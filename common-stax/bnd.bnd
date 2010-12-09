@@ -1,0 +1,8 @@
+-runbundles: osgi.cmpn,\
+	org.apache.felix.scr,\
+	org.apache.felix.shell,\
+	org.apache.felix.shell.tui
+-runfw: org.apache.felix.framework
+-buildpath: osgi.core,\
+	guava;version=latest
+Export-Package: org.daisy.common.stax

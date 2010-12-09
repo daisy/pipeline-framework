@@ -1,0 +1,20 @@
+!SESSION 2010-12-01 13:56:02.320 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.6.0_20
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_GB
+
+!ENTRY commandline 4 0 2010-12-01 13:56:02.320
+!MESSAGE 
+!STACK 0
+org.osgi.framework.BundleException: The bundle "commandline_0.0.0 [4]" could not be resolved. Reason: Missing Constraint: Import-Package: org.daisy.pipeline.modules; version="[1.0.0,2.0.0)"
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1317)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1301)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:319)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.updateWorker(AbstractBundle.java:629)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.update(AbstractBundle.java:576)
+	at bndtools.launcher.BundleInstaller.performUpdates(BundleInstaller.java:286)
+	at bndtools.launcher.BundleInstaller.performAllChanges(BundleInstaller.java:216)
+	at bndtools.launcher.BundleInstaller.synchronizeBundles(BundleInstaller.java:127)
+	at bndtools.launcher.BundleInstaller.run(BundleInstaller.java:83)
+	at java.lang.Thread.run(Thread.java:636)

@@ -1,0 +1,9 @@
+Include-Resource: expath-pkg.xml=expath-pkg.xml,\
+	module-B/hello.xsl=module-B/hello.xsl
+
+-runbundles: osgi.cmpn,\
+	org.apache.felix.scr,\
+	org.apache.felix.shell,\
+	org.apache.felix.shell.tui
+-runfw: org.apache.felix.framework
+Bundle-Version: 1.0.0

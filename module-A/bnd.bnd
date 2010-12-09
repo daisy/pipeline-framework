@@ -1,0 +1,11 @@
+-runbundles: osgi.cmpn,\
+	org.apache.felix.scr,\
+	org.apache.felix.shell,\
+	org.apache.felix.shell.tui,\
+	module-B;version=latest
+-runfw: org.apache.felix.framework
+-buildpath: osgi.core,\
+	osgi.cmpn,\
+	module-B;version=latest
+	
+Include-Resource: expath-pkg.xml=expath-pkg.xml,module-A/hello.xsl=module-A/hello.xsl

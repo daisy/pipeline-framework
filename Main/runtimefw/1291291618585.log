@@ -1,0 +1,141 @@
+!SESSION 2010-12-02 12:06:59.725 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.6.0_20
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_GB
+
+!ENTRY commandline 4 0 2010-12-02 12:06:59.725
+!MESSAGE 
+!STACK 0
+java.util.zip.ZipException: Exception in opening zip file: /home/javi/dedicon/osgi/Main/runtimefw/org.eclipse.osgi/bundles/4/30/bundlefile
+	at org.eclipse.osgi.framework.util.SecureAction.getZipFile(SecureAction.java:264)
+	at org.eclipse.osgi.baseadaptor.bundlefile.ZipBundleFile.basicOpen(ZipBundleFile.java:88)
+	at org.eclipse.osgi.baseadaptor.bundlefile.ZipBundleFile.getZipFile(ZipBundleFile.java:101)
+	at org.eclipse.osgi.baseadaptor.bundlefile.ZipBundleFile.checkedOpen(ZipBundleFile.java:74)
+	at org.eclipse.osgi.baseadaptor.bundlefile.ZipBundleFile.getEntry(ZipBundleFile.java:246)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findClassImpl(ClasspathManager.java:531)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClassImpl(ClasspathManager.java:481)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass_LockClassLoader(ClasspathManager.java:469)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:449)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:393)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:469)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:422)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:410)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:266)
+	at org.daisy.pipeline.ui.commandline.CmdLineActivator$1.run(CmdLineActivator.java:23)
+Caused by: java.util.zip.ZipException: error in opening zip file
+	at java.util.zip.ZipFile.open(Native Method)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:131)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:148)
+	at org.eclipse.osgi.framework.util.SecureAction.getZipFile(SecureAction.java:251)
+	... 16 more
+
+!ENTRY expath-pkg-parser 4 0 2010-12-02 12:08:18.879
+!MESSAGE 
+!STACK 0
+org.osgi.framework.BundleException: The bundle "expath-pkg-parser_1.0.0 [9]" could not be resolved. Reason: Missing Constraint: Import-Package: .; version="0.0.0"
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1317)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1301)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:319)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.updateWorker(AbstractBundle.java:629)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.update(AbstractBundle.java:576)
+	at bndtools.launcher.BundleInstaller.performUpdates(BundleInstaller.java:286)
+	at bndtools.launcher.BundleInstaller.performAllChanges(BundleInstaller.java:216)
+	at bndtools.launcher.BundleInstaller.synchronizeBundles(BundleInstaller.java:127)
+	at bndtools.launcher.BundleInstaller.run(BundleInstaller.java:83)
+	at java.lang.Thread.run(Thread.java:636)
+
+!ENTRY commandline 4 0 2010-12-02 12:08:18.883
+!MESSAGE 
+!STACK 0
+org.osgi.framework.BundleException: The bundle "commandline_0.0.0 [4]" could not be resolved. Reason: Missing Constraint: Import-Package: .; version="0.0.0"
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1317)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1301)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:319)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.updateWorker(AbstractBundle.java:629)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.update(AbstractBundle.java:576)
+	at bndtools.launcher.BundleInstaller.performUpdates(BundleInstaller.java:286)
+	at bndtools.launcher.BundleInstaller.performAllChanges(BundleInstaller.java:216)
+	at bndtools.launcher.BundleInstaller.synchronizeBundles(BundleInstaller.java:127)
+	at bndtools.launcher.BundleInstaller.run(BundleInstaller.java:83)
+	at java.lang.Thread.run(Thread.java:636)
+
+!ENTRY common-stax 4 0 2010-12-02 12:08:18.887
+!MESSAGE 
+!STACK 0
+org.osgi.framework.BundleException: The bundle "common-stax_0.0.0 [15]" could not be resolved. Reason: Missing Constraint: Import-Package: .; version="0.0.0"
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1317)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1301)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:319)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.updateWorker(AbstractBundle.java:629)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.update(AbstractBundle.java:576)
+	at bndtools.launcher.BundleInstaller.performUpdates(BundleInstaller.java:286)
+	at bndtools.launcher.BundleInstaller.performAllChanges(BundleInstaller.java:216)
+	at bndtools.launcher.BundleInstaller.synchronizeBundles(BundleInstaller.java:127)
+	at bndtools.launcher.BundleInstaller.run(BundleInstaller.java:83)
+	at java.lang.Thread.run(Thread.java:636)
+
+!ENTRY org.eclipse.osgi 4 0 2010-12-02 12:08:18.891
+!MESSAGE 
+!STACK 0
+java.util.zip.ZipException: Exception in opening zip file: /home/javi/dedicon/osgi/Main/runtimefw/org.eclipse.osgi/bundles/16/2/bundlefile
+	at org.eclipse.osgi.framework.util.SecureAction.getZipFile(SecureAction.java:264)
+	at org.eclipse.osgi.baseadaptor.bundlefile.ZipBundleFile.basicOpen(ZipBundleFile.java:88)
+	at org.eclipse.osgi.baseadaptor.bundlefile.ZipBundleFile.getZipFile(ZipBundleFile.java:101)
+	at org.eclipse.osgi.baseadaptor.bundlefile.ZipBundleFile.checkedOpen(ZipBundleFile.java:74)
+	at org.eclipse.osgi.baseadaptor.bundlefile.ZipBundleFile.getEntry(ZipBundleFile.java:246)
+	at org.eclipse.osgi.baseadaptor.BaseData.getEntry0(BaseData.java:111)
+	at org.eclipse.osgi.baseadaptor.BaseData.getEntry(BaseData.java:102)
+	at org.eclipse.osgi.internal.baseadaptor.AdaptorUtil.loadManifestFrom(AdaptorUtil.java:187)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseStorageHook.getGeneratedManifest0(EclipseStorageHook.java:406)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseStorageHook.getGeneratedManifest(EclipseStorageHook.java:393)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseStorageHook.createCachedManifest(EclipseStorageHook.java:388)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseStorageHook.getManifest(EclipseStorageHook.java:507)
+	at org.eclipse.osgi.internal.baseadaptor.BaseStorage.loadManifest(BaseStorage.java:306)
+	at org.eclipse.osgi.internal.baseadaptor.BundleUpdate.begin(BundleUpdate.java:91)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.updateWorkerPrivileged(AbstractBundle.java:646)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle$2.run(AbstractBundle.java:593)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.updateWorker(AbstractBundle.java:620)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.update(AbstractBundle.java:576)
+	at bndtools.launcher.BundleInstaller.performUpdates(BundleInstaller.java:286)
+	at bndtools.launcher.BundleInstaller.performAllChanges(BundleInstaller.java:216)
+	at bndtools.launcher.BundleInstaller.synchronizeBundles(BundleInstaller.java:127)
+	at bndtools.launcher.BundleInstaller.run(BundleInstaller.java:83)
+	at java.lang.Thread.run(Thread.java:636)
+Caused by: java.util.zip.ZipException: error in opening zip file
+	at java.util.zip.ZipFile.open(Native Method)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:131)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:148)
+	at org.eclipse.osgi.framework.util.SecureAction.getZipFile(SecureAction.java:251)
+	... 23 more
+
+!ENTRY commandline 4 0 2010-12-02 12:08:38.803
+!MESSAGE 
+!STACK 0
+java.util.zip.ZipException: Exception in opening zip file: /home/javi/dedicon/osgi/Main/runtimefw/org.eclipse.osgi/bundles/4/31/bundlefile
+	at org.eclipse.osgi.framework.util.SecureAction.getZipFile(SecureAction.java:264)
+	at org.eclipse.osgi.baseadaptor.bundlefile.ZipBundleFile.basicOpen(ZipBundleFile.java:88)
+	at org.eclipse.osgi.baseadaptor.bundlefile.ZipBundleFile.getZipFile(ZipBundleFile.java:101)
+	at org.eclipse.osgi.baseadaptor.bundlefile.ZipBundleFile.checkedOpen(ZipBundleFile.java:74)
+	at org.eclipse.osgi.baseadaptor.bundlefile.ZipBundleFile.getEntry(ZipBundleFile.java:246)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findClassImpl(ClasspathManager.java:531)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClassImpl(ClasspathManager.java:481)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass_LockClassLoader(ClasspathManager.java:469)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:449)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:393)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:469)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:422)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:410)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:266)
+	at org.daisy.pipeline.ui.commandline.CmdLineActivator$1.run(CmdLineActivator.java:23)
+Caused by: java.util.zip.ZipException: error in opening zip file
+	at java.util.zip.ZipFile.open(Native Method)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:131)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:148)
+	at org.eclipse.osgi.framework.util.SecureAction.getZipFile(SecureAction.java:251)
+	... 16 more

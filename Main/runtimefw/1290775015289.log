@@ -1,0 +1,25 @@
+!SESSION 2010-11-26 12:36:55.444 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.6.0_20
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_GB
+
+!ENTRY commandline 4 0 2010-11-26 12:36:55.445
+!MESSAGE 
+!STACK 0
+org.osgi.framework.BundleException: The bundle "commandline_0.0.0 [3]" could not be resolved. Reason: Missing Constraint: Import-Package: junit.framework; version="[3.8.0,4.0.0)"
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1317)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1301)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:319)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:374)
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1067)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:561)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:546)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:459)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:243)
+	at org.eclipse.osgi.framework.internal.core.EquinoxLauncher.internalStart(EquinoxLauncher.java:281)
+	at org.eclipse.osgi.framework.internal.core.EquinoxLauncher.start(EquinoxLauncher.java:251)
+	at org.eclipse.osgi.launch.Equinox.start(Equinox.java:256)
+	at bndtools.launcher.Main.createAndRunFramework(Main.java:222)
+	at bndtools.launcher.Main.run(Main.java:111)
+	at bndtools.launcher.Main.main(Main.java:52)

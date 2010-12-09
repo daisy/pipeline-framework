@@ -1,0 +1,24 @@
+-runbundles: osgi.cmpn,\
+	org.apache.felix.scr,\
+	org.apache.felix.shell,\
+	org.apache.felix.shell.tui,\
+	module-common;version=latest,\
+	guava;version=latest,\
+	common-stax;version=latest,\
+	osgi.core,\
+	stax2-api
+-runfw: org.eclipse.osgi
+-buildpath: osgi.core,\
+	osgi.cmpn,\
+	module-common;version=latest,\
+	stax2-api,\
+	guava;version=latest,\
+	common-stax;version=latest
+Bundle-Version: 1.0.0
+Export-Package: org.daisy.expath.parser,\
+	org.daisy.expath.parser.stax
+Include-Resource: OSGI-INF/parser.xml=OSGI-INF/parser.xml
+Service-Component: OSGI-INF/parser.xml
+-runproperties: org.osgi.framework.system.packages=javax.naming',' javax.naming.directory',' javax.naming.spi',' javax.management',' javax.management.loading',' javax.management.modelmbean',' javax.net',' javax.net.ssl',' javax.crypto',' javax.crypto.interfaces',' javax.crypto.spec',' javax.security.auth',' javax.security.auth.spi',' javax.security.auth.callback',' javax.security.auth.login',' javax.security.cert',' javax.xml.parsers','  javax.xml.xpath',' javax.xml.transform.sax',' javax.xml.transform.dom',' javax.xml.namespace',' javax.xml.transform',' javax.xml.transform.stream',' javax.xml.validation',' org.xml.sax',' org.xml.sax.helpers',' org.xml.sax.ext',' com.sun.org.apache.xalan.internal',' com.sun.org.apache.xalan.internal.res',' com.sun.org.apache.xml.internal.utils',' com.sun.org.apache.xpath.internal',' com.sun.org.apache.xpath.internal.jaxp',' com.sun.org.apache.xpath.internal.objects',' com.sun.org.apache.xml.internal',' org.w3c.dom',' org.w3c.dom.traversal',' org.w3c.dom.ls',' javax.sql',' javax.transaction',' sun.misc','javax.xml.stream','javax.xml.stream.events','javax.xml.stream.util','javax.annotation
+Import-Package: org.codehaus.stax2.osgi,\
+	*
