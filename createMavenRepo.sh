@@ -40,8 +40,8 @@ if [ -z $1 ]; then
 	#woodstox-core
 	installBundle "cnf/repo/woodstox-core-lgpl/woodstox-core-lgpl-4.0.8.jar" $THIRD_PARTY "woodstox-core-lgpl" "4.0.8" $MAVEN_REPO
 	#guava
-	installBundle "guava/generated/guava.jar" $THIRD_PARTY "guava" "1.6.0" $MAVEN_REPO
+	installBundle "cnf/repo/guava/guava-1.6.0.jar" $THIRD_PARTY "guava" "1.6.0" $MAVEN_REPO
 	#jopt
-	installBundle "jopt-simple-3.2/generated/jopt-simple-3.2.jar" $THIRD_PARTY "jopt" "3.2" $MAVEN_REPO
+	installBundle "cnf/repo/jopt-simple-3.2/jopt-simple-3.2-0.0.0.jar" $THIRD_PARTY "jopt" "3.2" $MAVEN_REPO
 	
 fi

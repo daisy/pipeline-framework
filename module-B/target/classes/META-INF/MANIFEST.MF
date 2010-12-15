@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Built-By: javi
+Build-Jdk: 1.6.0_22
+Bundle-Version: 1.0.0
+Tool: Bnd-0.0.357
+Bundle-Name: module B
+Bnd-LastModified: 1292352521052
+Created-By: Apache Maven Bundle Plugin
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: testModules.module-B
+

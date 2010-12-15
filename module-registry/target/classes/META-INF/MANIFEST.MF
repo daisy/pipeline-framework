@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Export-Package: org.daisy.pipeline.modules.tracker;uses:="org.osgi.fra
+ mework,org.daisy.pipeline.modules,org.daisy.expath.parser,org.osgi.ut
+ il.tracker"
+Service-Component: OSGI-INF/registry.xml
+Built-By: javi
+Tool: Bnd-0.0.357
+Bundle-Name: module registry
+Created-By: Apache Maven Bundle Plugin
+Build-Jdk: 1.6.0_22
+Bundle-Version: 1.0.0
+Bnd-LastModified: 1292352520724
+Bundle-ManifestVersion: 2
+Import-Package: org.daisy.expath.parser,org.daisy.pipeline.modules,org
+ .daisy.pipeline.modules.tracker,org.osgi.framework;version="1.5",org.
+ osgi.util.tracker;version="1.4"
+Bundle-SymbolicName: org.daisy.pipeline.module-registry
+

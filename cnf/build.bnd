@@ -13,7 +13,7 @@ src:          src
 bin:          bin
 target-dir:   generated
 target:       ${project}/${target-dir}
-build:        /home/javi/dedicon/osgi/cnf
+build:        ${workspace}/cnf
 repo:         ${build}/repo
 p:            ${basename;${project}}
 project.name: ${p}

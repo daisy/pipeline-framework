@@ -1,0 +1,85 @@
+!SESSION 2010-12-14 18:50:12.016 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.6.0_20
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_GB
+
+!ENTRY expath-pkg-parser 4 0 2010-12-14 18:50:12.025
+!MESSAGE 
+!STACK 0
+org.osgi.framework.BundleException: The bundle "expath-pkg-parser_1.0.0 [9]" could not be resolved. Reason: Missing Constraint: Import-Package: com.google.common.base; version="0.0.0"
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1317)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1301)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:319)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:374)
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1067)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:561)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:546)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:459)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:243)
+	at org.eclipse.osgi.framework.internal.core.EquinoxLauncher.internalStart(EquinoxLauncher.java:281)
+	at org.eclipse.osgi.framework.internal.core.EquinoxLauncher.start(EquinoxLauncher.java:251)
+	at org.eclipse.osgi.launch.Equinox.start(Equinox.java:256)
+	at bndtools.launcher.Main.createAndRunFramework(Main.java:222)
+	at bndtools.launcher.Main.run(Main.java:111)
+	at bndtools.launcher.Main.main(Main.java:52)
+
+!ENTRY common-stax 4 0 2010-12-14 18:50:12.042
+!MESSAGE 
+!STACK 0
+org.osgi.framework.BundleException: The bundle "common-stax_0.0.0 [15]" could not be resolved. Reason: Missing Constraint: Import-Package: com.google.common.base; version="0.0.0"
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1317)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1301)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:319)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:374)
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1067)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:561)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:546)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:459)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:243)
+	at org.eclipse.osgi.framework.internal.core.EquinoxLauncher.internalStart(EquinoxLauncher.java:281)
+	at org.eclipse.osgi.framework.internal.core.EquinoxLauncher.start(EquinoxLauncher.java:251)
+	at org.eclipse.osgi.launch.Equinox.start(Equinox.java:256)
+	at bndtools.launcher.Main.createAndRunFramework(Main.java:222)
+	at bndtools.launcher.Main.run(Main.java:111)
+	at bndtools.launcher.Main.main(Main.java:52)
+
+!ENTRY commandline 4 0 2010-12-14 18:50:12.044
+!MESSAGE 
+!STACK 0
+org.osgi.framework.BundleException: The bundle "commandline_0.0.0 [26]" could not be resolved. Reason: Missing Constraint: Import-Package: joptsimple; version="[0.0.0,1.0.0)"
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1317)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1301)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:319)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:374)
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1067)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:561)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:546)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:459)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:243)
+	at org.eclipse.osgi.framework.internal.core.EquinoxLauncher.internalStart(EquinoxLauncher.java:281)
+	at org.eclipse.osgi.framework.internal.core.EquinoxLauncher.start(EquinoxLauncher.java:251)
+	at org.eclipse.osgi.launch.Equinox.start(Equinox.java:256)
+	at bndtools.launcher.Main.createAndRunFramework(Main.java:222)
+	at bndtools.launcher.Main.run(Main.java:111)
+	at bndtools.launcher.Main.main(Main.java:52)
+
+!ENTRY module-registry 4 0 2010-12-14 18:50:12.045
+!MESSAGE 
+!STACK 0
+org.osgi.framework.BundleException: The bundle "module-registry_0.0.0 [27]" could not be resolved. Reason: Missing Constraint: Import-Package: org.daisy.expath.parser; version="[1.0.0,2.0.0)"
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1317)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1301)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:319)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:374)
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1067)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:561)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:546)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:459)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:243)
+	at org.eclipse.osgi.framework.internal.core.EquinoxLauncher.internalStart(EquinoxLauncher.java:281)
+	at org.eclipse.osgi.framework.internal.core.EquinoxLauncher.start(EquinoxLauncher.java:251)
+	at org.eclipse.osgi.launch.Equinox.start(Equinox.java:256)
+	at bndtools.launcher.Main.createAndRunFramework(Main.java:222)
+	at bndtools.launcher.Main.run(Main.java:111)
+	at bndtools.launcher.Main.main(Main.java:52)

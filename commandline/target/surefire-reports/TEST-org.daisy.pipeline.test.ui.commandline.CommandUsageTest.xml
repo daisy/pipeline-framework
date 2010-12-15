@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite failures="0" time="0.026" errors="0" skipped="0" tests="5" name="org.daisy.pipeline.test.ui.commandline.CommandUsageTest">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64"/>
+    <property name="java.vm.version" value="17.1-b03"/>
+    <property name="java.vm.vendor" value="Sun Microsystems Inc."/>
+    <property name="java.vendor.url" value="http://java.sun.com/"/>
+    <property name="path.separator" value=":"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.country" value="GB"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/home/javi/dedicon/framework/commandline"/>
+    <property name="java.runtime.version" value="1.6.0_22-b04"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+    <property name="basedir" value="/home/javi/dedicon/framework/commandline"/>
+    <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/endorsed"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="surefire.real.class.path" value="/tmp/surefirebooter131597365570625063.jar"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Sun Microsystems Inc."/>
+    <property name="os.name" value="Linux"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/server:/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64:/usr/lib/jvm/java-6-sun-1.6.0.22/jre/../lib/amd64:/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="surefire.test.class.path" value="/home/javi/dedicon/framework/commandline/target/test-classes:/home/javi/dedicon/framework/commandline/target/classes:/home/javi/.m2/repository/3rdPartyBundles/osgi.core/4.2.1/osgi.core-4.2.1.jar:/home/javi/.m2/repository/3rdPartyBundles/jopt/3.2/jopt-3.2.jar:/home/javi/.m2/repository/3rdPartyBundles/org.eclipse.osgi/3.6.1/org.eclipse.osgi-3.6.1.jar:/home/javi/.m2/repository/org/daisy/pipeline/module-common/1.0.0/module-common-1.0.0.jar:/home/javi/.m2/repository/junit/junit/4.8.1/junit-4.8.1.jar:"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="50.0"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Server Compiler"/>
+    <property name="os.version" value="2.6.35-23-generic"/>
+    <property name="user.home" value="/home/javi"/>
+    <property name="user.timezone" value=""/>
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.specification.version" value="1.6"/>
+    <property name="user.name" value="javi"/>
+    <property name="java.class.path" value="/home/javi/dedicon/framework/commandline/target/test-classes:/home/javi/dedicon/framework/commandline/target/classes:/home/javi/.m2/repository/3rdPartyBundles/osgi.core/4.2.1/osgi.core-4.2.1.jar:/home/javi/.m2/repository/3rdPartyBundles/jopt/3.2/jopt-3.2.jar:/home/javi/.m2/repository/3rdPartyBundles/org.eclipse.osgi/3.6.1/org.eclipse.osgi-3.6.1.jar:/home/javi/.m2/repository/org/daisy/pipeline/module-common/1.0.0/module-common-1.0.0.jar:/home/javi/.m2/repository/junit/junit/4.8.1/junit-4.8.1.jar:"/>
+    <property name="java.vm.specification.version" value="1.0"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.home" value="/usr/lib/jvm/java-6-sun-1.6.0.22/jre"/>
+    <property name="java.specification.vendor" value="Sun Microsystems Inc."/>
+    <property name="user.language" value="en"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.6.0_22"/>
+    <property name="java.ext.dirs" value="/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/ext:/usr/java/packages/lib/ext"/>
+    <property name="sun.boot.class.path" value="/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/resources.jar:/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/rt.jar:/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/jsse.jar:/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/jce.jar:/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/charsets.jar:/usr/lib/jvm/java-6-sun-1.6.0.22/jre/classes"/>
+    <property name="java.vendor" value="Sun Microsystems Inc."/>
+    <property name="localRepository" value="/home/javi/.m2/repository"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.vendor.url.bug" value="http://java.sun.com/cgi-bin/bugreport.cgi"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.desktop" value="gnome"/>
+    <property name="sun.cpu.isalist" value=""/>
+  </properties>
+  <testcase time="0.011" classname="org.daisy.pipeline.test.ui.commandline.CommandUsageTest" name="simpleTest"/>
+  <testcase time="0" classname="org.daisy.pipeline.test.ui.commandline.CommandUsageTest" name="noParser"/>
+  <testcase time="0" classname="org.daisy.pipeline.test.ui.commandline.CommandUsageTest" name="invalidParser"/>
+  <testcase time="0" classname="org.daisy.pipeline.test.ui.commandline.CommandUsageTest" name="messageTest"/>
+  <testcase time="0" classname="org.daisy.pipeline.test.ui.commandline.CommandUsageTest" name="messageCastTest"/>
+</testsuite>

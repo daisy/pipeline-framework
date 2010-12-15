@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Export-Package: org.daisy.pipeline.modules
+Built-By: javi
+Build-Jdk: 1.6.0_22
+Bundle-Version: 1.0.0
+Tool: Bnd-0.0.357
+Bundle-Name: module-common
+Bnd-LastModified: 1292352520218
+Created-By: Apache Maven Bundle Plugin
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: module-common
+Import-Package: org.daisy.pipeline.modules
+
