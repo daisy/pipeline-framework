@@ -1,0 +1,14 @@
+-runbundles: osgi.cmpn,\
+	org.apache.felix.scr,\
+	org.apache.felix.shell,\
+	org.apache.felix.shell.tui
+-runfw: org.apache.felix.framework
+-buildpath: osgi.core,\
+	osgi.cmpn,\
+	com.xmlcalabash,\
+	xproc-wrapper;version=latest,\
+	net.sf.saxon-he
+Private-Package: org.daisy.pipeline.xproc.impl
+Export-Package: org.daisy.pipeline.xproc.impl
+Include-Resource: OSGI-INF/xproc.xml=OSGI-INF/xproc.xml
+Service-Component: OSGI-INF/xproc.xml

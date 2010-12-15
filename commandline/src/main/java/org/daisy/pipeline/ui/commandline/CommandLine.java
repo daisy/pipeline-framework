@@ -17,6 +17,10 @@ public class CommandLine {
 		mProvider=provider;
 		mParser = new OptionParser();
 		mParser.accepts("l", "List of available converters");
+		mParser.accepts("x", "xproc file to execute").withRequiredArg();
+		mParser.accepts("i", "list of input ports in the format portName1:file1,portName2:file2  (only with -x modifier)").withRequiredArg();
+		mParser.accepts("o", "list of output files, standard output if 'result' is missing (only with -x modifier)").withRequiredArg();
+		mParser.accepts("p", "list of parameters in the format port1:param1:value1,param1:param2:value2 (only with -x modifier)").withRequiredArg();
 		mParser.accepts("h",
 				"Show this help or the help for the given converter")
 				.withOptionalArg().ofType(String.class)
@@ -41,14 +45,39 @@ public class CommandLine {
 		if(!checkBasicArgs(oSet)){
 			return getUsage();
 		}
+		
 		if(oSet.has("l")){
 			return getListCommand();
+		}else if(oSet.has("x")){
+			return getPipelineCommand(oSet);
 		}
 		
 		//at this point the only option left should be help
 		return getUsage();
 	}
 	
+	private Command getPipelineCommand(OptionSet oSet) {
+		Properties commandArgs= new Properties();
+		commandArgs.put(CommandPipeline.PROVIDER, mProvider);
+		String inputs="";
+		if(oSet.valueOf("i")!=null)
+				inputs=oSet.valueOf("i").toString();
+		String outputs="";
+		if(oSet.valueOf("o")!=null)
+			outputs=oSet.valueOf("o").toString();
+		String params="";
+		if(oSet.valueOf("p")!=null)
+			params=oSet.valueOf("p").toString();
+		String pipeline="";
+		if(oSet.valueOf("x")!=null)
+			pipeline=oSet.valueOf("x").toString();
+		commandArgs.setProperty(CommandPipeline.INPUT, inputs);
+		commandArgs.setProperty(CommandPipeline.OUTPUT, outputs);
+		commandArgs.setProperty(CommandPipeline.PARAMS, params);
+		commandArgs.setProperty(CommandPipeline.PIPELINE, pipeline);
+		return new CommandPipeline(commandArgs);
+	}
+
 	private Command getListCommand() {
 		Properties commandArgs= new Properties();
 		commandArgs.put(CommandList.PROVIDER, mProvider);
@@ -56,7 +85,7 @@ public class CommandLine {
 	}
 
 	public boolean checkBasicArgs(OptionSet oSet){
-		return oSet.has("l")||oSet.has("h");
+		return oSet.has("l")||oSet.has("h")||oSet.has("x");
 	}
 
 	public Command getUnrecovreableError(String msg){
