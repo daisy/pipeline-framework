@@ -15,10 +15,10 @@ Bundle-Activator: org.daisy.pipeline.ui.commandline.CmdLineActivator
 	woodstox-core-lgpl,\
 	common-stax;version=latest,\
 	expath-pkg-parser;version=latest,\
-	guava;version=latest,\
-	jopt-simple-3.2;version=latest,\
 	org.apache.felix.shell,\
-	org.apache.felix.shell.tui
+	org.apache.felix.shell.tui,\
+	guava,\
+	jopt-simple-3.2
 
 Export-Package: org.daisy.pipeline.ui.commandline
 -runproperties: org.daisy.pipeline.cmdargs=-l,\

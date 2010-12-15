@@ -4,5 +4,5 @@
 	org.apache.felix.shell.tui
 -runfw: org.apache.felix.framework
 -buildpath: osgi.core,\
-	guava;version=latest
+	guava
 Export-Package: org.daisy.common.stax

@@ -12,7 +12,7 @@
 	osgi.cmpn,\
 	module-common;version=latest,\
 	stax2-api,\
-	guava;version=latest,\
+	guava,\
 	common-stax;version=latest
 Bundle-Version: 1.0.0
 Export-Package: org.daisy.expath.parser,\
