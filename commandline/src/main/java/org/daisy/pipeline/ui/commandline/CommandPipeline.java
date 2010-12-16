@@ -73,8 +73,10 @@ public class CommandPipeline extends Command {
 		
 		}
 		//here we go!
+		
+
 		xproc.run();
-		System.out.println("Done!");
+		
 	}
 
 	private Source getSaxSource(String path) throws IllegalArgumentException {

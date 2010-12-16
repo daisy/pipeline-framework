@@ -20,11 +20,18 @@ public class CmdLineActivator implements BundleActivator {
 							"The arguments are null").execute();
 					System.exit(1);
 				} else {
-					new CommandLine(provider).parse(args.split("\\s"))
-							.execute();
+
+					try {
+						new CommandLine(provider).parse(args.split("\\s"))
+								.execute();
+					} catch (Exception e) {
+						new CommandLine(provider).getUnrecovreableError(e
+								.getMessage()).execute();
+						System.exit(1);
+					}
 					System.exit(0);
 				}
-				
+
 			}
 		}.start();
 	}

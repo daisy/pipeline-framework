@@ -1,4 +1,4 @@
--runbundles: osgi.cmpn,\
+u-runbundles: osgi.cmpn,\
 	org.apache.felix.scr,\
 	org.apache.felix.shell,\
 	org.apache.felix.shell.tui

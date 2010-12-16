@@ -6,8 +6,8 @@
 -buildpath: osgi.core,\
 	osgi.cmpn,\
 	com.xmlcalabash,\
-	xproc-wrapper;version=latest,\
-	net.sf.saxon-he
+	net.sf.saxon-he,\
+	xproc-wrapper;version=latest
 Private-Package: org.daisy.pipeline.xproc.impl
 Export-Package: org.daisy.pipeline.xproc.impl
 Include-Resource: OSGI-INF/xproc.xml=OSGI-INF/xproc.xml

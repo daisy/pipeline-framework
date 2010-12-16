@@ -31,3 +31,7 @@ syntax: regexp
 
 # ignore Maven target directories
 (^|/)target/
+# ignore metadata dirs 
+(^|/).metadata/
+
+

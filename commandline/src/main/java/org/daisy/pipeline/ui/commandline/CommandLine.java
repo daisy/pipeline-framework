@@ -19,7 +19,7 @@ public class CommandLine {
 		mParser.accepts("l", "List of available converters");
 		mParser.accepts("x", "xproc file to execute").withRequiredArg();
 		mParser.accepts("i", "list of input ports in the format portName1:file1,portName2:file2  (only with -x modifier)").withRequiredArg();
-		mParser.accepts("o", "list of output files, standard output if 'result' is missing (only with -x modifier)").withRequiredArg();
+		mParser.accepts("o", "list of output ports in the format portName1:file1,portName2:file2").withRequiredArg();
 		mParser.accepts("p", "list of parameters in the format port1:param1:value1,param1:param2:value2 (only with -x modifier)").withRequiredArg();
 		mParser.accepts("h",
 				"Show this help or the help for the given converter")
@@ -75,6 +75,7 @@ public class CommandLine {
 		commandArgs.setProperty(CommandPipeline.OUTPUT, outputs);
 		commandArgs.setProperty(CommandPipeline.PARAMS, params);
 		commandArgs.setProperty(CommandPipeline.PIPELINE, pipeline);
+		
 		return new CommandPipeline(commandArgs);
 	}
 

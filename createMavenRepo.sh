@@ -43,5 +43,11 @@ if [ -z $1 ]; then
 	installBundle "cnf/repo/guava/guava-1.6.0.jar" $THIRD_PARTY "guava" "1.6.0" $MAVEN_REPO
 	#jopt
 	installBundle "cnf/repo/jopt-simple-3.2/jopt-simple-3.2-0.0.0.jar" $THIRD_PARTY "jopt" "3.2" $MAVEN_REPO
+	#saxon 
+	installBundle "cnf/repo/net.sf.saxon-he/net.sf.saxon-he-9.2.1.5.jar" $THIRD_PARTY "net.sf.saxon-he" "9.2.1.5" $MAVEN_REPO
+	#calabash 
+	installBundle "cnf/repo/com.xmlcalabash/com.xmlcalabash-1.0.0.201011091109.jar" $THIRD_PARTY "com.xmlcalabash" "1.0.0.201011091109" $MAVEN_REPO
+	#thai
+	installBundle "cnf/repo/com.thaiopensource.jing/com.thaiopensource.jing-0.0.0.20091111.jar" $THIRD_PARTY "com.thaiopensource.jing" "1.0.0.20091111" $MAVEN_REPO
 	
 fi
