@@ -1,0 +1,12 @@
+-runbundles: osgi.cmpn,\
+	org.apache.felix.scr,\
+	org.apache.felix.shell,\
+	org.apache.felix.shell.tui
+-runfw: org.apache.felix.framework
+-buildpath: osgi.core,\
+	org.eclipse.osgi,\
+	module-common;version=latest
+Include-Resource: OSGI-INF/resolver.xml=OSGI-INF/resolver.xml	
+Service-Component: OSGI-INF/resolver.xml
+Export-Package: org.daisy.pipeline.modules.resolver
+Private-Package: org.daisy.pipeline.modules.resolver
