@@ -6,6 +6,6 @@ import org.daisy.pipeline.modules.Module;
 
 public interface EXPathPackageParser {
 
-	Module parse(URL url);
+	Module parse(URL url, ModuleBuilder builder);
 
 }

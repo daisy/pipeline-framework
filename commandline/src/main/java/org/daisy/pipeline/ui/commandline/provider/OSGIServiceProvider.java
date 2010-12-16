@@ -1,9 +1,9 @@
 package org.daisy.pipeline.ui.commandline.provider;
 
 import org.daisy.pipeline.modules.ModuleRegistry;
+import org.daisy.pipeline.modules.UriResolverDecorator;
 import org.daisy.pipeline.xproc.XProcessorFactory;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class OSGIServiceProvider implements ServiceProvider {
@@ -17,44 +17,34 @@ public class OSGIServiceProvider implements ServiceProvider {
 	@Override
 	public ModuleRegistry getModuleRegistry() {
 
-		ModuleRegistry reg=null;
-
-		if(mModuleRegistryTracker==null){
-			mModuleRegistryTracker= new ServiceTracker(mCtxt, ModuleRegistry.class.getName(), null);
-			mModuleRegistryTracker.open();
-		}
-		
-		
-		try {
-			reg = (ModuleRegistry) mModuleRegistryTracker.waitForService(5000);
-		} catch (InterruptedException e) {
-			throw new RuntimeException("Interrupted");
-		}
-		if(reg==null){
-			throw new RuntimeException("No service found");
-		}
-		mModuleRegistryTracker.close();
-		mModuleRegistryTracker=null;
-		return reg;
+		return this.getService(ModuleRegistry.class);
 	}
 	@Override
 	public XProcessorFactory getXProcessorFactory() {
-		XProcessorFactory fact=null;
+		return this.getService(XProcessorFactory.class);
+	}
+	@Override
+	public UriResolverDecorator getUriResolver() {
+		return this.getService(UriResolverDecorator.class);
+	} 
+	
+	private <T> T getService(Class<T> clazz){
+		T service=null;
 		ServiceTracker tracker;
 	
-		tracker= new ServiceTracker(mCtxt, XProcessorFactory.class.getName(), null);
+		tracker= new ServiceTracker(mCtxt, clazz.getName(), null);
 		tracker.open();
 		
 		try {
-			fact = (XProcessorFactory) tracker.waitForService(5000);
+			service = (T) tracker.waitForService(5000);
 		} catch (InterruptedException e) {
 			throw new RuntimeException("Interrupted");
 		}
-		if(fact==null){
-			throw new RuntimeException("No service found");
+		if(service==null){
+			throw new RuntimeException("No service found for "+clazz.getName());
 		}
 		tracker.close();
-		return fact;
-	} 
+		return service;
+	}
 
 }

@@ -4,11 +4,11 @@
  
     <xsl:output method="html"/>
 
-    <xsl:param name="name"/>
+    <xsl:param name="foo"/>
     <xsl:template match="/">
         <html>
             <body>
-                <h1>Juicers - <xsl:value-of select="$name" /></h1>
+                <h1>Juicers - <xsl:value-of select="$foo" /></h1>
                 <ul>
                     <xsl:for-each select="//juicer/name">
                         <xsl:apply-templates select="." />

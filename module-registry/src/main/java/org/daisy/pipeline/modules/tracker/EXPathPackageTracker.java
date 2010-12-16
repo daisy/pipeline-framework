@@ -1,12 +1,16 @@
 package org.daisy.pipeline.modules.tracker;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.daisy.expath.parser.DefaultModuleBuilder;
 import org.daisy.expath.parser.EXPathPackageParser;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ModuleRegistry;
+import org.daisy.pipeline.modules.ResourceLoader;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -23,12 +27,29 @@ public class EXPathPackageTracker extends BundleTracker {
 	private EXPathPackageParser mParser;
 	
 	@Override
-	public Object addingBundle(Bundle bundle, BundleEvent event) {
+	public Object addingBundle(final Bundle bundle, BundleEvent event) {
+		
 		Bundle result = null;
 		URL url = bundle.getResource("expath-pkg.xml");
 		if (url != null) {
 		//	System.out.println("tracking: " + bundle.getSymbolicName());
-			Module module = mParser.parse(url);
+			Module module = mParser.parse(url, new DefaultModuleBuilder().withLoader(new ResourceLoader() {
+				Bundle mBundle=bundle;
+				public URL loadResource(String path) {
+					Bundle rbundle=mBundle;
+					//TODO: this is not efficient at all, assure to load the whole path 
+					//while loading the bundle 
+					Enumeration res = bundle.findEntries("/", path, true);
+					if(res==null)
+						return null;
+					//String completePath = res.nextElement().toString();
+					try {
+						return new URL(res.nextElement().toString());
+					} catch (MalformedURLException e) {
+						return null;
+					}
+				}
+			}));
 			mRegistry.addModule(module);
 			result = bundle;
 		}

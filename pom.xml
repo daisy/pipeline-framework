@@ -11,8 +11,10 @@
 	<module>expath-pkg-parser</module>
 	<module>module-common</module>
 	<module>module-registry</module>
+	<module>module-uri-resolver</module>
 	<module>module-A</module>
 	<module>module-B</module>
+	<module>module-hello</module>
 	<module>commandline</module>
 	<module>xproc-wrapper</module>
 	<module>xproc-calabash-imp</module>

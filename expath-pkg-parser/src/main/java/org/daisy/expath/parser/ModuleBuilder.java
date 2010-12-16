@@ -1,53 +1,34 @@
 package org.daisy.expath.parser;
 
-import java.util.ArrayList;
+import java.net.URI;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.daisy.pipeline.modules.Component;
+import org.daisy.pipeline.modules.Component.Space;
 import org.daisy.pipeline.modules.Module;
+import org.daisy.pipeline.modules.ResourceLoader;
 
-public class ModuleBuilder {
+public interface ModuleBuilder {
 
-	private String name;
-	private String version;
-	private String title;
-	private Map<String, String> dependencies = new HashMap<String, String>();
-	private List<Component> components = new ArrayList<Component>();
+	Module build();
 
-	public Module build() {
-		return new Module(name, version, title, dependencies, components);
-	}
+	ModuleBuilder withName(String name);
 
-	public void withName(String name) {
-		this.name = name;
-	}
+	ModuleBuilder withLoader(ResourceLoader loader);
 
-	public void withVersion(String version) {
-		this.version = version;
-	}
+	ModuleBuilder withVersion(String version);
 
-	public void withTitle(String title) {
-		this.title = title;
-	}
+	ModuleBuilder withTitle(String title);
 
-	public void withDependencies(
-			Map<? extends String, ? extends String> dependencies) {
-		this.dependencies.putAll(dependencies);
-	}
+	ModuleBuilder withDependencies(
+			Map<? extends String, ? extends String> dependencies);
 
-	public void withDependency(String name, String version) {
-		dependencies.put(name, version);
-	}
+	ModuleBuilder withDependency(String name, String version);
 
-	public void withComponents(Collection<? extends Component> components) {
-		this.components.addAll(components);
-	}
+	ModuleBuilder withComponents(
+			Collection<? extends Component> components);
 
-	public void withComponent(Component component) {
-		components.add(component);
-	}
+	ModuleBuilder withComponent(URI uri, String path, Space space);
 
 }

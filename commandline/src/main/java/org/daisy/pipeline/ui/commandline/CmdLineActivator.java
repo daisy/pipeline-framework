@@ -25,6 +25,7 @@ public class CmdLineActivator implements BundleActivator {
 						new CommandLine(provider).parse(args.split("\\s"))
 								.execute();
 					} catch (Exception e) {
+						e.printStackTrace();
 						new CommandLine(provider).getUnrecovreableError(e
 								.getMessage()).execute();
 						System.exit(1);

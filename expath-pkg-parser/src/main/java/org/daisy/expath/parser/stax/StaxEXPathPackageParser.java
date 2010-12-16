@@ -20,7 +20,6 @@ import org.daisy.expath.parser.EXPathConstants.Attributes;
 import org.daisy.expath.parser.EXPathConstants.Elements;
 import org.daisy.expath.parser.EXPathPackageParser;
 import org.daisy.expath.parser.ModuleBuilder;
-import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Component.Space;
 import org.daisy.pipeline.modules.Module;
 
@@ -38,11 +37,10 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 		factory = inputFactoryProvider.createInputFactory();
 	}
 
-	public Module parse(URL url) {
+	public Module parse(URL url, ModuleBuilder builder) {
 		if (factory == null) {
 			throw new IllegalStateException();
 		}
-		ModuleBuilder builder = new ModuleBuilder();
 		InputStream is = null;
 		XMLEventReader reader = null;
 		try {
@@ -144,8 +142,14 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 									throw new XMLStreamException(
 											e.getMessage(), e);
 								}
-								builder.withComponent(new Component(uri,
-										Space.XSLT));
+								// Get the local path
+								StaxEventHelper.peekNextElement(reader,
+										Elements.FILE);
+								reader.next();
+								String path;
+								path = reader.getElementText();
+
+								builder.withComponent(uri, path, Space.XSLT);
 							}
 						}
 

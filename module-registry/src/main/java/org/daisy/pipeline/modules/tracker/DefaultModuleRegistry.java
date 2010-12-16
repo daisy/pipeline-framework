@@ -4,18 +4,12 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 
 import org.daisy.expath.parser.EXPathPackageParser;
 import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ModuleRegistry;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 public class DefaultModuleRegistry implements ModuleRegistry {
 
