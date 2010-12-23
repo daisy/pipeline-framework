@@ -8,8 +8,8 @@ About the framework demo
 -------------------------------------------------------------------------------
 
 The demo show a minimal version of what will be the Pipeline 2 runtime
-framework. It is implemented with OSGi, a standard technology to develop modular
-applications with Java.
+framework. It is implemented with OSGi, a standard technology to develop
+modular applications with Java.
 
 The framework implementation allows flexible and dynamic management of modules
 (pieces of cohesive functionality). It provides a module-aware URI resolver to
@@ -41,7 +41,9 @@ Demo
 
    A) Execute an XProc script
 
-It is possible to use the DAISY Pipeline 2 runtime to invoke an XProc processor, just pass as arguments the needed ports for your pipeline to run like in the example:
+It is possible to use the DAISY Pipeline 2 runtime to invoke an XProc
+processor, just pass as arguments the needed ports for your pipeline to run
+like in the example:
 
 $ pipeline2.sh -x test/delete.xpl -i source:test/juicers.xml,xslt:test/createJuicerList.xsl -o result:out.html -p parameters:name:paco
 
@@ -72,4 +74,5 @@ Inside helloTest.xpl the XSLT imports the module's XSLT as follows:
     <p:document href="http://www.example.org/module-hello/helloizer.xsl"/>
 </p:input>
 
-The systems takes care of resolving the absolute URI to the XLST file located in the available module.
+The systems takes care of resolving the absolute URI to the XLST file located
+in the available module.
