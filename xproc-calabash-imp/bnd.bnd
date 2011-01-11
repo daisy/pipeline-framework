@@ -7,7 +7,7 @@
 	osgi.cmpn,\
 	com.xmlcalabash,\
 	net.sf.saxon-he,\
-	xproc-wrapper;version=latest
+	xproc-wrapper;version=latest 
 Private-Package: org.daisy.pipeline.xproc.impl
 Export-Package: org.daisy.pipeline.xproc.impl
 Include-Resource: OSGI-INF/xproc.xml=OSGI-INF/xproc.xml

@@ -101,7 +101,7 @@ public class XProcessorImp extends XProcessor {
 		}
 		
 		for(String option:mOptions.keySet()){
-			mPipeline.setOption(new QName(option),new RuntimeValue( mOptions.toString()));
+			mPipeline.passOption(new QName(option),new RuntimeValue( mOptions.get(option).toString()));
 		}
 		
 		try {
