@@ -34,20 +34,18 @@ public class EXPathPackageTracker extends BundleTracker {
 		if (url != null) {
 		//	System.out.println("tracking: " + bundle.getSymbolicName());
 			Module module = mParser.parse(url, new DefaultModuleBuilder().withLoader(new ResourceLoader() {
-				Bundle mBundle=bundle;
+				
 				public URL loadResource(String path) {
-					Bundle rbundle=mBundle;
+				
 					//TODO: this is not efficient at all, assure to load the whole path 
 					//while loading the bundle 
-					Enumeration res = bundle.findEntries("/", path, true);
-					if(res==null)
-						return null;
+					//Enumeration res = bundle.findEntries("/", path, true);
+					//if(res==null)
+						//return null;
 					//String completePath = res.nextElement().toString();
-					try {
-						return new URL(res.nextElement().toString());
-					} catch (MalformedURLException e) {
-						return null;
-					}
+					System.out.println("[PATH] "+path);
+					URL url = bundle.getResource(path);
+					return url;
 				}
 			}));
 			mRegistry.addModule(module);

@@ -34,6 +34,7 @@ public class XProcessorImp extends XProcessor {
 	private HashMap<String, Source> mInputPorts = new HashMap<String, Source>();
 	private HashMap<String, Result> mOutputPorts = new HashMap<String, Result>();
 	private XProcParameters mParams;
+	private HashMap<String, Object> mOptions = new HashMap<String, Object>();
 
 	// TODO this field is not being used because
 	private EntityResolver mEntityResolver;
@@ -47,7 +48,7 @@ public class XProcessorImp extends XProcessor {
 		for (String s : mPipeline.getOutputs()) {
 			mOutputPorts.put(s, null);
 		}
-
+		
 		mParams = new XProcParameters(mInputPorts.keySet());
 
 	}
@@ -98,7 +99,11 @@ public class XProcessorImp extends XProcessor {
 								.toString()));
 			}
 		}
-
+		
+		for(String option:mOptions.keySet()){
+			mPipeline.setOption(new QName(option),new RuntimeValue( mOptions.toString()));
+		}
+		
 		try {
 			mPipeline.run();
 		} catch (SaxonApiException e) {
@@ -234,6 +239,17 @@ public class XProcessorImp extends XProcessor {
 	public Object getParameter(String port, String name) {
 		return mParams.getParameter(port, name);
 
+	}
+
+	@Override
+	public void setOption(String name, Object value) {
+		mOptions.put(name, value);
+		
+	}
+
+	@Override
+	public Object getOption(String name) {
+		return mOptions.get(name);
 	}
 
 }

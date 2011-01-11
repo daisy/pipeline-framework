@@ -20,6 +20,7 @@ public class Module {
 		this.title = title;
 		this.dependencies = dependencies;
 		for (Component component:components ){
+			component.setModule(this);
 			this.components.put(component.getURI(), component);
 		}
 		

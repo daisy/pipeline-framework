@@ -5,7 +5,7 @@
 	com.thaiopensource.jing,\
 	com.xmlcalabash,\
 	net.sf.saxon-he,\
-	xproc-calabash-imp;version=latest
+	
 -runfw: org.eclipse.osgi
 -buildpath: osgi.core,\
 	osgi.cmpn,\

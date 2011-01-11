@@ -25,6 +25,7 @@ public class CommandPipeline extends Command {
 	public static String PIPELINE = "PIPELINE";
 	public static String OUTPUT = "OUTPUT";
 	public static String PARAMS = "PARAMS";
+	public static String OPTIONS = "OPTIONS";
 	public static String PROVIDER = "PROVIDER";
 
 	public CommandPipeline(Properties args) {
@@ -46,6 +47,8 @@ public class CommandPipeline extends Command {
 				.getProperty(INPUT));
 		HashMap<String, String> outputs = parseInputList(mArgs
 				.getProperty(OUTPUT));
+		HashMap<String, String> options = parseInputList(mArgs
+				.getProperty(OPTIONS));
 
 		HashMap<String, HashMap<String, String>> params = parseParamsList(mArgs
 				.getProperty(PARAMS));
@@ -74,6 +77,10 @@ public class CommandPipeline extends Command {
 				xproc.setParameter(port, param, params.get(port).get(param));
 
 		}
+		//options
+		for (String option:options.keySet()){
+			xproc.setOption(option, options.get(option));
+		}
 		// bind outputs
 
 		for (String key : outputs.keySet()) {
@@ -81,6 +88,8 @@ public class CommandPipeline extends Command {
 			xproc.bindOutputPort(key, getSaxResult(outputs.get(key)));
 
 		}
+		
+		
 		// here we go!
 
 		xproc.run();

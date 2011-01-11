@@ -51,8 +51,8 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 			// parse the package element
 			StartElement elem = StaxEventHelper.peekNextElement(reader,
 					Elements.PACKAGE);
-			builder.withName(elem.getAttributeByName(Attributes.NAME)
-					.getValue());
+			//builder.withName(elem.getAttributeByName(Attributes.NAME)
+			//		.getValue());
 			reader.next();
 
 			// parse dependencies
@@ -104,7 +104,9 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 		// parse the version
 		builder.withVersion(module.getAttributeByName(Attributes.VERSION)
 				.getValue());
-
+		// parse the name
+		builder.withName(module.getAttributeByName(Attributes.NAME)
+				.getValue());
 		// parse the title
 		StaxEventHelper.peekNextElement(reader, Elements.TITLE);
 		reader.next();

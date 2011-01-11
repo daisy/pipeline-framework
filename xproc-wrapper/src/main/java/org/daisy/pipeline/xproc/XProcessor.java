@@ -27,6 +27,11 @@ public abstract class XProcessor {
 	public abstract void setParameter(String port,String name,Object value);
 	
 	public abstract Object getParameter(String port,String name);
+	
+	public abstract void setOption(String name,Object value);
+	
+	public abstract Object getOption(String name);
+
 
 	
 	public abstract void setURIResolver(URIResolver resolver); 

@@ -14,8 +14,7 @@ public class Component {
 	private String path;
 	private Space space;
 	private ResourceLoader loader;
-
-	// TODO content field: as URL ? as stream ? as handler ?
+	private Module module;
 
 	public Component(URI uri, String path, Space space, ResourceLoader loader) {
 		this.uri = uri;
@@ -34,7 +33,7 @@ public class Component {
 
 	public URI getResource() {
 		try {
-			URL url= loader.loadResource(path);
+			URL url= loader.loadResource(this.module.getName()+"/"+path);
 			if(url!=null)
 				return url.toURI();
 			else
@@ -49,5 +48,11 @@ public class Component {
 	public String toString() {
 		return space + "[" + uri + "]";
 	}
+	public Module getModule() {
+		return module;
+	}
 
+	public void setModule(Module module) {
+		this.module = module;
+	}
 }
