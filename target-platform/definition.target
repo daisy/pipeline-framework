@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.6"?>
+
+<target name="definition">
+<locations>
+<location path="/home/javi/dedicon/tycho/repo" type="Directory"/>
+<location path="/home/javi/dedicon/tycho/common.stax.site/target/site" type="Directory"/>
+<location path="/home/javi/dedicon/tycho/module.common.site/target/site" type="Directory"/>
+</locations>
+<launcherArgs>
+<vmArgs>org.osgi.framework.system.packages=sun.misc</vmArgs>
+<programArgs>org.osgi.framework.system.packages=sun.misc</programArgs>
+</launcherArgs>
+</target>
