@@ -1,5 +1,0 @@
--runbundles: 
-	module-B;version=latest
--runfw: org.apache.felix.framework
-	
-Include-Resource: expath-pkg.xml=expath-pkg.xml,module-A/hello.xsl=module-A/hello.xsl

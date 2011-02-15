@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="close" immediate="true" name="module-registry">
-   <implementation class="org.daisy.pipeline.modules.tracker.DefaultModuleRegistry"/>
-   <reference bind="setParser" cardinality="1..1" interface="org.daisy.expath.parser.EXPathPackageParser" name="PackageParser" policy="static"/> 
-   <service>
-      <provide interface="org.daisy.pipeline.modules.ModuleRegistry"/>
-   </service>
-</scr:component>
