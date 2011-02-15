@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>common.stax.feature</groupId>
+  <artifactId>common.stax.feature</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>eclipse-feature</packaging>
+
+  <parent>
+                <groupId>org.daisy.pipeline</groupId>
+                <artifactId>common-stax-parent</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <relativePath>../common-stax-parent</relativePath>
+ </parent>
+
+
+<build>
+<plugins>
+<plugin>
+  <groupId>org.sonatype.tycho</groupId>
+  <artifactId>maven-osgi-packaging-plugin</artifactId>
+  <version>${tycho-version}</version>
+  <configuration>
+    <deployableFeature>true</deployableFeature>
+  </configuration>
+</plugin>
+</plugins>
+</build>
+</project>
