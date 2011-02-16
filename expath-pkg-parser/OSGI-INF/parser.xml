@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="true" immediate="false" name="package-parser">
+   <implementation class="org.daisy.expath.parser.stax.StaxEXPathPackageParser"/>
+   <service>
+      <provide interface="org.daisy.expath.parser.EXPathPackageParser"/>
+   </service>
+   <reference bind="setFactory" cardinality="1..1" interface="org.codehaus.stax2.osgi.Stax2InputFactoryProvider" name="Stax2InputFactoryProvider" policy="static"/> 
+</scr:component>

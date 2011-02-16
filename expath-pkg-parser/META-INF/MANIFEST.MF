@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Expath-pkg-parser
+Bundle-SymbolicName: expath-pkg-parser
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.daisy.pipeline.modules,
+ org.daisy.common.stax,
+ com.google.common.base,
+ org.codehaus.stax2.osgi
+Service-Component: OSGI-INF/parser.xml
+Export-Package: org.daisy.expath.parser
+
+

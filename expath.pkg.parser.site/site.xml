@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/expath.pkg.parser.feature_1.0.0.qualifier.jar" id="expath.pkg.parser.feature" version="0.0.0"/>
+</site>
