@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Module-registry
+Bundle-SymbolicName: module-registry
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: com.google.common.base,
+ org.daisy.expath.parser,
+ org.daisy.pipeline.modules,
+ org.osgi.framework;version="1.5.0",
+ org.osgi.util.tracker;version="1.4.0"
+Service-Component: OSGI-INF/registry.xml
