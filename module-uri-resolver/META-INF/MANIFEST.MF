@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Module-uri-resolver
+Bundle-SymbolicName: module-uri-resolver
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.daisy.pipeline.modules,
+ org.osgi.framework;version="1.5.0"
+Service-Component: OSGI-INF/resolver.xml
