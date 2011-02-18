@@ -7,3 +7,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.daisy.pipeline.modules,
  org.osgi.framework;version="1.5.0"
 Service-Component: OSGI-INF/resolver.xml
+Export-Package: org.daisy.pipeline.modules.resolver

@@ -4,6 +4,7 @@ Bundle-Name: Xproc-calabash-imp
 Bundle-SymbolicName: xproc-calabash-imp
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Service-Component: OSGI-INF/xproc.xml
 Import-Package: com.xmlcalabash.core,
  com.xmlcalabash.io,
  com.xmlcalabash.model,

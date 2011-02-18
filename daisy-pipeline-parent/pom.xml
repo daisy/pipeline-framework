@@ -15,6 +15,11 @@
 	<module>../common-stax-parent</module>
 	<module>../module-common-parent</module>
 	<module>../expath-pkg-parser-parent</module>
+	<module>../module-registry-parent</module>
+	<module>../xproc-wrapper-parent</module>
+	<module>../xproc-calabash-imp-parent</module>
+	<module>../module-uri-resolver-parent</module>
+	<module>../commandline-parent</module>
 	</modules>
  <repositories>
                 <repository>

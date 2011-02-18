@@ -9,6 +9,7 @@
 <location path="/home/javi/dedicon/tycho/expath.pkg.parser.site/target/site" type="Directory"/>
 <location path="/home/javi/dedicon/tycho/module.registry.site/target/site" type="Directory"/>
 <location path="/home/javi/dedicon/tycho/xproc.calabash.imp.site/target/site" type="Directory"/>
+<location path="/home/javi/dedicon/tycho/module.uri.resolver.site/target/site" type="Directory"/>
 </locations>
 <launcherArgs>
 <vmArgs>org.osgi.framework.system.packages=sun.misc</vmArgs>

@@ -1,3 +1,4 @@
 #!/bin/bash
 export REPO=$PWD/repo
+rm $REPO/*jar
  ~/eclipse/eclipse/eclipse -debug -consolelog -nosplash -verbose -application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher -metadataRepository file://$REPO -artifactRepository file://$REPO -source $REPO -compress -publishArtifacts
