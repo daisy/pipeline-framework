@@ -9,6 +9,8 @@
 
         <properties>
                 <tycho-version>0.10.0</tycho-version>
+		<daisy.repo>${project.baseUri}../repo/</daisy.repo>
+		<daisy.target>${project.baseUri}../target-platform</daisy.target>
         </properties>
 	<modules>
 	<module>../target-platform</module>
@@ -25,12 +27,12 @@
                 <repository>
                   <id>daisy_repo</id>
                   <layout>p2</layout>
-                  <url>file:///home/javi/dedicon/tycho/repo/</url>
+                  <url>${daisy.repo}</url>
                 </repository>
                 <repository>
                   <id>target_platform</id>
                   <layout>p2</layout>
-                  <url>file:///home/javi/dedicon/tycho/target-platform</url>
+                  <url>${daisy.target}</url>
                 </repository>
 
 </repositories>
