@@ -9,7 +9,7 @@
 
         <properties>
                 <tycho-version>0.10.0</tycho-version>
-		<daisy.repo>${project.baseUri}../repo/</daisy.repo>
+		<daisy.repo>${project.baseUri}../repo/</daisy.repo> 
 		<daisy.target>${project.baseUri}../target-platform</daisy.target>
         </properties>
 	<modules>
