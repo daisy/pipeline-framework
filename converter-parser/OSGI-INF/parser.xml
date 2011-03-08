@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="true" immediate="true" name="converter-parser">
+   <implementation class="org.daisy.converter.parser.stax.StaxConverterParser"/>
+   <service>
+      <provide interface="org.daisy.converter.parser.ConverterParser"/>
+   </service>
+   <reference bind="setFactory" cardinality="1..1" interface="org.codehaus.stax2.osgi.Stax2InputFactoryProvider" name="Stax2InputFactoryProvider" policy="static"/> 
+   <reference bind="setUriResover" cardinality="1..1" interface="org.daisy.pipeline.modules.UriResolverDecorator" name="resolver" policy="static"/>
+</scr:component>

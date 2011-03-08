@@ -1,4 +1,4 @@
-Manifest-Version: 1.0
+nManifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Commandline
 Bundle-SymbolicName: commandline
@@ -8,6 +8,7 @@ Bundle-Activator: org.daisy.pipeline.ui.commandline.CmdLineActivator
 Import-Package: joptsimple,
  net.sf.saxon;version="9.2.1.5",
  org.daisy.pipeline.modules,
+ org.daisy.pipeline.modules.converter,
  org.daisy.pipeline.xproc,
  org.osgi.framework;version="1.5.0",
  org.osgi.util.tracker

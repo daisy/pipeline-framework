@@ -1,0 +1,11 @@
+<package name="http://www.example.org/module-B" xmlns="http://expath.org/ns/pkg">
+	
+	<module version="1.0.0" name="module-B">
+		<title>Example Module B v1.0</title>
+		<xslt>
+			<import-uri>http://www.example.org/module-B/hello.xsl</import-uri>
+			<file>hello.xsl</file>
+		</xslt>
+	</module>
+	
+</package>

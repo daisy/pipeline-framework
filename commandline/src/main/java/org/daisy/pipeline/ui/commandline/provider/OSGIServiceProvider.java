@@ -2,6 +2,7 @@ package org.daisy.pipeline.ui.commandline.provider;
 
 import org.daisy.pipeline.modules.ModuleRegistry;
 import org.daisy.pipeline.modules.UriResolverDecorator;
+import org.daisy.pipeline.modules.converter.ConverterRegistry;
 import org.daisy.pipeline.xproc.XProcessorFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
@@ -27,7 +28,10 @@ public class OSGIServiceProvider implements ServiceProvider {
 	public UriResolverDecorator getUriResolver() {
 		return this.getService(UriResolverDecorator.class);
 	} 
-	
+	@Override
+	public ConverterRegistry getConverterRegistry() {
+		return this.getService(ConverterRegistry.class);
+	}
 	private <T> T getService(Class<T> clazz){
 		T service=null;
 		ServiceTracker tracker;
@@ -46,5 +50,6 @@ public class OSGIServiceProvider implements ServiceProvider {
 		tracker.close();
 		return service;
 	}
+	
 
 }

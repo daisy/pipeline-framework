@@ -16,7 +16,8 @@ public class CommandLine {
 	public CommandLine(ServiceProvider provider) {
 		mProvider=provider;
 		mParser = new OptionParser();
-		mParser.accepts("l", "List of available converters");
+		mParser.accepts("l", "List of available uris");
+		mParser.accepts("c", "List of available converters");
 		mParser.accepts("x", "xproc file to execute").withRequiredArg();
 		mParser.accepts("i", "list of input ports in the format portName1:file1,portName2:file2  (only with -x modifier)").withRequiredArg();
 		mParser.accepts("o", "list of output ports in the format portName1:file1,portName2:file2").withRequiredArg();
@@ -49,14 +50,31 @@ public class CommandLine {
 		
 		if(oSet.has("l")){
 			return getListCommand();
+		}else if(oSet.has("c")){
+			return getListConverterCommand();
 		}else if(oSet.has("x")){
 			return getPipelineCommand(oSet);
+		}else if(oSet.has("h")){
+			return getHelpCommand(oSet);
 		}
 		
 		//at this point the only option left should be help
 		return getUsage();
 	}
 	
+	
+
+	private Command getHelpCommand(OptionSet oSet) {
+		Properties commandArgs= new Properties();
+		commandArgs.put(CommandConverterHelp.PROVIDER, mProvider);
+		
+		if (oSet.valueOf("h")!=null && !oSet.valueOf("h").toString().isEmpty()){
+			commandArgs.put(CommandConverterHelp.NAME,oSet.valueOf("h").toString());
+			return new CommandConverterHelp(commandArgs);
+		}else
+			return getUsage();
+	}
+
 	private Command getPipelineCommand(OptionSet oSet) {
 		Properties commandArgs= new Properties();
 		commandArgs.put(CommandPipeline.PROVIDER, mProvider);
@@ -84,6 +102,12 @@ public class CommandLine {
 		return new CommandPipeline(commandArgs);
 	}
 
+	private Command getListConverterCommand() {
+		Properties commandArgs= new Properties();
+		commandArgs.put(CommandList.PROVIDER, mProvider);
+		return new CommandConverterList(commandArgs);
+	}
+	
 	private Command getListCommand() {
 		Properties commandArgs= new Properties();
 		commandArgs.put(CommandList.PROVIDER, mProvider);
@@ -91,7 +115,7 @@ public class CommandLine {
 	}
 
 	public boolean checkBasicArgs(OptionSet oSet){
-		return oSet.has("l")||oSet.has("h")||oSet.has("x");
+		return oSet.has("c")||oSet.has("l")||oSet.has("h")||oSet.has("x");
 	}
 
 	public Command getUnrecovreableError(String msg){

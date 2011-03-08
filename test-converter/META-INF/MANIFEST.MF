@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test-converter
+Bundle-SymbolicName: test-converter
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: converter-registry;bundle-version="1.0.0",
+ module-common;bundle-version="1.0.0"
+Service-Component: OSGI-INF/test.xml
