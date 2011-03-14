@@ -12,7 +12,7 @@ public class OSGIConverterDescriptor extends ConverterDescriptor {
 	private static final String CONVERTER_URL = "converter.url";
 	private static final String CONVERTER_DESCRIPTION = "converter.description";
 	private static final String CONVERTER_NAME = "converter.name";
-
+	private BundleContext mCtxt;
 	public OSGIConverterDescriptor() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -20,11 +20,12 @@ public class OSGIConverterDescriptor extends ConverterDescriptor {
 
 	
 	public void init(BundleContext ctxt) {
-
+		
 	} 
 
 	protected void activate(ComponentContext context) {
 		Dictionary props =context.getProperties();
+		mCtxt=context.getBundleContext();
 		if (props.get(CONVERTER_NAME)==null ||props.get(CONVERTER_NAME).toString().isEmpty()){
 			throw new IllegalArgumentException(CONVERTER_NAME+" property must not be empty");
 		}

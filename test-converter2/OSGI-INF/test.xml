@@ -4,9 +4,8 @@
    <service>
             <provide interface="org.daisy.pipeline.modules.converter.ConverterDescriptor"/>
    </service>
-   <property name="converter.name" type="String" value="test2"/>
-   <property name="converter.description" type="String" value="Test number 2"/>
-   <property name="converter.url" type="String" value="http://google.com"/>
-
+   <property name="converter.name" type="String" value="testHello"/>
+   <property name="converter.description" type="String" value="Converter Hello"/>
+   <property name="converter.url" type="String" value="http://www.example.org/test/helloTest.xpl"/>
 
 </scr:component>

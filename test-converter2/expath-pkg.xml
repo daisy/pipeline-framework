@@ -1,0 +1,13 @@
+<package name="http://www.example.org/module-test" xmlns="http://expath.org/ns/pkg">
+	
+	
+	
+	<module version="1.0.0" name="module-test">
+		<title>Hello converter v1.0</title>
+		<xslt>
+			<import-uri>http://www.example.org/test/helloTest.xpl</import-uri>
+			<file>helloTest.xpl</file>
+		</xslt>
+	</module>
+	
+</package>

@@ -5,14 +5,19 @@ import java.util.HashMap;
 import org.daisy.pipeline.modules.converter.Converter;
 import org.daisy.pipeline.modules.converter.Converter.MutableConverter;
 import org.daisy.pipeline.modules.converter.ConverterFactory;
+import org.daisy.pipeline.modules.converter.ConverterRunnable;
 
-public class OSGIConverter implements Converter,MutableConverter,ConverterFactory {
+public class OSGIConverter implements Converter,MutableConverter {
 
 	private String mName;
 	private String mVersion;
 	private String mDescription;
 	private HashMap<String, ConverterArgument> mArguments = new HashMap<String, Converter.ConverterArgument>();
+	private OSGIConverterRegistry mFactory;
 	
+	OSGIConverter(OSGIConverterRegistry factory) {
+		mFactory=factory;
+	}
 	
 	public void addArgument(ConverterArgument argument){
 		mArguments.put(argument.getName(), argument);
@@ -48,27 +53,17 @@ public class OSGIConverter implements Converter,MutableConverter,ConverterFactor
 	public String getDescription() {
 		return mDescription;
 	}
-	@Override
-	public ConverterFactory getFactory() {
-		// TODO Auto-generated method stub
-		return this;
-	}
-	@Override
-	public MutableConverter newConverter() {
-		
-		return new OSGIConverter();
-	}
-	@Override
-	public MutableConverterArgument newArgument() {
-		// TODO Auto-generated method stub
-		return new OSGIConverterArgument();
-	}
+	
 	@Override
 	public void setName(String name) {
 		mName=name;
 	}
 	
-	public class OSGIConverterArgument extends  MutableConverterArgument{
+	OSGIConverterRegistry getRegistry(){
+		return mFactory;
+	}
+	
+	public static class OSGIConverterArgument extends  MutableConverterArgument{
 
 		@Override
 		public void setName(String name) {
@@ -105,6 +100,17 @@ public class OSGIConverter implements Converter,MutableConverter,ConverterFactor
 			
 		}
 		
+	}
+
+	@Override
+	public ConverterFactory getFactory() {
+		// TODO Auto-generated method stub
+		return mFactory;
+	}
+
+	@Override
+	public ConverterRunnable getRunnable() {
+		return new OSGIConverterRunner(this) ;
 	}
 	
 	

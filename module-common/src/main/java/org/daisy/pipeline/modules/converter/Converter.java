@@ -16,7 +16,7 @@ public interface Converter {
 
 	public ConverterFactory getFactory();
 
-	// public ConverterRunnable getRunnable();
+	public ConverterRunnable getRunnable();
 
 	public abstract class ConverterArgument {
 		public enum Type {

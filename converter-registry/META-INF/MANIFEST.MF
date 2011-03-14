@@ -6,6 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Import-Package: org.daisy.converter.parser,
  org.daisy.pipeline.modules,
  org.daisy.pipeline.modules.converter,
+ org.daisy.pipeline.xproc,
  org.osgi.framework;version="1.3.0",
  org.osgi.service.component
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
