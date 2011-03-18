@@ -21,9 +21,10 @@
 	<module>../expath-pkg-parser</module>
 	<module>../module-registry</module>
 	<module>../xproc-wrapper</module>
-	
 	<module>../xproc-calabash-imp</module>
 	<module>../module-uri-resolver</module>
+	<module>../converter-parser</module>
+	<module>../converter-registry</module>
 	<module>../commandline</module>
 	</modules>
  <repositories>
