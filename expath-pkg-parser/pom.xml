@@ -6,10 +6,10 @@
   <artifactId>expath-pkg-parser</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
-  <parent>
-                <groupId>org.daisy.pipeline</groupId>
-                <artifactId>expath-pkg-parser-parent</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-                <relativePath>../expath-pkg-parser-parent</relativePath>
- </parent>
+	<parent>
+			<groupId>org.daisy.pipeline</groupId>
+			<artifactId>daisy-pipeline-framework-parent</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<relativePath>../daisy-pipeline-parent</relativePath>
+	 </parent>
 </project>

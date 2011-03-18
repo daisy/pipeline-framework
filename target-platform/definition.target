@@ -3,13 +3,8 @@
 
 <target name="definition">
 <locations>
-<location path="../repo" type="Directory"/>
-<location path="../common.stax.site/target/site" type="Directory"/>
-<location path="../module.common.site/target/site" type="Directory"/>
-<location path="../expath.pkg.parser.site/target/site" type="Directory"/>
-<location path="../module.registry.site/target/site" type="Directory"/>
-<location path="../xproc.calabash.imp.site/target/site" type="Directory"/>
-<location path="../module.uri.resolver.site/target/site" type="Directory"/>
+<location path="${workspace_loc}/daisy-pipeline/repo" type="Directory"/>
+<location path="${project_loc}/../daisy.pipeline.site/target" type="Directory"/>
 </locations>
 <launcherArgs>
 <vmArgs>org.osgi.framework.system.packages=sun.misc</vmArgs>

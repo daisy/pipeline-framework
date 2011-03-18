@@ -2,12 +2,12 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-  <parent>
-                <groupId>org.daisy.pipeline</groupId>
-                <artifactId>common-stax-parent</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-                <relativePath>../common-stax-parent</relativePath>
- </parent>
+	<parent>
+			<groupId>org.daisy.pipeline</groupId>
+			<artifactId>daisy-pipeline-framework-parent</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<relativePath>../daisy-pipeline-parent</relativePath>
+	 </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.daisy.pipeline</groupId>

@@ -14,14 +14,17 @@
         </properties>
 	<modules>
 	<module>../target-platform</module>
-	<module>../common-stax-parent</module>
-	<module>../module-common-parent</module>
-	<module>../expath-pkg-parser-parent</module>
-	<module>../module-registry-parent</module>
-	<module>../xproc-wrapper-parent</module>
-	<module>../xproc-calabash-imp-parent</module>
-	<module>../module-uri-resolver-parent</module>
-	<module>../commandline-parent</module>
+	<module>../daisy.pipeline.feature</module>
+	<module>../daisy.pipeline.site</module>
+	<module>../module-common</module>
+	<module>../common-stax</module>
+	<module>../expath-pkg-parser</module>
+	<module>../module-registry</module>
+	<module>../xproc-wrapper</module>
+	
+	<module>../xproc-calabash-imp</module>
+	<module>../module-uri-resolver</module>
+	<module>../commandline</module>
 	</modules>
  <repositories>
                 <repository>

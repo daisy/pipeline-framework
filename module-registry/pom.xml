@@ -8,8 +8,8 @@
   <packaging>eclipse-plugin</packaging>
 	<parent>
 			<groupId>org.daisy.pipeline</groupId>
-			<artifactId>module-registry-parent</artifactId>
+			<artifactId>daisy-pipeline-framework-parent</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			<relativePath>../module-registry-parent</relativePath>
+			<relativePath>../daisy-pipeline-parent</relativePath>
 	 </parent>
 </project>

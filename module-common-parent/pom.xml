@@ -6,17 +6,9 @@
         <version>0.0.1-SNAPSHOT</version>
         <packaging>pom</packaging>
         <name>Module common parent</name>
-	<parent>
-			<groupId>org.daisy.pipeline</groupId>
-			<artifactId>daisy-pipeline-framework-parent</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<relativePath>../daisy-pipeline-parent</relativePath>
-	 </parent>
 
         <modules>
 		<module>../module-common</module>
-		<module>../module.common.feature</module>
-		<module>../module.common.site</module>
         </modules>
 
 </project>
