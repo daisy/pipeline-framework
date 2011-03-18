@@ -6,12 +6,6 @@
         <version>0.0.1-SNAPSHOT</version>
         <packaging>pom</packaging>
         <name>Module registry parent</name>
-	<parent>
-			<groupId>org.daisy.pipeline</groupId>
-			<artifactId>daisy-pipeline-framework-parent</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<relativePath>../daisy-pipeline-parent</relativePath>
-	 </parent>
 
         <modules>
 		<module>../module-registry</module>
