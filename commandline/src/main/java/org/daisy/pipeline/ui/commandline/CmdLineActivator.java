@@ -10,9 +10,18 @@ public class CmdLineActivator implements BundleActivator {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		final BundleContext ctxt = context;
+		
 		new Thread() {
 			public void run() {
-				String args = System.getProperty("org.daisy.pipeline.cmdargs");
+			  //  for (Object key:System.getProperties().keySet()){
+			    //	System.out.println("[PROP] "+key+": " + System.getProperties().getProperty(key.toString()));
+			    //}
+				String args = null;
+				args= System.getProperty("org.daisy.pipeline.cmdargs");
+				//awful getevn thanks to the disappointing pax runner --vmo space support
+				if (args==null)
+					args = System.getenv("DAISY_ARGS");
+				System.out.println("[ARGS] "+args);
 				ServiceProvider provider = new OSGIServiceProvider(ctxt);
 				if (args == null) {
 					new CommandLine(provider).getUnrecovreableError(
@@ -34,6 +43,7 @@ public class CmdLineActivator implements BundleActivator {
 
 			}
 		}.start();
+		
 	}
 
 	@Override

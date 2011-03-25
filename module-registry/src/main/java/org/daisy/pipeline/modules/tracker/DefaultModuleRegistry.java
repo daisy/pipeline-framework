@@ -37,6 +37,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 		tracker = new EXPathPackageTracker(context,this);
 		tracker.setParser(mParser);
 		tracker.open();
+		//System.out.println("MR UP");
 		
 	}
 	
@@ -72,6 +73,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	@Override
 	public void addModule(Module module) {
 		mModules.add(module);
+		//System.out.println("[LOG] Registring"+module.getName());
 		for(Component component: module.getComponents()){
 			mComponentsMap.put(component.getURI(), module);
 		}		

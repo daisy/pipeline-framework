@@ -26,6 +26,9 @@
 	<module>../converter-parser</module>
 	<module>../converter-registry</module>
 	<module>../commandline</module>
+	<module>../module-hello</module>
+	<module>../test-converter2</module>
+	<module>../test-converter</module>
 	</modules>
  <repositories>
                 <repository>

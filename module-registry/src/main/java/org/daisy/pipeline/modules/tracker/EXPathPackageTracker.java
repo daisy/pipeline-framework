@@ -28,11 +28,12 @@ public class EXPathPackageTracker extends BundleTracker {
 	
 	@Override
 	public Object addingBundle(final Bundle bundle, BundleEvent event) {
-		
+		//System.out.println("Adding bundle:"+bundle.getSymbolicName());
 		Bundle result = null;
 		URL url = bundle.getResource("expath-pkg.xml");
+		
 		if (url != null) {
-		//	System.out.println("tracking: " + bundle.getSymbolicName());
+			//System.out.println("tracking: " + bundle.getSymbolicName());
 			Module module = mParser.parse(url, new DefaultModuleBuilder().withLoader(new ResourceLoader() {
 				
 				public URL loadResource(String path) {

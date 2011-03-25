@@ -1,0 +1,2 @@
+scan-dir:PWD/../repo/plugins/
+scan-dir:PWD/../daisy.pipeline.site/target/site/plugins
