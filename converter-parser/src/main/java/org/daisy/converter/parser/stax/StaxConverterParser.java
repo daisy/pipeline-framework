@@ -27,11 +27,35 @@ import org.daisy.pipeline.modules.UriResolverDecorator;
 import org.daisy.pipeline.modules.converter.Converter;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
 
+
+/**
+ * The Class StaxConverterParser parses the converter information present in a xpl file.
+ * This information must follow the following syntax
+ * 
+ * <cd:converter name="testHello" version="1.0">
+		<cd:description> Test xpl description</cd:description>	
+		<cd:arg  name="in"  type="input" port="source" desc="input for hello process" optional="true"/> 	
+		<cd:arg  name="out"  type="output" port="result" desc="the result file"/> 	
+		<cd:arg  name="o"  type="option" bind="opt" desc="that kind of option that modifies the converter behaviour"/>
+		<cd:arg  name="msg"  type="parameter" bind="msg" port="params" desc="msg to show" />
+    </cd:converter>	
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
 public class StaxConverterParser implements ConverterParser {
 
+	/** The xmlinputfactory. */
 	private XMLInputFactory mFactory;
+	
+	/** The uri resolver. */
 	private URIResolver mUriResolver;
 
+	/* (non-Javadoc)
+	 * @see org.daisy.converter.parser.ConverterParser#parse(org.daisy.pipeline.modules.converter.ConverterDescriptor, org.daisy.converter.parser.ConverterBuilder)
+	 */
 	@Override
 	public Converter parse(ConverterDescriptor descriptor, ConverterBuilder builder ) {
 		if (mFactory == null) {
@@ -51,7 +75,7 @@ public class StaxConverterParser implements ConverterParser {
 			is = descUrl.openConnection().getInputStream();
 			reader = mFactory.createXMLEventReader(is);
 
-			// parse the package element
+			//converter elem and attrs
 			StartElement elem = StaxEventHelper.peekNextElement(reader,
 					Elements.CONVERTER);
 			builder.withName(elem.getAttributeByName(Attributes.NAME)
@@ -62,6 +86,7 @@ public class StaxConverterParser implements ConverterParser {
 					Elements.DESC);
 			reader.next();
 			builder.withDescription(reader.getElementText());
+			//arguments
 			this.parseArguments(reader,builder);
 			
 			//builder.withDescription(elem.);
@@ -87,19 +112,42 @@ public class StaxConverterParser implements ConverterParser {
 		return builder.build();
 	}
 
+	/**
+	 * Sets the factory.
+	 *
+	 * @param inputFactoryProvider the new factory
+	 */
 	public void setFactory(Stax2InputFactoryProvider inputFactoryProvider) {
 		//System.out.println("FACTORY!");
 		mFactory = inputFactoryProvider.createInputFactory();
 	}
 	
+	/**
+	 * Sets the direct factory.
+	 *
+	 * @param fact the new direct factory
+	 */
 	public void setDirectFactory(XMLInputFactory fact) {
 		mFactory = fact.newInstance();
 	}
 
+	/**
+	 * Sets the uri resover.
+	 *
+	 * @param resolver the new uri resover
+	 */
 	public void setUriResover(UriResolverDecorator resolver){
 		//System.out.println("RESOLVER!");
 		this.mUriResolver=resolver;
 	}
+	
+	/**
+	 * Parses the arguments.
+	 *
+	 * @param reader the reader
+	 * @param builder the builder
+	 * @throws XMLStreamException the xML stream exception
+	 */
 	private void parseArguments(final XMLEventReader reader,
 			final ConverterBuilder builder) throws XMLStreamException {
 		StaxEventHelper.loop(reader, EventPredicates.IS_START_ELEMENT,
