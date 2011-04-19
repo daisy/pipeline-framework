@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    <p>/p</p>
+    <div title="/div/@attr">
+        <p>/div/p[1]</p>
+        <p>/div/p[2]</p>
+        <linegroup>
+            <line>/div/linegroup/line</line>
+        </linegroup>
+        <p>
+            <linegroup>
+                <line>/div/p[2]/linegroup/line</line>
+            </linegroup>
+        </p>
+        <p>/div/p[4]</p>
+    </div>
+    <line title="/line[1]/@attr">/line[1]</line>
+    <line>
+        <line>/line[2]/line</line>
+    </line>
+    <line title="/line[3]/@title">
+        <linegroup title="/line[3]/linegroup/@title">
+            <p title="/line[3]/linegroup/p/@title">/line[3]/linegroup/p</p>
+        </linegroup>
+    </line>
+    <line>
+        <line>
+            <linegroup>
+                <line>/line[4]/line/linegroup/line</line>
+            </linegroup>
+        </line>
+    </line>
+    <linegroup>
+        <line>/linegroup[1]/line[1]</line>
+        <p>/linegroup[1]/p</p>/linegroup/text()<![CDATA[/linegroup/CDATA]]>
+        <linegroup>
+            <line>linegroup[1]/linegroup/line</line>
+        </linegroup>
+        <pagenum id="page-2" title="linegroup[1]/pagenum">2</pagenum>
+        <br>asdf</br>
+        <line>
+            <line>/linegroup[1]/line[2]/line</line>
+        </line>
+        <line>
+            <poem>
+                <p>/linegroup[1]/line[3]/poem/p</p>
+                <linegroup>
+                    <line>/linegroup[1]/line[3]/poem/linegroup/line</line>
+                    <p>/linegroup[1]/line[3]/poem/linegroup/p</p>
+                </linegroup>
+            </poem>
+        </line>
+        <line>/linegroup[1]/line[4]</line>
+    </linegroup>
+    <linegroup>
+        <p>/linegroup[2]/p</p>
+    </linegroup>
+</dtbook>

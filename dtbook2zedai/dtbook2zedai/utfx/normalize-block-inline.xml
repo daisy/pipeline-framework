@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="utfx_tests.rnc" type="compact"?>
+<utfx:tests xmlns:utfx="http://utfx.org/test-definition"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    
+    <utfx:stylesheet src="normalize-block-inline.xsl"/>
+    
+    <utfx:test>
+        <utfx:name>Normalize Mixed Block/Inline: only block-level</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <div>
+                    <p>Test</p>
+                </div>
+            </utfx:source>
+            <utfx:expected>
+                <div>
+                    <p>Test</p>
+                </div>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Normalize Mixed Block/Inline: only inline</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <div>
+                    <span>Test</span>
+                </div>
+            </utfx:source>
+            <utfx:expected>
+                <div>
+                    <span>Test</span>
+                </div>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Normalize Mixed Block/Inline: mixed block and inline</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <div>
+                    <p>Para</p> <span>Span</span> <span>Span 2</span> <p>Another Para</p>
+                </div>
+            </utfx:source>
+            <utfx:expected>
+                <div>
+                    <p>Para</p> <p><span>Span</span></p> <p><span>Span 2</span></p> <p>Another Para</p>
+                </div>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Normalize Mixed Block/Inline: mixed block and inline with plain text</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <div>
+                    <p>Para</p> <span>Span</span> <span>Span 2</span> <p>Another Para</p> Plain Text <span>Span 3</span>
+                </div>
+            </utfx:source>
+            <utfx:expected>
+                <div>
+                    <p>Para</p> <p><span>Span</span></p> <p><span>Span 2</span></p> <p>Another Para</p> <p>Plain Text</p> <p><span>Span 3</span></p>
+                </div>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Normalize Mixed Block/Inline: level elements with inline children</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <level1>
+                    <span>Span</span> <span>Span 2</span>
+                </level1>
+            </utfx:source>
+            <utfx:expected>
+                <level1>
+                    <p><span>Span</span></p> <p><span>Span 2</span></p>
+                </level1>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+</utfx:tests>

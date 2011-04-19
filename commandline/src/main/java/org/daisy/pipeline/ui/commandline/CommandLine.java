@@ -123,7 +123,7 @@ public class CommandLine {
 	private Command getConverterCommand(OptionSet oSet) {
 		Properties commandArgs = new Properties();
 		commandArgs.put(CommandList.PROVIDER, mProvider);
-		System.out.println(oSet.valueOf("c"));
+		//System.out.println(oSet.valueOf("c"));
 		if (oSet.valueOf("c") == null) {
 			return new CommandConverterList(commandArgs);
 		} else {

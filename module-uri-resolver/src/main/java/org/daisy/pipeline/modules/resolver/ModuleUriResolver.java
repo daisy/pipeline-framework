@@ -28,6 +28,7 @@ public class ModuleUriResolver implements UriResolverDecorator {
 		mRegistry=reg;
 	}
 	public Source resolve(String href, String base) {
+		//System.out.println("Resolving:"+href);
 		URI uhref= URI.create(href);
 		Module mod = mRegistry.getModuleByComponent(uhref);
 		if(mod==null){

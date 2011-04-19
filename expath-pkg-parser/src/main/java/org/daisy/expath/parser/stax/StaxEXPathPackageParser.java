@@ -62,7 +62,9 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 			parseModule(reader, builder);
 
 		} catch (XMLStreamException e) {
+			
 			throw new RuntimeException("Parsing error: " + e.getMessage(), e);
+			
 		} catch (IOException e) {
 			throw new RuntimeException("Couldn't access package descriptor: "
 					+ e.getMessage(), e);

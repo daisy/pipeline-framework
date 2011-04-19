@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="utfx_tests.rnc" type="compact"?>
+<utfx:tests xmlns:utfx="http://utfx.org/test-definition"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+
+    <!-- xmlns:d2z="http://pipeline.daisy.org/ns/dtbook2zedai/"-->
+    <!-- Are namespaces ignored?  The 'real' output is 
+        <ln xmlns="http://pipeline.daisy.org/ns/dtbook2zedai/"> ...</ln>
+        
+        But the elements are equivalent if I leave out namespace data from the comparison.
+        
+    -->
+
+    <utfx:stylesheet src="convert-linebreaks.xsl"/>
+
+    <utfx:test>
+        <utfx:name>Many Different Elements With Linebreaks</utfx:name>
+        <!-- This could be broken into many small tests, but it's not quite worth the time for this particular test. -->
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+
+                <bodymatter>
+                    <level>
+                        <hd>This Test <br/> is about <br/> Linebreaks</hd>
+                        <p>Filler</p>
+                    </level>
+
+                    <level1>
+                        <h1>This Test <br/> is about <br/> Linebreaks</h1>
+
+                        <p>
+                            <span>This is a test for <br/> convert-linebreaks.xsl.</span>
+                            <span>When the test is successful, instead of being broken by
+                                &lt;br&gt;, each line will be wrapped by &gt;ln&lt; instead.</span>
+                        </p>
+
+                        <a href="http://example.org">Links <br/> may contain linebreaks</a>
+                        <author>An author <br/> can have a linebreak <br/> in their name</author>
+                        <p>
+                            <span>
+                                <bdo dir="ltr">BDO <br/> with <br/> Linebreak</bdo>
+                            </span>
+                        </p>
+                        <bridgehead>Bridge <br/> Heads <br/> Can have Linebreaks too</bridgehead>
+
+
+                        <byline>Byline1 <br/> Byline2</byline>
+
+                        <cite>Cite1 <br/> Cite2</cite>
+
+                        <dateline>Dateline1 <br/> dateline2</dateline>
+
+                        <dl>
+                            <dd>DD1 <br/> DD2</dd>
+                            <dt>DT1 <br/> DT2</dt>
+                        </dl>
+
+                        <p>
+                            <dfn>DFN1 <br/> DFN2</dfn>
+                        </p>
+
+                        <docauthor>Docauthor1 <br/> Docauthor2</docauthor>
+                        <doctitle>Doctitle1 <br/> Doctitle2</doctitle>
+
+                        <p>
+                            <em>EM1 <br/> EM2</em>
+                        </p>
+
+                        <p>P1 <br/> P2</p>
+                        <p>
+                            <sent>SENT1 <br/> SENT2</sent>
+                        </p>
+
+                        <p>
+                            <strong>STRONG1 <br/> STRONG2</strong>
+                        </p>
+
+                        <poem>
+                            <title>TITLE1 <br/> TITLE2</title>
+
+                            <line>LINE1 <br/> LINE2</line>
+
+                        </poem>
+
+
+                        <level2>
+                            <h2>H2-1 <br/> H2-2</h2>
+                            <p>Filler</p>
+
+                            <level3>
+                                <h3>H3-1 <br/> H3-2</h3>
+                                <p>Filler</p>
+
+                                <level4>
+                                    <h4>H4-1 <br/> H4-2</h4>
+                                    <p>Filler</p>
+
+                                    <level5>
+                                        <h5>H5-1 <br/> H5-2</h5>
+                                        <p>Filler</p>
+
+                                        <level6>
+                                            <h6>H6-1 <br/> H6-2</h6>
+                                            <p>Filler</p>
+                                        </level6>
+
+                                    </level5>
+
+
+                                </level4>
+
+                            </level3>
+
+                        </level2>
+
+                    </level1>
+
+                </bodymatter>
+
+
+            </utfx:source>
+            <utfx:expected>
+                <bodymatter>
+                    <level>
+                        <hd>
+                            <ln>This Test</ln>
+                            <ln>is about</ln>
+                            <ln>Linebreaks</ln>
+                        </hd>
+                        <p>Filler</p>
+                    </level>
+                    <level1>
+                        <h1>
+                            <ln>This Test</ln>
+                            <ln>is about</ln>
+                            <ln>Linebreaks</ln>
+                        </h1>
+
+                        <p>
+                            <span>
+                                <ln>This is a test for</ln>
+                                <ln>convert-linebreaks.xsl.</ln>
+                            </span>
+                            <span>When the test is successful, instead of being broken by
+                                &lt;br&gt;, each line will be wrapped by &gt;ln&lt; instead.</span>
+                        </p>
+
+                        <a href="http://example.org">
+                            <ln>Links</ln>
+                            <ln>may contain linebreaks</ln>
+                        </a>
+                        <author>
+                            <ln>An author</ln>
+                            <ln>can have a linebreak</ln>
+                            <ln>in their name</ln>
+                        </author>
+                        <p>
+                            <span>
+                                <bdo dir="ltr">
+                                    <ln>BDO</ln>
+                                    <ln>with</ln>
+                                    <ln>Linebreak</ln>
+                                </bdo>
+                            </span>
+                        </p>
+                        <bridgehead>
+                            <ln>Bridge</ln>
+                            <ln>Heads</ln>
+                            <ln>Can have Linebreaks too</ln>
+                        </bridgehead>
+
+
+                        <byline>
+                            <ln>Byline1</ln>
+                            <ln>Byline2</ln>
+                        </byline>
+
+                        <cite>
+                            <ln>Cite1</ln>
+                            <ln>Cite2</ln>
+                        </cite>
+
+                        <dateline>
+                            <ln>Dateline1</ln>
+                            <ln>dateline2</ln>
+                        </dateline>
+
+                        <dl>
+                            <dd>
+                                <ln>DD1</ln>
+                                <ln>DD2</ln>
+                            </dd>
+                            <dt>
+                                <ln>DT1</ln>
+                                <ln>DT2</ln>
+                            </dt>
+                        </dl>
+
+                        <p>
+                            <dfn>
+                                <ln>DFN1</ln>
+                                <ln>DFN2</ln>
+                            </dfn>
+                        </p>
+
+                        <docauthor>
+                            <ln>Docauthor1</ln>
+                            <ln>Docauthor2</ln>
+                        </docauthor>
+                        <doctitle>
+                            <ln>Doctitle1</ln>
+                            <ln>Doctitle2</ln>
+                        </doctitle>
+
+                        <p>
+                            <em>
+                                <ln>EM1</ln>
+                                <ln>EM2</ln>
+                            </em>
+                        </p>
+
+                        <p>
+                            <ln>P1</ln>
+                            <ln>P2</ln>
+                        </p>
+                        <p>
+                            <sent>
+                                <ln>SENT1</ln>
+                                <ln>SENT2</ln>
+                            </sent>
+                        </p>
+
+                        <p>
+                            <strong>
+                                <ln>STRONG1</ln>
+                                <ln>STRONG2</ln>
+                            </strong>
+                        </p>
+
+                        <poem>
+                            <title>
+                                <ln>TITLE1</ln>
+                                <ln>TITLE2</ln>
+                            </title>
+
+                            <line>
+                                <ln>LINE1</ln>
+                                <ln>LINE2</ln>
+                            </line>
+
+                        </poem>
+
+
+                        <level2>
+                            <h2>
+                                <ln>H2-1</ln>
+                                <ln>H2-2</ln>
+                            </h2>
+                            <p>Filler</p>
+
+                            <level3>
+                                <h3>
+                                    <ln>H3-1</ln>
+                                    <ln>H3-2</ln>
+                                </h3>
+                                <p>Filler</p>
+
+                                <level4>
+                                    <h4>
+                                        <ln>H4-1</ln>
+                                        <ln>H4-2</ln>
+                                    </h4>
+                                    <p>Filler</p>
+
+                                    <level5>
+                                        <h5>
+                                            <ln>H5-1</ln>
+                                            <ln>H5-2</ln>
+                                        </h5>
+                                        <p>Filler</p>
+
+                                        <level6>
+                                            <h6>
+                                                <ln>H6-1</ln>
+                                                <ln>H6-2</ln>
+                                            </h6>
+                                            <p>Filler</p>
+                                        </level6>
+
+                                    </level5>
+
+
+                                </level4>
+
+                            </level3>
+
+                        </level2>
+
+                    </level1>
+
+                </bodymatter>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+</utfx:tests>

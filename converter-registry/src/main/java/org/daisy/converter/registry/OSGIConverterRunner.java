@@ -6,8 +6,12 @@ import java.io.FileOutputStream;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 
+import net.sf.saxon.Configuration;
+
+import org.daisy.pipeline.modules.UriResolverDecorator;
 import org.daisy.pipeline.modules.converter.Converter.ConverterArgument.Type;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
 import org.daisy.pipeline.modules.converter.ConverterRunnable;
@@ -55,6 +59,8 @@ public class OSGIConverterRunner extends ConverterRunnable {
 								+ e.getLocalizedMessage(), e);
 			}
 			XProcessor proc = mRegistry.getXprocFactory().getProcessor(src);
+			URIResolver defaultResolver = Configuration.newConfiguration().getURIResolver();
+			((UriResolverDecorator)mRegistry.getUriResolver()).setDelegatedUriResolver(defaultResolver);
 			proc.setURIResolver(mRegistry.getUriResolver());
 			bindInputs(proc, runnable);
 			bindOutputs(proc, runnable);

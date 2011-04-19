@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="utfx_tests.rnc" type="compact"?>
+<utfx:tests xmlns:utfx="http://utfx.org/test-definition"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+
+    <utfx:stylesheet src="moveout-imggroup.xsl"/>
+
+    <!--<xsl:with-param name="valid-parents" select="tokenize('annotation,prodnote,sidebar,div,imggroup,caption,
+        li,note,img,blockquote,level,level1,level2,level3,level4,level5,level6,td,th'
+    -->
+    <utfx:test>
+        <utfx:name>Move Out Image Groups</utfx:name>
+        <utfx:call-template name="main">
+            <utfx:with-param name="document">
+                <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <book>
+                        <bodymatter>
+                            <level1>
+                                <div>
+                                    <p>Part A
+                                        <imggroup id="d1e63">
+                                            <img id="d1e65" src="abc.jpg" alt="abc"/>
+                                            <caption id="d1e67">i am a caption</caption>
+                                        </imggroup>
+                                        Part B</p>
+                                </div>
+                            </level1>
+                        </bodymatter>
+                    </book>
+                </dtbook>
+            </utfx:with-param>
+        </utfx:call-template>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            
+            <utfx:source>
+                <empty/>
+            </utfx:source>
+            
+            <utfx:expected>
+                <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <book>
+                        <bodymatter>
+                            <level1>
+                                <div>
+                                    <p>Part A</p>
+                                    <imggroup id="d1e63">
+                                        <img id="d1e65" src="abc.jpg" alt="abc"/>
+                                        <caption id="d1e67">i am a caption</caption>
+                                    </imggroup>
+                                    <p>Part B</p>
+                                </div>
+                            </level1>
+                        </bodymatter>
+                    </book>
+                </dtbook>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+</utfx:tests>

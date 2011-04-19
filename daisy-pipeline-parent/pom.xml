@@ -29,6 +29,7 @@
 	<module>../module-hello</module>
 	<module>../test-converter2</module>
 	<module>../test-converter</module>
+	<module>../dtbook2zedai</module>
 	</modules>
  <repositories>
                 <repository>

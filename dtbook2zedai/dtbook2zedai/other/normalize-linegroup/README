@@ -1,0 +1,9 @@
+Almost working demonstration of a way of unnesting linegroup/line elements.
+
+The stylesheet tries to make sure that no linegroups are nested, no lines are nested,
+that all lines have a linegroup as parent and that linegroups only has lines and
+pagenums as children.
+
+The stylesheet will probably make the document invalid and might remove some attributes,
+so it should only be used in cooperation with other stylesheets, or as an example of
+a solution to similar problems.

@@ -83,6 +83,7 @@ public class OSGIConverterRegistry implements ConverterRegistry,ConverterFactory
 	 * @param uriResolver the new uri resolver
 	 */
 	public void setUriResolver(UriResolverDecorator uriResolver) {
+		
 		mUriResolver = uriResolver;
 	}
 

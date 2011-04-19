@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="utfx_tests.rnc" type="compact"?>
+<utfx:tests xmlns:utfx="http://utfx.org/test-definition"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+
+    <utfx:stylesheet src="normalize-section-block.xsl"/>
+
+    <utfx:test>
+        <utfx:name>Normalize Mixed Section/Block: nothing wrong</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <bodymatter>
+                    <level1>
+                        <h1>Heading</h1>
+                        <p>Filler</p>
+                        <level2>
+                            <h2>heading2</h2>
+                            <p>Filler</p>
+                        </level2>
+                    </level1>
+                    <level1><h1>Heading 3</h1><p>Filler</p></level1>
+                </bodymatter>
+            </utfx:source>
+            <utfx:expected>
+                <bodymatter>
+                    <level1>
+                        <h1>Heading</h1>
+                        <p>Filler</p>
+                        <level2>
+                            <h2>heading2</h2>
+                            <p>Filler</p>
+                        </level2>
+                    </level1>
+                    <level1><h1>Heading 3</h1><p>Filler</p></level1>
+                </bodymatter>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Normalize Mixed Section/Block: mixed (illegal)</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <bodymatter>
+                    <level1>
+                        <h1>H1</h1>
+                        <p><sent>S-1</sent><sent>S-2</sent></p> <level2>
+                            <h2>H2</h2>
+                            <p><sent>S-1</sent></p>
+                        </level2> <p>ROGUE PARAGRAPH!</p> <level2>
+                            <h2>H2</h2>
+                            <p>P-1</p>
+                        </level2> </level1>
+                </bodymatter>
+            </utfx:source>
+            <utfx:expected>
+                <bodymatter>
+                    <level1>
+                        <h1>H1</h1>
+                        <p><sent>S-1</sent><sent>S-2</sent></p> <level2>
+                            <h2>H2</h2>
+                            <p><sent>S-1</sent></p>
+                        </level2> <level2><p>ROGUE PARAGRAPH!</p></level2> <level2>
+                            <h2>H2</h2>
+                            <p>P-1</p>
+                        </level2> </level1>
+                </bodymatter>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+</utfx:tests>

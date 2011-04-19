@@ -1,0 +1,1236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="utfx_tests.rnc" type="compact"?>
+<utfx:tests xmlns:utfx="http://utfx.org/test-definition"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:rend="http://www.daisy.org/ns/z3986/authoring/features/rend/"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <utfx:stylesheet src="translate-dtbook2zedai.xsl"/>
+
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: DTBook</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <dtbook/>
+            </utfx:source>
+            <utfx:expected>
+                <document xmlns:z3986="http://www.daisy.org/z3986/2011/vocab/decl/#"
+                    xmlns:dcterms="http://purl.org/dc/terms/"
+                    profile="http://www.daisy.org/z3986/2011/vocab/profiles/default/"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Head</utfx:name>
+        <!-- blank @about in meta for mods records because that filename is a parameter -->
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <head/>
+            </utfx:source>
+            <utfx:expected>
+                <head>
+                    <meta rel="z3986:profile"
+                        resource="http://www.daisy.org/z3986/2011/auth/profiles/book/0.8/"/>
+                    <meta rel="z3986:meta-record" resource="">
+                        <meta property="z3986:meta-record-type" about="" content="z3986:mods"/>
+                        <meta property="z3986:meta-record-version" about="" content="3.3"/>
+                    </meta>
+                </head>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Book</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <book/>
+            </utfx:source>
+            <utfx:expected>
+                <body/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Frontmatter</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <frontmatter>
+                    <doctitle/>
+                    <docauthor/>
+                </frontmatter>
+            </utfx:source>
+            <utfx:expected>
+                <frontmatter>
+                    <section>
+                        <p role="title"/>
+                        <p role="author"/>
+                    </section>
+                </frontmatter>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Bodymatter</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <bodymatter/>
+            </utfx:source>
+            <utfx:expected>
+                <bodymatter/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Rearmatter</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <rearmatter/>
+            </utfx:source>
+            <utfx:expected>
+                <backmatter/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Meta</utfx:name>
+        <!-- blank @about in meta for mods records because that filename is a parameter -->
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <head>
+                    <meta name="dc:Title" content="A"/>
+                    <meta name="dc:Identifier" content="B"/>
+                    <meta name="dc:Creator" content="C"/>
+                    <meta name="dc:Date" content="D"/>
+                    <meta name="dc:Publisher" content="E"/>
+                    <meta name="dc:Language" content="F"/>
+                    <meta name="dc:Subject" content="G"/>
+                    <meta name="dc:Description" content="H"/>
+                    <meta name="dc:Contributor" content="I"/>
+                    <meta name="dc:Type" content="J"/>
+                    <meta name="dc:Format" content="K"/>
+                    <meta name="dc:Source" content="L"/>
+                    <meta name="dc:Relation" content="M"/>
+                    <meta name="dc:Coverage" content="N"/>
+                    <meta name="dc:Rights" content="O"/>
+                    <meta name="dc:RevisionDescription" content="P"/>
+                </head>
+            </utfx:source>
+            <utfx:expected>
+                <head>
+                    <meta rel="z3986:profile"
+                        resource="http://www.daisy.org/z3986/2011/auth/profiles/book/0.8/"/>
+                    <meta property="dcterms:title" content="A"/>
+                    <meta property="dcterms:identifier" content="B"/>
+                    <meta property="dcterms:creator" content="C"/>
+                    <meta property="dcterms:date" content="D" xml:id="meta-dcdate"/>
+                    <meta property="dcterms:publisher" content="E"/>
+                    <meta property="dcterms:language" content="F"/>
+                    <meta property="dcterms:subject" content="G"/>
+                    <meta property="dcterms:description" content="H"/>
+                    <meta property="dcterms:contributor" content="I"/>
+                    <meta property="dcterms:type" content="J"/>
+                    <meta property="dcterms:format" content="K"/>
+                    <meta property="dcterms:source" content="L"/>
+                    <meta property="dcterms:relation" content="M"/>
+                    <meta property="dcterms:coverage" content="N"/>
+                    <meta property="dcterms:rights" content="O"/>
+                    <meta property="dcterms:description" content="P" about="#meta-dcdate"/> <meta
+                        rel="z3986:meta-record" resource="">
+                        <meta property="z3986:meta-record-type" about="" content="z3986:mods"/>
+                        <meta property="z3986:meta-record-version" about="" content="3.3"/>
+                    </meta>
+                </head>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Docauthor</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <docauthor/>
+            </utfx:source>
+            <utfx:expected>
+                <p role="author"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Doctitle</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <doctitle/>
+            </utfx:source>
+            <utfx:expected>
+                <p role="title"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: levels #1</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <level1>
+                    <level2>
+                        <level3>
+                            <level4>
+                                <level5>
+                                    <level6/>
+                                </level5>
+                            </level4>
+                        </level3>
+                    </level2>
+                </level1>
+            </utfx:source>
+            <utfx:expected>
+                <section>
+                    <section>
+                        <section>
+                            <section>
+                                <section>
+                                    <section/>
+                                </section>
+                            </section>
+                        </section>
+                    </section>
+                </section>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: levels #2</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <level/>
+            </utfx:source>
+            <utfx:expected>
+                <section/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Headings</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <h1/>
+                <h2/>
+                <h3/>
+                <h4/>
+                <h5/>
+                <h6/>
+            </utfx:source>
+            <utfx:expected>
+                <h/>
+                <h/>
+                <h/>
+                <h/>
+                <h/>
+                <h/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Text</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>Text</utfx:source>
+            <utfx:expected>Text</utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: bridgehead and hd</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <bridgehead/>
+                <hd/>
+            </utfx:source>
+            <utfx:expected>
+                <hd/>
+                <hd/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: emphasis</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <em>EMphasis</em>
+                <strong>STRONG</strong>
+            </utfx:source>
+            <utfx:expected>
+                <emph>EMphasis</emph>
+                <emph>STRONG</emph>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: List #1</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <list start="0" depth="2"/>
+            </utfx:source>
+            <utfx:expected>
+                <list start="0" depth="2"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: List #2</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <list enum="1"/>
+            </utfx:source>
+            <utfx:expected>
+                <list rend:prefix="decimal"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: List #3</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <list enum="a"/>
+            </utfx:source>
+            <utfx:expected>
+                <list rend:prefix="lower-alpha"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: List #4</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <list enum="A"/>
+            </utfx:source>
+            <utfx:expected>
+                <list rend:prefix="upper-alpha"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: List #5</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <list enum="i"/>
+            </utfx:source>
+            <utfx:expected>
+                <list rend:prefix="lower-roman"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: List #6</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <list enum="I"/>
+            </utfx:source>
+            <utfx:expected>
+                <list rend:prefix="upper-roman"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: List #7</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <list type="pl"/>
+            </utfx:source>
+            <utfx:expected>
+                <list/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: List #8</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <list type="ul"/>
+            </utfx:source>
+            <utfx:expected>
+                <list type="unordered"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: List #9</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <list type="ul"/>
+            </utfx:source>
+            <utfx:expected>
+                <list type="unordered"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: List #10</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <list>
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                    <pagenum page="normal">12</pagenum>
+                </list>
+            </utfx:source>
+            <utfx:expected>
+                <list>
+                    <item>Item 1</item>
+                    <item>Item 2</item>
+                    <pagebreak value="12"/>
+                </list>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: List #11</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <list>
+                    <hd>The List</hd>
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                </list>
+            </utfx:source>
+            <utfx:expected>
+                <list>
+                    <item>
+                        <hd>The List</hd>
+                    </item>
+                    <item>Item 1</item>
+                    <item>Item 2</item>
+                </list>
+                </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Image</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <img src="image.png" height="300" width="300" alt="test image" id="abcde"/>
+            </utfx:source>
+            <utfx:expected>
+                <object src="image.png" height="300" width="300" xml:id="abcde">
+                    <description>test image</description>
+                </object>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Image Group</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <imggroup/>
+            </utfx:source>
+            <utfx:expected>
+                <block/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Caption</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <caption imgref="#img0001">CAPTION</caption>
+            </utfx:source>
+            <utfx:expected>
+                <caption ref="img0001">CAPTION</caption>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Caption</utfx:name>
+            <utfx:assert-equal normalise-internal-whitespace="yes">
+                <utfx:source>
+                    <caption imgref="#img0001">CAPTION</caption>
+                </utfx:source>
+                <utfx:expected>
+                    <caption ref="img0001">CAPTION</caption>
+                </utfx:expected>
+            </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Image group with caption</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <imggroup>
+                    <img src="image.png" alt="test image" id="img0001"/>
+                    <caption>CAPTION</caption>
+                </imggroup>
+            </utfx:source>
+            <utfx:expected>
+                <block>
+                    <object src="image.png" xml:id="img0001">
+                        <description>test image</description>
+                    </object>
+                    <caption ref="img0001">CAPTION</caption>
+                </block>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Annotation</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source><annotation/></utfx:source>
+            <utfx:expected><annotation/></utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Prodnote</utfx:name>
+            <utfx:assert-equal normalise-internal-whitespace="yes">
+                <utfx:source>
+                    <prodnote imgref="#img0001">PRODNOTE</prodnote>
+                </utfx:source>
+                <utfx:expected>
+                    <annotation by="republisher" ref="img0001">PRODNOTE</annotation>
+                </utfx:expected>
+            </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Image group with prodnote</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <imggroup>
+                    <img src="image.png" alt="test image" id="img0002"/>
+                    <prodnote>PRODNOTE</prodnote>
+                </imggroup>
+            </utfx:source>
+            <utfx:expected>
+                <block>
+                    <object src="image.png" xml:id="img0002">
+                        <description>test image</description>
+                    </object>
+                    <annotation by="republisher" ref="img0001">PRODNOTE</annotation>
+                </block>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Sidebar</utfx:name>
+        <utfx:assert-equal>
+            <utfx:source>
+                <sidebar/>
+            </utfx:source>
+            <utfx:expected>
+                <aside role="sidebar"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Note </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <note class="footnote"/>
+                <note class="endnote"/>
+            </utfx:source>
+            <utfx:expected>
+                <note role="footnote"/>
+                <note class="endnote"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Div</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <div/>
+            </utfx:source>
+            <utfx:expected>
+                <block/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: pagenum </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <pagenum>5</pagenum>
+                <pagenum page="front">ii</pagenum>
+            </utfx:source>
+            <utfx:expected>
+                <pagebreak value="5"/>
+                <pagebreak value="ii"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Noteref</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <noteref idref="#abc123">32</noteref>
+            </utfx:source>
+            <utfx:expected>
+                <noteref ref="abc123">32</noteref>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Annoref</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <annoref idref="#abc123">33</annoref>
+            </utfx:source>
+            <utfx:expected>
+                <annoref ref="abc123">33</annoref>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+<utfx:test>
+<utfx:name>Translate-DTBook2ZedAI: Quotes </utfx:name>
+<utfx:assert-equal normalise-internal-whitespace="yes">
+<utfx:source>
+    <blockquote/>
+    <q/>
+</utfx:source>
+<utfx:expected>
+    <quote/>
+    <quote/>
+</utfx:expected>
+</utfx:assert-equal>
+</utfx:test>
+  
+  
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Table #1</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <table id="table1" width="100" border="2" cellspacing="10" cellpadding="10"/>
+            </utfx:source>
+            <utfx:expected>
+                <table xml:id="table1" width="100" border="2" cellspacing="10" cellpadding="10"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Table 2</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <table id="table2">
+                    <caption>This is a lovely <span>Caption!</span></caption>
+                </table>
+            </utfx:source>
+            <utfx:expected>
+                <table id="table2">
+                    <caption ref="table2">This is a lovely <span>Caption!</span></caption>
+                </table>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Table 3</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <table id="table3">
+                    <col/>
+                    <col/>
+                    <caption>table caption</caption>
+                    <tbody xml:id="tbody1"/>
+                </table>
+            </utfx:source>
+            <utfx:expected>
+                <table id="table3">
+                    <caption ref="table3">caption</caption>
+                    <colgroup><col/></colgroup>
+                    <colgroup><col/></colgroup>
+                    <tbody xml:id="tbody1"/>
+                </table>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: col</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <col span="3" align="left" valign="center" width="300" id="col1"/>
+            </utfx:source>
+            <utfx:expected>
+                <col span="3" align="left" valign="center" width="300" id="col1"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+   
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: colgroup</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <colgroup span="3" id="colgroup1" align="left" valign="center" width="300"/>
+                <colgroup span="4" id="colgroup2">
+                    <col/>
+                    <col/>
+                </colgroup>
+                <colgroup id="colgroup3">
+                    <col/>
+                    <col/>
+                </colgroup>
+            </utfx:source>
+            <utfx:expected>
+                <colgroup xml:id="colgroup1" span="3" align="left" valign="center" width="300"/>
+                <colgroup xml:id="colgroup2">
+                    <col/>
+                    <col/>
+                </colgroup>
+                <colgroup xml:id="colgroup3">
+                    <col/>
+                    <col/>
+                </colgroup>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: thead </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <thead id="thead1" align="left" valign="center"/>
+            </utfx:source>
+            <utfx:expected>
+                <thead xml:id="thead1" align="left" valign="center"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: tfoot</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <tfoot id="tfoot1" align="left" valign="center"/>
+            </utfx:source>
+            <utfx:expected>
+                <tfoot xml:id="tfoot1" align="left" valign="center"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: tbody</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <tbody id="tbody2" align="left" valign="center"/>
+            </utfx:source>
+            <utfx:expected>
+                <tbody xml:id="tbody2" align="left" valign="center"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+   
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: tr </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <tr id="tr1" align="left" valign="center"/>
+            </utfx:source>
+            <utfx:expected>
+                <tr xml:id="tr1" align="left" valign="center"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: th</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <th id="th1" abbr="abc" headers="def" colspan="3" rowspan="3" scope="scope" align="right" valign="center"/>
+            </utfx:source>
+            <utfx:expected>
+                <th xml:id="th1" abbr="abc" headers="def" colspan="3" rowspan="3" scope="scope" align="right" valign="center"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: td</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <td id="td1" headers="abc" colspan="3" rowspan="4" scope="scope" align="center" valign="center"/>
+            </utfx:source>
+            <utfx:expected>
+                <td xml:id="td1" headers="abc" colspan="3" rowspan="4" scope="scope" align="center" valign="center"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: byline</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <byline/>
+            </utfx:source>
+            <utfx:expected>
+                <citation/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: sent</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <sent/>
+            </utfx:source>
+            <utfx:expected>
+                <s/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: address</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <address/>
+            </utfx:source>
+            <utfx:expected>
+                <block/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: epigraph</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <epigraph/>
+            </utfx:source>
+            <utfx:expected>
+                <block role="epigraph"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: dateline </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <dateline/>
+            </utfx:source>
+            <utfx:expected>
+                <p role="time"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI:ln </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <!-- should be d2z:ln -->
+            <utfx:source>
+                <ln/>
+            </utfx:source>
+            <utfx:expected>
+                <ln/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: br </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source><br/></utfx:source>
+            <utfx:expected></utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: cite </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <cite id="cite1">
+                    <title>Title</title>
+                    <author>Author</author>
+                    Citation Text
+                </cite>
+            </utfx:source>
+            <utfx:expected>
+                <citation xml:id="cite1">
+                    <span property="title" about="cite1">Title</span>
+                    <span property="author" about="cite1">Author</span>
+                    Citation Text
+                </citation>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: covertitle </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <covertitle/>
+            </utfx:source>
+            <utfx:expected>
+                <block role="covertitle"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: acronym</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <acronym pronounce="yes">FALAFL</acronym>
+                <acronym pronounce="no">ZPQA</acronym>
+                <acronym>DMFC</acronym>
+            </utfx:source>
+            <utfx:expected>
+                <abbr type="acronym">FALAFL</abbr>
+                <abbr type="initialism">ZPQA</abbr>
+                <abbr type="initialism">DMFC</abbr>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: link</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <link/>
+            </utfx:source>
+            <utfx:expected></utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: p</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source><p/></utfx:source>
+            <utfx:expected><p/></utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: abbr</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source><abbr/></utfx:source>
+            <utfx:expected><abbr type="truncation"/></utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: sup</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source><sup/></utfx:source>
+            <utfx:expected><sup/></utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: sub</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source><sub/></utfx:source>
+            <utfx:expected><sub/></utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: span</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <span/>
+                <span role="ROLE"/>
+            </utfx:source>
+            <utfx:expected>
+                <span/>
+                <span role="ROLE"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: w</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <w/>
+            </utfx:source>
+            <utfx:expected>
+                <w/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: linegroup</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <annotation><linegroup><line/><line/><pagenum>4</pagenum></linegroup></annotation>
+                <caption><linegroup><line/><line/></linegroup></caption>
+                <level><linegroup><line/><line/></linegroup></level>
+                <level1><linegroup><line/><line/></linegroup></level1>
+                <level2><linegroup><line/><line/></linegroup></level2>
+                <level3><linegroup><line/><line/></linegroup></level3>
+                <level4><linegroup><line/><line/></linegroup></level4>
+                <level5><linegroup><line/><line/></linegroup></level5>
+                <level6><linegroup><line/><line/></linegroup></level6>
+                <td><linegroup><line/><line/></linegroup></td>
+                <prodnote><linegroup><line/><line/></linegroup></prodnote>
+                <sidebar><linegroup><line/><line/></linegroup></sidebar>
+                <th id="th1"><linegroup><line/><line/></linegroup></th>
+            </utfx:source>
+            <utfx:expected>
+                <annotation><block><p><line/></p><p><line/></p><pagebreak value="4"/></block></annotation>
+                <caption><block><p><line/></p><p><line/></p></block></caption>
+                <level><block><p><line/></p><p><line/></p></block></level>
+                <level1><block><p><line/></p><p><line/></p></block></level1>
+                <level2><block><p><line/></p><p><line/></p></block></level2>
+                <level3><block><p><line/></p><p><line/></p></block></level3>
+                <level4><block><p><line/></p><p><line/></p></block></level4>
+                <level5><block><p><line/></p><p><line/></p></block></level5>
+                <level6><block><p><line/></p><p><line/></p></block></level6>
+                <td><block><p><line/></p><p><line/></p></block></td>
+                <prodnote><block><p><line/></p><p><line/></p></block></prodnote>
+                <sidebar><block><p><line/></p><p><line/></p></block></sidebar>
+                <th xml:id="th1"><block><p><line/></p><p><line/></p></block></th>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: line</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source><line/></utfx:source>
+            <utfx:expected><ln/></utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: samp </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <samp/>
+            </utfx:source>
+            <utfx:expected>
+                <block role="example"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: dfn </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source><dfn/></utfx:source>
+            <utfx:expected><term/></utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: a</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <a href="#abc"/>
+                <a href="page.html" external="true"/>
+                <a href="#def" external="false"/>
+                <a href="#para3" rel="REL"/>
+                <a href="#chapter4" rev="REV"/>
+            </utfx:source>
+            <utfx:expected>
+                <ref ref="abc"/>
+                <ref xlink:href="page.html"/>
+                <ref ref="def"/>
+                <ref ref="para3" rel="REL"/>
+                <ref ref="chapter4" rev="REV"/>
+            </utfx:expected>
+            
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: definition list </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source><dl/></utfx:source>
+            <utfx:expected><list type="unordered"/></utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: item </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source><item/></utfx:source>
+            <utfx:expected><item/></utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: dd</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <level><list/><dd/></level>
+                <level><dl/><dd/></level>
+                <level><div/><dd/></level>
+                <level><poem/><dd/></level>
+                <level><linegroup/><dd/></level>
+                <level><table/><dd/></level>
+                <level><dd/><sidebar/></level>
+                <level><dd/><note/></level>
+                <level><dd/><epigraph/></level>
+                <level><span/><dd/></level>
+            </utfx:source> 
+            <utfx:expected>
+                <section><list/><p><definition/></p></section>
+                <section><list type="unordered"/><p><definition/></p></section>
+                <section><block/><p><definition/></p></section>
+                <section><block role="poem"/><p><definition/></p></section>
+                <section><block/><p><definition/></p></section>
+                <section><table/><p><definition/></p></section>
+                <section><p><definition/></p><aside role="sidebar"/></section>
+                <section><list/><p><definition/></p><note/></section>
+                <section><list/><p><definition/></p><block role="epigraph"/></section>
+                <section><span/><definition/></section>
+                
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: dt</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <level><list/><dt/></level>
+                <level><dl/><dt/></level>
+                <level><div/><dt/></level>
+                <level><poem/><dt/></level>
+                <level><linegroup/><dt/></level>
+                <level><table/><dt/></level>
+                <level><dt/><sidebar/></level>
+                <level><dt/><note/></level>
+                <level><dt/><epigraph/></level>
+                <level><span/><dt/></level>
+            </utfx:source> 
+            <utfx:expected>
+                <section><list/><p><term/></p></section>
+                <section><list type="unordered"/><p><term/></p></section>
+                <section><block/><p><term/></p></section>
+                <section><block role="poem"/><p><term/></p></section>
+                <section><block/><p><term/></p></section>
+                <section><table/><p><term/></p></section>
+                <section><p><term/></p><aside role="sidebar"/></section>
+                <section><list/><p><term/></p><note/></section>
+                <section><list/><p><term/></p><block role="epigraph"/></section>
+                <section><span/><term/></section>
+             </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: linenum</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source><linenum/></utfx:source>
+            <utfx:expected><lnum/></utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: poem</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <poem>
+                    <title>TITLE</title>
+                    <author>AUTHOR</author>
+                    <ln>LINE</ln>
+                    <hd>HD</hd>
+                </poem>
+            </utfx:source>
+            <utfx:expected>
+                <block role="poem">
+                    <p role="title">TITLE</p>
+                    <p role="author">AUTHOR</p>
+                    <p>LINE</p>
+                    <hd>HD</hd>
+                </block>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: code-blocks </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <code-block/>
+                <code-block>
+                    <em/><strong/><dfn/><cite/><abbr/><acronym/><a/><sub/><sup/><span/><bdo/><w/><annoref/><noteref/><sent/>
+                </code-block>
+                <code-block>
+                    <prodnote/><q/>
+                </code-block>
+                <code-block>
+                    <em/><strong/><dfn/><cite/><abbr/><acronym/><a href="abc.html" external="true"/>
+                    <sub/><sup/><span/><bdo/><w/><annoref/><noteref/>
+                    <sent/><code-phrase/>
+                </code-block>
+                <code-block>
+                    <em/><pagenum>23</pagenum>
+                </code-block>
+                <code-block>
+                    <ln>LINE</ln><q/>
+                </code-block>
+            </utfx:source>
+            <utfx:expected>
+                <code/>
+                <code>
+                    <block><annotation by="republisher"/><quote/></block>
+                </code>
+                <code>
+                    <p><emph/></p><p><emph/></p><p><term/></p><p><citation/></p><p><abbr type="truncation"/></p>
+                    <p><abbr type="initialism"/></p><p><ref xlink:href="abc.html"/></p>
+                    <p><sub/></p><p><sup/></p><p><span/></p><p><span/></p>
+                    <p><w/></p><p><annoref/></p><p><noteref/></p><p><s/></p><p><code/></p>
+                </code>
+                <code>
+                    <p><emph/></p><pagebreak value="23"/>
+                </code>
+                <code>
+                    <ln>LINE</ln><block><quote/></block>
+                </code>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+    <utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: code-phrases </utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <code-phrase/>
+                <code-phrase>
+                    <abbr/>
+                    <acronym/>
+                    <em/>
+                    <strong/>
+                </code-phrase>
+                <code-phrase>
+                    <span/><abbr/>
+                </code-phrase>
+            </utfx:source>
+            <utfx:expected>
+                <code/>
+                <code>
+                    <span role="truncation"/>
+                    <span role="initialism"/>
+                    <emph/>
+                    <emph/>
+                </code>
+                <code>
+                    <span/>
+                    <span role="truncation"/>
+                </code>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+</utfx:tests>

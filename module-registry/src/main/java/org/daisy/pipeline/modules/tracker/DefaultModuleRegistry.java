@@ -73,8 +73,9 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	@Override
 	public void addModule(Module module) {
 		mModules.add(module);
-		//System.out.println("[LOG] Registring"+module.getName());
+		//System.out.println("[LOG] Registring "+module.getName());
 		for(Component component: module.getComponents()){
+			//System.out.println("[LOG] Comp "+component.getURI());
 			mComponentsMap.put(component.getURI(), module);
 		}		
 	}

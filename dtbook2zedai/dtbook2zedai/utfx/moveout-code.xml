@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="utfx_tests.rnc" type="compact"?>
+<utfx:tests xmlns:utfx="http://utfx.org/test-definition"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+
+    <utfx:stylesheet src="moveout-code.xsl"/>
+
+    <!--<xsl:with-param name="valid-parents" select="tokenize('annotation,prodnote,sidebar,div,imggroup,caption,
+        li,note,img,blockquote,level,level1,level2,level3,level4,level5,level6,td,th'
+    -->
+    <utfx:test>
+        <utfx:name>Move Out Block-Level Code</utfx:name>
+        <utfx:call-template name="main">
+            <utfx:with-param name="doc">
+                <dtbook>
+                    <bodymatter>
+                        <level1>
+                            <div>
+                                <a href="http://example.org"> Part A <code-block id="code">This is some code</code-block> Part B</a>
+                            </div>
+                        </level1>
+                    </bodymatter>
+                </dtbook>  
+            </utfx:with-param>
+        </utfx:call-template>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            
+            <utfx:source>
+                <empty/>
+            </utfx:source>
+                
+            
+             
+            <utfx:expected>
+                <dtbook>
+                    <bodymatter>
+                        <level1>
+                            <div>
+                                <a href="http://example.org">Part A</a>
+                                <code-block id="code"/>
+                                <a href="http://example.org">Part B</a>
+                            </div>
+                        </level1>
+                    </bodymatter>
+                </dtbook>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+</utfx:tests>

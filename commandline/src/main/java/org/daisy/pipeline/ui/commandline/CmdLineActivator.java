@@ -21,7 +21,7 @@ public class CmdLineActivator implements BundleActivator {
 				//awful getevn thanks to the disappointing pax runner --vmo space support
 				if (args==null)
 					args = System.getenv("DAISY_ARGS");
-				System.out.println("[ARGS] "+args);
+				//System.out.println("[ARGS] "+args);
 				ServiceProvider provider = new OSGIServiceProvider(ctxt);
 				if (args == null) {
 					new CommandLine(provider).getUnrecovreableError(

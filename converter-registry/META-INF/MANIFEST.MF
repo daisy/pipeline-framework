@@ -3,7 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Converter-registry
 Bundle-SymbolicName: converter-registry
 Bundle-Version: 1.0.0.qualifier
-Import-Package: org.daisy.converter.parser,
+Import-Package: net.sf.saxon;version="9.2.1.5",
+ org.daisy.converter.parser,
  org.daisy.pipeline.modules,
  org.daisy.pipeline.modules.converter,
  org.daisy.pipeline.xproc,
@@ -12,4 +13,4 @@ Import-Package: org.daisy.converter.parser,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Service-Component: OSGI-INF/registry.xml
 Export-Package: org.daisy.converter.registry
-Require-Bundle: module-common 
+Require-Bundle: module-common

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="utfx_tests.rnc" type="compact"?>
+<utfx:tests xmlns:utfx="http://utfx.org/test-definition"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+
+    <utfx:stylesheet src="moveout-definition-contents.xsl"/>
+
+    <utfx:test>
+        <utfx:name>Definition with LIST</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <item>
+                    <dd>DD <list><item>Nested List with One Item</item></list> Rest of DD</dd>
+                </item>
+            </utfx:source>
+            <utfx:expected>
+                <item>
+                    <dd>DD </dd>
+                    <list><item>Nested List with One Item</item></list>
+                    <dd>Rest of DD</dd>
+                </item>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Definition with DL</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <item>
+                    <dd>DD <dl><item><dt>nested dl</dt></item></dl> Rest of DD</dd>
+                </item>
+            </utfx:source>
+            <utfx:expected>
+                <item>
+                    <dd>DD</dd>
+                    <dl><item><dt>nested dl</dt></item></dl>
+                    <dd>Rest of DD</dd>
+                </item>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Definition with DIV</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <item>
+                    <dd>DD <div>I am a div</div> Rest of DD</dd>
+                </item>
+            </utfx:source>
+            <utfx:expected>
+                <item>
+                    <dd>DD</dd>
+                    <div>I am a div</div>
+                    <dd>Rest of DD</dd>
+                </item>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Definition with POEM</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <item>
+                    <dd>DD <poem>A little poem</poem> Rest of DD</dd>
+                </item>
+            </utfx:source>
+            <utfx:expected>
+                <item>
+                    <dd>DD</dd>
+                    <poem>A little poem</poem>
+                    <dd>Rest of DD</dd>
+                </item>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Definition with LINEGROUP</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <item>
+                    <dd>DD <linegroup><line>L1</line><line>L2</line></linegroup> Rest of DD</dd>
+                </item>
+            </utfx:source>
+            <utfx:expected>
+                <item>
+                    <dd>DD</dd>
+                    <linegroup><line>L1</line><line>L2</line></linegroup>
+                    <dd>Rest of DD</dd>
+                </item>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Definition with TABLE</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <item>
+                    <dt>data</dt>
+                    <dd>a term referring to numbers in tables: <table>
+                            <tbody><tr><td>012345</td></tr></tbody>
+                        </table> Data is often sorted, compared, and accidentally deleted.</dd>
+                </item>
+            </utfx:source>
+            <utfx:expected>
+                <item>
+                    <dt>data</dt>
+                    <dd>a term referring to numbers in tables:</dd>
+                    <table>
+                        <tbody><tr><td>012345</td></tr></tbody>
+                    </table>
+                    <dd>Data is often sorted, compared, and accidentally deleted.</dd>
+                </item>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Definition with SIDEBAR</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <item>
+                    <dd>DD <sidebar>Why on earth is a sidebar here?</sidebar> Rest of DD</dd>
+                </item>
+            </utfx:source>
+            <utfx:expected>
+                <item>
+                    <dd>DD </dd>
+                    <sidebar>Why on earth is a sidebar here?</sidebar>
+                    <dd>Rest of DD</dd>
+                </item>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Definition with NOTE</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <item>
+                    <dd>DD <note>notes <span>spans in notes</span></note> Rest of DD <span>spans in
+                            definition</span></dd>
+                </item>
+            </utfx:source>
+            <utfx:expected>
+                <item>
+                    <dd>DD </dd>
+                    <note>notes <span>spans in notes</span></note>
+                    <dd>Rest of DD <span>spans in definition</span></dd>
+                </item>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Definition with EPIGRAPH</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <item>
+                    <dd>DD <epigraph>epigraphs should not be inside definitions</epigraph> Rest of
+                        DD</dd>
+                </item>
+            </utfx:source>
+            <utfx:expected>
+                <item>
+                    <dd>DD </dd>
+                    <epigraph>epigraphs should not be inside definitions</epigraph>
+                    <dd>Rest of DD</dd>
+                </item>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Definition with ANNOTATION</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <item>
+                    <dd>DD <annotation>annotations should not be inside definitions</annotation>
+                        Rest of DD</dd>
+                </item>
+            </utfx:source>
+            <utfx:expected>
+                <item>
+                    <dd>DD </dd>
+                    <annotation>annotations should not be inside definitions</annotation>
+                    <dd>Rest of DD</dd>
+                </item>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Definition with Nested Definition</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <item>
+                    <dd>DD <div>DIV1</div>
+                        <dl>
+                            <item>
+                                <dt>TERM</dt>
+                                <dd> DD2 <div>DIV2</div> Rest of DD2 </dd>
+                            </item>
+                        </dl> Rest of DD</dd>
+                </item>
+            </utfx:source>
+            <utfx:expected>
+                <item>
+                    <dd>DD</dd>
+                    <div>DIV1</div>
+                    <dl>
+                        <item>
+                            <dt>TERM</dt>
+                            <dd>DD2</dd>
+                            <div>DIV2</div>
+                            <dd>Rest of DD2</dd>
+                        </item>
+                    </dl>
+                    <dd>Rest of DD</dd>
+                </item>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Definition with multiple illegal child elements of the same type</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <item>
+                    <dd>DD <div>DIV1</div> middle of DD <div>DIV2</div> end of DD</dd>
+                </item>
+            </utfx:source>
+            <utfx:expected>
+                <item>
+                    <dd>DD </dd>
+                    <div>DIV1</div>
+                    <dd>middle of DD</dd> 
+                    <div>DIV2</div>
+                    <dd>end of DD</dd>
+                </item>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    <utfx:test>
+        <utfx:name>Definition with multiple illegal child elements of different types</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <item>
+                    <dd>DD <div>DIV1</div> middle of DD <annotation>ANNO1</annotation> end of DD</dd>
+                </item>
+            </utfx:source>
+            <utfx:expected>
+                <item>
+                    <dd>DD </dd>
+                    <div>DIV1</div>
+                    <dd>middle of DD</dd> 
+                    <annotation>ANNO1</annotation>
+                    <dd>end of DD</dd>
+                </item>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>
+    
+</utfx:tests>
