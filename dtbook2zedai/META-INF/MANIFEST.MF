@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Dtbook2zedai
-Bundle-SymbolicName: dtbook2zedai
-Bundle-Version: 1.0.0.qualifier
-Require-Bundle: converter-registry;bundle-version="1.0.0",
- module-common;bundle-version="1.0.0",
- module-registry;bundle-version="1.0.0"
-Service-Component: OSGI-INF/dtbook2zedai.xml
