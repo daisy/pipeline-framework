@@ -3,8 +3,8 @@
 
 <target name="definition">
 <locations>
-<location path="${workspace_loc}/daisy-pipeline/repo" type="Directory"/>
 <location path="${project_loc}/../daisy.pipeline.site/target/site" type="Directory"/>
+<location path="${workspace_loc}/repo" type="Directory"/>
 </locations>
 <launcherArgs>
 <vmArgs>org.osgi.framework.system.packages=sun.misc</vmArgs>
