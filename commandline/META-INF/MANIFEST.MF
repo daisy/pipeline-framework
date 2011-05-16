@@ -5,6 +5,7 @@ Bundle-SymbolicName: commandline
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Activator: org.daisy.pipeline.ui.commandline.CmdLineActivator
+Bundle-ActivationPolicy: lazy
 Import-Package: joptsimple,
  net.sf.saxon;version="9.2.1.5",
  org.daisy.pipeline.modules,
@@ -12,3 +13,5 @@ Import-Package: joptsimple,
  org.daisy.pipeline.xproc,
  org.osgi.framework;version="1.5.0",
  org.osgi.util.tracker
+
+
