@@ -103,7 +103,7 @@ public class XProcessorImp extends XProcessor {
 		for(String option:mOptions.keySet()){
 			mPipeline.passOption(new QName(option),new RuntimeValue( mOptions.get(option).toString()));
 		}
-		
+		mProcRuntime.setMessageListener(new slf4jXProcMessageListener());
 		try {
 			mPipeline.run();
 		} catch (SaxonApiException e) {

@@ -9,6 +9,10 @@ Import-Package: com.xmlcalabash.core,
  com.xmlcalabash.io,
  com.xmlcalabash.model,
  com.xmlcalabash.runtime,
+ com.xmlcalabash.util,
+ net.sf.saxon.om;version="9.2.1.5",
  net.sf.saxon.s9api,
+ net.sf.saxon.trans;version="9.2.1.5",
  org.daisy.pipeline.xproc,
- org.osgi.framework
+ org.osgi.framework,
+ org.slf4j;version="1.6.1"
