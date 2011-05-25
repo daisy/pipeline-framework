@@ -172,3 +172,2018 @@ org.osgi.framework.BundleException: The bundle could not be resolved. Reason: An
 2011-05-16 19:42:35,477 [INFO] - converter-parser - BundleEvent.STARTED
 2011-05-16 19:42:35,477 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
 2011-05-16 19:42:35,477 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-24 16:14:35,114 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-24 16:14:35,143 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-24 16:14:35,145 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-24 16:14:35,145 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-24 16:14:35,145 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-24 16:14:35,145 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-24 16:14:35,145 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-24 16:14:35,146 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-24 16:14:35,146 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,146 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,146 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,146 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,146 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,146 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-24 16:14:35,146 [INFO] - guava - BundleEvent.STARTED
+2011-05-24 16:14:35,146 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-24 16:14:35,146 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-24 16:14:35,146 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,146 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-24 16:14:35,146 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,146 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,146 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-24 16:14:35,146 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,146 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,146 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,146 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,146 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-24 16:14:35,147 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-24 16:14:35,147 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-24 16:14:35,147 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-24 16:14:35,147 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-24 16:14:35,147 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-24 16:14:35,147 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-24 16:14:35,147 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-24 16:14:35,147 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,147 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-24 16:14:35,147 [INFO] - commandline - BundleEvent.STARTED
+2011-05-24 16:14:35,147 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-24 16:14:35,147 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,147 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-24 16:14:35,147 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-24 16:14:35,152 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-24 16:14:35,152 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-24 16:14:35,152 [INFO] - module-common - BundleEvent.STARTED
+2011-05-24 16:14:35,152 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-24 16:17:57,855 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-24 16:18:01,446 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-24 16:18:01,463 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-24 16:18:01,465 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-24 16:18:01,466 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-24 16:18:01,466 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-24 16:18:01,466 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-24 16:18:01,466 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-24 16:18:01,466 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-24 16:18:01,466 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:18:01,466 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:18:01,466 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:18:01,466 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:18:01,466 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:18:01,466 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-24 16:18:01,466 [INFO] - guava - BundleEvent.STARTED
+2011-05-24 16:18:01,466 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-24 16:18:01,466 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-24 16:18:01,466 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:18:01,467 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-24 16:18:01,467 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:18:01,467 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:18:01,467 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-24 16:18:01,467 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:18:01,467 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:18:01,467 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:18:01,467 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:18:01,467 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-24 16:18:01,467 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-24 16:18:01,467 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-24 16:18:01,467 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-24 16:18:01,467 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-24 16:18:01,467 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-24 16:18:01,467 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-24 16:18:01,468 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-24 16:18:01,468 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-24 16:18:01,468 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-24 16:18:01,468 [INFO] - module-common - BundleEvent.STARTED
+2011-05-24 16:18:01,468 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-24 16:18:01,468 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-24 16:18:01,468 [INFO] - commandline - BundleEvent.STARTED
+2011-05-24 16:18:01,468 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-24 16:18:01,468 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,284 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-24 16:18:55,288 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-24 16:18:55,290 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-24 16:18:55,290 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-24 16:18:55,290 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-24 16:18:55,290 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-24 16:18:55,290 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-24 16:18:55,290 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-24 16:18:55,290 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,291 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,291 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,291 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,291 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,291 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-24 16:18:55,291 [INFO] - guava - BundleEvent.STARTED
+2011-05-24 16:18:55,291 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-24 16:18:55,291 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-24 16:18:55,291 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,291 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-24 16:18:55,291 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,291 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,301 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-24 16:18:55,301 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,301 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,301 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,301 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,301 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-24 16:18:55,301 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-24 16:18:55,301 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-24 16:18:55,301 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-24 16:18:55,302 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-24 16:18:55,302 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-24 16:18:55,302 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-24 16:18:55,302 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-24 16:18:55,302 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,302 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-24 16:18:55,302 [INFO] - module-common - BundleEvent.STARTED
+2011-05-24 16:18:55,302 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-24 16:18:55,302 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-24 16:18:55,302 [INFO] - commandline - BundleEvent.STARTED
+2011-05-24 16:18:55,302 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-24 16:18:55,302 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,350 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,351 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,352 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-24 16:18:55,353 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-24 16:18:55,353 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-24 16:18:55,355 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-24 16:18:55,356 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-24 16:18:55,369 [DEBUG] - converter-parser - Hello log
+2011-05-24 16:19:08,205 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-24 16:19:08,218 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-24 16:19:08,226 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-24 16:19:08,226 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-24 16:19:08,226 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-24 16:19:08,226 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-24 16:19:08,226 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-24 16:19:08,226 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-24 16:19:08,226 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,226 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,227 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,227 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,227 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,227 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-24 16:19:08,227 [INFO] - guava - BundleEvent.STARTED
+2011-05-24 16:19:08,227 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-24 16:19:08,227 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-24 16:19:08,227 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,227 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-24 16:19:08,227 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,227 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,227 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-24 16:19:08,230 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,230 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,230 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,230 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,230 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-24 16:19:08,230 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-24 16:19:08,230 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-24 16:19:08,230 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-24 16:19:08,231 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-24 16:19:08,231 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-24 16:19:08,231 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-24 16:19:08,231 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-24 16:19:08,231 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,231 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-24 16:19:08,231 [INFO] - module-common - BundleEvent.STARTED
+2011-05-24 16:19:08,231 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-24 16:19:08,231 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-24 16:19:08,237 [INFO] - commandline - BundleEvent.STARTED
+2011-05-24 16:19:08,237 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-24 16:19:08,237 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,295 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,296 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,297 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-24 16:19:08,297 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-24 16:19:08,297 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-24 16:19:08,299 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,304 [DEBUG] - converter-parser - Hello log
+2011-05-24 16:19:08,304 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-24 16:19:08,307 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,319 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-24 16:19:08,321 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-24 16:19:08,321 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-24 16:19:08,321 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-24 16:20:07,655 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-24 16:20:07,668 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-24 16:20:07,696 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-24 16:20:07,696 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-24 16:20:07,696 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-24 16:20:07,696 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-24 16:20:07,696 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-24 16:20:07,696 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-24 16:20:07,696 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:20:07,697 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:20:07,697 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:20:07,697 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:20:07,697 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:20:07,697 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-24 16:20:07,697 [INFO] - guava - BundleEvent.STARTED
+2011-05-24 16:20:07,697 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-24 16:20:07,697 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-24 16:20:07,697 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:20:07,697 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-24 16:20:07,697 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:20:07,697 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:20:07,697 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-24 16:20:07,697 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:20:07,697 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:20:07,698 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:20:07,698 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:20:07,698 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-24 16:20:07,698 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-24 16:20:07,698 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-24 16:20:07,698 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-24 16:20:07,698 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-24 16:20:07,698 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-24 16:20:07,698 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-24 16:20:07,698 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-24 16:20:07,698 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-24 16:20:07,698 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-24 16:20:07,698 [INFO] - module-common - BundleEvent.STARTED
+2011-05-24 16:20:07,698 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-24 16:20:07,699 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-24 16:20:07,699 [INFO] - commandline - BundleEvent.STARTED
+2011-05-24 16:20:07,699 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-24 16:20:51,556 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-24 16:20:51,559 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-24 16:20:51,561 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-24 16:20:51,561 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-24 16:20:51,562 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-24 16:20:51,562 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-24 16:20:51,562 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-24 16:20:51,562 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-24 16:20:51,562 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:20:51,562 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:20:51,562 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:20:51,562 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:20:51,562 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:20:51,562 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-24 16:20:51,562 [INFO] - guava - BundleEvent.STARTED
+2011-05-24 16:20:51,562 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-24 16:20:51,562 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-24 16:20:51,562 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:20:51,562 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-24 16:20:51,563 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:20:51,563 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:20:51,563 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-24 16:20:51,563 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:20:51,563 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:20:51,563 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:20:51,563 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:20:51,563 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-24 16:20:51,563 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-24 16:20:51,563 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-24 16:20:51,563 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-24 16:20:51,563 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-24 16:20:51,563 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-24 16:20:51,563 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-24 16:20:51,563 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-24 16:20:51,564 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-24 16:20:51,564 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-24 16:20:51,564 [INFO] - module-common - BundleEvent.STARTED
+2011-05-24 16:20:52,539 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-24 16:20:52,541 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-24 16:20:52,542 [INFO] - commandline - BundleEvent.STARTED
+2011-05-24 16:20:52,543 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-24 16:20:52,611 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-24 16:20:52,611 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-24 16:20:52,611 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-24 16:20:52,612 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-24 16:20:52,612 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-24 16:20:52,612 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-24 16:20:52,614 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-24 16:20:52,614 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-24 16:20:52,621 [DEBUG] - converter-parser - Hello log
+2011-05-24 16:20:52,626 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-24 16:20:52,626 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-24 16:20:52,629 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-24 16:20:52,629 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-24 16:20:52,629 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-24 16:21:09,539 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-24 16:21:09,558 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-24 16:21:09,568 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-24 16:21:09,568 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-24 16:21:09,568 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-24 16:21:09,568 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-24 16:21:09,568 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-24 16:21:09,568 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-24 16:21:09,568 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:21:09,568 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:21:09,568 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:21:09,568 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:21:09,568 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:21:09,569 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-24 16:21:09,569 [INFO] - guava - BundleEvent.STARTED
+2011-05-24 16:21:09,569 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-24 16:21:09,569 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-24 16:21:09,569 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:21:09,569 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-24 16:21:09,569 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:21:09,569 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:21:09,569 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-24 16:21:09,569 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:21:09,569 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:21:10,477 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:21:10,478 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:21:10,478 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-24 16:21:10,482 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-24 16:21:10,482 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-24 16:21:10,482 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-24 16:21:10,482 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-24 16:21:10,483 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-24 16:21:10,483 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-24 16:21:10,483 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-24 16:21:10,487 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-24 16:21:10,487 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-24 16:21:10,487 [INFO] - module-common - BundleEvent.STARTED
+2011-05-24 16:21:10,500 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-24 16:21:10,501 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-24 16:21:10,502 [INFO] - commandline - BundleEvent.STARTED
+2011-05-24 16:21:10,512 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-24 16:21:10,568 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-24 16:21:10,568 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-24 16:21:10,568 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-24 16:21:10,568 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-24 16:21:10,568 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-24 16:21:10,568 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-24 16:21:10,570 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-24 16:21:10,574 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-24 16:21:10,583 [DEBUG] - converter-parser - Hello log
+2011-05-24 16:21:10,601 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-24 16:21:10,602 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-24 16:21:10,602 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-24 16:21:10,602 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-24 16:21:10,602 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-24 16:21:10,932 [INFO] - converter-parser - Running pipeline !1
+2011-05-24 16:21:10,933 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-24 16:21:10,933 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #5 (1 docs)])
+2011-05-24 16:21:10,933 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #6] ([document-sequence #5 (2 docs)])
+2011-05-24 16:21:10,987 [INFO] - converter-parser - Running error !1.4
+2011-05-24 16:21:10,988 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:!1.4 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #1 (1 docs)]
+2011-05-24 16:21:10,988 [DEBUG] - converter-parser - Error step ??? read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:21:11,237 [ERROR] - converter-parser - fall-down-go-bang:
+             Nothing to see here.
+         
+2011-05-24 16:29:50,943 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-24 16:29:50,946 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-24 16:29:50,948 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-24 16:29:50,948 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-24 16:29:50,948 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-24 16:29:50,948 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-24 16:29:50,948 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-24 16:29:50,949 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-24 16:29:50,949 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,949 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,949 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,949 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,949 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,949 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-24 16:29:50,956 [INFO] - guava - BundleEvent.STARTED
+2011-05-24 16:29:50,956 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-24 16:29:50,956 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-24 16:29:50,956 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,956 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-24 16:29:50,956 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,956 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,956 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-24 16:29:50,956 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,956 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,956 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,956 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,957 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-24 16:29:50,957 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-24 16:29:50,957 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-24 16:29:50,957 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-24 16:29:50,957 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-24 16:29:50,957 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-24 16:29:50,957 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-24 16:29:50,957 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-24 16:29:50,957 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,957 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-24 16:29:50,957 [INFO] - module-common - BundleEvent.STARTED
+2011-05-24 16:29:50,957 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-24 16:29:50,957 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-24 16:29:50,957 [INFO] - commandline - BundleEvent.STARTED
+2011-05-24 16:29:50,957 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-24 16:29:50,989 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,989 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,990 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-24 16:29:50,990 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-24 16:29:50,991 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-24 16:29:50,991 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-24 16:29:51,003 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-24 16:29:51,003 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-24 16:29:51,011 [DEBUG] - converter-parser - Hello log
+2011-05-24 16:29:51,017 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-24 16:29:51,017 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-24 16:29:51,017 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-24 16:29:51,017 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-24 16:29:51,017 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-24 16:29:51,456 [INFO] - converter-parser - Running pipeline !1
+2011-05-24 16:29:51,457 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-24 16:29:51,457 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #7] ([document-sequence #1 (1 docs)])
+2011-05-24 16:29:51,457 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #7] ([document-sequence #1 (2 docs)])
+2011-05-24 16:29:51,474 [INFO] - converter-parser - Running identity !1.4
+2011-05-24 16:29:51,474 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:14:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-24 16:29:51,474 [DEBUG] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:29:51,475 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:14:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-24 16:29:51,475 [DEBUG] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:29:51,527 [INFO] - converter-parser - Running {http://xmlcalabash.com/ns/extensions}message !1.5
+2011-05-24 16:29:51,527 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-24 16:29:51,528 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:Message step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:29:51,528 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-24 16:29:51,528 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:Message step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:29:51,528 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (2 docs)])
+2011-05-24 16:29:51,528 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (0 docs)])
+2011-05-24 16:29:51,528 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #5] ([document-sequence #3 (2 docs)]) to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-24 16:29:51,528 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (2 docs)])
+2011-05-24 16:29:51,528 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-24 16:29:51,787 [ERROR] - converter-parser - err:XD0007:XD0007
+2011-05-24 16:30:48,575 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-24 16:30:48,591 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-24 16:30:48,593 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-24 16:30:48,593 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-24 16:30:48,593 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-24 16:30:48,593 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-24 16:30:48,593 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-24 16:30:48,593 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-24 16:30:48,593 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,593 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,593 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,594 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,594 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,594 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-24 16:30:48,594 [INFO] - guava - BundleEvent.STARTED
+2011-05-24 16:30:48,594 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-24 16:30:48,594 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-24 16:30:48,594 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,594 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-24 16:30:48,594 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,594 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,594 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-24 16:30:48,594 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,594 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,594 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,594 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,594 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-24 16:30:48,595 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-24 16:30:48,595 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-24 16:30:48,595 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-24 16:30:48,595 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-24 16:30:48,595 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-24 16:30:48,595 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-24 16:30:48,595 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-24 16:30:48,595 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,595 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-24 16:30:48,595 [INFO] - module-common - BundleEvent.STARTED
+2011-05-24 16:30:48,595 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-24 16:30:48,595 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-24 16:30:48,595 [INFO] - commandline - BundleEvent.STARTED
+2011-05-24 16:30:48,595 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-24 16:30:48,674 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,675 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,675 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,676 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-24 16:30:48,677 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-24 16:30:48,677 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-24 16:30:48,680 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,684 [DEBUG] - converter-parser - Hello log
+2011-05-24 16:30:48,684 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-24 16:30:48,718 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,719 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-24 16:30:48,719 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-24 16:30:48,719 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-24 16:30:48,719 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-24 16:30:49,052 [INFO] - converter-parser - Running pipeline !1
+2011-05-24 16:30:49,052 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-24 16:30:49,052 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #7] ([document-sequence #1 (1 docs)])
+2011-05-24 16:30:49,052 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #7] ([document-sequence #1 (2 docs)])
+2011-05-24 16:30:49,053 [INFO] - converter-parser - Running identity !1.4
+2011-05-24 16:30:49,053 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:14:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-24 16:30:49,053 [DEBUG] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:30:49,054 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:14:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-24 16:30:49,054 [DEBUG] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:30:49,079 [INFO] - converter-parser - Running {http://xmlcalabash.com/ns/extensions}message !1.5
+2011-05-24 16:30:49,080 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-24 16:30:49,080 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:Message step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:30:49,080 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-24 16:30:49,080 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:Message step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:30:49,080 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (2 docs)])
+2011-05-24 16:30:49,080 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (0 docs)])
+2011-05-24 16:30:49,080 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #5] ([document-sequence #3 (2 docs)]) to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-24 16:30:49,080 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (2 docs)])
+2011-05-24 16:30:49,080 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-24 16:30:49,401 [ERROR] - converter-parser - err:XD0007:XD0007
+2011-05-24 16:31:47,859 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-24 16:31:47,863 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-24 16:31:47,865 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-24 16:31:47,865 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-24 16:31:47,865 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-24 16:31:47,865 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-24 16:31:47,865 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-24 16:31:47,865 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-24 16:31:47,865 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,865 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,865 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,865 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,865 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,866 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-24 16:31:47,866 [INFO] - guava - BundleEvent.STARTED
+2011-05-24 16:31:47,866 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-24 16:31:47,866 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-24 16:31:47,866 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,866 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-24 16:31:47,866 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,866 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,866 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-24 16:31:47,866 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,866 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,866 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,866 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,866 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-24 16:31:47,866 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-24 16:31:47,866 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-24 16:31:47,867 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-24 16:31:47,867 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-24 16:31:47,867 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-24 16:31:47,867 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-24 16:31:47,867 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-24 16:31:47,867 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,867 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-24 16:31:47,867 [INFO] - module-common - BundleEvent.STARTED
+2011-05-24 16:31:47,867 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-24 16:31:47,867 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-24 16:31:47,867 [INFO] - commandline - BundleEvent.STARTED
+2011-05-24 16:31:47,867 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-24 16:31:47,923 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,923 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,924 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,925 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-24 16:31:47,925 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-24 16:31:47,925 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-24 16:31:47,927 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,939 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-24 16:31:47,942 [DEBUG] - converter-parser - Hello log
+2011-05-24 16:31:47,955 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,955 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-24 16:31:47,956 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-24 16:31:47,956 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-24 16:31:47,956 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-24 16:31:48,322 [INFO] - converter-parser - Running pipeline !1
+2011-05-24 16:31:48,323 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-24 16:31:48,323 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #7] ([document-sequence #1 (1 docs)])
+2011-05-24 16:31:48,323 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #7] ([document-sequence #1 (2 docs)])
+2011-05-24 16:31:48,325 [INFO] - converter-parser - Running identity !1.4
+2011-05-24 16:31:48,325 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:14:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-24 16:31:48,325 [DEBUG] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:31:48,325 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:14:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-24 16:31:48,326 [DEBUG] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:31:48,351 [INFO] - converter-parser - Running {http://xmlcalabash.com/ns/extensions}message !1.5
+2011-05-24 16:31:48,352 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-24 16:31:48,352 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:Message step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:31:48,352 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-24 16:31:48,352 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:Message step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:31:48,352 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (2 docs)])
+2011-05-24 16:31:48,352 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (0 docs)])
+2011-05-24 16:31:48,352 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #5] ([document-sequence #3 (2 docs)]) to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-24 16:31:48,352 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (2 docs)])
+2011-05-24 16:31:48,352 [DEBUG] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-24 16:31:48,677 [ERROR] - converter-parser - err:XD0007:XD0007
+2011-05-24 16:39:57,681 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-24 16:39:57,684 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-24 16:39:57,686 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-24 16:39:57,686 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-24 16:39:57,686 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-24 16:39:57,686 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-24 16:39:57,686 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-24 16:39:57,686 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-24 16:39:57,686 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,686 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,687 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,687 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,687 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,687 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-24 16:39:57,687 [INFO] - guava - BundleEvent.STARTED
+2011-05-24 16:39:57,687 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-24 16:39:57,687 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-24 16:39:57,687 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,687 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-24 16:39:57,687 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,687 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,687 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-24 16:39:57,687 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,687 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,687 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,687 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,688 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-24 16:39:57,688 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-24 16:39:57,688 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-24 16:39:57,688 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-24 16:39:57,688 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-24 16:39:57,688 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-24 16:39:57,688 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-24 16:39:57,688 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-24 16:39:57,688 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,688 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-24 16:39:57,688 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,688 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-24 16:39:57,688 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-24 16:39:57,688 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-24 16:39:57,689 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,689 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-24 16:39:57,689 [INFO] - module-common - BundleEvent.STARTED
+2011-05-24 16:39:57,689 [INFO] - commandline - BundleEvent.STARTED
+2011-05-24 16:39:57,709 [DEBUG] - converter-parser - Hello log
+2011-05-24 16:39:57,711 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-24 16:39:57,712 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-24 16:39:57,798 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,798 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,798 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,800 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-24 16:39:57,824 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-24 16:39:57,825 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-24 16:39:57,825 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-24 16:39:57,825 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-24 16:39:58,252 [INFO] - converter-parser - Running pipeline !1
+2011-05-24 16:39:58,253 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-24 16:39:58,253 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #7] ([document-sequence #1 (1 docs)])
+2011-05-24 16:39:58,253 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #7] ([document-sequence #1 (2 docs)])
+2011-05-24 16:39:58,254 [INFO] - converter-parser - Running identity !1.4
+2011-05-24 16:39:58,255 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-24 16:39:58,255 [INFO] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:39:58,255 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-24 16:39:58,255 [INFO] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:39:58,281 [INFO] - converter-parser - Running {http://xmlcalabash.com/ns/extensions}message !1.5
+2011-05-24 16:39:58,281 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-24 16:39:58,281 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:Message step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:39:58,282 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-24 16:39:58,282 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:Message step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:39:58,282 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (2 docs)])
+2011-05-24 16:39:58,282 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (0 docs)])
+2011-05-24 16:39:58,282 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #5] ([document-sequence #3 (2 docs)]) to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-24 16:39:58,282 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (2 docs)])
+2011-05-24 16:39:58,282 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-24 16:39:58,646 [ERROR] - converter-parser - err:XD0007:XD0007
+2011-05-24 16:44:14,180 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-24 16:44:14,356 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-24 16:44:14,357 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-24 16:44:14,357 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-24 16:44:14,358 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-24 16:44:14,358 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-24 16:44:14,358 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-24 16:44:14,358 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-24 16:44:14,358 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,358 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,358 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,358 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,358 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,358 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-24 16:44:14,358 [INFO] - guava - BundleEvent.STARTED
+2011-05-24 16:44:14,358 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-24 16:44:14,358 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-24 16:44:14,358 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,358 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-24 16:44:14,358 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,358 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,358 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-24 16:44:14,358 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,358 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,359 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,359 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,359 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-24 16:44:14,359 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-24 16:44:14,359 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-24 16:44:14,359 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-24 16:44:14,359 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-24 16:44:14,359 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-24 16:44:14,359 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-24 16:44:14,359 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-24 16:44:14,359 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,359 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-24 16:44:14,359 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,359 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-24 16:44:14,359 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-24 16:44:14,359 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-24 16:44:14,359 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-24 16:44:14,359 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-24 16:44:14,359 [INFO] - module-common - BundleEvent.STARTED
+2011-05-24 16:44:14,360 [INFO] - commandline - BundleEvent.STARTED
+2011-05-24 16:44:14,360 [DEBUG] - converter-parser - Hello log
+2011-05-24 16:44:14,484 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-24 16:44:14,484 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-24 16:44:15,048 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-24 16:44:15,049 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-24 16:44:15,049 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-24 16:44:15,049 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-24 16:44:15,063 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-24 16:44:15,065 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-24 16:44:15,065 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-24 16:44:15,066 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-24 16:44:15,665 [INFO] - converter-parser - Running pipeline !1
+2011-05-24 16:44:15,666 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-24 16:44:15,666 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #7] ([document-sequence #1 (1 docs)])
+2011-05-24 16:44:15,666 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #7] ([document-sequence #1 (2 docs)])
+2011-05-24 16:44:15,668 [INFO] - converter-parser - Running identity !1.4
+2011-05-24 16:44:15,668 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-24 16:44:15,668 [INFO] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:44:15,670 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-24 16:44:15,670 [INFO] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:44:15,902 [INFO] - converter-parser - Running {http://xmlcalabash.com/ns/extensions}message !1.5
+2011-05-24 16:44:15,902 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-24 16:44:15,902 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:Message step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:44:15,902 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-24 16:44:15,902 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:Message step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-24 16:44:15,902 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (2 docs)])
+2011-05-24 16:44:15,902 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (0 docs)])
+2011-05-24 16:44:15,902 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #5] ([document-sequence #3 (2 docs)]) to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-24 16:44:15,903 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (2 docs)])
+2011-05-24 16:44:15,903 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-24 16:44:15,903 [ERROR] - converter-parser - err:XD0007:XD0007
+2011-05-25 17:38:23,334 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-25 17:38:23,356 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-25 17:38:23,358 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-25 17:38:23,358 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-25 17:38:23,358 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-25 17:38:23,358 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-25 17:38:23,358 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-25 17:38:23,359 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-25 17:38:23,359 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:38:23,359 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:38:23,359 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:38:23,359 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:38:23,359 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:38:23,359 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-25 17:38:23,359 [INFO] - guava - BundleEvent.STARTED
+2011-05-25 17:38:23,359 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-25 17:38:23,359 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-25 17:38:23,359 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:38:23,359 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-25 17:38:23,359 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:38:23,359 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:38:23,359 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-25 17:38:23,360 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:38:23,386 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:38:23,391 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:38:23,392 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:38:23,392 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-25 17:38:23,394 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-25 17:38:23,394 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-25 17:38:23,394 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-25 17:38:23,394 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-25 17:38:23,395 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-25 17:38:23,395 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-25 17:38:23,395 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-25 17:38:23,401 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-25 17:38:23,401 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-25 17:38:23,401 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-25 17:38:23,416 [DEBUG] - converter-parser - Hello log
+2011-05-25 17:38:24,422 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-25 17:38:24,436 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-25 17:38:24,437 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-25 17:38:24,437 [INFO] - module-common - BundleEvent.STARTED
+2011-05-25 17:38:24,437 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-25 17:38:24,438 [INFO] - commandline - BundleEvent.STARTED
+2011-05-25 17:38:24,530 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-25 17:38:24,530 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-25 17:38:24,531 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-25 17:38:24,531 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-25 17:38:24,533 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-25 17:38:24,554 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-25 17:38:24,554 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-25 17:38:24,555 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-25 17:38:24,555 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-25 17:38:24,555 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-25 17:38:24,555 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-25 17:38:25,149 [INFO] - converter-parser - Running pipeline !1
+2011-05-25 17:38:25,149 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-25 17:38:25,149 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #7] ([document-sequence #1 (1 docs)])
+2011-05-25 17:38:25,149 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #7] ([document-sequence #1 (2 docs)])
+2011-05-25 17:38:25,151 [INFO] - converter-parser - Running identity !1.4
+2011-05-25 17:38:25,151 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-25 17:38:25,151 [INFO] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:38:25,151 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-25 17:38:25,151 [INFO] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:38:25,193 [INFO] - converter-parser - Running {http://xmlcalabash.com/ns/extensions}message !1.5
+2011-05-25 17:38:25,194 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-25 17:38:25,194 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:Message step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:38:25,194 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-25 17:38:25,194 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:39:Message step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:38:25,195 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (2 docs)])
+2011-05-25 17:38:25,195 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (0 docs)])
+2011-05-25 17:38:25,195 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #5] ([document-sequence #3 (2 docs)]) to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-25 17:38:25,195 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (2 docs)])
+2011-05-25 17:38:25,195 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-25 17:38:25,901 [ERROR] - converter-parser - err:XD0007:XD0007
+2011-05-25 17:41:02,440 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-25 17:41:02,452 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-25 17:41:02,454 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-25 17:41:02,454 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-25 17:41:02,454 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-25 17:41:02,454 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-25 17:41:02,454 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-25 17:41:02,455 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-25 17:41:02,455 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,455 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,455 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,455 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,455 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,455 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-25 17:41:02,455 [INFO] - guava - BundleEvent.STARTED
+2011-05-25 17:41:02,455 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-25 17:41:02,455 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-25 17:41:02,455 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,455 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-25 17:41:02,455 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,455 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,455 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-25 17:41:02,456 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,456 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,456 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,456 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,456 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-25 17:41:02,456 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-25 17:41:02,461 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-25 17:41:02,462 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-25 17:41:02,462 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-25 17:41:02,462 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-25 17:41:02,462 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-25 17:41:02,462 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-25 17:41:02,462 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,462 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-25 17:41:02,462 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-25 17:41:02,462 [DEBUG] - converter-parser - Hello log
+2011-05-25 17:41:02,462 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-25 17:41:02,462 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,462 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-25 17:41:02,462 [INFO] - module-common - BundleEvent.STARTED
+2011-05-25 17:41:02,463 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-25 17:41:02,463 [INFO] - commandline - BundleEvent.STARTED
+2011-05-25 17:41:02,552 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,552 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,575 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-25 17:41:02,575 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-25 17:41:02,576 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-25 17:41:02,581 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,581 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,581 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-25 17:41:02,587 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-25 17:41:02,587 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-25 17:41:02,587 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-25 17:41:03,049 [INFO] - converter-parser - Running pipeline !1
+2011-05-25 17:41:03,050 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-25 17:41:03,050 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #7] ([document-sequence #1 (1 docs)])
+2011-05-25 17:41:03,050 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #7] ([document-sequence #1 (2 docs)])
+2011-05-25 17:41:03,080 [INFO] - converter-parser - Running {http://xmlcalabash.com/ns/extensions}message !1.4
+2011-05-25 17:41:03,081 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-25 17:41:03,081 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:Message step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:41:03,082 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-25 17:41:03,082 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:Message step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:41:03,083 [INFO] - converter-parser - Running identity !1.5
+2011-05-25 17:41:03,083 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:18:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-25 17:41:03,083 [INFO] - converter-parser - Identity step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:41:03,084 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:18:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-25 17:41:03,084 [INFO] - converter-parser - Identity step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:41:03,084 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (2 docs)])
+2011-05-25 17:41:03,084 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (0 docs)])
+2011-05-25 17:41:03,084 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #5] ([document-sequence #3 (2 docs)]) to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-25 17:41:03,084 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (2 docs)])
+2011-05-25 17:41:03,085 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-25 17:41:03,439 [ERROR] - converter-parser - err:XD0007:XD0007
+2011-05-25 17:41:21,363 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-25 17:41:21,368 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-25 17:41:21,375 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-25 17:41:21,375 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-25 17:41:21,375 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-25 17:41:21,375 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-25 17:41:21,375 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-25 17:41:21,375 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-25 17:41:21,375 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:41:21,375 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:41:21,376 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:41:21,376 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:41:21,376 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:41:21,376 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-25 17:41:21,376 [INFO] - guava - BundleEvent.STARTED
+2011-05-25 17:41:21,376 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-25 17:41:21,376 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-25 17:41:21,376 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:41:21,376 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-25 17:41:21,376 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:41:21,376 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:41:21,376 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-25 17:41:21,376 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:41:21,376 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:41:21,376 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:41:21,376 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:41:21,377 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-25 17:41:21,377 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-25 17:41:21,377 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-25 17:41:21,377 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-25 17:41:21,377 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-25 17:41:21,377 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-25 17:41:21,377 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-25 17:41:21,377 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-25 17:41:21,377 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-25 17:41:21,377 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-25 17:41:21,377 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-25 17:41:21,377 [DEBUG] - converter-parser - Hello log
+2011-05-25 17:41:22,320 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-25 17:41:22,322 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-25 17:41:22,323 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-25 17:41:22,323 [INFO] - module-common - BundleEvent.STARTED
+2011-05-25 17:41:22,324 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-25 17:41:22,341 [INFO] - commandline - BundleEvent.STARTED
+2011-05-25 17:41:22,341 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-25 17:41:22,429 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-25 17:41:22,431 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-25 17:41:22,431 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-25 17:41:22,432 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-25 17:41:22,433 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-25 17:41:22,452 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-25 17:41:22,452 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-25 17:41:22,453 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-25 17:41:22,453 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-25 17:41:22,453 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-25 17:41:22,923 [INFO] - converter-parser - Running pipeline !1
+2011-05-25 17:41:22,924 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-25 17:41:22,924 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #5] ([document-sequence #1 (1 docs)])
+2011-05-25 17:41:22,924 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #5] ([document-sequence #1 (2 docs)])
+2011-05-25 17:41:22,925 [INFO] - converter-parser - Running identity !1.4
+2011-05-25 17:41:22,925 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-25 17:41:22,925 [INFO] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:41:22,925 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-25 17:41:22,925 [INFO] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:41:22,925 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-25 17:41:22,926 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #4] ([document-sequence #3 (0 docs)])
+2011-05-25 17:41:22,926 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #3] ([document-sequence #2 (2 docs)]) to [pipe #4] ([document-sequence #3 (1 docs)])
+2011-05-25 17:41:22,926 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-25 17:41:22,926 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #4] ([document-sequence #3 (1 docs)])
+2011-05-25 17:41:23,317 [ERROR] - converter-parser - err:XD0007:XD0007
+2011-05-25 17:51:10,173 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-25 17:51:10,182 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-25 17:51:10,192 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-25 17:51:10,192 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-25 17:51:10,192 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-25 17:51:10,193 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-25 17:51:10,193 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-25 17:51:10,193 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-25 17:51:10,193 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:10,193 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:10,193 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:10,193 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:10,193 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:10,193 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-25 17:51:10,193 [INFO] - guava - BundleEvent.STARTED
+2011-05-25 17:51:10,193 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-25 17:51:10,193 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-25 17:51:10,193 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:51:10,194 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-25 17:51:10,194 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:51:10,194 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:51:10,194 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-25 17:51:10,194 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:51:10,194 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:51:10,194 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:51:10,194 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:51:10,194 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-25 17:51:10,194 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-25 17:51:10,194 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-25 17:51:10,194 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-25 17:51:10,194 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-25 17:51:10,194 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-25 17:51:10,194 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-25 17:51:10,195 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-25 17:51:10,195 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-25 17:51:10,195 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-25 17:51:10,195 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-25 17:51:10,195 [INFO] - module-common - BundleEvent.STARTED
+2011-05-25 17:51:10,195 [INFO] - commandline - BundleEvent.STARTED
+2011-05-25 17:51:10,195 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-25 17:51:10,195 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-25 17:51:10,195 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-25 17:51:10,195 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-25 17:51:10,195 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-25 17:51:10,195 [DEBUG] - converter-parser - Hello log
+2011-05-25 17:51:11,180 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-25 17:51:11,181 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-25 17:51:11,240 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-25 17:51:11,241 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-25 17:51:11,243 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-25 17:51:11,244 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-25 17:51:11,247 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-25 17:51:11,248 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-25 17:51:11,248 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-25 17:51:11,248 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-25 17:51:11,255 [INFO] - converter-parser - Running pipeline !1
+2011-05-25 17:51:11,255 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-25 17:51:11,255 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #5] ([document-sequence #1 (1 docs)])
+2011-05-25 17:51:11,255 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #5] ([document-sequence #1 (2 docs)])
+2011-05-25 17:51:11,257 [INFO] - converter-parser - Running identity !1.4
+2011-05-25 17:51:11,257 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-25 17:51:11,257 [INFO] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:51:11,257 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (2 docs)])
+2011-05-25 17:51:11,257 [INFO] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:51:11,257 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-25 17:51:11,258 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #4] ([document-sequence #3 (0 docs)])
+2011-05-25 17:51:11,258 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #3] ([document-sequence #2 (2 docs)]) to [pipe #4] ([document-sequence #3 (1 docs)])
+2011-05-25 17:51:11,258 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (2 docs)])
+2011-05-25 17:51:11,258 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #4] ([document-sequence #3 (1 docs)])
+2011-05-25 17:51:11,260 [ERROR] - converter-parser - err:XD0007:XD0007
+2011-05-25 17:51:35,061 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-25 17:51:35,064 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-25 17:51:35,074 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-25 17:51:35,074 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-25 17:51:35,074 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-25 17:51:35,074 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-25 17:51:35,074 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-25 17:51:35,074 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-25 17:51:35,074 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:35,074 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:35,074 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:35,074 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:35,074 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:35,075 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-25 17:51:35,075 [INFO] - guava - BundleEvent.STARTED
+2011-05-25 17:51:35,075 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-25 17:51:35,075 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-25 17:51:35,075 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:51:35,075 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-25 17:51:35,075 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:51:35,075 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:51:35,075 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-25 17:51:35,075 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:51:35,075 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:51:35,075 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:51:35,075 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:51:35,075 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-25 17:51:35,075 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-25 17:51:35,087 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-25 17:51:35,087 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-25 17:51:35,087 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-25 17:51:35,087 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-25 17:51:35,087 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-25 17:51:35,087 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-25 17:51:35,087 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-25 17:51:35,087 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-25 17:51:36,087 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-25 17:51:36,088 [INFO] - module-common - BundleEvent.STARTED
+2011-05-25 17:51:36,089 [INFO] - commandline - BundleEvent.STARTED
+2011-05-25 17:51:36,089 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-25 17:51:37,091 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-25 17:51:37,091 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-25 17:51:37,094 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-25 17:51:37,104 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-25 17:51:37,106 [DEBUG] - converter-parser - Hello log
+2011-05-25 17:51:38,108 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-25 17:51:38,110 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-25 17:51:38,167 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-25 17:51:38,168 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-25 17:51:38,169 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-25 17:51:38,170 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-25 17:51:38,172 [INFO] - converter-parser - Running pipeline !1
+2011-05-25 17:51:38,172 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-25 17:51:38,172 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #5] ([document-sequence #1 (0 docs)])
+2011-05-25 17:51:38,173 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #5] ([document-sequence #1 (1 docs)])
+2011-05-25 17:51:38,174 [INFO] - converter-parser - Running identity !1.4
+2011-05-25 17:51:38,174 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:18:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (1 docs)])
+2011-05-25 17:51:38,174 [INFO] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:51:38,174 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (1 docs)])
+2011-05-25 17:51:38,175 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #4] ([document-sequence #3 (0 docs)])
+2011-05-25 17:51:38,175 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #3] ([document-sequence #2 (1 docs)]) to [pipe #4] ([document-sequence #3 (1 docs)])
+2011-05-25 17:51:38,176 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-25 17:51:38,176 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-25 17:51:38,176 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-25 17:51:38,176 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-25 17:51:51,357 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-25 17:51:51,360 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-25 17:51:51,385 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-25 17:51:51,385 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-25 17:51:51,385 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-25 17:51:51,385 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-25 17:51:51,385 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-25 17:51:51,385 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-25 17:51:51,385 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:51,386 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:51,386 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:51,386 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:51,386 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:51:51,386 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-25 17:51:51,386 [INFO] - guava - BundleEvent.STARTED
+2011-05-25 17:51:51,386 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-25 17:51:51,386 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-25 17:51:51,386 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:51:51,386 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-25 17:51:51,386 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:51:51,386 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:51:51,386 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-25 17:51:51,386 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:51:51,386 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:51:51,386 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:51:51,387 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:51:51,387 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-25 17:51:51,387 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-25 17:51:51,387 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-25 17:51:51,387 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-25 17:51:51,387 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-25 17:51:51,387 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-25 17:51:51,387 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-25 17:51:51,387 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-25 17:51:51,387 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-25 17:51:51,387 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-25 17:51:51,387 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-25 17:51:51,387 [INFO] - module-common - BundleEvent.STARTED
+2011-05-25 17:51:51,387 [INFO] - commandline - BundleEvent.STARTED
+2011-05-25 17:51:51,387 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-25 17:51:51,388 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-25 17:51:51,388 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-25 17:51:51,388 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-25 17:51:51,388 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-25 17:51:51,388 [DEBUG] - converter-parser - Hello log
+2011-05-25 17:51:52,336 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-25 17:51:52,339 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-25 17:51:52,396 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-25 17:51:52,397 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-25 17:51:52,401 [INFO] - converter-parser - Running pipeline !1
+2011-05-25 17:51:52,402 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-25 17:51:52,402 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #7] ([document-sequence #1 (0 docs)])
+2011-05-25 17:51:52,402 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #7] ([document-sequence #1 (1 docs)])
+2011-05-25 17:51:52,402 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-25 17:51:52,402 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-25 17:51:52,402 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-25 17:51:52,407 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-25 17:51:52,407 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-25 17:51:52,407 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-25 17:51:52,428 [INFO] - converter-parser - Running {http://xmlcalabash.com/ns/extensions}message !1.4
+2011-05-25 17:51:52,429 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (1 docs)])
+2011-05-25 17:51:52,429 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:Message step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:51:52,430 [INFO] - converter-parser - Running identity !1.5
+2011-05-25 17:51:52,430 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:18:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (1 docs)])
+2011-05-25 17:51:52,430 [INFO] - converter-parser - Identity step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:51:52,430 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (1 docs)])
+2011-05-25 17:51:52,431 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (0 docs)])
+2011-05-25 17:51:52,431 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #5] ([document-sequence #3 (1 docs)]) to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-25 17:52:44,717 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-25 17:52:44,720 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-25 17:52:44,730 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-25 17:52:44,730 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-25 17:52:44,730 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-25 17:52:44,730 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-25 17:52:44,730 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-25 17:52:44,730 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-25 17:52:44,730 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:52:44,730 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:52:44,737 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:52:44,737 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:52:44,737 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:52:44,737 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-25 17:52:44,737 [INFO] - guava - BundleEvent.STARTED
+2011-05-25 17:52:44,737 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-25 17:52:44,737 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-25 17:52:44,737 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:52:44,737 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-25 17:52:44,737 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:52:44,737 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:52:44,737 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-25 17:52:44,737 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:52:44,737 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:52:44,738 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:52:44,738 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:52:44,738 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-25 17:52:44,738 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-25 17:52:44,738 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-25 17:52:44,738 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-25 17:52:44,738 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-25 17:52:44,738 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-25 17:52:44,738 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-25 17:52:44,738 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-25 17:52:44,738 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-25 17:52:44,738 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-25 17:52:44,738 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-25 17:52:44,738 [INFO] - module-common - BundleEvent.STARTED
+2011-05-25 17:52:44,738 [INFO] - commandline - BundleEvent.STARTED
+2011-05-25 17:52:44,738 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-25 17:52:44,738 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-25 17:52:44,738 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-25 17:52:44,739 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-25 17:52:44,739 [DEBUG] - converter-parser - Hello log
+2011-05-25 17:52:44,739 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-25 17:52:45,698 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-25 17:52:45,755 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-25 17:52:45,756 [INFO] - converter-parser - Running pipeline !1
+2011-05-25 17:52:45,756 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-25 17:52:45,757 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #7] ([document-sequence #1 (0 docs)])
+2011-05-25 17:52:45,757 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #7] ([document-sequence #1 (1 docs)])
+2011-05-25 17:52:45,757 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-25 17:52:45,757 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-25 17:52:45,757 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-25 17:52:45,761 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-25 17:52:45,762 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-25 17:52:45,762 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-25 17:52:45,762 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-25 17:52:45,762 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-25 17:52:45,788 [INFO] - converter-parser - Running {http://xmlcalabash.com/ns/extensions}message !1.4
+2011-05-25 17:52:45,789 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (1 docs)])
+2011-05-25 17:52:45,789 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:Message step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:52:45,789 [INFO] - converter-parser - Running identity !1.5
+2011-05-25 17:52:45,789 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:18:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (1 docs)])
+2011-05-25 17:52:45,790 [INFO] - converter-parser - Identity step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:52:45,790 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (1 docs)])
+2011-05-25 17:52:45,791 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (0 docs)])
+2011-05-25 17:52:45,791 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #5] ([document-sequence #3 (1 docs)]) to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-25 17:56:36,169 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-25 17:56:36,187 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-25 17:56:36,189 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-25 17:56:36,189 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-25 17:56:36,189 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-25 17:56:36,189 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-25 17:56:36,189 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-25 17:56:36,189 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-25 17:56:36,189 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,189 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,189 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,189 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,189 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,189 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-25 17:56:36,189 [INFO] - guava - BundleEvent.STARTED
+2011-05-25 17:56:36,190 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-25 17:56:36,190 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-25 17:56:36,190 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,190 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-25 17:56:36,190 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,190 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,190 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-25 17:56:36,190 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,190 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,190 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,190 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,190 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-25 17:56:36,190 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-25 17:56:36,190 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-25 17:56:36,190 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-25 17:56:36,191 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-25 17:56:36,191 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-25 17:56:36,191 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-25 17:56:36,191 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-25 17:56:36,191 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,191 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-25 17:56:36,191 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-25 17:56:36,191 [INFO] - module-common - BundleEvent.STARTED
+2011-05-25 17:56:36,191 [INFO] - commandline - BundleEvent.STARTED
+2011-05-25 17:56:36,191 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-25 17:56:36,191 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-25 17:56:36,191 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-25 17:56:36,191 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,192 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-25 17:56:36,192 [DEBUG] - converter-parser - Hello log
+2011-05-25 17:56:36,192 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-25 17:56:36,192 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,271 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,272 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,273 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,281 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-25 17:56:36,297 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-25 17:56:36,298 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-25 17:56:36,298 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-25 17:56:36,298 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-25 17:56:36,658 [INFO] - converter-parser - Running pipeline !1
+2011-05-25 17:56:36,658 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-25 17:56:36,658 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #7] ([document-sequence #1 (0 docs)])
+2011-05-25 17:56:36,659 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #7] ([document-sequence #1 (1 docs)])
+2011-05-25 17:56:36,690 [INFO] - converter-parser - Running {http://xmlcalabash.com/ns/extensions}message !1.4
+2011-05-25 17:56:36,691 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (1 docs)])
+2011-05-25 17:56:36,691 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:Message step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:56:36,692 [INFO] - converter-parser - Running identity !1.5
+2011-05-25 17:56:36,692 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:18:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (1 docs)])
+2011-05-25 17:56:36,692 [INFO] - converter-parser - Identity step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:56:36,693 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (1 docs)])
+2011-05-25 17:56:36,694 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (0 docs)])
+2011-05-25 17:56:36,694 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #5] ([document-sequence #3 (1 docs)]) to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-25 17:56:54,227 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-25 17:56:54,239 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-25 17:56:54,247 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-25 17:56:54,247 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-25 17:56:54,248 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-25 17:56:54,248 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-25 17:56:54,248 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-25 17:56:54,248 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-25 17:56:54,248 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:56:54,248 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:56:54,248 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:56:54,248 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:56:54,248 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 17:56:54,248 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-25 17:56:54,248 [INFO] - guava - BundleEvent.STARTED
+2011-05-25 17:56:54,248 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-25 17:56:54,248 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-25 17:56:54,248 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:56:54,249 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-25 17:56:54,249 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:56:54,249 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 17:56:54,249 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-25 17:56:54,249 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:56:54,249 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 17:56:54,249 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:56:54,249 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 17:56:54,249 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-25 17:56:54,249 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-25 17:56:54,249 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-25 17:56:54,249 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-25 17:56:54,249 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-25 17:56:54,249 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-25 17:56:54,249 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-25 17:56:54,250 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-25 17:56:54,250 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-25 17:56:54,250 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-25 17:56:54,250 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-25 17:56:54,250 [INFO] - module-common - BundleEvent.STARTED
+2011-05-25 17:56:54,250 [INFO] - commandline - BundleEvent.STARTED
+2011-05-25 17:56:54,250 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-25 17:56:54,250 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-25 17:56:54,250 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-25 17:56:54,250 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-25 17:56:54,250 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-25 17:56:54,250 [DEBUG] - converter-parser - Hello log
+2011-05-25 17:56:55,239 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-25 17:56:55,241 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-25 17:56:55,300 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-25 17:56:55,301 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-25 17:56:55,302 [INFO] - converter-parser - Running pipeline !1
+2011-05-25 17:56:55,304 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-25 17:56:55,304 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #7] ([document-sequence #1 (0 docs)])
+2011-05-25 17:56:55,304 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #7] ([document-sequence #1 (1 docs)])
+2011-05-25 17:56:55,304 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-25 17:56:55,305 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-25 17:56:55,320 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-25 17:56:55,321 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-25 17:56:55,321 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-25 17:56:55,321 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-25 17:56:55,337 [INFO] - converter-parser - Running {http://xmlcalabash.com/ns/extensions}message !1.4
+2011-05-25 17:56:55,338 [WARN] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:Hello world
+2011-05-25 17:56:55,338 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (1 docs)])
+2011-05-25 17:56:55,339 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:Message step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:56:55,339 [INFO] - converter-parser - Running identity !1.5
+2011-05-25 17:56:55,340 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:18:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (1 docs)])
+2011-05-25 17:56:55,340 [INFO] - converter-parser - Identity step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-25 17:56:55,341 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (1 docs)])
+2011-05-25 17:56:55,341 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (0 docs)])
+2011-05-25 17:56:55,342 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #5] ([document-sequence #3 (1 docs)]) to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-25 18:00:18,993 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-25 18:00:19,004 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-25 18:00:19,011 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-25 18:00:19,011 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-25 18:00:19,011 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-25 18:00:19,011 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-25 18:00:19,011 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-25 18:00:19,011 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-25 18:00:19,011 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,011 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,011 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,011 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,012 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,012 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-25 18:00:19,012 [INFO] - guava - BundleEvent.STARTED
+2011-05-25 18:00:19,012 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-25 18:00:19,012 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-25 18:00:19,012 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,012 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-25 18:00:19,012 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,012 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,012 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-25 18:00:19,012 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,012 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,012 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,012 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,013 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-25 18:00:19,013 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-25 18:00:19,013 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-25 18:00:19,013 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-25 18:00:19,013 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-25 18:00:19,013 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-25 18:00:19,013 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-25 18:00:19,013 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-25 18:00:19,013 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,013 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-25 18:00:19,013 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-25 18:00:19,013 [INFO] - module-common - BundleEvent.STARTED
+2011-05-25 18:00:19,013 [INFO] - commandline - BundleEvent.STARTED
+2011-05-25 18:00:19,013 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-25 18:00:19,014 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-25 18:00:19,014 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-25 18:00:19,014 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,014 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-25 18:00:19,014 [DEBUG] - converter-parser - Hello log
+2011-05-25 18:00:19,014 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-25 18:00:19,014 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,077 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,079 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,080 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,101 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-25 18:00:19,105 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-25 18:00:19,105 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-25 18:00:19,108 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-25 18:00:19,108 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-25 18:00:19,485 [INFO] - converter-parser - Running pipeline !1
+2011-05-25 18:00:19,486 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-25 18:00:19,486 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #7] ([document-sequence #1 (0 docs)])
+2011-05-25 18:00:19,486 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #7] ([document-sequence #1 (1 docs)])
+2011-05-25 18:00:19,515 [INFO] - converter-parser - Running {http://xmlcalabash.com/ns/extensions}message !1.4
+2011-05-25 18:00:19,515 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:Hello world
+2011-05-25 18:00:19,516 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (1 docs)])
+2011-05-25 18:00:19,516 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:Message step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 18:00:19,516 [INFO] - converter-parser - Running identity !1.5
+2011-05-25 18:00:19,516 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:18:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (1 docs)])
+2011-05-25 18:00:19,516 [INFO] - converter-parser - Identity step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-25 18:00:19,516 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (1 docs)])
+2011-05-25 18:00:19,517 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (0 docs)])
+2011-05-25 18:00:19,517 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #5] ([document-sequence #3 (1 docs)]) to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-25 18:11:45,012 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-25 18:11:45,020 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-25 18:11:45,022 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-25 18:11:45,022 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-25 18:11:45,023 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-25 18:11:45,023 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-25 18:11:45,023 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-25 18:11:45,023 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-25 18:11:45,023 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,023 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,023 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,023 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,023 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,023 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-25 18:11:45,023 [INFO] - guava - BundleEvent.STARTED
+2011-05-25 18:11:45,023 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-25 18:11:45,023 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-25 18:11:45,023 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,024 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-25 18:11:45,024 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,024 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,024 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-25 18:11:45,024 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,024 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,024 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,024 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,024 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-25 18:11:45,024 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-25 18:11:45,024 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-25 18:11:45,024 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-25 18:11:45,024 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-25 18:11:45,024 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-25 18:11:45,024 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-25 18:11:45,025 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-25 18:11:45,025 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,025 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-25 18:11:45,025 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-25 18:11:45,025 [INFO] - module-common - BundleEvent.STARTED
+2011-05-25 18:11:45,025 [INFO] - commandline - BundleEvent.STARTED
+2011-05-25 18:11:45,025 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-25 18:11:45,025 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-25 18:11:45,025 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-25 18:11:45,025 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,025 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-25 18:11:45,025 [DEBUG] - converter-parser - Hello log
+2011-05-25 18:11:45,025 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-25 18:11:45,025 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,036 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,037 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,037 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,071 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-25 18:11:45,072 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-25 18:11:45,072 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-25 18:11:45,072 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-25 18:11:45,072 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-25 18:11:45,393 [INFO] - converter-parser - Running pipeline !1
+2011-05-25 18:11:45,394 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-25 18:11:45,394 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #7] ([document-sequence #1 (0 docs)])
+2011-05-25 18:11:45,394 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #7] ([document-sequence #1 (1 docs)])
+2011-05-25 18:11:45,423 [INFO] - converter-parser - Running {http://xmlcalabash.com/ns/extensions}message !1.4
+2011-05-25 18:11:45,423 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:Hello world
+2011-05-25 18:11:45,423 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (1 docs)])
+2011-05-25 18:11:45,424 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:Message step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 18:11:45,424 [INFO] - converter-parser - Running identity !1.5
+2011-05-25 18:11:45,424 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:18:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (1 docs)])
+2011-05-25 18:11:45,424 [INFO] - converter-parser - Identity step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-25 18:11:45,425 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (1 docs)])
+2011-05-25 18:11:45,426 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (0 docs)])
+2011-05-25 18:11:45,426 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #5] ([document-sequence #3 (1 docs)]) to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-25 18:13:07,514 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-25 18:13:07,523 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-25 18:13:07,531 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-25 18:13:07,531 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-25 18:13:07,531 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-25 18:13:07,531 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-25 18:13:07,532 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-25 18:13:07,532 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-25 18:13:07,532 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:13:07,532 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:13:07,532 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:13:07,532 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:13:07,532 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:13:07,532 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-25 18:13:07,532 [INFO] - guava - BundleEvent.STARTED
+2011-05-25 18:13:07,532 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-25 18:13:07,532 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-25 18:13:07,532 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 18:13:07,533 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-25 18:13:07,533 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 18:13:07,533 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 18:13:07,533 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-25 18:13:07,533 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:13:07,533 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 18:13:08,462 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:13:08,463 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:13:08,463 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-25 18:13:08,472 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-25 18:13:08,472 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-25 18:13:08,472 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-25 18:13:08,472 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-25 18:13:08,472 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-25 18:13:08,472 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-25 18:13:08,472 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-25 18:13:08,476 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-25 18:13:08,479 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-25 18:13:08,485 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-25 18:13:08,485 [INFO] - module-common - BundleEvent.STARTED
+2011-05-25 18:13:08,487 [INFO] - commandline - BundleEvent.STARTED
+2011-05-25 18:13:08,487 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-25 18:13:08,488 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-25 18:13:08,488 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-25 18:13:08,490 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-25 18:13:08,494 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-25 18:13:08,495 [DEBUG] - converter-parser - Hello log
+2011-05-25 18:13:09,495 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-25 18:13:09,556 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-25 18:13:09,556 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-25 18:13:09,556 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-25 18:13:09,556 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-25 18:13:09,560 [INFO] - converter-parser - Running pipeline !1
+2011-05-25 18:13:09,561 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-25 18:13:09,561 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-25 18:13:09,561 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #7] ([document-sequence #1 (0 docs)])
+2011-05-25 18:13:09,561 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #7] ([document-sequence #1 (1 docs)])
+2011-05-25 18:13:09,561 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-25 18:13:09,561 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-25 18:13:09,561 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-25 18:13:09,561 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-25 18:13:09,588 [INFO] - converter-parser - Running {http://xmlcalabash.com/ns/extensions}message !1.4
+2011-05-25 18:13:09,588 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:Message:Hello world
+2011-05-25 18:13:09,588 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (1 docs)])
+2011-05-25 18:13:09,589 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:38:Message step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 18:13:09,589 [INFO] - converter-parser - Running identity !1.5
+2011-05-25 18:13:09,589 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:15:18:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (1 docs)])
+2011-05-25 18:13:09,589 [INFO] - converter-parser - Identity step !1.5 read file:/home/javi/tmp/msg.xpl
+2011-05-25 18:13:09,590 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from [pipe #5] ([document-sequence #3 (1 docs)])
+2011-05-25 18:13:09,591 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #6] ([document-sequence #4 (0 docs)])
+2011-05-25 18:13:09,591 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #5] ([document-sequence #3 (1 docs)]) to [pipe #6] ([document-sequence #4 (1 docs)])
+2011-05-25 18:22:06,932 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-25 18:22:06,942 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-25 18:22:06,944 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-25 18:22:06,944 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-25 18:22:06,944 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-25 18:22:06,944 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-25 18:22:06,945 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-25 18:22:06,945 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-25 18:22:06,945 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:22:06,945 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:22:06,945 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:22:06,945 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:22:06,945 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:22:06,945 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-25 18:22:06,945 [INFO] - guava - BundleEvent.STARTED
+2011-05-25 18:22:06,945 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-25 18:22:06,945 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-25 18:22:06,945 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 18:22:06,945 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-25 18:22:06,945 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 18:22:06,945 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 18:22:06,946 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-25 18:22:06,946 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:22:06,946 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 18:22:06,946 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:22:06,946 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:22:06,946 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-25 18:22:06,946 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-25 18:22:06,946 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-25 18:22:06,946 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-25 18:22:06,946 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-25 18:22:06,946 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-25 18:22:06,946 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-25 18:22:06,946 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-25 18:22:06,946 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-25 18:22:06,946 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-25 18:22:06,947 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-25 18:22:06,951 [INFO] - module-common - BundleEvent.STARTED
+2011-05-25 18:22:06,951 [INFO] - commandline - BundleEvent.STARTED
+2011-05-25 18:22:06,951 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-25 18:22:06,951 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-25 18:22:06,951 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-25 18:22:06,951 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-25 18:22:06,951 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-25 18:22:06,951 [DEBUG] - converter-parser - Hello log
+2011-05-25 18:22:07,926 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-25 18:22:07,991 [INFO] - converter-parser - Running pipeline !1
+2011-05-25 18:22:07,991 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-25 18:22:07,991 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #8] ([document-sequence #1 (0 docs)])
+2011-05-25 18:22:07,991 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #8] ([document-sequence #1 (1 docs)])
+2011-05-25 18:22:07,991 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-25 18:22:07,991 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-25 18:22:07,991 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-25 18:22:07,991 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-25 18:22:07,991 [INFO] - converter-parser - Running identity !1.4
+2011-05-25 18:22:07,991 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:13:17:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (1 docs)])
+2011-05-25 18:22:07,991 [INFO] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 18:22:07,991 [INFO] - converter-parser - Running xslt !1.5
+2011-05-25 18:22:07,991 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:12:!1.5 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #3 (1 docs)]
+2011-05-25 18:22:07,991 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:12:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (1 docs)])
+2011-05-25 18:22:07,992 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-25 18:22:07,992 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-25 18:22:07,993 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-25 18:22:07,993 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-25 18:22:07,993 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-25 18:22:08,072 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read '' from [pipe #6] ([document-sequence #6 (1 docs)])
+2011-05-25 18:22:08,072 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote '' to [pipe #7] ([document-sequence #7 (0 docs)])
+2011-05-25 18:22:08,072 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #6] ([document-sequence #6 (1 docs)]) to [pipe #7] ([document-sequence #7 (1 docs)])
+2011-05-25 18:28:59,260 [INFO] - LogBackend - BundleEvent.STARTED
+2011-05-25 18:28:59,263 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-05-25 18:28:59,267 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-05-25 18:28:59,267 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-05-25 18:28:59,267 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-05-25 18:28:59,268 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-05-25 18:28:59,268 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-05-25 18:28:59,268 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-05-25 18:28:59,268 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,268 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,268 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,268 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,268 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,268 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-05-25 18:28:59,268 [INFO] - guava - BundleEvent.STARTED
+2011-05-25 18:28:59,268 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-05-25 18:28:59,268 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-05-25 18:28:59,268 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,268 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-05-25 18:28:59,268 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,269 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,269 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-05-25 18:28:59,269 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,269 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,269 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,269 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,269 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-05-25 18:28:59,269 [INFO] - isorelax - BundleEvent.STARTED
+2011-05-25 18:28:59,269 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-05-25 18:28:59,269 [INFO] - com.thaiopensource.jing - BundleEvent.STARTED
+2011-05-25 18:28:59,269 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-05-25 18:28:59,269 [INFO] - org.daisy.pipeline.mainextension - BundleEvent.STARTED
+2011-05-25 18:28:59,269 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-05-25 18:28:59,269 [INFO] - metadata-utilities - BundleEvent.STARTED
+2011-05-25 18:28:59,269 [INFO] - dtbook2zedai - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,270 [INFO] - dtbook2zedai - BundleEvent.STARTED
+2011-05-25 18:28:59,270 [INFO] - module-registry - BundleEvent.STARTED
+2011-05-25 18:28:59,270 [INFO] - module-common - BundleEvent.STARTED
+2011-05-25 18:28:59,270 [INFO] - commandline - BundleEvent.STARTED
+2011-05-25 18:28:59,270 [INFO] - xproc-wrapper - BundleEvent.STARTED
+2011-05-25 18:28:59,270 [INFO] - module-uri-resolver - BundleEvent.STARTED
+2011-05-25 18:28:59,270 [INFO] - common-stax - BundleEvent.STARTED
+2011-05-25 18:28:59,270 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,270 [INFO] - xproc-calabash-imp - BundleEvent.STARTED
+2011-05-25 18:28:59,270 [DEBUG] - converter-parser - Hello log
+2011-05-25 18:28:59,270 [INFO] - converter-parser - BundleEvent.STARTED
+2011-05-25 18:28:59,270 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,300 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,302 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,303 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,317 [INFO] - expath-pkg-parser - BundleEvent.STARTED
+2011-05-25 18:28:59,349 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-05-25 18:28:59,350 [INFO] - converter-registry - BundleEvent.STARTED
+2011-05-25 18:28:59,350 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-05-25 18:28:59,350 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-05-25 18:28:59,691 [INFO] - converter-parser - Running pipeline !1
+2011-05-25 18:28:59,691 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #0 (1 docs)]
+2011-05-25 18:28:59,691 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote 'file:/home/javi/tmp/msg.xpl' to [pipe #8] ([document-sequence #1 (0 docs)])
+2011-05-25 18:28:59,691 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline input copy from readableinline [document-sequence #0 (1 docs)] to [pipe #8] ([document-sequence #1 (1 docs)])
+2011-05-25 18:28:59,692 [INFO] - converter-parser - Running identity !1.4
+2011-05-25 18:28:59,693 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:13:17:!1.4 read 'file:/home/javi/tmp/msg.xpl' from [pipe #1] ([document-sequence #1 (1 docs)])
+2011-05-25 18:28:59,693 [INFO] - converter-parser - Identity step !1.4 read file:/home/javi/tmp/msg.xpl
+2011-05-25 18:28:59,693 [INFO] - converter-parser - Running xslt !1.5
+2011-05-25 18:28:59,693 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:12:!1.5 read 'file:/home/javi/tmp/msg.xpl' from readableinline [document-sequence #3 (1 docs)]
+2011-05-25 18:28:59,693 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:14:12:!1.5 read 'file:/home/javi/tmp/msg.xpl' from [pipe #3] ([document-sequence #2 (1 docs)])
+2011-05-25 18:28:59,774 [INFO] - converter-parser - 0:
+                     Hello from xslt!
+                  
+2011-05-25 18:28:59,774 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 read '' from [pipe #6] ([document-sequence #6 (1 docs)])
+2011-05-25 18:28:59,774 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:!1 wrote '' to [pipe #7] ([document-sequence #7 (0 docs)])
+2011-05-25 18:28:59,774 [INFO] - converter-parser - file:/home/javi/tmp/msg.xpl:6:6:Pipeline output copy from [pipe #6] ([document-sequence #6 (1 docs)]) to [pipe #7] ([document-sequence #7 (1 docs)])

@@ -83,7 +83,8 @@ public class XProcessorImp extends XProcessor {
 
 	@Override
 	public void run() {
-		checkPorts();
+		//let the processor crash, as errors are thrown if the input is defined inline
+		//checkPorts();
 		try {
 			bindPorts();
 		} catch (ClassCastException cce) {
