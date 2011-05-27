@@ -15,4 +15,6 @@ Import-Package: com.xmlcalabash.core,
  net.sf.saxon.trans;version="9.2.1.5",
  org.daisy.pipeline.xproc,
  org.osgi.framework,
- org.slf4j;version="1.6.1"
+ org.slf4j;version="1.6.1",
+ org.slf4j.impl
+Bundle-Activator: org.daisy.pipeline.xproc.impl.Activator

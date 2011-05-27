@@ -23,6 +23,7 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
     private Logger log = defaultLogger;
 
     public void error(XProcRunnable step, XdmNode node, String message, QName code) {
+    	log.debug("in regular error");
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
@@ -33,6 +34,7 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
     }
 
     public void error(Throwable exception) {
+    	log.debug("in throwable error");
         StructuredQName qCode = null;
         SourceLocator loc = null;
         String message = "";
