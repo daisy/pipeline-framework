@@ -6,7 +6,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 public class CmdLineActivator implements BundleActivator {
-
+	private static boolean EXIT = true;
 	@Override
 	public void start(BundleContext context) throws Exception {
 		final BundleContext ctxt = context;
@@ -26,7 +26,8 @@ public class CmdLineActivator implements BundleActivator {
 				if (args == null) {
 					new CommandLine(provider).getUnrecovreableError(
 							"The arguments are null").execute();
-					System.exit(1);
+					if(EXIT)
+						System.exit(1);
 				} else {
 
 					try {
@@ -36,9 +37,11 @@ public class CmdLineActivator implements BundleActivator {
 						e.printStackTrace();
 						new CommandLine(provider).getUnrecovreableError(e
 								.getMessage()).execute();
-						System.exit(1);
+						if(EXIT)
+							System.exit(1);
 					}
-					System.exit(0);
+					if(EXIT)
+						System.exit(0);
 				}
 
 			}

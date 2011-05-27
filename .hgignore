@@ -36,5 +36,5 @@ syntax: regexp
 (^|/)target/
 # ignore metadata dirs 
 (^|/).metadata/
-
-
+# runner directory by pax
+(^|/)runner/
