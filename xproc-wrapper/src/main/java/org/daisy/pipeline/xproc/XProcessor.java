@@ -1,5 +1,7 @@
 package org.daisy.pipeline.xproc;
 
+import java.util.Properties;
+
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -31,11 +33,7 @@ public abstract class XProcessor {
 	public abstract void setOption(String name,Object value);
 	
 	public abstract Object getOption(String name);
-
-
-	
 	public abstract void setURIResolver(URIResolver resolver); 
-
 	public abstract Iterable <String> getInputPorts();
 	
 	public abstract Iterable <String> getOutputPorts();
@@ -43,6 +41,9 @@ public abstract class XProcessor {
 	public abstract void bindInputPort(String name,Source src);
 	public abstract void bindOutputPort(String name,Result result);
 	
+	public abstract void setProperties(Properties properties);
+	public abstract Properties getProperties();
+
 	public abstract void run();
 	
 	

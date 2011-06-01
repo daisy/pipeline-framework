@@ -3,6 +3,7 @@ package org.daisy.pipeline.xproc.impl;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.xml.transform.ErrorListener;
@@ -16,6 +17,8 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.pipeline.xproc.XProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.EntityResolver;
 
 import com.xmlcalabash.core.XProcRuntime;
@@ -35,11 +38,15 @@ public class XProcessorImp extends XProcessor {
 	private HashMap<String, Result> mOutputPorts = new HashMap<String, Result>();
 	private XProcParameters mParams;
 	private HashMap<String, Object> mOptions = new HashMap<String, Object>();
+	Logger mLogger = LoggerFactory.getLogger(XProcessorImp.class);
 
 	// TODO this field is not being used because
 	private EntityResolver mEntityResolver;
+	private Properties mProperties;
 
 	public XProcessorImp(XPipeline pipeline, XProcRuntime runtime) {
+		
+		
 		mProcRuntime = runtime;
 		mPipeline = pipeline;
 		for (String s : mPipeline.getInputs()) {
@@ -50,7 +57,8 @@ public class XProcessorImp extends XProcessor {
 		}
 		
 		mParams = new XProcParameters(mInputPorts.keySet());
-
+		mProperties=new Properties();
+		
 	}
 
 	@Override
@@ -251,6 +259,16 @@ public class XProcessorImp extends XProcessor {
 	@Override
 	public Object getOption(String name) {
 		return mOptions.get(name);
+	}
+
+	@Override
+	public void setProperties(Properties properties) {
+		mProperties=properties;
+	}
+
+	@Override
+	public Properties getProperties() {
+		return mProperties;
 	}
 
 }

@@ -1,19 +1,28 @@
 package org.daisy.pipeline.xproc.impl;
 
+import java.util.Properties;
+
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
+import javax.xml.transform.sax.SAXSource;
 
+import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.pipeline.xproc.XProcessor;
 import org.daisy.pipeline.xproc.XProcessorFactory;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 
 import com.xmlcalabash.core.XProcConfiguration;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.runtime.XPipeline;
+import com.xmlcalabash.util.URIUtils;
 
 public class XProcFactoryImpl implements XProcessorFactory{
 
@@ -21,9 +30,11 @@ public class XProcFactoryImpl implements XProcessorFactory{
 	private URIResolver mUriResolver = null;
 	private EntityResolver mEntityResolver = null;
 	private boolean mSchemaAware = false;
-	
+	private Properties mProperties=null;
+	Logger mLogger = LoggerFactory.getLogger(XProcFactoryImpl.class);
+
 	public XProcFactoryImpl(){
-		
+		mProperties=new Properties();
 	}
 	
 	public void init(BundleContext context) {
@@ -38,7 +49,6 @@ public class XProcFactoryImpl implements XProcessorFactory{
 	
 	public static XProcessorFactory newInstance(){
 		return new XProcFactoryImpl();
-		
 	}
 	@Override
 	public ErrorListener getErrorListener() {
@@ -58,7 +68,7 @@ public class XProcFactoryImpl implements XProcessorFactory{
 
 	@Override
 	public void setURIResolver(URIResolver arg0) {
-		mUriResolver=mUriResolver;
+		mUriResolver=arg0;
 		
 	}
 
@@ -67,6 +77,11 @@ public class XProcFactoryImpl implements XProcessorFactory{
 		
 		
 		XProcConfiguration conf = new XProcConfiguration();
+		try {
+			loadConfigurationFile(conf);
+		} catch (SaxonApiException e1) {
+			throw new RuntimeException("error loading configuration file",e1); 
+		}
 		conf.schemaAware=this.mSchemaAware;
 		//try this with anonymous classes  
 		if(mErrorListener!=null)
@@ -98,6 +113,19 @@ public class XProcFactoryImpl implements XProcessorFactory{
 		return inst;
 	}
 
+	private void loadConfigurationFile(XProcConfiguration conf) throws SaxonApiException {
+	      if (mProperties.getProperty(CONFIGURATION_FILE) != null) {
+	    	  mLogger.debug("Reading configuration from "+mProperties.getProperty(CONFIGURATION_FILE));
+              // Make this absolute because sometimes it fails from the command line otherwise. WTF?
+              String cfgURI = URIUtils.cwdAsURI().resolve(mProperties.getProperty(CONFIGURATION_FILE)).toASCIIString();
+              SAXSource source = new SAXSource(new InputSource(cfgURI));
+              DocumentBuilder builder = conf.getProcessor().newDocumentBuilder();
+              XdmNode doc = builder.build(source);
+              conf.parse(doc);
+          }
+		
+	}
+
 	@Override
 	public void setSchemaAware(boolean schemaAware) {
 		mSchemaAware = schemaAware;
@@ -114,6 +142,17 @@ public class XProcFactoryImpl implements XProcessorFactory{
 	public void setEntityResolver(EntityResolver entityResolver) {
 		this.mEntityResolver=entityResolver;
 		
+	}
+
+	@Override
+	public void setProperties(Properties properties) {
+		mProperties=properties;
+	}
+
+	@Override
+	public Properties getProperties() {
+		return mProperties;
+
 	}
 
 }
