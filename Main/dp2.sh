@@ -1,5 +1,5 @@
 #!/bin/bash
-CONSOLE=true
+CONSOLE=false
 ARGS="$(echo ${@})"
 rm -rf runner/cache
 cat bundles.txt | sed "s#PWD#$PWD#g" > comp
