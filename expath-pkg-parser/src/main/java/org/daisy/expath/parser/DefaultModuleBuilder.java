@@ -64,9 +64,9 @@ public class DefaultModuleBuilder implements ModuleBuilder {
 		return this;
 	}
 
-	public ModuleBuilder withComponent(URI uri, String path, Space space) {
+	public ModuleBuilder withComponent(URI uri, String path) {
 		mLogger.trace("withComponent:"+uri.toString()+", path: "+path);
-		components.add(new Component(uri, path, space, loader));
+		components.add(new Component(uri, path,  loader));
 		return this;
 	}
 

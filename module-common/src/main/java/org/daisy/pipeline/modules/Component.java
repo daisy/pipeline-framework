@@ -10,19 +10,19 @@ import org.slf4j.LoggerFactory;
 public class Component {
 
 	public enum Space {
-		XSLT, XPROC
+		XSLT, XPROC,XQUERY,RNC,XSD,NG
 	}
 
 	private URI uri;
 	private String path;
-	private Space space;
+	//private Space space;
 	private ResourceLoader loader;
 	private Module module;
     Logger mLogger = LoggerFactory.getLogger(getClass().getName());
-	public Component(URI uri, String path, Space space, ResourceLoader loader) {
+	public Component(URI uri, String path, ResourceLoader loader) {
 		this.uri = uri;
 		this.path = path;
-		this.space = space;
+		//this.space = space;
 		this.loader = loader;
 	}
 
@@ -30,9 +30,9 @@ public class Component {
 		return uri;
 	}
 
-	public Space getSpace() {
+	/*public Space getSpace() {
 		return space;
-	}
+	}*/
 
 	public URI getResource() {
 		try {
@@ -50,7 +50,7 @@ public class Component {
 
 	@Override
 	public String toString() {
-		return space + "[" + uri + "]";
+		return  "[" + uri + "]";
 	}
 	public Module getModule() {
 		return module;

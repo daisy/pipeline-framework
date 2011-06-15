@@ -29,6 +29,6 @@ public interface ModuleBuilder {
 	ModuleBuilder withComponents(
 			Collection<? extends Component> components);
 
-	ModuleBuilder withComponent(URI uri, String path, Space space);
+	ModuleBuilder withComponent(URI uri, String path);
 
 }

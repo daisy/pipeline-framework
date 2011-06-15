@@ -4526,3 +4526,270 @@ org.osgi.framework.BundleException: The bundle could not be resolved. Reason: An
 2011-06-15 18:32:09,543 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
 2011-06-15 18:32:09,543 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
 2011-06-15 18:32:09,543 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-06-15 19:32:08,657 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-15 19:32:08,673 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-15 19:32:08,675 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-15 19:32:08,676 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-15 19:32:08,676 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-15 19:32:08,676 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-15 19:32:08,676 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-15 19:32:08,676 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-15 19:32:08,676 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,676 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,676 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,676 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,676 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,676 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-15 19:32:08,676 [INFO] - guava - BundleEvent.STARTED
+2011-06-15 19:32:08,676 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-15 19:32:08,676 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-15 19:32:08,676 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-15 19:32:08,676 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,676 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-15 19:32:08,676 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,676 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,676 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-15 19:32:08,677 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,677 [ERROR] - dtbook-utils - [SCR] Component definition XMLs not found in bundle dtbook-utils. The component header value is upgrade-dtbook.xml
+2011-06-15 19:32:08,677 [DEBUG] - converter-parser - New converter
+2011-06-15 19:32:08,677 [DEBUG] - converter-parser - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-15 19:32:08,677 [INFO] - dtbook-utils - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,689 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,715 [DEBUG] - converter-parser - tracking: dtbook-utils,bundleresource://1.fwk1318663487/expath-pkg.xml
+2011-06-15 19:32:08,763 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-15 19:32:08,763 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: merge-dtbook/upgrade-dtbook.xpl
+2011-06-15 19:32:08,763 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-15 19:32:08,764 [DEBUG] - converter-parser - Registring dtbook-utils
+2011-06-15 19:32:08,764 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-15 19:32:08,764 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-15 19:32:08,764 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/dtbook-utils-library.xpl
+2011-06-15 19:32:08,764 [DEBUG] - converter-parser - tracking: mediaoverlay-utils,bundleresource://2.fwk1318663487/expath-pkg.xml
+2011-06-15 19:32:08,765 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-15 19:32:08,765 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-15 19:32:08,765 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-15 19:32:08,765 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-15 19:32:08,765 [DEBUG] - converter-parser - Registring mediaoverlay-utils
+2011-06-15 19:32:08,765 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange-content.xpl
+2011-06-15 19:32:08,765 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange.xpl
+2011-06-15 19:32:08,765 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-15 19:32:08,765 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/join.xpl
+2011-06-15 19:32:08,765 [DEBUG] - converter-parser - tracking: metadata-utilities,bundleresource://3.fwk1318663487/expath-pkg.xml
+2011-06-15 19:32:08,765 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/metadata-utilities/metadata-generator.xpl, path: metadata-generator/metadata-generator.xpl
+2011-06-15 19:32:08,765 [DEBUG] - converter-parser - Registring metadata-utilities
+2011-06-15 19:32:08,765 [DEBUG] - converter-parser - Component http://www.daisy.org/metadata-utilities/metadata-generator.xpl
+2011-06-15 19:32:08,765 [DEBUG] - converter-parser - tracking: metadata-utils,bundleresource://4.fwk1318663487/expath-pkg.xml
+2011-06-15 19:32:08,766 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-15 19:32:08,766 [DEBUG] - converter-parser - Registring metadata-utils
+2011-06-15 19:32:08,766 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/metadata-utils/metadata-utils-library.xpl
+2011-06-15 19:32:08,766 [DEBUG] - converter-parser - tracking: html-utils,bundleresource://5.fwk1318663487/expath-pkg.xml
+2011-06-15 19:32:08,766 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-15 19:32:08,766 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/html-utils/html5outliner.xsl, path: html5outliner.xsl
+2011-06-15 19:32:08,766 [DEBUG] - converter-parser - Registring html-utils
+2011-06-15 19:32:08,766 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/html-utils/html-library.xpl
+2011-06-15 19:32:08,766 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/html-utils/html5outliner.xsl
+2011-06-15 19:32:08,769 [DEBUG] - converter-parser - Module registry up
+2011-06-15 19:32:08,771 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,771 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,771 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,779 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,785 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,794 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,799 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,800 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-15 19:32:08,800 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-06-15 19:32:08,800 [INFO] - isorelax - BundleEvent.STARTED
+2011-06-15 19:32:08,801 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-06-15 19:32:08,801 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-06-15 19:32:08,801 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-06-15 19:32:08,801 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-06-15 19:32:08,802 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-06-15 19:32:21,200 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-15 19:32:21,216 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-15 19:32:21,218 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-15 19:32:21,218 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-15 19:32:21,218 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-15 19:32:21,218 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-15 19:32:21,218 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-15 19:32:21,219 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-15 19:32:21,219 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,219 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,219 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,219 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,219 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,219 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-15 19:32:21,219 [INFO] - guava - BundleEvent.STARTED
+2011-06-15 19:32:21,219 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-15 19:32:21,219 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-15 19:32:21,219 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-15 19:32:21,219 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,219 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-15 19:32:21,220 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,220 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,220 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-15 19:32:21,220 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,220 [ERROR] - dtbook-utils - [SCR] Component definition XMLs not found in bundle dtbook-utils. The component header value is upgrade-dtbook.xml
+2011-06-15 19:32:21,220 [DEBUG] - converter-parser - New converter
+2011-06-15 19:32:21,220 [DEBUG] - converter-parser - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-15 19:32:21,220 [INFO] - dtbook-utils - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,220 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,220 [DEBUG] - converter-parser - tracking: dtbook-utils,bundleresource://1.fwk1145892402/expath-pkg.xml
+2011-06-15 19:32:21,245 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-15 19:32:21,245 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: merge-dtbook/upgrade-dtbook.xpl
+2011-06-15 19:32:21,246 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-15 19:32:21,246 [DEBUG] - converter-parser - Registring dtbook-utils
+2011-06-15 19:32:21,246 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-15 19:32:21,246 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-15 19:32:21,246 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/dtbook-utils-library.xpl
+2011-06-15 19:32:21,246 [DEBUG] - converter-parser - tracking: mediaoverlay-utils,bundleresource://2.fwk1145892402/expath-pkg.xml
+2011-06-15 19:32:21,247 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-15 19:32:21,247 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-15 19:32:21,247 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-15 19:32:21,247 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-15 19:32:21,247 [DEBUG] - converter-parser - Registring mediaoverlay-utils
+2011-06-15 19:32:21,247 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange-content.xpl
+2011-06-15 19:32:21,247 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange.xpl
+2011-06-15 19:32:21,247 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-15 19:32:21,247 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/join.xpl
+2011-06-15 19:32:21,255 [DEBUG] - converter-parser - tracking: metadata-utilities,bundleresource://3.fwk1145892402/expath-pkg.xml
+2011-06-15 19:32:21,255 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/metadata-utilities/metadata-generator.xpl, path: metadata-generator/metadata-generator.xpl
+2011-06-15 19:32:21,255 [DEBUG] - converter-parser - Registring metadata-utilities
+2011-06-15 19:32:21,255 [DEBUG] - converter-parser - Component http://www.daisy.org/metadata-utilities/metadata-generator.xpl
+2011-06-15 19:32:21,255 [DEBUG] - converter-parser - tracking: metadata-utils,bundleresource://4.fwk1145892402/expath-pkg.xml
+2011-06-15 19:32:21,255 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-15 19:32:21,255 [DEBUG] - converter-parser - Registring metadata-utils
+2011-06-15 19:32:21,261 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/metadata-utils/metadata-utils-library.xpl
+2011-06-15 19:32:21,262 [DEBUG] - converter-parser - tracking: html-utils,bundleresource://5.fwk1145892402/expath-pkg.xml
+2011-06-15 19:32:21,262 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-15 19:32:21,262 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/html-utils/html5outliner.xsl, path: html5outliner.xsl
+2011-06-15 19:32:21,262 [DEBUG] - converter-parser - Registring html-utils
+2011-06-15 19:32:21,262 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/html-utils/html-library.xpl
+2011-06-15 19:32:21,262 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/html-utils/html5outliner.xsl
+2011-06-15 19:32:21,262 [DEBUG] - converter-parser - Module registry up
+2011-06-15 19:32:21,262 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,262 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,262 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,270 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,270 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,272 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,279 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,279 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-15 19:32:21,279 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-06-15 19:32:21,279 [INFO] - isorelax - BundleEvent.STARTED
+2011-06-15 19:32:21,280 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-06-15 19:32:21,280 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-06-15 19:32:21,280 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-06-15 19:32:21,280 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-06-15 19:32:21,281 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-06-15 19:32:34,109 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-15 19:32:34,121 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-15 19:32:34,123 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-15 19:32:34,123 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-15 19:32:34,123 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-15 19:32:34,128 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-15 19:32:34,128 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-15 19:32:34,128 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-15 19:32:34,128 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,129 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,129 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,129 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,129 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,129 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-15 19:32:34,129 [INFO] - guava - BundleEvent.STARTED
+2011-06-15 19:32:34,129 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-15 19:32:34,129 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-15 19:32:34,130 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-15 19:32:34,132 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,132 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-15 19:32:34,132 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,132 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,132 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-15 19:32:34,132 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,132 [ERROR] - dtbook-utils - [SCR] Component definition XMLs not found in bundle dtbook-utils. The component header value is upgrade-dtbook.xml
+2011-06-15 19:32:34,136 [DEBUG] - converter-parser - New converter
+2011-06-15 19:32:34,136 [DEBUG] - converter-parser - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-15 19:32:34,137 [INFO] - dtbook-utils - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,151 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,170 [DEBUG] - converter-parser - tracking: dtbook-utils,bundleresource://1.fwk1145892402/expath-pkg.xml
+2011-06-15 19:32:34,209 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-15 19:32:34,210 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: merge-dtbook/upgrade-dtbook.xpl
+2011-06-15 19:32:34,210 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-15 19:32:34,211 [DEBUG] - converter-parser - Registring dtbook-utils
+2011-06-15 19:32:34,211 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-15 19:32:34,211 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-15 19:32:34,211 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/dtbook-utils-library.xpl
+2011-06-15 19:32:34,211 [DEBUG] - converter-parser - tracking: mediaoverlay-utils,bundleresource://2.fwk1145892402/expath-pkg.xml
+2011-06-15 19:32:34,211 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-15 19:32:34,212 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-15 19:32:34,212 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-15 19:32:34,212 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-15 19:32:34,212 [DEBUG] - converter-parser - Registring mediaoverlay-utils
+2011-06-15 19:32:34,212 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange-content.xpl
+2011-06-15 19:32:34,212 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange.xpl
+2011-06-15 19:32:34,212 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-15 19:32:34,212 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/join.xpl
+2011-06-15 19:32:34,212 [DEBUG] - converter-parser - tracking: metadata-utilities,bundleresource://3.fwk1145892402/expath-pkg.xml
+2011-06-15 19:32:34,212 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/metadata-utilities/metadata-generator.xpl, path: metadata-generator/metadata-generator.xpl
+2011-06-15 19:32:34,212 [DEBUG] - converter-parser - Registring metadata-utilities
+2011-06-15 19:32:34,212 [DEBUG] - converter-parser - Component http://www.daisy.org/metadata-utilities/metadata-generator.xpl
+2011-06-15 19:32:34,212 [DEBUG] - converter-parser - tracking: metadata-utils,bundleresource://4.fwk1145892402/expath-pkg.xml
+2011-06-15 19:32:34,213 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-15 19:32:34,213 [DEBUG] - converter-parser - Registring metadata-utils
+2011-06-15 19:32:34,213 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/metadata-utils/metadata-utils-library.xpl
+2011-06-15 19:32:34,213 [DEBUG] - converter-parser - tracking: html-utils,bundleresource://5.fwk1145892402/expath-pkg.xml
+2011-06-15 19:32:34,213 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-15 19:32:34,214 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/html-utils/html5outliner.xsl, path: html5outliner.xsl
+2011-06-15 19:32:34,214 [DEBUG] - converter-parser - Registring html-utils
+2011-06-15 19:32:34,214 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/html-utils/html-library.xpl
+2011-06-15 19:32:34,214 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/html-utils/html5outliner.xsl
+2011-06-15 19:32:34,217 [DEBUG] - converter-parser - Module registry up
+2011-06-15 19:32:34,219 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,220 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,220 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,225 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,225 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,228 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,230 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,231 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-15 19:32:34,231 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-06-15 19:32:34,236 [INFO] - isorelax - BundleEvent.STARTED
+2011-06-15 19:32:34,236 [INFO] - org.apache.commons.codec - BundleEvent.STARTED
+2011-06-15 19:32:34,236 [INFO] - net.sf.saxon-he - BundleEvent.STARTED
+2011-06-15 19:32:34,236 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
+2011-06-15 19:32:34,236 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
+2011-06-15 19:32:34,236 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED

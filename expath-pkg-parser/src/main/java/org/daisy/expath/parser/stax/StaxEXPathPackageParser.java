@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashSet;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -29,7 +31,18 @@ import com.google.common.base.Predicates;
 public class StaxEXPathPackageParser implements EXPathPackageParser {
 
 	private XMLInputFactory factory;
-
+	private static HashSet<QName> COMPONENT_ELEMENTS= new HashSet<QName>();
+	static{
+		COMPONENT_ELEMENTS.add(Elements.XSLT);
+		COMPONENT_ELEMENTS.add(Elements.XPROC);
+		COMPONENT_ELEMENTS.add(Elements.NG);
+		COMPONENT_ELEMENTS.add(Elements.XSD);
+		COMPONENT_ELEMENTS.add(Elements.XQUERY);
+		COMPONENT_ELEMENTS.add(Elements.RNC);
+		
+	};
+	
+	
 	public StaxEXPathPackageParser() {
 	}
 
@@ -132,9 +145,8 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 							throws XMLStreamException {
 						if (event.isStartElement()) {
 							StartElement component = event.asStartElement();
-							// TODO plug other components xquery | xproc | xsd |
-							// rng | rnc
-							if (component.getName().equals(Elements.XSLT)) {
+					
+							if (COMPONENT_ELEMENTS.contains(component.getName())) {
 								StaxEventHelper.peekNextElement(reader,
 										Elements.IMPORT_URI);
 								reader.next();
@@ -152,7 +164,7 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 								String path;
 								path = reader.getElementText();
 
-								builder.withComponent(uri, path, Space.XSLT);
+								builder.withComponent(uri, path);
 							}
 						}
 

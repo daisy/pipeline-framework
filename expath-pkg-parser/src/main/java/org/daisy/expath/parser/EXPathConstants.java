@@ -18,6 +18,10 @@ public final class EXPathConstants {
 		public static QName TITLE = new QName(EXPATH_NS, "title");
 		public static QName XPROC = new QName(EXPATH_NS, "xproc");
 		public static QName XSLT = new QName(EXPATH_NS, "xslt");
+		public static QName NG = new QName(EXPATH_NS, "ng");
+		public static QName XSD = new QName(EXPATH_NS, "xsd");
+		public static QName RNC = new QName(EXPATH_NS, "rnc");
+		public static QName XQUERY = new QName(EXPATH_NS, "xquery");
 
 		// TODO add other EXPath elements
 
