@@ -35,7 +35,7 @@ public final class StaxEventHelper {
 			}
 		};
 
-		public static Predicate<XMLEvent> CHILD_OR_SIBLING = new Predicate<XMLEvent>() {
+		public static class ChildOrSiblingPredicate implements Predicate<XMLEvent>{
 			private int opened = 1;
 
 			public boolean apply(XMLEvent event) {
@@ -52,6 +52,10 @@ public final class StaxEventHelper {
 				return opened > 0;
 			}
 		};
+		
+		public static Predicate<XMLEvent> getChildOrSiblingPredicate(){
+			return new ChildOrSiblingPredicate();
+		}
 	}
 
 	public static StartElement peekNextElement(XMLEventReader reader, QName name)
@@ -67,7 +71,7 @@ public final class StaxEventHelper {
 		throw new IllegalStateException("Element " + name + " not found");
 	}
 
-	public static void loop(XMLEventReader reader, Predicate<XMLEvent> filter,
+	public static synchronized void loop(XMLEventReader reader, Predicate<XMLEvent> filter,
 			Predicate<XMLEvent> checker, EventProcessor processor)
 			throws XMLStreamException {
 		while (reader.hasNext()) {

@@ -51,8 +51,8 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 			// parse the package element
 			StartElement elem = StaxEventHelper.peekNextElement(reader,
 					Elements.PACKAGE);
-			//builder.withName(elem.getAttributeByName(Attributes.NAME)
-			//		.getValue());
+			// builder.withName(elem.getAttributeByName(Attributes.NAME)
+			// .getValue());
 			reader.next();
 
 			// parse dependencies
@@ -62,9 +62,9 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 			parseModule(reader, builder);
 
 		} catch (XMLStreamException e) {
-			
+
 			throw new RuntimeException("Parsing error: " + e.getMessage(), e);
-			
+
 		} catch (IOException e) {
 			throw new RuntimeException("Couldn't access package descriptor: "
 					+ e.getMessage(), e);
@@ -107,8 +107,7 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 		builder.withVersion(module.getAttributeByName(Attributes.VERSION)
 				.getValue());
 		// parse the name
-		builder.withName(module.getAttributeByName(Attributes.NAME)
-				.getValue());
+		builder.withName(module.getAttributeByName(Attributes.NAME).getValue());
 		// parse the title
 		StaxEventHelper.peekNextElement(reader, Elements.TITLE);
 		reader.next();
@@ -121,14 +120,14 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 
 	private void parseComponents(final XMLEventReader reader,
 			final ModuleBuilder builder) throws XMLStreamException {
-		//changed this because otherwise mvn won't work
-		//this is really awkward
-		
+		// changed this because otherwise mvn won't work
+		// this is really awkward
+
 		Predicate<XMLEvent> pred = Predicates.or(
 				EventPredicates.IS_START_ELEMENT,
 				EventPredicates.IS_END_ELEMENT);
-		StaxEventHelper.loop(reader, pred,
-				EventPredicates.CHILD_OR_SIBLING, new EventProcessor() {
+		StaxEventHelper.loop(reader, pred, EventPredicates.getChildOrSiblingPredicate(),
+				new EventProcessor() {
 					public void process(XMLEvent event)
 							throws XMLStreamException {
 						if (event.isStartElement()) {

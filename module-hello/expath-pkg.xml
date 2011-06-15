@@ -8,6 +8,10 @@
 			<import-uri>http://www.example.org/module-hello/helloizer.xsl</import-uri>
 			<file>helloizer.xsl</file>
 		</xslt>
+		<xslt>
+			<import-uri>http://www.example.org/module-hello/buenosdiasenorita.xpl</import-uri>
+			<file>buenosdiasenorita.xpl</file>
+		</xslt>
 	</module>
 	
 </package>

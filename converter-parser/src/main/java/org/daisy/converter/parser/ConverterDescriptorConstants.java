@@ -16,7 +16,7 @@ public final class ConverterDescriptorConstants {
 	}
 
 	/** The C d_ ns. */
-	public static String CD_NS = "http://www.daisy.org/daisypipeline/converter_descriptor";
+	public static String CD_NS = "http://www.daisy.org/ns/pipeline/converter";
 
 	/**
 	 * The Class Elements.

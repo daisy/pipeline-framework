@@ -5,9 +5,18 @@
 	<module version="1.0.0" name="module-test">
 		<title>Hello converter v1.0</title>
 		<xslt>
-			<import-uri>http://www.example.org/test/helloTest.xpl</import-uri>
-			<file>helloTest.xpl</file>
+			<import-uri>http://www.example.org/test/helloTest3.xpl</import-uri>
+			<file>helloTest3.xpl</file>
 		</xslt>
+		<xslt>
+			<import-uri>http://www.example.org/test/helloTest.xpl</import-uri>
+			<file>dir1/helloTest.xpl</file>
+		</xslt>
+		<xslt>
+			<import-uri>http://www.example.org/test/helloTest2.xpl</import-uri>
+			<file>helloTest2.xpl</file>
+		</xslt>
+		
 	</module>
 	
 </package>

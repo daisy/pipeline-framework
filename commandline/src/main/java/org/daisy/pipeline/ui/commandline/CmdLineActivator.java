@@ -10,6 +10,7 @@ public class CmdLineActivator implements BundleActivator {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		final BundleContext ctxt = context;
+		org.slf4j.impl.OSGILogFactory.initOSGI(context);
 		
 		new Thread() {
 			public void run() {

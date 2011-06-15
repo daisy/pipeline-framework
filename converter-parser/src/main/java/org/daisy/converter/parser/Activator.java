@@ -11,7 +11,6 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		org.slf4j.impl.OSGILogFactory.initOSGI(context); 
 		Logger logger = LoggerFactory.getLogger(Activator.class);
-		logger.debug("Hello log");
 		
 	}
 

@@ -11,7 +11,7 @@ import org.xml.sax.EntityResolver;
 public interface XProcessorFactory {
 
 	 static final String DEFAULT_IMP="nl.dedicon.xproc.Impl.XProcFactoryImpl";
-	 public static final String CONFIGURATION_FILE="CONFIGURAION_FILE";
+	 public static final String CONFIGURATION_FILE="org.daisy.pipeline.xproc.configuration";
 	
 
 	

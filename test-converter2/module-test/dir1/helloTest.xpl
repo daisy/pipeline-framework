@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
-xmlns:cd="http://www.daisy.org/daisypipeline/converter_descriptor"
+xmlns:cd="http://www.daisy.org/ns/pipeline/converter"
  
 name="myPipeline" version="1.0">
  <p:documentation>
