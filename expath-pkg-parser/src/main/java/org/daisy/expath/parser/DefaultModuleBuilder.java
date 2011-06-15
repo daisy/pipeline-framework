@@ -11,6 +11,8 @@ import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Component.Space;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ResourceLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultModuleBuilder implements ModuleBuilder {
 
@@ -20,7 +22,7 @@ public class DefaultModuleBuilder implements ModuleBuilder {
 	private String title;
 	private Map<String, String> dependencies = new HashMap<String, String>();
 	private List<Component> components = new ArrayList<Component>();
-
+	private Logger mLogger = LoggerFactory.getLogger(getClass());
 	public Module build() {
 		return new Module(name, version, title, dependencies, components);
 	}
@@ -63,6 +65,7 @@ public class DefaultModuleBuilder implements ModuleBuilder {
 	}
 
 	public ModuleBuilder withComponent(URI uri, String path, Space space) {
+		mLogger.trace("withComponent:"+uri.toString()+", path: "+path);
 		components.add(new Component(uri, path, space, loader));
 		return this;
 	}

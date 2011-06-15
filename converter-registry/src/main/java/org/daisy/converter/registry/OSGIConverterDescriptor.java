@@ -6,6 +6,8 @@ import java.util.Dictionary;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class OSGIConverterDescriptor to be used in a OSGI environment. This class defines a common the interface 
@@ -39,12 +41,14 @@ public class OSGIConverterDescriptor extends ConverterDescriptor {
 	/** The bundle ctxt. */
 	private BundleContext mCtxt;
 	
+	private Logger mLogger=LoggerFactory.getLogger(getClass());
+	
 	/**
 	 * Instantiates a new oSGI converter descriptor.
 	 */
 	public OSGIConverterDescriptor() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	
@@ -65,20 +69,26 @@ public class OSGIConverterDescriptor extends ConverterDescriptor {
 	protected void activate(ComponentContext context) {
 		Dictionary props =context.getProperties();
 		mCtxt=context.getBundleContext();
+		
+		mLogger.debug("New converter");
 		if (props.get(CONVERTER_NAME)==null ||props.get(CONVERTER_NAME).toString().isEmpty()){
+			mLogger.warn("Converter without name");
 			throw new IllegalArgumentException(CONVERTER_NAME+" property must not be empty");
 		}
 		
 		if (props.get(CONVERTER_DESCRIPTION)==null ||props.get(CONVERTER_DESCRIPTION).toString().isEmpty()){
+			mLogger.warn("Converter without desciption: "+props.get(CONVERTER_NAME).toString()  );
 			throw new IllegalArgumentException(CONVERTER_DESCRIPTION+" property must not be empty");
 		}
 		if (props.get(CONVERTER_URL)==null ||props.get(CONVERTER_URL).toString().isEmpty()){
+			mLogger.warn("Converter without url: "+props.get(CONVERTER_NAME).toString()  );
 			throw new IllegalArgumentException(CONVERTER_URL+" property must not be empty");
 		}
-		
 		mName = props.get(CONVERTER_NAME).toString();
 		mDescription = props.get(CONVERTER_DESCRIPTION).toString();
 		mFile = URI.create(props.get(CONVERTER_URL).toString());
+		mLogger.debug(this.toString());
+
 	
 	}
 	
@@ -87,9 +97,9 @@ public class OSGIConverterDescriptor extends ConverterDescriptor {
 	 */
 	public String toString(){
 		StringBuffer buf=new StringBuffer();
-		buf.append("Name:\t"+mName);
-		buf.append("\nDesc:\t"+mDescription);
-		buf.append("\nurl:\t"+mFile.toString());
+		buf.append("Name: "+mName);
+		buf.append(",Desc: "+mDescription);
+		buf.append(",url: "+mFile.toString());
 		return buf.toString();
 	}
 

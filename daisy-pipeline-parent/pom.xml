@@ -13,6 +13,7 @@
 		<daisy.target>${project.baseUri}../target-platform</daisy.target>
         </properties>
 	<modules>
+	<module>../Main</module>
 	<module>../target-platform</module>
 	<module>../daisy.pipeline.feature</module>
 	<module>../daisy.pipeline.site</module>
@@ -45,6 +46,28 @@
 </repositories>
         <build>
                 <plugins>
+			<!--
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.0-beta-1</version> 
+				<configuration>
+				  <descriptors>
+				    <descriptor>./descriptor.xml</descriptor>
+				  </descriptors>
+				  <finalName>daisy_pipeline_cmd</finalName>
+				  <outputDirectory>dist</outputDirectory>
+				</configuration>
+				 <executions>
+			      <execution>
+			       <id>my-assembly</id>
+			       <phase>package</phase>
+			       <goals>
+				<goal>assembly</goal>
+			       </goals>
+			      </execution>
+			     </executions>
+		       </plugin>
+			-->
                         <plugin>
                                 <groupId>org.sonatype.tycho</groupId>
                                 <artifactId>tycho-maven-plugin</artifactId>

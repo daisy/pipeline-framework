@@ -10,12 +10,15 @@ import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ModuleRegistry;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultModuleRegistry implements ModuleRegistry {
 
 	HashMap<URI, Module> mComponentsMap= new HashMap<URI, Module>();
 	HashSet<Module> mModules= new HashSet<Module>();
 	private EXPathPackageParser mParser;
+	private Logger mLogger = LoggerFactory.getLogger(getClass());
 
 	/*
 	private final Function<Bundle, Module> toModule = new Function<Bundle, Module>() {
@@ -37,6 +40,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 		tracker = new EXPathPackageTracker(context,this);
 		tracker.setParser(mParser);
 		tracker.open();
+		mLogger.debug("Module registry up");
 		//System.out.println("MR UP");
 		
 	}
@@ -73,9 +77,9 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	@Override
 	public void addModule(Module module) {
 		mModules.add(module);
-		//System.out.println("[LOG] Registring "+module.getName());
+		mLogger.debug("Registring "+module.getName());
 		for(Component component: module.getComponents()){
-			//System.out.println("[LOG] Comp "+component.getURI());
+			mLogger.debug("Component "+component.getURI());
 			mComponentsMap.put(component.getURI(), module);
 		}		
 	}

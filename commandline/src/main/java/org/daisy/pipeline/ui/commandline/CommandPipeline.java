@@ -18,6 +18,8 @@ import org.daisy.pipeline.modules.UriResolverDecorator;
 import org.daisy.pipeline.ui.commandline.provider.ServiceProvider;
 import org.daisy.pipeline.xproc.XProcessor;
 import org.daisy.pipeline.xproc.XProcessorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 public class CommandPipeline extends Command {
@@ -27,10 +29,10 @@ public class CommandPipeline extends Command {
 	public static String PARAMS = "PARAMS";
 	public static String OPTIONS = "OPTIONS";
 	public static String PROVIDER = "PROVIDER";
-
+	private Logger mLogger;
 	public CommandPipeline(Properties args) {
 		super(args);
-
+		mLogger = LoggerFactory.getLogger(this.getClass());
 	}
 
 	@Override
@@ -53,10 +55,15 @@ public class CommandPipeline extends Command {
 		HashMap<String, HashMap<String, String>> params = parseParamsList(mArgs
 				.getProperty(PARAMS));
 		String output = null;
-
+		Properties props = new Properties();
+		mLogger.debug("Executing " + this.getClass().getName());
+		if (System.getProperties().containsKey(XProcessorFactory.CONFIGURATION_FILE)){
+			mLogger.debug("xproc configuration file set to:"+System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
+			props.setProperty(XProcessorFactory.CONFIGURATION_FILE, System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
+		}
 		XProcessorFactory fact = ((ServiceProvider) mArgs.get(PROVIDER))
 				.getXProcessorFactory();
-
+		fact.setProperties(props);
 		XProcessor xproc = fact.getProcessor(getSaxSource(mArgs
 				.getProperty(PIPELINE)));
 		// Uri resolver settings

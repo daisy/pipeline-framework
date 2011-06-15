@@ -8,5 +8,8 @@ Import-Package: com.google.common.base,
  org.daisy.expath.parser,
  org.daisy.pipeline.modules,
  org.osgi.framework;version="1.5.0",
- org.osgi.util.tracker;version="1.4.0"
+ org.osgi.util.tracker;version="1.4.0",
+ org.slf4j,
+ org.slf4j.impl
 Service-Component: OSGI-INF/registry.xml
+Bundle-Activator: org.daisy.pipeline.modules.tracker.Activator
