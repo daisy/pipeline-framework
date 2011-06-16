@@ -1,5 +1,8 @@
 package org.daisy.pipeline.ui.commandline;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import org.daisy.pipeline.ui.commandline.provider.OSGIServiceProvider;
 import org.daisy.pipeline.ui.commandline.provider.ServiceProvider;
 import org.osgi.framework.BundleActivator;
@@ -35,9 +38,10 @@ public class CmdLineActivator implements BundleActivator {
 						new CommandLine(provider).parse(args.split("\\s"))
 								.execute();
 					} catch (Exception e) {
-						e.printStackTrace();
+						StringWriter sw = new StringWriter();
+						e.printStackTrace(new PrintWriter(sw));
 						new CommandLine(provider).getUnrecovreableError(e
-								.getMessage()).execute();
+								.getMessage()+"\n"+sw.toString()).execute();
 						if(EXIT)
 							System.exit(1);
 					}

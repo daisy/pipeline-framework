@@ -22,7 +22,7 @@ public class CommandUnrecoverableError extends Command {
 		}
 		//System.err.println(" "+err);
 		mLogger.error("Unrecoverable error: "+err);
-		mLogger.warn("Shutting down because previous errors");
+		mLogger.warn("Shutting down due to previous errors");
 		
 	}
 

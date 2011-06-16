@@ -112,7 +112,9 @@ public class XProcessorImp extends XProcessor {
 		for(String option:mOptions.keySet()){
 			mPipeline.passOption(new QName(option),new RuntimeValue( mOptions.get(option).toString()));
 		}
+		checkOutPorts();
 		mProcRuntime.setMessageListener(new slf4jXProcMessageListener());
+		
 		try {
 			mPipeline.run();
 		} catch (SaxonApiException e) {
@@ -192,17 +194,21 @@ public class XProcessorImp extends XProcessor {
 
 	}
 
-	private void checkPorts() {
+	private void checkInPorts() {
 		for (String s : mPipeline.getInputs()) {
 			if (mInputPorts.get(s) == null && !mParams.getParametrizedPorts().contains(s))
 				throw new RuntimeException("Unbound input port:" + s);
 		}
 
+		
+
+	}
+	
+	private void checkOutPorts() {
 		for (String s : mPipeline.getOutputs()) {
 			if (mOutputPorts.get(s) == null)
 				throw new RuntimeException("Unbound output port:" + s);
 		}
-
 	}
 
 	@Override

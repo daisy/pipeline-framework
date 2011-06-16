@@ -154,7 +154,8 @@ public class CommandLine {
 
 	public Command getUnrecovreableError(String msg) {
 		Properties commandArgs = new Properties();
-		commandArgs.put(CommandUnrecoverableError.ERR, msg);
+		if(msg!=null)
+			commandArgs.put(CommandUnrecoverableError.ERR, msg);
 		return new CommandUnrecoverableError(commandArgs);
 	}
 
