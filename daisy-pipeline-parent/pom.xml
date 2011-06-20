@@ -26,6 +26,8 @@
 	<module>../module-uri-resolver</module>
 	<module>../converter-parser</module>
 	<module>../converter-registry</module>
+	<module>../calabash-custom-steps</module>
+	<module>../calabash-extensions</module>
 	<module>../commandline</module>
 	<module>../module-hello</module>
 	<module>../test-converter2</module>

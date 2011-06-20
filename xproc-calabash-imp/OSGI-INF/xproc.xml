@@ -3,5 +3,7 @@
    <implementation class="org.daisy.pipeline.xproc.impl.XProcFactoryImpl"/>
    <service>
       <provide interface="org.daisy.pipeline.xproc.XProcessorFactory"/>
+      <provide interface="org.daisy.pipeline.xproc.impl.Configurable"/>
    </service>
+    <reference bind="setConfiguration" cardinality="1..1" interface="org.daisy.calabash.XProcConfigurationFactory" policy="static"/>
 </scr:component>

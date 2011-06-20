@@ -11,6 +11,8 @@ import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.calabash.DynamicXProcConfigurationFactory;
+import org.daisy.calabash.XProcConfigurationFactory;
 import org.daisy.pipeline.xproc.XProcessor;
 import org.daisy.pipeline.xproc.XProcessorFactory;
 import org.osgi.framework.BundleContext;
@@ -24,7 +26,7 @@ import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.runtime.XPipeline;
 import com.xmlcalabash.util.URIUtils;
 
-public class XProcFactoryImpl implements XProcessorFactory{
+public class XProcFactoryImpl implements XProcessorFactory,Configurable{
 
 	private ErrorListener mErrorListener=null; 
 	private URIResolver mUriResolver = null;
@@ -32,6 +34,7 @@ public class XProcFactoryImpl implements XProcessorFactory{
 	private boolean mSchemaAware = false;
 	private Properties mProperties=null;
 	Logger mLogger = LoggerFactory.getLogger(XProcFactoryImpl.class);
+	private XProcConfiguration mConfiguration;
 
 	public XProcFactoryImpl(){
 		mProperties=new Properties();
@@ -43,7 +46,10 @@ public class XProcFactoryImpl implements XProcessorFactory{
 	}
 	
 	
-
+    public void setConfiguration(XProcConfigurationFactory conf){
+    	this.mConfiguration = conf.newConfiguration();
+    	mLogger.debug("configuration set via osgi");
+    }
 	public void close() {
 	}
 	
@@ -74,9 +80,15 @@ public class XProcFactoryImpl implements XProcessorFactory{
 
 	@Override
 	public XProcessor getProcessor(Source source)  {
-		
-		
-		XProcConfiguration conf = new XProcConfiguration();
+		XProcConfiguration conf=null;
+		if (mConfiguration==null){
+			conf = new DynamicXProcConfigurationFactory().newConfiguration();
+			mLogger.warn("setting new configuration to calabash, this should be already set");
+		}else{
+			conf=mConfiguration;
+			mLogger.debug("calabash configuration taken from state");
+		}
+			
 		try {
 			loadConfigurationFile(conf);
 		} catch (SaxonApiException e1) {

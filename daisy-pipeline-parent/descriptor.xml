@@ -1,0 +1,53 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+  <id>distribution</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <fileSets>
+    <!-- third party modules -->	
+    <fileSet>
+      <directory>../repo/plugins</directory>
+      <outputDirectory>lib</outputDirectory>
+      <includes>
+        <include>*.jar</include>
+      </includes>
+    </fileSet>
+    <!-- framework -->	
+    <fileSet>
+      <directory>../daisy.pipeline.site/target/site/plugins</directory>
+      <outputDirectory>framework</outputDirectory>
+      <includes>
+        <include>*.jar</include>
+      </includes>
+    </fileSet>
+    <!-- modules -->
+    <fileSet>
+      <directory>../../daisy-pipeline-modules/daisy.pipeline.modules.site/target/site/plugins</directory>
+      <outputDirectory>modules</outputDirectory>
+      <includes>
+        <include>*.jar</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>etc</directory>
+      <outputDirectory>etc</outputDirectory>
+    </fileSet>
+  </fileSets>
+  <files>
+     <file>
+      <source>../Main/dp2.sh</source>
+    </file>
+     <file>
+      <source>../Main/pax-runner-1.6.1.jar</source>
+    </file>
+     <file>
+      <source>../Main/bundlesDist.txt</source>
+      <destName>bundles.txt</destName>
+    </file>
+
+
+  </files>
+  
+</assembly>

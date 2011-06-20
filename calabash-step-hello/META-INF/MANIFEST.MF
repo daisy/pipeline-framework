@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Calabash Hello Step
+Bundle-SymbolicName: org.daisy.calabash.steps.hello
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Import-Package: com.xmlcalabash.core,
+ com.xmlcalabash.io,
+ com.xmlcalabash.library,
+ com.xmlcalabash.model,
+ com.xmlcalabash.runtime,
+ net.sf.saxon.s9api;version="9.2.1.5",
+ org.daisy.calabash
+Service-Component: OSGI-INF/step-hello.xml
+Export-Package: org.daisy.calabash.steps

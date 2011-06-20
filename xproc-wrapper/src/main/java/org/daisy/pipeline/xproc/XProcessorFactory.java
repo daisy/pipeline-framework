@@ -27,6 +27,7 @@ public interface XProcessorFactory {
 	public abstract void setProperties(Properties properties);
 	public abstract Properties getProperties();
 	
+	
 		
 	
 	
