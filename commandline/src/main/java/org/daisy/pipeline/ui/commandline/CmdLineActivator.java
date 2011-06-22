@@ -9,7 +9,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 public class CmdLineActivator implements BundleActivator {
-	private static boolean EXIT = false;
+	private static boolean EXIT = true;
 	@Override
 	public void start(BundleContext context) throws Exception {
 		final BundleContext ctxt = context;

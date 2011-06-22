@@ -7366,3 +7366,187 @@ org.osgi.framework.BundleException: The bundle could not be resolved. Reason: An
 2011-06-21 19:55:32,256 [INFO] - com.springsource.org.apache.tools.ant - BundleEvent.STARTED
 2011-06-21 19:55:32,256 [INFO] - org.eclipse.osgi - BundleEvent.STARTED
 2011-06-21 19:55:32,257 [INFO] - org.eclipse.osgi - FrameworkEvent.STARTED
+2011-06-22 20:09:13,196 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-22 20:09:13,230 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-22 20:09:13,232 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-22 20:09:13,232 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-22 20:09:13,232 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-22 20:09:13,232 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-22 20:09:13,232 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-22 20:09:13,232 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-22 20:09:13,232 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,232 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,232 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,232 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,232 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,232 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-22 20:09:13,232 [INFO] - guava - BundleEvent.STARTED
+2011-06-22 20:09:13,232 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-22 20:09:13,232 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-22 20:09:13,232 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-22 20:09:13,232 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,232 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-22 20:09:13,232 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,232 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,233 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-22 20:09:13,233 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,233 [DEBUG] - module-registry - New converter
+2011-06-22 20:09:13,233 [DEBUG] - module-registry - Name: dtbook-to-zedai,Desc: Convert DTBook XML to ZedAI XML,url: http://www.daisy.org/ns/pipeline/module/dtbook-to-zedai/dtbook-to-zedai.xpl
+2011-06-22 20:09:13,233 [INFO] - org.daisy.pipeline.dtbook-to-zedai - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,233 [DEBUG] - module-registry - New converter
+2011-06-22 20:09:13,233 [DEBUG] - module-registry - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-22 20:09:13,233 [INFO] - org.daisy.pipeline.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,233 [DEBUG] - module-registry - New converter
+2011-06-22 20:09:13,233 [DEBUG] - module-registry - Name: upgrade-dtbook,Desc: DTBook utility for upgrading to DTBook 2005-3.,url: http://www.daisy.org/ns/pipeline/module/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-22 20:09:13,233 [INFO] - org.daisy.pipeline.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,233 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,233 [INFO] - org.daisy.calabash.extensions - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,233 [ERROR] - job-manager - [SCR] Component definition XMLs not found in bundle job-manager. The component header value is OSGI-INF/jobmanager.xml
+2011-06-22 20:09:13,233 [INFO] - module-registry - org.daisy.calabash.DynamicXProcConfigurationFactory is up
+2011-06-22 20:09:13,469 [DEBUG] - module-registry - configuration set via osgi
+2011-06-22 20:09:13,469 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,469 [ERROR] - daisy-pipeline - [SCR] Component definition XMLs not found in bundle daisy-pipeline. The component header value is OSGI-INF/dp.xml
+2011-06-22 20:09:13,472 [INFO] - module-registry - Adding step to registry: message
+2011-06-22 20:09:13,472 [INFO] - calabash-custom-steps - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,472 [INFO] - module-registry - Adding step to registry: xslt
+2011-06-22 20:09:13,472 [INFO] - calabash-custom-steps - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,493 [DEBUG] - module-registry - tracking: html-utils,bundleresource://1.fwk1318663487/expath-pkg.xml
+2011-06-22 20:09:13,568 [DEBUG] - module-registry - withComponent:http://www.daisy.org/ns/pipeline/utilities/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-22 20:09:13,569 [DEBUG] - module-registry - withComponent:http://www.daisy.org/ns/pipeline/utilities/html-utils/html5-outliner.xsl, path: html5-outliner.xsl
+2011-06-22 20:09:13,569 [DEBUG] - module-registry - Registring html-utils
+2011-06-22 20:09:13,569 [DEBUG] - module-registry - Component http://www.daisy.org/ns/pipeline/utilities/html-utils/html5-outliner.xsl
+2011-06-22 20:09:13,569 [DEBUG] - module-registry - Component http://www.daisy.org/ns/pipeline/utilities/html-utils/html-library.xpl
+2011-06-22 20:09:13,569 [DEBUG] - module-registry - tracking: org.daisy.pipeline.dtbook-to-zedai,bundleresource://2.fwk1318663487/expath-pkg.xml
+2011-06-22 20:09:13,570 [DEBUG] - module-registry - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-to-zedai/dtbook-to-zedai.xpl, path: dtbook-to-zedai.xpl
+2011-06-22 20:09:13,570 [DEBUG] - module-registry - Registring dtbook-to-zedai
+2011-06-22 20:09:13,570 [DEBUG] - module-registry - Component http://www.daisy.org/ns/pipeline/module/dtbook-to-zedai/dtbook-to-zedai.xpl
+2011-06-22 20:09:13,570 [DEBUG] - module-registry - tracking: mediaoverlay-utils,bundleresource://3.fwk1318663487/expath-pkg.xml
+2011-06-22 20:09:13,570 [DEBUG] - module-registry - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-22 20:09:13,570 [DEBUG] - module-registry - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-22 20:09:13,570 [DEBUG] - module-registry - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-22 20:09:13,570 [DEBUG] - module-registry - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-22 20:09:13,570 [DEBUG] - module-registry - Registring mediaoverlay-utils
+2011-06-22 20:09:13,570 [DEBUG] - module-registry - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange-content.xpl
+2011-06-22 20:09:13,570 [DEBUG] - module-registry - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange.xpl
+2011-06-22 20:09:13,571 [DEBUG] - module-registry - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-22 20:09:13,571 [DEBUG] - module-registry - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/join.xpl
+2011-06-22 20:09:13,571 [DEBUG] - module-registry - tracking: org.daisy.pipeline.metadata-utils,bundleresource://4.fwk1318663487/expath-pkg.xml
+2011-06-22 20:09:13,571 [DEBUG] - module-registry - withComponent:http://www.daisy.org/ns/pipeline/module/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-22 20:09:13,571 [DEBUG] - module-registry - Registring metadata-utils
+2011-06-22 20:09:13,571 [DEBUG] - module-registry - Component http://www.daisy.org/ns/pipeline/module/metadata-utils/metadata-utils-library.xpl
+2011-06-22 20:09:13,571 [DEBUG] - module-registry - tracking: org.daisy.pipeline.dtbook-utils,bundleresource://5.fwk1318663487/expath-pkg.xml
+2011-06-22 20:09:13,571 [DEBUG] - module-registry - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-22 20:09:13,571 [DEBUG] - module-registry - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-22 20:09:13,571 [DEBUG] - module-registry - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-22 20:09:13,571 [DEBUG] - module-registry - Registring dtbook-utils
+2011-06-22 20:09:13,571 [DEBUG] - module-registry - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-22 20:09:13,571 [DEBUG] - module-registry - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-22 20:09:13,571 [DEBUG] - module-registry - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/dtbook-utils-library.xpl
+2011-06-22 20:09:13,574 [DEBUG] - module-registry - Module registry up
+2011-06-22 20:09:13,586 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,586 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,586 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,586 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,590 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,593 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,594 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-22 20:09:13,595 [INFO] - org.eclipse.equinox.ds - BundleEvent.STARTED
+2011-06-22 20:11:48,697 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-22 20:11:48,706 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-22 20:11:48,712 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-22 20:11:48,712 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-22 20:11:48,712 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-22 20:11:48,712 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-22 20:11:48,712 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-22 20:11:48,712 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-22 20:11:48,712 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,712 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,712 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,712 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,712 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,712 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-22 20:11:48,712 [INFO] - guava - BundleEvent.STARTED
+2011-06-22 20:11:48,712 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-22 20:11:48,712 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-22 20:11:48,712 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-22 20:11:48,712 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,712 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-22 20:11:48,712 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,712 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,713 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-22 20:11:48,713 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,728 [DEBUG] - converter-parser - New converter
+2011-06-22 20:11:48,728 [DEBUG] - converter-parser - Name: dtbook-to-zedai,Desc: Convert DTBook XML to ZedAI XML,url: http://www.daisy.org/ns/pipeline/module/dtbook-to-zedai/dtbook-to-zedai.xpl
+2011-06-22 20:11:48,731 [INFO] - org.daisy.pipeline.dtbook-to-zedai - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,736 [DEBUG] - converter-parser - New converter
+2011-06-22 20:11:48,736 [DEBUG] - converter-parser - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-22 20:11:48,737 [INFO] - org.daisy.pipeline.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,737 [DEBUG] - converter-parser - New converter
+2011-06-22 20:11:48,737 [DEBUG] - converter-parser - Name: upgrade-dtbook,Desc: DTBook utility for upgrading to DTBook 2005-3.,url: http://www.daisy.org/ns/pipeline/module/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-22 20:11:48,737 [INFO] - org.daisy.pipeline.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,747 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,751 [INFO] - calabash-custom-steps - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,751 [INFO] - calabash-custom-steps - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,753 [INFO] - job-manager - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,755 [INFO] - org.daisy.calabash.extensions - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,770 [DEBUG] - converter-parser - tracking: html-utils,bundleresource://1.fwk1145892402/expath-pkg.xml
+2011-06-22 20:11:48,842 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-22 20:11:48,843 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/html-utils/html5-outliner.xsl, path: html5-outliner.xsl
+2011-06-22 20:11:48,843 [DEBUG] - converter-parser - Registring html-utils
+2011-06-22 20:11:48,843 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/html-utils/html5-outliner.xsl
+2011-06-22 20:11:48,843 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/html-utils/html-library.xpl
+2011-06-22 20:11:48,843 [DEBUG] - converter-parser - tracking: org.daisy.pipeline.dtbook-to-zedai,bundleresource://2.fwk1145892402/expath-pkg.xml
+2011-06-22 20:11:48,843 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-to-zedai/dtbook-to-zedai.xpl, path: dtbook-to-zedai.xpl
+2011-06-22 20:11:48,843 [DEBUG] - converter-parser - Registring dtbook-to-zedai
+2011-06-22 20:11:48,843 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/dtbook-to-zedai/dtbook-to-zedai.xpl
+2011-06-22 20:11:48,843 [DEBUG] - converter-parser - tracking: mediaoverlay-utils,bundleresource://3.fwk1145892402/expath-pkg.xml
+2011-06-22 20:11:48,844 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-22 20:11:48,844 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-22 20:11:48,844 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-22 20:11:48,844 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-22 20:11:48,844 [DEBUG] - converter-parser - Registring mediaoverlay-utils
+2011-06-22 20:11:48,844 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange-content.xpl
+2011-06-22 20:11:48,844 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange.xpl
+2011-06-22 20:11:48,844 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-22 20:11:48,844 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/join.xpl
+2011-06-22 20:11:48,844 [DEBUG] - converter-parser - tracking: org.daisy.pipeline.metadata-utils,bundleresource://4.fwk1145892402/expath-pkg.xml
+2011-06-22 20:11:48,844 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-22 20:11:48,844 [DEBUG] - converter-parser - Registring metadata-utils
+2011-06-22 20:11:48,845 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/metadata-utils/metadata-utils-library.xpl
+2011-06-22 20:11:48,845 [DEBUG] - converter-parser - tracking: org.daisy.pipeline.dtbook-utils,bundleresource://5.fwk1145892402/expath-pkg.xml
+2011-06-22 20:11:48,845 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-22 20:11:48,845 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-22 20:11:48,845 [DEBUG] - converter-parser - withComponent:http://www.daisy.org/ns/pipeline/module/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-22 20:11:48,845 [DEBUG] - converter-parser - Registring dtbook-utils
+2011-06-22 20:11:48,846 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-22 20:11:48,846 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-22 20:11:48,846 [DEBUG] - converter-parser - Component http://www.daisy.org/ns/pipeline/module/dtbook-utils/dtbook-utils-library.xpl
+2011-06-22 20:11:48,849 [DEBUG] - converter-parser - Module registry up
+2011-06-22 20:11:48,849 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-22 20:11:48,867 [INFO] - converter-parser - Adding step to registry: message
+2011-06-22 20:11:48,867 [INFO] - converter-parser - Adding step to registry: xslt
+2011-06-22 20:11:48,867 [INFO] - converter-parser - org.daisy.calabash.DynamicXProcConfigurationFactory is up
