@@ -18,6 +18,7 @@
 	<module>../daisy.pipeline.feature</module>
 	<module>../daisy.pipeline.site</module>
 	<module>../daisy-pipeline</module>
+	<module>../job-manager</module>
 	<module>../module-common</module>
 	<module>../common-stax</module>
 	<module>../expath-pkg-parser</module>

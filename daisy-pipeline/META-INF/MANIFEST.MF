@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Daisy-pipeline
+Bundle-SymbolicName: daisy-pipeline
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Service-Component: OSGI-INF/dp.xml
+Import-Package: org.daisy.pipeline.jobmanager,
+ org.daisy.pipeline.modules,
+ org.daisy.pipeline.modules.converter,
+ org.daisy.pipeline.xproc,
+ org.osgi.framework,
+ org.slf4j;version="1.6.1",
+ org.slf4j.impl
+Export-Package: org.daisy.pipeline
+
