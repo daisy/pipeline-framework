@@ -56,7 +56,11 @@ public class CommandConverter extends Command {
 		for(String argName : strArgs.keySet()){
 			runnable.getValue(argName).setValue(strArgs.get(argName));
 		}
+ 
 		runnable.run();
+		//provider.getDaisyPipelineContext().getJobManager().addJob(runnable);
+		//making things more complex :
+		
 	}
 
 }

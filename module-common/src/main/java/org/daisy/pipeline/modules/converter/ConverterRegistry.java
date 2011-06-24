@@ -1,5 +1,7 @@
 package org.daisy.pipeline.modules.converter;
 
+import java.net.URI;
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -29,5 +31,12 @@ public interface ConverterRegistry {
 	 * @return the descriptor
 	 */
 	public ConverterDescriptor getDescriptor(String name);
+	/**
+	 * Gets the descriptor bound to the uri
+	 *
+	 * @param name the name
+	 * @return the descriptor
+	 */
+	public ConverterDescriptor getDescriptor(URI uri);
 	
 }

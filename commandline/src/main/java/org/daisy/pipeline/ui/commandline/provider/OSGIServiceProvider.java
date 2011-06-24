@@ -1,5 +1,6 @@
 package org.daisy.pipeline.ui.commandline.provider;
 
+import org.daisy.pipeline.DaisyPipelineContext;
 import org.daisy.pipeline.modules.ModuleRegistry;
 import org.daisy.pipeline.modules.UriResolverDecorator;
 import org.daisy.pipeline.modules.converter.ConverterRegistry;
@@ -49,6 +50,10 @@ public class OSGIServiceProvider implements ServiceProvider {
 		}
 		tracker.close();
 		return service;
+	}
+	@Override
+	public DaisyPipelineContext getDaisyPipelineContext() {
+		return this.getService(DaisyPipelineContext.class);
 	}
 	
 

@@ -1,5 +1,6 @@
 package org.daisy.converter.registry;
 
+import java.net.URI;
 import java.util.HashMap;
 
 import javax.xml.transform.URIResolver;
@@ -24,6 +25,8 @@ public class OSGIConverterRegistry implements ConverterRegistry,ConverterFactory
 	
 	/** The available descriptors */
 	HashMap<String, ConverterDescriptor> mDescriptors = new HashMap<String, ConverterDescriptor>();
+	/** available descriptiors indexed by uri **/
+	HashMap<URI, ConverterDescriptor> mDescriptorsUri = new HashMap<URI, ConverterDescriptor>();
 	
 	/** The parser. */
 	ConverterParser mParser = null;
@@ -104,6 +107,7 @@ public class OSGIConverterRegistry implements ConverterRegistry,ConverterFactory
 		//System.out.println("Registering:\n" + conv.toString());
 		conv.setLoader(new OSGIConverterLoader());
 		mDescriptors.put(conv.getName(), conv);
+		mDescriptorsUri.put(conv.getFile(), conv);
 	}
 	
 	/* (non-Javadoc)
@@ -121,7 +125,10 @@ public class OSGIConverterRegistry implements ConverterRegistry,ConverterFactory
 	public ConverterDescriptor getDescriptor(String name) {
 		return mDescriptors.get(name);
 	}
-
+	@Override
+	public ConverterDescriptor getDescriptor(URI uri) {
+		return mDescriptorsUri.get(uri);
+	}
 	/**
 	 * The Class OSGIConverterLoader.
 	 */
@@ -154,6 +161,8 @@ public class OSGIConverterRegistry implements ConverterRegistry,ConverterFactory
 		// TODO Auto-generated method stub
 		return new OSGIConverterArgument();
 	}
+
+
 
 	
 }

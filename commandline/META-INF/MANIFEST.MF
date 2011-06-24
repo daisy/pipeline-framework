@@ -8,6 +8,8 @@ Bundle-Activator: org.daisy.pipeline.ui.commandline.CmdLineActivator
 Bundle-ActivationPolicy: lazy
 Import-Package: joptsimple,
  net.sf.saxon;version="9.2.1.5",
+ org.daisy.pipeline,
+ org.daisy.pipeline.jobmanager,
  org.daisy.pipeline.modules,
  org.daisy.pipeline.modules.converter,
  org.daisy.pipeline.xproc,

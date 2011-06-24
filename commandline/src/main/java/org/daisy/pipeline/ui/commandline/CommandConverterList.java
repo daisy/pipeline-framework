@@ -31,7 +31,7 @@ public class CommandConverterList extends Command {
 					"Provider is not a ServiceProvider");
 		}
 		
-		Iterable<ConverterDescriptor> descriptors = provider.getConverterRegistry().getDescriptors();
+		Iterable<ConverterDescriptor> descriptors = provider.getDaisyPipelineContext().getConverterRegistry().getDescriptors();
 		System.out.println("Available Descriptors:");
 		for (ConverterDescriptor desc : descriptors) {
 			System.out.println(desc.getName()+" - "+desc.getDescription());

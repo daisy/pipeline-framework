@@ -1,4 +1,5 @@
 package org.daisy.pipeline.ui.commandline.provider;
+import org.daisy.pipeline.DaisyPipelineContext;
 import org.daisy.pipeline.modules.ModuleRegistry;
 import org.daisy.pipeline.modules.UriResolverDecorator;
 import org.daisy.pipeline.modules.converter.ConverterRegistry;
@@ -9,5 +10,6 @@ public interface ServiceProvider {
 	public XProcessorFactory getXProcessorFactory();
 	public UriResolverDecorator getUriResolver();
 	public ConverterRegistry getConverterRegistry();
+	public DaisyPipelineContext getDaisyPipelineContext();
 
 }

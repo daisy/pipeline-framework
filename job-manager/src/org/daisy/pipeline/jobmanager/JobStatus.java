@@ -1,20 +1,32 @@
 package org.daisy.pipeline.jobmanager;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.LinkedList;
 
 public class JobStatus {
 	public enum Status{
 		PROCESSING , COMPLETED , FAILED , NOT_STARTED
 	}
-	protected LinkedList<Error>mErrors=new LinkedList<JobStatus.Error>();
+	protected LinkedList<JobError>mErrors=new LinkedList<JobError>();
 	protected URI mLog;
-	protected Result mResult;
+	protected JobResult mResult;
 	protected Status mStatus;
 	protected JobID mJobID;
 	
+	
+	public JobStatus() {
+		mStatus=Status.NOT_STARTED;
+		try {
+			mLog=new URI("file:/pathtolog");
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	public Iterable<Error> getErrors() {
-		return mErrors;
+		return new LinkedList<Error>(mErrors); 
 	}
 
 
@@ -38,12 +50,12 @@ public class JobStatus {
 	}
 
 
-	static class Result{
+	static class JobResult implements Result{
 		private URI mUri;
 		private String mType;
 		
 		
-		public Result(URI uri, String type) {
+		public JobResult(URI uri, String type) {
 			super();
 			mUri = uri;
 			mType = type;
@@ -65,15 +77,13 @@ public class JobStatus {
 	}
 	
 	
-	static class Error{
-		enum Level{
-			WARNING, FATAL , ERROR
-		}
+	static class JobError implements Error{
+		
 		private Level mLevel;
 		private String mDescription;
 		
 		
-		public Error(Level level, String description) {
+		public JobError(Level level, String description) {
 			super();
 			mLevel = level;
 			mDescription = description;
@@ -81,12 +91,20 @@ public class JobStatus {
 		public Level getLevel() {
 			return mLevel;
 		}
+		/* (non-Javadoc)
+		 * @see org.daisy.pipeline.jobmanager.Error#setLevel(org.daisy.pipeline.jobmanager.JobStatus.JobError.Level)
+		 */
+		@Override
 		public void setLevel(Level level) {
 			mLevel = level;
 		}
 		public String getDescription() {
 			return mDescription;
 		}
+		/* (non-Javadoc)
+		 * @see org.daisy.pipeline.jobmanager.Error#setDescription(java.lang.String)
+		 */
+		@Override
 		public void setDescription(String description) {
 			mDescription = description;
 		}
