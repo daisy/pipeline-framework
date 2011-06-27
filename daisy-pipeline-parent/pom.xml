@@ -30,6 +30,7 @@
 	<module>../converter-registry</module>
 	<module>../calabash-custom-steps</module>
 	<module>../calabash-extensions</module>
+	<module>../webservice</module>
 	<module>../commandline</module>
 	<module>../module-hello</module>
 	<module>../test-converter2</module>
