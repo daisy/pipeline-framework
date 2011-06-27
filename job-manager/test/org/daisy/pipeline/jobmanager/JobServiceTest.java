@@ -56,7 +56,7 @@ public class JobServiceTest {
 	public void testJobQuery(){
 		
 		JobID id = ser.addJob(conv);
-		Job job = ser.getJob(id);
+		Job job = ser.getJob(ser.getIDFactory().fromString(id.getID()));
 		assertEquals(conv, job.getRunnable());
 	}
 	@Test

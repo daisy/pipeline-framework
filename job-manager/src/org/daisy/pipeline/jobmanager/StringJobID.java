@@ -14,8 +14,13 @@ public class StringJobID implements JobID{
 	
 	@Override
 	public int hashCode() {
-		// TODO Auto-generated method stub
 		return mId.hashCode();
+	}
+
+	
+	@Override
+	public boolean equals(Object other) {
+		return mId.equals(other.toString());
 	}
 
 
@@ -39,6 +44,10 @@ public class StringJobID implements JobID{
 		@Override
 		public JobID getNewID(String prefix) {
 			return new StringJobID(prefix+"#"+mCount++);
+		}
+		@Override
+		public JobID fromString(String str) {
+			return new StringJobID(str);
 		}
 	
 	} 

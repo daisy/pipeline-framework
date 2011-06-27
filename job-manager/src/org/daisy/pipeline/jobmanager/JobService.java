@@ -130,4 +130,8 @@ public class JobService implements JobManager{
 		
 		
 	}
+	@Override
+	public IDFactory getIDFactory() {
+		return mIdFactory;
+	}
 }
