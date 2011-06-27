@@ -2,7 +2,7 @@
 				xmlns:xs="http://www.w3.org/2001/XMLSchema"
 				xmlns:modA="http://www.example.org/module-A"
 				xmlns:modB="http://www.example.org/module-B"
-				xmlns:cd="http://www.daisy.org/daisypipeline/converter_descriptor"
+				xmlns:cd="http://www.daisy.org/ns/pipeline/converter"
 				version="2.0">
 	<cd:converter name="testHello" version="1.0">
 		<cd:description> Test xpl description</cd:description>	
