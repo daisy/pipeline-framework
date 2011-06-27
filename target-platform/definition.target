@@ -5,6 +5,7 @@
 <locations>
 <location path="${project_loc}/../daisy.pipeline.site/target/site" type="Directory"/>
 <location path="${project_loc}/../repo" type="Directory"/>
+<location path="/home/javi/dedicon/daisy/daisy-pipeline-modules/daisy.pipeline.modules.site/target/site" type="Directory"/>
 </locations>
 <launcherArgs>
 <vmArgs>org.osgi.framework.system.packages=sun.misc</vmArgs>

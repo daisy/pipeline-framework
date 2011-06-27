@@ -1,5 +1,6 @@
 package org.daisy.pipeline.webservice;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -10,6 +11,7 @@ import org.daisy.pipeline.jobmanager.Job;
 import org.daisy.pipeline.jobmanager.JobStatus;
 import org.daisy.pipeline.modules.converter.Converter.ConverterArgument;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
+import org.restlet.ext.xml.DomRepresentation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -185,7 +187,11 @@ public class XmlFormatter {
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		    DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		    Document document = documentBuilder.newDocument();
+			//DomRepresentation rep = new DomRepresentation();
+			//Document document = rep.getDocument();
 		    return document;
+		
+		
 		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
