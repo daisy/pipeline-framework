@@ -16,7 +16,7 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Starting webservice on port 8182.");
 		
-		ServiceReference sr = context.getServiceReference(org.daisy.pipeline.DaisyPipelineContext.class.toString());
+		ServiceReference sr = context.getServiceReference(org.daisy.pipeline.DaisyPipelineContext.class.getName());
 		DaisyPipelineContext daisyPipelineContext = (DaisyPipelineContext)context.getService(sr);
 		
 		Component component = new Component();
