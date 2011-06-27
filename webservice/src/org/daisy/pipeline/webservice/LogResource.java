@@ -2,6 +2,7 @@ package org.daisy.pipeline.webservice;
 
 import org.daisy.pipeline.DaisyPipelineContext;
 import org.daisy.pipeline.jobmanager.Job;
+import org.daisy.pipeline.jobmanager.JobID;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
@@ -14,8 +15,9 @@ public class LogResource extends ServerResource {
     public void doInit() {  
 		super.doInit();
 		DaisyPipelineContext context = ((WebApplication)this.getApplication()).getDaisyPipelineContext();
-        String jobId = (String) getRequestAttributes().get("id");  
-        job = Utilities.getJob(jobId, context);
+        String idParam = (String) getRequestAttributes().get("id");  
+        JobID jobId = context.getJobManager().getIDFactory().fromString(idParam);
+        job = context.getJobManager().getJob(jobId);
     }
 	
 	@Get

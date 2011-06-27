@@ -9,6 +9,7 @@ import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 import org.daisy.pipeline.jobmanager.Job;
+import org.daisy.pipeline.jobmanager.JobID;
 
 
 public class JobResource extends ServerResource {
@@ -18,8 +19,9 @@ public class JobResource extends ServerResource {
     public void doInit() {  
 		super.doInit();
 		DaisyPipelineContext context = ((WebApplication)this.getApplication()).getDaisyPipelineContext();
-        String jobId = (String) getRequestAttributes().get("id");  
-        job = Utilities.getJob(jobId, context);
+        String idParam = (String) getRequestAttributes().get("id");  
+        JobID jobId = context.getJobManager().getIDFactory().fromString(idParam);
+        job = context.getJobManager().getJob(jobId);
     }  
   
     @Get("xml")

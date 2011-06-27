@@ -2,6 +2,7 @@ package org.daisy.pipeline.webservice;
 
 import org.daisy.pipeline.DaisyPipelineContext;
 import org.daisy.pipeline.jobmanager.Job;
+import org.daisy.pipeline.jobmanager.JobID;
 import org.daisy.pipeline.jobmanager.JobStatus;
 import org.daisy.pipeline.jobmanager.Result;
 import org.restlet.data.Status;
@@ -15,8 +16,9 @@ public class ResultResource extends ServerResource {
     public void doInit() {  
 		super.doInit();
 		DaisyPipelineContext context = ((WebApplication)this.getApplication()).getDaisyPipelineContext();
-        String jobId = (String) getRequestAttributes().get("id");  
-        job = Utilities.getJob(jobId, context);
+		String idParam = (String) getRequestAttributes().get("id");  
+        JobID jobId = context.getJobManager().getIDFactory().fromString(idParam);
+        job = context.getJobManager().getJob(jobId);
     }  
   
 	// TODO: @Get("zip")

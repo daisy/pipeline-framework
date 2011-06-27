@@ -26,7 +26,7 @@ public class Activator implements BundleActivator {
 	
 		component.getDefaultHost().attach("/ws", application);
 		
-		// TODO: where to get this information dynamically?
+		// TODO: how to get this information dynamically?
 		application.setServerAddress("http://localhost:8182/ws");
 		
 		component.start();

@@ -9,10 +9,9 @@
   
   <parent>
     <groupId>org.daisy.pipeline</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>daisy-pipeline-framework-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <relativePath>../webservice-parent</relativePath>
+    <relativePath>../daisy-pipeline-parent</relativePath>
   </parent>
-  
   
 </project>
