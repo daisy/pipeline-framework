@@ -1,5 +1,5 @@
 package org.daisy.pipeline.jobmanager;
 
-interface Result {
+public interface Result {
 
 }

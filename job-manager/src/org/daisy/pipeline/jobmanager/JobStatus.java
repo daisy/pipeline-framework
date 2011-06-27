@@ -77,7 +77,7 @@ public class JobStatus {
 	}
 	
 	
-	static class JobError implements Error{
+	public static class JobError implements Error{
 		
 		private Level mLevel;
 		private String mDescription;

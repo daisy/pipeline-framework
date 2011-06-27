@@ -1,7 +1,7 @@
 package org.daisy.pipeline.jobmanager;
 
 
-interface Error {
+public interface Error {
 	enum Level{
 		WARNING, FATAL , ERROR
 	}
