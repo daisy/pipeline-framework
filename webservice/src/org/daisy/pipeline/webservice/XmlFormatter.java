@@ -1,6 +1,5 @@
 package org.daisy.pipeline.webservice;
 
-import java.io.IOException;
 import java.util.Iterator;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -11,7 +10,6 @@ import org.daisy.pipeline.jobmanager.Job;
 import org.daisy.pipeline.jobmanager.JobStatus;
 import org.daisy.pipeline.modules.converter.Converter.ConverterArgument;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
-import org.restlet.ext.xml.DomRepresentation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -200,6 +198,7 @@ public class XmlFormatter {
 	    
 	}
 	
+	// TODO: this doesn't quite work as I would like .. it includes the parent node
 	public static String nodeToString(Node node) {
 		Document doc = node.getOwnerDocument();
 		DOMImplementationLS domImplLS = (DOMImplementationLS) doc.getImplementation();

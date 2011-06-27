@@ -125,20 +125,40 @@ public class JobsResource extends ServerResource {
 		    		Element inputElm = (Element)inputNodes.item(i);
 		    		String name = inputElm.getAttribute("name");
 		    		
-		    		// TODO support a sequence of input documents
-		    		// for now, we're assuming arguments of type "INPUT" that expect a single XML document
-
-		    		NodeList docwrapperNodes = inputElm.getElementsByTagName("docwrapper");
-		    		// this would have already been checked during validation (not yet implemented)
-		    		if (docwrapperNodes.getLength() == 0) return null;
 		    		
-		    		// get the XML of the input document, serialized as a string
-		    		String docstring = XmlFormatter.nodeToString(docwrapperNodes.item(0));
 		    		ConverterArgument arg = converterDescriptor.getConverter().getArgument(name);
-		    		ConverterRunnable.ValuedConverterArgument valueArg = converterRunnable.new ValuedConverterArgument(docstring, arg);
+		    		ConverterRunnable.ValuedConverterArgument valueArg = null;
 		    		
-		    		converterRunnable.setValue(valueArg);
+		    		if (arg.getType() == ConverterArgument.Type.INPUT) {
+		    			// TODO support inline XML input
+		    			// TODO support a sequence of input documents
+			    		// NodeList docwrapperNodes = inputElm.getElementsByTagName("docwrapper");
+			    		// this would have already been checked during validation (not yet implemented)
+			    		// if (docwrapperNodes.getLength() == 0) return null;
+			    		
+		    			// get the XML of the input document, serialized as a string
+			    		// String docstring = XmlFormatter.nodeToString(docwrapperNodes.item(0));
+		    			
+		    			// here we just expect a URI.  this is temporary for the beta.
+		    			String val = inputElm.getTextContent();
+			    		valueArg = converterRunnable.new ValuedConverterArgument(val, arg);
+			    		
+		    		}
+		    		else if (arg.getType() == ConverterArgument.Type.OPTION || arg.getType() == ConverterArgument.Type.PARAMETER) {
+		    			String val = inputElm.getTextContent();
+		    			valueArg = converterRunnable.new ValuedConverterArgument(val, arg);
+		    		}
+		    		// we don't care about output arguments in the webservice
+		    		else if (arg.getType() == ConverterArgument.Type.OUTPUT) {
+		    			valueArg = converterRunnable.new ValuedConverterArgument("Nothing", arg);
+		    		}
 		    		
+		    		if (valueArg != null) {
+		    			converterRunnable.setValue(valueArg);
+		    		}
+		    		else {
+		    			return null;
+		    		}
 		    	}
 		    	return converterRunnable;
 				
