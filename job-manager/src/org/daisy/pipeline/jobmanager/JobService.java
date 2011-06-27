@@ -1,6 +1,7 @@
 package org.daisy.pipeline.jobmanager;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -37,7 +38,7 @@ public class JobService implements JobManager{
 	}
 	@Override
 	public Iterable<Job> getJobList() {
-		return mJobQueue;
+		return new LinkedList<Job>(mJobs.values());
 	}
 
 	@Override
