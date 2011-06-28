@@ -34,6 +34,7 @@
 	<module>../module-hello</module>
 	<module>../test-converter2</module>
 	<module>../test-converter</module>
+	<module>../webservice</module>
 	</modules>
  <repositories>
                 <repository>
