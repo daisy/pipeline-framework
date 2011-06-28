@@ -27,8 +27,9 @@ public class JobResource extends ServerResource {
     @Get("xml")
     public Representation getResource() {  
     	if (job != null) {
+    		String serverAddress = ((WebApplication)this.getApplication()).getServerAddress();
 			setStatus(Status.SUCCESS_OK);
-    		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.jobToXml(job));
+    		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.jobToXml(job, serverAddress));
     		return dom;
 		}
 		else {

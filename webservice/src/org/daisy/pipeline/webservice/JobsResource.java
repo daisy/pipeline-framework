@@ -32,8 +32,9 @@ public class JobsResource extends ServerResource {
 	@Get("xml")
 	public Representation getResource() {
 		DaisyPipelineContext context = ((WebApplication)this.getApplication()).getDaisyPipelineContext();
+		String serverAddress = ((WebApplication)this.getApplication()).getServerAddress();
 		DomRepresentation dom = new DomRepresentation(
-				MediaType.APPLICATION_XML, XmlFormatter.jobsToXml(context.getJobManager().getJobList()));
+				MediaType.APPLICATION_XML, XmlFormatter.jobsToXml(context.getJobManager().getJobList(), serverAddress));
 		setStatus(Status.SUCCESS_OK);
 		return dom;
 	}

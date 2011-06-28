@@ -18,21 +18,21 @@ import org.w3c.dom.ls.LSSerializer;
 
 public class XmlFormatter {
 
-	public static Document jobToXml(Job job) {
+	public static Document jobToXml(Job job, String serverAddress) {
 		Document doc = createDom();
-		Element jobElm = toXmlElm(job, doc);
+		Element jobElm = toXmlElm(job, doc, serverAddress);
 		doc.appendChild(jobElm);
 		return doc;
 	}
 	
-	public static Document jobsToXml(Iterable<Job> jobs) {
+	public static Document jobsToXml(Iterable<Job> jobs, String serverAddress) {
 		Document doc = createDom();
 		Element jobsElm = doc.createElement("jobs");
 		
 		Iterator<Job> it = jobs.iterator();
 		while(it.hasNext()) {
 			Job job = it.next();
-			Element jobElm = toXmlElm(job, doc);
+			Element jobElm = toXmlElm(job, doc, serverAddress);
 			jobsElm.appendChild(jobElm);
 		}
 		
@@ -121,7 +121,7 @@ public class XmlFormatter {
 	  <log href="http://ws.pipeline.org/jobs/$ID/log"/>
 	</job>
 	 */
-	private static Element toXmlElm(Job job, Document doc) {
+	private static Element toXmlElm(Job job, Document doc, String serverAddress) {
 		JobStatus jobStatus = job.getStatus();
 		
 		Element rootElm = doc.createElement("job");
@@ -147,7 +147,7 @@ public class XmlFormatter {
 		
 		if (jobStatus.getStatus() == JobStatus.Status.COMPLETED) {
 			Element resultElm = doc.createElement("result");
-			resultElm.setAttribute("href", "http://ws.pipeline.org/jobs/" + job.getId() + "/result");
+			resultElm.setAttribute("href", serverAddress + "/jobs/" + job.getId() + "/result");
 			rootElm.appendChild(resultElm);
 		}
 		
@@ -175,7 +175,7 @@ public class XmlFormatter {
 		
 		if (jobStatus.getStatus() == JobStatus.Status.COMPLETED || jobStatus.getStatus() == JobStatus.Status.FAILED) {
 			Element logElm = doc.createElement("log");
-			logElm.setAttribute("href", "http://ws.pipeline.org/jobs/" + job.getId() + "/log");
+			logElm.setAttribute("href", serverAddress + "/jobs/" + job.getId() + "/log");
 		}
 		return rootElm;
 	}
