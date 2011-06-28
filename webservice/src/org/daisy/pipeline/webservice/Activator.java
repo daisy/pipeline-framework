@@ -8,19 +8,24 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import org.restlet.Component;
 import org.restlet.data.Protocol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Activator implements BundleActivator {
 
 	private class PipelineContextTrackerCustomizer implements ServiceTrackerCustomizer{
+		
 
 		@Override
 		public Object addingService(ServiceReference ref) {
+			
+				//mLogger.info("starting cmd");
 			DaisyPipelineContext daisyPipelineContext = (DaisyPipelineContext) context.getService(ref);
 			Component component = new Component();
 			component.getServers().add(Protocol.HTTP, 8182);
 			WebApplication application = new WebApplication();
 			application.setDaisyPipelineContext(daisyPipelineContext);
-		
+			
 			component.getDefaultHost().attach("/ws", application);
 			
 			// TODO: how to get this information dynamically?
@@ -48,14 +53,18 @@ public class Activator implements BundleActivator {
 	}
 	private ServiceTracker pipelineContextTracker;
 private BundleContext context;
-	
+public static final String WS = "ws";
 	/*
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+    Logger mLogger = LoggerFactory.getLogger(getClass().getCanonicalName());
 	public void start(BundleContext context) throws Exception {
+		if (System.getProperty(DaisyPipelineContext.MODE_PROPERY) != null
+				&& System.getProperty(DaisyPipelineContext.MODE_PROPERY)
+						.equals(WS)) {
 		this.context=context;
-		System.out.println("Starting webservice on port 8182.");
+		mLogger.info("Starting webservice on port 8182.");
 		
 		pipelineContextTracker = new ServiceTracker(context, DaisyPipelineContext.class.getName(), new PipelineContextTrackerCustomizer());
 		pipelineContextTracker.open();
@@ -63,6 +72,7 @@ private BundleContext context;
 		DaisyPipelineContext daisyPipelineContext = (DaisyPipelineContext) pipelineContextTracker.waitForService(5000);
 //		ServiceReference sr = context.getServiceReference(org.daisy.pipeline.DaisyPipelineContext.class.getName());
 //		DaisyPipelineContext daisyPipelineContext = (DaisyPipelineContext)context.getService(sr);
+		}
 		
 		
 	}
@@ -73,7 +83,7 @@ private BundleContext context;
 	 */
 	public void stop(BundleContext context) throws Exception {
 		pipelineContextTracker.close();
-		System.out.println("Webservice stopped.");
+		mLogger.info("Webservice stopped.");
 	}
 
 }

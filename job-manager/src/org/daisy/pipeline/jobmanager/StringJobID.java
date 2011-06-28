@@ -43,7 +43,7 @@ public class StringJobID implements JobID{
 		private static int mCount=0; 
 		@Override
 		public JobID getNewID(String prefix) {
-			return new StringJobID(prefix+"#"+mCount++);
+			return new StringJobID(prefix+"-"+mCount++);
 		}
 		@Override
 		public JobID fromString(String str) {

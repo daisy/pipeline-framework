@@ -18,4 +18,5 @@ Import-Package: org.daisy.pipeline,
  org.restlet.representation,
  org.restlet.resource,
  org.restlet.routing,
- org.restlet.util
+ org.restlet.util,
+ org.slf4j;version="1.6.1"
