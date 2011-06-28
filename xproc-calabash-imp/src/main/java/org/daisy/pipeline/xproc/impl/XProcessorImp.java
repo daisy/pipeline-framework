@@ -113,7 +113,7 @@ public class XProcessorImp extends XProcessor {
 			mPipeline.passOption(new QName(option),new RuntimeValue( mOptions.get(option).toString()));
 		}
 		checkOutPorts();
-		mProcRuntime.setMessageListener(new slf4jXProcMessageListener());
+		//mProcRuntime.setMessageListener(new slf4jXProcMessageListener());
 		
 		try {
 			mPipeline.run();

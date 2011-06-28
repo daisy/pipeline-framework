@@ -99,6 +99,7 @@ public class XProcFactoryImpl implements XProcessorFactory,Configurable{
 		if(mErrorListener!=null)
 			conf.errorListener = this.mErrorListener.getClass().getName();
 		XProcRuntime runtime = new XProcRuntime(conf);
+		runtime.setMessageListener(new slf4jXProcMessageListener());
 		if(mUriResolver!=null)
 			runtime.setURIResolver(mUriResolver);
 		if(mEntityResolver!=null)

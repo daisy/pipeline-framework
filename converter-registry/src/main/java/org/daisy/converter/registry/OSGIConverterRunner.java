@@ -58,9 +58,11 @@ public class OSGIConverterRunner extends ConverterRunnable {
 						"Error while getting the converter file:"
 								+ e.getLocalizedMessage(), e);
 			}
-			XProcessor proc = mRegistry.getXprocFactory().getProcessor(src);
 			URIResolver defaultResolver = Configuration.newConfiguration().getURIResolver();
 			((UriResolverDecorator)mRegistry.getUriResolver()).setDelegatedUriResolver(defaultResolver);
+			mRegistry.getXprocFactory().setURIResolver(mRegistry.getUriResolver());
+			XProcessor proc = mRegistry.getXprocFactory().getProcessor(src);
+			
 			proc.setURIResolver(mRegistry.getUriResolver());
 			bindInputs(proc, runnable);
 			bindOutputs(proc, runnable);
