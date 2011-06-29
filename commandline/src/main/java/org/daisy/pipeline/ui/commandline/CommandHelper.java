@@ -12,7 +12,7 @@ public class CommandHelper {
 
 		String[] parts = list.split(",");
 		for (String part : parts) {
-			String pair[] = part.split(":");
+			String pair[] = part.split("=");
 			try {
 				pairs.put(pair[0], pair[1]);
 			} catch (Exception e) {

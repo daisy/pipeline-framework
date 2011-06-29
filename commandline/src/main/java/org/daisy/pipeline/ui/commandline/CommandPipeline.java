@@ -138,7 +138,7 @@ public class CommandPipeline extends Command {
 
 		String[] parts = list.split(",");
 		for (String part : parts) {
-			String pair[] = part.split(":");
+			String pair[] = part.split("=");
 			try {
 				if (!pairs.containsKey(pair[0])) {
 					pairs.put(pair[0], new HashMap<String, String>());

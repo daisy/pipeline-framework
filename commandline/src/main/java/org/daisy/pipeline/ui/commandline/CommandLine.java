@@ -26,21 +26,21 @@ public class CommandLine {
 		mParser.accepts("x", "xproc file to execute").withRequiredArg();
 		mParser.accepts(
 				"i",
-				"list of input ports in the format portName1:file1,portName2:file2  (only with -x modifier)")
+				"list of input ports in the format portName1=file1,portName2=file2  (only with -x modifier)")
 				.withRequiredArg();
 		mParser.accepts("o",
-				"list of output ports in the format portName1:file1,portName2:file2")
+				"list of output ports in the format portName1=file1,portName2=file2")
 				.withRequiredArg();
 		mParser.accepts(
 				"p",
-				"list of parameters in the format port1:param1:value1,param1:param2:value2 (only with -x modifier)")
+				"list of parameters in the format port1=param1=value1,port1=param2=value2 (only with -x modifier)")
 				.withRequiredArg();
 		mParser.accepts("t",
-				"list of options in the format opt1:value1,opt2:value2 (only with -x modifier)")
+				"list of options in the format opt1=value1,opt2=value2 (only with -x modifier)")
 				.withRequiredArg();
 		mParser.accepts(
 				"a",
-				"list of arguments in the format arg1:value1,arg2:value2 (only with -c modifier)")
+				"list of arguments in the format arg1=value1,arg2=value2 (only with -c modifier)")
 				.withRequiredArg();
 		mParser.accepts("h",
 				"Show this help or the help for the given converter")
