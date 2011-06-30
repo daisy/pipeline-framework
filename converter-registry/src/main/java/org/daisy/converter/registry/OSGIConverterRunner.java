@@ -2,6 +2,7 @@ package org.daisy.converter.registry;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.Properties;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -16,6 +17,9 @@ import org.daisy.pipeline.modules.converter.Converter.ConverterArgument.Type;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
 import org.daisy.pipeline.modules.converter.ConverterRunnable;
 import org.daisy.pipeline.xproc.XProcessor;
+import org.daisy.pipeline.xproc.XProcessorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class OSGIConverterRunner runs the converter using a xproc wrapper instance 
@@ -25,7 +29,7 @@ public class OSGIConverterRunner extends ConverterRunnable {
 
 	/** The  registry. */
 	OSGIConverterRegistry mRegistry;
-
+	Logger mLogger= LoggerFactory.getLogger(getClass());
 	/**
 	 * Instantiates a new oSGI converter runner.
 	 *
@@ -57,6 +61,11 @@ public class OSGIConverterRunner extends ConverterRunnable {
 				throw new RuntimeException(
 						"Error while getting the converter file:"
 								+ e.getLocalizedMessage(), e);
+			}
+			Properties props = new Properties();
+			if (System.getProperties().containsKey(XProcessorFactory.CONFIGURATION_FILE)){
+				mLogger.debug("xproc configuration file set to:"+System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
+				props.setProperty(XProcessorFactory.CONFIGURATION_FILE, System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
 			}
 			URIResolver defaultResolver = Configuration.newConfiguration().getURIResolver();
 			((UriResolverDecorator)mRegistry.getUriResolver()).setDelegatedUriResolver(defaultResolver);
