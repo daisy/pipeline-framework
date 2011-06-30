@@ -51,6 +51,7 @@ public class CmdLineActivator implements BundleActivator {
 						} catch (Exception e) {
 							StringWriter sw = new StringWriter();
 							e.printStackTrace(new PrintWriter(sw));
+							
 							new CommandLine(provider).getUnrecovreableError(
 									e.getMessage() + "\n" + sw.toString())
 									.execute();

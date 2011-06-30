@@ -6174,3 +6174,1416 @@ org.osgi.framework.BundleException: The bundle could not be resolved. Reason: An
 2011-06-29 13:27:25,491 [INFO] - xproc-calabash-imp - Running store store-zedai-file
 2011-06-29 13:27:25,491 [INFO] - xproc-calabash-imp - bundleresource://2.fwk487638052/dtbook-to-zedai/dtbook-to-zedai.xpl:280:38:store-zedai-file read '' from [pipe #74] ([document-sequence #39 (1 docs)])
 2011-06-29 13:27:25,491 [DEBUG] - xproc-calabash-imp - bundleresource://2.fwk487638052/dtbook-to-zedai/dtbook-to-zedai.xpl:284:58:Storing to "file:///tmp/d2zout.xml".
+2011-06-30 13:01:19,277 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-30 13:01:19,304 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-30 13:01:19,307 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-30 13:01:19,307 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-30 13:01:19,307 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-30 13:01:19,307 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-30 13:01:19,307 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-30 13:01:19,307 [INFO] - junit4 - BundleEvent.STARTED
+2011-06-30 13:01:19,307 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-30 13:01:19,307 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,307 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,307 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,307 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,307 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,308 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-30 13:01:19,308 [INFO] - guava - BundleEvent.STARTED
+2011-06-30 13:01:19,308 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-30 13:01:19,308 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-30 13:01:19,308 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-30 13:01:19,308 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,308 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-30 13:01:19,308 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,308 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,308 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-30 13:01:19,308 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,308 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 13:01:19,308 [DEBUG] - xproc-calabash-imp - Name: dtbook-to-zedai,Desc: Convert DTBook XML to ZedAI XML,url: http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl
+2011-06-30 13:01:19,308 [INFO] - org.daisy.pipeline.modules.dtbook-to-zedai - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,308 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 13:01:19,309 [DEBUG] - xproc-calabash-imp - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 13:01:19,309 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,309 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 13:01:19,309 [DEBUG] - xproc-calabash-imp - Name: upgrade-dtbook,Desc: DTBook utility for upgrading to DTBook 2005-3.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 13:01:19,309 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,309 [INFO] - org.daisy.calabash.extensions - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,309 [INFO] - job-manager - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,310 [DEBUG] - xproc-calabash-imp - Starting the job runner
+2011-06-30 13:01:19,343 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.metadata-utils,bundleresource://1.fwk1891275584/expath-pkg.xml
+2011-06-30 13:01:19,395 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-30 13:01:19,396 [DEBUG] - xproc-calabash-imp - Registring metadata-utils
+2011-06-30 13:01:19,396 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl
+2011-06-30 13:01:19,396 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.dtbook-to-zedai,bundleresource://2.fwk1891275584/expath-pkg.xml
+2011-06-30 13:01:19,396 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl, path: dtbook-to-zedai.xpl
+2011-06-30 13:01:19,396 [DEBUG] - xproc-calabash-imp - Registring dtbook-to-zedai
+2011-06-30 13:01:19,396 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl
+2011-06-30 13:01:19,396 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.dtbook-utils,bundleresource://3.fwk1891275584/expath-pkg.xml
+2011-06-30 13:01:19,397 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-30 13:01:19,397 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 13:01:19,397 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-30 13:01:19,397 [DEBUG] - xproc-calabash-imp - Registring dtbook-utils
+2011-06-30 13:01:19,397 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl
+2011-06-30 13:01:19,397 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 13:01:19,397 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 13:01:19,397 [DEBUG] - xproc-calabash-imp - tracking: mediaoverlay-utils,bundleresource://4.fwk1891275584/expath-pkg.xml
+2011-06-30 13:01:19,397 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-30 13:01:19,397 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-30 13:01:19,397 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-30 13:01:19,397 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-30 13:01:19,397 [DEBUG] - xproc-calabash-imp - Registring mediaoverlay-utils
+2011-06-30 13:01:19,398 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange-content.xpl
+2011-06-30 13:01:19,398 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/rearrange.xpl
+2011-06-30 13:01:19,398 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-30 13:01:19,398 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/ns/pipeline/utilities/mediaoverlay-utils/join.xpl
+2011-06-30 13:01:19,398 [DEBUG] - xproc-calabash-imp - tracking: html-utils,bundleresource://5.fwk1891275584/expath-pkg.xml
+2011-06-30 13:01:19,398 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/ns/pipeline/utilities/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-30 13:01:19,398 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/ns/pipeline/utilities/html-utils/html5-outliner.xsl, path: html5-outliner.xsl
+2011-06-30 13:01:19,398 [DEBUG] - xproc-calabash-imp - Registring html-utils
+2011-06-30 13:01:19,398 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/ns/pipeline/utilities/html-utils/html5-outliner.xsl
+2011-06-30 13:01:19,398 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/ns/pipeline/utilities/html-utils/html-library.xpl
+2011-06-30 13:01:19,401 [DEBUG] - xproc-calabash-imp - Module registry up
+2011-06-30 13:01:19,404 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,404 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,405 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-30 13:01:19,406 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,681 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-30 14:14:12,703 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-30 14:14:12,707 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-30 14:14:12,723 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-30 14:14:12,723 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-30 14:14:12,723 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-30 14:14:12,723 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-30 14:14:12,723 [INFO] - junit4 - BundleEvent.STARTED
+2011-06-30 14:14:12,723 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-30 14:14:12,723 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,723 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,724 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,724 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,724 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,724 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-30 14:14:12,724 [INFO] - guava - BundleEvent.STARTED
+2011-06-30 14:14:12,724 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-30 14:14:12,724 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-30 14:14:12,724 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-30 14:14:12,724 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,724 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-30 14:14:12,724 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,732 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,732 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-30 14:14:12,733 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,733 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 14:14:12,733 [DEBUG] - xproc-calabash-imp - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 14:14:12,733 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,733 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 14:14:12,733 [DEBUG] - xproc-calabash-imp - Name: upgrade-dtbook,Desc: DTBook utility for upgrading to DTBook 2005-3.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 14:14:12,733 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,733 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 14:14:12,733 [DEBUG] - xproc-calabash-imp - Name: daisy202-to-epub3,Desc: DAISY 2.02 to EPUB3,url: http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 14:14:12,733 [INFO] - org.daisy.pipeline.modules.daisy202-to-epub3 - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,733 [INFO] - org.daisy.calabash.extensions - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,733 [INFO] - job-manager - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,735 [DEBUG] - xproc-calabash-imp - Starting the job runner
+2011-06-30 14:14:12,766 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.html-utils,bundleresource://1.fwk935143012/expath-pkg.xml
+2011-06-30 14:14:12,833 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-30 14:14:12,834 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl, path: html5-outliner.xsl
+2011-06-30 14:14:12,840 [DEBUG] - xproc-calabash-imp - Registring html-utils
+2011-06-30 14:14:12,840 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl
+2011-06-30 14:14:12,840 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl
+2011-06-30 14:14:12,840 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.fileset-utils,bundleresource://2.fwk935143012/expath-pkg.xml
+2011-06-30 14:14:12,840 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl, path: xproc/fileset-library.xpl
+2011-06-30 14:14:12,840 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl, path: xslt/fileset-to-odf-manifest.xsl
+2011-06-30 14:14:12,840 [DEBUG] - xproc-calabash-imp - Registring fileset-utils
+2011-06-30 14:14:12,840 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl
+2011-06-30 14:14:12,840 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zip-utils,bundleresource://3.fwk935143012/expath-pkg.xml
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl, path: xproc/zip-library.xpl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - Registring zip-utils
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.metadata-utils,bundleresource://4.fwk935143012/expath-pkg.xml
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - Registring metadata-utils
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-pub-utils,bundleresource://5.fwk935143012/expath-pkg.xml
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl, path: xproc/epub3-pub-library.xpl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl, path: xslt/fileset-to-manifest.xsl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl, path: xslt/fileset-to-spine.xsl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl, path: xslt/manifest-to-spine.xsl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - Registring epub3-pub-utils
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-ocf-utils,bundleresource://6.fwk935143012/expath-pkg.xml
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl, path: xproc/epub3-ocf-library.xpl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - Registring epub3-ocf-utils
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl
+2011-06-30 14:14:12,841 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.file-utils,bundleresource://7.fwk935143012/expath-pkg.xml
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl, path: xproc/file-library.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - Registring file-utils
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediaoverlay-utils,bundleresource://8.fwk935143012/expath-pkg.xml
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - Registring mediaoverlay-utils
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.dtbook-utils,bundleresource://9.fwk935143012/expath-pkg.xml
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - Registring dtbook-utils
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediatype-utils,bundleresource://10.fwk935143012/expath-pkg.xml
+2011-06-30 14:14:12,842 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl, path: mediatype.xpl
+2011-06-30 14:14:12,843 [DEBUG] - xproc-calabash-imp - Registring mediatype-utils
+2011-06-30 14:14:12,843 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl
+2011-06-30 14:14:12,843 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.daisy202-to-epub3,bundleresource://11.fwk935143012/expath-pkg.xml
+2011-06-30 14:14:12,843 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl, path: daisy202-to-epub3.xpl
+2011-06-30 14:14:12,843 [DEBUG] - xproc-calabash-imp - Registring daisy202-to-epub3
+2011-06-30 14:14:12,843 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 14:14:12,843 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-nav-utils,bundleresource://12.fwk935143012/expath-pkg.xml
+2011-06-30 14:14:12,843 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl, path: xproc/epub3-nav-library.xpl
+2011-06-30 14:14:12,843 [DEBUG] - xproc-calabash-imp - Registring epub3-nav-utils
+2011-06-30 14:14:12,843 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl
+2011-06-30 14:14:12,846 [DEBUG] - xproc-calabash-imp - Module registry up
+2011-06-30 14:14:12,851 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,851 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,851 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-30 14:14:12,851 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,907 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-30 15:54:12,929 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-30 15:54:12,931 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-30 15:54:12,931 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-30 15:54:12,931 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-30 15:54:12,931 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-30 15:54:12,932 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-30 15:54:12,932 [INFO] - junit4 - BundleEvent.STARTED
+2011-06-30 15:54:12,932 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-30 15:54:12,932 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,932 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,932 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,932 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,932 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,932 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-30 15:54:12,932 [INFO] - guava - BundleEvent.STARTED
+2011-06-30 15:54:12,932 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-30 15:54:12,932 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-30 15:54:12,932 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-30 15:54:12,932 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,932 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-30 15:54:12,932 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,933 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,933 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-30 15:54:12,933 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,933 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 15:54:12,933 [DEBUG] - xproc-calabash-imp - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 15:54:12,933 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,933 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 15:54:12,933 [DEBUG] - xproc-calabash-imp - Name: upgrade-dtbook,Desc: DTBook utility for upgrading to DTBook 2005-3.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 15:54:12,933 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,933 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 15:54:12,933 [DEBUG] - xproc-calabash-imp - Name: daisy202-to-epub3,Desc: DAISY 2.02 to EPUB3,url: http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 15:54:12,933 [INFO] - org.daisy.pipeline.modules.daisy202-to-epub3 - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,933 [INFO] - org.daisy.calabash.extensions - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,933 [INFO] - job-manager - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,933 [DEBUG] - xproc-calabash-imp - Starting the job runner
+2011-06-30 15:54:12,933 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-30 15:54:12,988 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.html-utils,bundleresource://1.fwk935143012/expath-pkg.xml
+2011-06-30 15:54:13,041 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-30 15:54:13,042 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl, path: html5-outliner.xsl
+2011-06-30 15:54:13,042 [DEBUG] - xproc-calabash-imp - Registring html-utils
+2011-06-30 15:54:13,042 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl
+2011-06-30 15:54:13,042 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl
+2011-06-30 15:54:13,042 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.fileset-utils,bundleresource://2.fwk935143012/expath-pkg.xml
+2011-06-30 15:54:13,043 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl, path: xproc/fileset-library.xpl
+2011-06-30 15:54:13,043 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl, path: xslt/fileset-to-odf-manifest.xsl
+2011-06-30 15:54:13,043 [DEBUG] - xproc-calabash-imp - Registring fileset-utils
+2011-06-30 15:54:13,043 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl
+2011-06-30 15:54:13,043 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl
+2011-06-30 15:54:13,043 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zip-utils,bundleresource://3.fwk935143012/expath-pkg.xml
+2011-06-30 15:54:13,043 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl, path: xproc/zip-library.xpl
+2011-06-30 15:54:13,043 [DEBUG] - xproc-calabash-imp - Registring zip-utils
+2011-06-30 15:54:13,043 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl
+2011-06-30 15:54:13,043 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.metadata-utils,bundleresource://4.fwk935143012/expath-pkg.xml
+2011-06-30 15:54:13,044 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-30 15:54:13,044 [DEBUG] - xproc-calabash-imp - Registring metadata-utils
+2011-06-30 15:54:13,044 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl
+2011-06-30 15:54:13,044 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-pub-utils,bundleresource://5.fwk935143012/expath-pkg.xml
+2011-06-30 15:54:13,044 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl, path: xproc/epub3-pub-library.xpl
+2011-06-30 15:54:13,044 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl, path: xslt/fileset-to-manifest.xsl
+2011-06-30 15:54:13,044 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl, path: xslt/fileset-to-spine.xsl
+2011-06-30 15:54:13,044 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl, path: xslt/manifest-to-spine.xsl
+2011-06-30 15:54:13,044 [DEBUG] - xproc-calabash-imp - Registring epub3-pub-utils
+2011-06-30 15:54:13,044 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl
+2011-06-30 15:54:13,044 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl
+2011-06-30 15:54:13,045 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl
+2011-06-30 15:54:13,045 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl
+2011-06-30 15:54:13,045 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-ocf-utils,bundleresource://6.fwk935143012/expath-pkg.xml
+2011-06-30 15:54:13,045 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl, path: xproc/epub3-ocf-library.xpl
+2011-06-30 15:54:13,045 [DEBUG] - xproc-calabash-imp - Registring epub3-ocf-utils
+2011-06-30 15:54:13,045 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl
+2011-06-30 15:54:13,045 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.file-utils,bundleresource://7.fwk935143012/expath-pkg.xml
+2011-06-30 15:54:13,045 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl, path: xproc/file-library.xpl
+2011-06-30 15:54:13,046 [DEBUG] - xproc-calabash-imp - Registring file-utils
+2011-06-30 15:54:13,046 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl
+2011-06-30 15:54:13,046 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediaoverlay-utils,bundleresource://8.fwk935143012/expath-pkg.xml
+2011-06-30 15:54:13,046 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-30 15:54:13,046 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-30 15:54:13,046 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-30 15:54:13,047 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-30 15:54:13,047 [DEBUG] - xproc-calabash-imp - Registring mediaoverlay-utils
+2011-06-30 15:54:13,047 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl
+2011-06-30 15:54:13,047 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-30 15:54:13,047 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl
+2011-06-30 15:54:13,047 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl
+2011-06-30 15:54:13,047 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.dtbook-utils,bundleresource://9.fwk935143012/expath-pkg.xml
+2011-06-30 15:54:13,047 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-30 15:54:13,047 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 15:54:13,048 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-30 15:54:13,048 [DEBUG] - xproc-calabash-imp - Registring dtbook-utils
+2011-06-30 15:54:13,048 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl
+2011-06-30 15:54:13,048 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 15:54:13,048 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 15:54:13,048 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediatype-utils,bundleresource://10.fwk935143012/expath-pkg.xml
+2011-06-30 15:54:13,048 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl, path: mediatype.xpl
+2011-06-30 15:54:13,048 [DEBUG] - xproc-calabash-imp - Registring mediatype-utils
+2011-06-30 15:54:13,048 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl
+2011-06-30 15:54:13,048 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.daisy202-to-epub3,bundleresource://11.fwk935143012/expath-pkg.xml
+2011-06-30 15:54:13,049 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl, path: daisy202-to-epub3.xpl
+2011-06-30 15:54:13,049 [DEBUG] - xproc-calabash-imp - Registring daisy202-to-epub3
+2011-06-30 15:54:13,049 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 15:54:13,049 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-nav-utils,bundleresource://12.fwk935143012/expath-pkg.xml
+2011-06-30 15:54:13,049 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl, path: xproc/epub3-nav-library.xpl
+2011-06-30 15:54:13,050 [DEBUG] - xproc-calabash-imp - Registring epub3-nav-utils
+2011-06-30 15:54:13,051 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl
+2011-06-30 15:54:13,057 [DEBUG] - xproc-calabash-imp - Module registry up
+2011-06-30 15:54:13,058 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-30 15:54:13,060 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-30 15:54:13,062 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-30 15:54:13,089 [INFO] - xproc-calabash-imp - org.daisy.calabash.DynamicXProcConfigurationFactory is up
+2011-06-30 15:54:13,255 [DEBUG] - xproc-calabash-imp - configuration set via osgi
+2011-06-30 15:54:13,256 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-06-30 15:54:13,258 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-06-30 15:54:13,259 [DEBUG] - xproc-calabash-imp - setting job manager
+2011-06-30 15:54:13,259 [DEBUG] - xproc-calabash-imp - OSGIDaisyContext service up
+2011-06-30 15:54:13,259 [INFO] - daisy-pipeline - ServiceEvent.REGISTERED
+2011-06-30 15:54:13,264 [DEBUG] - xproc-calabash-imp - setting converter registry
+2011-06-30 15:54:13,268 [INFO] - calabash-custom-steps - ServiceEvent.REGISTERED
+2011-06-30 15:54:13,269 [INFO] - xproc-calabash-imp - Adding step to registry: message
+2011-06-30 15:54:13,269 [INFO] - calabash-custom-steps - ServiceEvent.REGISTERED
+2011-06-30 15:54:13,270 [INFO] - xproc-calabash-imp - Adding step to registry: xslt
+2011-06-30 15:54:39,526 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-30 15:54:39,529 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-30 15:54:39,531 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-30 15:54:39,531 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-30 15:54:39,531 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-30 15:54:39,531 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-30 15:54:39,531 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-30 15:54:39,531 [INFO] - junit4 - BundleEvent.STARTED
+2011-06-30 15:54:39,531 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-30 15:54:39,531 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,531 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,531 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,531 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,531 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,531 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-30 15:54:39,532 [INFO] - guava - BundleEvent.STARTED
+2011-06-30 15:54:39,532 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-30 15:54:39,532 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-30 15:54:39,532 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-30 15:54:39,532 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,532 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-30 15:54:39,532 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,532 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,532 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-30 15:54:39,532 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,532 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 15:54:39,532 [DEBUG] - xproc-calabash-imp - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 15:54:39,532 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,532 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 15:54:39,532 [DEBUG] - xproc-calabash-imp - Name: upgrade-dtbook,Desc: DTBook utility for upgrading to DTBook 2005-3.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 15:54:39,532 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,532 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 15:54:39,532 [DEBUG] - xproc-calabash-imp - Name: daisy202-to-epub3,Desc: DAISY 2.02 to EPUB3,url: http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 15:54:39,532 [INFO] - org.daisy.pipeline.modules.daisy202-to-epub3 - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,532 [INFO] - org.daisy.calabash.extensions - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,532 [INFO] - job-manager - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,533 [DEBUG] - xproc-calabash-imp - Starting the job runner
+2011-06-30 15:54:39,533 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.html-utils,bundleresource://1.fwk225912260/expath-pkg.xml
+2011-06-30 15:54:39,561 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-30 15:54:39,562 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl, path: html5-outliner.xsl
+2011-06-30 15:54:39,562 [DEBUG] - xproc-calabash-imp - Registring html-utils
+2011-06-30 15:54:39,563 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl
+2011-06-30 15:54:39,563 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl
+2011-06-30 15:54:39,563 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.fileset-utils,bundleresource://2.fwk225912260/expath-pkg.xml
+2011-06-30 15:54:39,563 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl, path: xproc/fileset-library.xpl
+2011-06-30 15:54:39,564 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl, path: xslt/fileset-to-odf-manifest.xsl
+2011-06-30 15:54:39,564 [DEBUG] - xproc-calabash-imp - Registring fileset-utils
+2011-06-30 15:54:39,564 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl
+2011-06-30 15:54:39,564 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl
+2011-06-30 15:54:39,564 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zip-utils,bundleresource://3.fwk225912260/expath-pkg.xml
+2011-06-30 15:54:39,564 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl, path: xproc/zip-library.xpl
+2011-06-30 15:54:39,564 [DEBUG] - xproc-calabash-imp - Registring zip-utils
+2011-06-30 15:54:39,564 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl
+2011-06-30 15:54:39,565 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.metadata-utils,bundleresource://4.fwk225912260/expath-pkg.xml
+2011-06-30 15:54:39,565 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-30 15:54:39,565 [DEBUG] - xproc-calabash-imp - Registring metadata-utils
+2011-06-30 15:54:39,565 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl
+2011-06-30 15:54:39,565 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-pub-utils,bundleresource://5.fwk225912260/expath-pkg.xml
+2011-06-30 15:54:39,566 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl, path: xproc/epub3-pub-library.xpl
+2011-06-30 15:54:39,566 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl, path: xslt/fileset-to-manifest.xsl
+2011-06-30 15:54:39,566 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl, path: xslt/fileset-to-spine.xsl
+2011-06-30 15:54:39,566 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl, path: xslt/manifest-to-spine.xsl
+2011-06-30 15:54:39,566 [DEBUG] - xproc-calabash-imp - Registring epub3-pub-utils
+2011-06-30 15:54:39,567 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl
+2011-06-30 15:54:39,567 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl
+2011-06-30 15:54:39,567 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl
+2011-06-30 15:54:39,567 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl
+2011-06-30 15:54:39,567 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-ocf-utils,bundleresource://6.fwk225912260/expath-pkg.xml
+2011-06-30 15:54:39,567 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl, path: xproc/epub3-ocf-library.xpl
+2011-06-30 15:54:39,568 [DEBUG] - xproc-calabash-imp - Registring epub3-ocf-utils
+2011-06-30 15:54:39,568 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl
+2011-06-30 15:54:39,568 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.file-utils,bundleresource://7.fwk225912260/expath-pkg.xml
+2011-06-30 15:54:39,568 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl, path: xproc/file-library.xpl
+2011-06-30 15:54:39,568 [DEBUG] - xproc-calabash-imp - Registring file-utils
+2011-06-30 15:54:39,568 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl
+2011-06-30 15:54:39,568 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediaoverlay-utils,bundleresource://8.fwk225912260/expath-pkg.xml
+2011-06-30 15:54:39,569 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-30 15:54:39,569 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-30 15:54:39,569 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-30 15:54:39,569 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-30 15:54:39,569 [DEBUG] - xproc-calabash-imp - Registring mediaoverlay-utils
+2011-06-30 15:54:39,569 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl
+2011-06-30 15:54:39,570 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-30 15:54:39,570 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl
+2011-06-30 15:54:39,570 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl
+2011-06-30 15:54:39,570 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.dtbook-utils,bundleresource://9.fwk225912260/expath-pkg.xml
+2011-06-30 15:54:39,570 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-30 15:54:39,570 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 15:54:39,571 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-30 15:54:39,571 [DEBUG] - xproc-calabash-imp - Registring dtbook-utils
+2011-06-30 15:54:39,571 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl
+2011-06-30 15:54:39,571 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 15:54:39,571 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 15:54:39,571 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediatype-utils,bundleresource://10.fwk225912260/expath-pkg.xml
+2011-06-30 15:54:39,571 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl, path: mediatype.xpl
+2011-06-30 15:54:39,571 [DEBUG] - xproc-calabash-imp - Registring mediatype-utils
+2011-06-30 15:54:39,572 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl
+2011-06-30 15:54:39,572 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.daisy202-to-epub3,bundleresource://11.fwk225912260/expath-pkg.xml
+2011-06-30 15:54:39,572 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl, path: daisy202-to-epub3.xpl
+2011-06-30 15:54:39,572 [DEBUG] - xproc-calabash-imp - Registring daisy202-to-epub3
+2011-06-30 15:54:39,572 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 15:54:39,572 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-nav-utils,bundleresource://12.fwk225912260/expath-pkg.xml
+2011-06-30 15:54:39,573 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl, path: xproc/epub3-nav-library.xpl
+2011-06-30 15:54:39,573 [DEBUG] - xproc-calabash-imp - Registring epub3-nav-utils
+2011-06-30 15:54:39,573 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl
+2011-06-30 15:54:39,576 [DEBUG] - xproc-calabash-imp - Module registry up
+2011-06-30 15:54:39,579 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,580 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,580 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,580 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,586 [INFO] - xproc-calabash-imp - org.daisy.calabash.DynamicXProcConfigurationFactory is up
+2011-06-30 15:54:39,676 [DEBUG] - xproc-calabash-imp - configuration set via osgi
+2011-06-30 15:54:39,680 [DEBUG] - xproc-calabash-imp - setting job manager
+2011-06-30 15:54:39,680 [DEBUG] - xproc-calabash-imp - OSGIDaisyContext service up
+2011-06-30 15:54:39,680 [INFO] - daisy-pipeline - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,680 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,685 [DEBUG] - xproc-calabash-imp - getting resource from component:daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 15:54:39,685 [INFO] - xproc-calabash-imp - resolving daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 15:54:39,685 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,693 [INFO] - xproc-calabash-imp - Adding step to registry: message
+2011-06-30 15:54:39,693 [INFO] - calabash-custom-steps - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,694 [INFO] - xproc-calabash-imp - Adding step to registry: xslt
+2011-06-30 15:54:39,694 [INFO] - calabash-custom-steps - ServiceEvent.REGISTERED
+2011-06-30 15:54:39,697 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,610 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-30 15:58:31,630 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-30 15:58:31,655 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-30 15:58:31,655 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-30 15:58:31,655 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-30 15:58:31,655 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-30 15:58:31,655 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-30 15:58:31,655 [INFO] - junit4 - BundleEvent.STARTED
+2011-06-30 15:58:31,656 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-30 15:58:31,656 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,656 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,656 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,656 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,656 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,656 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-30 15:58:31,656 [INFO] - guava - BundleEvent.STARTED
+2011-06-30 15:58:31,656 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-30 15:58:31,656 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-30 15:58:31,656 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-30 15:58:31,656 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,656 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-30 15:58:31,656 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,656 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,656 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-30 15:58:31,657 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,657 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 15:58:31,657 [DEBUG] - xproc-calabash-imp - Name: daisy202-to-epub3,Desc: DAISY 2.02 to EPUB3,url: http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 15:58:31,657 [INFO] - org.daisy.pipeline.modules.daisy202-to-epub3 - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,657 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 15:58:31,657 [DEBUG] - xproc-calabash-imp - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 15:58:31,657 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,657 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 15:58:31,657 [DEBUG] - xproc-calabash-imp - Name: upgrade-dtbook,Desc: DTBook utility for upgrading to DTBook 2005-3.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 15:58:31,657 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,657 [INFO] - org.daisy.calabash.extensions - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,657 [INFO] - job-manager - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,657 [DEBUG] - xproc-calabash-imp - Starting the job runner
+2011-06-30 15:58:31,664 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zip-utils,bundleresource://1.fwk487638052/expath-pkg.xml
+2011-06-30 15:58:31,703 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl, path: xproc/zip-library.xpl
+2011-06-30 15:58:31,705 [DEBUG] - xproc-calabash-imp - Registring zip-utils
+2011-06-30 15:58:31,705 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl
+2011-06-30 15:58:31,705 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-nav-utils,bundleresource://2.fwk487638052/expath-pkg.xml
+2011-06-30 15:58:31,705 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl, path: xproc/epub3-nav-library.xpl
+2011-06-30 15:58:31,705 [DEBUG] - xproc-calabash-imp - Registring epub3-nav-utils
+2011-06-30 15:58:31,706 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl
+2011-06-30 15:58:31,706 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.file-utils,bundleresource://3.fwk487638052/expath-pkg.xml
+2011-06-30 15:58:31,706 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl, path: xproc/file-library.xpl
+2011-06-30 15:58:31,706 [DEBUG] - xproc-calabash-imp - Registring file-utils
+2011-06-30 15:58:31,706 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl
+2011-06-30 15:58:31,706 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.metadata-utils,bundleresource://4.fwk487638052/expath-pkg.xml
+2011-06-30 15:58:31,707 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-30 15:58:31,707 [DEBUG] - xproc-calabash-imp - Registring metadata-utils
+2011-06-30 15:58:31,707 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl
+2011-06-30 15:58:31,725 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-pub-utils,bundleresource://5.fwk487638052/expath-pkg.xml
+2011-06-30 15:58:31,726 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl, path: xproc/epub3-pub-library.xpl
+2011-06-30 15:58:31,726 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl, path: xslt/fileset-to-manifest.xsl
+2011-06-30 15:58:31,726 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl, path: xslt/fileset-to-spine.xsl
+2011-06-30 15:58:31,726 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl, path: xslt/manifest-to-spine.xsl
+2011-06-30 15:58:31,726 [DEBUG] - xproc-calabash-imp - Registring epub3-pub-utils
+2011-06-30 15:58:31,726 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl
+2011-06-30 15:58:31,726 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl
+2011-06-30 15:58:31,726 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl
+2011-06-30 15:58:31,726 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl
+2011-06-30 15:58:31,727 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.daisy202-to-epub3,bundleresource://6.fwk487638052/expath-pkg.xml
+2011-06-30 15:58:31,727 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl, path: daisy202-to-epub3.xpl
+2011-06-30 15:58:31,727 [DEBUG] - xproc-calabash-imp - Registring daisy202-to-epub3
+2011-06-30 15:58:31,727 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 15:58:31,727 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.fileset-utils,bundleresource://7.fwk487638052/expath-pkg.xml
+2011-06-30 15:58:31,728 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl, path: xproc/fileset-library.xpl
+2011-06-30 15:58:31,728 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl, path: xslt/fileset-to-odf-manifest.xsl
+2011-06-30 15:58:31,728 [DEBUG] - xproc-calabash-imp - Registring fileset-utils
+2011-06-30 15:58:31,728 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl
+2011-06-30 15:58:31,728 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl
+2011-06-30 15:58:31,728 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediaoverlay-utils,bundleresource://8.fwk487638052/expath-pkg.xml
+2011-06-30 15:58:31,729 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-30 15:58:31,729 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-30 15:58:31,729 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-30 15:58:31,729 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-30 15:58:31,729 [DEBUG] - xproc-calabash-imp - Registring mediaoverlay-utils
+2011-06-30 15:58:31,729 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl
+2011-06-30 15:58:31,729 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-30 15:58:31,729 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl
+2011-06-30 15:58:31,729 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl
+2011-06-30 15:58:31,730 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.html-utils,bundleresource://9.fwk487638052/expath-pkg.xml
+2011-06-30 15:58:31,730 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-30 15:58:31,730 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl, path: html5-outliner.xsl
+2011-06-30 15:58:31,730 [DEBUG] - xproc-calabash-imp - Registring html-utils
+2011-06-30 15:58:31,730 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl
+2011-06-30 15:58:31,730 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl
+2011-06-30 15:58:31,730 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediatype-utils,bundleresource://10.fwk487638052/expath-pkg.xml
+2011-06-30 15:58:31,731 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl, path: mediatype.xpl
+2011-06-30 15:58:31,731 [DEBUG] - xproc-calabash-imp - Registring mediatype-utils
+2011-06-30 15:58:31,731 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl
+2011-06-30 15:58:31,731 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-ocf-utils,bundleresource://11.fwk487638052/expath-pkg.xml
+2011-06-30 15:58:31,731 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl, path: xproc/epub3-ocf-library.xpl
+2011-06-30 15:58:31,732 [DEBUG] - xproc-calabash-imp - Registring epub3-ocf-utils
+2011-06-30 15:58:31,732 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl
+2011-06-30 15:58:31,732 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.dtbook-utils,bundleresource://12.fwk487638052/expath-pkg.xml
+2011-06-30 15:58:31,732 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-30 15:58:31,732 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 15:58:31,732 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-30 15:58:31,732 [DEBUG] - xproc-calabash-imp - Registring dtbook-utils
+2011-06-30 15:58:31,733 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl
+2011-06-30 15:58:31,733 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 15:58:31,733 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 15:58:31,736 [DEBUG] - xproc-calabash-imp - Module registry up
+2011-06-30 15:58:31,739 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,739 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,739 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,739 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-30 15:58:31,763 [INFO] - xproc-calabash-imp - org.daisy.calabash.DynamicXProcConfigurationFactory is up
+2011-06-30 15:58:31,905 [DEBUG] - xproc-calabash-imp - configuration set via osgi
+2011-06-30 15:58:31,909 [DEBUG] - xproc-calabash-imp - setting job manager
+2011-06-30 15:58:31,909 [DEBUG] - xproc-calabash-imp - OSGIDaisyContext service up
+2011-06-30 15:58:31,910 [DEBUG] - xproc-calabash-imp - setting converter registry
+2011-06-30 16:07:57,307 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-30 16:07:57,313 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-30 16:07:57,318 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-30 16:07:57,318 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-30 16:07:57,318 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-30 16:07:57,318 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-30 16:07:57,318 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-30 16:07:57,318 [INFO] - junit4 - BundleEvent.STARTED
+2011-06-30 16:07:57,318 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-30 16:07:57,318 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,318 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,318 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,318 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,318 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,318 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-30 16:07:57,318 [INFO] - guava - BundleEvent.STARTED
+2011-06-30 16:07:57,319 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-30 16:07:57,319 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-30 16:07:57,319 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-30 16:07:57,319 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,319 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-30 16:07:57,319 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,319 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,319 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-30 16:07:57,319 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,319 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:07:57,319 [DEBUG] - xproc-calabash-imp - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:07:57,321 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,322 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:07:57,322 [DEBUG] - xproc-calabash-imp - Name: upgrade-dtbook,Desc: DTBook utility for upgrading to DTBook 2005-3.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:07:57,324 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,332 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:07:57,332 [DEBUG] - xproc-calabash-imp - Name: daisy202-to-epub3,Desc: DAISY 2.02 to EPUB3,url: http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 16:07:57,332 [INFO] - org.daisy.pipeline.modules.daisy202-to-epub3 - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,353 [INFO] - org.daisy.calabash.extensions - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,360 [INFO] - job-manager - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,366 [DEBUG] - xproc-calabash-imp - Starting the job runner
+2011-06-30 16:07:57,378 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediatype-utils,bundleresource://1.fwk850442967/expath-pkg.xml
+2011-06-30 16:07:57,411 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl, path: mediatype.xpl
+2011-06-30 16:07:57,413 [DEBUG] - xproc-calabash-imp - Registring mediatype-utils
+2011-06-30 16:07:57,413 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl
+2011-06-30 16:07:57,413 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.dtbook-utils,bundleresource://2.fwk850442967/expath-pkg.xml
+2011-06-30 16:07:57,413 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:07:57,414 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:07:57,414 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-30 16:07:57,414 [DEBUG] - xproc-calabash-imp - Registring dtbook-utils
+2011-06-30 16:07:57,414 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl
+2011-06-30 16:07:57,414 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:07:57,414 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:07:57,414 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-pub-utils,bundleresource://3.fwk850442967/expath-pkg.xml
+2011-06-30 16:07:57,414 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl, path: xproc/epub3-pub-library.xpl
+2011-06-30 16:07:57,415 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl, path: xslt/fileset-to-manifest.xsl
+2011-06-30 16:07:57,415 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl, path: xslt/fileset-to-spine.xsl
+2011-06-30 16:07:57,415 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl, path: xslt/manifest-to-spine.xsl
+2011-06-30 16:07:57,415 [DEBUG] - xproc-calabash-imp - Registring epub3-pub-utils
+2011-06-30 16:07:57,415 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl
+2011-06-30 16:07:57,415 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl
+2011-06-30 16:07:57,415 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl
+2011-06-30 16:07:57,415 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl
+2011-06-30 16:07:57,416 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.daisy202-to-epub3,bundleresource://4.fwk850442967/expath-pkg.xml
+2011-06-30 16:07:57,416 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl, path: daisy202-to-epub3.xpl
+2011-06-30 16:07:57,416 [DEBUG] - xproc-calabash-imp - Registring daisy202-to-epub3
+2011-06-30 16:07:57,416 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 16:07:57,416 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.file-utils,bundleresource://5.fwk850442967/expath-pkg.xml
+2011-06-30 16:07:57,417 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl, path: xproc/file-library.xpl
+2011-06-30 16:07:57,417 [DEBUG] - xproc-calabash-imp - Registring file-utils
+2011-06-30 16:07:57,417 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl
+2011-06-30 16:07:57,417 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-nav-utils,bundleresource://6.fwk850442967/expath-pkg.xml
+2011-06-30 16:07:57,417 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl, path: xproc/epub3-nav-library.xpl
+2011-06-30 16:07:57,417 [DEBUG] - xproc-calabash-imp - Registring epub3-nav-utils
+2011-06-30 16:07:57,417 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl
+2011-06-30 16:07:57,417 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.html-utils,bundleresource://7.fwk850442967/expath-pkg.xml
+2011-06-30 16:07:57,417 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-30 16:07:57,417 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl, path: html5-outliner.xsl
+2011-06-30 16:07:57,418 [DEBUG] - xproc-calabash-imp - Registring html-utils
+2011-06-30 16:07:57,418 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl
+2011-06-30 16:07:57,418 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl
+2011-06-30 16:07:57,418 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-ocf-utils,bundleresource://8.fwk850442967/expath-pkg.xml
+2011-06-30 16:07:57,418 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl, path: xproc/epub3-ocf-library.xpl
+2011-06-30 16:07:57,418 [DEBUG] - xproc-calabash-imp - Registring epub3-ocf-utils
+2011-06-30 16:07:57,418 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl
+2011-06-30 16:07:57,418 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zip-utils,bundleresource://9.fwk850442967/expath-pkg.xml
+2011-06-30 16:07:57,418 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl, path: xproc/zip-library.xpl
+2011-06-30 16:07:57,418 [DEBUG] - xproc-calabash-imp - Registring zip-utils
+2011-06-30 16:07:57,418 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl
+2011-06-30 16:07:57,418 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.fileset-utils,bundleresource://10.fwk850442967/expath-pkg.xml
+2011-06-30 16:07:57,419 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl, path: xproc/fileset-library.xpl
+2011-06-30 16:07:57,419 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl, path: xslt/fileset-to-odf-manifest.xsl
+2011-06-30 16:07:57,419 [DEBUG] - xproc-calabash-imp - Registring fileset-utils
+2011-06-30 16:07:57,419 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl
+2011-06-30 16:07:57,419 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl
+2011-06-30 16:07:57,419 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediaoverlay-utils,bundleresource://11.fwk850442967/expath-pkg.xml
+2011-06-30 16:07:57,419 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-30 16:07:57,419 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-30 16:07:57,419 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-30 16:07:57,419 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-30 16:07:57,419 [DEBUG] - xproc-calabash-imp - Registring mediaoverlay-utils
+2011-06-30 16:07:57,419 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl
+2011-06-30 16:07:57,419 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-30 16:07:57,420 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl
+2011-06-30 16:07:57,420 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl
+2011-06-30 16:07:57,420 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.metadata-utils,bundleresource://12.fwk850442967/expath-pkg.xml
+2011-06-30 16:07:57,420 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-30 16:07:57,420 [DEBUG] - xproc-calabash-imp - Registring metadata-utils
+2011-06-30 16:07:57,420 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl
+2011-06-30 16:07:57,426 [DEBUG] - xproc-calabash-imp - Module registry up
+2011-06-30 16:07:57,426 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,426 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,426 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,427 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,432 [INFO] - xproc-calabash-imp - org.daisy.calabash.DynamicXProcConfigurationFactory is up
+2011-06-30 16:07:57,520 [DEBUG] - xproc-calabash-imp - configuration set via osgi
+2011-06-30 16:07:57,524 [DEBUG] - xproc-calabash-imp - setting job manager
+2011-06-30 16:07:57,524 [DEBUG] - xproc-calabash-imp - OSGIDaisyContext service up
+2011-06-30 16:07:57,524 [INFO] - daisy-pipeline - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,525 [DEBUG] - xproc-calabash-imp - setting converter registry
+2011-06-30 16:07:57,526 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-06-30 16:07:57,526 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,271 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-30 16:10:14,285 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-30 16:10:14,287 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-30 16:10:14,287 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-30 16:10:14,287 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-30 16:10:14,287 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-30 16:10:14,287 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-30 16:10:14,287 [INFO] - junit4 - BundleEvent.STARTED
+2011-06-30 16:10:14,287 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-30 16:10:14,287 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,288 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,288 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,288 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,288 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,288 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-30 16:10:14,288 [INFO] - guava - BundleEvent.STARTED
+2011-06-30 16:10:14,288 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-30 16:10:14,288 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-30 16:10:14,288 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-30 16:10:14,288 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,288 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-30 16:10:14,288 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,288 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,288 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-30 16:10:14,288 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,288 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:10:14,289 [DEBUG] - xproc-calabash-imp - Name: daisy202-to-epub3,Desc: DAISY 2.02 to EPUB3,url: http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 16:10:14,289 [INFO] - org.daisy.pipeline.modules.daisy202-to-epub3 - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,289 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:10:14,289 [DEBUG] - xproc-calabash-imp - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:10:14,289 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,289 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:10:14,289 [DEBUG] - xproc-calabash-imp - Name: upgrade-dtbook,Desc: DTBook utility for upgrading to DTBook 2005-3.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:10:14,289 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,289 [INFO] - org.daisy.calabash.extensions - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,289 [INFO] - job-manager - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,289 [DEBUG] - xproc-calabash-imp - Starting the job runner
+2011-06-30 16:10:14,289 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.file-utils,bundleresource://1.fwk487638052/expath-pkg.xml
+2011-06-30 16:10:14,372 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl, path: xproc/file-library.xpl
+2011-06-30 16:10:14,374 [DEBUG] - xproc-calabash-imp - Registring file-utils
+2011-06-30 16:10:14,374 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl
+2011-06-30 16:10:14,374 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zip-utils,bundleresource://2.fwk487638052/expath-pkg.xml
+2011-06-30 16:10:14,374 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl, path: xproc/zip-library.xpl
+2011-06-30 16:10:14,374 [DEBUG] - xproc-calabash-imp - Registring zip-utils
+2011-06-30 16:10:14,374 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl
+2011-06-30 16:10:14,374 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-ocf-utils,bundleresource://3.fwk487638052/expath-pkg.xml
+2011-06-30 16:10:14,374 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl, path: xproc/epub3-ocf-library.xpl
+2011-06-30 16:10:14,374 [DEBUG] - xproc-calabash-imp - Registring epub3-ocf-utils
+2011-06-30 16:10:14,375 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl
+2011-06-30 16:10:14,375 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.daisy202-to-epub3,bundleresource://4.fwk487638052/expath-pkg.xml
+2011-06-30 16:10:14,375 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl, path: daisy202-to-epub3.xpl
+2011-06-30 16:10:14,375 [DEBUG] - xproc-calabash-imp - Registring daisy202-to-epub3
+2011-06-30 16:10:14,375 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 16:10:14,375 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-nav-utils,bundleresource://5.fwk487638052/expath-pkg.xml
+2011-06-30 16:10:14,375 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl, path: xproc/epub3-nav-library.xpl
+2011-06-30 16:10:14,375 [DEBUG] - xproc-calabash-imp - Registring epub3-nav-utils
+2011-06-30 16:10:14,375 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl
+2011-06-30 16:10:14,375 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zedai-to-html,bundleresource://6.fwk487638052/expath-pkg.xml
+2011-06-30 16:10:14,375 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zedai-to-html/xslt/zedai-to-html.xsl, path: xslt/zedai-to-html.xsl
+2011-06-30 16:10:14,376 [DEBUG] - xproc-calabash-imp - Registring zedai-to-html
+2011-06-30 16:10:14,376 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zedai-to-html/xslt/zedai-to-html.xsl
+2011-06-30 16:10:14,376 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediatype-utils,bundleresource://7.fwk487638052/expath-pkg.xml
+2011-06-30 16:10:14,376 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl, path: mediatype.xpl
+2011-06-30 16:10:14,376 [DEBUG] - xproc-calabash-imp - Registring mediatype-utils
+2011-06-30 16:10:14,376 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl
+2011-06-30 16:10:14,376 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.html-utils,bundleresource://8.fwk487638052/expath-pkg.xml
+2011-06-30 16:10:14,376 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-30 16:10:14,376 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl, path: html5-outliner.xsl
+2011-06-30 16:10:14,376 [DEBUG] - xproc-calabash-imp - Registring html-utils
+2011-06-30 16:10:14,376 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl
+2011-06-30 16:10:14,376 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl
+2011-06-30 16:10:14,376 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.dtbook-utils,bundleresource://9.fwk487638052/expath-pkg.xml
+2011-06-30 16:10:14,377 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:10:14,377 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:10:14,377 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-30 16:10:14,377 [DEBUG] - xproc-calabash-imp - Registring dtbook-utils
+2011-06-30 16:10:14,377 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl
+2011-06-30 16:10:14,377 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:10:14,377 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:10:14,377 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.metadata-utils,bundleresource://10.fwk487638052/expath-pkg.xml
+2011-06-30 16:10:14,377 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-30 16:10:14,377 [DEBUG] - xproc-calabash-imp - Registring metadata-utils
+2011-06-30 16:10:14,377 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl
+2011-06-30 16:10:14,377 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediaoverlay-utils,bundleresource://11.fwk487638052/expath-pkg.xml
+2011-06-30 16:10:14,378 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-30 16:10:14,378 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-30 16:10:14,378 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-30 16:10:14,378 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-30 16:10:14,378 [DEBUG] - xproc-calabash-imp - Registring mediaoverlay-utils
+2011-06-30 16:10:14,378 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl
+2011-06-30 16:10:14,378 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-30 16:10:14,378 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl
+2011-06-30 16:10:14,378 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl
+2011-06-30 16:10:14,378 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.fileset-utils,bundleresource://12.fwk487638052/expath-pkg.xml
+2011-06-30 16:10:14,378 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl, path: xproc/fileset-library.xpl
+2011-06-30 16:10:14,378 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl, path: xslt/fileset-to-odf-manifest.xsl
+2011-06-30 16:10:14,378 [DEBUG] - xproc-calabash-imp - Registring fileset-utils
+2011-06-30 16:10:14,378 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl
+2011-06-30 16:10:14,379 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl
+2011-06-30 16:10:14,379 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-pub-utils,bundleresource://13.fwk487638052/expath-pkg.xml
+2011-06-30 16:10:14,379 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl, path: xproc/epub3-pub-library.xpl
+2011-06-30 16:10:14,379 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl, path: xslt/fileset-to-manifest.xsl
+2011-06-30 16:10:14,379 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl, path: xslt/fileset-to-spine.xsl
+2011-06-30 16:10:14,379 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl, path: xslt/manifest-to-spine.xsl
+2011-06-30 16:10:14,379 [DEBUG] - xproc-calabash-imp - Registring epub3-pub-utils
+2011-06-30 16:10:14,379 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl
+2011-06-30 16:10:14,379 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl
+2011-06-30 16:10:14,379 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl
+2011-06-30 16:10:14,379 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl
+2011-06-30 16:10:14,398 [DEBUG] - xproc-calabash-imp - Module registry up
+2011-06-30 16:10:14,401 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,401 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,402 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,402 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,410 [INFO] - xproc-calabash-imp - org.daisy.calabash.DynamicXProcConfigurationFactory is up
+2011-06-30 16:10:14,506 [DEBUG] - xproc-calabash-imp - configuration set via osgi
+2011-06-30 16:10:14,510 [DEBUG] - xproc-calabash-imp - setting job manager
+2011-06-30 16:10:14,510 [DEBUG] - xproc-calabash-imp - OSGIDaisyContext service up
+2011-06-30 16:10:14,510 [INFO] - daisy-pipeline - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,512 [DEBUG] - xproc-calabash-imp - setting converter registry
+2011-06-30 16:10:14,512 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,512 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,522 [INFO] - xproc-calabash-imp - Adding step to registry: message
+2011-06-30 16:10:14,522 [INFO] - calabash-custom-steps - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,523 [INFO] - xproc-calabash-imp - Adding step to registry: xslt
+2011-06-30 16:10:14,523 [INFO] - calabash-custom-steps - ServiceEvent.REGISTERED
+2011-06-30 16:10:14,528 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-30 16:10:40,986 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-30 16:10:41,008 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-30 16:10:41,023 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-30 16:10:41,023 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-30 16:10:41,023 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-30 16:10:41,023 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-30 16:10:41,023 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-30 16:10:41,023 [INFO] - junit4 - BundleEvent.STARTED
+2011-06-30 16:10:41,023 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-30 16:10:41,023 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,023 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,023 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,024 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,029 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,029 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-30 16:10:41,029 [INFO] - guava - BundleEvent.STARTED
+2011-06-30 16:10:41,029 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-30 16:10:41,029 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-30 16:10:41,033 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-30 16:10:41,033 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,033 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-30 16:10:41,033 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,033 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,033 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-30 16:10:41,033 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,034 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:10:41,034 [DEBUG] - xproc-calabash-imp - Name: daisy202-to-epub3,Desc: DAISY 2.02 to EPUB3,url: http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 16:10:41,034 [INFO] - org.daisy.pipeline.modules.daisy202-to-epub3 - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,034 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:10:41,034 [DEBUG] - xproc-calabash-imp - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:10:41,034 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,034 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:10:41,034 [DEBUG] - xproc-calabash-imp - Name: upgrade-dtbook,Desc: DTBook utility for upgrading to DTBook 2005-3.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:10:41,034 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,034 [INFO] - org.daisy.calabash.extensions - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,034 [INFO] - job-manager - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,034 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,034 [DEBUG] - xproc-calabash-imp - Starting the job runner
+2011-06-30 16:10:41,045 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.file-utils,bundleresource://1.fwk1891275584/expath-pkg.xml
+2011-06-30 16:10:41,082 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl, path: xproc/file-library.xpl
+2011-06-30 16:10:41,083 [DEBUG] - xproc-calabash-imp - Registring file-utils
+2011-06-30 16:10:41,083 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl
+2011-06-30 16:10:41,083 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zip-utils,bundleresource://2.fwk1891275584/expath-pkg.xml
+2011-06-30 16:10:41,083 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl, path: xproc/zip-library.xpl
+2011-06-30 16:10:41,083 [DEBUG] - xproc-calabash-imp - Registring zip-utils
+2011-06-30 16:10:41,083 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl
+2011-06-30 16:10:41,083 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-ocf-utils,bundleresource://3.fwk1891275584/expath-pkg.xml
+2011-06-30 16:10:41,083 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl, path: xproc/epub3-ocf-library.xpl
+2011-06-30 16:10:41,083 [DEBUG] - xproc-calabash-imp - Registring epub3-ocf-utils
+2011-06-30 16:10:41,083 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl
+2011-06-30 16:10:41,083 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.daisy202-to-epub3,bundleresource://4.fwk1891275584/expath-pkg.xml
+2011-06-30 16:10:41,084 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl, path: daisy202-to-epub3.xpl
+2011-06-30 16:10:41,084 [DEBUG] - xproc-calabash-imp - Registring daisy202-to-epub3
+2011-06-30 16:10:41,084 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 16:10:41,084 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-nav-utils,bundleresource://5.fwk1891275584/expath-pkg.xml
+2011-06-30 16:10:41,084 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl, path: xproc/epub3-nav-library.xpl
+2011-06-30 16:10:41,084 [DEBUG] - xproc-calabash-imp - Registring epub3-nav-utils
+2011-06-30 16:10:41,084 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl
+2011-06-30 16:10:41,084 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zedai-to-html,bundleresource://6.fwk1891275584/expath-pkg.xml
+2011-06-30 16:10:41,084 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zedai-to-html/xslt/zedai-to-html.xsl, path: xslt/zedai-to-html.xsl
+2011-06-30 16:10:41,084 [DEBUG] - xproc-calabash-imp - Registring zedai-to-html
+2011-06-30 16:10:41,084 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zedai-to-html/xslt/zedai-to-html.xsl
+2011-06-30 16:10:41,085 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediatype-utils,bundleresource://7.fwk1891275584/expath-pkg.xml
+2011-06-30 16:10:41,085 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl, path: mediatype.xpl
+2011-06-30 16:10:41,085 [DEBUG] - xproc-calabash-imp - Registring mediatype-utils
+2011-06-30 16:10:41,085 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl
+2011-06-30 16:10:41,085 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.html-utils,bundleresource://8.fwk1891275584/expath-pkg.xml
+2011-06-30 16:10:41,085 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-30 16:10:41,085 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl, path: html5-outliner.xsl
+2011-06-30 16:10:41,085 [DEBUG] - xproc-calabash-imp - Registring html-utils
+2011-06-30 16:10:41,085 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl
+2011-06-30 16:10:41,085 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl
+2011-06-30 16:10:41,085 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.dtbook-utils,bundleresource://9.fwk1891275584/expath-pkg.xml
+2011-06-30 16:10:41,086 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:10:41,086 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:10:41,086 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-30 16:10:41,086 [DEBUG] - xproc-calabash-imp - Registring dtbook-utils
+2011-06-30 16:10:41,086 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl
+2011-06-30 16:10:41,086 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:10:41,086 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:10:41,086 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.metadata-utils,bundleresource://10.fwk1891275584/expath-pkg.xml
+2011-06-30 16:10:41,086 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-30 16:10:41,086 [DEBUG] - xproc-calabash-imp - Registring metadata-utils
+2011-06-30 16:10:41,086 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl
+2011-06-30 16:10:41,086 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediaoverlay-utils,bundleresource://11.fwk1891275584/expath-pkg.xml
+2011-06-30 16:10:41,086 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-30 16:10:41,087 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-30 16:10:41,087 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-30 16:10:41,087 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-30 16:10:41,087 [DEBUG] - xproc-calabash-imp - Registring mediaoverlay-utils
+2011-06-30 16:10:41,087 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl
+2011-06-30 16:10:41,087 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-30 16:10:41,087 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl
+2011-06-30 16:10:41,087 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl
+2011-06-30 16:10:41,087 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.fileset-utils,bundleresource://12.fwk1891275584/expath-pkg.xml
+2011-06-30 16:10:41,087 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl, path: xproc/fileset-library.xpl
+2011-06-30 16:10:41,087 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl, path: xslt/fileset-to-odf-manifest.xsl
+2011-06-30 16:10:41,087 [DEBUG] - xproc-calabash-imp - Registring fileset-utils
+2011-06-30 16:10:41,087 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl
+2011-06-30 16:10:41,087 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl
+2011-06-30 16:10:41,088 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-pub-utils,bundleresource://13.fwk1891275584/expath-pkg.xml
+2011-06-30 16:10:41,088 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl, path: xproc/epub3-pub-library.xpl
+2011-06-30 16:10:41,088 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl, path: xslt/fileset-to-manifest.xsl
+2011-06-30 16:10:41,088 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl, path: xslt/fileset-to-spine.xsl
+2011-06-30 16:10:41,088 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl, path: xslt/manifest-to-spine.xsl
+2011-06-30 16:10:41,088 [DEBUG] - xproc-calabash-imp - Registring epub3-pub-utils
+2011-06-30 16:10:41,089 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl
+2011-06-30 16:10:41,089 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl
+2011-06-30 16:10:41,090 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl
+2011-06-30 16:10:41,090 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl
+2011-06-30 16:10:41,093 [DEBUG] - xproc-calabash-imp - Module registry up
+2011-06-30 16:10:41,093 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,095 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,096 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,102 [INFO] - xproc-calabash-imp - org.daisy.calabash.DynamicXProcConfigurationFactory is up
+2011-06-30 16:10:41,185 [DEBUG] - xproc-calabash-imp - configuration set via osgi
+2011-06-30 16:10:41,185 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,187 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,188 [DEBUG] - xproc-calabash-imp - setting job manager
+2011-06-30 16:10:41,188 [DEBUG] - xproc-calabash-imp - OSGIDaisyContext service up
+2011-06-30 16:10:41,188 [INFO] - daisy-pipeline - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,190 [DEBUG] - xproc-calabash-imp - setting converter registry
+2011-06-30 16:10:41,195 [INFO] - calabash-custom-steps - ServiceEvent.REGISTERED
+2011-06-30 16:10:41,196 [INFO] - xproc-calabash-imp - Adding step to registry: message
+2011-06-30 16:10:41,196 [INFO] - calabash-custom-steps - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,472 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-30 16:11:51,475 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-30 16:11:51,477 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-30 16:11:51,477 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-30 16:11:51,477 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-30 16:11:51,477 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-30 16:11:51,477 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-30 16:11:51,477 [INFO] - junit4 - BundleEvent.STARTED
+2011-06-30 16:11:51,477 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-30 16:11:51,477 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,478 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,478 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,478 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,478 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,478 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-30 16:11:51,478 [INFO] - guava - BundleEvent.STARTED
+2011-06-30 16:11:51,478 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-30 16:11:51,478 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-30 16:11:51,478 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-30 16:11:51,478 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,478 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-30 16:11:51,478 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,478 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,478 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-30 16:11:51,478 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,494 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:11:51,494 [DEBUG] - xproc-calabash-imp - Name: daisy202-to-epub3,Desc: DAISY 2.02 to EPUB3,url: http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 16:11:51,495 [INFO] - org.daisy.pipeline.modules.daisy202-to-epub3 - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,498 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:11:51,498 [DEBUG] - xproc-calabash-imp - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:11:51,498 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,505 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:11:51,505 [DEBUG] - xproc-calabash-imp - Name: upgrade-dtbook,Desc: DTBook utility for upgrading to DTBook 2005-3.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:11:51,506 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,508 [INFO] - org.daisy.calabash.extensions - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,518 [INFO] - job-manager - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,519 [DEBUG] - xproc-calabash-imp - Starting the job runner
+2011-06-30 16:11:51,535 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.file-utils,bundleresource://1.fwk1603837828/expath-pkg.xml
+2011-06-30 16:11:51,570 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl, path: xproc/file-library.xpl
+2011-06-30 16:11:51,571 [DEBUG] - xproc-calabash-imp - Registring file-utils
+2011-06-30 16:11:51,572 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl
+2011-06-30 16:11:51,572 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zip-utils,bundleresource://2.fwk1603837828/expath-pkg.xml
+2011-06-30 16:11:51,572 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl, path: xproc/zip-library.xpl
+2011-06-30 16:11:51,572 [DEBUG] - xproc-calabash-imp - Registring zip-utils
+2011-06-30 16:11:51,572 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl
+2011-06-30 16:11:51,572 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-ocf-utils,bundleresource://3.fwk1603837828/expath-pkg.xml
+2011-06-30 16:11:51,573 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl, path: xproc/epub3-ocf-library.xpl
+2011-06-30 16:11:51,573 [DEBUG] - xproc-calabash-imp - Registring epub3-ocf-utils
+2011-06-30 16:11:51,573 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl
+2011-06-30 16:11:51,573 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.daisy202-to-epub3,bundleresource://4.fwk1603837828/expath-pkg.xml
+2011-06-30 16:11:51,574 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl, path: daisy202-to-epub3.xpl
+2011-06-30 16:11:51,574 [DEBUG] - xproc-calabash-imp - Registring daisy202-to-epub3
+2011-06-30 16:11:51,574 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 16:11:51,574 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-nav-utils,bundleresource://5.fwk1603837828/expath-pkg.xml
+2011-06-30 16:11:51,574 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl, path: xproc/epub3-nav-library.xpl
+2011-06-30 16:11:51,574 [DEBUG] - xproc-calabash-imp - Registring epub3-nav-utils
+2011-06-30 16:11:51,574 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl
+2011-06-30 16:11:51,575 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zedai-to-html,bundleresource://6.fwk1603837828/expath-pkg.xml
+2011-06-30 16:11:51,575 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zedai-to-html/xslt/zedai-to-html.xsl, path: xslt/zedai-to-html.xsl
+2011-06-30 16:11:51,575 [DEBUG] - xproc-calabash-imp - Registring zedai-to-html
+2011-06-30 16:11:51,575 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zedai-to-html/xslt/zedai-to-html.xsl
+2011-06-30 16:11:51,575 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediatype-utils,bundleresource://7.fwk1603837828/expath-pkg.xml
+2011-06-30 16:11:51,575 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl, path: mediatype.xpl
+2011-06-30 16:11:51,576 [DEBUG] - xproc-calabash-imp - Registring mediatype-utils
+2011-06-30 16:11:51,576 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl
+2011-06-30 16:11:51,576 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.html-utils,bundleresource://8.fwk1603837828/expath-pkg.xml
+2011-06-30 16:11:51,576 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-30 16:11:51,576 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl, path: html5-outliner.xsl
+2011-06-30 16:11:51,576 [DEBUG] - xproc-calabash-imp - Registring html-utils
+2011-06-30 16:11:51,576 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl
+2011-06-30 16:11:51,577 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl
+2011-06-30 16:11:51,577 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.dtbook-utils,bundleresource://9.fwk1603837828/expath-pkg.xml
+2011-06-30 16:11:51,577 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:11:51,577 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:11:51,577 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-30 16:11:51,577 [DEBUG] - xproc-calabash-imp - Registring dtbook-utils
+2011-06-30 16:11:51,578 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl
+2011-06-30 16:11:51,578 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:11:51,578 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:11:51,578 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.metadata-utils,bundleresource://10.fwk1603837828/expath-pkg.xml
+2011-06-30 16:11:51,578 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-30 16:11:51,578 [DEBUG] - xproc-calabash-imp - Registring metadata-utils
+2011-06-30 16:11:51,578 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl
+2011-06-30 16:11:51,578 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediaoverlay-utils,bundleresource://11.fwk1603837828/expath-pkg.xml
+2011-06-30 16:11:51,579 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-30 16:11:51,579 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-30 16:11:51,579 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-30 16:11:51,579 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-30 16:11:51,579 [DEBUG] - xproc-calabash-imp - Registring mediaoverlay-utils
+2011-06-30 16:11:51,580 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl
+2011-06-30 16:11:51,580 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-30 16:11:51,580 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl
+2011-06-30 16:11:51,580 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl
+2011-06-30 16:11:51,580 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.fileset-utils,bundleresource://12.fwk1603837828/expath-pkg.xml
+2011-06-30 16:11:51,580 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl, path: xproc/fileset-library.xpl
+2011-06-30 16:11:51,580 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl, path: xslt/fileset-to-odf-manifest.xsl
+2011-06-30 16:11:51,580 [DEBUG] - xproc-calabash-imp - Registring fileset-utils
+2011-06-30 16:11:51,581 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl
+2011-06-30 16:11:51,581 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl
+2011-06-30 16:11:51,581 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-pub-utils,bundleresource://13.fwk1603837828/expath-pkg.xml
+2011-06-30 16:11:51,581 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl, path: xproc/epub3-pub-library.xpl
+2011-06-30 16:11:51,581 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl, path: xslt/fileset-to-manifest.xsl
+2011-06-30 16:11:51,581 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl, path: xslt/fileset-to-spine.xsl
+2011-06-30 16:11:51,582 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl, path: xslt/manifest-to-spine.xsl
+2011-06-30 16:11:51,582 [DEBUG] - xproc-calabash-imp - Registring epub3-pub-utils
+2011-06-30 16:11:51,582 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl
+2011-06-30 16:11:51,582 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl
+2011-06-30 16:11:51,582 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl
+2011-06-30 16:11:51,582 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl
+2011-06-30 16:11:51,585 [DEBUG] - xproc-calabash-imp - Module registry up
+2011-06-30 16:11:51,597 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,597 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,597 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-30 16:11:51,597 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,291 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-30 16:16:07,297 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-30 16:16:07,299 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-30 16:16:07,299 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-30 16:16:07,299 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-30 16:16:07,300 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-30 16:16:07,300 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-30 16:16:07,300 [INFO] - junit4 - BundleEvent.STARTED
+2011-06-30 16:16:07,300 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-30 16:16:07,300 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,300 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,300 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,300 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,300 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,300 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-30 16:16:07,300 [INFO] - guava - BundleEvent.STARTED
+2011-06-30 16:16:07,300 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-30 16:16:07,300 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-30 16:16:07,300 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-30 16:16:07,300 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,300 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-30 16:16:07,300 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,300 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,300 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-30 16:16:07,300 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,300 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:16:07,301 [DEBUG] - xproc-calabash-imp - Name: daisy202-to-epub3,Desc: DAISY 2.02 to EPUB3,url: http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 16:16:07,301 [INFO] - org.daisy.pipeline.modules.daisy202-to-epub3 - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,302 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:16:07,302 [DEBUG] - xproc-calabash-imp - Name: dtbook-to-zedai,Desc: Convert DTBook XML to ZedAI XML,url: http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl
+2011-06-30 16:16:07,303 [INFO] - org.daisy.pipeline.modules.dtbook-to-zedai - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,307 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:16:07,307 [DEBUG] - xproc-calabash-imp - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:16:07,307 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,307 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:16:07,307 [DEBUG] - xproc-calabash-imp - Name: upgrade-dtbook,Desc: DTBook utility for upgrading to DTBook 2005-3.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:16:07,307 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,314 [INFO] - org.daisy.calabash.extensions - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,325 [INFO] - job-manager - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,325 [DEBUG] - xproc-calabash-imp - Starting the job runner
+2011-06-30 16:16:07,351 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-pub-utils,bundleresource://1.fwk1891275584/expath-pkg.xml
+2011-06-30 16:16:07,385 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl, path: xproc/epub3-pub-library.xpl
+2011-06-30 16:16:07,386 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl, path: xslt/fileset-to-manifest.xsl
+2011-06-30 16:16:07,387 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl, path: xslt/fileset-to-spine.xsl
+2011-06-30 16:16:07,387 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl, path: xslt/manifest-to-spine.xsl
+2011-06-30 16:16:07,388 [DEBUG] - xproc-calabash-imp - Registring epub3-pub-utils
+2011-06-30 16:16:07,388 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl
+2011-06-30 16:16:07,388 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl
+2011-06-30 16:16:07,388 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl
+2011-06-30 16:16:07,388 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl
+2011-06-30 16:16:07,388 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.metadata-utils,bundleresource://2.fwk1891275584/expath-pkg.xml
+2011-06-30 16:16:07,389 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-30 16:16:07,389 [DEBUG] - xproc-calabash-imp - Registring metadata-utils
+2011-06-30 16:16:07,389 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl
+2011-06-30 16:16:07,389 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.daisy202-to-epub3,bundleresource://3.fwk1891275584/expath-pkg.xml
+2011-06-30 16:16:07,389 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl, path: daisy202-to-epub3.xpl
+2011-06-30 16:16:07,389 [DEBUG] - xproc-calabash-imp - Registring daisy202-to-epub3
+2011-06-30 16:16:07,389 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 16:16:07,390 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zip-utils,bundleresource://4.fwk1891275584/expath-pkg.xml
+2011-06-30 16:16:07,390 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl, path: xproc/zip-library.xpl
+2011-06-30 16:16:07,390 [DEBUG] - xproc-calabash-imp - Registring zip-utils
+2011-06-30 16:16:07,390 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl
+2011-06-30 16:16:07,390 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zedai-to-html,bundleresource://5.fwk1891275584/expath-pkg.xml
+2011-06-30 16:16:07,391 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zedai-to-html/xslt/zedai-to-html.xsl, path: xslt/zedai-to-html.xsl
+2011-06-30 16:16:07,391 [DEBUG] - xproc-calabash-imp - Registring zedai-to-html
+2011-06-30 16:16:07,391 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zedai-to-html/xslt/zedai-to-html.xsl
+2011-06-30 16:16:07,391 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-nav-utils,bundleresource://6.fwk1891275584/expath-pkg.xml
+2011-06-30 16:16:07,391 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl, path: xproc/epub3-nav-library.xpl
+2011-06-30 16:16:07,391 [DEBUG] - xproc-calabash-imp - Registring epub3-nav-utils
+2011-06-30 16:16:07,391 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl
+2011-06-30 16:16:07,391 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.dtbook-to-zedai,bundleresource://7.fwk1891275584/expath-pkg.xml
+2011-06-30 16:16:07,392 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl, path: dtbook-to-zedai.xpl
+2011-06-30 16:16:07,392 [DEBUG] - xproc-calabash-imp - Registring dtbook-to-zedai
+2011-06-30 16:16:07,392 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl
+2011-06-30 16:16:07,392 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.fileset-utils,bundleresource://8.fwk1891275584/expath-pkg.xml
+2011-06-30 16:16:07,392 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl, path: xproc/fileset-library.xpl
+2011-06-30 16:16:07,393 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl, path: xslt/fileset-to-odf-manifest.xsl
+2011-06-30 16:16:07,393 [DEBUG] - xproc-calabash-imp - Registring fileset-utils
+2011-06-30 16:16:07,393 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl
+2011-06-30 16:16:07,393 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl
+2011-06-30 16:16:07,393 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-ocf-utils,bundleresource://9.fwk1891275584/expath-pkg.xml
+2011-06-30 16:16:07,393 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl, path: xproc/epub3-ocf-library.xpl
+2011-06-30 16:16:07,393 [DEBUG] - xproc-calabash-imp - Registring epub3-ocf-utils
+2011-06-30 16:16:07,393 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl
+2011-06-30 16:16:07,393 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.file-utils,bundleresource://10.fwk1891275584/expath-pkg.xml
+2011-06-30 16:16:07,394 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl, path: xproc/file-library.xpl
+2011-06-30 16:16:07,394 [DEBUG] - xproc-calabash-imp - Registring file-utils
+2011-06-30 16:16:07,394 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl
+2011-06-30 16:16:07,394 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediaoverlay-utils,bundleresource://11.fwk1891275584/expath-pkg.xml
+2011-06-30 16:16:07,394 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-30 16:16:07,395 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-30 16:16:07,395 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-30 16:16:07,395 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-30 16:16:07,395 [DEBUG] - xproc-calabash-imp - Registring mediaoverlay-utils
+2011-06-30 16:16:07,395 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl
+2011-06-30 16:16:07,395 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-30 16:16:07,395 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl
+2011-06-30 16:16:07,395 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl
+2011-06-30 16:16:07,395 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.html-utils,bundleresource://12.fwk1891275584/expath-pkg.xml
+2011-06-30 16:16:07,396 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-30 16:16:07,396 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl, path: html5-outliner.xsl
+2011-06-30 16:16:07,396 [DEBUG] - xproc-calabash-imp - Registring html-utils
+2011-06-30 16:16:07,396 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl
+2011-06-30 16:16:07,396 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl
+2011-06-30 16:16:07,396 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.dtbook-utils,bundleresource://13.fwk1891275584/expath-pkg.xml
+2011-06-30 16:16:07,396 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:16:07,397 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:16:07,397 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-30 16:16:07,397 [DEBUG] - xproc-calabash-imp - Registring dtbook-utils
+2011-06-30 16:16:07,397 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl
+2011-06-30 16:16:07,397 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:16:07,397 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:16:07,397 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediatype-utils,bundleresource://14.fwk1891275584/expath-pkg.xml
+2011-06-30 16:16:07,398 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl, path: mediatype.xpl
+2011-06-30 16:16:07,398 [DEBUG] - xproc-calabash-imp - Registring mediatype-utils
+2011-06-30 16:16:07,398 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl
+2011-06-30 16:16:07,401 [DEBUG] - xproc-calabash-imp - Module registry up
+2011-06-30 16:16:07,405 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,405 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,405 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-30 16:16:07,407 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,710 [INFO] - LogBackend - BundleEvent.STARTED
+2011-06-30 16:16:19,723 [ERROR] - org.eclipse.osgi - FrameworkEvent.ERROR
+org.osgi.framework.BundleException: The bundle could not be resolved. Reason: Another singleton version selected: org.eclipse.osgi_3.5.0.v20090520
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1313) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1297) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:309) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:370) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1068) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:557) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:464) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:248) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:445) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:220) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:330) [org.eclipse.osgi_3.5.0.v20090520.jar:na]
+2011-06-30 16:16:19,731 [INFO] - org.apache.commons.httpclient - BundleEvent.STARTED
+2011-06-30 16:16:19,731 [INFO] - org.apache.commons.logging - BundleEvent.STARTED
+2011-06-30 16:16:19,731 [INFO] - sf4j-wrapper - BundleEvent.STARTED
+2011-06-30 16:16:19,731 [INFO] - org.relaxng.datatype - BundleEvent.STARTED
+2011-06-30 16:16:19,731 [INFO] - org.eclipse.osgi.services - BundleEvent.STARTED
+2011-06-30 16:16:19,731 [INFO] - junit4 - BundleEvent.STARTED
+2011-06-30 16:16:19,731 [INFO] - org.ccil.cowan.tagsoup - BundleEvent.STARTED
+2011-06-30 16:16:19,731 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,731 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,731 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,731 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,731 [INFO] - woodstox-core-lgpl - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,731 [INFO] - woodstox-core-lgpl - BundleEvent.STARTED
+2011-06-30 16:16:19,731 [INFO] - guava - BundleEvent.STARTED
+2011-06-30 16:16:19,731 [INFO] - org.apache.xml.resolver - BundleEvent.STARTED
+2011-06-30 16:16:19,732 [INFO] - com.xmlcalabash - BundleEvent.STARTED
+2011-06-30 16:16:19,732 [INFO] - com.icl.saxon - BundleEvent.STARTED
+2011-06-30 16:16:19,732 [INFO] - org.eclipse.equinox.event - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,732 [INFO] - org.eclipse.equinox.event - BundleEvent.STARTED
+2011-06-30 16:16:19,732 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,732 [INFO] - org.eclipse.equinox.util - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,732 [INFO] - org.eclipse.equinox.util - BundleEvent.STARTED
+2011-06-30 16:16:19,732 [INFO] - org.eclipse.equinox.ds - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,752 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:16:19,753 [DEBUG] - xproc-calabash-imp - Name: daisy202-to-epub3,Desc: DAISY 2.02 to EPUB3,url: http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 16:16:19,754 [INFO] - org.daisy.pipeline.modules.daisy202-to-epub3 - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,756 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:16:19,756 [DEBUG] - xproc-calabash-imp - Name: dtbook-to-zedai,Desc: Convert DTBook XML to ZedAI XML,url: http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl
+2011-06-30 16:16:19,756 [INFO] - org.daisy.pipeline.modules.dtbook-to-zedai - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,759 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:16:19,759 [DEBUG] - xproc-calabash-imp - Name: merge-dtbook,Desc: DTBook utility for merging two or more files.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:16:19,759 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,759 [DEBUG] - xproc-calabash-imp - New converter
+2011-06-30 16:16:19,760 [DEBUG] - xproc-calabash-imp - Name: upgrade-dtbook,Desc: DTBook utility for upgrading to DTBook 2005-3.,url: http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:16:19,760 [INFO] - org.daisy.pipeline.modules.dtbook-utils - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,778 [INFO] - org.daisy.calabash.extensions - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,791 [INFO] - job-manager - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,792 [DEBUG] - xproc-calabash-imp - Starting the job runner
+2011-06-30 16:16:19,808 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-pub-utils,bundleresource://1.fwk1421571929/expath-pkg.xml
+2011-06-30 16:16:19,843 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl, path: xproc/epub3-pub-library.xpl
+2011-06-30 16:16:19,844 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl, path: xslt/fileset-to-manifest.xsl
+2011-06-30 16:16:19,844 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl, path: xslt/fileset-to-spine.xsl
+2011-06-30 16:16:19,844 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl, path: xslt/manifest-to-spine.xsl
+2011-06-30 16:16:19,845 [DEBUG] - xproc-calabash-imp - Registring epub3-pub-utils
+2011-06-30 16:16:19,845 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/manifest-to-spine.xsl
+2011-06-30 16:16:19,845 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-manifest.xsl
+2011-06-30 16:16:19,845 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xslt/fileset-to-spine.xsl
+2011-06-30 16:16:19,845 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl
+2011-06-30 16:16:19,845 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.metadata-utils,bundleresource://2.fwk1421571929/expath-pkg.xml
+2011-06-30 16:16:19,845 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl, path: metadata-utils-library.xpl
+2011-06-30 16:16:19,845 [DEBUG] - xproc-calabash-imp - Registring metadata-utils
+2011-06-30 16:16:19,845 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/metadata-utils/metadata-utils-library.xpl
+2011-06-30 16:16:19,845 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.daisy202-to-epub3,bundleresource://3.fwk1421571929/expath-pkg.xml
+2011-06-30 16:16:19,845 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl, path: daisy202-to-epub3.xpl
+2011-06-30 16:16:19,845 [DEBUG] - xproc-calabash-imp - Registring daisy202-to-epub3
+2011-06-30 16:16:19,846 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl
+2011-06-30 16:16:19,846 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zip-utils,bundleresource://4.fwk1421571929/expath-pkg.xml
+2011-06-30 16:16:19,846 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl, path: xproc/zip-library.xpl
+2011-06-30 16:16:19,846 [DEBUG] - xproc-calabash-imp - Registring zip-utils
+2011-06-30 16:16:19,846 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl
+2011-06-30 16:16:19,846 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.zedai-to-html,bundleresource://5.fwk1421571929/expath-pkg.xml
+2011-06-30 16:16:19,846 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/zedai-to-html/xslt/zedai-to-html.xsl, path: xslt/zedai-to-html.xsl
+2011-06-30 16:16:19,846 [DEBUG] - xproc-calabash-imp - Registring zedai-to-html
+2011-06-30 16:16:19,846 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/zedai-to-html/xslt/zedai-to-html.xsl
+2011-06-30 16:16:19,846 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-nav-utils,bundleresource://6.fwk1421571929/expath-pkg.xml
+2011-06-30 16:16:19,846 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl, path: xproc/epub3-nav-library.xpl
+2011-06-30 16:16:19,847 [DEBUG] - xproc-calabash-imp - Registring epub3-nav-utils
+2011-06-30 16:16:19,847 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl
+2011-06-30 16:16:19,847 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.dtbook-to-zedai,bundleresource://7.fwk1421571929/expath-pkg.xml
+2011-06-30 16:16:19,847 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl, path: dtbook-to-zedai.xpl
+2011-06-30 16:16:19,847 [DEBUG] - xproc-calabash-imp - Registring dtbook-to-zedai
+2011-06-30 16:16:19,847 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl
+2011-06-30 16:16:19,847 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.fileset-utils,bundleresource://8.fwk1421571929/expath-pkg.xml
+2011-06-30 16:16:19,847 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl, path: xproc/fileset-library.xpl
+2011-06-30 16:16:19,847 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl, path: xslt/fileset-to-odf-manifest.xsl
+2011-06-30 16:16:19,847 [DEBUG] - xproc-calabash-imp - Registring fileset-utils
+2011-06-30 16:16:19,847 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl
+2011-06-30 16:16:19,847 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/fileset-utils/xslt/fileset-to-odf-manifest.xsl
+2011-06-30 16:16:19,847 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.epub3-ocf-utils,bundleresource://9.fwk1421571929/expath-pkg.xml
+2011-06-30 16:16:19,848 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl, path: xproc/epub3-ocf-library.xpl
+2011-06-30 16:16:19,848 [DEBUG] - xproc-calabash-imp - Registring epub3-ocf-utils
+2011-06-30 16:16:19,848 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl
+2011-06-30 16:16:19,848 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.file-utils,bundleresource://10.fwk1421571929/expath-pkg.xml
+2011-06-30 16:16:19,848 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl, path: xproc/file-library.xpl
+2011-06-30 16:16:19,848 [DEBUG] - xproc-calabash-imp - Registring file-utils
+2011-06-30 16:16:19,848 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl
+2011-06-30 16:16:19,848 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediaoverlay-utils,bundleresource://11.fwk1421571929/expath-pkg.xml
+2011-06-30 16:16:19,848 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl, path: join.xpl
+2011-06-30 16:16:19,848 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl, path: upgrade-smil.xpl
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl, path: rearrange.xpl
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl, path: rearrange-content.xpl
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - Registring mediaoverlay-utils
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange-content.xpl
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/upgrade-smil.xpl
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/rearrange.xpl
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediaoverlay-utils/join.xpl
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.html-utils,bundleresource://12.fwk1421571929/expath-pkg.xml
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl, path: html-library.xpl
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl, path: html5-outliner.xsl
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - Registring html-utils
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.dtbook-utils,bundleresource://13.fwk1421571929/expath-pkg.xml
+2011-06-30 16:16:19,849 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl, path: merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:16:19,850 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl, path: upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:16:19,850 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl, path: dtbook-utils-library.xpl
+2011-06-30 16:16:19,850 [DEBUG] - xproc-calabash-imp - Registring dtbook-utils
+2011-06-30 16:16:19,850 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl
+2011-06-30 16:16:19,850 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl
+2011-06-30 16:16:19,850 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl
+2011-06-30 16:16:19,850 [DEBUG] - xproc-calabash-imp - tracking: org.daisy.pipeline.modules.mediatype-utils,bundleresource://14.fwk1421571929/expath-pkg.xml
+2011-06-30 16:16:19,850 [DEBUG] - xproc-calabash-imp - withComponent:http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl, path: mediatype.xpl
+2011-06-30 16:16:19,850 [DEBUG] - xproc-calabash-imp - Registring mediatype-utils
+2011-06-30 16:16:19,852 [DEBUG] - xproc-calabash-imp - Component http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl
+2011-06-30 16:16:19,855 [DEBUG] - xproc-calabash-imp - Module registry up
+2011-06-30 16:16:19,858 [INFO] - converter-parser - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,858 [INFO] - module-uri-resolver - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,858 [INFO] - module-registry - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,858 [INFO] - expath-pkg-parser - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,865 [INFO] - xproc-calabash-imp - org.daisy.calabash.DynamicXProcConfigurationFactory is up
+2011-06-30 16:16:19,964 [DEBUG] - xproc-calabash-imp - configuration set via osgi
+2011-06-30 16:16:19,967 [DEBUG] - xproc-calabash-imp - setting job manager
+2011-06-30 16:16:19,968 [DEBUG] - xproc-calabash-imp - OSGIDaisyContext service up
+2011-06-30 16:16:19,968 [INFO] - daisy-pipeline - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,969 [INFO] - converter-registry - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,969 [INFO] - xproc-calabash-imp - ServiceEvent.REGISTERED
+2011-06-30 16:16:19,969 [DEBUG] - xproc-calabash-imp - setting converter registry
+2011-06-30 16:16:19,973 [INFO] - xproc-calabash-imp - Adding step to registry: message
+2011-06-30 16:16:19,973 [INFO] - calabash-custom-steps - ServiceEvent.REGISTERED

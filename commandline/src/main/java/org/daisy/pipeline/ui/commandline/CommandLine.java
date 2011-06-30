@@ -43,7 +43,7 @@ public class CommandLine {
 				"list of arguments in the format arg1=value1,arg2=value2 (only with -c modifier)")
 				.withRequiredArg();
 		mParser.accepts("h",
-				"Show this help or the help for the given converter")
+				"Showe this help or the help for the given converter")
 				.withOptionalArg().ofType(String.class)
 				.describedAs("converter");
 

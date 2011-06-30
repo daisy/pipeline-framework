@@ -20,7 +20,7 @@ public class CommandUnrecoverableError extends Command {
 		if(mArgs.containsKey(ERR)){
 			err =mArgs.getProperty(ERR);
 		}
-		//System.err.println(" "+err);
+		System.err.println("Unrecoverable error:"+err);
 		mLogger.error("Unrecoverable error: "+err);
 		mLogger.warn("Shutting down due to previous errors");
 		
