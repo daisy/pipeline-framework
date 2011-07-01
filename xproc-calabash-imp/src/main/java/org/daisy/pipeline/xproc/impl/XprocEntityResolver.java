@@ -28,14 +28,24 @@ public class XprocEntityResolver implements EntityResolver {
 			URL url = this.getClass().getClassLoader().getResource("resources/xhtml-symbol.ent");
 			return new InputSource(url.openStream());
 			
-		} if (systemId.equals("http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd")) {
+		}else if (systemId.equals("http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd")) {
 			URL url = this.getClass().getClassLoader().getResource("resources/xhtml1-frameset.dtd");
 			return new InputSource(url.openStream());
-		}if (systemId.equals("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")) {
+		}else if (systemId.equals("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")) {
 			URL url = this.getClass().getClassLoader().getResource("resources/xhtml1-strict.dtd");
 			return new InputSource(url.openStream());
-		}if (systemId.equals("http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd")) {
+		}else if (systemId.equals("http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd")) {
 			URL url = this.getClass().getClassLoader().getResource("resources/xhtml1-transitional.dtd");
+			return new InputSource(url.openStream());
+		}else if (systemId.equals("http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd")) {
+			URL url = this.getClass().getClassLoader().getResource("resources/dtbook-2005-3.dtd");
+			return new InputSource(url.openStream());
+			
+		}else if (systemId.equals("http://www.daisy.org/z3986/2005/dtbook-2005-2.dtd")) {
+			URL url = this.getClass().getClassLoader().getResource("resources/dtbook-2005-2.dtd");
+			return new InputSource(url.openStream());
+		}else if (systemId.equals("http://www.daisy.org/z3986/2005/dtbook-2005-1.dtd")){
+			URL url = this.getClass().getClassLoader().getResource("resources/dtbook-2005-1.dtd");
 			return new InputSource(url.openStream());
 		}else {
 			// use the default behaviour
