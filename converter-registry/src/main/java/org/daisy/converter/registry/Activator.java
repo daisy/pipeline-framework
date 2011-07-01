@@ -9,7 +9,6 @@ public class Activator implements BundleActivator {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		org.slf4j.impl.OSGILogFactory.initOSGI(context);
- 
 
 
 

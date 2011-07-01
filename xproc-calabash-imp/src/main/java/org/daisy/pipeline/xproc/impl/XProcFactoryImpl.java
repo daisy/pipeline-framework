@@ -30,7 +30,7 @@ public class XProcFactoryImpl implements XProcessorFactory,Configurable{
 
 	private ErrorListener mErrorListener=null; 
 	private URIResolver mUriResolver = null;
-	private EntityResolver mEntityResolver = null;
+	private EntityResolver mEntityResolver = new XprocEntityResolver();
 	private boolean mSchemaAware = false;
 	private Properties mProperties=null;
 	Logger mLogger = LoggerFactory.getLogger(XProcFactoryImpl.class);
@@ -94,11 +94,13 @@ public class XProcFactoryImpl implements XProcessorFactory,Configurable{
 		} catch (SaxonApiException e1) {
 			throw new RuntimeException("error loading configuration file",e1); 
 		}
+		
 		conf.schemaAware=this.mSchemaAware;
 		//try this with anonymous classes  
 		if(mErrorListener!=null)
 			conf.errorListener = this.mErrorListener.getClass().getName();
 		XProcRuntime runtime = new XProcRuntime(conf);
+		
 		runtime.setMessageListener(new slf4jXProcMessageListener());
 		if(mUriResolver!=null)
 			runtime.setURIResolver(mUriResolver);
