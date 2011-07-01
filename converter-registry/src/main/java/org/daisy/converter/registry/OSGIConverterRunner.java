@@ -67,6 +67,7 @@ public class OSGIConverterRunner extends ConverterRunnable {
 				mLogger.debug("xproc configuration file set to:"+System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
 				props.setProperty(XProcessorFactory.CONFIGURATION_FILE, System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
 			}
+			mRegistry.getXprocFactory().setProperties(props);
 			URIResolver defaultResolver = Configuration.newConfiguration().getURIResolver();
 			((UriResolverDecorator)mRegistry.getUriResolver()).setDelegatedUriResolver(defaultResolver);
 			mRegistry.getXprocFactory().setURIResolver(mRegistry.getUriResolver());
