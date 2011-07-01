@@ -4,6 +4,7 @@ Bundle-Name: Converter-registry
 Bundle-SymbolicName: converter-registry
 Bundle-Version: 1.0.0.qualifier
 Import-Package: net.sf.saxon;version="9.2.1.5",
+ org.apache.commons.httpclient.protocol,
  org.daisy.converter.parser,
  org.daisy.pipeline.modules,
  org.daisy.pipeline.modules.converter,

@@ -61,16 +61,18 @@ public class CommandPipeline extends Command {
 			mLogger.debug("xproc configuration file set to:"+System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
 			props.setProperty(XProcessorFactory.CONFIGURATION_FILE, System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
 		}
-		XProcessorFactory fact = ((ServiceProvider) mArgs.get(PROVIDER))
-				.getXProcessorFactory();
-		fact.setProperties(props);
-		XProcessor xproc = fact.getProcessor(getSaxSource(mArgs
-				.getProperty(PIPELINE)));
 		// Uri resolver settings
 		URIResolver defaultResolver = Configuration.newConfiguration().getURIResolver();
 		UriResolverDecorator uriResolver = ((ServiceProvider) mArgs
 				.get(PROVIDER)).getUriResolver().setDelegatedUriResolver(
 				defaultResolver);
+		XProcessorFactory fact = ((ServiceProvider) mArgs.get(PROVIDER))
+				.getXProcessorFactory();
+		fact.setProperties(props);
+		fact.setURIResolver(uriResolver);
+		XProcessor xproc = fact.getProcessor(getSaxSource(mArgs
+				.getProperty(PIPELINE)));
+		
 		xproc.setURIResolver(uriResolver);
 		// bind inputs
 		for (String key : inputs.keySet()) {
