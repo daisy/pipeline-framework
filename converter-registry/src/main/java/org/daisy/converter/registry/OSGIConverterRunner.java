@@ -1,7 +1,9 @@
 package org.daisy.converter.registry;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.net.URI;
 import java.util.Properties;
 
 import javax.xml.transform.Result;
@@ -170,7 +172,16 @@ public class OSGIConverterRunner extends ConverterRunnable {
 			} else {
 
 				try {
-					return new StreamResult(new FileOutputStream(output));
+					URI uri=null;
+					try{
+						 uri = URI.create(output);
+					}catch (IllegalArgumentException iae) {
+						
+					}
+					if(uri==null)
+						return new StreamResult(new FileOutputStream(new File(output)));
+					else 
+						return new StreamResult(new FileOutputStream(new File(uri)));
 				} catch (FileNotFoundException e) {
 					throw new IllegalArgumentException("Output file not found:"
 							+ e);
