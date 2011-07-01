@@ -15,7 +15,7 @@ public class XprocEntityResolver implements EntityResolver {
 	@Override
 	public InputSource resolveEntity(String publicId, String systemId)
 			throws SAXException, IOException {
-		if (systemId.equals(SMIL_PUBLIC)) {
+		if (systemId.equalsIgnoreCase(SMIL_PUBLIC)) {
 			URL url = this.getClass().getClassLoader().getResource(SMIL_DTD);
 			return new InputSource(url.openStream());
 		}else if (systemId.contains("xhtml-lat1.ent")) {
