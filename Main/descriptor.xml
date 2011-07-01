@@ -44,6 +44,12 @@
       <source>../Main/dp2ws.sh</source>
     </file>
      <file>
+      <source>../Main/dp2.bat</source>
+    </file>
+     <file>
+      <source>../Main/dp2ws.bat</source>
+    </file>
+     <file>
       <source>../Main/pax-runner-1.6.1.jar</source>
     </file>
      <file>

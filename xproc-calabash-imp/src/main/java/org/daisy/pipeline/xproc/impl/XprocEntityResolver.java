@@ -18,13 +18,13 @@ public class XprocEntityResolver implements EntityResolver {
 		if (systemId.equals(SMIL_PUBLIC)) {
 			URL url = this.getClass().getClassLoader().getResource(SMIL_DTD);
 			return new InputSource(url.openStream());
-		}else if (systemId.equals("http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent")) {
+		}else if (systemId.contains("xhtml-lat1.ent")) {
 			URL url = this.getClass().getClassLoader().getResource("resources/xhtml-lat1.ent");
 			return new InputSource(url.openStream());
-		}else if (systemId.equals("http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent")) {
+		}else if (systemId.contains("xhtml-special.ent")) {
 			URL url = this.getClass().getClassLoader().getResource("resources/xhtml-special.ent");
 			return new InputSource(url.openStream());
-		}else if (systemId.equals("http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent")) {
+		}else if (systemId.contains("DTD/xhtml-symbol.ent")) {
 			URL url = this.getClass().getClassLoader().getResource("resources/xhtml-symbol.ent");
 			return new InputSource(url.openStream());
 			
