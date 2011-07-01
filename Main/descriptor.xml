@@ -34,6 +34,9 @@
     <fileSet>
       <directory>etc</directory>
       <outputDirectory>etc</outputDirectory>
+      <excludes>
+      	<exclude>bundles*</exclude>
+      </excludes>
     </fileSet>
 	<!-- LICENSES -->	
     <fileSet>
@@ -61,8 +64,8 @@
       <source>pax-runner-1.6.1.jar</source>
     </file>
      <file>
-      <source>bundlesDist.txt</source>
-      <destName>bundles.txt</destName>
+      <source>etc/bundlesDist.txt</source>
+      <destName>etc/bundles.txt</destName>
     </file>
      <file>
       <source>README.txt</source>
