@@ -46,6 +46,14 @@
         <include>*.txt</include>
       </includes>
     </fileSet>
+	<!-- SAMPLES -->	
+    <fileSet>
+      <directory>samples</directory>
+      <outputDirectory>samples</outputDirectory>
+      <!-- <includes>
+        <include>**/*.*</include>
+      </includes> -->
+    </fileSet>
   </fileSets>
   <files>
      <file>
