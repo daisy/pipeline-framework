@@ -27,7 +27,17 @@ public class XprocEntityResolver implements EntityResolver {
 		}else if (systemId.equals("http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent")) {
 			URL url = this.getClass().getClassLoader().getResource("resources/xhtml-symbol.ent");
 			return new InputSource(url.openStream());
-		} else {
+			
+		} if (systemId.equals("http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd")) {
+			URL url = this.getClass().getClassLoader().getResource("resources/xhtml1-frameset.dtd");
+			return new InputSource(url.openStream());
+		}if (systemId.equals("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")) {
+			URL url = this.getClass().getClassLoader().getResource("resources/xhtml1-strict.dtd");
+			return new InputSource(url.openStream());
+		}if (systemId.equals("http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd")) {
+			URL url = this.getClass().getClassLoader().getResource("resources/xhtml1-transitional.dtd");
+			return new InputSource(url.openStream());
+		}else {
 			// use the default behaviour
 			return null;
 		}
