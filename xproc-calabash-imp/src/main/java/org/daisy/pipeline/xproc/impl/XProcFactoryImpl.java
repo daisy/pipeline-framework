@@ -99,8 +99,9 @@ public class XProcFactoryImpl implements XProcessorFactory,Configurable{
 		//try this with anonymous classes  
 		if(mErrorListener!=null)
 			conf.errorListener = this.mErrorListener.getClass().getName();
-		XProcRuntime runtime = new XProcRuntime(conf);
 		
+		XProcRuntime runtime = new XProcRuntime(conf);
+		runtime.setPhoneHome(false);
 		runtime.setMessageListener(new slf4jXProcMessageListener());
 		if(mUriResolver!=null)
 			runtime.setURIResolver(mUriResolver);

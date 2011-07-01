@@ -3,16 +3,16 @@
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>${DP_LOG_DIR}/daisy-pipeline.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-      <fileNamePattern>daisy-pipeline.%i.log</fileNamePattern>
+      <fileNamePattern>${DP_LOG_DIR}/daisy-pipeline.%i.log.zip</fileNamePattern>
       <minIndex>1</minIndex>
-      <maxIndex>9</maxIndex>
+      <maxIndex>4</maxIndex>
     </rollingPolicy>
     <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-      <maxFileSize>5MB</maxFileSize>
+      <maxFileSize>10MB</maxFileSize>
     </triggeringPolicy>
 
     <layout class="ch.qos.logback.classic.PatternLayout" >
-      <Pattern>%date [%level] - %logger - %msg%n</Pattern>
+      <Pattern>%date [%level] - %logger{36} - %msg%n</Pattern>
     </layout>
   </appender>
 
@@ -23,6 +23,6 @@
   </appender>
   <root level="debug">
     <appender-ref ref="FILE"/>
-    <appender-ref ref="STDOUT"/>
+    <!-- appender-ref ref="STDOUT" /-->
   </root>
 </configuration>
