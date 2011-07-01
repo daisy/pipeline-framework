@@ -24,7 +24,7 @@ public class XprocEntityResolver implements EntityResolver {
 		}else if (systemId.contains("xhtml-special.ent")) {
 			URL url = this.getClass().getClassLoader().getResource("resources/xhtml-special.ent");
 			return new InputSource(url.openStream());
-		}else if (systemId.contains("DTD/xhtml-symbol.ent")) {
+		}else if (systemId.contains("xhtml-symbol.ent")) {
 			URL url = this.getClass().getClassLoader().getResource("resources/xhtml-symbol.ent");
 			return new InputSource(url.openStream());
 			
