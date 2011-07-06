@@ -60,8 +60,8 @@ public static final String WS = "ws";
 	 */
     Logger mLogger = LoggerFactory.getLogger(getClass().getCanonicalName());
 	public void start(BundleContext context) throws Exception {
-		if (System.getProperty(DaisyPipelineContext.MODE_PROPERY) != null
-				&& System.getProperty(DaisyPipelineContext.MODE_PROPERY)
+		if (System.getProperty(DaisyPipelineContext.MODE_PROPERTY) != null
+				&& System.getProperty(DaisyPipelineContext.MODE_PROPERTY)
 						.equals(WS)) {
 		this.context=context;
 		mLogger.info("Starting webservice on port 8182.");
