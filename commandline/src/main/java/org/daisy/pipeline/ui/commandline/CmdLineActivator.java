@@ -20,8 +20,8 @@ public class CmdLineActivator implements BundleActivator {
 		final BundleContext ctxt = context;
 		org.slf4j.impl.OSGILogFactory.initOSGI(context);
 		
-		if (System.getProperty(DaisyPipelineContext.MODE_PROPERY) != null
-				&& System.getProperty(DaisyPipelineContext.MODE_PROPERY)
+		if (System.getProperty(DaisyPipelineContext.MODE_PROPERTY) != null
+				&& System.getProperty(DaisyPipelineContext.MODE_PROPERTY)
 						.equals(CMD)) {
 			mLogger.info("starting cmd");
 			new Thread() {
