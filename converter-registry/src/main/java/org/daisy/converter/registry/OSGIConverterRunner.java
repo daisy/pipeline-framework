@@ -20,8 +20,6 @@ import org.daisy.pipeline.modules.converter.ConverterDescriptor;
 import org.daisy.pipeline.modules.converter.ConverterRunnable;
 import org.daisy.pipeline.xproc.XProcessor;
 import org.daisy.pipeline.xproc.XProcessorFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The Class OSGIConverterRunner runs the converter using a xproc wrapper instance 
@@ -31,7 +29,7 @@ public class OSGIConverterRunner extends ConverterRunnable {
 
 	/** The  registry. */
 	OSGIConverterRegistry mRegistry;
-	Logger mLogger= LoggerFactory.getLogger(getClass());
+//	Logger mLogger= LoggerFactory.getLogger(getClass());
 	/**
 	 * Instantiates a new oSGI converter runner.
 	 *
@@ -66,7 +64,7 @@ public class OSGIConverterRunner extends ConverterRunnable {
 			}
 			Properties props = new Properties();
 			if (System.getProperties().containsKey(XProcessorFactory.CONFIGURATION_FILE)){
-				mLogger.debug("xproc configuration file set to:"+System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
+			//	mLogger.debug("xproc configuration file set to:"+System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
 				props.setProperty(XProcessorFactory.CONFIGURATION_FILE, System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
 			}
 			mRegistry.getXprocFactory().setProperties(props);

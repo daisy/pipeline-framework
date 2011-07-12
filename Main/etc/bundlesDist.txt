@@ -1,3 +1,0 @@
-scan-dir:PWD/lib/
-scan-dir:PWD/modules/
-scan-dir:PWD/framework/

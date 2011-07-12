@@ -1,3 +1,0 @@
-scan-dir:PWD/../../daisy-pipeline-modules/daisy.pipeline.modules.site/target/site/plugins
-scan-dir:PWD/../daisy.pipeline.site/target/site/plugins
-scan-dir:PWD/../repo/plugins/

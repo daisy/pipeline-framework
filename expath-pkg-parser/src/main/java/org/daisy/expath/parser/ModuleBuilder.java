@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.daisy.pipeline.modules.Component;
-import org.daisy.pipeline.modules.Component.Space;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ResourceLoader;
 

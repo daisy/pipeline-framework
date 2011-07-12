@@ -9,8 +9,6 @@ Import-Package: org.daisy.pipeline.jobmanager,
  org.daisy.pipeline.modules,
  org.daisy.pipeline.modules.converter,
  org.daisy.pipeline.xproc,
- org.osgi.framework,
- org.slf4j;version="1.6.1",
- org.slf4j.impl
+ org.osgi.framework
 Export-Package: org.daisy.pipeline
 

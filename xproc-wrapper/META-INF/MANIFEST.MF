@@ -5,3 +5,4 @@ Bundle-SymbolicName: xproc-wrapper
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.daisy.pipeline.xproc
+Import-Package: javax.xml.transform

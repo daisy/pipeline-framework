@@ -8,22 +8,20 @@ import org.daisy.pipeline.ui.commandline.provider.OSGIServiceProvider;
 import org.daisy.pipeline.ui.commandline.provider.ServiceProvider;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CmdLineActivator implements BundleActivator {
 	private static final String CMD = "cmd";
 	private static boolean EXIT = true;
-	Logger mLogger = LoggerFactory.getLogger(this.getClass().getCanonicalName());
+	//Logger mLogger = LoggerFactory.getLogger(this.getClass().getCanonicalName());
 	@Override
 	public void start(BundleContext context) throws Exception {
 		final BundleContext ctxt = context;
-		org.slf4j.impl.OSGILogFactory.initOSGI(context);
+	//	org.slf4j.impl.OSGILogFactory.initOSGI(context);
 		
 		if (System.getProperty(DaisyPipelineContext.MODE_PROPERTY) != null
 				&& System.getProperty(DaisyPipelineContext.MODE_PROPERTY)
 						.equals(CMD)) {
-			mLogger.info("starting cmd");
+		//	mLogger.info("starting cmd");
 			new Thread() {
 				public void run() {
 					// for (Object key:System.getProperties().keySet()){

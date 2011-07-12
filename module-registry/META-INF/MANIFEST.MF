@@ -5,11 +5,10 @@ Bundle-SymbolicName: module-registry
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.google.common.base,
- org.daisy.expath.parser,
- org.daisy.pipeline.modules,
- org.osgi.framework;version="1.5.0",
- org.osgi.util.tracker;version="1.4.0",
- org.slf4j,
- org.slf4j.impl
+ javax.xml.stream,
+ org.osgi.framework,
+ org.osgi.util.tracker
 Service-Component: OSGI-INF/registry.xml
 Bundle-Activator: org.daisy.pipeline.modules.tracker.Activator
+Require-Bundle: expath-pkg-parser;bundle-version="1.0.0",
+ module-common;bundle-version="1.0.0"

@@ -8,8 +8,6 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import org.restlet.Component;
 import org.restlet.data.Protocol;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Activator implements BundleActivator {
 
@@ -58,14 +56,14 @@ public static final String WS = "ws";
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
-    Logger mLogger = LoggerFactory.getLogger(getClass().getCanonicalName());
+   // Logger mLogger = LoggerFactory.getLogger(getClass().getCanonicalName());
 	public void start(BundleContext context) throws Exception {
 		if (System.getProperty(DaisyPipelineContext.MODE_PROPERTY) != null
 				&& System.getProperty(DaisyPipelineContext.MODE_PROPERTY)
 						.equals(WS)) {
 		this.context=context;
-		mLogger.info("Starting webservice on port 8182.");
-		
+		//mLogger.info("Starting webservice on port 8182.");
+		System.out.println("Starting webservice on port 8182.");
 		pipelineContextTracker = new ServiceTracker(context, DaisyPipelineContext.class.getName(), new PipelineContextTrackerCustomizer());
 		pipelineContextTracker.open();
 		
@@ -83,7 +81,7 @@ public static final String WS = "ws";
 	 */
 	public void stop(BundleContext context) throws Exception {
 		pipelineContextTracker.close();
-		mLogger.info("Webservice stopped.");
+	//	mLogger.info("Webservice stopped.");
 	}
 
 }

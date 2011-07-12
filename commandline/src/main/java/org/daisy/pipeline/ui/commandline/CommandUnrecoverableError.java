@@ -2,12 +2,9 @@ package org.daisy.pipeline.ui.commandline;
 
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class CommandUnrecoverableError extends Command {
 	public static final String ERR = "ERR";
-	private Logger mLogger = LoggerFactory.getLogger(getClass().getCanonicalName());
+//	private Logger mLogger = LoggerFactory.getLogger(getClass().getCanonicalName());
 	public CommandUnrecoverableError(Properties args) {
 		super(args);
 		// TODO Auto-generated constructor stub
@@ -21,8 +18,8 @@ public class CommandUnrecoverableError extends Command {
 			err =mArgs.getProperty(ERR);
 		}
 		System.err.println("Unrecoverable error:"+err);
-		mLogger.error("Unrecoverable error: "+err);
-		mLogger.warn("Shutting down due to previous errors");
+		//mLogger.error("Unrecoverable error: "+err);
+	//	mLogger.warn("Shutting down due to previous errors");
 		
 	}
 

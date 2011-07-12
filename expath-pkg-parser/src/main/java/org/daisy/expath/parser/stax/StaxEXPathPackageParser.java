@@ -22,7 +22,6 @@ import org.daisy.expath.parser.EXPathConstants.Attributes;
 import org.daisy.expath.parser.EXPathConstants.Elements;
 import org.daisy.expath.parser.EXPathPackageParser;
 import org.daisy.expath.parser.ModuleBuilder;
-import org.daisy.pipeline.modules.Component.Space;
 import org.daisy.pipeline.modules.Module;
 
 import com.google.common.base.Predicate;

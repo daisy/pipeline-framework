@@ -17,6 +17,8 @@
 	<module>../target-platform</module>
 	<module>../daisy.pipeline.feature</module>
 	<module>../daisy.pipeline.site</module>
+	<module>../daisy.pipeline.frontend.feature</module>
+	<module>../daisy.pipeline.frontend.site</module>
 	<module>../daisy-pipeline</module>
 	<module>../job-manager</module>
 	<module>../module-common</module>

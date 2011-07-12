@@ -5,13 +5,13 @@ Bundle-SymbolicName: expath-pkg-parser
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.google.common.base,
+ javax.xml.namespace,
+ javax.xml.stream,
  org.codehaus.stax2;version="3.0.2",
  org.codehaus.stax2.osgi,
  org.daisy.common.stax,
  org.daisy.pipeline.modules,
- org.osgi.framework,
- org.slf4j;version="1.6.1",
- org.slf4j.impl
+ org.osgi.framework
 Service-Component: OSGI-INF/parser.xml
 Export-Package: org.daisy.expath.parser,
  org.daisy.expath.parser.stax

@@ -3,15 +3,15 @@ package org.daisy.pipeline;
 import org.daisy.pipeline.jobmanager.JobManager;
 import org.daisy.pipeline.modules.converter.ConverterRegistry;
 import org.osgi.framework.BundleContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 public class OSGIDaisyPipelineContext implements DaisyPipelineContext{
-	Logger mLogger = LoggerFactory.getLogger(this.getClass().getName());
+//	Logger mLogger = LoggerFactory.getLogger(this.getClass().getName());
 	ConverterRegistry mConverterRegistry;
 	JobManager mJobManager;
 	public void init(BundleContext context) {
-		mLogger.debug("OSGIDaisyContext service up");
+	//	mLogger.debug("OSGIDaisyContext service up");
 	}	
 	
 	public void setConverterRegistry(ConverterRegistry converterRegistry){
@@ -19,7 +19,7 @@ public class OSGIDaisyPipelineContext implements DaisyPipelineContext{
 	}
 	
 	public ConverterRegistry getConverterRegistry() {
-		mLogger.debug("setting converter registry");
+//		mLogger.debug("setting converter registry");
 		return mConverterRegistry;
 	}
 
@@ -28,7 +28,7 @@ public class OSGIDaisyPipelineContext implements DaisyPipelineContext{
 	}
 
 	public void setJobManager(JobManager jobManager) {
-		mLogger.debug("setting job manager");
+//		mLogger.debug("setting job manager");
 		mJobManager = jobManager;
 	}
 
