@@ -22,7 +22,8 @@ public class WebApplication extends Application {
 	public Restlet createInboundRoot() {
 		Router router = new Router(getContext());
 		router.attach("/converters", ConvertersResource.class);
-		router.attach("/converters/{name}", ConverterResource.class);
+		//router.attach("/converters/{name}", ConverterResource.class);
+		router.attach("/converter{?id,uri}", ConverterResource.class);
 		router.attach("/jobs", JobsResource.class);
 		router.attach("/jobs/{id}", JobResource.class);
 		router.attach("/jobs/{id}/log", LogResource.class);

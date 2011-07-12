@@ -176,6 +176,7 @@ public class XmlFormatter {
 		if (jobStatus.getStatus() == JobStatus.Status.COMPLETED || jobStatus.getStatus() == JobStatus.Status.FAILED) {
 			Element logElm = doc.createElement("log");
 			logElm.setAttribute("href", serverAddress + "/jobs/" + job.getId() + "/log");
+			rootElm.appendChild(logElm);
 		}
 		return rootElm;
 	}

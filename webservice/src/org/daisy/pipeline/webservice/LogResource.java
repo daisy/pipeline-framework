@@ -25,7 +25,7 @@ public class LogResource extends ServerResource {
 		if (job != null) {
 			setStatus(Status.SUCCESS_OK);
 			// TODO: return the actual log, not the path to the log file 
-			return job.getStatus().getLog().toString();
+			return "<log>" + job.getStatus().getLog().toString() + "</log>";
 		}
 		else {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);

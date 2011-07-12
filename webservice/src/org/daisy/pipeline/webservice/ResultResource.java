@@ -39,7 +39,7 @@ public class ResultResource extends ServerResource {
     		// This is the result object, but it doesn't do anything yet
     		Result result = job.getStatus().getResult();
 			
-    		return "Results not implemented yet. We apologize for the inconvenience.";
+    		return "<result>Results not implemented yet. We apologize for the inconvenience.</result>";
 		}
 		else {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);

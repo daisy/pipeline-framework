@@ -79,7 +79,7 @@ public class JobsResource extends ServerResource {
 			    	  Representation newJobUriRepresentation = new EmptyRepresentation();
 			    	  newJobUriRepresentation.setLocationRef(((WebApplication)this.getApplication()).getServerAddress() + "/jobs/" + newId.getID());
 			    	  
-			    	  setStatus(Status.SUCCESS_OK);
+			    	  setStatus(Status.SUCCESS_CREATED);
 			    	  return newJobUriRepresentation;
 			      }
 			      else {
