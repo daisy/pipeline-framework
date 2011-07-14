@@ -15,10 +15,18 @@
         <include>*.jar</include>
       </includes>
     </fileSet>
-    <!-- framework -->	
+    <!-- framework backend-->	
     <fileSet>
       <directory>../daisy.pipeline.site/target/site/plugins</directory>
       <outputDirectory>framework</outputDirectory>
+      <includes>
+        <include>*.jar</include>
+      </includes>
+    </fileSet>
+    <!-- framework frontend-->	
+    <fileSet>
+      <directory>../daisy.pipeline.frontend.site/target/site/plugins</directory>
+      <outputDirectory>frontend</outputDirectory>
       <includes>
         <include>*.jar</include>
       </includes>
@@ -31,12 +39,25 @@
         <include>*.jar</include>
       </includes>
     </fileSet>
+    <!-- conf -->
     <fileSet>
-      <directory>etc</directory>
+      <directory>etcDist</directory>
       <outputDirectory>etc</outputDirectory>
-      <excludes>
-      	<exclude>bundles*</exclude>
-      </excludes>
+    </fileSet>
+    <!-- felix launcher-->
+    <fileSet>
+      <directory>fbin</directory>
+      <outputDirectory>fbin</outputDirectory>
+    </fileSet>
+    <!-- felix dependencies-->
+    <fileSet>
+      <directory>bundle</directory>
+      <outputDirectory>bundle</outputDirectory>
+    </fileSet>
+    <!-- felix shell (just for beta version, get rid of this in the future ) -->
+    <fileSet>
+      <directory>bundle_shell</directory>
+      <outputDirectory>bundle_shell</outputDirectory>
     </fileSet>
 	<!-- LICENSES -->	
     <fileSet>
@@ -67,13 +88,6 @@
     </file>
      <file>
       <source>dp2ws.bat</source>
-    </file>
-     <file>
-      <source>pax-runner-1.6.1.jar</source>
-    </file>
-     <file>
-      <source>etc/bundlesDist.txt</source>
-      <destName>etc/bundles.txt</destName>
     </file>
      <file>
       <source>README.txt</source>

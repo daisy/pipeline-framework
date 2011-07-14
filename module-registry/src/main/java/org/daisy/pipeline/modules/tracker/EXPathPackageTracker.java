@@ -13,12 +13,14 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.util.tracker.BundleTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EXPathPackageTracker extends BundleTracker {
 
 	private Map<String, Bundle> bundles = new HashMap<String, Bundle>();
 	ModuleRegistry mRegistry;
-	//private Logger mLogger = LoggerFactory.getLogger(getClass());
+	private Logger mLogger = LoggerFactory.getLogger(getClass());
 
 	public EXPathPackageTracker(BundleContext context, ModuleRegistry reg) {
 		super(context, Bundle.ACTIVE, null);
@@ -34,7 +36,7 @@ public class EXPathPackageTracker extends BundleTracker {
 		URL url = bundle.getResource("expath-pkg.xml");
 
 		if (url != null) {
-		//	mLogger.debug("tracking: " + bundle.getSymbolicName() + "," + url);
+			mLogger.debug("tracking: " + bundle.getSymbolicName() + "," + url);
 
 			Module module = mParser.parse(url,
 					new DefaultModuleBuilder().withLoader(new ResourceLoader() {
@@ -73,7 +75,7 @@ public class EXPathPackageTracker extends BundleTracker {
 	@Override
 	public void removedBundle(Bundle bundle, BundleEvent event, Object object) {
 		super.removedBundle(bundle, event, object);
-		System.out.println("removing: " + bundle.getSymbolicName() + "["
+		mLogger.info("removing: " + bundle.getSymbolicName() + "["
 				+ event + "]");
 		bundles.remove(bundle.getSymbolicName());
 	}

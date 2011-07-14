@@ -10,10 +10,12 @@ Import-Package: javax.xml.stream,
  net.sf.saxon,
  org.daisy.pipeline,
  org.daisy.pipeline.jobmanager,
+ org.daisy.pipeline.logging,
  org.daisy.pipeline.modules,
  org.daisy.pipeline.modules.converter,
  org.daisy.pipeline.xproc,
  org.osgi.framework,
- org.osgi.util.tracker
+ org.osgi.util.tracker,
+ org.slf4j
 
 

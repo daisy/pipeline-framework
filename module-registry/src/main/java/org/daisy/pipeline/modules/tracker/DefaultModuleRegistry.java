@@ -10,13 +10,15 @@ import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ModuleRegistry;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultModuleRegistry implements ModuleRegistry {
 
 	HashMap<URI, Module> mComponentsMap= new HashMap<URI, Module>();
 	HashSet<Module> mModules= new HashSet<Module>();
 	private EXPathPackageParser mParser;
-	//private Logger mLogger = LoggerFactory.getLogger(getClass());
+	private Logger mLogger = LoggerFactory.getLogger(getClass());
 
 	/*
 	private final Function<Bundle, Module> toModule = new Function<Bundle, Module>() {
@@ -38,8 +40,8 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 		tracker = new EXPathPackageTracker(context,this);
 		tracker.setParser(mParser);
 		tracker.open();
-		//mLogger.debug("Module registry up");
-		System.out.println("MR UP");
+		mLogger.debug("Module registry up");
+
 		
 	}
 	
@@ -54,7 +56,6 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	}
 
 	public Iterator<Module> iterator() {
-		// TODO cache the modules and synchronize with tracker
 		return mModules.iterator();
 	}
 
@@ -75,9 +76,9 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	@Override
 	public void addModule(Module module) {
 		mModules.add(module);
-	//	mLogger.debug("Registring "+module.getName());
+		mLogger.debug("Registring "+module.getName());
 		for(Component component: module.getComponents()){
-	//		mLogger.debug("Component "+component.getURI());
+			mLogger.debug("Component "+component.getURI());
 			mComponentsMap.put(component.getURI(), module);
 		}		
 	}

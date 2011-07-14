@@ -8,5 +8,5 @@ Service-Component: OSGI-INF/jobmanager.xml
 Import-Package: org.daisy.pipeline.modules.converter,
  org.junit;version="1.0.0",
  org.osgi.framework;version="1.5.0",
- org.slf4j;version="1.6.1"
+ org.slf4j
 Export-Package: org.daisy.pipeline.jobmanager

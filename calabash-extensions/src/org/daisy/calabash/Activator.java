@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 public class Activator implements BundleActivator {
 
 	public void start(BundleContext context) throws Exception {
-		org.slf4j.impl.OSGILogFactory.initOSGI(context); 
+		
 
 		LoggerFactory.getLogger(this.getClass()).info("calabash-extensions activated ");
 	}

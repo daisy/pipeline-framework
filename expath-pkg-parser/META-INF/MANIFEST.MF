@@ -11,7 +11,8 @@ Import-Package: com.google.common.base,
  org.codehaus.stax2.osgi,
  org.daisy.common.stax,
  org.daisy.pipeline.modules,
- org.osgi.framework
+ org.osgi.framework,
+ org.slf4j
 Service-Component: OSGI-INF/parser.xml
 Export-Package: org.daisy.expath.parser,
  org.daisy.expath.parser.stax

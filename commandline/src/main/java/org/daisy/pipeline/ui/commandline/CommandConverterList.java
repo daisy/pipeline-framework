@@ -1,6 +1,5 @@
 package org.daisy.pipeline.ui.commandline;
 
-import java.net.URI;
 import java.util.Properties;
 
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;

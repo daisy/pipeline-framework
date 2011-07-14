@@ -9,7 +9,8 @@ Import-Package: net.sf.saxon;version="9.2.1.5",
  org.daisy.pipeline.modules.converter,
  org.daisy.pipeline.xproc,
  org.osgi.framework,
- org.osgi.service.component
+ org.osgi.service.component,
+ org.slf4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Service-Component: OSGI-INF/registry.xml
 Export-Package: org.daisy.converter.registry

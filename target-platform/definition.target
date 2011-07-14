@@ -3,9 +3,9 @@
 
 <target name="definition">
 <locations>
+<location path="${project_loc}/../repo" type="Directory"/>
 <location path="${project_loc}/../daisy.pipeline.site/target/site" type="Directory"/>
 <location path="${project_loc}/../daisy.pipeline.frontend.site/target/site" type="Directory"/>
-<location path="${project_loc}/../repo" type="Directory"/>
 <location path="${project_loc}/../../daisy-pipeline-modules/daisy.pipeline.modules.site/target/site" type="Directory"/>
 </locations>
 <launcherArgs>
