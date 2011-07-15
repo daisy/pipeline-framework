@@ -1,10 +1,19 @@
 ###############################################################################
-###          DAISY Pipeline 2 - 1.0 Beta 1 - July 2nd, 2011                 ###
+###          DAISY Pipeline 2 - 1.0 Beta 2 - July 2nd, 2011                 ###
 ###############################################################################
 
 
+ 1. What is the DAISY Pipeline 2 ?
+ 2. Contents of the package
+ 3. Release notes
+ 4. Prerequisites
+ 5. Getting started
+ 6. Documentation
+ 7. Known limitations
+ 8. Contact
 
-What is the DAISY Pipeline 2 ?
+
+1. What is the DAISY Pipeline 2 ?
 -------------------------------------------------------------------------------
 
 The DAISY Pipeline 2 is an ongoing project to develop a next generation
@@ -17,8 +26,7 @@ For more information see:
  - the development site: http://code.google.com/p/daisy-pipeline/
 
 
-
-Contents of the package
+2. Contents of the package
 -------------------------------------------------------------------------------
 
 This package is an early beta release for the 1.0 version due in September
@@ -39,8 +47,35 @@ The package includes:
  - a set of sample documents to test the provided conversions
 
 
+3. Release Notes
+-------------------------------------------------------------------------------
 
-Prerequisites                   
+The changes since the last release are:
+
+ * Framework
+   * adopted Apache Felix as the underlying OSGi framework (instead of Eclipse Equinox)
+   * the launcher is now the built-in Felix launcher (instead of Pax Runner)
+     * reduced startup time
+     * no more "Pax Runner" ASCII banner
+   * adopted Apache Felix File Install to configure the installed bundles and start levels
+   * updated and fixed the logging framework (based on SLF4J + Logback)
+ * Web service
+   * Restlet logging statements are now intercepted, using the JUL bridge for SLF4J
+   * Converters are now identified with their URI, in a query parameter
+   * minor fixes
+ * Modules
+   * daisy202-to-epub3: added an option to generate an NCX from the EPUB 3 Navigation Document
+   * daisy202-to-epub3: production of Media Overlays is now optional
+   * epub3-nav-utils: added an XSLT to generate an NCX from an EPUB 3 Navigation Document
+   * fileset-utils: bug fixes
+   * mediaoverlay-utils: added XSLTs to extract audio and text referenced from SMIL files
+
+The full list of changes can be found at:
+ http://code.google.com/p/daisy-pipeline/w/ReleaseNotes
+
+
+
+4. Prerequisites                   
 -------------------------------------------------------------------------------
 
 Modules already include their dependent libraries and only require a recent
@@ -50,7 +85,7 @@ To get the latest version of Java, go to http://www.java.com/
 
 
 
-Getting Started
+5. Getting Started
 -------------------------------------------------------------------------------
 
 A) Command line tool:
@@ -77,7 +112,7 @@ B) RESTful Web Service:
 
 
 
-Documentation
+6. Documentation
 -------------------------------------------------------------------------------
 
 Command line usage:
@@ -117,15 +152,12 @@ development wiki:
 
 
 
-Known limitations
+7. Known limitations
 -------------------------------------------------------------------------------
 
 Framework:
  - the installation path must not contain space characters
- - the launcher scripts outputs a verbose header advertising the
- underlying launcher tool (OPS4J Pax Runner)
  - converter arguments must be absolute 'file:' URIs
- - the execution may take a significant startup time
  - the execution messages are only available in the debug log, and are
  not very user-friendly
  - no support for localization
@@ -134,16 +166,15 @@ DTBook to ZedAI:
  - see http://code.google.com/p/daisy-pipeline/issues/list?can=2&q=DTBook-to-ZedAI
 
 EPUB 3 production:
- - No support for NCX
  - Supports only toc and page-list navigation
  - No support for font mangling
  - No support for encryption
 
 DAISY 2.02 to EPUB 3:
  - see the EPUB 3 production limitations
- - No support for text-only EPUB 3 production
 
 ZedAI to EPUB 3:
+ - no support for NCX generation
  - the produced EPUB 3 may be invalid
  - ZedAI to HTML is partially implemented
  - ZedAI Metadata is not extracted
@@ -156,7 +187,7 @@ ZedAI to EPUB 3:
 
 
 
-Contact 
+8. Contact 
 -------------------------------------------------------------------------------
 
 If you wish to join the effort and contribute to the Pipeline 2 project, feel
