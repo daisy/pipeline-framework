@@ -3,10 +3,10 @@
 	      xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
 >
 
-<implementation type="px:info" class-name="com.xmlcalabash.extensions.fileutils.Info"/>
-<implementation type="px:mkdir" class-name="com.xmlcalabash.extensions.fileutils.Mkdir"/>
 <implementation type="px:copy" class-name="com.xmlcalabash.extensions.fileutils.Copy"/>
 <implementation type="px:delete" class-name="com.xmlcalabash.extensions.fileutils.Delete"/>
+<implementation type="px:info" class-name="com.xmlcalabash.extensions.fileutils.Info"/>
+<implementation type="px:mkdir" class-name="com.xmlcalabash.extensions.fileutils.Mkdir"/>
 <implementation type="px:zip" class-name="com.xmlcalabash.extensions.Zip"/>
 
 </xproc-config>
