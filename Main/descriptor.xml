@@ -14,6 +14,18 @@
       <includes>
         <include>*.jar</include>
       </includes>
+      <excludes>
+	<exclude>*logback*</exclude>	
+	<exclude>*slf4*</exclude>	
+      </excludes>
+    </fileSet>
+    <fileSet>
+      <directory>../repo/plugins</directory>
+      <outputDirectory>bundle</outputDirectory>
+      <includes>
+	<include>*logback*</include>	
+	<include>*slf4*</include>	
+      </includes>
     </fileSet>
     <!-- framework backend-->	
     <fileSet>
