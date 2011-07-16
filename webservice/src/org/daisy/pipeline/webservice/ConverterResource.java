@@ -20,12 +20,10 @@ public class ConverterResource extends ServerResource {
 	public void doInit() {
 		super.doInit();
 		DaisyPipelineContext context = ((WebApplication)this.getApplication()).getDaisyPipelineContext();
-		//String converterName = (String) getRequestAttributes().get("name");
-		String converterName = (String) getRequestAttributes().get("uri");
-		System.out.println(converterName);
-		// converterDescriptor = context.getConverterRegistry().getDescriptor(converterName);
+		String converterUri = (String) getQuery().getFirstValue("id");
+		System.out.println(converterUri);
 		try {
-			converterDescriptor = context.getConverterRegistry().getDescriptor(new URI(converterName));
+			converterDescriptor = context.getConverterRegistry().getDescriptor(new URI(converterUri));
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
