@@ -10,6 +10,7 @@ import org.daisy.pipeline.jobmanager.Job;
 import org.daisy.pipeline.jobmanager.JobStatus;
 import org.daisy.pipeline.modules.converter.Converter.ConverterArgument;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -19,15 +20,14 @@ import org.w3c.dom.ls.LSSerializer;
 public class XmlFormatter {
 
 	public static Document jobToXml(Job job, String serverAddress) {
-		Document doc = createDom();
-		Element jobElm = toXmlElm(job, doc, serverAddress);
-		doc.appendChild(jobElm);
+		Document doc = createDom("job");
+		toXmlElm(job, doc, serverAddress);
 		return doc;
 	}
 	
 	public static Document jobsToXml(Iterable<Job> jobs, String serverAddress) {
-		Document doc = createDom();
-		Element jobsElm = doc.createElement("jobs");
+		Document doc = createDom("jobs");
+		Element jobsElm = doc.getDocumentElement();
 		
 		Iterator<Job> it = jobs.iterator();
 		while(it.hasNext()) {
@@ -36,21 +36,19 @@ public class XmlFormatter {
 			jobsElm.appendChild(jobElm);
 		}
 		
-		doc.appendChild(jobsElm);
 		return doc;
 	}
 	
 
 	public static Document converterDescriptorToXml(ConverterDescriptor converterDescriptor) {
-		Document doc = createDom();
-		Element converterElm = toXmlElm(converterDescriptor, doc);
-		doc.appendChild(converterElm);
+		Document doc = createDom("converter");
+		toXmlElm(converterDescriptor, doc);
 		return doc;
 	}
 	
 	public static Document converterDescriptorsToXml(Iterable<ConverterDescriptor> converterDescriptors) {
-		Document doc = createDom();
-		Element convertersElm = doc.createElement("converters");
+		Document doc = createDom("converters");
+		Element convertersElm = doc.getDocumentElement();
 		
 		Iterator<ConverterDescriptor> it = converterDescriptors.iterator();
 		while(it.hasNext()) {
@@ -59,7 +57,6 @@ public class XmlFormatter {
 			convertersElm.appendChild(converterElm);
 		}
 		
-		doc.appendChild(convertersElm);
 		return doc;
 	}
 	
@@ -73,7 +70,14 @@ public class XmlFormatter {
 	</converter>
 	 */
 	private static Element toXmlElm(ConverterDescriptor converterDescriptor, Document doc) {
-		Element rootElm = doc.createElement("converter");
+		Element rootElm = null;
+		
+		if (doc.getDocumentElement().getNodeName() == "converter") {
+			rootElm = doc.getDocumentElement();
+		}
+		else {
+			rootElm = doc.createElement("converter");
+		}
 		rootElm.setAttribute("href", converterDescriptor.getFile().toString());
 		
 		Element descriptionElm = doc.createElement("description");
@@ -122,9 +126,16 @@ public class XmlFormatter {
 	</job>
 	 */
 	private static Element toXmlElm(Job job, Document doc, String serverAddress) {
+		Element rootElm = null;
+		
+		if (doc.getDocumentElement().getNodeName() == "job") {
+			rootElm = doc.getDocumentElement();
+		}
+		else {
+			rootElm = doc.createElement("job");
+		}
 		JobStatus jobStatus = job.getStatus();
 		
-		Element rootElm = doc.createElement("job");
 		rootElm.setAttribute("id", job.getId().getID());
 		if (jobStatus.getStatus() == JobStatus.Status.COMPLETED) {
 			rootElm.setAttribute("status", "COMPLETED");
@@ -181,14 +192,13 @@ public class XmlFormatter {
 		return rootElm;
 	}
 	
-	public static Document createDom(){
+	public static Document createDom(String documentElementName){
 		try {
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		    DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-		    Document document = documentBuilder.newDocument();
-			//DomRepresentation rep = new DomRepresentation();
-			//Document document = rep.getDocument();
-		    return document;
+		    DOMImplementation domImpl = documentBuilder.getDOMImplementation();
+		    Document document = domImpl.createDocument("http://www.daisy.org/ns/pipeline/data", documentElementName, null);
+			return document;
 		
 		
 		} catch (ParserConfigurationException e) {
