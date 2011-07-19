@@ -66,7 +66,7 @@ public class JobsResource extends ServerResource {
 			      InputSource is = new InputSource(new StringReader(s));
 			      Document doc = builder.parse(is);
 			      
-			      boolean isValid = validateJobRequest(doc);
+			      boolean isValid = Validator.validateJobRequest(doc, ((WebApplication)this.getApplication()).getDaisyPipelineContext());
 			      if (!isValid) {
 			    	  setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			    	  return null;
@@ -104,68 +104,7 @@ public class JobsResource extends ServerResource {
 		}
 	}
 	
-	private boolean validateJobRequest(Document doc) {
-		URL schema = this.getClass().getResource("resources/jobRequest.xsd");
-		boolean xml_valid = XmlValidator.validate(doc, schema);
-		if (xml_valid == false) {
-			return false;
-		}
-		
-		// now check that there are the right number of arguments
-		Element useConverterElm = (Element)doc.getElementsByTagName("useConverter").item(0);
-		String converterUri = useConverterElm.getAttribute("href");
-		
-		DaisyPipelineContext context = ((WebApplication)this.getApplication()).getDaisyPipelineContext();
-	    ConverterDescriptor converterDescriptor;
-		try {
-			converterDescriptor = context.getConverterRegistry().getDescriptor(new URI(converterUri));
-			converterDescriptor = context.getConverterRegistry().getDescriptor(new URI(converterUri));
-			
-			if (converterDescriptor != null) {
-				// make sure that each converter argument is fulfilled as required
-				Iterator<ConverterArgument>it = converterDescriptor.getConverter().getArguments().iterator();
-				NodeList inputNodes = useConverterElm.getElementsByTagName("input");
-				
-				boolean hasAllRequiredArgs = true;
-				while (it.hasNext()) {
-					ConverterArgument arg = it.next();
-					
-					boolean foundArg = false;
-					// required argument
-					if (arg.isOptional() == false) {
-						// look through the jobRequest input elements to see if there's one to match this argument
-						// also check that its contents are non-empty
-						for (int i=0; i<inputNodes.getLength(); i++) {
-							Element elm = (Element)inputNodes.item(i);
-							if (elm.getAttribute("name") == arg.getName() && elm.getTextContent().trim().length() > 0) {
-								foundArg = true;
-							}
-						}
-					}    
-					else {
-						// if the arg is optional, we don't care if it's present or not
-						foundArg = true;
-					}
-					
-					hasAllRequiredArgs |= foundArg;
-				}
-				
-				if (hasAllRequiredArgs == false) {
-					System.out.print("ERROR: Required args missing");
-				}
-				return hasAllRequiredArgs;
-			}
-			else {
-				System.out.print("ERROR: Converter not found");
-				return false;
-			}
-		}  catch (URISyntaxException e) {
-			System.out.print("ERROR: Malformed URI");
-			return false;
-		}
-	}
-
-
+	
 
 	private ConverterRunnable createConverterRunnable(Document doc) {
 		
