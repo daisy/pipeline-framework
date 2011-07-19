@@ -2,6 +2,7 @@ package org.daisy.pipeline.webservice;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 import javax.xml.XMLConstants;
@@ -27,13 +28,15 @@ public class XmlValidator {
 		
 		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 	    Source schemaFile;
-		try {
-			schemaFile = new StreamSource(schemaUrl.openStream());
-		} catch (IOException e2) {
+	    InputStream is;
+	    try {
+			is = schemaUrl.openStream();
+		} catch (IOException e3) {
 			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			e3.printStackTrace();
 			return false;
 		}
+		schemaFile = new StreamSource(is);
 		
 	    Schema schema = null;
 		try {
@@ -41,6 +44,12 @@ public class XmlValidator {
 		} catch (SAXException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			try {
+				is.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return false;
 		}
 
@@ -48,15 +57,33 @@ public class XmlValidator {
 	    
 	    try {
 	    	validator.validate(new DOMSource(document));
+	    	try {
+				is.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    	return true;
 	    }
 	    catch (SAXException e) {
 	    	System.out.println("VALIDATION EXCEPTION");
 	    	System.out.println(e.getMessage());
+	    	try {
+				is.close();
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 	    	return false;
 	    } catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			try {
+				is.close();
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 			return false;
 		}
 	}
