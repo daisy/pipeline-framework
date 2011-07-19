@@ -26,7 +26,15 @@ public class XmlValidator {
 		}
 		
 		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-	    Source schemaFile = new StreamSource(new File(schemaUrl.getFile()));
+	    Source schemaFile;
+		try {
+			schemaFile = new StreamSource(schemaUrl.openStream());
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			return false;
+		}
+		
 	    Schema schema = null;
 		try {
 			schema = factory.newSchema(schemaFile);
