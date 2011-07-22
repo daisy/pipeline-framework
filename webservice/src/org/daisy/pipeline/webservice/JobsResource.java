@@ -28,6 +28,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import org.apache.commons.codec.binary.Base64;
+
 
 public class JobsResource extends ServerResource {
 
@@ -148,6 +150,7 @@ public class JobsResource extends ServerResource {
 		    			valueArg = converterRunnable.new ValuedConverterArgument(val, arg);
 		    		}
 		    		// we don't care about output arguments in the webservice
+		    		// TODO: is the framework now responsible for mapping output params?
 		    		else if (arg.getType() == ConverterArgument.Type.OUTPUT) {
 		    			valueArg = converterRunnable.new ValuedConverterArgument("Nothing", arg);
 		    		}
@@ -159,6 +162,20 @@ public class JobsResource extends ServerResource {
 		    			return null;
 		    		}
 		    	}
+		    	
+		    	// set data on the converter
+		    	NodeList dataElmNodes = doc.getElementsByTagName("data");
+		    	if (dataElmNodes.getLength() > 0) {
+		    		Element dataElm = (Element)dataElmNodes.item(0);
+		    		String encodedData = dataElm.getTextContent();
+		    		
+		    		//if the framework wants decoded data
+		    		//byte[] decoded = Base64.decodeBase64(encodedData.getBytes());
+				    
+		    		// TODO: what will this function be called?
+		    		// converterRunnable.setData(decoded);
+		    	}
+		    	
 		    	return converterRunnable;
 				
 			}
@@ -175,8 +192,5 @@ public class JobsResource extends ServerResource {
 	    
 	    			
 	}
-	
-	
-	
 	
 }

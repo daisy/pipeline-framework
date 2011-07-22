@@ -97,8 +97,11 @@ public class Validator {
 					ConverterArgument arg = it.next();
 					
 					boolean foundArg = false;
-					// required argument
-					if (arg.isOptional() == false) {
+					
+					// if this is a required argument and not an output argument
+					// TODO: filter out arguments that have @dir = output
+					// below, we just filter out arguments with ConverterArgument.Type.OUTPUT
+					if (arg.isOptional() == false && arg.getType() != ConverterArgument.Type.OUTPUT) {
 						// look through the jobRequest input elements to see if there's one to match this argument
 						// also check that its contents are non-empty
 						for (int i=0; i<inputNodes.getLength(); i++) {

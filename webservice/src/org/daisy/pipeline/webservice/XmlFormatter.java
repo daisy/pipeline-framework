@@ -87,6 +87,7 @@ public class XmlFormatter {
 		
 		Iterator<ConverterArgument> it = converterDescriptor.getConverter().getArguments().iterator();
 		
+		
 		while(it.hasNext()) {
 			ConverterArgument arg = it.next();
 			
@@ -98,18 +99,23 @@ public class XmlFormatter {
 				type = "option";
 			}
 			else if (arg.getType() == ConverterArgument.Type.OUTPUT) {
-				type = "output";
+			//	type = "output";
 			}
 			else if (arg.getType() == ConverterArgument.Type.PARAMETER) {
 				type = "parameter";
 			}
-			Element argElm = doc.createElement("arg");
-			argElm.setAttribute("name", arg.getName());
-			argElm.setAttribute("type", type);
-			argElm.setAttribute("port", arg.getPort());
-			argElm.setAttribute("desc", arg.getDesc());
 			
-			rootElm.appendChild(argElm);
+			// TODO: filter out arguments that have @dir = output
+			// below, we just filter out arguments with ConverterArgument.Type.OUTPUT
+			if (arg.getType() != ConverterArgument.Type.OUTPUT) {
+				Element argElm = doc.createElement("arg");
+				argElm.setAttribute("name", arg.getName());
+				argElm.setAttribute("type", type);
+				argElm.setAttribute("port", arg.getPort());
+				argElm.setAttribute("desc", arg.getDesc());
+				
+				rootElm.appendChild(argElm);
+			}
 		}
 		return rootElm;
 	}

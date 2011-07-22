@@ -6,6 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.daisy.pipeline.webservice.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: ch.qos.logback.classic;version="0.9.15",
+ org.apache.commons.codec.binary,
  org.daisy.pipeline,
  org.daisy.pipeline.jobmanager,
  org.daisy.pipeline.logging,
