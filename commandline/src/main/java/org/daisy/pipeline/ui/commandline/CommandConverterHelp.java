@@ -3,8 +3,8 @@ package org.daisy.pipeline.ui.commandline;
 import java.util.Properties;
 
 import org.daisy.pipeline.modules.converter.Converter;
+import org.daisy.pipeline.modules.converter.ConverterArgument;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
-import org.daisy.pipeline.modules.converter.Converter.ConverterArgument;
 import org.daisy.pipeline.ui.commandline.provider.ServiceProvider;
 
 public class CommandConverterHelp extends Command {

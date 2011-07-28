@@ -10,6 +10,7 @@
         <properties>
                 <tycho-version>0.10.0</tycho-version>
 		<daisy.repo>${project.baseUri}../repo/</daisy.repo> 
+		<daisy.test>${project.baseUri}../test/</daisy.test> 
 		<daisy.target>${project.baseUri}../target-platform</daisy.target>
         </properties>
 	<modules>
@@ -38,12 +39,18 @@
 	<module>../test-converter2</module>
 	<module>../test-converter</module>
 	<module>../webservice</module>
+	<module>../executor</module>
 	</modules>
  <repositories>
                 <repository>
                   <id>daisy_repo</id>
                   <layout>p2</layout>
                   <url>${daisy.repo}</url>
+                </repository>
+                <repository>
+                  <id>test_repo</id>
+                  <layout>p2</layout>
+                  <url>${daisy.test}</url>
                 </repository>
                 <repository>
                   <id>target_platform</id>

@@ -15,8 +15,9 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.daisy.pipeline.DaisyPipelineContext;
+import org.daisy.pipeline.modules.converter.ConverterArgument;
+import org.daisy.pipeline.modules.converter.ConverterArgument.Direction;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
-import org.daisy.pipeline.modules.converter.Converter.ConverterArgument;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -85,7 +86,7 @@ public class Validator {
 		ConverterDescriptor converterDescriptor;
 		try {
 			converterDescriptor = context.getConverterRegistry().getDescriptor(new URI(converterUri));
-			converterDescriptor = context.getConverterRegistry().getDescriptor(new URI(converterUri));
+			//converterDescriptor = context.getConverterRegistry().getDescriptor(new URI(converterUri));
 			
 			if (converterDescriptor != null) {
 				// make sure that each converter argument is fulfilled as required
@@ -101,7 +102,7 @@ public class Validator {
 					// if this is a required argument and not an output argument
 					// TODO: filter out arguments that have @dir = output
 					// below, we just filter out arguments with ConverterArgument.Type.OUTPUT
-					if (arg.isOptional() == false && arg.getType() != ConverterArgument.Type.OUTPUT) {
+					if (arg.isOptional() == false && arg.getDirection() != Direction.OUTPUT) {
 						// look through the jobRequest input elements to see if there's one to match this argument
 						// also check that its contents are non-empty
 						for (int i=0; i<inputNodes.getLength(); i++) {

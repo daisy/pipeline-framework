@@ -4,17 +4,19 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Iterator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.daisy.pipeline.DaisyPipelineContext;
 import org.daisy.pipeline.jobmanager.JobID;
-import org.daisy.pipeline.modules.converter.Converter.ConverterArgument;
+import org.daisy.pipeline.modules.converter.ConverterArgument;
+import org.daisy.pipeline.modules.converter.ConverterArgument.BindType;
+import org.daisy.pipeline.modules.converter.ConverterArgument.Direction;
+import org.daisy.pipeline.modules.converter.ConverterArgument.ValuedConverterArgument;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
 import org.daisy.pipeline.modules.converter.ConverterRunnable;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -27,8 +29,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-
-import org.apache.commons.codec.binary.Base64;
 
 
 public class JobsResource extends ServerResource {
@@ -128,9 +128,9 @@ public class JobsResource extends ServerResource {
 		    		
 		    		
 		    		ConverterArgument arg = converterDescriptor.getConverter().getArgument(name);
-		    		ConverterRunnable.ValuedConverterArgument valueArg = null;
+		    		ValuedConverterArgument valueArg = null;
 		    		
-		    		if (arg.getType() == ConverterArgument.Type.INPUT) {
+		    		if (arg.getBindType() == BindType.PORT && arg.getDirection()==Direction.INPUT) {
 		    			// TODO support inline XML input
 		    			// TODO support a sequence of input documents
 			    		// NodeList docwrapperNodes = inputElm.getElementsByTagName("docwrapper");
@@ -142,21 +142,24 @@ public class JobsResource extends ServerResource {
 		    			
 		    			// here we just expect a URI.  this is temporary for the beta.
 		    			String val = inputElm.getTextContent();
-			    		valueArg = converterRunnable.new ValuedConverterArgument(val, arg);
+		    			valueArg=arg.getValuedConverterBuilder().withSource(SAXHelper.getSaxSource(val));
+			    		 
 			    		
-		    		}
-		    		else if (arg.getType() == ConverterArgument.Type.OPTION || arg.getType() == ConverterArgument.Type.PARAMETER) {
+		    		}else if (arg.getBindType() == BindType.PORT && arg.getDirection()==Direction.OUTPUT) {
 		    			String val = inputElm.getTextContent();
-		    			valueArg = converterRunnable.new ValuedConverterArgument(val, arg);
+		    			valueArg=arg.getValuedConverterBuilder().withResult(SAXHelper.getSaxResult(val));
+		    		}else if (arg.getBindType() == ConverterArgument.BindType.OPTION){//|| arg.getType() == ConverterArgument.Type.PARAMETER) {
+		    			String val = inputElm.getTextContent();
+		    			valueArg = arg.getValuedConverterBuilder().withString(val);
 		    		}
 		    		// we don't care about output arguments in the webservice
 		    		// TODO: is the framework now responsible for mapping output params?
-		    		else if (arg.getType() == ConverterArgument.Type.OUTPUT) {
-		    			valueArg = converterRunnable.new ValuedConverterArgument("Nothing", arg);
-		    		}
+		    		//else if (arg.getType() == ConverterArgument.Type.OUTPUT) {
+		    		//	valueArg = converterRunnable.new ValuedConverterArgument("Nothing", arg);
+		    		//}
 		    		
 		    		if (valueArg != null) {
-		    			converterRunnable.setValue(valueArg);
+		    			converterRunnable.setConverterArgumentValue(valueArg);
 		    		}
 		    		else {
 		    			return null;

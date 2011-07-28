@@ -2,19 +2,26 @@ package org.daisy.pipeline.modules.converter;
 
 import java.util.HashMap;
 
-import org.daisy.pipeline.modules.converter.Converter.ConverterArgument;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+
+import org.daisy.pipeline.modules.converter.ConverterArgument.BindType;
+import org.daisy.pipeline.modules.converter.ConverterArgument.Direction;
+import org.daisy.pipeline.modules.converter.ConverterArgument.ValuedConverterArgument;
+import org.daisy.pipeline.xproc.InputPort;
+import org.daisy.pipeline.xproc.NamedValue;
+import org.daisy.pipeline.xproc.OutputPort;
+import org.daisy.pipeline.xproc.Port;
 /**
  * The Class ConverterRunnable allows to run a converter instance setting the 
  * parameters
  */
-public abstract class ConverterRunnable implements Runnable {
+public class ConverterRunnable extends XProcRunnable {
 
-	/** The executor. */
-	protected ConverterExecutor mExecutor;
 	
 	/** The arguments. */
-	protected  HashMap<ConverterArgument, ValuedConverterArgument> mArguments = new HashMap<ConverterArgument, ConverterRunnable.ValuedConverterArgument>();
-	
+	protected  HashMap<ConverterArgument, ValuedConverterArgument> mArguments = new HashMap<ConverterArgument, ValuedConverterArgument>();
+	protected HashMap<String, Port> mPorts= new HashMap<String, Port>();
 	/** The converter. */
 	private Converter mConverter;
 	
@@ -23,25 +30,75 @@ public abstract class ConverterRunnable implements Runnable {
 	 *
 	 * @param conv the conv
 	 */
-	protected ConverterRunnable(Converter conv){
+	public ConverterRunnable(Converter conv){
 		this.setConverter(conv);
 	}
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
-	public void run() {
+	public void run(){
 		for (ConverterArgument arg : mArguments.keySet()) {
 			if (!arg.isOptional()
 					&& (mArguments.get(arg) == null
-							|| mArguments.get(arg).getValue() == null || mArguments
-							.get(arg).getValue().isEmpty())) {
+							|| mArguments.get(arg).getValues().isEmpty()  )) {
 				throw new RuntimeException("No value for mandatory argument:"+arg.getName());
 
 			}
 		}
+		this.bind();
+		super.run();
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	protected void bind() {
+	
+			for (ValuedConverterArgument arg : mArguments.values()) {
+				if (arg.getConverterArgument().getBindType() == BindType.PORT && arg.getConverterArgument().getDirection() == Direction.INPUT) {
+					bindInput((ValuedConverterArgument<Source>)arg);
+				}else if (arg.getConverterArgument().getBindType() == BindType.PORT && arg.getConverterArgument().getDirection() == Direction.OUTPUT){
+					bindOutput((ValuedConverterArgument<Result>)arg);
+				}else if (arg.getConverterArgument().getBindType() == BindType.OPTION){
+					bindOption((ValuedConverterArgument<String>)arg);
+				}
+			}
+	
 
-		mExecutor.execute(this);
+	}
+	
+	
+	private void bindOption(ValuedConverterArgument<String> arg) {
+		if(arg.getValues().isEmpty()){
+			throw new IllegalArgumentException("no value passed for the option:"+arg.getConverterArgument().getBind());
+		}
+		NamedValue opt = new NamedValue(arg.getConverterArgument().getBind(), arg.getValues().get(0));
+		super.mOptions.add(opt);
+		
+	}
+
+	private void bindInput(ValuedConverterArgument<Source> arg) {
+		InputPort port = (InputPort) mPorts.get(arg.getConverterArgument().getBind());
+		if(port==null){
+			port= new InputPort(arg.getConverterArgument().getBind());
+			this.mPorts.put(arg.getConverterArgument().getBind(), port);
+			this.addInputPort(port);
+		} 
+		for (Source src: arg.getValues()){
+			port.addBind(src);
+		}
+	}
+
+	private void bindOutput(ValuedConverterArgument<Result> arg) {
+		OutputPort port = (OutputPort) mPorts.get(arg.getConverterArgument().getBind());
+		if(port==null){
+			port= new OutputPort(arg.getConverterArgument().getBind());
+			this.mPorts.put(arg.getConverterArgument().getBind(), port);
+			this.addOutputPort(port);
+		} 
+		for (Result res: arg.getValues()){
+			port.addBind(res);
+		}
 	}
 	
 	/**
@@ -51,71 +108,28 @@ public abstract class ConverterRunnable implements Runnable {
 	 */
 	protected void setConverter(Converter converter){
 		mConverter=converter;
-		mArguments=new HashMap<Converter.ConverterArgument, ConverterRunnable.ValuedConverterArgument>();
+		mArguments=new HashMap<ConverterArgument, ValuedConverterArgument>();
 		for (ConverterArgument arg: mConverter.getArguments()){
-			mArguments.put(arg,new ValuedConverterArgument(null, arg));
+			mArguments.put(arg,null);
 		}
+		this.setPipelineUri(this.getConverter().getURI());
 	}
 
-	/**
-	 * Sets the value to given argument
-	 *
-	 * @param arg the arg
-	 * @param value the value
-	 */
-	public void setValue(ConverterArgument arg, String value) {
-		if (mArguments.containsKey(arg)) {
-			mArguments.put(arg, new ValuedConverterArgument(value, arg));
-		} else {
-			throw new IllegalArgumentException("No argument " + arg.getName()
-					+ " for converter " + getConverter().getName());
-		}
+	
+	public void setConverterArgumentValue(ValuedConverterArgument value){ 
+		mArguments.put(value.getConverterArgument(), value);
 	}
 	
-	/**
-	 * Sets a valued argument. Valued arguments are stored using the converter argument as key
-	 *
-	 * @param value the new value
-	 */
-	public void setValue(ValuedConverterArgument value){
-		if (mArguments.containsKey(value.getArgument())) {
-			mArguments.put(value.getArgument(), value);
-		} else {
-			throw new IllegalArgumentException("No argument " + value.getArgument()
-					+ " for converter " + getConverter().getName());
-		}
-	}
+
 	
-	/**
-	 * Gets the valued argument bound to the given converter argument 
-	 *
-	 * @param arg the arg
-	 * @return the valued argument
-	 */
-	public ValuedConverterArgument getValuedArgument(ConverterArgument arg) {
-		return mArguments.get(arg);
-	}
-	
-	/**
-	 * Gets the value.
-	 *
-	 * @param name the name
-	 * @return the value
-	 */
-	public ValuedConverterArgument getValue(String name) {
-		ConverterArgument arg= mConverter.getArgument(name);
-		if (arg==null)
-			throw new IllegalArgumentException("No argument with name "+name+" for converter "+mConverter.getName());
-		
-		return mArguments.get(arg);
-	}
+
 	
 	/**
 	 * Gets the values.
 	 *
 	 * @return the values
 	 */
-	public Iterable <ValuedConverterArgument> getValues() {
+	protected Iterable <ValuedConverterArgument> getValues() {
 		return mArguments.values();
 	}
 	
@@ -128,78 +142,7 @@ public abstract class ConverterRunnable implements Runnable {
 		return mConverter;
 	}
 
-	/**
-	 * The Interface ConverterExecutor.
-	 */
-	public interface ConverterExecutor {
-		
-		/**
-		 * the delegate class which will actually execute the converter invokation
-		 *
-		 * @param runnable the runnable
-		 */
-		public void execute(ConverterRunnable runnable);
-	}
 
-	/**
-	 * The Class ValuedConverterArgument.
-	 */
-	public class ValuedConverterArgument {
-		
-		/** The m value. */
-		protected String mValue;
-		
-		/** The m argument. */
-		private ConverterArgument mArgument;
 
-		/**
-		 * Instantiates a new valued converter argument.
-		 *
-		 * @param value the value
-		 * @param argument the argument
-		 */
-		public ValuedConverterArgument(String value, ConverterArgument argument) {
-			super();
-			mValue = value;
-			mArgument = argument;
-		}
-
-		/**
-		 * Sets the value.
-		 *
-		 * @param value the new value
-		 */
-		public void setValue(String value) {
-			mValue = value;
-		}
-
-		/**
-		 * Gets the value.
-		 *
-		 * @return the value
-		 */
-		public String getValue() {
-			return mValue;
-		}
-
-		/**
-		 * Sets the argument.
-		 *
-		 * @param argument the new argument
-		 */
-		public void setArgument(ConverterArgument argument) {
-			mArgument = argument;
-		}
-
-		/**
-		 * Gets the argument.
-		 *
-		 * @return the argument
-		 */
-		public ConverterArgument getArgument() {
-			return mArgument;
-		}
-
-	}
-
+	
 }

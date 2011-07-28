@@ -1,5 +1,5 @@
 package org.daisy.converter.parser.stax;
-/*
+
 import java.net.URISyntaxException;
 
 import javax.xml.stream.XMLInputFactory;
@@ -8,11 +8,11 @@ import junit.framework.Assert;
 
 import org.daisy.converter.parser.ConverterBuilder;
 import org.daisy.converter.parser.DefaultConverterBuilder;
-import org.daisy.converter.registry.OSGIConverter;
-import org.daisy.converter.registry.OSGIConverterDescriptor;
 import org.daisy.pipeline.modules.converter.Converter;
-import org.daisy.pipeline.modules.converter.Converter.ConverterArgument;
-import org.daisy.pipeline.modules.converter.Converter.ConverterArgument.Type;
+import org.daisy.pipeline.modules.converter.ConverterArgument;
+import org.daisy.pipeline.modules.converter.ConverterArgument.BindType;
+import org.daisy.pipeline.modules.converter.ConverterArgument.Direction;
+import org.daisy.pipeline.modules.converter.ConverterArgument.OutputType;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,17 +24,18 @@ public class StaxConverterParserTest {
 	public void setUp() throws URISyntaxException{
 		StaxConverterParser parser = new StaxConverterParser();
 		parser.setDirectFactory(XMLInputFactory.newInstance());
-		ConverterDescriptor desc = new OSGIConverterDescriptor();
+		ConverterDescriptor desc = new ConverterDescriptor() {
+		};
 		desc.setFile(this.getClass().getClassLoader().getResource("converterDescriptor.xpl").toURI());
-		ConverterBuilder cb =new DefaultConverterBuilder(new OSGIConverter());
+		ConverterBuilder cb =new DefaultConverterBuilder(new MockConverter.MockFactory());
 		conv=parser.parse(desc, cb);
 	}
 	@Test
 	public void converterParsingTest() throws URISyntaxException{
 
-		Assert.assertEquals("testHello", conv.getName());
+		Assert.assertEquals("dtbook-to-zedai", conv.getName());
 		Assert.assertEquals("1.0", conv.getVersion());
-		Assert.assertEquals(" Test xpl description", conv.getDescription());
+		Assert.assertEquals("Convert DTBook XML to ZedAI XML", conv.getDescription());
 	}
 	
 	@Test
@@ -42,30 +43,24 @@ public class StaxConverterParserTest {
 
 		ConverterArgument arg = conv.getArgument("in");
 		
-		Assert.assertEquals("input for hello process", arg.getDesc());
-		Assert.assertEquals(Type.INPUT, arg.getType());
-		Assert.assertEquals("source", arg.getPort());
-		Assert.assertEquals(true, arg.isOptional());
-		
-		arg = conv.getArgument("out");
-		Assert.assertEquals("the result file", arg.getDesc());
-		Assert.assertEquals(Type.OUTPUT, arg.getType());
-		Assert.assertEquals("result", arg.getPort());
+		Assert.assertEquals("DTBook input file(s)", arg.getDesc());
+		Assert.assertEquals(BindType.PORT, arg.getBindType());
 		Assert.assertEquals(false, arg.isOptional());
+		Assert.assertEquals("source", arg.getBind());
+		Assert.assertEquals(true, arg.isSequence());
+		Assert.assertEquals("application/x-dtbook+xml", arg.getMediaType());
+		Assert.assertEquals(Direction.INPUT,arg.getDirection() );
+		
 		
 		arg = conv.getArgument("o");
-		Assert.assertEquals("that kind of option that modifies the converter behaviour", arg.getDesc());
-		Assert.assertEquals(Type.OPTION, arg.getType());
-		Assert.assertEquals("opt", arg.getBind());
+		Assert.assertEquals("Output file path", arg.getDesc());
+		Assert.assertEquals(BindType.OPTION, arg.getBindType());
+		Assert.assertEquals("output-file", arg.getBind());
 		Assert.assertEquals(false, arg.isOptional());
-		
-		arg = conv.getArgument("msg");
-		Assert.assertEquals("msg to show", arg.getDesc());
-		Assert.assertEquals(Type.PARAMETER, arg.getType());
-		Assert.assertEquals("msg", arg.getBind());
-		Assert.assertEquals("params", arg.getPort());
-		Assert.assertEquals(false, arg.isOptional());
+		Assert.assertEquals(Direction.OUTPUT,arg.getDirection() );
+		Assert.assertEquals(OutputType.FILE,arg.getOutputType());
+		Assert.assertEquals("application/z3986-auth+xml", arg.getMediaType());
 		
 	}
+	
 }
-*/

@@ -3,9 +3,16 @@ package org.daisy.pipeline.ui.commandline;
 import java.util.HashMap;
 import java.util.Properties;
 
+import org.daisy.pipeline.modules.converter.ConverterArgument;
+import org.daisy.pipeline.modules.converter.ConverterArgument.Direction;
+import org.daisy.pipeline.modules.converter.ConverterArgument.ValuedArgumentBuilder;
+import org.daisy.pipeline.modules.converter.ConverterArgument.ValuedConverterArgument;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
 import org.daisy.pipeline.modules.converter.ConverterRunnable;
+import org.daisy.pipeline.modules.converter.ConverterArgument.BindType;
 import org.daisy.pipeline.ui.commandline.provider.ServiceProvider;
+
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
 public class CommandConverter extends Command {
 
@@ -51,13 +58,23 @@ public class CommandConverter extends Command {
 		}
 		ConverterRunnable runnable = desc.getConverter().getRunnable();
 		for(String argName : strArgs.keySet()){
-			runnable.getValue(argName).setValue(strArgs.get(argName));
+			ConverterArgument arg=runnable.getConverter().getArgument(argName);
+			ValuedConverterArgument  varg= null;
+			if(arg.getBindType()==BindType.PORT && arg.getDirection()==Direction.INPUT)
+				varg=arg.getValuedConverterBuilder().withSource(SAXHelper.getSaxSource(strArgs.get(argName)));
+			else if(arg.getBindType()==BindType.PORT && arg.getDirection()==Direction.OUTPUT)
+				varg=arg.getValuedConverterBuilder().withResult(SAXHelper.getSaxResult(strArgs.get(argName)));
+			else if(arg.getBindType()==BindType.OPTION){
+				varg=arg.getValuedConverterBuilder().withString(strArgs.get(argName));
+			}
+			runnable.setConverterArgumentValue(varg);
 		}
  
-		runnable.run();
+		
 		//provider.getDaisyPipelineContext().getJobManager().addJob(runnable);
 		//making things more complex :
-		
+		runnable.setExecutor(provider.getDaisyPipelineContext().getExecutor());
+		runnable.run();
 	}
 
 }

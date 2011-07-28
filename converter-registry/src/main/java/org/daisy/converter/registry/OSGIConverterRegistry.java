@@ -11,11 +11,11 @@ import org.daisy.converter.registry.OSGIConverter.OSGIConverterArgument;
 import org.daisy.pipeline.modules.UriResolverDecorator;
 import org.daisy.pipeline.modules.converter.Converter;
 import org.daisy.pipeline.modules.converter.Converter.MutableConverter;
-import org.daisy.pipeline.modules.converter.Converter.MutableConverterArgument;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor.ConverterLoader;
 import org.daisy.pipeline.modules.converter.ConverterFactory;
 import org.daisy.pipeline.modules.converter.ConverterRegistry;
+import org.daisy.pipeline.modules.converter.MutableConverterArgument;
 import org.daisy.pipeline.xproc.XProcessorFactory;
 import org.osgi.framework.BundleContext;
 /**

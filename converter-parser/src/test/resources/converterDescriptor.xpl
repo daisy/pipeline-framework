@@ -3,13 +3,25 @@
 		xmlns:cd="http://www.daisy.org/daisypipeline/converter_descriptor"
 	name="myPipeline" version="1.0">
 
-    <cd:converter name="testHello" version="1.0">
-	<cd:description> Test xpl description</cd:description>	
-	<cd:arg  name="in"  type="input" port="source" desc="input for hello process" optional="true"/> 	
-	<cd:arg  name="out"  type="output" port="result" desc="the result file"/> 	
-	<cd:arg  name="o"  type="option" bind="opt" desc="that kind of option that modifies the converter behaviour"/>
-	<cd:arg  name="msg"  type="parameter" bind="msg" port="params" desc="msg to show" />
-    </cd:converter>	
+    <cd:converter name="dtbook-to-zedai" version="1.0" xmlns:cd="http://www.daisy.org/ns/pipeline/converter">
+ 	 <cd:description>Convert DTBook XML to ZedAI XML</cd:description>  
+  	<cd:arg  name="in"
+           desc="DTBook input file(s)"
+           bind="source"
+           bind-type="port" 
+           optional="false"
+           dir="input"
+           sequence="true"
+           media-type="application/x-dtbook+xml"/>
+  		<cd:arg  name="o"
+           desc="Output file path"
+           bind="output-file"
+           bind-type="option"
+           optional="false"
+           dir="output"
+           type="anyFileURI"
+           media-type="application/z3986-auth+xml"/>
+		</cd:converter>
 
     <p:input port="parameters" kind="parameter"/>
     <p:output port="result" sequence="true"/>

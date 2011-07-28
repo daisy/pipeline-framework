@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="close" immediate="true" name="executor-service">
+   <implementation class="org.daisy.pipeline.executor.OSGIXprocExecutor"/>
+   <service>
+      <provide interface="org.daisy.pipeline.modules.converter.Executor"/>
+   </service>
+   
+    
+   <reference bind="setXprocFactory" cardinality="1..1" interface="org.daisy.pipeline.xproc.XProcessorFactory" policy="static"/>
+   <reference bind="setUriResolver" cardinality="1..1" interface="org.daisy.pipeline.modules.UriResolverDecorator" name="resolver" policy="static"/>
+   
+</scr:component>

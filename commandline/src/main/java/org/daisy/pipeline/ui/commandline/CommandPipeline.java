@@ -3,21 +3,20 @@ package org.daisy.pipeline.ui.commandline;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Properties;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
-import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
-import net.sf.saxon.Configuration;
-
-import org.daisy.pipeline.modules.UriResolverDecorator;
+import org.daisy.pipeline.modules.converter.XProcRunnable;
 import org.daisy.pipeline.ui.commandline.provider.ServiceProvider;
-import org.daisy.pipeline.xproc.XProcessor;
-import org.daisy.pipeline.xproc.XProcessorFactory;
+import org.daisy.pipeline.xproc.InputPort;
+import org.daisy.pipeline.xproc.NamedValue;
+import org.daisy.pipeline.xproc.OutputPort;
 import org.xml.sax.InputSource;
 
 public class CommandPipeline extends Command {
@@ -53,79 +52,48 @@ public class CommandPipeline extends Command {
 		HashMap<String, HashMap<String, String>> params = parseParamsList(mArgs
 				.getProperty(PARAMS));
 		String output = null;
-		Properties props = new Properties();
-		//mLogger.debug("Executing " + this.getClass().getName());
-		if (System.getProperties().containsKey(XProcessorFactory.CONFIGURATION_FILE)){
-		//	mLogger.debug("xproc configuration file set to:"+System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
-			props.setProperty(XProcessorFactory.CONFIGURATION_FILE, System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
-		}
-		// Uri resolver settings
-		URIResolver defaultResolver = Configuration.newConfiguration().getURIResolver();
-		UriResolverDecorator uriResolver = ((ServiceProvider) mArgs
-				.get(PROVIDER)).getUriResolver().setDelegatedUriResolver(
-				defaultResolver);
-		XProcessorFactory fact = ((ServiceProvider) mArgs.get(PROVIDER))
-				.getXProcessorFactory();
-		fact.setProperties(props);
-		fact.setURIResolver(uriResolver);
-		XProcessor xproc = fact.getProcessor(getSaxSource(mArgs
-				.getProperty(PIPELINE)));
 		
-		xproc.setURIResolver(uriResolver);
+		
+		ServiceProvider prov=(ServiceProvider)mArgs.get(PROVIDER); 
+		XProcRunnable xpr = prov.getDaisyPipelineContext().newXprocRunnalble();
+		xpr.setPipelineUri(URI.create(mArgs
+				.getProperty(PIPELINE)));
+	
+		
+		
 		// bind inputs
 		for (String key : inputs.keySet()) {
-
-			xproc.bindInputPort(key, getSaxSource(inputs.get(key)));
+			InputPort port = new InputPort(key);
+			port.addBind(SAXHelper.getSaxSource(inputs.get(key)));
+			xpr.addInputPort(port);
 
 		}
 		// set params
+		/*
 		for (String port : params.keySet()) {
 			for (String param : params.get(port).keySet())
 				xproc.setParameter(port, param, params.get(port).get(param));
 
-		}
+		}*/
 		//options
 		for (String option:options.keySet()){
-			xproc.setOption(option, options.get(option));
+			xpr.addOption(new NamedValue(option, options.get(option)));
 		}
 		// bind outputs
 
 		for (String key : outputs.keySet()) {
-
-			xproc.bindOutputPort(key, getSaxResult(outputs.get(key)));
-
+			OutputPort port = new OutputPort(key);
+			port.addBind(SAXHelper.getSaxResult(outputs.get(key)));
+			xpr.addOutputPort(port);
 		}
 		
 		
-		// here we go!
 
-		xproc.run();
-
-	}
-
-	private Source getSaxSource(String path) throws IllegalArgumentException {
-		File file = new File(path);
-		if (!file.exists() || !file.canRead()) {
-			throw new IllegalArgumentException(
-					"Error: file not found or its not readable:" + path);
-		}
-		return new SAXSource(new InputSource(file.toURI().toString()));
-	}
-
-	private Result getSaxResult(String output) throws IllegalArgumentException {
-		if (output == null || output.isEmpty()) {
-			return new StreamResult(System.out);
-		} else {
-
-			try {
-				return new StreamResult(new FileOutputStream(output));
-			} catch (FileNotFoundException e) {
-				throw new IllegalArgumentException("Output file not found:" + e);
-			}
-
-		}
+		prov.getDaisyPipelineContext().getExecutor().execute(xpr);
 
 	}
+
+
 
 	
 

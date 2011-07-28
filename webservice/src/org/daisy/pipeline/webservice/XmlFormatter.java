@@ -8,7 +8,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.daisy.pipeline.jobmanager.Job;
 import org.daisy.pipeline.jobmanager.JobStatus;
-import org.daisy.pipeline.modules.converter.Converter.ConverterArgument;
+import org.daisy.pipeline.modules.converter.ConverterArgument;
+import org.daisy.pipeline.modules.converter.ConverterArgument.Direction;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -91,27 +92,27 @@ public class XmlFormatter {
 		while(it.hasNext()) {
 			ConverterArgument arg = it.next();
 			
-			String type = "";
-			if (arg.getType() == ConverterArgument.Type.INPUT) {
-				type = "input";
-			}
-			else if (arg.getType() == ConverterArgument.Type.OPTION) {
-				type = "option";
-			}
-			else if (arg.getType() == ConverterArgument.Type.OUTPUT) {
-			//	type = "output";
-			}
-			else if (arg.getType() == ConverterArgument.Type.PARAMETER) {
-				type = "parameter";
-			}
+			String type = arg.getBindType().toString().toLowerCase();
+//			if (arg.getB == ConverterArgument.Type.INPUT) {
+//				type = "input";
+//			}
+//			else if (arg.getType() == ConverterArgument.Type.OPTION) {
+//				type = "option";
+//			}
+//			else if (arg.getType() == ConverterArgument.Type.OUTPUT) {
+//			//	type = "output";
+//			}
+//			else if (arg.getType() == ConverterArgument.Type.PARAMETER) {
+//				type = "parameter";
+//			}
 			
 			// TODO: filter out arguments that have @dir = output
 			// below, we just filter out arguments with ConverterArgument.Type.OUTPUT
-			if (arg.getType() != ConverterArgument.Type.OUTPUT) {
+			if (arg.getDirection() != Direction.OUTPUT) {
 				Element argElm = doc.createElement("arg");
 				argElm.setAttribute("name", arg.getName());
 				argElm.setAttribute("type", type);
-				argElm.setAttribute("port", arg.getPort());
+				//argElm.setAttribute("port", arg.getPort());
 				argElm.setAttribute("desc", arg.getDesc());
 				
 				rootElm.appendChild(argElm);
