@@ -17,7 +17,7 @@ public final class ConverterDescriptorConstants {
 
 	/** The C d_ ns. */
 	public static String CD_NS = "http://www.daisy.org/ns/pipeline/converter";
-
+	public static String PX_NS = "http://www.daisy.org/ns/pipeline/xproc";
 	/**
 	 * The Class Elements.
 	 */
@@ -28,7 +28,8 @@ public final class ConverterDescriptorConstants {
 		
 		/** The DESC. */
 		public static QName DESC = new QName(CD_NS, "description");
-		
+		public static QName PX_DESC = new QName(PX_NS, "description");
+		public static QName PX_MEDIA_TYPE = new QName(PX_NS, "media-type");
 		/** The ARG. */
 		public static QName ARG = new QName(CD_NS, "arg");
 
