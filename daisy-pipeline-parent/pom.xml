@@ -27,6 +27,7 @@
 	<module>../common-stax</module>
 	<module>../expath-pkg-parser</module>
 	<module>../module-registry</module>
+	<module>../xproc-api</module>
 	<module>../xproc-wrapper</module>
 	<module>../xproc-calabash-imp</module>
 	<module>../module-uri-resolver</module>
