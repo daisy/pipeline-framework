@@ -1,20 +1,22 @@
 package org.daisy.commons.xproc;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 
 public final class XProcPipelineInfo {
 
 	public static final class Builder {
 
 		private URI uri;
-		private final Map<String, XProcPortInfo> inputPorts = new HashMap<String, XProcPortInfo>();
-		private final Map<String, XProcPortInfo> parameterPorts = new HashMap<String, XProcPortInfo>();
-		private final Map<String, XProcPortInfo> outputPorts = new HashMap<String, XProcPortInfo>();
-		private final Map<QName, XProcOptionInfo> options = new HashMap<QName, XProcOptionInfo>();
+		private final Map<String, XProcPortInfo> inputPorts = Maps.newHashMap();
+		private final Map<String, XProcPortInfo> parameterPorts = Maps.newHashMap();
+		private final Map<String, XProcPortInfo> outputPorts = Maps.newHashMap();
+		private final Map<QName, XProcOptionInfo> options = Maps.newHashMap();
 
 		public Builder() {
 		}
@@ -60,12 +62,11 @@ public final class XProcPipelineInfo {
 			Map<String, XProcPortInfo> parameterPorts,
 			Map<String, XProcPortInfo> outputPorts,
 			Map<QName, XProcOptionInfo> options) {
-		// FIXME set immutable copies
 		this.uri = uri;
-		this.inputPorts = inputPorts;
-		this.parameterPorts = parameterPorts;
-		this.outputPorts = outputPorts;
-		this.options = options;
+		this.inputPorts = ImmutableMap.copyOf(inputPorts);
+		this.parameterPorts = ImmutableMap.copyOf(parameterPorts);
+		this.outputPorts = ImmutableMap.copyOf(outputPorts);
+		this.options = ImmutableMap.copyOf(options);
 	}
 
 	public URI getURI() {
@@ -73,7 +74,6 @@ public final class XProcPipelineInfo {
 	}
 
 	public Iterable<XProcPortInfo> getInputPorts() {
-		// FIXME return immutable copy
 		return inputPorts.values();
 	}
 
@@ -82,7 +82,6 @@ public final class XProcPipelineInfo {
 	}
 
 	public Iterable<XProcOptionInfo> getOptions() {
-		// FIXME return immutable copy
 		return options.values();
 	}
 
@@ -91,7 +90,6 @@ public final class XProcPipelineInfo {
 	}
 
 	public Iterable<XProcPortInfo> getOutputPorts() {
-		// FIXME return immutable copy
 		return outputPorts.values();
 	}
 
@@ -100,7 +98,6 @@ public final class XProcPipelineInfo {
 	}
 
 	public Iterable<String> getParameterPorts() {
-		// FIXME return immutable copy
 		return parameterPorts.keySet();
 	}
 }

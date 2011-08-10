@@ -5,6 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+
 import javax.xml.namespace.QName;
 
 import org.daisy.commons.xproc.io.Resource;
@@ -12,9 +16,11 @@ import org.daisy.commons.xproc.io.Resource;
 public class XProcInput {
 	public static final class Builder {
 		private final XProcPipelineInfo info;
-		private final HashMap<String, List<Resource>> inputs = new HashMap<String, List<Resource>>();
-		private final Map<String, Map<QName, String>> parameters = new HashMap<String, Map<QName, String>>();
-		private final Map<QName, String> options = new HashMap<QName, String>();
+		private final HashMap<String, List<Resource>> inputs = Maps
+				.newHashMap();
+		private final Map<String, Map<QName, String>> parameters = Maps
+				.newHashMap();
+		private final Map<QName, String> options = Maps.newHashMap();
 
 		public Builder() {
 			this.info = null;
@@ -59,30 +65,38 @@ public class XProcInput {
 		}
 	}
 
-	private Map<String, List<Resource>> inputs;
-	private Map<String, Map<QName, String>> parameters;
-	private Map<QName, String> options;
+	private final Map<String, List<Resource>> inputs;
+	private final Map<String, Map<QName, String>> parameters;
+	private final Map<QName, String> options;
 
 	private XProcInput(Map<String, List<Resource>> inputs,
 			Map<String, Map<QName, String>> parameters,
 			Map<QName, String> options) {
-		this.inputs = inputs;
-		this.parameters = parameters;
-		this.options = options;
+		ImmutableMap.Builder<String, List<Resource>> inputsBuilder = ImmutableMap
+				.builder();
+		for (String key : inputs.keySet()) {
+			inputsBuilder.put(key, ImmutableList.copyOf(inputs.get(key)));
+		}
+		this.inputs = inputsBuilder.build();
+		ImmutableMap.Builder<String, Map<QName, String>> parametersBuilder = ImmutableMap
+				.builder();
+		for (String key : parameters.keySet()) {
+			parametersBuilder
+					.put(key, ImmutableMap.copyOf(parameters.get(key)));
+		}
+		this.parameters = parametersBuilder.build();
+		this.options = ImmutableMap.copyOf(options);
 	}
 
 	public Iterable<Resource> getInputs(String port) {
-		// TODO return immutable copy
-		return inputs.get(port);
+		return ImmutableList.copyOf(inputs.get(port));
 	}
 
 	public Map<QName, String> getParameters(String port) {
-		// TODO return immutable copy
-		return parameters.get(port);
+		return ImmutableMap.copyOf(parameters.get(port));
 	}
 
 	public Map<QName, String> getOptions() {
-		// TODO return immutable copy
 		return options;
 	}
 
