@@ -95,6 +95,8 @@ public interface Converter {
 		public void addArgument(ConverterArgument argument);
 		
 		public void setURI(URI uri);
+		
+		
 	}
 
 	
