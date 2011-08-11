@@ -3,11 +3,10 @@ package org.daisy.pipeline.job;
 import java.io.File;
 import java.util.UUID;
 
-import org.daisy.commons.xproc.XProcEngine;
-import org.daisy.commons.xproc.XProcInput;
-import org.daisy.commons.xproc.XProcPipeline;
-import org.daisy.commons.xproc.XProcResult;
-import org.daisy.commons.xproc.io.ResourceCollection;
+import org.daisy.common.xproc.XProcEngine;
+import org.daisy.common.xproc.XProcInput;
+import org.daisy.common.xproc.XProcPipeline;
+import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.script.XProcScript;
 
 public class Job {
@@ -46,7 +45,7 @@ public class Job {
 	public void run(XProcEngine engine) {
 		status = "running";
 		XProcPipeline pipeline = engine.load(script.getURI());
-		pipeline.run(input);
+		XProcResult output = pipeline.run(input);
 		status = "done";
 		results = new JobResult();
 	}

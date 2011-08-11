@@ -1,6 +1,6 @@
 package org.daisy.pipeline.job;
 
-import org.daisy.commons.xproc.XProcEngine;
+import org.daisy.common.xproc.XProcEngine;
 
 public class JobExecutionService {
 	XProcEngine engine;

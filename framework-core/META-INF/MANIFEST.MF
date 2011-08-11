@@ -5,5 +5,9 @@ Bundle-SymbolicName: org.daisy.pipeline.framework
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: DAISY Consortium
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.daisy.commons.xproc,
- org.daisy.commons.xproc.io
+Import-Package: 
+ com.google.common.base,
+ com.google.common.collect,
+ org.daisy.common.base,
+ org.daisy.common.xproc
+Export-Package: org.daisy.pipeline.job

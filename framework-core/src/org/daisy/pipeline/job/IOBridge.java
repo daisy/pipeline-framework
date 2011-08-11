@@ -2,9 +2,8 @@ package org.daisy.pipeline.job;
 
 import java.io.File;
 
-import org.daisy.commons.xproc.XProcInput;
+import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.script.XProcScript;
-import org.daisy.commons.xproc.io.ResourceCollection;
 
 public class IOBridge {
 

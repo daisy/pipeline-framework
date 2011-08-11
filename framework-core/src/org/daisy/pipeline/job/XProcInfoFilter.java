@@ -1,6 +1,6 @@
 package org.daisy.pipeline.job;
 
-import org.daisy.commons.xproc.XProcPipelineInfo;
+import org.daisy.common.xproc.XProcPipelineInfo;
 
 public class XProcInfoFilter implements Filter<XProcPipelineInfo> {
 

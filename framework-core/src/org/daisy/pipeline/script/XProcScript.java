@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
-import org.daisy.commons.xproc.XProcPipelineInfo;
+import org.daisy.common.xproc.XProcPipelineInfo;
 
 public final class XProcScript {
 

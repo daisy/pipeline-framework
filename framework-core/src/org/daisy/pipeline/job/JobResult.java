@@ -2,7 +2,7 @@ package org.daisy.pipeline.job;
 
 import java.util.zip.ZipFile;
 
-import org.daisy.commons.xproc.XProcResult;
+import org.daisy.common.xproc.XProcResult;
 
 public class JobResult {
 	public XProcResult getXProcOutput() {

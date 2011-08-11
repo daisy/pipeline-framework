@@ -1,7 +1,6 @@
 package org.daisy.pipeline.job;
 
-import org.daisy.commons.xproc.XProcInput;
-import org.daisy.commons.xproc.io.ResourceCollection;
+import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.script.XProcScript;
 
 public class JobManager {
