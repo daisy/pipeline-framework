@@ -1,4 +1,4 @@
-package org.daisy.commons.xproc;
+package org.daisy.common.xproc;
 
 import java.util.HashMap;
 import java.util.List;

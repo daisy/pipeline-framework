@@ -1,4 +1,4 @@
-package org.daisy.commons.xproc;
+package org.daisy.common.xproc;
 
 import javax.xml.namespace.QName;
 

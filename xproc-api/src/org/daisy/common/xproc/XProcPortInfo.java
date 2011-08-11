@@ -1,4 +1,4 @@
-package org.daisy.commons.xproc;
+package org.daisy.common.xproc;
 
 public final class XProcPortInfo {
 

@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Xproc API
-Bundle-SymbolicName: org.daisy.commons.xproc-api
+Bundle-SymbolicName: org.daisy.common.xproc-api
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: DAISY Consortium
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: org.daisy.commons.xproc
+Export-Package: org.daisy.common.xproc
 Import-Package: com.google.common.collect,
  org.daisy.common.base
