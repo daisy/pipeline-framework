@@ -10,4 +10,5 @@ Import-Package:
  com.google.common.collect,
  org.daisy.common.base,
  org.daisy.common.xproc
-Export-Package: org.daisy.pipeline.job
+Export-Package: org.daisy.pipeline.job,
+ org.daisy.pipeline.script
