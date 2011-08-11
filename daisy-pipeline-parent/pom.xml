@@ -21,6 +21,7 @@
 	<module>../daisy.pipeline.frontend.feature</module>
 	<module>../daisy.pipeline.frontend.site</module>
 	<module>../org.daisy.pipeline.logging</module>
+	<module>../common-utils</module>
 	<module>../daisy-pipeline</module>
 	<module>../framework-core</module>
 	<module>../job-manager</module>

@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: DAISY Common Utilities
+Bundle-SymbolicName: org.daisy.common-utils
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: DAISY Consortium
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.daisy.common.base
