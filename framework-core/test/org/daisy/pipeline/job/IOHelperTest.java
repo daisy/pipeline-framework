@@ -1,4 +1,4 @@
-package org.daisy.pipeline.io;
+package org.daisy.pipeline.job;
 
 import java.net.URI;
 

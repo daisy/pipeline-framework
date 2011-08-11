@@ -1,6 +1,8 @@
 package org.daisy.pipeline.job;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.util.UUID;
 
 import org.daisy.common.xproc.XProcEngine;
@@ -19,11 +21,16 @@ public class Job {
 	public static Job newJob(XProcScript script, XProcInput input,
 			ResourceCollection context) {
 		UUID id = UUID.randomUUID();
+		// FIXME "common path"+id.toString
 		File dataDir = new File(id.toString());
-		IOBridge bridge = new IOBridge(dataDir);
-		XProcInput resolvedInput = bridge.resolve(script, input, context);
-		// TODO validate input
-		return new Job(id, script, resolvedInput, dataDir);
+		try {
+			IOBridge bridge = new IOBridge(dataDir);
+			XProcInput resolvedInput = bridge.resolve(script, input, context);
+			// TODO validate input
+			return new Job(id, script, resolvedInput, dataDir);
+		} catch (IOException e) {
+			throw new RuntimeException("Error resolving pipeline info", e);
+		}
 	}
 
 	UUID id;
@@ -53,4 +60,5 @@ public class Job {
 	public JobResult getResult() {
 		return results;
 	}
+
 }
