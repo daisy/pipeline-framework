@@ -1,5 +1,9 @@
-package org.daisy.pipeline.io;
+package org.daisy.pipeline.job;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 
 public class IOHelper {
@@ -15,9 +19,11 @@ public class IOHelper {
 	}
 	
 	public static URI map(String base,String uri){
-		String furi= base+"/"+uri;
+		String furi= base+uri;
 		return URI.create(furi);
 	}
+	
+	
 
 	public URI getNewOutputFolder(String base){
 		String fUri=base+"/"+mOutputFolderPreffix+"_"+(++mFolderOuts)+"/";
@@ -32,5 +38,16 @@ public class IOHelper {
 	}
 	public void setFileOutputPreffix(String outputPreffix) {
 		mOutputFilePreffix = outputPreffix;
+	}
+	public static void dump(InputStream is,String base,String path) throws IOException{
+		File fout=new File(URI.create(base+"/"+path));
+		FileOutputStream fos=new FileOutputStream(fout);
+		byte buff[]= new byte[1024];
+		int read=0;
+		while((read=is.read(buff))>0){
+			fos.write(buff);
+		}
+		fos.close();
+		is.close();
 	}
 }
