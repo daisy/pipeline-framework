@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Calabash adapter for the XProc API
+Bundle-SymbolicName: org.daisy.common.xproc.calabash-adapter
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: DAISY Consortium
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: com.google.common.base,
+ com.xmlcalabash.core;version="1.1.0",
+ com.xmlcalabash.io;version="1.1.0",
+ com.xmlcalabash.model;version="1.1.0",
+ com.xmlcalabash.runtime;version="1.1.0",
+ com.xmlcalabash.util,
+ javax.xml.transform;version="1.3.0",
+ net.sf.saxon;version="9.3.0",
+ net.sf.saxon.om,
+ net.sf.saxon.s9api;version="9.3.0",
+ net.sf.saxon.trans,
+ org.daisy.calabash,
+ org.daisy.common.base,
+ org.daisy.common.xproc,
+ org.slf4j;version="1.5.6"
