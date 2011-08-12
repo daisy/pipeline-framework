@@ -1,22 +1,19 @@
 package org.daisy.common.xproc;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.transform.Result;
 
 import org.daisy.common.base.Provider;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class XProcOutput {
 	public static final class Builder {
 		private final XProcPipelineInfo info;
-		private final HashMap<String, List<Provider<Result>>> outputs = Maps
+		private final HashMap<String, Provider<Result>> outputs = Maps
 				.newHashMap();
 
 		public Builder() {
@@ -29,13 +26,7 @@ public class XProcOutput {
 
 		public Builder withOutput(String port, Provider<Result> result) {
 			// TODO check if compatible with info
-			if (outputs.containsKey(port)) {
-				outputs.get(port).add(result);
-			} else {
-				List<Provider<Result>> resources = Lists.newLinkedList();
-				resources.add(result);
-				outputs.put(port, resources);
-			}
+			outputs.put(port, result);
 			return this;
 		}
 
@@ -44,18 +35,13 @@ public class XProcOutput {
 		}
 	}
 
-	private final Map<String, List<Provider<Result>>> outputs;
+	private final Map<String, Provider<Result>> outputs;
 
-	private XProcOutput(Map<String, List<Provider<Result>>> outputs) {
-		ImmutableMap.Builder<String, List<Provider<Result>>> outputsBuilder = ImmutableMap
-				.builder();
-		for (String key : outputs.keySet()) {
-			outputsBuilder.put(key, ImmutableList.copyOf(outputs.get(key)));
-		}
-		this.outputs = outputsBuilder.build();
+	private XProcOutput(Map<String, Provider<Result>> outputs) {
+		this.outputs = ImmutableMap.copyOf(outputs);
 	}
 
-	public Iterable<Provider<Result>> getOutputs(String port) {
-		return ImmutableList.copyOf(outputs.get(port));
+	public Provider<Result> getResultProvider(String port) {
+		return outputs.get(port);
 	}
 }
