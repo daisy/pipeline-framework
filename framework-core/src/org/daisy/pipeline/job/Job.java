@@ -2,25 +2,25 @@ package org.daisy.pipeline.job;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.UUID;
 
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
+import org.daisy.pipeline.job.JobIdGenerator.JobId;
 import org.daisy.pipeline.script.XProcScript;
 
 public class Job {
 
 	public static Job newJob(XProcScript script, XProcInput input) {
 		// TODO validate input
-		return new Job(UUID.randomUUID(), script, input, null);
+		return new Job(JobIdFactory.newId(), script, input, null);
 	}
 
 	public static Job newJob(XProcScript script, XProcInput input,
 			ResourceCollection context) {
-		UUID id = UUID.randomUUID();
+		JobId id = JobIdFactory.newId();
 		// FIXME "common path"+id.toString
 		File dataDir = new File(id.toString());
 		try {
@@ -33,7 +33,7 @@ public class Job {
 		}
 	}
 
-	UUID id;
+	JobIdGenerator.JobId id;
 	XProcInput input;
 	XProcScript script;
 	XProcResult output;
@@ -41,7 +41,7 @@ public class Job {
 	File dataDir;
 	String status;
 
-	private Job(UUID id, XProcScript script, XProcInput input, File dataDir) {
+	private Job(JobId id, XProcScript script, XProcInput input, File dataDir) {
 
 	}
 
