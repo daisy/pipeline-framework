@@ -41,7 +41,5 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	}
 
 	public void unsetParser(XProcScriptParser parser) {
-		if (this.parser == parser)
-			this.parser = null;
 	}
 }
