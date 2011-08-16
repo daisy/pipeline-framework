@@ -3,13 +3,16 @@ package org.daisy.pipeline.job;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.script.XProcScript;
 
-public class JobManager {
-	JobExecutionService jobExecutionService;
+public interface JobManager {
 
 	public Job newJob(XProcScript script, XProcInput input,
-			ResourceCollection context) {
-		Job job = Job.newJob(script, input, context);
-		jobExecutionService.addJob(job);
-		return job;
-	}
+			ResourceCollection context);
+
+	public Job newJob(XProcScript script, XProcInput input);
+
+	public Iterable<Job> getJobs();
+
+	public boolean deleteJob(JobId id);
+
+	public Job getJob(JobId id);
 }
