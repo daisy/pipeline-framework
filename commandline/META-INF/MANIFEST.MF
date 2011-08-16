@@ -8,6 +8,8 @@ Bundle-Activator: org.daisy.pipeline.ui.commandline.CmdLineActivator
 Import-Package: javax.xml.stream,
  joptsimple,
  net.sf.saxon,
+ org.daisy.common.base,
+ org.daisy.common.xproc,
  org.daisy.pipeline,
  org.daisy.pipeline.jobmanager,
  org.daisy.pipeline.logging,

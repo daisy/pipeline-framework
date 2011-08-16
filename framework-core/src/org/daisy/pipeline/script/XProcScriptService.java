@@ -4,6 +4,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
+
 public final class XProcScriptService {
 
 	/** The Constant CONVERTER_URL. */
@@ -18,6 +21,7 @@ public final class XProcScriptService {
 	private URI uri;
 	private String name;
 	private String description;
+	private Supplier<XProcScript> script;
 
 	public XProcScriptService() {
 	}
@@ -59,6 +63,23 @@ public final class XProcScriptService {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public XProcScript load() {
+		return script.get();
+	}
+
+	public void setParser(final XProcScriptParser parser) {
+		script = Suppliers.memoize(new Supplier<XProcScript>() {
+			@Override
+			public XProcScript get() {
+				return parser.parse(uri);
+			}
+		});
+	}
+
+	public boolean hasParser() {
+		return script != null;
 	}
 
 	public String toString() {
