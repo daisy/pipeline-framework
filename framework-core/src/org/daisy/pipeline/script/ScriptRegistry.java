@@ -2,8 +2,10 @@ package org.daisy.pipeline.script;
 
 import java.net.URI;
 
-public class ScriptRegistry {
-	public XProcScript get(URI uri){
-		return null;
-	}
+public interface ScriptRegistry {
+	public XProcScript getScript(URI uri);
+	public XProcScriptService getDescriptor(URI uri);
+	
+	public Iterable<XProcScriptService> getDescriptors();
+	public Iterable<XProcScript> getScripts();
 }
