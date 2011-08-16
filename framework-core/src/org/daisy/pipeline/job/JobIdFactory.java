@@ -1,6 +1,5 @@
 package org.daisy.pipeline.job;
 
-import org.daisy.pipeline.job.JobIdGenerator.JobId;
 
 public class JobIdFactory {
 	public static JobId newId(){
