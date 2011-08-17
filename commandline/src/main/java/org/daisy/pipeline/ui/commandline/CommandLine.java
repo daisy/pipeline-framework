@@ -2,17 +2,16 @@ package org.daisy.pipeline.ui.commandline;
 
 import java.util.Properties;
 
+import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
 import org.daisy.pipeline.ui.commandline.provider.ServiceProvider;
 
-import sun.security.action.GetBooleanAction;
+public final class CommandLine {
 
-public class CommandLine {
-
-	OptionParser mParser;
-	ServiceProvider mProvider;
+	private final OptionParser mParser;
+	private final ServiceProvider mProvider;
 
 	public CommandLine(ServiceProvider provider) {
 		mProvider = provider;
@@ -57,13 +56,8 @@ public class CommandLine {
 		OptionSet oSet = null;
 		try {
 			oSet = mParser.parse(args);
-		} catch (joptsimple.OptionException oe) {
+		} catch (OptionException oe) {
 			return getUsageWithError(oe.getLocalizedMessage());
-		}
-
-		// Properties commandArgs = new Properties();
-		if (!checkBasicArgs(oSet)) {
-			return getUsage();
 		}
 
 		if (oSet.has("l")) {
@@ -146,10 +140,6 @@ public class CommandLine {
 		Properties commandArgs = new Properties();
 		commandArgs.put(CommandList.PROVIDER, mProvider);
 		return new CommandList(commandArgs);
-	}
-
-	public boolean checkBasicArgs(OptionSet oSet) {
-		return oSet.has("c") || oSet.has("l") || oSet.has("h") || oSet.has("x");
 	}
 
 	public Command getUnrecovreableError(String msg) {
