@@ -12,3 +12,4 @@ Import-Package:
  org.daisy.common.xproc
 Export-Package: org.daisy.pipeline.job,
  org.daisy.pipeline.script
+Service-Component: OSGI-INF/registry.xml
