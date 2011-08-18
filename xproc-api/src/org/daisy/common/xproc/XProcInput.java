@@ -14,7 +14,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-
 public final class XProcInput {
 	public static final class Builder {
 		private final XProcPipelineInfo info;
@@ -67,6 +66,10 @@ public final class XProcInput {
 		}
 	}
 
+	private final static List<Provider<Source>> emptySources = ImmutableList
+			.of();
+	private final static Map<QName, String> emptyParams = ImmutableMap.of();
+
 	private final Map<String, List<Provider<Source>>> inputs;
 	private final Map<String, Map<QName, String>> parameters;
 	private final Map<QName, String> options;
@@ -91,11 +94,13 @@ public final class XProcInput {
 	}
 
 	public Iterable<Provider<Source>> getInputs(String port) {
-		return ImmutableList.copyOf(inputs.get(port));
+		return inputs.containsKey(port) ? ImmutableList
+				.copyOf(inputs.get(port)) : emptySources;
 	}
 
 	public Map<QName, String> getParameters(String port) {
-		return ImmutableMap.copyOf(parameters.get(port));
+		return parameters.containsKey(port) ? ImmutableMap.copyOf(parameters
+				.get(port)) : emptyParams;
 	}
 
 	public Map<QName, String> getOptions() {
