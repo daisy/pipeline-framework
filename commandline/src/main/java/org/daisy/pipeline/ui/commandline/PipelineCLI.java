@@ -2,7 +2,6 @@ package org.daisy.pipeline.ui.commandline;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Properties;
 
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
@@ -11,6 +10,7 @@ import joptsimple.OptionSet;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.modules.ModuleRegistry;
 import org.daisy.pipeline.script.ScriptRegistry;
+import org.daisy.pipeline.script.XProcScriptService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,33 +30,23 @@ public class PipelineCLI {
 
 	public PipelineCLI() {
 		parser = new OptionParser();
-		parser.accepts("l", "List of available uris");
-		parser.accepts(
-				"c",
-				"List of available converters or if a converter name is present it will be executed using the -a arguments")
+		parser.accepts("l", "list of available uris");
+		parser.accepts("s",
+				"list of available scripts or if a script name is present it will be executed")
 				.withOptionalArg().ofType(String.class)
-				.describedAs("converter");
-		parser.accepts("x", "xproc file to execute").withRequiredArg();
-		parser.accepts(
-				"i",
-				"list of input ports in the format portName1=file1,portName2=file2  (only with -x modifier)")
-				.withRequiredArg();
-		parser.accepts("o",
-				"list of output ports in the format portName1=file1,portName2=file2")
-				.withRequiredArg();
-		parser.accepts(
-				"p",
-				"list of parameters in the format port1=param1=value1,port1=param2=value2 (only with -x modifier)")
-				.withRequiredArg();
-		parser.accepts("t",
-				"list of options in the format opt1=value1,opt2=value2 (only with -x modifier)")
-				.withRequiredArg();
-		parser.accepts(
-				"a",
-				"list of arguments in the format arg1=value1,arg2=value2 (only with -c modifier)")
-				.withRequiredArg();
+				.describedAs("script name");
+		parser.accepts("x", "xproc file to execute").withRequiredArg()
+				.describedAs("XProc document");
+		parser.accepts("i", "list of input ports").withRequiredArg()
+				.describedAs("portName1=file1,...");
+		parser.accepts("o", "list of output ports").withRequiredArg()
+				.describedAs("portName1=file1,...");
+		parser.accepts("p", "list of parameters").withRequiredArg()
+				.describedAs("port1=param1=value1,...");
+		parser.accepts("t", "list of options").withRequiredArg()
+				.describedAs("opt1=value1,...");
 		parser.accepts("h",
-				"Showe this help or the help for the given converter")
+				"show this help or the help for the given converter")
 				.withOptionalArg().ofType(String.class)
 				.describedAs("converter");
 
@@ -133,9 +123,9 @@ public class PipelineCLI {
 		}
 
 		if (oSet.has("l")) {
-			return getListCommand();
-		} else if (oSet.has("c")) {
-			return getConverterCommand(oSet);
+			return getListURIsCommand();
+		} else if (oSet.has("s")) {
+			return getScriptCommand(oSet);
 		} else if (oSet.has("x")) {
 			return getPipelineCommand(oSet);
 		} else if (oSet.has("h")) {
@@ -147,18 +137,13 @@ public class PipelineCLI {
 	}
 
 	private Command getHelpCommand(OptionSet oSet) {
-		// FIXME
-		return getUsage();
-		// Properties commandArgs = new Properties();
-		// commandArgs.put(CommandConverterHelp.PROVIDER, mProvider);
-		//
-		// if (oSet.valueOf("h") != null
-		// && !oSet.valueOf("h").toString().isEmpty()) {
-		// commandArgs.put(CommandConverterHelp.NAME, oSet.valueOf("h")
-		// .toString());
-		// return new CommandConverterHelp(commandArgs);
-		// } else
-		// return getUsage();
+		if (oSet.valueOf("h") != null
+				&& !oSet.valueOf("h").toString().isEmpty()) {
+			return CommandScriptHelp.newInstance(oSet.valueOf("h").toString(),
+					scriptRegistry);
+		} else {
+			return getUsage();
+		}
 	}
 
 	private Command getPipelineCommand(OptionSet oSet) {
@@ -177,35 +162,41 @@ public class PipelineCLI {
 		String options = "";
 		if (oSet.valueOf("t") != null)
 			options = oSet.valueOf("t").toString();
-		return CommandPipeline.newInstance(pipeline, inputs, outputs, params, options, xprocEngine);
+		return CommandPipeline.newInstance(pipeline, inputs, outputs, params,
+				options, xprocEngine);
 	}
 
-	private Command getConverterCommand(OptionSet oSet) {
-		// FIXME
-		return getUsage();
-		// Properties commandArgs = new Properties();
-		// commandArgs.put(CommandList.PROVIDER, mProvider);
-		// // System.out.println(oSet.valueOf("c"));
-		// if (oSet.valueOf("c") == null) {
-		// // return new CommandConverterList(commandArgs);
-		// } else {
-		// String arguments;
-		// String name = oSet.valueOf("c").toString();
-		// if (oSet.valueOf("a") != null) {
-		// arguments = oSet.valueOf("a").toString();
-		// } else {
-		// return this
-		// .getUnrecovreableError("converter without arguments");
-		// }
-		// commandArgs.put(CommandConverter.PROVIDER, mProvider);
-		// commandArgs.setProperty(CommandConverter.NAME, name);
-		// commandArgs.setProperty(CommandConverter.ARGS, arguments);
-		// return new CommandConverter(commandArgs);
-		// }
+	private Command getScriptCommand(OptionSet oSet) {
+		if (oSet.valueOf("s") == null
+				&& !oSet.valueOf("s").toString().isEmpty()) {
+			return CommandListScripts.newInstance(scriptRegistry);
+		} else {
+			String scriptName = oSet.valueOf("s").toString();
+			for (XProcScriptService scriptService : scriptRegistry.getScripts()) {
+				if (scriptService.getName().equals(scriptName)) {
+					String inputs = "";
+					if (oSet.valueOf("i") != null)
+						inputs = oSet.valueOf("i").toString();
+					String outputs = "";
+					if (oSet.valueOf("o") != null)
+						outputs = oSet.valueOf("o").toString();
+					String params = "";
+					if (oSet.valueOf("p") != null)
+						params = oSet.valueOf("p").toString();
+					String options = "";
+					if (oSet.valueOf("t") != null)
+						options = oSet.valueOf("t").toString();
+					return CommandPipeline.newInstance(scriptService.getURI()
+							.toString(), inputs, outputs, params, options,
+							xprocEngine);
+				}
+			}
+			return getUsageWithError("Script '" + scriptName + " not found");
+		}
 	}
 
-	private Command getListCommand() {
-		return CommandList.newInstance(moduleRegistry);
+	private Command getListURIsCommand() {
+		return CommandListURIs.newInstance(moduleRegistry);
 	}
 
 	private Command getUnrecovreableError(String msg) {

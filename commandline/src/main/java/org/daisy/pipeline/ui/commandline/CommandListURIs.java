@@ -4,18 +4,18 @@ import java.net.URI;
 
 import org.daisy.pipeline.modules.ModuleRegistry;
 
-public final class CommandList implements Command {
+public final class CommandListURIs implements Command {
 
 	public static Command newInstance(ModuleRegistry moduleRegistry) {
 		if (moduleRegistry == null) {
 			throw new IllegalArgumentException();
 		}
-		return new CommandList(moduleRegistry);
+		return new CommandListURIs(moduleRegistry);
 	}
 
 	private final ModuleRegistry moduleRegistry;
 
-	private CommandList(ModuleRegistry moduleRegistry) {
+	private CommandListURIs(ModuleRegistry moduleRegistry) {
 		this.moduleRegistry = moduleRegistry;
 	}
 
