@@ -11,6 +11,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.calabash.DynamicXProcConfigurationFactory;
+import org.daisy.calabash.XProcConfigurationFactory;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipeline;
@@ -29,21 +30,23 @@ public final class CalabashXProcEngine implements XProcEngine {
 	public static final String CONFIGURATION_FILE = "org.daisy.pipeline.xproc.configuration";
 
 	private static final Logger logger = LoggerFactory
-	.getLogger(CalabashXProcEngine.class);
+			.getLogger(CalabashXProcEngine.class);
 
-	private boolean schemaAware;
+	private boolean schemaAware = false;
 	private URIResolver uriResolver = null;
-	private EntityResolver entityResolver= null;
+	private EntityResolver entityResolver = null;
 	private Properties properties = null;
+	private XProcConfigurationFactory configFactory = null;
 
 	public CalabashXProcEngine() {
 	}
 
 	@Override
 	public XProcPipeline load(URI uri) {
-
-		XProcConfiguration conf = new DynamicXProcConfigurationFactory()
-				.newConfiguration();
+		// TODO check that the dynamic config factory is set
+		XProcConfiguration conf = configFactory != null ? configFactory
+				.newConfiguration(schemaAware) : new XProcConfiguration(
+				schemaAware);
 
 		try {
 			loadConfigurationFile(conf);
@@ -69,7 +72,8 @@ public final class CalabashXProcEngine implements XProcEngine {
 	private void loadConfigurationFile(XProcConfiguration conf)
 			throws SaxonApiException {
 		// TODO cleanup
-		if (properties!=null && properties.getProperty(CONFIGURATION_FILE) != null) {
+		if (properties != null
+				&& properties.getProperty(CONFIGURATION_FILE) != null) {
 			logger.debug("Reading configuration from "
 					+ properties.getProperty(CONFIGURATION_FILE));
 			// Make this absolute because sometimes it fails from the command
@@ -84,12 +88,8 @@ public final class CalabashXProcEngine implements XProcEngine {
 		}
 	}
 
-	public void setSchemaAware(boolean schemaAware) {
-		this.schemaAware = schemaAware;
-	}
-
-	public void setUriResolver(URIResolver uriResolver) {
-		this.uriResolver = uriResolver;
+	public void setConfigurationFactory(XProcConfigurationFactory configFactory) {
+		this.configFactory = configFactory;
 	}
 
 	public void setEntityResolver(EntityResolver entityResolver) {
@@ -99,4 +99,13 @@ public final class CalabashXProcEngine implements XProcEngine {
 	public void setProperties(Properties properties) {
 		this.properties = properties;
 	}
+
+	public void setSchemaAware(boolean schemaAware) {
+		this.schemaAware = schemaAware;
+	}
+
+	public void setUriResolver(URIResolver uriResolver) {
+		this.uriResolver = uriResolver;
+	}
+
 }
