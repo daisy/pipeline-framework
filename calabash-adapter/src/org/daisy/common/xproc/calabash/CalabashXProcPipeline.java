@@ -4,6 +4,7 @@ import java.net.URI;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
+import javax.xml.transform.URIResolver;
 
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
@@ -17,6 +18,7 @@ import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcResult;
+import org.xml.sax.EntityResolver;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
@@ -33,6 +35,8 @@ public class CalabashXProcPipeline implements XProcPipeline {
 
 	private final URI uri;
 	private final XProcConfiguration configuration;
+	private final URIResolver uriResolver;
+	private final EntityResolver entityResolver;
 	private final Supplier<XPipeline> xpipeline = new Supplier<XPipeline>() {
 
 		@Override
@@ -40,10 +44,12 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			XProcRuntime runtime = new XProcRuntime(configuration);
 			runtime.setPhoneHome(false);
 			runtime.setMessageListener(new slf4jXProcMessageListener());
-			// if (mUriResolver != null)
-			// runtime.setURIResolver(mUriResolver);
-			// if (mEntityResolver != null)
-			// runtime.setEntityResolver(mEntityResolver);
+			if (uriResolver != null) {
+				runtime.setURIResolver(uriResolver);
+			}
+			if (entityResolver != null) {
+				runtime.setEntityResolver(entityResolver);
+			}
 
 			XPipeline xpipeline = null;
 
@@ -91,9 +97,12 @@ public class CalabashXProcPipeline implements XProcPipeline {
 				}
 			});
 
-	public CalabashXProcPipeline(final URI uri, final XProcConfiguration conf) {
+	public CalabashXProcPipeline(URI uri, XProcConfiguration conf,
+			URIResolver uriResolver, EntityResolver entityResolver) {
 		this.uri = uri;
 		this.configuration = conf;
+		this.uriResolver = uriResolver;
+		this.entityResolver = entityResolver;
 	}
 
 	@Override
