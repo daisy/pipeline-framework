@@ -10,7 +10,6 @@ import javax.xml.transform.sax.SAXSource;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ModuleRegistry;
 import org.daisy.pipeline.modules.UriResolverDecorator;
-import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -20,13 +19,14 @@ public class ModuleUriResolver implements UriResolverDecorator {
 	private URIResolver mDelegated;
 	Logger mLogger = LoggerFactory.getLogger(getClass().getName());
 
-	public void init(BundleContext ctxt) {
-
+	public void activate(){
+		mLogger.debug("Activating module URI resolver");
+	}
+	
+	public void deactivate(){
+		mLogger.debug("Deactivating module URI resolver");
 	}
 
-	public void stop() {
-
-	}
 
 	public void setModuleRegistry(ModuleRegistry reg) {
 		mRegistry = reg;

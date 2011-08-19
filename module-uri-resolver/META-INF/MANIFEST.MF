@@ -4,8 +4,10 @@ Bundle-Name: Module-uri-resolver
 Bundle-SymbolicName: module-uri-resolver
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.daisy.pipeline.modules,
- org.osgi.framework;version="1.5.0",
- org.slf4j
-Service-Component: OSGI-INF/resolver.xml
+Import-Package:  javax.xml.transform,
+ javax.xml.transform.sax,
+ org.daisy.pipeline.modules,
+ org.slf4j,
+ org.xml.sax
 Export-Package: org.daisy.pipeline.modules.resolver
+Service-Component: OSGI-INF/resolver.xml
