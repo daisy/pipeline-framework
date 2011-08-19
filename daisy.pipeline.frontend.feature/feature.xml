@@ -17,14 +17,14 @@
    </license>
 
    <plugin
-         id="commandline"
+         id="org.daisy.pipeline.webservice"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.daisy.pipeline.webservice"
+         id="org.daisy.pipeline.cli"
          download-size="0"
          install-size="0"
          version="0.0.0"
