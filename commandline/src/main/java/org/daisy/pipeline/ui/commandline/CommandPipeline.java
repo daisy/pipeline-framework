@@ -1,133 +1,94 @@
 package org.daisy.pipeline.ui.commandline;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.net.URI;
 import java.util.HashMap;
-import java.util.Properties;
+import java.util.Map;
 
+import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamResult;
 
-import net.sf.saxon.Configuration;
+import org.daisy.common.base.Provider;
+import org.daisy.common.xproc.XProcEngine;
+import org.daisy.common.xproc.XProcInput;
+import org.daisy.common.xproc.XProcOutput;
+import org.daisy.common.xproc.XProcPipeline;
+import org.daisy.common.xproc.XProcResult;
 
-import org.daisy.pipeline.modules.UriResolverDecorator;
-import org.daisy.pipeline.ui.commandline.provider.ServiceProvider;
-import org.daisy.pipeline.xproc.XProcessor;
-import org.daisy.pipeline.xproc.XProcessorFactory;
-import org.xml.sax.InputSource;
+public class CommandPipeline implements Command {
 
-public class CommandPipeline extends Command {
-	public static String INPUT = "INPUT";
-	public static String PIPELINE = "PIPELINE";
-	public static String OUTPUT = "OUTPUT";
-	public static String PARAMS = "PARAMS";
-	public static String OPTIONS = "OPTIONS";
-	public static String PROVIDER = "PROVIDER";
-	//private Logger mLogger;
-	public CommandPipeline(Properties args) {
-		super(args);
-		//mLogger = LoggerFactory.getLogger(this.getClass());
+	public static Command newInstance(String pipeline, String inputArgs,
+			String outputArgs, String paramsArgs, String optionsArgs,
+			XProcEngine xprocEngine) {
+		return new CommandPipeline(pipeline, inputArgs, outputArgs, paramsArgs,
+				optionsArgs, xprocEngine);
+	}
+
+	private final XProcEngine xprocEngine;
+	private final String uri;
+	private final Map<String, String> inputs;
+	private final Map<String, String> outputs;
+	private final Map<String, String> options;// FIXME use QNames
+	private final Map<String, HashMap<String, String>> params;
+
+	private CommandPipeline(String uri, String inputArgs, String outputArgs,
+			String paramsArgs, String optionsArgs, XProcEngine xprocEngine) {
+		if (uri == null || uri.isEmpty()) {
+			throw new IllegalArgumentException("Error: no XProc document URI");
+		}
+		this.uri = uri;
+		this.inputs = CommandHelper.parseInputList(inputArgs);
+		this.outputs = CommandHelper.parseInputList(outputArgs);
+		this.params = parseParamsList(paramsArgs);
+		this.options = CommandHelper.parseInputList(optionsArgs);
+		this.xprocEngine = xprocEngine;
 	}
 
 	@Override
 	public void execute() throws IllegalArgumentException {
-		if (!mArgs.containsKey(PROVIDER)) {
-			throw new IllegalArgumentException(
-					"Exepecting provider as an argument");
-		}
 
-		if (mArgs.getProperty(PIPELINE).isEmpty()) {
-			throw new IllegalArgumentException("Error:No pipeline file");
-		}
-		HashMap<String, String> inputs = CommandHelper.parseInputList(mArgs
-				.getProperty(INPUT));
-		HashMap<String, String> outputs = CommandHelper.parseInputList(mArgs
-				.getProperty(OUTPUT));
-		HashMap<String, String> options = CommandHelper.parseInputList(mArgs
-				.getProperty(OPTIONS));
+		XProcPipeline pipeline = xprocEngine.load(URI.create(uri));
 
-		HashMap<String, HashMap<String, String>> params = parseParamsList(mArgs
-				.getProperty(PARAMS));
-		String output = null;
-		Properties props = new Properties();
-		//mLogger.debug("Executing " + this.getClass().getName());
-		if (System.getProperties().containsKey(XProcessorFactory.CONFIGURATION_FILE)){
-		//	mLogger.debug("xproc configuration file set to:"+System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
-			props.setProperty(XProcessorFactory.CONFIGURATION_FILE, System.getProperty(XProcessorFactory.CONFIGURATION_FILE));
-		}
-		// Uri resolver settings
-		URIResolver defaultResolver = Configuration.newConfiguration().getURIResolver();
-		UriResolverDecorator uriResolver = ((ServiceProvider) mArgs
-				.get(PROVIDER)).getUriResolver().setDelegatedUriResolver(
-				defaultResolver);
-		XProcessorFactory fact = ((ServiceProvider) mArgs.get(PROVIDER))
-				.getXProcessorFactory();
-		fact.setProperties(props);
-		fact.setURIResolver(uriResolver);
-		XProcessor xproc = fact.getProcessor(getSaxSource(mArgs
-				.getProperty(PIPELINE)));
-		
-		xproc.setURIResolver(uriResolver);
 		// bind inputs
-		for (String key : inputs.keySet()) {
+		XProcInput.Builder inputBuilder = new XProcInput.Builder();
+		for (final String port : inputs.keySet()) {
+			inputBuilder.withInput(port, new Provider<Source>() {
 
-			xproc.bindInputPort(key, getSaxSource(inputs.get(key)));
-
+				@Override
+				public Source provide() {
+					return SAXHelper.getSaxSource(inputs.get(port));
+				}
+			});
 		}
-		// set params
-		for (String port : params.keySet()) {
-			for (String param : params.get(port).keySet())
-				xproc.setParameter(port, param, params.get(port).get(param));
 
-		}
-		//options
-		for (String option:options.keySet()){
-			xproc.setOption(option, options.get(option));
-		}
-		// bind outputs
-
-		for (String key : outputs.keySet()) {
-
-			xproc.bindOutputPort(key, getSaxResult(outputs.get(key)));
-
-		}
-		
-		
-		// here we go!
-
-		xproc.run();
-
-	}
-
-	private Source getSaxSource(String path) throws IllegalArgumentException {
-		File file = new File(path);
-		if (!file.exists() || !file.canRead()) {
-			throw new IllegalArgumentException(
-					"Error: file not found or its not readable:" + path);
-		}
-		return new SAXSource(new InputSource(file.toURI().toString()));
-	}
-
-	private Result getSaxResult(String output) throws IllegalArgumentException {
-		if (output == null || output.isEmpty()) {
-			return new StreamResult(System.out);
-		} else {
-
-			try {
-				return new StreamResult(new FileOutputStream(output));
-			} catch (FileNotFoundException e) {
-				throw new IllegalArgumentException("Output file not found:" + e);
+		// bind params
+		for (final String port : params.keySet()) {
+			for (String param : params.get(port).keySet()) {
+				inputBuilder.withParameter(port, new QName(param),
+						params.get(port).get(param));
 			}
-
 		}
 
-	}
+		// bind options
+		for (String option : options.keySet()) {
+			inputBuilder.withOption(new QName(option), options.get(option));
+		}
 
-	
+		// bind outputs
+		XProcOutput.Builder outputBuilder = new XProcOutput.Builder();
+		for (final String port : outputs.keySet()) {
+			outputBuilder.withOutput(port, new Provider<Result>() {
+
+				@Override
+				public Result provide() {
+					return SAXHelper.getSaxResult(outputs.get(port));
+				}
+			});
+		}
+
+		XProcResult result = pipeline.run(inputBuilder.build());
+		result.writeTo(outputBuilder.build());
+	}
 
 	public HashMap<String, HashMap<String, String>> parseParamsList(String list)
 			throws IllegalArgumentException {

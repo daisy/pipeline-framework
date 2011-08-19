@@ -1,16 +1,20 @@
 package org.daisy.converter.parser.stax;
-/*
+
+import java.net.URI;
+
 import junit.framework.Assert;
 
 import org.daisy.converter.parser.ConverterBuilder;
 import org.daisy.converter.parser.ConverterBuilder.ConverterArgumentBuilder;
 import org.daisy.converter.parser.DefaultConverterBuilder;
 import org.daisy.pipeline.modules.converter.Converter;
-import org.daisy.pipeline.modules.converter.Converter.ConverterArgument;
-import org.daisy.pipeline.modules.converter.Converter.ConverterArgument.Type;
+import org.daisy.pipeline.modules.converter.ConverterArgument;
+import org.daisy.pipeline.modules.converter.ConverterArgument.BindType;
+import org.daisy.pipeline.modules.converter.ConverterArgument.Direction;
+import org.daisy.pipeline.modules.converter.ConverterArgument.OutputType;
 import org.junit.Before;
 import org.junit.Test;
-import org.daisy.converter.registry.OSGIConverter;
+
 public class DefaultConverterBuilderTest {
 	private static final String VERSION = "version";
 	private static final String NAME = "name";
@@ -19,45 +23,46 @@ public class DefaultConverterBuilderTest {
 	private static String A_DESC = "arg_desc";
 	private static String A_BIND = "arg_bind";
 	private static String A_PORT = "arg_port";
+	private static String A_MEDIA = "arg_media";
 	ConverterArgumentBuilder cab;
 	ConverterBuilder cb;
 	@Before
 	public void setup(){
-		cab = new DefaultConverterBuilder(new OSGIConverter())
+		cab = new DefaultConverterBuilder(new MockConverter.MockFactory())
 		.getConverterArgumentBuilder();
-		cb =new DefaultConverterBuilder(new OSGIConverter());
+		cb =new DefaultConverterBuilder(new MockConverter.MockFactory());
 	}
 	
 	@Test
 	public void testSimpleArgument() {
-		
 		ConverterArgument arg = cab.withName(A_NAME).withDesc(A_DESC)
-				.withBind(A_BIND).withPort(A_PORT).build();
+				.withBind(A_BIND).withPort(A_PORT).withMediaType(A_MEDIA).build();
 		
 		Assert.assertEquals(A_NAME, arg.getName());
 		Assert.assertEquals(A_DESC, arg.getDesc());
 		Assert.assertEquals(A_BIND, arg.getBind());
-		Assert.assertEquals(A_PORT, arg.getPort());
+		Assert.assertEquals(A_MEDIA, arg.getMediaType());
+		//Assert.assertEquals(A_PORT, arg.getPort());
 		
 	}
 	@Test
-	public void testTypeArgument() {
+	public void testBindTypeArgument() {
 				
 		try{
-			cab.withType("other");
+			cab.withBindType("other");
 			Assert.fail("Expecting exception");
 		}catch (IllegalArgumentException e) {}
 		
-		ConverterArgument input = cab.withType("input").build();	
-		ConverterArgument output = cab.withType("output").build();
-		ConverterArgument option = cab.withType("option").build();
-		ConverterArgument parameter = cab.withType("parameter").build();
+		ConverterArgument input = cab.withBindType("port").build();	
+		ConverterArgument output = cab.withBindType("port").build();
+		ConverterArgument option = cab.withBindType("option").build();
+		ConverterArgument parameter = cab.withBindType("parameter").build();
 		
 		
-		Assert.assertEquals(Type.INPUT, input.getType());
-		Assert.assertEquals(Type.OUTPUT, output.getType());
-		Assert.assertEquals(Type.OPTION, option.getType());
-		Assert.assertEquals(Type.PARAMETER, parameter.getType());
+		Assert.assertEquals(BindType.PORT, input.getBindType());
+		Assert.assertEquals(BindType.PORT, output.getBindType());
+		Assert.assertEquals(BindType.OPTION, option.getBindType());
+		Assert.assertEquals(BindType.PARAMETER, parameter.getBindType());
 		
 		
 		
@@ -74,13 +79,70 @@ public class DefaultConverterBuilderTest {
 		Assert.assertEquals(true, opt.isOptional());
 		Assert.assertEquals(false, notOpt.isOptional());
 	}
+	@Test 
+	public void testSequence(){
+		try{
+			cab.withSequence("maybe");
+			Assert.fail("Expecting exception");
+		}catch (IllegalArgumentException e) {}
+		ConverterArgument seq = cab.withSequence("true").build();	
+		ConverterArgument notSeq = cab.withSequence("false").build();
+		Assert.assertEquals(true, seq.isSequence());
+		Assert.assertEquals(false, notSeq.isSequence());
+	}
+	
+	@Test
+	public void testOutputTypeArgument() {
+				
+		try{
+			cab.withType("other");
+			Assert.fail("Expecting exception");
+		}catch (IllegalArgumentException e) {}
+		
+		ConverterArgument input = cab.withType("anyFileURI").build();	
+		ConverterArgument output = cab.withType("anyFolderURI").build();
+		
+		
+		
+		Assert.assertEquals(OutputType.FILE, input.getOutputType());
+		Assert.assertEquals(OutputType.FOLDER, output.getOutputType());
+		
+		
+		
+		
+	}
+	
+	@Test
+	public void testDirArgument() {
+				
+		try{
+			cab.withDir("other");
+			Assert.fail("Expecting exception");
+		}catch (IllegalArgumentException e) {}
+		
+		ConverterArgument input = cab.withDir("input").build();	
+		ConverterArgument output = cab.withDir("output").build();
+		
+		
+		
+		Assert.assertEquals(Direction.INPUT, input.getDirection());
+		Assert.assertEquals(Direction.OUTPUT, output.getDirection());
+		
+		
+		
+		
+	}
+	
+
 	
 	@Test
 	public void testConverterBuilder(){
-		Converter conv = cb.withDescription(DESC).withName(NAME).withVersion(VERSION).build();
+		URI uri= URI.create("http://test.com");
+		Converter conv = cb.withDescription(DESC).withName(NAME).withVersion(VERSION).withURI(uri).build();
 		Assert.assertEquals(NAME, conv.getName());
 		Assert.assertEquals(DESC, conv.getDescription());
 		Assert.assertEquals(VERSION, conv.getVersion());
+		Assert.assertEquals(uri, conv.getURI());
 	}
 	@Test
 	public void testConverterWithArg(){
@@ -92,10 +154,8 @@ public class DefaultConverterBuilderTest {
 		Assert.assertEquals(A_NAME, arg.getName());
 		Assert.assertEquals(A_DESC, arg.getDesc());
 		Assert.assertEquals(A_BIND, arg.getBind());
-		Assert.assertEquals(A_PORT, arg.getPort());
 		Assert.assertEquals(NAME, conv.getName());
 		Assert.assertEquals(DESC, conv.getDescription());
 		Assert.assertEquals(VERSION, conv.getVersion());
 	}
 }
-*/

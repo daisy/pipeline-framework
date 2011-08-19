@@ -1,15 +1,26 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.6"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.2"?>
 
 <target name="definition">
-<locations>
-<location path="${project_loc}/../repo" type="Directory"/>
-<location path="${project_loc}/../daisy.pipeline.site/target/site" type="Directory"/>
-<location path="${project_loc}/../daisy.pipeline.frontend.site/target/site" type="Directory"/>
-<location path="${project_loc}/../../daisy-pipeline-modules/daisy.pipeline.modules.site/target/site" type="Directory"/>
-</locations>
-<launcherArgs>
-<vmArgs>org.osgi.framework.system.packages=sun.misc</vmArgs>
-<programArgs>org.osgi.framework.system.packages=sun.misc</programArgs>
-</launcherArgs>
+
+   <launcherArgs>
+      <programArgs>org.osgi.framework.system.packages=sun.misc</programArgs>
+      <vmArgs>org.osgi.framework.system.packages=sun.misc</vmArgs>
+   </launcherArgs>
+
+   <location useDefault="true"/>
+
+   <content useAllPlugins="true">
+      <plugins>
+      </plugins>
+      <features>
+      </features>
+      <extraLocations>
+         <location path="${project_loc}/../repo"/>
+         <location path="${project_loc}/../daisy.pipeline.site/target/site"/>
+         <location path="${project_loc}/../daisy.pipeline.frontend.site/target/site"/>
+         <location path="${project_loc}/../test"/>
+      </extraLocations>
+   </content>
+
 </target>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.daisy.org/ns/pipeline/data" xmlns:data="http://www.daisy.org/ns/pipeline/data">
+  <xs:element name="converters">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="data:converter"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="converter">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="data:description"/>
+        <xs:element maxOccurs="unbounded" ref="data:arg"/>
+      </xs:sequence>
+      <xs:attribute name="href" use="required" type="xs:anyURI"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="description" type="xs:string"/>
+  <xs:element name="arg">
+    <xs:complexType>
+      <xs:attribute name="desc" use="required"/>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="port" use="required"/>
+      <xs:attribute name="type" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

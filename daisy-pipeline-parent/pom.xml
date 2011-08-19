@@ -10,6 +10,7 @@
         <properties>
                 <tycho-version>0.10.0</tycho-version>
 		<daisy.repo>${project.baseUri}../repo/</daisy.repo> 
+		<daisy.test>${project.baseUri}../test/</daisy.test> 
 		<daisy.target>${project.baseUri}../target-platform</daisy.target>
         </properties>
 	<modules>
@@ -20,17 +21,21 @@
 	<module>../daisy.pipeline.frontend.feature</module>
 	<module>../daisy.pipeline.frontend.site</module>
 	<module>../org.daisy.pipeline.logging</module>
+	<module>../common-utils</module>
 	<module>../daisy-pipeline</module>
+	<module>../framework-core</module>
 	<module>../job-manager</module>
 	<module>../module-common</module>
 	<module>../common-stax</module>
 	<module>../expath-pkg-parser</module>
 	<module>../module-registry</module>
+	<module>../xproc-api</module>
 	<module>../xproc-wrapper</module>
 	<module>../xproc-calabash-imp</module>
 	<module>../module-uri-resolver</module>
 	<module>../converter-parser</module>
 	<module>../converter-registry</module>
+	<module>../calabash-adapter</module>
 	<module>../calabash-custom-steps</module>
 	<module>../calabash-extensions</module>
 	<module>../commandline</module>
@@ -38,12 +43,18 @@
 	<module>../test-converter2</module>
 	<module>../test-converter</module>
 	<module>../webservice</module>
+	<module>../executor</module>
 	</modules>
  <repositories>
                 <repository>
                   <id>daisy_repo</id>
                   <layout>p2</layout>
                   <url>${daisy.repo}</url>
+                </repository>
+                <repository>
+                  <id>test_repo</id>
+                  <layout>p2</layout>
+                  <url>${daisy.test}</url>
                 </repository>
                 <repository>
                   <id>target_platform</id>

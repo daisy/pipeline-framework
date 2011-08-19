@@ -1,11 +1,16 @@
 package org.daisy.pipeline.jobmanager;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.net.URI;
 import java.util.LinkedList;
 
 import org.daisy.pipeline.jobmanager.JobService.JobRunner;
 import org.daisy.pipeline.modules.converter.Converter;
+import org.daisy.pipeline.modules.converter.ConverterArgument;
 import org.daisy.pipeline.modules.converter.ConverterFactory;
 import org.daisy.pipeline.modules.converter.ConverterRunnable;
 import org.junit.Before;
@@ -153,7 +158,9 @@ class ConverterRunnableMock extends ConverterRunnable{
 	protected ConverterRunnableMock( boolean fail) {
 		
 		super(new Converter(){
-
+			public URI getURI(){
+				return null;
+			}
 			@Override
 			public String getName() {
 				// TODO Auto-generated method stub
@@ -182,7 +189,7 @@ class ConverterRunnableMock extends ConverterRunnable{
 			@Override
 			public Iterable<ConverterArgument> getArguments() {
 				// TODO Auto-generated method stub
-				return new LinkedList<Converter.ConverterArgument>();
+				return new LinkedList<ConverterArgument>();
 			}
 
 			@Override

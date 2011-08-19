@@ -1,18 +1,21 @@
 package org.daisy.converter.registry;
 
+import java.net.URI;
 import java.util.HashMap;
 
 import org.daisy.pipeline.modules.converter.Converter;
 import org.daisy.pipeline.modules.converter.Converter.MutableConverter;
+import org.daisy.pipeline.modules.converter.ConverterArgument;
 import org.daisy.pipeline.modules.converter.ConverterFactory;
 import org.daisy.pipeline.modules.converter.ConverterRunnable;
+import org.daisy.pipeline.modules.converter.MutableConverterArgument;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class OSGIConverter defines a converter used in a OSGI environment
  */
 public class OSGIConverter implements Converter,MutableConverter {
-
+	private URI mUri;
 	/** The name. */
 	private String mName;
 	
@@ -23,7 +26,7 @@ public class OSGIConverter implements Converter,MutableConverter {
 	private String mDescription;
 	
 	/** The arguments. */
-	private HashMap<String, ConverterArgument> mArguments = new HashMap<String, Converter.ConverterArgument>();
+	private HashMap<String, ConverterArgument> mArguments = new HashMap<String, ConverterArgument>();
 	
 	/** The factory. */
 	private OSGIConverterRegistry mFactory;
@@ -145,14 +148,7 @@ public class OSGIConverter implements Converter,MutableConverter {
 			
 		}
 
-		/* (non-Javadoc)
-		 * @see org.daisy.pipeline.modules.converter.Converter.MutableConverterArgument#setType(org.daisy.pipeline.modules.converter.Converter.ConverterArgument.Type)
-		 */
-		@Override
-		public void setType(Type type) {
-			this.mType=type;
-			
-		}
+		
 
 		/* (non-Javadoc)
 		 * @see org.daisy.pipeline.modules.converter.Converter.MutableConverterArgument#setOptional(boolean)
@@ -163,13 +159,34 @@ public class OSGIConverter implements Converter,MutableConverter {
 			
 		}
 
-		/* (non-Javadoc)
-		 * @see org.daisy.pipeline.modules.converter.Converter.MutableConverterArgument#setPort(java.lang.String)
-		 */
+	
+
+
 		@Override
-		public void setPort(String port) {
-			mPort=port;
+		public void setBindType(BindType bindType) {
+			this.mBindType=bindType;			
+		}
+
+		@Override
+		public void setDirection(Direction direction) {
+			this.mDirection=direction;
 			
+		}
+
+		@Override
+		public void setMediaType(String mediaType) {
+			this.mMediaType=mediaType;			
+		}
+
+		@Override
+		public void setOutputType(OutputType outputType) {
+			this.mOutputType=outputType;
+			
+		}
+
+		@Override
+		public void setSequence(boolean sequence) {
+			this.mSequence=sequence;
 		}
 		
 	}
@@ -188,7 +205,19 @@ public class OSGIConverter implements Converter,MutableConverter {
 	 */
 	@Override
 	public ConverterRunnable getRunnable() {
-		return new OSGIConverterRunner(this) ;
+		return new ConverterRunnable(this) ;
+	}
+
+
+	@Override
+	public URI getURI() {
+		// TODO Auto-generated method stub
+		return this.mUri;
+	}
+
+	@Override
+	public void setURI(URI uri) {
+		this.mUri=uri;
 	}
 	
 	

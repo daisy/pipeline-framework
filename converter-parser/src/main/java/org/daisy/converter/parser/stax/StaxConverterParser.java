@@ -2,6 +2,7 @@ package org.daisy.converter.parser.stax;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.xml.stream.XMLEventReader;
@@ -26,6 +27,8 @@ import org.daisy.converter.parser.ConverterParser;
 import org.daisy.pipeline.modules.UriResolverDecorator;
 import org.daisy.pipeline.modules.converter.Converter;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -53,6 +56,7 @@ public class StaxConverterParser implements ConverterParser {
 	/** The uri resolver. */
 	private URIResolver mUriResolver;
 
+	private static Logger mLogger = LoggerFactory.getLogger(StaxConverterParser.class);
 	/* (non-Javadoc)
 	 * @see org.daisy.converter.parser.ConverterParser#parse(org.daisy.pipeline.modules.converter.ConverterDescriptor, org.daisy.converter.parser.ConverterBuilder)
 	 */
@@ -70,8 +74,13 @@ public class StaxConverterParser implements ConverterParser {
 			if (mUriResolver!=null){
 				Source src =mUriResolver.resolve(descUrl.toString(), "");
 				descUrl = new URL(src.getSystemId());
+				
 			}
-			
+			try {
+				builder.withURI(descUrl.toURI());
+			} catch (URISyntaxException e) {
+				mLogger.warn("resolved uri not an uri");
+			}
 			is = descUrl.openConnection().getInputStream();
 			reader = mFactory.createXMLEventReader(is);
 
@@ -158,18 +167,24 @@ public class StaxConverterParser implements ConverterParser {
 						ConverterArgumentBuilder cab = builder.getConverterArgumentBuilder();
 						cab.withName(argument.getAttributeByName(Attributes.NAME).getValue());
 						cab.withDesc(argument.getAttributeByName(Attributes.DESC).getValue());
-						cab.withType(argument.getAttributeByName(Attributes.TYPE).getValue());
-						Attribute bind=argument.getAttributeByName(Attributes.BIND);
-						Attribute port=argument.getAttributeByName(Attributes.PORT);
+						cab.withBindType(argument.getAttributeByName(Attributes.BIND_TYPE).getValue());
+						cab.withBind(argument.getAttributeByName(Attributes.BIND).getValue());
+						cab.withDir(argument.getAttributeByName(Attributes.DIR).getValue());
+						cab.withMediaType(argument.getAttributeByName(Attributes.MEDIA_TYPE).getValue());
+						
 						Attribute optional=argument.getAttributeByName(Attributes.OPTIONAL);
-						if (bind!=null){
-							cab.withBind(bind.getValue());
-						}
-						if (port!=null){
-							cab.withPort(port.getValue());
-						}
+						Attribute sequence = argument.getAttributeByName(Attributes.SEQUENCE);
+						Attribute type = argument.getAttributeByName(Attributes.TYPE);
+						
+						
 						if (optional!=null){
 							cab.withOptional(optional.getValue());
+						}
+						if (sequence!=null){
+							cab.withSequence(sequence.getValue());
+						}
+						if (type!=null){
+							cab.withType(type.getValue());
 						}
 						builder.withArgument(cab);
 					}

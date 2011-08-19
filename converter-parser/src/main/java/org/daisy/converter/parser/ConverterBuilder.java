@@ -2,9 +2,11 @@ package org.daisy.converter.parser;
 
 
 
+import java.net.URI;
+
 import org.daisy.pipeline.modules.ResourceLoader;
 import org.daisy.pipeline.modules.converter.Converter;
-import org.daisy.pipeline.modules.converter.Converter.ConverterArgument;
+import org.daisy.pipeline.modules.converter.ConverterArgument;
 
 
 /**
@@ -43,6 +45,7 @@ public interface ConverterBuilder {
 		 */
 		public ConverterBuilder withDescription(String desc);
 		
+		public ConverterBuilder withURI(URI uri);
 		/**
 		 * With loader.
 		 *
@@ -125,6 +128,12 @@ public interface ConverterBuilder {
 			 * @return this converter argument builder
 			 */
 			public ConverterArgumentBuilder withOptional(String desc);
+			
+			public ConverterArgumentBuilder withBindType(String bindType);
+			public ConverterArgumentBuilder withDir(String dir);
+			public ConverterArgumentBuilder withMediaType(String mediaType);
+			public ConverterArgumentBuilder withSequence(String sequence);
+			
 		}
 	
 }

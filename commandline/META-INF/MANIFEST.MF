@@ -1,21 +1,16 @@
-nManifest-Version: 1.0
+Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Commandline
-Bundle-SymbolicName: commandline
+Bundle-Name: DAISY Pipeline 2 CLI
+Bundle-SymbolicName: org.daisy.pipeline.cli
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-Activator: org.daisy.pipeline.ui.commandline.CmdLineActivator
 Import-Package: javax.xml.stream,
  joptsimple,
  net.sf.saxon,
- org.daisy.pipeline,
- org.daisy.pipeline.jobmanager,
+ org.daisy.common.base,
+ org.daisy.common.xproc,
  org.daisy.pipeline.logging,
  org.daisy.pipeline.modules,
- org.daisy.pipeline.modules.converter,
- org.daisy.pipeline.xproc,
- org.osgi.framework,
- org.osgi.util.tracker,
+ org.daisy.pipeline.script,
  org.slf4j
-
-
+Service-Component: OSGI-INF/cli.xml

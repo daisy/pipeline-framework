@@ -1,7 +1,6 @@
 package org.daisy.pipeline.modules.converter;
 
 import org.daisy.pipeline.modules.converter.Converter.MutableConverter;
-import org.daisy.pipeline.modules.converter.Converter.MutableConverterArgument;
 
 // TODO: Auto-generated Javadoc
 /**

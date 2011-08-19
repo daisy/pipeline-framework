@@ -10,9 +10,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.daisy.pipeline.DaisyPipelineContext;
 import org.daisy.pipeline.jobmanager.JobID;
-import org.daisy.pipeline.modules.converter.Converter.ConverterArgument;
+import org.daisy.pipeline.modules.converter.ConverterArgument;
+import org.daisy.pipeline.modules.converter.ConverterArgument.BindType;
+import org.daisy.pipeline.modules.converter.ConverterArgument.Direction;
+import org.daisy.pipeline.modules.converter.ConverterArgument.ValuedConverterArgument;
 import org.daisy.pipeline.modules.converter.ConverterDescriptor;
 import org.daisy.pipeline.modules.converter.ConverterRunnable;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -59,11 +63,12 @@ public class JobsResource extends ServerResource {
 			
 			try {
 			      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			      factory.setNamespaceAware(true);
 			      DocumentBuilder builder = factory.newDocumentBuilder();
 			      InputSource is = new InputSource(new StringReader(s));
 			      Document doc = builder.parse(is);
 			      
-			      boolean isValid = validateJobRequest(doc);
+			      boolean isValid = Validator.validateJobRequest(doc, ((WebApplication)this.getApplication()).getDaisyPipelineContext());
 			      if (!isValid) {
 			    	  setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			    	  return null;
@@ -101,12 +106,7 @@ public class JobsResource extends ServerResource {
 		}
 	}
 	
-	private boolean validateJobRequest(Document doc) {
-		// TODO job request validation
-		return true;
-	}
-
-
+	
 
 	private ConverterRunnable createConverterRunnable(Document doc) {
 		
@@ -128,9 +128,9 @@ public class JobsResource extends ServerResource {
 		    		
 		    		
 		    		ConverterArgument arg = converterDescriptor.getConverter().getArgument(name);
-		    		ConverterRunnable.ValuedConverterArgument valueArg = null;
+		    		ValuedConverterArgument valueArg = null;
 		    		
-		    		if (arg.getType() == ConverterArgument.Type.INPUT) {
+		    		if (arg.getBindType() == BindType.PORT && arg.getDirection()==Direction.INPUT) {
 		    			// TODO support inline XML input
 		    			// TODO support a sequence of input documents
 			    		// NodeList docwrapperNodes = inputElm.getElementsByTagName("docwrapper");
@@ -142,25 +142,43 @@ public class JobsResource extends ServerResource {
 		    			
 		    			// here we just expect a URI.  this is temporary for the beta.
 		    			String val = inputElm.getTextContent();
-			    		valueArg = converterRunnable.new ValuedConverterArgument(val, arg);
+		    			valueArg=arg.getValuedConverterBuilder().withSource(SAXHelper.getSaxSource(val));
+			    		 
 			    		
-		    		}
-		    		else if (arg.getType() == ConverterArgument.Type.OPTION || arg.getType() == ConverterArgument.Type.PARAMETER) {
+		    		}else if (arg.getBindType() == BindType.PORT && arg.getDirection()==Direction.OUTPUT) {
 		    			String val = inputElm.getTextContent();
-		    			valueArg = converterRunnable.new ValuedConverterArgument(val, arg);
+		    			valueArg=arg.getValuedConverterBuilder().withResult(SAXHelper.getSaxResult(val));
+		    		}else if (arg.getBindType() == ConverterArgument.BindType.OPTION){//|| arg.getType() == ConverterArgument.Type.PARAMETER) {
+		    			String val = inputElm.getTextContent();
+		    			valueArg = arg.getValuedConverterBuilder().withString(val);
 		    		}
 		    		// we don't care about output arguments in the webservice
-		    		else if (arg.getType() == ConverterArgument.Type.OUTPUT) {
-		    			valueArg = converterRunnable.new ValuedConverterArgument("Nothing", arg);
-		    		}
+		    		// TODO: is the framework now responsible for mapping output params?
+		    		//else if (arg.getType() == ConverterArgument.Type.OUTPUT) {
+		    		//	valueArg = converterRunnable.new ValuedConverterArgument("Nothing", arg);
+		    		//}
 		    		
 		    		if (valueArg != null) {
-		    			converterRunnable.setValue(valueArg);
+		    			converterRunnable.setConverterArgumentValue(valueArg);
 		    		}
 		    		else {
 		    			return null;
 		    		}
 		    	}
+		    	
+		    	// set data on the converter
+		    	NodeList dataElmNodes = doc.getElementsByTagName("data");
+		    	if (dataElmNodes.getLength() > 0) {
+		    		Element dataElm = (Element)dataElmNodes.item(0);
+		    		String encodedData = dataElm.getTextContent();
+		    		
+		    		//if the framework wants decoded data
+		    		//byte[] decoded = Base64.decodeBase64(encodedData.getBytes());
+				    
+		    		// TODO: what will this function be called?
+		    		// converterRunnable.setData(decoded);
+		    	}
+		    	
 		    	return converterRunnable;
 				
 			}
@@ -177,8 +195,5 @@ public class JobsResource extends ServerResource {
 	    
 	    			
 	}
-	
-	
-	
 	
 }

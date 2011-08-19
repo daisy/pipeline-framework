@@ -1,21 +1,24 @@
+/*
+ * 
+ */
 package org.daisy.pipeline.xproc.impl;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
-import javax.xml.transform.sax.SAXSource;
 
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.pipeline.xproc.InputPort;
+import org.daisy.pipeline.xproc.NamedValue;
+import org.daisy.pipeline.xproc.OutputPort;
+import org.daisy.pipeline.xproc.ParameterPort;
 import org.daisy.pipeline.xproc.XProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,71 +31,108 @@ import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.model.Serialization;
 import com.xmlcalabash.runtime.XPipeline;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class XProcessorImp is a calabash implementation for the XProc class
+ */
 public class XProcessorImp extends XProcessor {
 
+	/** The Pipeline. */
 	private XPipeline mPipeline;
+	
+	/** The Proc runtime. */
 	private XProcRuntime mProcRuntime;
+	
+	/** The Error listener. */
 	private ErrorListener mErrorListener;
 
-	private HashMap<String, Source> mInputPorts = new HashMap<String, Source>();
-	private HashMap<String, Result> mOutputPorts = new HashMap<String, Result>();
-	private XProcParameters mParams;
-	private HashMap<String, Object> mOptions = new HashMap<String, Object>();
-	Logger mLogger = LoggerFactory.getLogger(XProcessorImp.class);
-
-	// TODO this field is not being used because
+	/** The Input ports. */
+	private HashMap<String, InputPort> mInputPorts = new HashMap<String, InputPort>();
+	
+	/** The Output ports. */
+	private HashMap<String, OutputPort> mOutputPorts = new HashMap<String, OutputPort>();
+	
+	/** The Options. */
+	private HashMap<String,NamedValue> mOptions = new HashMap<String,NamedValue>();
+	
+	/** The Logger. */
+	private Logger mLogger = LoggerFactory.getLogger(XProcessorImp.class);
+	
+	/** The Entity resolver. */
 	private EntityResolver mEntityResolver;
+	
+	/** The Properties. */
 	private Properties mProperties;
+	
+	/** The Params. */
+	private HashMap<String, ParameterPort> mParams = new HashMap<String, ParameterPort>();
+	
 
+
+
+
+	/**
+	 * Instantiates a new x processor imp.
+	 *
+	 * @param pipeline the pipeline
+	 * @param runtime the runtime
+	 */
 	public XProcessorImp(XPipeline pipeline, XProcRuntime runtime) {
-		
-		
 		mProcRuntime = runtime;
 		mPipeline = pipeline;
-		for (String s : mPipeline.getInputs()) {
-			mInputPorts.put(s, null);
-		}
-		for (String s : mPipeline.getOutputs()) {
-			mOutputPorts.put(s, null);
-		}
-		
-		mParams = new XProcParameters(mInputPorts.keySet());
 		mProperties=new Properties();
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#getErrorListener()
+	 */
 	@Override
 	public ErrorListener getErrorListener() {
 		return mErrorListener;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#getURIResolver()
+	 */
 	@Override
 	public URIResolver getURIResolver() {
 
 		return this.mProcRuntime.getResolver();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#setErrorListener(javax.xml.transform.ErrorListener)
+	 */
 	@Override
 	public void setErrorListener(ErrorListener listener) {
 		mErrorListener = listener;
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#setSchemaAware()
+	 */
 	@Override
 	public void setSchemaAware() {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#setURIResolver(javax.xml.transform.URIResolver)
+	 */
 	@Override
 	public void setURIResolver(URIResolver resolver) {
 		mProcRuntime.setURIResolver(resolver);
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#run()
+	 */
 	@Override
 	public void run() {
-		//let the processor crash, as errors are thrown if the input is defined inline
-		//checkPorts();
+		
 		try {
 			bindPorts();
 		} catch (ClassCastException cce) {
@@ -101,19 +141,17 @@ public class XProcessorImp extends XProcessor {
 							+ cce.getMessage(), cce);
 		}
 
-		for (String port : mParams.getParametrizedPorts()) {
-			for (String param : mParams.getParametersFromPort(port)) {
-				mPipeline.setParameter(port, new QName(param),
-						new RuntimeValue(mParams.getParameter(port, param)
-								.toString()));
+		for (ParameterPort port : mParams.values()) {
+			for (NamedValue param : port.getBinds()) {
+				mPipeline.setParameter(port.getName(), new QName(param.getName()),
+						new RuntimeValue(param.getValue()));
 			}
 		}
 		
-		for(String option:mOptions.keySet()){
-			mPipeline.passOption(new QName(option),new RuntimeValue( mOptions.get(option).toString()));
+		for(NamedValue option:mOptions.values()){
+			mPipeline.passOption(new QName(option.getName()),new RuntimeValue( option.getValue()));
 		}
-		//checkOutPorts();
-		//mProcRuntime.setMessageListener(new slf4jXProcMessageListener());
+
 		
 		try {
 			
@@ -130,10 +168,16 @@ public class XProcessorImp extends XProcessor {
 
 	}
 
+	/**
+	 * Bind results.
+	 *
+	 * @throws SaxonApiException the saxon api exception
+	 */
 	private void bindResults() throws SaxonApiException {
 
 		for (String port : mPipeline.getOutputs()) {
-			Result result = mOutputPorts.get(port);
+			//TODO sequential output
+			Result result = mOutputPorts.get(port).getBinds().poll();
 			ReadablePipe rpipe = mPipeline.readFrom(port);
 
 			Serialization serial = new Serialization(mProcRuntime, mPipeline
@@ -184,17 +228,21 @@ public class XProcessorImp extends XProcessor {
 
 	}
 
+	/**
+	 * Binds  the input ports.
+	 */
 	private void bindPorts() {
 		for (String port : mPipeline.getInputs()) {
-			if (mInputPorts.get(port) != null) {
-				Source src = (SAXSource) mInputPorts.get(port);
-				XdmNode doc = mProcRuntime.parse(src.getSystemId(), "");
-				mPipeline.writeTo(port, doc);
+			if (mInputPorts.containsKey(port)) {
+				for (Source src:mInputPorts.get(port).getBinds()){
+					XdmNode doc = mProcRuntime.parse(src.getSystemId(), "");
+					mPipeline.writeTo(port, doc);
+				}
 			}
 		}
 
 	}
-
+/*
 	private void checkInPorts() {
 		for (String s : mPipeline.getInputs()) {
 			if (mInputPorts.get(s) == null && !mParams.getParametrizedPorts().contains(s))
@@ -211,12 +259,18 @@ public class XProcessorImp extends XProcessor {
 				throw new RuntimeException("Unbound output port:" + s);
 		}
 	}
-
-	@Override
+*/
+	/* (non-Javadoc)
+ * @see org.daisy.pipeline.xproc.XProcessor#getEntityResolver()
+ */
+@Override
 	public EntityResolver getEntityResolver() {
 		return mEntityResolver;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#setEntityResolver(org.xml.sax.EntityResolver)
+	 */
 	@Override
 	public void setEntityResolver(EntityResolver resolver) {
 		mEntityResolver = resolver;
@@ -224,103 +278,92 @@ public class XProcessorImp extends XProcessor {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#getInputPorts()
+	 */
 	@Override
-	public Iterable<String> getInputPorts() {
-		return this.mInputPorts.keySet();
+	public Iterable<InputPort> getInputPorts() {
+		return this.mInputPorts.values();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#getOutputPorts()
+	 */
 	@Override
-	public Iterable<String> getOutputPorts() {
-		return this.mOutputPorts.keySet();
+	public Iterable<OutputPort> getOutputPorts() {
+		return this.mOutputPorts.values();
 	}
 
+	
+	
+	
+	
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#getOption(java.lang.String)
+	 */
 	@Override
-	public void bindInputPort(String name, Source src) {
-		this.mInputPorts.put(name, src);
-	}
-
-	@Override
-	public void bindOutputPort(String name, Result result) {
-		this.mOutputPorts.put(name, result);
-
-	}
-
-	@Override
-	public void setParameter(String port, String name, Object value) {
-		mInputPorts.put(port, null);
-		mParams.addParameter(port, name, value);
-	}
-
-	@Override
-	public Object getParameter(String port, String name) {
-		return mParams.getParameter(port, name);
-
-	}
-
-	@Override
-	public void setOption(String name, Object value) {
-		mOptions.put(name, value);
-		
-	}
-
-	@Override
-	public Object getOption(String name) {
+	public NamedValue getOption(String name) {
 		return mOptions.get(name);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#setProperties(java.util.Properties)
+	 */
 	@Override
 	public void setProperties(Properties properties) {
 		mProperties=properties;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#getProperties()
+	 */
 	@Override
 	public Properties getProperties() {
 		return mProperties;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#addParameterPort(org.daisy.pipeline.xproc.ParameterPort)
+	 */
+	@Override
+	public void addParameterPort(ParameterPort paramPort) {
+		this.mParams.put(paramPort.getName(), paramPort);
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#getParameter(java.lang.String)
+	 */
+	@Override
+	public ParameterPort getParameter(String port) {
+		return mParams.get(port);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#setOption(org.daisy.pipeline.xproc.NamedValue)
+	 */
+	@Override
+	public void setOption(NamedValue option) {
+		mOptions.put(option.getKey(),option);
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#bindInputPort(org.daisy.pipeline.xproc.InputPort)
+	 */
+	@Override
+	public void bindInputPort(InputPort inPort) {
+		mInputPorts.put(inPort.getName(), inPort);
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.xproc.XProcessor#bindOutputPort(org.daisy.pipeline.xproc.OutputPort)
+	 */
+	@Override
+	public void bindOutputPort(OutputPort outPort) {
+		mOutputPorts.put(outPort.getName(), outPort);
+	}
+
 }
 
-class XProcParameters {
-
-	HashMap<String, HashMap<String, Object>> mPorts = new HashMap<String, HashMap<String, Object>>();
-	HashSet<String> mAllowedPorts = new HashSet<String>();
-
-	public XProcParameters(Collection<String> ports) {
-		mAllowedPorts.addAll(ports);
-	}
-
-	public void addParameter(String port, String parameter, Object value) {
-		if (mAllowedPorts.contains(port)) {
-			if (mPorts.get(port) == null) {
-				mPorts.put(port, new HashMap<String, Object>());
-			}
-			mPorts.get(port).put(parameter, value);
-		} else {
-			throw new RuntimeException(
-					"Unable to bind parameter,port not found:" + port);
-		}
-
-	}
-
-	public Object getParameter(String port, String parameter) {
-		if (mAllowedPorts.contains(port)) {
-			if (mPorts.get(port) == null) {
-				return null;
-			}
-			return mPorts.get(port).get(parameter);
-		} else {
-			throw new RuntimeException(
-					"Unable to get parameter,port not found:" + port);
-		}
-
-	}
-
-	public Set<String> getParametrizedPorts() {
-		return mPorts.keySet();
-	}
-
-	public Set<String> getParametersFromPort(String port) {
-		return mPorts.get(port).keySet();
-	}
-
-}

@@ -2,6 +2,7 @@ package org.daisy.pipeline.ui.commandline;
 
 import java.util.HashMap;
 
+//TODO move to CommandPipeline (only used there) ?
 public class CommandHelper {
 	public static HashMap<String, String> parseInputList(String list)
 			throws IllegalArgumentException {

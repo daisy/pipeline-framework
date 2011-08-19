@@ -4,5 +4,6 @@
    <reference bind="setModuleRegistry" cardinality="1..1" interface="org.daisy.pipeline.modules.ModuleRegistry" name="ModuleUriResolver" policy="static"/>
    <service>
       <provide interface="org.daisy.pipeline.modules.UriResolverDecorator"/>
+      <provide interface="javax.xml.transform.URIResolver"/>
    </service>
 </scr:component>

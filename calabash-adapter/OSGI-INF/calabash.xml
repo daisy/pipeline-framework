@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.daisy.common.xproc.calabash.engine">
+   <implementation class="org.daisy.common.xproc.calabash.CalabashXProcEngine"/>
+   <service>
+      <provide interface="org.daisy.common.xproc.XProcEngine"/>
+   </service>
+   <reference name="uri-resolver" interface="javax.xml.transform.URIResolver"  bind="setUriResolver" cardinality="0..1" policy="dynamic"/>
+   <reference name="calabash-config-factory" interface="org.daisy.calabash.XProcConfigurationFactory"  bind="setConfigurationFactory" cardinality="0..1" policy="dynamic"/>
+</scr:component>

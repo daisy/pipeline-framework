@@ -7,6 +7,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.daisy.pipeline.jobmanager.JobStatus.Status;
 import org.daisy.pipeline.modules.converter.ConverterRunnable;
+import org.daisy.pipeline.modules.converter.Executor;
+import org.daisy.pipeline.modules.converter.XProcRunnable;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +21,7 @@ public class JobService implements JobManager{
 	JobRunner mRunner = new JobRunner();
 	HashMap<JobID, SimpleJob> mJobs= new HashMap<JobID, SimpleJob>(); 
 	Logger mLogger = LoggerFactory.getLogger(this.getClass().getName());
-	
+	Executor mExecutor;
 	
 	public void init(BundleContext ctxt){
 		//TODO rely on some conf to set this
@@ -35,6 +37,10 @@ public class JobService implements JobManager{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void setExecutor(Executor executor){
+		mExecutor=executor;
 	}
 	@Override
 	public Iterable<Job> getJobList() {
@@ -95,7 +101,9 @@ public class JobService implements JobManager{
 					toExec.getMutableStatus().setStatus(Status.PROCESSING);
 					try{
 						mLogger.debug("about run: "+toExec.getId());
-						mJobQueue.poll().getRunnable().run();
+						XProcRunnable runnable=(XProcRunnable) mJobQueue.poll().getRunnable();
+						runnable.setExecutor(mExecutor);
+						runnable.run();
 						mLogger.debug(toExec.getId()+" job done.");
 						toExec.getMutableStatus().setStatus(Status.COMPLETED);
 					}catch(Exception e){
