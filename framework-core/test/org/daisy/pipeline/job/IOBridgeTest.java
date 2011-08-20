@@ -46,8 +46,8 @@ public class IOBridgeTest {
 		XProcOptionInfo optionInf=XProcOptionInfo.newOption(new QName("myinput"), false, "");
 		XProcOptionInfo optionInf2=XProcOptionInfo.newOption(new QName("myopt"), false, "");
 		XProcPipelineInfo info= new XProcPipelineInfo.Builder().withPort(portInf).withURI(URI.create("")).withOption(optionInf).withOption(optionInf2).build();
-		XProcOptionMetadata meta1= new XProcOptionMetadata.Builder().withDirection(Direction.INPUT).build();
-		XProcOptionMetadata meta2= new XProcOptionMetadata.Builder().withDirection(Direction.NA).build();
+		XProcOptionMetadata meta1= new XProcOptionMetadata.Builder().withDirection("input").build();
+		XProcOptionMetadata meta2= new XProcOptionMetadata.Builder().withDirection("output").build();
 		HashMap<QName, XProcOptionMetadata> ometas = new HashMap<QName, XProcOptionMetadata>();
 		ometas.put(new QName("myinput"), meta1);
 		ometas.put(new QName("myopt"), meta2);

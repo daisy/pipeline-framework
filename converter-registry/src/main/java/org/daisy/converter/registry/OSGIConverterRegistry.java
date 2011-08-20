@@ -5,8 +5,6 @@ import java.util.HashMap;
 
 import javax.xml.transform.URIResolver;
 
-import org.daisy.converter.parser.ConverterParser;
-import org.daisy.converter.parser.DefaultConverterBuilder;
 import org.daisy.converter.registry.OSGIConverter.OSGIConverterArgument;
 import org.daisy.pipeline.modules.UriResolverDecorator;
 import org.daisy.pipeline.modules.converter.Converter;
@@ -29,7 +27,7 @@ public class OSGIConverterRegistry implements ConverterRegistry,ConverterFactory
 	HashMap<URI, ConverterDescriptor> mDescriptorsUri = new HashMap<URI, ConverterDescriptor>();
 	
 	/** The parser. */
-	ConverterParser mParser = null;
+	//ConverterParser mParser = null;
 	
 	/** The xproc factory. */
 	XProcessorFactory mXprocFactory = null;
@@ -58,9 +56,9 @@ public class OSGIConverterRegistry implements ConverterRegistry,ConverterFactory
 	 *
 	 * @param parser the new parser
 	 */
-	public void setParser(ConverterParser parser){
-		mParser=parser;
-	}
+	//public void setParser(ConverterParser parser){
+	//	mParser=parser;
+	//}
 
 	/**
 	 * Sets the xproc factory that will be used to run the converter runnables
@@ -105,7 +103,7 @@ public class OSGIConverterRegistry implements ConverterRegistry,ConverterFactory
 	@Override
 	public void addConverterDescriptor(ConverterDescriptor conv) {
 		//System.out.println("Registering:\n" + conv.toString());
-		conv.setLoader(new OSGIConverterLoader());
+		//conv.setLoader(new OSGIConverterLoader());
 		mDescriptors.put(conv.getName(), conv);
 		mDescriptorsUri.put(conv.getFile(), conv);
 	}
@@ -132,17 +130,18 @@ public class OSGIConverterRegistry implements ConverterRegistry,ConverterFactory
 	/**
 	 * The Class OSGIConverterLoader.
 	 */
-	public class OSGIConverterLoader implements ConverterLoader{
-
-		/* (non-Javadoc)
-		 * @see org.daisy.pipeline.modules.converter.ConverterDescriptor.ConverterLoader#loadConverter(org.daisy.pipeline.modules.converter.ConverterDescriptor)
-		 */
-		@Override
-		public Converter loadConverter(ConverterDescriptor desc) {
-			return mParser.parse(desc,new DefaultConverterBuilder(OSGIConverterRegistry.this) );
-		}
-		
-	}
+	
+//	public class OSGIConverterLoader implements ConverterLoader{
+//
+//		/* (non-Javadoc)
+//		 * @see org.daisy.pipeline.modules.converter.ConverterDescriptor.ConverterLoader#loadConverter(org.daisy.pipeline.modules.converter.ConverterDescriptor)
+//		 */
+//		@Override
+//		//public Converter loadConverter(ConverterDescriptor desc) {
+//			//return mParser.parse(desc,new DefaultConverterBuilder(OSGIConverterRegistry.this) );
+//		//}
+//		
+//	}
 
 	/* (non-Javadoc)
 	 * @see org.daisy.pipeline.modules.converter.ConverterFactory#newConverter()

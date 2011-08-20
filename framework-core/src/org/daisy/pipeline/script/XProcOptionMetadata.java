@@ -37,14 +37,14 @@ public class XProcOptionMetadata {
 	public Direction getDirection() {
 		return direction;
 	}
-	public static final class Builder {
+	public static final class Builder implements MetadataBuilder<XProcOptionMetadata>{
 		private String niceName;
 		private String description;
 		private String type;
 		private String mediaType;
 		private Direction direction;
 
-		public Builder setDescription(String description) {
+		public Builder withDescription(String description) {
 			this.description = description;
 			return this;
 		}
@@ -63,8 +63,12 @@ public class XProcOptionMetadata {
 			this.mediaType = mediaType;
 			return this;
 		}
-		public Builder withDirection(Direction direction) {
-			this.direction = direction;
+		public Builder withDirection(String direction) {
+			if(direction.equalsIgnoreCase(Direction.OUTPUT.toString())){
+				this.direction=Direction.OUTPUT;
+			}else{
+				this.direction=Direction.INPUT;
+			}
 			return this;
 		}
 		public XProcOptionMetadata build(){

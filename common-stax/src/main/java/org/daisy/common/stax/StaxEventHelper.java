@@ -1,5 +1,7 @@
-
 package org.daisy.common.stax;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -7,9 +9,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-
 import com.google.common.base.Predicate;
- 
+
 public final class StaxEventHelper {
 
 	public static class EventPredicates {
@@ -19,6 +20,17 @@ public final class StaxEventHelper {
 				public boolean apply(XMLEvent event) {
 					return event.isStartElement()
 							&& event.asStartElement().getName().equals(name);
+				}
+			};
+		}
+
+		public static Predicate<XMLEvent> isStartOrStopElement(final QName name) {
+			return new Predicate<XMLEvent>() {
+				public boolean apply(XMLEvent event) {
+					return (event.isStartElement() && event.asStartElement()
+							.getName().equals(name))
+							|| (event.isEndElement() && event.asEndElement()
+									.getName().equals(name));
 				}
 			};
 		}
@@ -35,7 +47,8 @@ public final class StaxEventHelper {
 			}
 		};
 
-		public static class ChildOrSiblingPredicate implements Predicate<XMLEvent>{
+		public static class ChildOrSiblingPredicate implements
+				Predicate<XMLEvent> {
 			private int opened = 1;
 
 			public boolean apply(XMLEvent event) {
@@ -52,10 +65,36 @@ public final class StaxEventHelper {
 				return opened > 0;
 			}
 		};
-		
-		public static Predicate<XMLEvent> getChildOrSiblingPredicate(){
+
+		public static Predicate<XMLEvent> getChildOrSiblingPredicate() {
 			return new ChildOrSiblingPredicate();
 		}
+
+		public static class ChildPredicate implements Predicate<XMLEvent> {
+			private int opened = 0;
+
+			public boolean apply(XMLEvent event) {
+
+				switch (event.getEventType()) {
+				case XMLEvent.START_ELEMENT:
+					opened++;
+					break;
+				case XMLEvent.END_ELEMENT:
+					opened--;
+					break;
+				default:
+					break;
+				}
+
+				return opened > 0;
+			}
+
+		}
+
+		public static Predicate<XMLEvent> isChildPredicate() {
+			return new ChildPredicate();
+		}
+
 	}
 
 	public static StartElement peekNextElement(XMLEventReader reader, QName name)
@@ -71,9 +110,23 @@ public final class StaxEventHelper {
 		throw new IllegalStateException("Element " + name + " not found");
 	}
 
-	public static synchronized void loop(XMLEventReader reader, Predicate<XMLEvent> filter,
-			Predicate<XMLEvent> checker, EventProcessor processor)
-			throws XMLStreamException {
+	public static StartElement peekNextElement(XMLEventReader reader,
+			Set<QName> names) throws XMLStreamException {
+
+		while (reader.hasNext()) {
+			XMLEvent event = reader.peek();
+			if (event.isStartElement()
+					&& names.contains(event.asStartElement().getName())) {
+				return event.asStartElement();
+			}
+			reader.next();
+		}
+		throw new IllegalStateException("Element  not found");
+	}
+
+	public static synchronized void loop(XMLEventReader reader,
+			Predicate<XMLEvent> filter, Predicate<XMLEvent> checker,
+			EventProcessor processor) throws XMLStreamException {
 		while (reader.hasNext()) {
 			XMLEvent event = reader.peek();
 			if (filter.apply(event)) {
@@ -82,7 +135,8 @@ public final class StaxEventHelper {
 				}
 				processor.process(event);
 			}
-			reader.next();
+			if (reader.hasNext())// nested loops
+				reader.next();
 		}
 	}
 

@@ -7,3 +7,4 @@ public interface ScriptRegistry {
 	public XProcScriptService getScript(URI uri);
 	public Iterable<XProcScriptService> getScripts();
 }
+ 
