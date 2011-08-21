@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" name="Dynamic Calabash Configuration Factory" inmediate="true">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" name="Dynamic Calabash Configuration Factory">
    <implementation class="org.daisy.calabash.DynamicXProcConfigurationFactory"/>
   <reference bind="addStep" cardinality="0..n" interface="org.daisy.calabash.XProcStepProvider" name="XProcStepProvider" policy="dynamic" unbind="removeStep"/> 
    <service>
