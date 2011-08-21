@@ -9,14 +9,9 @@ import com.google.common.base.Suppliers;
 
 public final class XProcScriptService {
 
-	/** The Constant CONVERTER_URL. */
-	public static final String CONVERTER_URL = "converter.url";
-
-	/** The Constant CONVERTER_DESCRIPTION. */
-	public static final String CONVERTER_DESCRIPTION = "converter.description";
-
-	/** The Constant CONVERTER_NAME. */
-	public static final String CONVERTER_NAME = "converter.name";
+	public static final String SCRIPT_URL = "script.url";
+	public static final String SCRIPT_DESCRIPTION = "script.description";
+	public static final String SCRIPT_NAME = "script.name";
 
 	private URI uri;
 	private String name;
@@ -27,30 +22,30 @@ public final class XProcScriptService {
 	}
 
 	public void activate(Map<?, ?> properties) {
-		if (properties.get(CONVERTER_NAME) == null
-				|| properties.get(CONVERTER_NAME).toString().isEmpty()) {
-			throw new IllegalArgumentException(CONVERTER_NAME
+		if (properties.get(SCRIPT_NAME) == null
+				|| properties.get(SCRIPT_NAME).toString().isEmpty()) {
+			throw new IllegalArgumentException(SCRIPT_NAME
 					+ " property must not be empty");
 		}
 
-		if (properties.get(CONVERTER_DESCRIPTION) == null
-				|| properties.get(CONVERTER_DESCRIPTION).toString().isEmpty()) {
-			throw new IllegalArgumentException(CONVERTER_DESCRIPTION
+		if (properties.get(SCRIPT_DESCRIPTION) == null
+				|| properties.get(SCRIPT_DESCRIPTION).toString().isEmpty()) {
+			throw new IllegalArgumentException(SCRIPT_DESCRIPTION
 					+ " property must not be empty");
 		}
-		if (properties.get(CONVERTER_URL) == null
-				|| properties.get(CONVERTER_URL).toString().isEmpty()) {
-			throw new IllegalArgumentException(CONVERTER_URL
+		if (properties.get(SCRIPT_URL) == null
+				|| properties.get(SCRIPT_URL).toString().isEmpty()) {
+			throw new IllegalArgumentException(SCRIPT_URL
 					+ " property must not be empty");
 		}
 		try {
-			this.uri = new URI(properties.get(CONVERTER_URL).toString());
+			this.uri = new URI(properties.get(SCRIPT_URL).toString());
 		} catch (URISyntaxException e) {
-			throw new IllegalArgumentException(CONVERTER_URL
+			throw new IllegalArgumentException(SCRIPT_URL
 					+ " property must not be a legal URI");
 		}
-		this.name = properties.get(CONVERTER_NAME).toString();
-		this.description = properties.get(CONVERTER_DESCRIPTION).toString();
+		this.name = properties.get(SCRIPT_NAME).toString();
+		this.description = properties.get(SCRIPT_DESCRIPTION).toString();
 	}
 
 	public URI getURI() {

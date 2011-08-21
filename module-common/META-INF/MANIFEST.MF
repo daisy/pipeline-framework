@@ -6,9 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.daisy.pipeline.modules,
  org.daisy.pipeline.modules.converter
-Import-Package: org.slf4j,
- org.daisy.pipeline.xproc,
+Import-Package: org.daisy.pipeline.xproc;resolution:=optional,
  org.junit,
- org.osgi.framework
- 
- 
+ org.osgi.framework,
+ org.slf4j

@@ -1,112 +1,93 @@
 package org.daisy.pipeline.ui.commandline;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.HashMap;
-import java.util.Properties;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
+import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPipeline;
-import org.daisy.pipeline.modules.converter.XProcRunnable;
-import org.daisy.pipeline.ui.commandline.provider.ServiceProvider;
-import org.daisy.pipeline.xproc.InputPort;
-import org.daisy.pipeline.xproc.NamedValue;
-import org.daisy.pipeline.xproc.OutputPort;
-import org.xml.sax.InputSource;
+import org.daisy.common.xproc.XProcResult;
 
-public class CommandPipeline extends Command {
-	public static String INPUT = "INPUT";
-	public static String PIPELINE = "PIPELINE";
-	public static String OUTPUT = "OUTPUT";
-	public static String PARAMS = "PARAMS";
-	public static String OPTIONS = "OPTIONS";
-	public static String PROVIDER = "PROVIDER";
+public class CommandPipeline implements Command {
 
-	// private Logger mLogger;
-	public CommandPipeline(Properties args) {
-		super(args);
-		// mLogger = LoggerFactory.getLogger(this.getClass());
+	public static Command newInstance(String pipeline, String inputArgs,
+			String outputArgs, String paramsArgs, String optionsArgs,
+			XProcEngine xprocEngine) {
+		return new CommandPipeline(pipeline, inputArgs, outputArgs, paramsArgs,
+				optionsArgs, xprocEngine);
+	}
+
+	private final XProcEngine xprocEngine;
+	private final String uri;
+	private final Map<String, String> inputs;
+	private final Map<String, String> outputs;
+	private final Map<String, String> options;// FIXME use QNames
+	private final Map<String, HashMap<String, String>> params;
+
+	private CommandPipeline(String uri, String inputArgs, String outputArgs,
+			String paramsArgs, String optionsArgs, XProcEngine xprocEngine) {
+		if (uri == null || uri.isEmpty()) {
+			throw new IllegalArgumentException("Error: no XProc document URI");
+		}
+		this.uri = uri;
+		this.inputs = CommandHelper.parseInputList(inputArgs);
+		this.outputs = CommandHelper.parseInputList(outputArgs);
+		this.params = parseParamsList(paramsArgs);
+		this.options = CommandHelper.parseInputList(optionsArgs);
+		this.xprocEngine = xprocEngine;
 	}
 
 	@Override
 	public void execute() throws IllegalArgumentException {
-		if (!mArgs.containsKey(PROVIDER)) {
-			throw new IllegalArgumentException(
-					"Exepecting provider as an argument");
-		}
 
-		if (mArgs.getProperty(PIPELINE).isEmpty()) {
-			throw new IllegalArgumentException("Error:No pipeline file");
-		}
-		final HashMap<String, String> inputs = CommandHelper
-				.parseInputList(mArgs.getProperty(INPUT));
-		HashMap<String, String> outputs = CommandHelper.parseInputList(mArgs
-				.getProperty(OUTPUT));
-		HashMap<String, String> options = CommandHelper.parseInputList(mArgs
-				.getProperty(OPTIONS));
+		XProcPipeline pipeline = xprocEngine.load(URI.create(uri));
 
-		HashMap<String, HashMap<String, String>> params = parseParamsList(mArgs
-				.getProperty(PARAMS));
-		String output = null;
-
-		ServiceProvider prov = (ServiceProvider) mArgs.get(PROVIDER);
-		XProcEngine xprocEngine = null;//FIXME
-		XProcPipeline pipeline = xprocEngine.load(URI.create(mArgs
-				.getProperty(PIPELINE)));
-		// XProcRunnable xpr =
-		// prov.getDaisyPipelineContext().newXprocRunnalble();
-		// xpr.setPipelineUri(URI.create(mArgs
-		// .getProperty(PIPELINE)));
-
-		XProcInput.Builder inputBuilder = new XProcInput.Builder();
 		// bind inputs
-		for (final String key : inputs.keySet()) {
-			inputBuilder.withInput(key, new Provider<Source>() {
+		XProcInput.Builder inputBuilder = new XProcInput.Builder();
+		for (final String port : inputs.keySet()) {
+			inputBuilder.withInput(port, new Provider<Source>() {
 
 				@Override
 				public Source provide() {
-					return SAXHelper.getSaxSource(inputs.get(key));
+					return SAXHelper.getSaxSource(inputs.get(port));
 				}
 			});
-			// InputPort port = new InputPort(key);
-			// port.addBind(SAXHelper.getSaxSource(inputs.get(key)));
-			// xpr.addInputPort(port);
-
 		}
-		// set params
-		/*
-		 * for (String port : params.keySet()) { for (String param :
-		 * params.get(port).keySet()) xproc.setParameter(port, param,
-		 * params.get(port).get(param));
-		 * 
-		 * }
-		 */
-		// options
+
+		// bind params
+		for (final String port : params.keySet()) {
+			for (String param : params.get(port).keySet()) {
+				inputBuilder.withParameter(port, new QName(param),
+						params.get(port).get(param));
+			}
+		}
+
+		// bind options
 		for (String option : options.keySet()) {
 			inputBuilder.withOption(new QName(option), options.get(option));
-			// xpr.addOption(new NamedValue(option, options.get(option)));
 		}
+
 		// bind outputs
+		XProcOutput.Builder outputBuilder = new XProcOutput.Builder();
+		for (final String port : outputs.keySet()) {
+			outputBuilder.withOutput(port, new Provider<Result>() {
 
-		for (String key : outputs.keySet()) {
-			OutputPort port = new OutputPort(key);
-			port.addBind(SAXHelper.getSaxResult(outputs.get(key)));
-			// xpr.addOutputPort(port);
+				@Override
+				public Result provide() {
+					return SAXHelper.getSaxResult(outputs.get(port));
+				}
+			});
 		}
 
-		pipeline.run(inputBuilder.build());
-		// prov.getDaisyPipelineContext().getExecutor().execute(xpr);
-
+		XProcResult result = pipeline.run(inputBuilder.build());
+		result.writeTo(outputBuilder.build());
 	}
 
 	public HashMap<String, HashMap<String, String>> parseParamsList(String list)

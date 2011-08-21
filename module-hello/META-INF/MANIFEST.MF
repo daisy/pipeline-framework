@@ -4,7 +4,7 @@ Bundle-Name: Test-converter
 Bundle-SymbolicName: module-hello
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: converter-registry;bundle-version="1.0.0",
+Require-Bundle: 
  module-common;bundle-version="1.0.0",
  module-registry;bundle-version="1.0.0"
 
