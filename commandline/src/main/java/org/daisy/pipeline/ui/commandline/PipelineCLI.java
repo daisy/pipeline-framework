@@ -168,7 +168,7 @@ public class PipelineCLI {
 
 	private Command getScriptCommand(OptionSet oSet) {
 		if (oSet.valueOf("s") == null
-				&& !oSet.valueOf("s").toString().isEmpty()) {
+				|| oSet.valueOf("s").toString().isEmpty()) {
 			return CommandListScripts.newInstance(scriptRegistry);
 		} else {
 			String scriptName = oSet.valueOf("s").toString();
