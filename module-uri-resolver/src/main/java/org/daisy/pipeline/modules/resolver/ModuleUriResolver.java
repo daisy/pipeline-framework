@@ -9,15 +9,14 @@ import javax.xml.transform.sax.SAXSource;
 
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ModuleRegistry;
-import org.daisy.pipeline.modules.UriResolverDecorator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
-public class ModuleUriResolver implements UriResolverDecorator {
-	ModuleRegistry mRegistry = null;
+public class ModuleUriResolver implements URIResolver {
+	private static Logger mLogger = LoggerFactory.getLogger(ModuleUriResolver.class);
+	private ModuleRegistry mRegistry = null;
 	private URIResolver mDelegated;
-	Logger mLogger = LoggerFactory.getLogger(getClass().getName());
 
 	public void activate(){
 		mLogger.debug("Activating module URI resolver");
@@ -64,10 +63,9 @@ public class ModuleUriResolver implements UriResolverDecorator {
 		}
 	}
 
-	@Override
-	public UriResolverDecorator setDelegatedUriResolver(URIResolver uriResolver) {
-		mDelegated = uriResolver;
-		return this;
-	}
+//	public UriResolverDecorator setDelegatedUriResolver(URIResolver uriResolver) {
+//		mDelegated = uriResolver;
+//		return null;
+//	}
 
 }
