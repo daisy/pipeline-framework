@@ -7,6 +7,8 @@ import javax.xml.stream.XMLInputFactory;
 
 import junit.framework.Assert;
 
+import org.codehaus.stax2.XMLInputFactory2;
+import org.codehaus.stax2.osgi.Stax2InputFactoryProvider;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcOptionMetadata.Direction;
@@ -21,11 +23,17 @@ public class XProcScriptParserTest {
 	@Before
 	public void setUp() throws URISyntaxException {
 		StaxXProcScriptParser parser = new StaxXProcScriptParser();
-		parser.setFactory(XMLInputFactory.newInstance());
+		parser.setFactory(new Stax2InputFactoryProvider() {
+			
+			@Override
+			public XMLInputFactory2 createInputFactory() {
+				return new com.ctc.wstx.stax.WstxInputFactory();
+			}
+		});
 		XProcPipelineInfo.Builder builder = new XProcPipelineInfo.Builder();
 		builder.withURI(this.getClass().getClassLoader()
 				.getResource("converterDescriptor.xpl").toURI());
-		scp = parser.parse(builder.build());
+		scp = parser.parse(builder.build().getURI());
 	}
 
 	@Test

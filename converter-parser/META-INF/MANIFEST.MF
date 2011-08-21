@@ -12,10 +12,10 @@ Import-Package: com.google.common.base,
  org.slf4j,
  org.slf4j.impl,
  org.daisy.common.xproc,
- org.daisy.pipeline.script
+ org.daisy.pipeline.script,
+ com.ctc.wstx.stax
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: stax2-api
 Export-Package: org.daisy.converter.parser,
  org.daisy.converter.parser.stax
 Service-Component: OSGI-INF/parser.xml
-Bundle-Activator: org.daisy.converter.parser.Activator

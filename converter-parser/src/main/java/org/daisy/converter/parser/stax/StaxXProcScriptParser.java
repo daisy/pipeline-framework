@@ -18,6 +18,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
+import org.codehaus.stax2.osgi.Stax2InputFactoryProvider;
 import org.daisy.common.stax.EventProcessor;
 import org.daisy.common.stax.StaxEventHelper;
 import org.daisy.common.stax.StaxEventHelper.EventPredicates;
@@ -48,8 +49,8 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		mUriResolver = uriResolver;
 	}
 
-	public void setFactory(XMLInputFactory factory) {
-		this.mFactory = factory;
+	public void setFactory(Stax2InputFactoryProvider factoryProvider) {
+		this.mFactory = factoryProvider.createInputFactory();
 	}
 
 	@Override
