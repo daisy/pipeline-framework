@@ -38,20 +38,6 @@
          unpack="false"/>
 
    <plugin
-         id="xproc-calabash-imp"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="xproc-wrapper"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="module-registry"
          download-size="0"
          install-size="0"
@@ -66,20 +52,6 @@
          unpack="false"/>
 
    <plugin
-         id="converter-parser"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="converter-registry"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.daisy.calabash.extensions"
          download-size="0"
          install-size="0"
@@ -88,20 +60,6 @@
 
    <plugin
          id="calabash-custom-steps"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="daisy-pipeline"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="job-manager"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -123,13 +81,6 @@
 
    <plugin
          id="org.daisy.pipeline.logging"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="executor"
          download-size="0"
          install-size="0"
          version="0.0.0"
