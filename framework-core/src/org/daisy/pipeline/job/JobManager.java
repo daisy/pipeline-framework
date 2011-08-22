@@ -12,7 +12,7 @@ public interface JobManager {
 
 	public Iterable<Job> getJobs();
 
-	public boolean deleteJob(JobId id);
+	public Job deleteJob(JobId id);
 
 	public Job getJob(JobId id);
 }
