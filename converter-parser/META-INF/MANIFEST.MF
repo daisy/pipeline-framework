@@ -4,7 +4,6 @@ Bundle-Name: Converter-parser
 Bundle-SymbolicName: converter-parser
 Bundle-Version: 1.0.0.qualifier
 Import-Package: com.google.common.base,
- org.codehaus.stax2.osgi,
  org.daisy.common.stax,
  org.daisy.pipeline.modules,
  org.daisy.pipeline.modules.converter,
@@ -13,7 +12,7 @@ Import-Package: com.google.common.base,
  org.slf4j.impl,
  org.daisy.common.xproc,
  org.daisy.pipeline.script,
- com.ctc.wstx.stax
+ javax.xml.stream
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: stax2-api
 Export-Package: org.daisy.converter.parser,

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.LinkedList;
 
 import javax.xml.namespace.QName;
@@ -18,11 +17,9 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
-import org.codehaus.stax2.osgi.Stax2InputFactoryProvider;
 import org.daisy.common.stax.EventProcessor;
 import org.daisy.common.stax.StaxEventHelper;
 import org.daisy.common.stax.StaxEventHelper.EventPredicates;
-import org.daisy.common.stax.StaxEventHelper.EventPredicates.ChildPredicate;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.converter.parser.XProcScriptConstants;
 import org.daisy.converter.parser.XProcScriptConstants.Elements;
@@ -49,8 +46,8 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		mUriResolver = uriResolver;
 	}
 
-	public void setFactory(Stax2InputFactoryProvider factoryProvider) {
-		this.mFactory = factoryProvider.createInputFactory();
+	public void setFactory(XMLInputFactory factory) {
+		this.mFactory = factory;
 	}
 
 	@Override
