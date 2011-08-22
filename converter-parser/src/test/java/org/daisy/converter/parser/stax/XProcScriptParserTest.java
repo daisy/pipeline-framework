@@ -8,6 +8,7 @@ import javax.xml.stream.XMLInputFactory;
 import junit.framework.Assert;
 
 import org.daisy.common.xproc.XProcPipelineInfo;
+import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcOptionMetadata.Direction;
 import org.daisy.pipeline.script.XProcPortMetadata;
@@ -48,5 +49,14 @@ public class XProcScriptParserTest {
 		Assert.assertEquals("anyDirURI", opt.getType());
 		Assert.assertEquals(Direction.OUTPUT, opt.getDirection());
 		Assert.assertEquals("Output directory", opt.getNiceName());
+	}
+	@Test
+	public void testInfo(){
+		//just a simple test to see if is correctly set
+		XProcPipelineInfo info =scp.getXProcPipelineInfo();
+		XProcPortInfo port=info.getInputPort("source");
+		Assert.assertEquals("source", port.getName());
+		Assert.assertEquals(true, port.isPrimary());
+		Assert.assertEquals(true, port.isSequence());
 	}
 }

@@ -36,7 +36,7 @@
         </p:documentation>
     </p:input>
     
-    <p:option name="opt-output-dir" required="true" px:dir="output" px:type="anyDirURI">
+    <p:option name="opt-output-dir" select="." required="true" px:dir="output" px:type="anyDirURI">
         <p:documentation>
             <xd:short>Output directory</xd:short>
         </p:documentation>

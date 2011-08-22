@@ -37,7 +37,7 @@ public class XProcOptionMetadata {
 	public Direction getDirection() {
 		return direction;
 	}
-	public static final class Builder implements MetadataBuilder<XProcOptionMetadata>{
+	public static final class Builder {
 		private String niceName;
 		private String description;
 		private String type;

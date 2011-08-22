@@ -65,6 +65,12 @@ public final class XProcScriptConstants {
 		
 		/** The Constant NAME. */
 		public static final QName NAME = new QName("name");
+		public static final QName REQUIRED = new QName("required");
+		public static final QName SELECT = new QName("select");
+		public static final QName PORT = new QName("port");
+		public static final QName PRIMARY = new QName("primary");
+		public static final QName SEQUENCE = new QName("sequence");
+		public static final QName KIND = new QName("KIND");
 		
 
 		/**
@@ -75,3 +81,4 @@ public final class XProcScriptConstants {
 		}
 	}
 }
+

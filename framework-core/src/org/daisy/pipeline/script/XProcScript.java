@@ -9,8 +9,8 @@ import javax.xml.namespace.QName;
 import org.daisy.common.xproc.XProcPipelineInfo;
 
 public final class XProcScript {
-	public static class Builder implements MetadataBuilder<XProcScript>{
-		XProcPipelineInfo pipelineInfo;
+	public static class Builder {
+		private XProcPipelineInfo pipelineInfo;
 		private String name;
 		private String description;
 		private Map<String, XProcPortMetadata> portsMetadata=new HashMap<String, XProcPortMetadata>();

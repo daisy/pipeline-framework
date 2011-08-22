@@ -1,7 +1,7 @@
 package org.daisy.pipeline.script;
 
 public class XProcPortMetadata {
-	public static final class Builder implements MetadataBuilder<XProcPortMetadata>{
+	public static final class Builder {
 		private String niceName;
 		private String description;
 		private String mediaType;
