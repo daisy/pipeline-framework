@@ -14,37 +14,37 @@
 		<daisy.target>${project.baseUri}../target-platform</daisy.target>
         </properties>
 	<modules>
-	<module>../target-platform</module>
-	<module>../Main</module>
-	<module>../daisy.pipeline.feature</module>
-	<module>../daisy.pipeline.site</module>
-	<module>../daisy.pipeline.frontend.feature</module>
-	<module>../daisy.pipeline.frontend.site</module>
-	<module>../org.daisy.pipeline.logging</module>
-	<module>../common-utils</module>
-	<module>../daisy-pipeline</module>
-	<module>../framework-core</module>
-	<module>../job-manager</module>
-	<module>../module-common</module>
-	<module>../common-stax</module>
-	<module>../expath-pkg-parser</module>
-	<module>../module-registry</module>
-	<module>../xproc-api</module>
-	<module>../xproc-wrapper</module>
-	<module>../xproc-calabash-imp</module>
-	<module>../module-uri-resolver</module>
-	<module>../converter-parser</module>
-	<module>../converter-registry</module>
 	<module>../calabash-adapter</module>
 	<module>../calabash-custom-steps</module>
 	<module>../calabash-extensions</module>
 	<module>../commandline</module>
+	<module>../common-stax</module>
+	<module>../common-utils</module>
+	<module>../converter-parser</module>
+	<module>../converter-registry</module>
+	<module>../daisy-pipeline</module>
+	<module>../daisy.pipeline.feature</module>
+	<module>../daisy.pipeline.frontend.feature</module>
+	<module>../daisy.pipeline.frontend.site</module>
+	<module>../daisy.pipeline.site</module>
+	<module>../executor</module>
+	<module>../expath-pkg-parser</module>
+	<module>../framework-core</module>
+	<module>../job-manager</module>
+	<module>../module-common</module>
 	<module>../module-hello</module>
-	<module>../test-converter2</module>
+	<module>../module-registry</module>
+	<module>../module-uri-resolver</module>
+	<module>../org.daisy.pipeline.logging</module>
+	<module>../target-platform</module>
 	<module>../test-converter</module>
+	<module>../test-converter2</module>
 	<module>../webservice</module>
 	<module>../woodstox-osgi-adapter</module>
-	<module>../executor</module>
+	<module>../xproc-api</module>
+	<module>../xproc-calabash-imp</module>
+	<module>../xproc-wrapper</module>
+	<module>../Main</module>
 	</modules>
  <repositories>
                 <repository>
