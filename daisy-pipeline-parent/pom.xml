@@ -43,6 +43,7 @@
 	<module>../test-converter2</module>
 	<module>../test-converter</module>
 	<module>../webservice</module>
+	<module>../woodstox-osgi-adapter</module>
 	<module>../executor</module>
 	</modules>
  <repositories>
