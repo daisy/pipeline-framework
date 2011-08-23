@@ -23,10 +23,10 @@ public class PipelineWebService extends Application {
 	@Override
 	public Restlet createInboundRoot() {
 		Router router = new Router(getContext());
-		router.attach("/converters", ConvertersResource.class);
+		router.attach("/scripts", ScriptsResource.class);
 		// TODO: is there any way to route this as "/converter{?id=uri}" in
 		// order to be more explicit about the params?
-		router.attach("/converter", ConverterResource.class);
+		router.attach("/script", ScriptResource.class);
 		router.attach("/jobs", JobsResource.class);
 		router.attach("/jobs/{id}", JobResource.class);
 		router.attach("/jobs/{id}/log", LogResource.class);

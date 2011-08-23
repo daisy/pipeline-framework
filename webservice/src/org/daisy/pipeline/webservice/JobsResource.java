@@ -1,24 +1,34 @@
 package org.daisy.pipeline.webservice;
 
-import java.io.IOException;
+import java.io.File;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.zip.ZipFile;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.daisy.pipeline.DaisyPipelineContext;
-import org.daisy.pipeline.jobmanager.JobID;
-import org.daisy.pipeline.modules.converter.ConverterArgument;
-import org.daisy.pipeline.modules.converter.ConverterArgument.BindType;
-import org.daisy.pipeline.modules.converter.ConverterArgument.Direction;
-import org.daisy.pipeline.modules.converter.ConverterArgument.ValuedConverterArgument;
-import org.daisy.pipeline.modules.converter.ConverterDescriptor;
-import org.daisy.pipeline.modules.converter.ConverterRunnable;
-
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.daisy.common.xproc.XProcInput;
+import org.daisy.pipeline.job.DefaultJobManager;
+import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobManager;
+import org.daisy.pipeline.job.ResourceCollection;
+import org.daisy.pipeline.job.ZipResourceContext;
+import org.daisy.pipeline.script.ScriptRegistry;
+import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.XProcScriptService;
+import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
+import org.restlet.ext.fileupload.RestletFileUpload;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
@@ -30,170 +40,196 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-
 public class JobsResource extends ServerResource {
 
+	private String TmpZip = "/tmp/webservice_incoming.zip";
+	
 	@Get("xml")
 	public Representation getResource() {
-		DaisyPipelineContext context = ((WebApplication)this.getApplication()).getDaisyPipelineContext();
-		String serverAddress = ((WebApplication)this.getApplication()).getServerAddress();
-		DomRepresentation dom = new DomRepresentation(
-				MediaType.APPLICATION_XML, XmlFormatter.jobsToXml(context.getJobManager().getJobList(), serverAddress));
+		String serverAddress = ((PipelineWebService) this.getApplication()).getServerAddress();
+		DefaultJobManager jobMan = new DefaultJobManager(); 
+		Document doc = XmlFormatter.jobsToXml(jobMan.getJobs(), serverAddress);
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
 		setStatus(Status.SUCCESS_OK);
 		return dom;
 	}
 
-	
-	
-	// the client is submitting a string of xml data
-	// so, I would think this annotation should read @Post("xml")
-	
-	// already tried using DomRepresentation as the function param, and an XML DOM as the http request body, but it doesn't seem to work well.
-	
-	// another issue, would like to be more specific about the media type: 
-	// client says "contentType: application/xml", server says @Post("xml") ==> OPTIONS 405 (unsupported method)
-	// client says no content type, server says @Post("xml") ==> POST 415 (media type error)
-	// client says "contentType: application/xml", server says @Post ==> OPTIONS 405 (unsupported method)
-	// client says no content type, server says @Post ==> POST 200 (works)
-	
+	/*
+	 * taken from an example at:
+	 * http://wiki.restlet.org/docs_2.0/13-restlet/28-restlet/64-restlet.html
+	 */
 	@Post
-	public Representation createResource(Representation representation) {	
-		try {
-			String s = representation.getText();
-			
-			try {
-			      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			      factory.setNamespaceAware(true);
-			      DocumentBuilder builder = factory.newDocumentBuilder();
-			      InputSource is = new InputSource(new StringReader(s));
-			      Document doc = builder.parse(is);
-			      
-			      boolean isValid = Validator.validateJobRequest(doc, ((WebApplication)this.getApplication()).getDaisyPipelineContext());
-			      if (!isValid) {
-			    	  setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			    	  return null;
-			      }
-			      
-			      ConverterRunnable converterRunnable = createConverterRunnable(doc);
-			      
-			      if (converterRunnable != null) {
-			    	  DaisyPipelineContext context = ((WebApplication)this.getApplication()).getDaisyPipelineContext();
-			    	  JobID newId = context.getJobManager().addJob(converterRunnable);
-			    	  
-			    	  // return the URI of the new job
-			    	  Representation newJobUriRepresentation = new EmptyRepresentation();
-			    	  newJobUriRepresentation.setLocationRef(((WebApplication)this.getApplication()).getServerAddress() + "/jobs/" + newId.getID());
-			    	  
-			    	  setStatus(Status.SUCCESS_CREATED);
-			    	  return newJobUriRepresentation;
-			      }
-			      else {
-			    	  setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			    	  return null;
-			      } 
-			    }
-			    catch( Exception ex ) {
-			      ex.printStackTrace();
-			      setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    	  return null;
-			    }
-			
-		} catch (IOException e) {
+    public Representation createResource(Representation entity) throws Exception {
+        if (entity != null) {
+            if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(), true)) {
+                Request request = this.getRequest();
+                // sort through the multipart request
+                RequestData data = processMultipart(request);
+                
+    			boolean isValid = Validator.validateJobRequest(data.getXml(), (PipelineWebService)this.getApplication());
+    			
+    			if (!isValid) {
+    				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+    				return null;
+    			}
+
+    			Job job = createJob(data.getXml(), data.getZipFile());
+    			
+    			if (job != null) {
+    				JobId id = job.getId();
+    				
+    				// return the URI of the new job
+    				Representation newJobUriRepresentation = new EmptyRepresentation();
+    				String serverAddress = ((PipelineWebService) this.getApplication()).getServerAddress();
+    				newJobUriRepresentation.setLocationRef(serverAddress + "/jobs/" + id.toString());
+
+    				setStatus(Status.SUCCESS_CREATED);
+    				return newJobUriRepresentation;
+    			} 
+    			else {
+    				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+    				return null;
+    			}                                
+            }
+        } else {
+            // POST request with no entity.
+            setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+            return null;
+        }
+		return null;
+    }
+	
+	private RequestData processMultipart(Request request) {
+		// 1/ Create a factory for disk-based file items
+        DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
+        fileItemFactory.setSizeThreshold(1000240);
+
+        // 2/ Create a new file upload handler based on the Restlet
+        // FileUpload extension that will parse Restlet requests and
+        // generates FileItems.
+        RestletFileUpload upload = new RestletFileUpload(fileItemFactory);
+        List<FileItem> items;
+
+        ZipFile zip = null;
+        String xml = "";
+        try {
+			items = upload.parseRequest(request);
+			Iterator<FileItem> it = items.iterator();
+	        while (it.hasNext()) {
+	            FileItem fi = it.next();
+	            
+	            if (fi.getFieldName().equals("jobData")) {
+	                // TODO: need access to a temporary storage space per job
+	                File file = new File(TmpZip);
+	                fi.write(file);	  
+	                // TODO: can I do this?
+	                zip = new ZipFile(file);
+	                
+	            }
+	            else if (fi.getFieldName().equals("jobRequest")) {
+	            	xml = fi.getString("utf-8");
+	            }
+	        }
+
+	        if (zip == null || xml.length() == 0) {
+	        	setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+	        	return null;
+	        }
+	        
+	        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			docFactory.setNamespaceAware(true);
+			DocumentBuilder builder = docFactory.newDocumentBuilder();
+			InputSource is = new InputSource(new StringReader(xml));
+			Document doc = builder.parse(is);
+
+	        RequestData data = new RequestData(zip, doc);
+	        return data;
+	        
+		} catch (FileUploadException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return null;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 			return null;
 		}
 	}
 	
+	// just a convenience class
+	private class RequestData {
+		private ZipFile zip;
+		private Document xml;
+		
+		RequestData(ZipFile zip, Document xml) {
+			this.zip = zip;
+			this.xml = xml;
+		}
+		
+		ZipFile getZipFile() {
+			return zip;
+		}
+		
+		Document getXml() {
+			return xml;
+		}
+	}
 	
+	private Job createJob(Document doc, ZipFile zip) {
 
-	private ConverterRunnable createConverterRunnable(Document doc) {
+		Element scriptElm = (Element) doc.getElementsByTagName("useScript").item(0);
 		
-		Element converterElm = (Element)doc.getElementsByTagName("useConverter").item(0);
-		String converterUri = converterElm.getAttribute("href");
-		
-		DaisyPipelineContext context = ((WebApplication)this.getApplication()).getDaisyPipelineContext();
-	    ConverterDescriptor converterDescriptor;
+		URI scriptUri = null;
 		try {
-			converterDescriptor = context.getConverterRegistry().getDescriptor(new URI(converterUri));
-			
-			if (converterDescriptor != null) {
-				ConverterRunnable converterRunnable = converterDescriptor.getConverter().getRunnable();
-		    	
-		    	NodeList inputNodes = doc.getElementsByTagName("input");
-		    	for(int i = 0; i<inputNodes.getLength(); i++) {
-		    		Element inputElm = (Element)inputNodes.item(i);
-		    		String name = inputElm.getAttribute("name");
-		    		
-		    		
-		    		ConverterArgument arg = converterDescriptor.getConverter().getArgument(name);
-		    		ValuedConverterArgument valueArg = null;
-		    		
-		    		if (arg.getBindType() == BindType.PORT && arg.getDirection()==Direction.INPUT) {
-		    			// TODO support inline XML input
-		    			// TODO support a sequence of input documents
-			    		// NodeList docwrapperNodes = inputElm.getElementsByTagName("docwrapper");
-			    		// this would have already been checked during validation (not yet implemented)
-			    		// if (docwrapperNodes.getLength() == 0) return null;
-			    		
-		    			// get the XML of the input document, serialized as a string
-			    		// String docstring = XmlFormatter.nodeToString(docwrapperNodes.item(0));
-		    			
-		    			// here we just expect a URI.  this is temporary for the beta.
-		    			String val = inputElm.getTextContent();
-		    			valueArg=arg.getValuedConverterBuilder().withSource(SAXHelper.getSaxSource(val));
-			    		 
-			    		
-		    		}else if (arg.getBindType() == BindType.PORT && arg.getDirection()==Direction.OUTPUT) {
-		    			String val = inputElm.getTextContent();
-		    			valueArg=arg.getValuedConverterBuilder().withResult(SAXHelper.getSaxResult(val));
-		    		}else if (arg.getBindType() == ConverterArgument.BindType.OPTION){//|| arg.getType() == ConverterArgument.Type.PARAMETER) {
-		    			String val = inputElm.getTextContent();
-		    			valueArg = arg.getValuedConverterBuilder().withString(val);
-		    		}
-		    		// we don't care about output arguments in the webservice
-		    		// TODO: is the framework now responsible for mapping output params?
-		    		//else if (arg.getType() == ConverterArgument.Type.OUTPUT) {
-		    		//	valueArg = converterRunnable.new ValuedConverterArgument("Nothing", arg);
-		    		//}
-		    		
-		    		if (valueArg != null) {
-		    			converterRunnable.setConverterArgumentValue(valueArg);
-		    		}
-		    		else {
-		    			return null;
-		    		}
-		    	}
-		    	
-		    	// set data on the converter
-		    	NodeList dataElmNodes = doc.getElementsByTagName("data");
-		    	if (dataElmNodes.getLength() > 0) {
-		    		Element dataElm = (Element)dataElmNodes.item(0);
-		    		String encodedData = dataElm.getTextContent();
-		    		
-		    		//if the framework wants decoded data
-		    		//byte[] decoded = Base64.decodeBase64(encodedData.getBytes());
-				    
-		    		// TODO: what will this function be called?
-		    		// converterRunnable.setData(decoded);
-		    	}
-		    	
-		    	return converterRunnable;
-				
-			}
-			else {
-				return null;
-			}
-
-		
+			scriptUri = new URI(scriptElm.getAttribute("href"));
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
-	    
-	    			
-	}
+		
+		// get the script from the URI
+		ScriptRegistry scriptRegistry = ((PipelineWebService)this.getApplication()).getScriptRegistry();
+		XProcScriptService scriptService = scriptRegistry.getScript(scriptUri);
+		if (scriptService == null) {
+			return null;
+		}
+		
+		XProcScript script = scriptService.load();
+		
+		XProcInput.Builder builder = new XProcInput.Builder(script.getXProcPipelineInfo());
+		
+		// iterate through the input nodes and fill in the builder values
+		NodeList inputNodes = doc.getElementsByTagName("input");
+		for (int i = 0; i < inputNodes.getLength(); i++) {
+			Element inputElm = (Element) inputNodes.item(i);
+			String name = inputElm.getAttribute("name");
+			
+			
+			NodeList fileNodes = inputElm.getElementsByTagName("file");
+			for (int j = 0; j < fileNodes.getLength(); j++) {
+				String src = ((Element)fileNodes.item(j)).getAttribute("src");
+				String contextPath = ((Element)fileNodes.item(j)).getAttribute("contextPath");
+				// TODO: need to tell the framework both @src and @contextPath
+				// builder.withInput(name, src);
+			}
+		}
 	
+		NodeList optionNodes = doc.getElementsByTagName("option");
+		for (int i = 0; i< optionNodes.getLength(); i++) {
+			Element optionElm = (Element) optionNodes.item(i);
+			String name = optionElm.getAttribute("name");
+			String val = optionElm.getTextContent();
+			builder.withOption(new QName(name), val);
+		}
+			
+		
+		XProcInput input = builder.build();
+		
+		ResourceCollection resourceCollection = new ZipResourceContext(zip);
+		
+		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
+		Job job = jobMan.newJob(script, input, resourceCollection);
+		return  job;
+	}
 }

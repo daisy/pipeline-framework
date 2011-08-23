@@ -6,17 +6,15 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.pipeline.jobmanager.Job;
-import org.daisy.pipeline.jobmanager.JobStatus;
-import org.daisy.pipeline.modules.converter.ConverterArgument;
-import org.daisy.pipeline.modules.converter.ConverterArgument.Direction;
-import org.daisy.pipeline.modules.converter.ConverterDescriptor;
+import org.daisy.common.xproc.XProcOptionInfo;
+import org.daisy.common.xproc.XProcPortInfo;
+import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.script.XProcOptionMetadata;
+import org.daisy.pipeline.script.XProcPortMetadata;
+import org.daisy.pipeline.script.XProcScript;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSSerializer;
 
 public class XmlFormatter {
 
@@ -40,90 +38,96 @@ public class XmlFormatter {
 		return doc;
 	}
 	
-
-	public static Document converterDescriptorToXml(ConverterDescriptor converterDescriptor) {
-		Document doc = createDom("converter");
-		toXmlElm(converterDescriptor, doc);
+	public static Document xprocScriptToXml(XProcScript script) {
+		Document doc = createDom("script");
+		toXmlElm(script, doc);
 		return doc;
 	}
 	
-	public static Document converterDescriptorsToXml(Iterable<ConverterDescriptor> converterDescriptors) {
-		Document doc = createDom("converters");
-		Element convertersElm = doc.getDocumentElement();
+	public static Document xprocScriptsToXml(Iterable<XProcScript> scripts) {
+		Document doc = createDom("scripts");
+		Element scriptsElm = doc.getDocumentElement();
 		
-		Iterator<ConverterDescriptor> it = converterDescriptors.iterator();
+		Iterator<XProcScript> it = scripts.iterator();
 		while(it.hasNext()) {
-			ConverterDescriptor converterDescriptor = it.next();
-			Element converterElm = toXmlElm(converterDescriptor, doc);
-			convertersElm.appendChild(converterElm);
+			XProcScript script = it.next();
+			Element converterElm = toXmlElm(script, doc);
+			scriptsElm.appendChild(converterElm);
 		}
-		
 		return doc;
 	}
 	
 	/*
-	<converter href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl">
+	<script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl">
 	    <description>Convert DTBook XML to ZedAI XML</description>  
-	    <arg  name="in"  type="input" port="source" desc="input document"/>  
-		<!-- only need to list input arguments -->      
-		<!-- more arguments could follow, depending on the converter -->
+	    <input  name="myIn" type="XML" desc="input document" sequenceAllowed="true"/> 
+	    <option name="myOpt" type="string" desc="the important option" required="false"/>
 		...
-	</converter>
+	</script>
 	 */
-	private static Element toXmlElm(ConverterDescriptor converterDescriptor, Document doc) {
+	private static Element toXmlElm(XProcScript script, Document doc) {
 		Element rootElm = null;
 		
-		if (doc.getDocumentElement().getNodeName() == "converter") {
+		if (doc.getDocumentElement().getNodeName() == "script") {
 			rootElm = doc.getDocumentElement();
 		}
 		else {
-			rootElm = doc.createElement("converter");
+			rootElm = doc.createElement("script");
 		}
-		rootElm.setAttribute("href", converterDescriptor.getFile().toString());
+		rootElm.setAttribute("href", script.getURI().toString());
 		
 		Element descriptionElm = doc.createElement("description");
-		descriptionElm.setTextContent(converterDescriptor.getDescription());
+		// TODO: get description
+		descriptionElm.setTextContent("DESCRIPTION");
 		
 		rootElm.appendChild(descriptionElm);
 		
-		Iterator<ConverterArgument> it = converterDescriptor.getConverter().getArguments().iterator();
+		Iterator<XProcPortInfo> it_input = script.getXProcPipelineInfo().getInputPorts().iterator();
+		Iterator<XProcOptionInfo> it_options = script.getXProcPipelineInfo().getOptions().iterator();
 		
-		
-		while(it.hasNext()) {
-			ConverterArgument arg = it.next();
+		while(it_input.hasNext()) {
+			XProcPortInfo input = it_input.next();			
 			
-			String type = arg.getBindType().toString().toLowerCase();
-//			if (arg.getB == ConverterArgument.Type.INPUT) {
-//				type = "input";
-//			}
-//			else if (arg.getType() == ConverterArgument.Type.OPTION) {
-//				type = "option";
-//			}
-//			else if (arg.getType() == ConverterArgument.Type.OUTPUT) {
-//			//	type = "output";
-//			}
-//			else if (arg.getType() == ConverterArgument.Type.PARAMETER) {
-//				type = "parameter";
-//			}
+			Element inputElm = doc.createElement("input");
+			inputElm.setAttribute("name", input.getName());
 			
-			// TODO: filter out arguments that have @dir = output
-			// below, we just filter out arguments with ConverterArgument.Type.OUTPUT
-			if (arg.getDirection() != Direction.OUTPUT) {
-				Element argElm = doc.createElement("arg");
-				argElm.setAttribute("name", arg.getName());
-				argElm.setAttribute("type", type);
-				//argElm.setAttribute("port", arg.getPort());
-				argElm.setAttribute("desc", arg.getDesc());
-				
-				rootElm.appendChild(argElm);
+			if (input.isSequence() == true) {
+				inputElm.setAttribute("sequenceAllowed", "true");
 			}
+			else {
+				inputElm.setAttribute("sequenceAllowed", "false");
+			}
+			
+			XProcPortMetadata meta = script.getPortMetadata(input.getName());
+			inputElm.setAttribute("type", meta.getMediaType());
+			inputElm.setAttribute("desc", meta.getDescription());
+
+			rootElm.appendChild(inputElm);
 		}
+		
+		while(it_options.hasNext()) {
+			XProcOptionInfo option = it_options.next();
+			
+			Element optionElm = doc.createElement("option");
+			optionElm.setAttribute("name", option.getName().toString());
+			if (option.isRequired()) {
+				optionElm.setAttribute("required", "true");
+			}
+			else {
+				optionElm.setAttribute("required", "false");
+			}
+			
+			XProcOptionMetadata meta = script.getOptionMetadata(option.getName());
+			optionElm.setAttribute("type", meta.getMediaType());
+			optionElm.setAttribute("desc", meta.getDescription());
+		}
+		
 		return rootElm;
 	}
 	
 	/*
-	<job id="job-id" status="PROCESSING | COMPLETED | FAILED | NOT_STARTED">
-	  <converter href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
+	<job id="job-id" status="DONE | IDLE | RUNNING">
+	  <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
 	  <result href="http://ws.pipeline.org/jobs/$ID/result"/>
 	  <errors>
 	     <error level="WARNING | FATAL | ERROR">This is a description of the error</error>
@@ -141,36 +145,37 @@ public class XmlFormatter {
 		else {
 			rootElm = doc.createElement("job");
 		}
-		JobStatus jobStatus = job.getStatus();
 		
-		rootElm.setAttribute("id", job.getId().getID());
-		if (jobStatus.getStatus() == JobStatus.Status.COMPLETED) {
-			rootElm.setAttribute("status", "COMPLETED");
+		Job.Status status = job.getStatus();
+		
+		rootElm.setAttribute("id", job.getId().toString());
+		if (status == Job.Status.DONE) {
+			rootElm.setAttribute("status", "DONE");
 		}
-		else if (jobStatus.getStatus() == JobStatus.Status.PROCESSING) {
-			rootElm.setAttribute("status", "PROCESSING");
+		else if (status == Job.Status.IDLE) {
+			rootElm.setAttribute("status", "IDLE");
 		}
-		else if (jobStatus.getStatus() == JobStatus.Status.FAILED) {
-			rootElm.setAttribute("status", "FAILED");
+		else if (status == Job.Status.RUNNING) {
+			rootElm.setAttribute("status", "RUNNING");
 		}
-		else if (jobStatus.getStatus() == JobStatus.Status.NOT_STARTED) {
-			rootElm.setAttribute("status", "NOT_STARTED");
-		}
-
-		// TODO: is the converter element really necessary? it's not available via the job object.  it also doesn't provide any new info to the client.
-		Element converterElm = doc.createElement("converter");
-		converterElm.setAttribute("href", "NA");
-		rootElm.appendChild(converterElm);
+		
+		// TODO: get the script URI from the job (pending framework implementation)
+		Element scriptElm = doc.createElement("script");
+		scriptElm.setAttribute("href", "NA");
+		rootElm.appendChild(scriptElm);
 		
 		
-		if (jobStatus.getStatus() == JobStatus.Status.COMPLETED) {
+		if (status == Job.Status.DONE) {
 			Element resultElm = doc.createElement("result");
-			resultElm.setAttribute("href", serverAddress + "/jobs/" + job.getId() + "/result");
+			resultElm.setAttribute("href", serverAddress + "/jobs/" + job.getId().toString() + "/result");
 			rootElm.appendChild(resultElm);
 		}
 		
+		/*
+		 * TODO incorporate errors (pending framework implementation)
+		 
 		Element errorsElm = doc.createElement("errors");
-		// TODO: is this the best way to get the error objects?
+		// TODO where are the job errors stored in the framework?
 		Iterator<org.daisy.pipeline.jobmanager.Error> it = jobStatus.getErrors().iterator();
 		
 		while(it.hasNext()) {
@@ -189,9 +194,9 @@ public class XmlFormatter {
 			errorsElm.appendChild(errorElm);
 		}
 		
-		rootElm.appendChild(errorsElm);
+		rootElm.appendChild(errorsElm);*/
 		
-		if (jobStatus.getStatus() == JobStatus.Status.COMPLETED || jobStatus.getStatus() == JobStatus.Status.FAILED) {
+		if (status == Job.Status.DONE) {
 			Element logElm = doc.createElement("log");
 			logElm.setAttribute("href", serverAddress + "/jobs/" + job.getId() + "/log");
 			rootElm.appendChild(logElm);
@@ -209,18 +214,9 @@ public class XmlFormatter {
 		
 		
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
 	    
-	}
-	
-	// TODO: this doesn't quite work as I would like .. it includes the parent node
-	public static String nodeToString(Node node) {
-		Document doc = node.getOwnerDocument();
-		DOMImplementationLS domImplLS = (DOMImplementationLS) doc.getImplementation();
-		LSSerializer serializer = domImplLS.createLSSerializer();
-		return serializer.writeToString(node);
-	}
+	}	
 }

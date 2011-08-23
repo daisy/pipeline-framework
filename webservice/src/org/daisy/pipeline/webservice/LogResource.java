@@ -1,8 +1,9 @@
 package org.daisy.pipeline.webservice;
 
-import org.daisy.pipeline.DaisyPipelineContext;
-import org.daisy.pipeline.jobmanager.Job;
-import org.daisy.pipeline.jobmanager.JobID;
+import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobIdFactory;
+import org.daisy.pipeline.job.JobManager;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
@@ -14,18 +15,19 @@ public class LogResource extends ServerResource {
 	@Override  
     public void doInit() {  
 		super.doInit();
-		DaisyPipelineContext context = ((WebApplication)this.getApplication()).getDaisyPipelineContext();
+		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
         String idParam = (String) getRequestAttributes().get("id");  
-        JobID jobId = context.getJobManager().getIDFactory().fromString(idParam);
-        job = context.getJobManager().getJob(jobId);
+        JobId id = JobIdFactory.newIdFromString(idParam);
+        job = jobMan.getJob(id);
     }
 	
 	@Get
 	public String getResource() {
 		if (job != null) {
 			setStatus(Status.SUCCESS_OK);
-			// TODO: return the actual log, not the path to the log file 
-			return "<log>" + job.getStatus().getLog().toString() + "</log>";
+			
+			// TODO: return the actual log, not just the status
+			return "<log>" + job.getStatus().name() + "</log>";
 		}
 		else {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);

@@ -5,7 +5,13 @@ Bundle-SymbolicName: org.daisy.pipeline.webservice;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: ch.qos.logback.classic;version="0.9.15",
+ javax.servlet.http,
  org.apache.commons.codec.binary,
+ org.apache.commons.fileupload,
+ org.apache.commons.fileupload.disk,
+ org.daisy.common.base,
+ org.daisy.common.xproc,
+ org.daisy.pipeline,
  org.daisy.pipeline.job,
  org.daisy.pipeline.logging,
  org.daisy.pipeline.script,
@@ -14,11 +20,13 @@ Import-Package: ch.qos.logback.classic;version="0.9.15",
  org.osgi.util.tracker;version="1.4.0",
  org.restlet,
  org.restlet.data,
+ org.restlet.ext.fileupload,
  org.restlet.ext.xml,
  org.restlet.representation,
  org.restlet.resource,
  org.restlet.routing,
  org.restlet.util,
  org.slf4j
+Require-Bundle: org.daisy.pipeline.framework
 Service-Component: OSGI-INF/webservice.xml
 

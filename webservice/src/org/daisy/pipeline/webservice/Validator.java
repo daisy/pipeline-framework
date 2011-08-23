@@ -14,10 +14,12 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import org.daisy.pipeline.DaisyPipelineContext;
-import org.daisy.pipeline.modules.converter.ConverterArgument;
-import org.daisy.pipeline.modules.converter.ConverterArgument.Direction;
-import org.daisy.pipeline.modules.converter.ConverterDescriptor;
+import org.daisy.common.xproc.XProcOptionInfo;
+import org.daisy.common.xproc.XProcPortInfo;
+import org.daisy.pipeline.job.XProcInfoFilter;
+import org.daisy.pipeline.script.ScriptRegistry;
+import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.XProcScriptService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -73,7 +75,9 @@ public class Validator {
 		return false;
 	}
 	
-	public static boolean validateJobRequest(Document doc, DaisyPipelineContext context) {
+	public static boolean validateJobRequest(Document doc, PipelineWebService application) {
+		
+		// validate against the schema
 		boolean xml_valid = validateXml(doc, Validator.jobRequestSchema);
 		if (xml_valid == false) {
 			return false;
@@ -81,58 +85,86 @@ public class Validator {
 		
 		// now check that there are the right number of arguments
 		Element useConverterElm = (Element)doc.getElementsByTagName("useConverter").item(0);
-		String converterUri = useConverterElm.getAttribute("href");
+		String scriptUri = useConverterElm.getAttribute("href");
 		
-		ConverterDescriptor converterDescriptor;
 		try {
-			converterDescriptor = context.getConverterRegistry().getDescriptor(new URI(converterUri));
-			//converterDescriptor = context.getConverterRegistry().getDescriptor(new URI(converterUri));
+			ScriptRegistry scriptRegistry = application.getScriptRegistry();
+			XProcScriptService unfilteredScript = scriptRegistry.getScript(new URI(scriptUri));
 			
-			if (converterDescriptor != null) {
-				// make sure that each converter argument is fulfilled as required
-				Iterator<ConverterArgument>it = converterDescriptor.getConverter().getArguments().iterator();
-				NodeList inputNodes = useConverterElm.getElementsByTagName("input");
-				
-				boolean hasAllRequiredArgs = true;
-				while (it.hasNext()) {
-					ConverterArgument arg = it.next();
-					
-					boolean foundArg = false;
-					
-					// if this is a required argument and not an output argument
-					// TODO: filter out arguments that have @dir = output
-					// below, we just filter out arguments with ConverterArgument.Type.OUTPUT
-					if (arg.isOptional() == false && arg.getDirection() != Direction.OUTPUT) {
-						// look through the jobRequest input elements to see if there's one to match this argument
-						// also check that its contents are non-empty
-						for (int i=0; i<inputNodes.getLength(); i++) {
-							Element elm = (Element)inputNodes.item(i);
-							if (elm.getAttribute("name") == arg.getName() && elm.getTextContent().trim().length() > 0) {
-								foundArg = true;
-							}
-						}
-					}    
-					else {
-						// if the arg is optional, we don't care if it's present or not
-						foundArg = true;
-					}
-					
-					hasAllRequiredArgs |= foundArg;
-				}
-				
-				if (hasAllRequiredArgs == false) {
-					System.out.print("ERROR: Required args missing");
-				}
-				return hasAllRequiredArgs;
-			}
-			else {
-				System.out.print("ERROR: Converter not found");
+			if (unfilteredScript == null) {
+				System.out.println("ERROR: Script not found");
 				return false;
 			}
+			
+			XProcScript script = XProcInfoFilter.INSTANCE.filterScript(unfilteredScript.load());
+			
+			// inputs
+			boolean hasAllRequiredInputs = validatePortData(script.getXProcPipelineInfo().getInputPorts(), 
+					useConverterElm.getElementsByTagName("input"));
+			// options
+			boolean hasAllRequiredOptions = validateOptionData(script.getXProcPipelineInfo().getOptions(), 
+					useConverterElm.getElementsByTagName("option"));
+			// outputs
+			// TODO do we ever require outputs??
+				
+				return hasAllRequiredInputs & hasAllRequiredOptions;
 		}  catch (URISyntaxException e) {
 			System.out.print("ERROR: Malformed URI");
 			return false;
 		}
+	}
+
+	private static boolean validateOptionData(Iterable<XProcOptionInfo> options, NodeList nodes) {
+		Iterator<XProcOptionInfo>it = options.iterator();
+		boolean hasAllRequiredArgs = true;
+		while (it.hasNext()) {
+			XProcOptionInfo arg = it.next();
+			// skip optional arguments
+			if (arg.isRequired() == false) {
+				continue;
+			}
+			boolean foundArg = false;
+			
+			for (int i=0; i<nodes.getLength(); i++) {
+				Element elm = (Element)nodes.item(i);
+				if (elm.getAttribute("name") == arg.getName().toString() && elm.getTextContent().trim().length() > 0) {
+					// TODO: validate as whatever its type should be
+					foundArg = true;
+				}
+			}
+			hasAllRequiredArgs |= foundArg;
+		}
+		
+		if (hasAllRequiredArgs == false) {
+			// TODO: be more specific
+			System.out.print("ERROR: Required args missing");
+		}
+		return hasAllRequiredArgs;
+	}
+
+	private static boolean validatePortData(Iterable<XProcPortInfo> ports, NodeList nodes) {
+		
+		Iterator<XProcPortInfo>it = ports.iterator();
+		boolean hasAllRequiredArgs = true;
+		while (it.hasNext()) {
+			XProcPortInfo arg = it.next();
+			boolean foundArg = false;
+			
+			for (int i=0; i<nodes.getLength(); i++) {
+				Element elm = (Element)nodes.item(i);
+				if (elm.getAttribute("name") == arg.getName() && elm.getTextContent().trim().length() > 0) {
+					// TODO: validate as XML
+					foundArg = true;
+				}
+			}
+			hasAllRequiredArgs |= foundArg;
+		}
+		
+		if (hasAllRequiredArgs == false) {
+			// TODO: be more specific
+			System.out.print("ERROR: Required args missing");
+		}
+		return hasAllRequiredArgs;
 	}
 
 	
