@@ -20,7 +20,6 @@ import javax.xml.validation.SchemaFactory;
 
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
-import org.daisy.pipeline.job.XProcInfoFilter;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
@@ -110,7 +109,7 @@ public class Validator {
 			return false;
 		}
 		
-		XProcScript script = XProcInfoFilter.INSTANCE.filterScript(unfilteredScript.load());
+		XProcScript script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
 		
 		// inputs
 		boolean hasAllRequiredInputs = validateInputPortData(script.getXProcPipelineInfo().getInputPorts(), 

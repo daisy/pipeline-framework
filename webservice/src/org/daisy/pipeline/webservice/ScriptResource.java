@@ -3,17 +3,15 @@ package org.daisy.pipeline.webservice;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.restlet.data.MediaType;
-import org.restlet.data.Status;
-import org.restlet.representation.Representation;
-import org.restlet.ext.xml.DomRepresentation;  
-import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
-
-import org.daisy.pipeline.job.XProcInfoFilter;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
+import org.restlet.data.MediaType;
+import org.restlet.data.Status;
+import org.restlet.ext.xml.DomRepresentation;
+import org.restlet.representation.Representation;
+import org.restlet.resource.Get;
+import org.restlet.resource.ServerResource;
 
 public class ScriptResource extends ServerResource {
 	private XProcScript script = null;
@@ -33,7 +31,7 @@ public class ScriptResource extends ServerResource {
 		ScriptRegistry scriptRegistry = ((PipelineWebService)this.getApplication()).getScriptRegistry();
 		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptUri);
 		// TODO check with framework about this function call
-		script = XProcInfoFilter.INSTANCE.filterScript(unfilteredScript.load());
+		script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
 	}
 
 	@Get("xml")

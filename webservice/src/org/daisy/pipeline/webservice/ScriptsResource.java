@@ -3,7 +3,6 @@ package org.daisy.pipeline.webservice;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.daisy.pipeline.job.XProcInfoFilter;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
@@ -27,7 +26,7 @@ public class ScriptsResource extends ServerResource {
 		
 		while (it.hasNext()) {
 			XProcScriptService unfilteredScript = it.next();
-			XProcScript script = XProcInfoFilter.INSTANCE.filterScript(unfilteredScript.load());
+			XProcScript script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
 			scripts.add(script);
 		}
 	}
