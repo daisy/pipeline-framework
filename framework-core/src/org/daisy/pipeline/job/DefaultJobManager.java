@@ -7,15 +7,13 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.script.XProcScript;
 
 public class DefaultJobManager implements JobManager {
-	// TODO add job execution service as a listener ?
-	private JobExecutionService jobExecutionService;
+	
 	private Map<JobId, Job> jobs;
 
 	public Job newJob(XProcScript script, XProcInput input,
 			ResourceCollection context) {
 		Job job = Job.newJob(script, input, context);
 		jobs.put(job.getId(), job);
-		jobExecutionService.submit(job);
 		return job;
 	}
 
@@ -30,10 +28,8 @@ public class DefaultJobManager implements JobManager {
 	}
 
 	@Override
-	public boolean deleteJob(JobId id) {
-		// TODO check arguments
-		// TODO if possible, remove from the execution service
-		return jobs.remove(id) != null;
+	public Job deleteJob(JobId id) {
+		return jobs.remove(id);
 	}
 
 	@Override
