@@ -21,29 +21,21 @@
 	<module>../common-stax</module>
 	<module>../common-utils</module>
 	<module>../converter-parser</module>
-	<module>../converter-registry</module>
 	<module>../daisy-pipeline</module>
 	<module>../daisy.pipeline.feature</module>
 	<module>../daisy.pipeline.frontend.feature</module>
 	<module>../daisy.pipeline.frontend.site</module>
 	<module>../daisy.pipeline.site</module>
-	<module>../executor</module>
 	<module>../expath-pkg-parser</module>
 	<module>../framework-core</module>
-	<module>../job-manager</module>
 	<module>../module-common</module>
-	<module>../module-hello</module>
 	<module>../module-registry</module>
 	<module>../module-uri-resolver</module>
 	<module>../org.daisy.pipeline.logging</module>
 	<module>../target-platform</module>
-	<module>../test-converter</module>
-	<module>../test-converter2</module>
 	<module>../webservice</module>
 	<module>../woodstox-osgi-adapter</module>
 	<module>../xproc-api</module>
-	<module>../xproc-calabash-imp</module>
-	<module>../xproc-wrapper</module>
 	<module>../Main</module>
 	</modules>
  <repositories>
