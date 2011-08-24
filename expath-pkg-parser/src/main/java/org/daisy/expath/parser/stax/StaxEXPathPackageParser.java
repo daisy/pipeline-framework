@@ -14,7 +14,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-import org.codehaus.stax2.osgi.Stax2InputFactoryProvider;
 import org.daisy.common.stax.EventProcessor;
 import org.daisy.common.stax.StaxEventHelper;
 import org.daisy.common.stax.StaxEventHelper.EventPredicates;
@@ -45,8 +44,8 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 	public StaxEXPathPackageParser() {
 	}
 
-	public void setFactory(Stax2InputFactoryProvider inputFactoryProvider) {
-		factory = inputFactoryProvider.createInputFactory();
+	public void setFactory(XMLInputFactory factory) {
+		this.factory = factory;
 	}
 
 	public Module parse(URL url, ModuleBuilder builder) {

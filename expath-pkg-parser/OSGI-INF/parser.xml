@@ -4,5 +4,5 @@
    <service>
       <provide interface="org.daisy.expath.parser.EXPathPackageParser"/>
    </service>
-   <reference bind="setFactory" cardinality="1..1" interface="org.codehaus.stax2.osgi.Stax2InputFactoryProvider" name="Stax2InputFactoryProvider" policy="static"/> 
+   <reference bind="setFactory" cardinality="1..1" interface="javax.xml.stream.XMLInputFactory" name="stax-input-factory" policy="static"/> 
 </scr:component>

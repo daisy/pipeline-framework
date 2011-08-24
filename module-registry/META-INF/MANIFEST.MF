@@ -1,15 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Module-registry
-Bundle-SymbolicName: module-registry
+Bundle-Name: DAISY Pipeline 2 Module Registry
+Bundle-SymbolicName: org.daisy.pipeline.modules.registry
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: com.google.common.base,
- javax.xml.stream,
+Import-Package: org.daisy.expath.parser,
+ org.daisy.pipeline.modules,
  org.osgi.framework,
  org.osgi.util.tracker,
  org.slf4j
 Service-Component: OSGI-INF/registry.xml
-Bundle-Activator: org.daisy.pipeline.modules.tracker.Activator
-Require-Bundle: expath-pkg-parser;bundle-version="1.0.0",
- module-common;bundle-version="1.0.0"
