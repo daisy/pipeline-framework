@@ -195,7 +195,7 @@ public class Validator {
 							validArg = validateFileElements(fileNodes);
 						}
 						else {
-							validArg = validateDocwrapperElements(docwrapperNodes);
+							validArg = validateDocwrapperElements(docwrapperNodes, script.getPortMetadata(arg.getName()).getMediaType());
 						}
 					}					
 				}
@@ -213,7 +213,8 @@ public class Validator {
 	// make sure these nodes contain well-formed XML
 	// nodes must contain at least one item
 	// nodes must be <docwrapper> elements
-	private static boolean validateDocwrapperElements(NodeList nodes) {
+	// TODO incorporate media type
+	private static boolean validateDocwrapperElements(NodeList nodes, String mediaType) {
 		boolean isValid = true;
 		
 		for (int i = 0; i<nodes.getLength(); i++) {
