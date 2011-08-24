@@ -20,13 +20,11 @@ public class ScriptsResource extends ServerResource {
 	@Override
 	public void doInit() {
 		super.doInit();
-		
 		ScriptRegistry scriptRegistry = ((PipelineWebService)this.getApplication()).getScriptRegistry();
-		
 		Iterable<XProcScriptService> unfilteredScripts = scriptRegistry.getScripts();
 		Iterator<XProcScriptService> it = unfilteredScripts.iterator();
-		
 		scripts = new ArrayList<XProcScript>();
+		
 		while (it.hasNext()) {
 			XProcScriptService unfilteredScript = it.next();
 			XProcScript script = XProcInfoFilter.INSTANCE.filterScript(unfilteredScript.load());

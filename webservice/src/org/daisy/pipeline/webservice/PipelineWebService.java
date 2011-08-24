@@ -11,8 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PipelineWebService extends Application {
-	private static Logger logger = LoggerFactory
-			.getLogger(PipelineWebService.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(PipelineWebService.class.getName());
 
 	// TODO make port and address configurable
 	private final String serverAddress = "http://localhost:8182/ws";

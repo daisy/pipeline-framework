@@ -26,26 +26,24 @@ public class ScriptResource extends ServerResource {
 		try {
 			scriptUri = new URI((String) getQuery().getFirstValue("id"));
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
+			// TODO log an error
 			e.printStackTrace();
 			return;
 		}
 		ScriptRegistry scriptRegistry = ((PipelineWebService)this.getApplication()).getScriptRegistry();
 		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptUri);
-		// TODO filter should accept and return XProcScript objects
+		// TODO check with framework about this function call
 		script = XProcInfoFilter.INSTANCE.filterScript(unfilteredScript.load());
 	}
 
 	@Get("xml")
 	public Representation getResource() {
-		if (script != null) {
-			setStatus(Status.SUCCESS_OK);
-			DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.xprocScriptToXml(script));
-			return dom;
-		}
-		else {
+		if (script == null) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return null;
 		}
+		setStatus(Status.SUCCESS_OK);
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.xprocScriptToXml(script));
+		return dom;
 	}
 }
