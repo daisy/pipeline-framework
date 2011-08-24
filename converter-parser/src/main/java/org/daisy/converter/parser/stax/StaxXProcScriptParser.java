@@ -17,8 +17,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
-import org.codehaus.stax2.XMLInputFactory2;
-import org.codehaus.stax2.osgi.Stax2InputFactoryProvider;
 import org.daisy.common.stax.EventProcessor;
 import org.daisy.common.stax.StaxEventHelper;
 import org.daisy.common.stax.StaxEventHelper.EventPredicates;
@@ -270,8 +268,8 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 	}
 
 	private static class DocumentationHolder {
-		private String mShort;
-		private String mDetail;
+		String mShort;
+		String mDetail;
 	}
 
 	private static class XProcOptionMetadataBuilderHolder {

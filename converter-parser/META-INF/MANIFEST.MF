@@ -3,18 +3,13 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Converter-parser
 Bundle-SymbolicName: converter-parser
 Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.google.common.base,
  org.daisy.common.stax,
- org.daisy.pipeline.modules,
- org.daisy.pipeline.modules.converter,
- org.osgi.framework;version="1.3.0",
- org.slf4j,
- org.slf4j.impl,
  org.daisy.common.xproc,
  org.daisy.pipeline.script,
- javax.xml.stream
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: stax2-api
-Export-Package: org.daisy.converter.parser,
- org.daisy.converter.parser.stax
+ javax.xml.namespace,
+ javax.xml.stream,
+ javax.xml.stream.events,
+ javax.xml.transform
 Service-Component: OSGI-INF/parser.xml

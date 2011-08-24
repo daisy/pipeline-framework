@@ -15,12 +15,12 @@ Import-Package: com.google.common.base,
  javax.xml.transform,
  javax.xml.transform.sax,
  javax.xml.transform.stream,
- net.sf.saxon,
  net.sf.saxon.om,
  net.sf.saxon.s9api,
  net.sf.saxon.trans,
  org.daisy.calabash,
  org.daisy.common.base,
  org.daisy.common.xproc,
- org.slf4j
+ org.slf4j,
+ org.xml.sax
 Service-Component: OSGI-INF/calabash.xml
