@@ -6,6 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.ctc.wstx.api;version="[4.0.0,5.0.0)",
  com.ctc.wstx.stax;version="[4.0.0,5.0.0)",
+ javax.xml.stream,
  org.codehaus.stax2.osgi;version="[3.0.0,4.0.0)",
  org.osgi.framework;version="1.5.0"
 Bundle-Activator: org.daisy.common.stax.woodstox.osgi.Activator
