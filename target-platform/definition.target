@@ -3,11 +3,11 @@
 
 <target name="definition">
 <locations>
-<location path="${eclipse_home}" type="Profile"/>
 <location path="${project_loc}/../daisy.pipeline.site/target/site" type="Directory"/>
 <location path="${project_loc}/../daisy.pipeline.frontend.site/target/site" type="Directory"/>
-<location path="${project_loc}/../test" type="Directory"/>
 <location path="${project_loc}/../repo" type="Directory"/>
+<location path="${project_loc}/../test" type="Directory"/>
+<location path="${project_loc}/../Main/bundle" type="Directory"/>
 </locations>
 <launcherArgs>
 <vmArgs>org.osgi.framework.system.packages=sun.misc</vmArgs>
