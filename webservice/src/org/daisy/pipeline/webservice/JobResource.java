@@ -45,7 +45,7 @@ public class JobResource extends ServerResource {
 		}
 		
 		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
-		if (jobMan.deleteJob(job.getId())) {
+		if (jobMan.deleteJob(job.getId())!=null) {
 			setStatus(Status.SUCCESS_NO_CONTENT);
 		}
 		else {
