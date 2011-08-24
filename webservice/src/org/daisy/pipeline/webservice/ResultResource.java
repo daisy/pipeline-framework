@@ -29,23 +29,25 @@ public class ResultResource extends ServerResource {
   
 	@Get
     public Representation getResource() {  
-    	if (job != null) {
-    		
-    		if (!job.getStatus().equals(org.daisy.pipeline.job.Job.Status.DONE)) {
-        		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-        		return null;
-        	}
-        	
-    		JobResult result = job.getResult();
-    		ZipFile zip = result.getZip();
-    		FileRepresentation rep = new FileRepresentation(new File(zip.getName()), MediaType.APPLICATION_ZIP);
-    		setStatus(Status.SUCCESS_OK);
-    		return rep;
-		}
-		else {
-			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+    	if (job == null) {
+    		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return null;
-		}
+    	}
+		
+		if (!job.getStatus().equals(Job.Status.DONE)) {
+    		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+    		return null;
+    	}
     	
+		JobResult result = job.getResult();
+		ZipFile zip = result.getZip();
+		// TODO check for errors instead of looking at null-ness of zip
+		if (zip == null) {
+			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+    		return null;
+		}
+		FileRepresentation rep = new FileRepresentation(new File(zip.getName()), MediaType.APPLICATION_ZIP);
+		setStatus(Status.SUCCESS_OK);
+		return rep;
     }  
 }

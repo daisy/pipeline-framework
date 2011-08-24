@@ -18,12 +18,18 @@ import org.w3c.dom.Element;
 
 public class XmlFormatter {
 
+	/*
+	 * example output: daisy-pipeline/webservice/docs/sampleXml/job.xml
+	 */
 	public static Document jobToXml(Job job, String serverAddress) {
 		Document doc = createDom("job");
 		toXmlElm(job, doc, serverAddress);
 		return doc;
 	}
 	
+	/*
+	 * example output: daisy-pipeline/webservice/docs/sampleXml/jobs.xml
+	 */
 	public static Document jobsToXml(Iterable<Job> jobs, String serverAddress) {
 		Document doc = createDom("jobs");
 		Element jobsElm = doc.getDocumentElement();
@@ -38,12 +44,18 @@ public class XmlFormatter {
 		return doc;
 	}
 	
+	/*
+	 * example output: daisy-pipeline/webservice/docs/sampleXml/script.xml
+	 */
 	public static Document xprocScriptToXml(XProcScript script) {
 		Document doc = createDom("script");
 		toXmlElm(script, doc);
 		return doc;
 	}
 	
+	/*
+	 * example output: daisy-pipeline/webservice/docs/sampleXml/scripts.xml
+	 */
 	public static Document xprocScriptsToXml(Iterable<XProcScript> scripts) {
 		Document doc = createDom("scripts");
 		Element scriptsElm = doc.getDocumentElement();
@@ -57,14 +69,6 @@ public class XmlFormatter {
 		return doc;
 	}
 	
-	/*
-	<script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl">
-	    <description>Convert DTBook XML to ZedAI XML</description>  
-	    <input  name="myIn" type="XML" desc="input document" sequenceAllowed="true"/> 
-	    <option name="myOpt" type="string" desc="the important option" required="false"/>
-		...
-	</script>
-	 */
 	private static Element toXmlElm(XProcScript script, Document doc) {
 		Element rootElm = null;
 		
@@ -77,8 +81,7 @@ public class XmlFormatter {
 		rootElm.setAttribute("href", script.getURI().toString());
 		
 		Element descriptionElm = doc.createElement("description");
-		// TODO: get description
-		descriptionElm.setTextContent("DESCRIPTION");
+		descriptionElm.setTextContent(script.getDescription());
 		
 		rootElm.appendChild(descriptionElm);
 		
@@ -125,17 +128,6 @@ public class XmlFormatter {
 		return rootElm;
 	}
 	
-	/*
-	<job id="job-id" status="DONE | IDLE | RUNNING">
-	  <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
-	  <result href="http://ws.pipeline.org/jobs/$ID/result"/>
-	  <errors>
-	     <error level="WARNING | FATAL | ERROR">This is a description of the error</error>
-	     ...
-	  </errors>
-	  <log href="http://ws.pipeline.org/jobs/$ID/log"/>
-	</job>
-	 */
 	private static Element toXmlElm(Job job, Document doc, String serverAddress) {
 		Element rootElm = null;
 		
@@ -175,7 +167,7 @@ public class XmlFormatter {
 		 * TODO incorporate errors (pending framework implementation)
 		 
 		Element errorsElm = doc.createElement("errors");
-		// TODO where are the job errors stored in the framework?
+		
 		Iterator<org.daisy.pipeline.jobmanager.Error> it = jobStatus.getErrors().iterator();
 		
 		while(it.hasNext()) {

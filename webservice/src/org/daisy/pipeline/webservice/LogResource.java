@@ -21,18 +21,17 @@ public class LogResource extends ServerResource {
         job = jobMan.getJob(id);
     }
 	
+	/*
+	 * example output: daisy-pipeline/webservice/docs/sampleXml/log.xml
+	 */
 	@Get
 	public String getResource() {
-		if (job != null) {
-			setStatus(Status.SUCCESS_OK);
-			
-			// TODO: return the actual log, not just the status
-			return "<log>" + job.getStatus().name() + "</log>";
-		}
-		else {
+		if (job == null) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return "";
 		}
-		
+		setStatus(Status.SUCCESS_OK);
+		// TODO: return the actual log, not just the status
+		return "<log>" + job.getStatus().name() + "</log>";
 	}
 }

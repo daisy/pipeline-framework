@@ -1,0 +1,44 @@
+<jobs>
+    <!--
+        This job has completed and it has available results.
+        The log file will have more details about the errors.
+    -->
+    <job id="job-id-01" status="DONE" xmlns="http://www.daisy.org/ns/pipeline/data">
+        <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
+        <result href="http://ws.pipeline.org/jobs/job-id-01/result"/>
+        <errors>
+            <error level="WARNING">Warning about this job</error>
+            <error level="ERROR">Reference not found by XProc step copy-file-references</error>
+        </errors>
+        <log href="http://ws.pipeline.org/jobs/job-id-01/log"/>
+    </job>
+    
+    <!--
+        This job has completed but has no available results.
+        The error list reports a failure.
+    -->
+    <job id="job-id-02" status="DONE" xmlns="http://www.daisy.org/ns/pipeline/data">
+        <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
+        <errors>
+            <error level="FATAL">Input XML dtbook.xml was not valid</error>
+        </errors>
+        <log href="http://ws.pipeline.org/jobs/job-id-02/log"/>
+    </job>
+    
+    <!--
+        This job hasn't started yet.
+        It has no result, errors, or log.
+    -->
+    <job id="job-id-03" status="IDLE" xmlns="http://www.daisy.org/ns/pipeline/data">
+        <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
+    </job>
+    
+    <!--
+        This job is running.
+        It has no result, errors, or log.
+    -->
+    <job id="job-id-03" status="RUNNING" xmlns="http://www.daisy.org/ns/pipeline/data">
+        <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
+    </job>
+    
+</jobs>

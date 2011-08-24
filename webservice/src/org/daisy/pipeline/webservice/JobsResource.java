@@ -11,10 +11,13 @@ import java.util.zip.ZipFile;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.sax.SAXSource;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.job.DefaultJobManager;
 import org.daisy.pipeline.job.Job;
@@ -42,7 +45,10 @@ import org.xml.sax.InputSource;
 
 public class JobsResource extends ServerResource {
 
-	private String TmpZip = "/tmp/webservice_incoming.zip";
+	// TODO make configurable
+	private String tempfileDir = "/tmp/";
+	private String tempfilePrefix = "p2ws";
+	private String tempfileSuffix = ".zip";
 	
 	@Get("xml")
 	public Representation getResource() {
@@ -60,46 +66,47 @@ public class JobsResource extends ServerResource {
 	 */
 	@Post
     public Representation createResource(Representation entity) throws Exception {
-        if (entity != null) {
-            if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(), true)) {
-                Request request = this.getRequest();
-                // sort through the multipart request
-                RequestData data = processMultipart(request);
-                
-    			boolean isValid = Validator.validateJobRequest(data.getXml(), (PipelineWebService)this.getApplication());
-    			
-    			if (!isValid) {
-    				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-    				return null;
-    			}
-
-    			Job job = createJob(data.getXml(), data.getZipFile());
-    			
-    			if (job != null) {
-    				JobId id = job.getId();
-    				
-    				// return the URI of the new job
-    				Representation newJobUriRepresentation = new EmptyRepresentation();
-    				String serverAddress = ((PipelineWebService) this.getApplication()).getServerAddress();
-    				newJobUriRepresentation.setLocationRef(serverAddress + "/jobs/" + id.toString());
-
-    				setStatus(Status.SUCCESS_CREATED);
-    				return newJobUriRepresentation;
-    			} 
-    			else {
-    				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-    				return null;
-    			}                                
-            }
-        } else {
-            // POST request with no entity.
+        if (entity == null) {
+        	// POST request with no entity.
             setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
             return null;
         }
-		return null;
+        
+        if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(), true)) {
+            Request request = this.getRequest();
+            // sort through the multipart request
+            MultipartRequestData data = processMultipart(request);
+            
+			boolean isValid = Validator.validateJobRequest(data.getXml(), (PipelineWebService)this.getApplication());
+			
+			if (!isValid) {
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				return null;
+			}
+
+			Job job = createJob(data.getXml(), data.getZipFile());
+			
+			if (job == null) {
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				return null;
+			}
+			JobId id = job.getId();
+			
+			// return the URI of the new job
+			Representation newJobUriRepresentation = new EmptyRepresentation();
+			String serverAddress = ((PipelineWebService) this.getApplication()).getServerAddress();
+			newJobUriRepresentation.setLocationRef(serverAddress + "/jobs/" + id.toString());
+
+			setStatus(Status.SUCCESS_CREATED);
+			return newJobUriRepresentation;
+        }
+        else {
+        	// TODO deal with inline XML
+        	return null;
+        }
     }
 	
-	private RequestData processMultipart(Request request) {
+	private MultipartRequestData processMultipart(Request request) {
 		// 1/ Create a factory for disk-based file items
         DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
         fileItemFactory.setSizeThreshold(1000240);
@@ -117,14 +124,11 @@ public class JobsResource extends ServerResource {
 			Iterator<FileItem> it = items.iterator();
 	        while (it.hasNext()) {
 	            FileItem fi = it.next();
-	            
 	            if (fi.getFieldName().equals("jobData")) {
-	                // TODO: need access to a temporary storage space per job
-	                File file = new File(TmpZip);
+	            	File file = File.createTempFile(tempfilePrefix, tempfileSuffix, new File(tempfileDir));
 	                fi.write(file);	  
-	                // TODO: can I do this?
-	                zip = new ZipFile(file);
-	                
+	                // TODO do i have to reopen the file first?
+	                zip = new ZipFile(file); 
 	            }
 	            else if (fi.getFieldName().equals("jobRequest")) {
 	            	xml = fi.getString("utf-8");
@@ -142,26 +146,26 @@ public class JobsResource extends ServerResource {
 			InputSource is = new InputSource(new StringReader(xml));
 			Document doc = builder.parse(is);
 
-	        RequestData data = new RequestData(zip, doc);
+	        MultipartRequestData data = new MultipartRequestData(zip, doc);
 	        return data;
 	        
 		} catch (FileUploadException e) {
-			// TODO Auto-generated catch block
+			// TODO log an error
 			e.printStackTrace();
 			return null;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			// TODO log an error
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
-	// just a convenience class
-	private class RequestData {
+	// just a convenience class for representing the parts of a multipart request
+	private class MultipartRequestData {
 		private ZipFile zip;
 		private Document xml;
 		
-		RequestData(ZipFile zip, Document xml) {
+		MultipartRequestData(ZipFile zip, Document xml) {
 			this.zip = zip;
 			this.xml = xml;
 		}
@@ -183,7 +187,7 @@ public class JobsResource extends ServerResource {
 		try {
 			scriptUri = new URI(scriptElm.getAttribute("href"));
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
+			// TODO log an error
 			e.printStackTrace();
 			return null;
 		}
@@ -191,12 +195,12 @@ public class JobsResource extends ServerResource {
 		// get the script from the URI
 		ScriptRegistry scriptRegistry = ((PipelineWebService)this.getApplication()).getScriptRegistry();
 		XProcScriptService scriptService = scriptRegistry.getScript(scriptUri);
+		
 		if (scriptService == null) {
 			return null;
 		}
 		
 		XProcScript script = scriptService.load();
-		
 		XProcInput.Builder builder = new XProcInput.Builder(script.getXProcPipelineInfo());
 		
 		// iterate through the input nodes and fill in the builder values
@@ -209,9 +213,16 @@ public class JobsResource extends ServerResource {
 			NodeList fileNodes = inputElm.getElementsByTagName("file");
 			for (int j = 0; j < fileNodes.getLength(); j++) {
 				String src = ((Element)fileNodes.item(j)).getAttribute("src");
-				String contextPath = ((Element)fileNodes.item(j)).getAttribute("contextPath");
-				// TODO: need to tell the framework both @src and @contextPath
-				// builder.withInput(name, src);
+				final SAXSource source = new SAXSource();
+	            source.setSystemId(src);
+	            Provider<Source> prov= new Provider<Source>(){
+	            	@Override
+	                public Source provide(){
+	            		return source;
+	            	}
+	            };
+
+				builder.withInput(name, prov);
 			}
 		}
 	
@@ -222,12 +233,9 @@ public class JobsResource extends ServerResource {
 			String val = optionElm.getTextContent();
 			builder.withOption(new QName(name), val);
 		}
-			
 		
 		XProcInput input = builder.build();
-		
 		ResourceCollection resourceCollection = new ZipResourceContext(zip);
-		
 		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
 		Job job = jobMan.newJob(script, input, resourceCollection);
 		return  job;

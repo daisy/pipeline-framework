@@ -1,0 +1,6 @@
+script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl">
+<description>Convert DTBook XML to ZedAI XML</description>  
+<input  name="myIn" type="XML" desc="input document" sequenceAllowed="true"/> 
+<option name="myOpt" type="string" desc="the important option" required="false"/>
+...
+</script>

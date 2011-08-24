@@ -1,0 +1,9 @@
+<job id="job-id-01" status="DONE" xmlns="http://www.daisy.org/ns/pipeline/data">
+    <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
+    <result href="http://ws.pipeline.org/jobs/$ID/result"/>
+    <errors>
+        <error level="WARNING">Warning about this job</error>
+        <error level="ERROR">Reference not found by XProc step copy-file-references</error>
+    </errors>
+    <log href="http://ws.pipeline.org/jobs/job-id-01/log"/>
+</job>
