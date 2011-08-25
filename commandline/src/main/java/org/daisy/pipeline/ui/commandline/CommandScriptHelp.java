@@ -40,9 +40,11 @@ public final class CommandScriptHelp implements Command {
 		sb.append('\t').append(script.getName()).append('\n');
 		sb.append('\t').append(script.getURI()).append('\n');
 		sb.append('\n');
-		sb.append("DESCRIPTION").append('\n');
-		sb.append('\t').append(script.getDescription()).append('\n');
-		sb.append('\n');
+		if (script.getDescription() != null) {
+			sb.append("DESCRIPTION").append('\n');
+			sb.append('\t').append(script.getDescription()).append('\n');
+			sb.append('\n');
+		}
 		// TODO getInputPorts should return a list ? or hasInputPorts() ?
 		if (script.getXProcPipelineInfo().getInputPorts().iterator().hasNext()) {
 			sb.append("INPUT PORTS").append('\n');
