@@ -1,11 +1,12 @@
 package org.daisy.converter.parser.stax;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.net.URISyntaxException;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
-
-import junit.framework.Assert;
 
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
@@ -14,33 +15,31 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class XProcPipelineInfoParserTest {
-	XProcPipelineInfo scp;
+
+	private XProcPipelineInfo xproc;
 
 	@Before
 	public void setUp() throws URISyntaxException {
 		StaxXProcPipelineInfoParser parser = new StaxXProcPipelineInfoParser();
 		parser.setFactory(XMLInputFactory.newInstance());
-		XProcPipelineInfo.Builder builder = new XProcPipelineInfo.Builder();
-		builder.withURI(this.getClass().getClassLoader()
-				.getResource("converterDescriptor.xpl").toURI());
-		scp = parser.parse(this.getClass().getClassLoader()
-				.getResource("converterDescriptor.xpl").toURI());
+		xproc = parser.parse(this.getClass().getClassLoader()
+				.getResource("script.xpl").toURI());
 	}
 
-	
-	
 	@Test
-	public void testInputPort(){
-		XProcPortInfo port=scp.getInputPort("source");
-		Assert.assertEquals("source", port.getName());
-		Assert.assertEquals(true, port.isPrimary());
-		Assert.assertEquals(true, port.isSequence());
-		
+	public void testInputPort() {
+		XProcPortInfo port = xproc.getInputPort("source");
+		assertEquals("source", port.getName());
+		assertEquals(true, port.isPrimary());
+		assertEquals(true, port.isSequence());
+
 	}
+
 	@Test
-	public void testOption(){
-		XProcOptionInfo info =scp.getOption(new QName("opt-output-dir"));
-		Assert.assertEquals(".", info.getSelect());
-		Assert.assertEquals(true, info.isRequired());
+	public void testOption() {
+		XProcOptionInfo info = xproc.getOption(new QName("option1"));
+		assertNotNull(info);
+		assertEquals(".", info.getSelect());
+		assertEquals(true, info.isRequired());
 	}
 }
