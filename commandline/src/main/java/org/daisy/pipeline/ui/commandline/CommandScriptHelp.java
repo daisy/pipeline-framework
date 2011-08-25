@@ -15,8 +15,6 @@ public final class CommandScriptHelp implements Command {
 		return new CommandScriptHelp(scriptName, scriptRegistry);
 	}
 
-	private static String INDENT = "  ";
-
 	private final String scriptName;
 	private final ScriptRegistry scriptRegistry;
 
@@ -29,50 +27,114 @@ public final class CommandScriptHelp implements Command {
 	public void execute() throws IllegalArgumentException {
 		for (XProcScriptService scriptService : scriptRegistry.getScripts()) {
 			if (scriptService.getName().equals(scriptName)) {
-				XProcScript script = scriptService.load();
-				System.out.println(script.getName());
-				System.out.println();
-				System.out.println(INDENT + script.getDescription());
-				System.out.println();
-				System.out.println("URI: " + script.getURI());
-				for (XProcPortInfo input : script.getXProcPipelineInfo()
-						.getInputPorts()) {
-					XProcPortMetadata metadata = script.getPortMetadata(input
-							.getName());
-					System.out.println(INDENT + "Input port '"
-							+ input.getName() + "': " + metadata.getNiceName()
-							+ " (" + metadata.getMediaType() + ")");
-					System.out.println(INDENT + INDENT
-							+ metadata.getDescription());
-				}
-				for (XProcPortInfo output : script.getXProcPipelineInfo()
-						.getOutputPorts()) {
-					XProcPortMetadata metadata = script.getPortMetadata(output
-							.getName());
-					System.out.println(INDENT + "Input port '"
-							+ output.getName() + "': " + metadata.getNiceName()
-							+ " (" + metadata.getMediaType() + ")");
-					System.out.println(INDENT + INDENT
-							+ metadata.getDescription());
-				}
-				for (String paramPort : script.getXProcPipelineInfo()
-						.getParameterPorts()) {
-					System.out.println(INDENT + "Parameter port '" + paramPort);
-				}
-				for (XProcOptionInfo option : script.getXProcPipelineInfo()
-						.getOptions()) {
-					XProcOptionMetadata metadata = script
-							.getOptionMetadata(option.getName());
-					System.out.println(INDENT + "Option '" + option.getName()
-							+ "': " + metadata.getNiceName() + " ("
-							+ (option.isRequired() ? "required" : "optional"));
-					System.out.println(INDENT + INDENT
-							+ metadata.getDescription());
-				}
+				System.out.println(toString(scriptService.load()));
 				return;
 			}
 		}
-		throw new RuntimeException("Script '" + scriptName + "' not found");
+		System.out.println("Script '" + scriptName + "' not found");
+	}
+
+	private static String toString(XProcScript script) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SCRIPT").append('\n');
+		sb.append('\t').append(script.getName()).append('\n');
+		sb.append('\t').append(script.getURI()).append('\n');
+		sb.append('\n');
+		sb.append("DESCRIPTION").append('\n');
+		sb.append('\t').append(script.getDescription()).append('\n');
+		sb.append('\n');
+		// TODO getInputPorts should return a list ? or hasInputPorts() ?
+		if (script.getXProcPipelineInfo().getInputPorts().iterator().hasNext()) {
+			sb.append("INPUT PORTS").append('\n');
+			for (XProcPortInfo port : script.getXProcPipelineInfo()
+					.getInputPorts()) {
+				XProcPortMetadata meta = script.getPortMetadata(port.getName());
+				sb.append('\t').append(port.getName());
+				if (meta.getNiceName() != null) {
+					sb.append(": ").append(meta.getNiceName());
+				}
+				sb.append(" (").append(
+						port.isSequence() ? "sequence of documents"
+								: "single document");
+				if (meta.getMediaType() != null) {
+					sb.append(" of type '").append(meta.getMediaType());
+				}
+				sb.append(")").append('\n');
+				if (meta.getDescription() != null) {
+					sb.append('\t').append('\t').append(meta.getDescription())
+							.append('\n');
+				}
+			}
+			sb.append('\n');
+		}
+		if (script.getXProcPipelineInfo().getOutputPorts().iterator().hasNext()) {
+			sb.append("OUTPUT PORTS").append('\n');
+			for (XProcPortInfo port : script.getXProcPipelineInfo()
+					.getOutputPorts()) {
+				XProcPortMetadata meta = script.getPortMetadata(port.getName());
+				sb.append('\t').append(port.getName());
+				if (meta.getNiceName() != null) {
+					sb.append(": ").append(meta.getNiceName());
+				}
+				sb.append(" (").append(
+						port.isSequence() ? "sequence of documents"
+								: "single document");
+				if (meta.getMediaType() != null) {
+					sb.append(" of type '").append(meta.getMediaType());
+				}
+				sb.append(")").append('\n');
+				if (meta.getDescription() != null) {
+					sb.append('\t').append('\t').append(meta.getDescription())
+							.append('\n');
+				}
+			}
+			sb.append('\n');
+		}
+		if (script.getXProcPipelineInfo().getParameterPorts().iterator()
+				.hasNext()) {
+			sb.append("PARAMETER PORTS").append('\n');
+			for (String port : script.getXProcPipelineInfo()
+					.getParameterPorts()) {
+				XProcPortMetadata meta = script.getPortMetadata(port);
+				sb.append('\t').append(port);
+				if (meta.getNiceName() != null) {
+					sb.append(": ").append(meta.getNiceName());
+				}
+				sb.append('\n');
+				if (meta.getDescription() != null) {
+					sb.append('\t').append('\t').append(meta.getDescription())
+							.append('\n');
+				}
+			}
+			sb.append('\n');
+		}
+		if (script.getXProcPipelineInfo().getOptions().iterator().hasNext()) {
+			sb.append("OPTIONS").append('\n');
+			for (XProcOptionInfo option : script.getXProcPipelineInfo()
+					.getOptions()) {
+				XProcOptionMetadata meta = script.getOptionMetadata(option
+						.getName());
+				sb.append('\t').append(option.getName());
+				if (meta.getNiceName() != null) {
+					sb.append(": ").append(meta.getNiceName());
+				}
+				sb.append(" (").append(
+						option.isRequired() ? "required" : "optional");
+				if (meta.getType() != null) {
+					sb.append(", type: ").append(meta.getType());
+				}
+				if (option.getSelect() != null) {
+					sb.append(", default: ").append(option.getSelect());
+				}
+				sb.append(")").append('\n');
+				if (meta.getDescription() != null) {
+					sb.append('\t').append('\t').append(meta.getDescription())
+							.append('\n');
+				}
+			}
+			sb.append('\n');
+		}
+		return sb.toString();
 	}
 
 }
