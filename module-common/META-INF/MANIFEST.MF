@@ -4,9 +4,5 @@ Bundle-Name: Module-common
 Bundle-SymbolicName: module-common
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: org.daisy.pipeline.modules,
- org.daisy.pipeline.modules.converter
-Import-Package: org.daisy.pipeline.xproc;resolution:=optional,
- org.junit,
- org.osgi.framework,
- org.slf4j
+Export-Package: org.daisy.pipeline.modules
+Import-Package: org.slf4j
