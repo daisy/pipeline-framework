@@ -1,5 +1,6 @@
 package org.daisy.converter.parser.stax;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -58,6 +59,15 @@ public class XProcScriptParserTest {
 	}
 
 	@Test
+	public void testMissingInputMetadata() {
+		XProcPortMetadata meta = scp.getPortMetadata("source2");
+		assertNotNull(meta);
+		assertNull(meta.getMediaType());
+		assertNull(meta.getNiceName());
+		assertNull(meta.getDescription());
+	}
+	
+	@Test
 	public void testOutputPort() {
 		XProcPortMetadata port = scp.getPortMetadata("result");
 		port.getDescription();
@@ -67,11 +77,23 @@ public class XProcScriptParserTest {
 
 	}
 
-	// TODO add tests for missing metadata
+	@Test
+	public void testMissingOutputMetadata() {
+		XProcPortMetadata meta = scp.getPortMetadata("result2");
+		assertNotNull(meta);
+		assertNull(meta.getMediaType());
+		assertNull(meta.getNiceName());
+		assertNull(meta.getDescription());
+	}
 
 	@Test
 	public void testParameterPort() {
-		// TODO test parameter port
+		// TODO test parameter metadata
+	}
+	
+	@Test
+	public void testMissingParameterMetadata() {
+		// TODO test missing parameter metadata
 	}
 
 	@Test
