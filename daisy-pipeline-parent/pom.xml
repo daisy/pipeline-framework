@@ -21,7 +21,6 @@
 	<module>../common-stax</module>
 	<module>../common-utils</module>
 	<module>../converter-parser</module>
-	<module>../daisy-pipeline</module>
 	<module>../daisy.pipeline.feature</module>
 	<module>../daisy.pipeline.frontend.feature</module>
 	<module>../daisy.pipeline.frontend.site</module>
