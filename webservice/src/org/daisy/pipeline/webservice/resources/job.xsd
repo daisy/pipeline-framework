@@ -3,18 +3,18 @@
   <xs:element name="job">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="data:converter"/>
-        <xs:element minOccurs="0" ref="data:result"/>
-        <xs:element ref="data:errors"/>
-        <xs:element ref="data:log"/>
+        <xs:element ref="data:script" maxOccurs="1" minOccurs="1"/>
+        <xs:element ref="data:result" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="data:errors" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="data:log" maxOccurs="1" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="id" use="required" type="xs:NCName"/>
       <xs:attribute name="status" use="required" type="xs:NCName"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="converter">
+  <xs:element name="script">
     <xs:complexType>
-      <xs:attribute name="href" use="required" type="xs:NCName"/>
+      <xs:attribute name="href" use="required" type="xs:anyURI"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="result">
@@ -25,7 +25,7 @@
   <xs:element name="errors">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" ref="data:error"/>
+        <xs:element ref="data:error" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>

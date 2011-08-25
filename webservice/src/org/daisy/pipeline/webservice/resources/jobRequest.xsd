@@ -3,44 +3,45 @@
   <xs:element name="jobRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="data:useConverter"/>
+        <xs:element ref="data:script" maxOccurs="1" minOccurs="1"/>
+        <xs:element ref="data:input" maxOccurs="unbounded"/>
+        <xs:element ref="data:option" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="useConverter">
+  <xs:element name="script">
     <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="data:input"/>
-      </xs:sequence>
       <xs:attribute name="href" use="required" type="xs:anyURI"/>
     </xs:complexType>
   </xs:element>
-  
   <xs:element name="input">
     <xs:complexType>
-      <xs:sequence>
+      <xs:choice>
+        <xs:element maxOccurs="unbounded" ref="data:file"/>
         <xs:element maxOccurs="unbounded" ref="data:docwrapper"/>
-      </xs:sequence>
+      </xs:choice>
       <xs:attribute name="name" use="required" type="xs:NCName"/>
     </xs:complexType>
   </xs:element>
-  
-  <xs:element name="option">
+  <xs:element name="file">
     <xs:complexType>
-      <xs:simpleContent>
-        <xs:extension base="xs:string">
-          <xs:attribute name="name" use="required" type="xs:NCName">
-          </xs:attribute>
-        </xs:extension>
-      </xs:simpleContent>
-    </xs:complexType>  
+      <xs:attribute name="src" use="required"/>
+    </xs:complexType>
   </xs:element>
-  
   <xs:element name="docwrapper">
     <xs:complexType>
       <xs:sequence>
-        <xs:any minOccurs="0"/>
+        <xs:any minOccurs="0"/>        
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="option">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:NCName">
+          <xs:attribute name="name" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
     </xs:complexType>
   </xs:element>
 </xs:schema>

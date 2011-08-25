@@ -1,10 +1,16 @@
 package org.daisy.pipeline.webservice;
 
+import java.io.StringWriter;
 import java.util.Iterator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
@@ -24,6 +30,12 @@ public class XmlFormatter {
 	public static Document jobToXml(Job job, String serverAddress) {
 		Document doc = createDom("job");
 		toXmlElm(job, doc, serverAddress);
+		
+		// for debugging only
+		if (!Validator.validateXml(doc, Validator.jobSchema)) {
+			System.out.println("INVALID XML:\n" + DOMToString(doc));
+		}
+		
 		return doc;
 	}
 	
@@ -41,6 +53,11 @@ public class XmlFormatter {
 			jobsElm.appendChild(jobElm);
 		}
 		
+		// for debugging only
+		if (!Validator.validateXml(doc, Validator.jobsSchema)) {
+			System.out.println("INVALID XML:\n" + DOMToString(doc));
+		}
+		
 		return doc;
 	}
 	
@@ -50,6 +67,12 @@ public class XmlFormatter {
 	public static Document xprocScriptToXml(XProcScript script) {
 		Document doc = createDom("script");
 		toXmlElm(script, doc);
+		
+		// for debugging only
+		if (!Validator.validateXml(doc, Validator.scriptSchema)) {
+			System.out.println("INVALID XML:\n" + DOMToString(doc));
+		}
+		
 		return doc;
 	}
 	
@@ -66,6 +89,31 @@ public class XmlFormatter {
 			Element converterElm = toXmlElm(script, doc);
 			scriptsElm.appendChild(converterElm);
 		}
+		
+		// for debugging only
+		if (!Validator.validateXml(doc, Validator.scriptsSchema)) {
+			System.out.println("INVALID XML:\n" + DOMToString(doc));
+		}
+		
+		return doc;
+	}
+	
+	public static Document jobLogToXml(Job job, String serverAddress) {
+		Document doc = createDom("log");
+		Element jobElm = doc.createElement("job");
+		jobElm.setAttribute("href", serverAddress + "/jobs/" + job.getId().toString());
+		Element dataElm = doc.createElement("data");
+		// TODO: replace with actual log file
+		dataElm.setTextContent(job.getStatus().name());
+		
+		doc.appendChild(jobElm);
+		doc.appendChild(dataElm);
+		
+		// for debugging only
+		if (!Validator.validateXml(doc, Validator.logSchema)) {
+			System.out.println("INVALID XML:\n" + DOMToString(doc));
+		}
+		
 		return doc;
 	}
 	
@@ -211,4 +259,28 @@ public class XmlFormatter {
 		}
 	    
 	}	
+	
+	/* 
+	 * from: 
+	 * http://www.journaldev.com/71/utility-java-class-to-format-xml-document-to-xml-string-and-xml-to-document
+	 */
+	public static String DOMToString(Document doc) {
+        String xmlString = "";
+        if (doc != null) {
+            try {
+                TransformerFactory transfac = TransformerFactory.newInstance();
+                Transformer trans = transfac.newTransformer();
+                trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+                trans.setOutputProperty(OutputKeys.INDENT, "yes");
+                StringWriter sw = new StringWriter();
+                StreamResult result = new StreamResult(sw);
+                DOMSource source = new DOMSource(doc);
+                trans.transform(source, result);
+                xmlString = sw.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return xmlString;
+    }
 }
