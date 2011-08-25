@@ -22,25 +22,30 @@ import org.daisy.expath.parser.EXPathConstants.Elements;
 import org.daisy.expath.parser.EXPathPackageParser;
 import org.daisy.expath.parser.ModuleBuilder;
 import org.daisy.pipeline.modules.Module;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
 public class StaxEXPathPackageParser implements EXPathPackageParser {
 
-	private XMLInputFactory factory;
-	private static HashSet<QName> COMPONENT_ELEMENTS= new HashSet<QName>();
-	static{
+	private final static Logger logger = LoggerFactory
+			.getLogger(StaxEXPathPackageParser.class);
+
+	private static HashSet<QName> COMPONENT_ELEMENTS = new HashSet<QName>();
+	static {
 		COMPONENT_ELEMENTS.add(Elements.XSLT);
 		COMPONENT_ELEMENTS.add(Elements.XPROC);
 		COMPONENT_ELEMENTS.add(Elements.NG);
 		COMPONENT_ELEMENTS.add(Elements.XSD);
 		COMPONENT_ELEMENTS.add(Elements.XQUERY);
 		COMPONENT_ELEMENTS.add(Elements.RNC);
-		
+
 	};
-	
-	
+
+	private XMLInputFactory factory;
+
 	public StaxEXPathPackageParser() {
 	}
 
@@ -49,6 +54,7 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 	}
 
 	public Module parse(URL url, ModuleBuilder builder) {
+		logger.trace("parsing EXPath package <{}>", url);
 		if (factory == null) {
 			throw new IllegalStateException();
 		}
@@ -73,10 +79,11 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 			parseModule(reader, builder);
 
 		} catch (XMLStreamException e) {
-
+			logger.trace("parsing error: {}", e.getMessage());
 			throw new RuntimeException("Parsing error: " + e.getMessage(), e);
 
 		} catch (IOException e) {
+			logger.trace("parsing error: {}", e.getMessage());
 			throw new RuntimeException("Couldn't access package descriptor: "
 					+ e.getMessage(), e);
 		} finally {
@@ -89,6 +96,7 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 				// ignore;
 			}
 		}
+		logger.trace("parsed <{}>", url);
 		return builder.build();
 	}
 
@@ -137,13 +145,14 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 		Predicate<XMLEvent> pred = Predicates.or(
 				EventPredicates.IS_START_ELEMENT,
 				EventPredicates.IS_END_ELEMENT);
-		StaxEventHelper.loop(reader, pred, EventPredicates.getChildOrSiblingPredicate(),
+		StaxEventHelper.loop(reader, pred,
+				EventPredicates.getChildOrSiblingPredicate(),
 				new EventProcessor() {
 					public void process(XMLEvent event)
 							throws XMLStreamException {
 						if (event.isStartElement()) {
 							StartElement component = event.asStartElement();
-					
+
 							if (COMPONENT_ELEMENTS.contains(component.getName())) {
 								StaxEventHelper.peekNextElement(reader,
 										Elements.IMPORT_URI);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="true" name="expath-package-parser">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="expath-package-parser">
    <implementation class="org.daisy.expath.parser.stax.StaxEXPathPackageParser"/>
    <service>
       <provide interface="org.daisy.expath.parser.EXPathPackageParser"/>
