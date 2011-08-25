@@ -2,6 +2,7 @@ package org.daisy.converter.parser.stax;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URISyntaxException;
 
@@ -29,17 +30,48 @@ public class XProcScriptParserTest {
 	}
 
 	@Test
-	public void converterParsingTest() throws URISyntaxException {
+	public void testDescription() throws URISyntaxException {
 		assertEquals("short description", scp.getName());
 		assertEquals("detail description", scp.getDescription());
+	}
+
+	@Test
+	public void testPortMetadataIsSet() {
+		for (XProcPortInfo port : scp.getXProcPipelineInfo().getInputPorts()) {
+			assertNotNull("port '" + port.getName() + "' has no metadata",
+					scp.getPortMetadata(port.getName()));
+		}
+		for (XProcPortInfo port : scp.getXProcPipelineInfo().getOutputPorts()) {
+			assertNotNull("port '" + port.getName() + "' has no metadata",
+					scp.getPortMetadata(port.getName()));
+		}
+		//TODO test parameter ports
 	}
 
 	@Test
 	public void testInputPort() {
 		XProcPortMetadata port = scp.getPortMetadata("source");
 		assertEquals("application/x-dtbook+xml", port.getMediaType());
-		assertEquals("source port", port.getNiceName());
+		assertEquals("source name", port.getNiceName());
+		assertEquals("source description", port.getDescription());
 
+	}
+
+	@Test
+	public void testOutputPort() {
+		XProcPortMetadata port = scp.getPortMetadata("result");
+		port.getDescription();
+		assertEquals("application/x-dtbook+xml", port.getMediaType());
+		assertEquals("result name", port.getNiceName());
+		assertEquals("result description", port.getDescription());
+
+	}
+
+	// TODO add tests for missing metadata
+
+	@Test
+	public void testParameterPort() {
+		// TODO test parameter port
 	}
 
 	@Test
@@ -57,7 +89,7 @@ public class XProcScriptParserTest {
 		assertNotNull(info);
 		XProcPortInfo port = info.getInputPort("source");
 		assertEquals("source", port.getName());
-		assertEquals(true, port.isPrimary());
-		assertEquals(true, port.isSequence());
+		assertTrue(port.isPrimary());
+		assertTrue(port.isSequence());
 	}
 }

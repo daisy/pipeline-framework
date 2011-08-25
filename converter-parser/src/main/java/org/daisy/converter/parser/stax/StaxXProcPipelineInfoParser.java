@@ -22,6 +22,7 @@ import org.daisy.common.xproc.XProcPipelineInfo.Builder;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.converter.parser.XProcScriptConstants.Attributes;
 import org.daisy.converter.parser.XProcScriptConstants.Elements;
+import org.daisy.converter.parser.XProcScriptConstants.Values;
 
 public class StaxXProcPipelineInfoParser {
 	/** The xmlinputfactory. */
@@ -117,13 +118,14 @@ public class StaxXProcPipelineInfoParser {
 							.equals(Elements.P_OPTION)) {
 						parseOption(event, infoBuilder);
 					} else if (this.isFirstChild()
-							&& event.asStartElement().getName()
+							&& (event.asStartElement().getName()
 									.equals(Elements.P_INPUT)
 							|| event.asStartElement().getName()
-									.equals(Elements.P_OUTPUT)) {
+									.equals(Elements.P_OUTPUT))) {
 						parsePort(event, infoBuilder);
 					}
 				}
+				//TODO break the loop when reached the subpipeline
 			}
 
 		}
@@ -132,7 +134,6 @@ public class StaxXProcPipelineInfoParser {
 			QName elemName = event.asStartElement().getName();
 			boolean primary = false;
 			boolean sequence = false;
-			String kind = "";
 			Attribute portAttr = event.asStartElement().getAttributeByName(
 					Attributes.PORT);
 			Attribute kindAttr = event.asStartElement().getAttributeByName(
@@ -141,16 +142,16 @@ public class StaxXProcPipelineInfoParser {
 					Attributes.PRIMARY);
 			Attribute sequenceAttr = event.asStartElement().getAttributeByName(
 					Attributes.SEQUENCE);
-			if (primaryAttr != null && primaryAttr.getValue().equals("true")) {
+			if (primaryAttr != null && Values.TRUE.equals(primaryAttr.getValue())) {
 				primary = true;
 			}
-			if (sequenceAttr != null && sequenceAttr.getValue().equals("true")) {
+			if (sequenceAttr != null && Values.TRUE.equals(sequenceAttr.getValue())) {
 				sequence = true;
 			}
 			XProcPortInfo info = null;
 			if (portAttr != null) {
 				if (kindAttr != null && elemName.equals(Elements.P_INPUT)
-						&& kindAttr.getValue().equals("parameters")) {
+						&& Values.PARAMETER.equals(kindAttr.getValue())) {
 					info = XProcPortInfo.newParameterPort(portAttr.getValue(),
 							primary);
 				} else if (elemName.equals(Elements.P_INPUT)) {
@@ -181,7 +182,7 @@ public class StaxXProcPipelineInfoParser {
 				name = new QName(nameAttr.getValue());
 			}
 			if (requiredAttr != null) {
-				if (requiredAttr.getValue().equalsIgnoreCase("true")) {
+				if (Values.TRUE.equals(requiredAttr.getValue())) {
 					required = true;
 				}
 			}

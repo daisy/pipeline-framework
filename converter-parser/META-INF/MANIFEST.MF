@@ -5,11 +5,12 @@ Bundle-SymbolicName: converter-parser
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.google.common.base,
- org.daisy.common.stax,
- org.daisy.common.xproc,
- org.daisy.pipeline.script,
+ com.google.common.collect;version="9.0.0",
  javax.xml.namespace,
  javax.xml.stream,
  javax.xml.stream.events,
- javax.xml.transform
+ javax.xml.transform,
+ org.daisy.common.stax,
+ org.daisy.common.xproc,
+ org.daisy.pipeline.script
 Service-Component: OSGI-INF/parser.xml
