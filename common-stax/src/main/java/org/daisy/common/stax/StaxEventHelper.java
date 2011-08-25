@@ -1,6 +1,5 @@
 package org.daisy.common.stax;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
