@@ -3,16 +3,22 @@ package org.daisy.pipeline.script;
 import java.net.URI;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 //TODO check thread safety 
 public class DefaultScriptRegistry implements ScriptRegistry {
+	
+	private static final Logger logger = LoggerFactory.getLogger(DefaultScriptRegistry.class); 
 
 	private final Map<URI, XProcScriptService> descriptors = Maps.newHashMap();
 	private XProcScriptParser parser;
 
 	public void register(final XProcScriptService script) {
+		logger.trace("registering script {}",script.getURI());
 		if (!script.hasParser()){
 			script.setParser(parser);
 		}

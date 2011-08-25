@@ -9,7 +9,8 @@ Import-Package:
  com.google.common.base,
  com.google.common.collect,
  org.daisy.common.base,
- org.daisy.common.xproc
+ org.daisy.common.xproc,
+ org.slf4j
 Export-Package: org.daisy.pipeline.job,
  org.daisy.pipeline.script
 Service-Component: OSGI-INF/registry.xml, OSGI-INF/job-manager.xml, OSGI-INF/job-execution-service.xml
