@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="test">
+   <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+   <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+   </service>
+   <property name="script.name" type="String" value="test"/>
+   <property name="script.description" type="String" value="script description"/>
+   <property name="script.url" type="String" value="http://www.daisy.org/pipeline/modules/test-script/test.xpl"/>
+</scr:component>
