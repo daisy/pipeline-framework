@@ -1,0 +1,16 @@
+<jobRequest xmlns="http://www.daisy.org/ns/pipeline/data">
+    <script href="http://www.daisy.org/ns/pipeline/modules/some-module/module-xproc.xpl"/>
+    <input name="source">
+        <docwrapper>
+            <myRootElement>
+                This XML has no external file references; therefore, it does not need to be submitted in a zip.
+            </myRootElement>
+        </docwrapper>
+        <docwrapper>
+            <myRootElement>
+                This XML has no external file references; therefore, it does not need to be submitted in a zip.
+            </myRootElement>
+        </docwrapper>
+    </input>
+    <option name="purple-or-green">purple</option>
+</jobRequest>

@@ -1,4 +1,4 @@
-<jobs>
+<jobs xmlns="http://www.daisy.org/ns/pipeline/data">
     <!--
         This job has completed and it has available results.
         The log file will have more details about the errors.
@@ -8,7 +8,6 @@
         <result href="http://ws.pipeline.org/jobs/job-id-01/result"/>
         <errors>
             <error level="WARNING">Warning about this job</error>
-            <error level="ERROR">Reference not found by XProc step copy-file-references</error>
         </errors>
         <log href="http://ws.pipeline.org/jobs/job-id-01/log"/>
     </job>

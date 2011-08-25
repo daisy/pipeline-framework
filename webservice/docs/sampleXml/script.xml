@@ -1,6 +1,10 @@
-script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl">
-<description>Convert DTBook XML to ZedAI XML</description>  
-<input  name="myIn" type="XML" desc="input document" sequenceAllowed="true"/> 
-<option name="myOpt" type="string" desc="the important option" required="false"/>
-...
+<script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl" xmlns="http://www.daisy.org/ns/pipeline/data">
+    <nicename>DTBook to ZedAI</nicename>
+    <description>Transforms DTBook XML into ZedAI XML, and extracts metadata and CSS information into separate files. 
+            Homepage: http://code.google.com/p/daisy-pipeline/wiki/DTBookToZedAI</description>  
+        <input  name="source" type="application/x-dtbook+xml" desc="DTBook input file(s)" sequenceAllowed="true"/> 
+        <option name="opt-output-dir" type="anyDirURI" desc="Output directory" required="true"/>
+        <option name="opt-zedai-filename" type="string" desc="Filename for the output ZedAI file" required="false"/>
+        <option name="opt-mods-filename" type="string" desc="Filename for the output MODS file" required="false"/>
+        <option name="opt-css-filename" type="string" desc="Filename for the output CSS file" required="false"/>
 </script>
