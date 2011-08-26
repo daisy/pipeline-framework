@@ -4,11 +4,18 @@ Bundle-Name: Calabash-custom-steps
 Bundle-SymbolicName: calabash-custom-steps
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: com.xmlcalabash;bundle-version="1.1.0",
- net.sf.saxon-he;bundle-version="9.3.0"
-Import-Package: net.sf.saxon.s9api;version="9.3.0",
+Import-Package: com.xmlcalabash.core,
+ com.xmlcalabash.io,
+ com.xmlcalabash.library,
+ com.xmlcalabash.model,
+ com.xmlcalabash.runtime,
+ com.xmlcalabash.util,
+ javax.xml.transform,
+ net.sf.saxon,
+ net.sf.saxon.event,
+ net.sf.saxon.lib,
+ net.sf.saxon.s9api,
  org.daisy.calabash,
  org.slf4j
-Export-Package: org.daisy.pipeline.calabash.extensions
 Service-Component: OSGI-INF/step-message.xml,OSGI-INF/step-xslt.xml
 

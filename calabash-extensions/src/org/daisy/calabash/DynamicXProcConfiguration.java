@@ -1,12 +1,10 @@
 package org.daisy.calabash;
 
-import java.util.Collection;
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.QName;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import net.sf.saxon.s9api.Processor;
-import net.sf.saxon.s9api.QName;
 
 import com.xmlcalabash.core.XProcConfiguration;
 import com.xmlcalabash.core.XProcRuntime;

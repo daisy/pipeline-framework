@@ -3,7 +3,6 @@ package org.daisy.calabash;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,8 +51,4 @@ public class DynamicXProcConfigurationFactory implements
 		return (stepProvider != null) ? stepProvider.newStep(runtime, step)
 				: null;
 	}
-    public void init(BundleContext ctxt){
-    	logger.info(this.getClass().getName()+" is up");
-    	
-    }
 }
