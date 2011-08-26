@@ -1,0 +1,15 @@
+client.rb --converters
+
+client.rb --converter --id=dtbook-to-zedai
+
+client.rb --jobs
+
+client.rb --job --id=job-id-01
+
+client.rb --log --id=job-id-01
+
+client.rb --result --id=job-id-01
+
+client.rb --delete --id=job-id-01
+
+client.rb --createjob
