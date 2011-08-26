@@ -1,8 +1,5 @@
 package org.daisy.pipeline.ui.commandline;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -78,12 +75,8 @@ public class PipelineCLI {
 						try {
 							parse(args.split("\\s")).execute();
 						} catch (Exception e) {
-							StringWriter sw = new StringWriter();
-							e.printStackTrace(new PrintWriter(sw));
-
-							getUnrecovreableError(
-									e.getMessage() + "\n" + sw.toString())
-									.execute();
+							getUnrecovreableError(e.getMessage()).execute();
+							logger.error(e.getMessage(), e);
 							if (EXIT) {
 								System.exit(1);
 							}
@@ -167,8 +160,7 @@ public class PipelineCLI {
 	}
 
 	private Command getScriptCommand(OptionSet oSet) {
-		if (oSet.valueOf("s") == null
-				|| oSet.valueOf("s").toString().isEmpty()) {
+		if (oSet.valueOf("s") == null || oSet.valueOf("s").toString().isEmpty()) {
 			return CommandListScripts.newInstance(scriptRegistry);
 		} else {
 			String scriptName = oSet.valueOf("s").toString();
@@ -191,7 +183,7 @@ public class PipelineCLI {
 							xprocEngine);
 				}
 			}
-			return getUsageWithError("Script '" + scriptName + " not found");
+			return getUsageWithError("Script '" + scriptName + "' not found");
 		}
 	}
 

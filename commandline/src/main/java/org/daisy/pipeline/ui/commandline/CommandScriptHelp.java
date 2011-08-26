@@ -1,5 +1,7 @@
 package org.daisy.pipeline.ui.commandline;
 
+import java.net.URI;
+
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -37,12 +39,19 @@ public final class CommandScriptHelp implements Command {
 	private static String toString(XProcScript script) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SCRIPT").append('\n');
-		sb.append('\t').append(script.getName()).append('\n');
-		sb.append('\t').append(script.getURI()).append('\n');
+		if (script.getName()!=null){
+			sb.append('\t').append(script.getName()).append('\n');
+		}
+		String shortName = toFileName(script.getURI());
+		sb.append('\t');
+		if (!shortName.isEmpty()){
+			sb.append(shortName).append(" -- ");
+		}
+		sb.append(script.getURI()).append('\n');
 		sb.append('\n');
 		if (script.getDescription() != null) {
 			sb.append("DESCRIPTION").append('\n');
-			sb.append('\t').append(script.getDescription()).append('\n');
+			sb.append('\t').append(script.getDescription().replaceAll("\\s*\\n+\\s*"," ")).append('\n');
 			sb.append('\n');
 		}
 		// TODO getInputPorts should return a list ? or hasInputPorts() ?
@@ -59,7 +68,7 @@ public final class CommandScriptHelp implements Command {
 						port.isSequence() ? "sequence of documents"
 								: "single document");
 				if (meta.getMediaType() != null) {
-					sb.append(" of type '").append(meta.getMediaType());
+					sb.append(" of type '").append(meta.getMediaType()).append('\'');
 				}
 				sb.append(")").append('\n');
 				if (meta.getDescription() != null) {
@@ -137,6 +146,13 @@ public final class CommandScriptHelp implements Command {
 			sb.append('\n');
 		}
 		return sb.toString();
+	}
+
+	private static String toFileName(URI uri) {
+		String path = uri.getPath();
+		int begin = path.lastIndexOf('/') + 1;
+		int end = path.lastIndexOf('.') != -1 ? path.lastIndexOf('.') : path.length();
+		return path.substring(begin,end<begin?path.length():end);
 	}
 
 }

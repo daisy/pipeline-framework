@@ -4,13 +4,17 @@ Bundle-Name: DAISY Pipeline 2 CLI
 Bundle-SymbolicName: org.daisy.pipeline.cli
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: javax.xml.stream,
+Import-Package: javax.xml.namespace,
+ javax.xml.stream,
+ javax.xml.transform,
+ javax.xml.transform.sax,
+ javax.xml.transform.stream,
  joptsimple,
  net.sf.saxon,
  org.daisy.common.base,
  org.daisy.common.xproc,
- org.daisy.pipeline.logging,
  org.daisy.pipeline.modules,
  org.daisy.pipeline.script,
- org.slf4j
+ org.slf4j,
+ org.xml.sax
 Service-Component: OSGI-INF/cli.xml
