@@ -11,7 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PipelineWebService extends Application {
-	private static Logger logger = LoggerFactory.getLogger(PipelineWebService.class.getName());
+	private static Logger logger = LoggerFactory
+			.getLogger(PipelineWebService.class.getName());
+	public static final String MODE_PROPERTY = "org.daisy.pipeline.mode";
+	private static final String WS = "ws";
 
 	// TODO make port and address configurable
 	private final String serverAddress = "http://localhost:8182/ws";
@@ -34,14 +37,17 @@ public class PipelineWebService extends Application {
 	}
 
 	public void init() {
-		logger.info("Starting webservice on port 8182.");
-		Component component = new Component();
-		component.getServers().add(Protocol.HTTP, portNumber);
-		component.getDefaultHost().attach("/ws", this);
-		try {
-			component.start();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		if (System.getProperty(MODE_PROPERTY) != null
+				&& System.getProperty(MODE_PROPERTY).equals(WS)) {
+			logger.info("Starting webservice on port 8182.");
+			Component component = new Component();
+			component.getServers().add(Protocol.HTTP, portNumber);
+			component.getDefaultHost().attach("/ws", this);
+			try {
+				component.start();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 
