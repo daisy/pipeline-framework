@@ -1,0 +1,8 @@
+<jobRequest xmlns="http://www.daisy.org/ns/pipeline/data">
+    <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
+    <input name="source">
+        <file src="./folders/xml1/file1.xml"/>
+        <file src="./folders/xml2/file2.xml"/>
+    </input>
+    <option name="opt-zedai-filename">myZedAIFile.xml</option>
+</jobRequest>

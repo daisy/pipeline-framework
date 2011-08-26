@@ -30,7 +30,6 @@ public class ScriptResource extends ServerResource {
 		}
 		ScriptRegistry scriptRegistry = ((PipelineWebService)this.getApplication()).getScriptRegistry();
 		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptUri);
-		// TODO check with framework about this function call
 		script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
 	}
 
