@@ -26,7 +26,6 @@ import com.xmlcalabash.util.URIUtils;
 
 //TODO check thread safety
 public final class CalabashXProcEngine implements XProcEngine {
-	public static final String CONFIGURATION_FILE = "org.daisy.pipeline.xproc.configuration";
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(CalabashXProcEngine.class);
@@ -38,8 +37,10 @@ public final class CalabashXProcEngine implements XProcEngine {
 	private XProcConfigurationFactory configFactory = null;
 
 	public CalabashXProcEngine() {
+		//FIXME: default entity resolver
+		entityResolver= new CalabashXprocEntityResolver();
 	}
-
+ 
 	@Override
 	public XProcPipeline load(URI uri) {
 		// TODO check that the dynamic config factory is set
