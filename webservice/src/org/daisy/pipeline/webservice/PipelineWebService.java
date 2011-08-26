@@ -38,7 +38,7 @@ public class PipelineWebService extends Application {
 
 	public void init() {
 		if (System.getProperty(MODE_PROPERTY) != null
-				&& System.getProperty(MODE_PROPERTY).equals(WS)) {
+				&& System.getProperty(MODE_PROPERTY).equalsIgnoreCase(WS)) {
 			logger.info("Starting webservice on port 8182.");
 			Component component = new Component();
 			component.getServers().add(Protocol.HTTP, portNumber);
