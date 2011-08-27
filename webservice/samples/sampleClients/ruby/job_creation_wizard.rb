@@ -1,103 +1,110 @@
+require './script_arg.rb'
+require 'nokogiri'
+
 # guide the user through the process of creating a job
 def job_creation_wizard
 
-	input = ""
-	until input == 'q'
-		puts "Choose a converter for your job, or (q)uit: \n\n"
-		# show available converters
-		print_converters
-		input = get_input
+  puts "Please enter the following information:"
+  puts "Script name: "
+  name  = STDIN.gets().chomp()
+  scripturi = get_uri_from_shortname(name)
 
-		if input == 'q'
-			return
-		end
+  doc = Rest.get_script(scripturi)
 
-		if ((1..$num_converters).include? input.to_i) == true
-			# user chose a converter
-			break
-		else
-			puts "Not recognized.\n"
-		end
-	end
+  input_args_data = prompt_for_input(doc)
+  option_args_data = prompt_for_options(doc)
 
-	converter = get_converter_by_number(input.to_i)
+  jobdoc = create_job_xml(scripturi, input_args_data, option_args_data)
 
-	print_converter(converter)
+  trace(jobdoc.to_s,"JOBREQUEST")
 
-	# now prompt for each input argument
-	args = converter.xpath(".//arg")
+  puts "Please enter the path to the zip file containing the data for this job:"
+  zippath = STDIN.gets().chomp()
 
-	args_data = []
-	if args.length > 0
-		puts "This converter requires " + args.length.to_s + " input arguments. Enter data for each argument, or (q)uit.\n\n"
+  res = Rest.post_job(jobdoc.to_s, zippath)
 
-		args.each do |node|
+  if res == true
+    message("Job created")
+  else
+    message("Job not created")
+  end
 
-			# requires an XML file
-			if node['type'] == 'input'
+end
 
-				valid_input = false
-				until valid_input
-					puts "XML file path for arg name='" + node['name'] + "':"
-					input = get_input
+# return an array of Arg objects
+def prompt_for_input(doc)
+  input_elms = doc.xpath(".//input")
+	input_args_data = []
+  input_elms.each do |node|
 
-					if input == 'q'
-						return
-					end
+    input_arg_data = nil
 
-# when the framework supports inline documents, replace this:
-					if FileTest.exists?(input) == true
-						argdata = OpenStruct.new
-						argdata.value = input
-						argdata.name = node['name']
-						argdata.argtype = node['type']
-						args_data.push(argdata)
-						valid_input = true
-					else
-						puts "file not found"
-					end
+    if node['sequenceAllowed'] == "true"
+      input_arg_data = ScriptArg.new(node['name'])
 
-# with this:
-=begin
-					begin
-						val = IO.read(get_input)
-						argdata = OpenStruct.new
-						argdata.value = val
-						argdata.name = node['name']
-						argdata.argtype = node['type']
-						args_data.push(argdata)
-						valid_input = true
-					rescue
-						puts "file not found"
-					end
-=end
-			end
-		# requires a string
-			elsif node['type'] == 'option'
+      puts "Input for **#{node['name']}**. \nEnter one XML file path on each line, relative to the zip container. Press 'q' when done. "
 
-					puts "String data for arg name='" + node['name'] + "':"
-					input = get_input
-					if input == 'q'
-						return
-					end
-					argdata = OpenStruct.new
-					argdata.value = input
-					argdata.name = node['name']
-					argdata.argtype = node['type']
-					args_data.push(argdata)
-			# unrecognized arg type; maybe "output"
-			else
-				puts "Not collecting data for " + node['desc']
-			end
-		end
-	else
-		puts "This converter requires no input arguments."
-	end
+      input = ''
+      until input == "q"
+        print '>'
+        input = STDIN.gets().chomp()
+        if input == 'q'
+          break
+        end
+        input_arg_data.add_value(input)
+      end
 
-	if post_job(converter, args_data) == true
-		$num_jobs += 1
-		puts "Job created"
-	else
-		puts "Job error"
-	end
+    else
+      puts "Input for **#{node['name']}**. \nEnter a path to an XML file, relative to the zip container: "
+      path = STDIN.gets().chomp()
+      input_arg_data = ScriptArg.new(node['name'])
+      input_arg_data.add_value(path)
+    end
+
+    input_args_data.push(input_arg_data)
+  end
+
+  return input_args_data
+end
+
+# return an array of Arg objects
+def prompt_for_options(doc)
+  option_elms = doc.xpath(".//option")
+	option_args_data = []
+  option_elms.each do |node|
+    req_or_opt = "Required"
+    if node['required'] == 'false'
+      req_or_opt = "Optional"
+    end
+    puts "#{req_or_opt} option for **#{node['name']}**. Enter a #{node['type']}: "
+    value = STDIN.gets().chomp()
+    option_arg_data = ScriptArg.new(node['name'])
+    option_arg_data.add_value(value)
+    option_args_data.push(option_arg_data)
+  end
+  return option_args_data
+end
+
+def create_job_xml(scripturi, input_args, option_args)
+
+  builder = Nokogiri::XML::Builder.new do |xml|
+		xml.jobRequest(:xmlns => "http://www.daisy.org/ns/pipeline/data") {
+      xml.script(:href => scripturi)
+      input_args.each do |arg|
+        xml.input(:name => arg.name) {
+          arg.value_list.each do |v|
+            xml.file(:src => v)
+          end
+        }
+      end
+
+      option_args.each do |arg|
+        xml.option(:name => arg.name) {
+          xml.text arg.value_list[0]
+        }
+      end
+    }
+  end
+
+  return builder.doc
 end

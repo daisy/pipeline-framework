@@ -2,12 +2,45 @@
 
 require 'rubygems'
 require 'nokogiri'
+require 'optparse'
+require './settings.rb'
+require './operations.rb'
 
-def print_usage
-	puts "
-	Syntax:
+def main
 
-  main.rb command options
+  checkargs
+
+  if Settings.instance.command == "scripts"
+    get_scripts
+  elsif Settings.instance.command == "script"
+    get_script(Settings.instance.options[:id])
+  elsif Settings.instance.command == "jobs"
+    get_jobs
+  elsif Settings.instance.command == "job"
+    get_job(Settings.instance.options[:id])
+  elsif Settings.instance.command == "log"
+    get_log(Settings.instance.options[:id])
+  elsif Settings.instance.command == "result"
+    get_result(Settings.instance.options[:id])
+  elsif Settings.instance.command == "delete"
+    delete_job(Settings.options[:id])
+  elsif Settings.instance.command == "createjob"
+    create_job
+  elsif Settings.instance.command == "runpreset"
+    run_preset_job
+  else
+    puts "Command #{Settings.instance.command} not recognized"
+  end
+
+end
+
+def checkargs
+
+  optparse = OptionParser.new do |opts|
+
+    opts.banner = "
+
+  Usage: main.rb command options
 
   Commands:
 
@@ -19,76 +52,41 @@ def print_usage
   result \t\t\t Show where the result is stored for a job.  Requires option --id=jobid.
   delete \t\t\t Delete a job.  Requires option --id=jobid.
   createjob \t\t\t Start creating a job.  Requires option --id=jobid.
+  runpreset \t\t\t Create a job with all pre-set values (for testing only).
 
-  Options:
-
-  --id \t\t\t String value to identify a resource, such as a converter or a job.
-  --trace \t\t\t Turn on trace statements
-  --baseuri \t\t\t Override the baseuri with another value; e.g. http://localhost:3000/ws/
-  --help \t\t\t Show this message.
   "
 
-end
+    Settings.instance.options[:trace] = false
+    opts.on('-t', '--trace', 'Turn on trace statements') do
+      Settings.instance.options[:trace] = true
+    end
 
-def main
+    Settings.instance.options[:id] = nil
+    opts.on('-i', '--id VALUE', 'specify an ID value') do |id|
+      Settings.instance.options[:id] = id
+    end
 
-  $baseuri = "http://localhost:8182/ws/"
+    Settings.instance.options[:baseuri] = nil
+    opts.on('-b', '--baseuri VALUE', "Override the default baseuri") do |baseuri|
+      Settings.instance.set_baseuri(baseuri)
+    end
 
-	checkargs
-
-  if $help
-    print_usage
-    return
-  end
-
-  if $command != ""
-
-    if $command == "scripts"
-      get_scripts
-    elsif $command == "script"
-      get_script($id)
-    elsif $command == "jobs"
-      get_jobs
-    elsif $command == "job"
-      get_job($id)
-    elsif $command == "log"
-      get_log($id)
-    elsif $command == "result"
-      get_result($id)
-    elsif $command == "delete"
-      delete_job($id)
-    elsif $command == "createjob"
-      create_job
-    else
-      puts "Command #{$command} not recognized"
+    opts.on('-h', '--help', 'Display this screen') do
+      message(opts)
+      exit
     end
   end
 
+  optparse.parse!
+
+  # only expecting one command so just grab the first one
+  ARGV.each do |a|
+    Settings.instance.command = a
+    break
+  end
 end
 
-def checkargs
-	$trace = false
-	$help = false
-	$command = ""
-  $id = ""
 
-	ARGV.each do|a|
-	  if a == '--trace'
-			$trace = true
-		elsif a == "--help"
-			$help = true
-		elsif a == "--test"
-			$test = true
-    elsif a == "--baseuri"
-      $baseuri = "TODO and end it with a slash"
-    elsif a == "--id"
-      $id = "TODO"
-    else
-      $command = a
-    end
-	end
-end
-
-## execution starts here
+# execution starts here
 main 
 

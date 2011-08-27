@@ -82,16 +82,17 @@ public class Validator {
 		
 		// validate against the schema
 		boolean xmlValid = validateXml(doc, Validator.jobRequestSchema);
-		boolean argsValid = validateArguments(doc, application);
+		if (xmlValid == false) return false;
 		
-		return xmlValid & argsValid;
+		boolean argsValid = validateArguments(doc, application);
+		return argsValid;
 	}
 	
 	// check that there is a value for each required argument
 	// check data of the argument value to the fullest extent possible
 	private static boolean validateArguments(Document doc, PipelineWebService application) {
 		
-		Element scriptElm = (Element)doc.getElementsByTagName("useConverter").item(0);
+		Element scriptElm = (Element)doc.getElementsByTagName("script").item(0);
 		URI scriptUri = null;
 		try {
 			scriptUri = new URI(scriptElm.getAttribute("href"));
@@ -113,10 +114,10 @@ public class Validator {
 		
 		// inputs
 		boolean hasAllRequiredInputs = validateInputPortData(script.getXProcPipelineInfo().getInputPorts(), 
-				scriptElm.getElementsByTagName("input"), script);
+				doc.getElementsByTagName("input"), script);
 		// options
 		boolean hasAllRequiredOptions = validateOptionData(script.getXProcPipelineInfo().getOptions(), 
-				scriptElm.getElementsByTagName("option"), script);
+				doc.getElementsByTagName("option"), script);
 		
 		// note that we don't validate output ports because it doesn't make sense in the context of the web service
 		
@@ -134,21 +135,20 @@ public class Validator {
 				continue;
 			}
 			
-			boolean foundArg = false;
 			boolean validArg = false;
 			for (int i=0; i<nodes.getLength(); i++) {
 				Element elm = (Element)nodes.item(i);
-				if (elm.getAttribute("name") == arg.getName().toString() && elm.getTextContent().trim().length() > 0) {
-					foundArg = true;
+				if (elm.getAttribute("name").equals(arg.getName().toString())) {
 					validArg = validateOptionType(elm.getTextContent(), script.getOptionMetadata(arg.getName()).getMediaType());
+					break;
 				}
 			}
-			hasAllRequiredArgs &= foundArg & validArg;
+			hasAllRequiredArgs &= validArg;
 		}
 		
 		if (hasAllRequiredArgs == false) {
 			// TODO: be more specific
-			System.out.print("ERROR: Required args missing");
+			System.out.println("ERROR: Required args missing");
 		}
 		return hasAllRequiredArgs;
 	}
@@ -159,7 +159,6 @@ public class Validator {
 		boolean hasAllRequiredArgs = true;
 		while (it.hasNext()) {
 			XProcPortInfo arg = it.next();
-			boolean foundArg = false;
 			boolean validArg = false;
 			// input elements should be of one of two forms:
 			// <input name="in1">
@@ -180,8 +179,7 @@ public class Validator {
 				Element elm = (Element)nodes.item(i);
 				
 				// find the <input> XML element that matches this input arg name
-				if (elm.getAttribute("name") == arg.getName()) {
-					foundArg = true;
+				if (elm.getAttribute("name").equals(arg.getName())) {
 					// <input> elements will have either <file> element children or <docwrapper> element children
 					NodeList fileNodes = elm.getElementsByTagName("file");
 					NodeList docwrapperNodes = elm.getElementsByTagName("docwrapper");
@@ -190,21 +188,22 @@ public class Validator {
 						validArg = false;
 					}
 					else {
-						if (fileNodes.getLength() == 0) {
+						if (fileNodes.getLength() > 0) {
 							validArg = validateFileElements(fileNodes);
 						}
 						else {
 							validArg = validateDocwrapperElements(docwrapperNodes, script.getPortMetadata(arg.getName()).getMediaType());
 						}
-					}					
+					}
+					break;
 				}
 			}
-			hasAllRequiredArgs &= foundArg & validArg;
+			hasAllRequiredArgs &= validArg;
 		}
 		
 		if (hasAllRequiredArgs == false) {
 			// TODO: be more specific
-			System.out.print("ERROR: Required args missing");
+			System.out.println("ERROR: Required args missing");
 		}
 		return hasAllRequiredArgs;
 	}
@@ -240,7 +239,8 @@ public class Validator {
 
 	private static boolean validateOptionType(String value, String mediaType) {
 		// TODO what are all the possibilities for mediaType?
-		return true;
+		// for now, just check that the string is non-empty
+		return value.trim().length() > 0;
 	}
 	
 	// just validate whether the xml is well-formed or not.  

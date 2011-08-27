@@ -1,51 +1,76 @@
-# show all the details for a script
+# display REST XML responses as human-friendly messages
+
+require './utils.rb'
+
 def display_script(element)
-  display_script_short(element)
-	element.xpath(".//arg").each do |arg|
-		puts "Argument \n\tname=" + arg['name']
+  message("\nScript: ")
+  puts display_script_short(element)
+
+  element.xpath(".//input").each do |arg|
+		puts "Input argument \n\tname=" + arg['name']
 		puts "\tdesc=" + arg['desc']
 		puts "\ttype=" + arg['type']
-		puts "\tport=" + arg['port']
-	end
+		puts "\tsequence allowed=" + arg['sequenceAllowed']
+  end
+
+element.xpath(".//option").each do |arg|
+		puts "Option argument \n\tname=" + arg['name']
+		puts "\tdesc=" + arg['desc']
+		puts "\ttype=" + arg['type']
+		puts "\trequired=" + arg['required']
+  end
+
+  message("\n")
 end
 
 def display_script_short(element)
-   puts element.xpath("./nicename")[0].content
-   puts element.xpath("./description")[0].content
+  nicename = element.xpath("./nicename")[0].content
+  description = element.xpath("./description")[0].content
+  return "#{nicename}\n\t#{description}"
 end
-# show a list of script names and descriptions
-def display_scripts(elements)
 
+def display_scripts(elements)
+  message("\nScripts: ")
   count = 1
   elements.each do |elm|
     puts "#{count.to_s}. #{display_script_short(elm)}"
+    count += 1
   end
-
+  message("\n")
 end
 
 def display_job(element)
-  display_job_short(element)
-  node.xpath(".//error").each do |err|
+  message("\nJob: ")
+
+  puts display_job_short(element)
+  element.xpath(".//error").each do |err|
     puts "ERROR: " + err['level'] + ".  " + err.content
   end
-
+  message("\n")
 end
 
 def display_job_short(element)
-  puts "Job ID = " + element['id'] + ",  Status = " + element['status']
+  return "Job ID = #{element['id']},  Status = #{element['status']}"
 end
 
 def display_jobs(elements)
+  message("\nJobs: ")
+
   count = 1
   elements.each do |elm|
     puts "#{count.to_s}. #{display_job_short(elm)}"
   end
+  message("\n")
 end
 
 def display_result(jobid, path)
   puts "Result for #{jobid} saved to #{path}"
+  message("\n")
 end
 
 def display_log(element)
-  puts element.to_s
+  message("\nLog for job #{element.xpath("./job")[0]['href']}: ")
+
+  puts element.xpath("./logfile")[0].content
+  message("\n")
 end
