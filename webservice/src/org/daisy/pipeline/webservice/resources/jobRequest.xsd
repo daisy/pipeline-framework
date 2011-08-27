@@ -20,7 +20,7 @@
         <xs:element maxOccurs="unbounded" ref="data:file"/>
         <xs:element maxOccurs="unbounded" ref="data:docwrapper"/>
       </xs:choice>
-      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="name" use="required" type="xs:string"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="file">
@@ -38,8 +38,8 @@
   <xs:element name="option">
     <xs:complexType>
       <xs:simpleContent>
-        <xs:extension base="xs:NCName">
-          <xs:attribute name="name" use="required" type="xs:NCName"/>
+        <xs:extension base="xs:string">
+          <xs:attribute name="name" use="required" type="xs:string"/>
         </xs:extension>
       </xs:simpleContent>
     </xs:complexType>

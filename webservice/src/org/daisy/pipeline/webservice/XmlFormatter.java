@@ -86,8 +86,8 @@ public class XmlFormatter {
 		Iterator<XProcScript> it = scripts.iterator();
 		while(it.hasNext()) {
 			XProcScript script = it.next();
-			Element converterElm = toXmlElm(script, doc);
-			scriptsElm.appendChild(converterElm);
+			Element scriptElm = toXmlElm(script, doc);
+			scriptsElm.appendChild(scriptElm);
 		}
 		
 		// for debugging only
@@ -120,13 +120,18 @@ public class XmlFormatter {
 	private static Element toXmlElm(XProcScript script, Document doc) {
 		Element rootElm = null;
 		
-		if (doc.getDocumentElement().getNodeName() == "script") {
+		if (doc.getDocumentElement().getNodeName().equals("script")) {
 			rootElm = doc.getDocumentElement();
 		}
 		else {
 			rootElm = doc.createElement("script");
 		}
 		rootElm.setAttribute("href", script.getURI().toString());
+		
+		Element nicenameElm = doc.createElement("nicename");
+		nicenameElm.setTextContent(script.getName());
+		
+		rootElm.appendChild(nicenameElm);
 		
 		Element descriptionElm = doc.createElement("description");
 		descriptionElm.setTextContent(script.getDescription());
@@ -171,6 +176,8 @@ public class XmlFormatter {
 			XProcOptionMetadata meta = script.getOptionMetadata(option.getName());
 			optionElm.setAttribute("type", meta.getMediaType());
 			optionElm.setAttribute("desc", meta.getDescription());
+			
+			rootElm.appendChild(optionElm);
 		}
 		
 		return rootElm;
@@ -179,7 +186,7 @@ public class XmlFormatter {
 	private static Element toXmlElm(Job job, Document doc, String serverAddress) {
 		Element rootElm = null;
 		
-		if (doc.getDocumentElement().getNodeName() == "job") {
+		if (doc.getDocumentElement().getNodeName().equals("job")) {
 			rootElm = doc.getDocumentElement();
 		}
 		else {

@@ -127,8 +127,10 @@ public class JobsResource extends ServerResource {
 	            if (fi.getFieldName().equals("jobData")) {
 	            	File file = File.createTempFile(tempfilePrefix, tempfileSuffix, new File(tempfileDir));
 	                fi.write(file);	  
-	                // TODO do i have to reopen the file first?
-	                zip = new ZipFile(file); 
+	                
+	                // re-opening the file after writing to it
+	                File file2 = new File(file.getAbsolutePath());
+	                zip = new ZipFile(file2); 
 	            }
 	            else if (fi.getFieldName().equals("jobRequest")) {
 	            	xml = fi.getString("utf-8");
@@ -181,7 +183,7 @@ public class JobsResource extends ServerResource {
 	
 	private Job createJob(Document doc, ZipFile zip) {
 
-		Element scriptElm = (Element) doc.getElementsByTagName("useScript").item(0);
+		Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
 		
 		URI scriptUri = null;
 		try {

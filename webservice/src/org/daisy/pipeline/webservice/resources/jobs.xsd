@@ -15,8 +15,8 @@
         <xs:element ref="data:errors" maxOccurs="1" minOccurs="0"/>
         <xs:element ref="data:log" maxOccurs="1" minOccurs="0"/>
       </xs:sequence>
-      <xs:attribute name="id" use="required" type="xs:NCName"/>
-      <xs:attribute name="status" use="required" type="xs:NCName"/>
+      <xs:attribute name="id" use="required" type="xs:string"/>
+      <xs:attribute name="status" use="required" type="xs:string"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="script">
@@ -38,7 +38,7 @@
   </xs:element>
   <xs:element name="error">
     <xs:complexType mixed="true">
-      <xs:attribute name="level" use="required" type="xs:NCName"/>
+      <xs:attribute name="level" use="required" type="xs:string"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="log">
