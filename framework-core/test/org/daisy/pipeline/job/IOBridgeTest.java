@@ -46,7 +46,7 @@ public class IOBridgeTest {
 		XProcOptionInfo optionInf=XProcOptionInfo.newOption(new QName("myinput"), false, "");
 		XProcOptionInfo optionInf2=XProcOptionInfo.newOption(new QName("myopt"), false, "");
 		XProcPipelineInfo info= new XProcPipelineInfo.Builder().withPort(portInf).withURI(URI.create("")).withOption(optionInf).withOption(optionInf2).build();
-		XProcOptionMetadata meta1= new XProcOptionMetadata.Builder().withDirection("input").build();
+		XProcOptionMetadata meta1= new XProcOptionMetadata.Builder().withDirection("input").withType("anyFileURI").build();
 		XProcOptionMetadata meta2= new XProcOptionMetadata.Builder().withDirection("output").build();
 		HashMap<QName, XProcOptionMetadata> ometas = new HashMap<QName, XProcOptionMetadata>();
 		ometas.put(new QName("myinput"), meta1);
@@ -61,18 +61,20 @@ public class IOBridgeTest {
 				.getResource("test.zip").toURI()));
 		ResourceCollection ctxt = new ZipResourceContext(mFile);
 		bridge.storeResources(ctxt);
-		Assert.assertTrue(new File(this.tmpDir+"/"+IOBridge.DATA_SUBDIR,"1.txt").exists());
-		Assert.assertTrue(this.tmpDir.toString(),new File(this.tmpDir+"/"+IOBridge.DATA_SUBDIR,"/folder/3.txt").exists());
+		Assert.assertTrue(new File(this.tmpDir+"/"+IOConstants.IO_DATA_SUBDIR,"1.txt").exists());
+		Assert.assertTrue(this.tmpDir.toString(),new File(this.tmpDir+"/"+IOConstants.IO_DATA_SUBDIR,"/folder/3.txt").exists());
 	}
 	
 	@Test
 	public void testResolveOptionsInput() throws IOException{
-		XProcInput input= new XProcInput.Builder().withOption(new QName("myinput"),"dir/myfile.xml").withOption(new QName("myopt"),"").build();
+		XProcInput input= new XProcInput.Builder().withOption(new QName("myinput"),"dir/myfile.xml").withOption(new QName("myopt"),"dir/outfile.xml").build();
 		XProcInput.Builder builder = new XProcInput.Builder();
 		bridge.resolveOptions(script, input, builder);
 		XProcInput newInput = builder.build();	
 		String res1= newInput.getOptions().get(new QName("myinput"));
-		Assert.assertEquals(tmpDir.toURI().toString()+IOBridge.DATA_SUBDIR+"/dir/myfile.xml", res1);
+		String res2= newInput.getOptions().get(new QName("myopt"));
+		Assert.assertEquals(tmpDir.toURI().toString()+IOConstants.IO_DATA_SUBDIR+"/dir/myfile.xml", res1);
+		Assert.assertEquals(tmpDir.toURI().toString()+IOConstants.IO_OUTPUT_SUBDIR+"/dir/outfile.xml", res2);
 	}
 	@Test
 	public void testCheckInputsInline() throws IOException{
@@ -97,8 +99,8 @@ public class IOBridgeTest {
 		Iterator<Provider<Source>> iter = newInput.getInputs("source").iterator();
 		Source res1=iter.next().provide();
 		Source res2=iter.next().provide();
-		Assert.assertEquals(tmpDir.toURI().toString()+IOBridge.DATA_SUBDIR+"/source-0.xml", res1.getSystemId());
-		Assert.assertEquals(tmpDir.toURI().toString()+IOBridge.DATA_SUBDIR+"/source-1.xml", res2.getSystemId());
+		Assert.assertEquals(tmpDir.toURI().toString()+IOConstants.IO_DATA_SUBDIR+"/source-0.xml", res1.getSystemId());
+		Assert.assertEquals(tmpDir.toURI().toString()+IOConstants.IO_DATA_SUBDIR+"/source-1.xml", res2.getSystemId());
 	} 
 	@Test
 	public void testCheckInputsRelative() throws IOException{
@@ -116,7 +118,7 @@ public class IOBridgeTest {
 		XProcInput newInput = builder.build();
 		Iterator<Provider<Source>> iter = newInput.getInputs("source").iterator();
 		Source res1=iter.next().provide();
-		Assert.assertEquals(tmpDir.toURI().toString()+IOBridge.DATA_SUBDIR+"/dir/myfile.xml", res1.getSystemId());
+		Assert.assertEquals(tmpDir.toURI().toString()+IOConstants.IO_DATA_SUBDIR+"/dir/myfile.xml", res1.getSystemId());
 	}
 	@Test
 	public void testCheckInputsAbsolute() throws IOException{

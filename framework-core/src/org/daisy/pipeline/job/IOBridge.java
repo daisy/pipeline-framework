@@ -13,23 +13,32 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcInput.Builder;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
+import org.daisy.pipeline.script.XProcOptionMetadata.Direction;
 import org.daisy.pipeline.script.XProcScript;
 
 public class IOBridge {
-	static String DATA_SUBDIR = "context";
-	static String OUTPUT_SUBDIR = "output";
+	
 	static HashSet<String> INPUTS_TO_TRANSLATE = new HashSet<String>();
-	static{
+	static {
 		INPUTS_TO_TRANSLATE.add("anyDirURI");
 		INPUTS_TO_TRANSLATE.add("anyFileURI");
 	}
 	private File mContextDir;
+	private File mOutputDir;
 
-	public IOBridge(File baseDir) throws IOException{
-		mContextDir = new File(baseDir +File.separator+DATA_SUBDIR);
-		if(!mContextDir.exists()&&!mContextDir.mkdirs()){
-			throw new IOException("Could not create context dir:" + mContextDir.getAbsolutePath());
-		};
+	public IOBridge(File baseDir) throws IOException {
+		mContextDir = new File(baseDir + File.separator + IOConstants.IO_DATA_SUBDIR);
+		if (!mContextDir.exists() && !mContextDir.mkdirs()) {
+			throw new IOException("Could not create context dir:"
+					+ mContextDir.getAbsolutePath());
+		}
+		;
+		mOutputDir = new File(baseDir + File.separator + IOConstants.IO_OUTPUT_SUBDIR);
+		if (!mOutputDir.exists() && !mOutputDir.mkdirs()) {
+			throw new IOException("Could not create context dir:"
+					+ mOutputDir.getAbsolutePath());
+		}
+		;
 	}
 
 	public XProcInput resolve(XProcScript script, XProcInput input,
@@ -45,10 +54,12 @@ public class IOBridge {
 	protected void resolveParams(XProcScript script, XProcInput input,
 			Builder resolvedInput) {
 
-		Iterable<String> paramInfos = script.getXProcPipelineInfo().getParameterPorts();
-		for(String paramInfo:paramInfos){
-			for (QName name:input.getParameters(paramInfo).keySet()){
-				resolvedInput.withParameter(paramInfo, name,input.getParameters(paramInfo).get(name));
+		Iterable<String> paramInfos = script.getXProcPipelineInfo()
+				.getParameterPorts();
+		for (String paramInfo : paramInfos) {
+			for (QName name : input.getParameters(paramInfo).keySet()) {
+				resolvedInput.withParameter(paramInfo, name, input
+						.getParameters(paramInfo).get(name));
 			}
 		}
 	}
@@ -58,7 +69,11 @@ public class IOBridge {
 		Iterable<XProcOptionInfo> optionInfos = script.getXProcPipelineInfo()
 				.getOptions();
 		for (XProcOptionInfo optionInfo : optionInfos) {
-			if (script.getOptionMetadata(optionInfo.getName()).getDirection() == Direction.INPUT && INPUTS_TO_TRANSLATE.contains(script.getOptionMetadata(optionInfo.getName()).getType())) {
+			if ((script.getOptionMetadata(optionInfo.getName()).getDirection() == Direction.INPUT
+					&& INPUTS_TO_TRANSLATE.contains(script.getOptionMetadata(
+							optionInfo.getName()).getType()))||script.getOptionMetadata(optionInfo.getName()).getDirection() == Direction.OUTPUT) {
+				String subDir= script.getOptionMetadata(optionInfo.getName()).getDirection()==Direction.INPUT?
+						mContextDir.toURI().toString():mOutputDir.toURI().toString();
 				URI relUri = null;
 				try {
 					relUri = URI.create(input.getOptions().get(
@@ -69,8 +84,8 @@ public class IOBridge {
 							"Error parsing uri for input option:"
 									+ optionInfo.getName(), e);
 				}
-				URI uri = IOHelper.map(mContextDir.toURI().toString(), relUri
-						.toString());
+				URI uri = IOHelper.map(subDir,
+						relUri.toString());
 				resolvedInput.withOption(optionInfo.getName(), uri.toString());
 			} else {
 				resolvedInput.withOption(optionInfo.getName(), input
