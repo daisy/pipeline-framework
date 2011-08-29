@@ -17,23 +17,28 @@ import org.daisy.pipeline.script.XProcOptionMetadata.Direction;
 import org.daisy.pipeline.script.XProcScript;
 
 public class IOBridge {
-	
-	static HashSet<String> INPUTS_TO_TRANSLATE = new HashSet<String>();
+
+	public static final String ANY_FILE_URI = "anyFileURI";
+	public static final String ANY_DIR_URI = "anyDirURI";
+	static HashSet<String> OPTIONS_TO_TRANSLATE = new HashSet<String>();
+	HashSet<String> mGeneratedOutputs = new HashSet<String>();
 	static {
-		INPUTS_TO_TRANSLATE.add("anyDirURI");
-		INPUTS_TO_TRANSLATE.add("anyFileURI");
+		OPTIONS_TO_TRANSLATE.add(ANY_DIR_URI);
+		OPTIONS_TO_TRANSLATE.add(ANY_FILE_URI);
 	}
 	private File mContextDir;
 	private File mOutputDir;
 
 	public IOBridge(File baseDir) throws IOException {
-		mContextDir = new File(baseDir + File.separator + IOConstants.IO_DATA_SUBDIR);
+		mContextDir = new File(baseDir + File.separator
+				+ IOConstants.IO_DATA_SUBDIR);
 		if (!mContextDir.exists() && !mContextDir.mkdirs()) {
 			throw new IOException("Could not create context dir:"
 					+ mContextDir.getAbsolutePath());
 		}
 		;
-		mOutputDir = new File(baseDir + File.separator + IOConstants.IO_OUTPUT_SUBDIR);
+		mOutputDir = new File(baseDir + File.separator
+				+ IOConstants.IO_OUTPUT_SUBDIR);
 		if (!mOutputDir.exists() && !mOutputDir.mkdirs()) {
 			throw new IOException("Could not create context dir:"
 					+ mOutputDir.getAbsolutePath());
@@ -69,23 +74,44 @@ public class IOBridge {
 		Iterable<XProcOptionInfo> optionInfos = script.getXProcPipelineInfo()
 				.getOptions();
 		for (XProcOptionInfo optionInfo : optionInfos) {
-			if ((script.getOptionMetadata(optionInfo.getName()).getDirection() == Direction.INPUT
-					&& INPUTS_TO_TRANSLATE.contains(script.getOptionMetadata(
-							optionInfo.getName()).getType()))||script.getOptionMetadata(optionInfo.getName()).getDirection() == Direction.OUTPUT) {
-				String subDir= script.getOptionMetadata(optionInfo.getName()).getDirection()==Direction.INPUT?
-						mContextDir.toURI().toString():mOutputDir.toURI().toString();
+			if (OPTIONS_TO_TRANSLATE.contains(script.getOptionMetadata(
+					optionInfo.getName()).getType())) {
+				String subDir = script.getOptionMetadata(optionInfo.getName())
+						.getDirection() == Direction.INPUT ? mContextDir
+						.toURI().toString() : mOutputDir.toURI().toString();
+
+				String strUri = input.getOptions().get(optionInfo.getName());
+				;
+				if (script.getOptionMetadata(optionInfo.getName())
+						.getDirection() == Direction.OUTPUT) {
+					if (strUri == null || strUri.isEmpty()) {
+
+						strUri = (optionInfo.getSelect() != null && !optionInfo
+								.getSelect().isEmpty()) ? optionInfo
+								.getSelect() : IOHelper.generateOutput(
+								optionInfo.getName().toString(),
+								script.getOptionMetadata(optionInfo.getName())
+										.getType(),
+								script.getOptionMetadata(optionInfo.getName())
+										.getMediaType());
+					}
+					if (mGeneratedOutputs.contains(strUri)) {
+						throw new IllegalArgumentException(
+								"Conflict when generating uri's a default value and option name have the same name:"
+										+ strUri);
+					}
+					mGeneratedOutputs.add(strUri);
+				}
 				URI relUri = null;
 				try {
-					relUri = URI.create(input.getOptions().get(
-							optionInfo.getName()));
+					relUri = URI.create(strUri);
 
 				} catch (Exception e) {
 					throw new RuntimeException(
 							"Error parsing uri for input option:"
 									+ optionInfo.getName(), e);
 				}
-				URI uri = IOHelper.map(subDir,
-						relUri.toString());
+				URI uri = IOHelper.map(subDir, relUri.toString());
 				resolvedInput.withOption(optionInfo.getName(), uri.toString());
 			} else {
 				resolvedInput.withOption(optionInfo.getName(), input

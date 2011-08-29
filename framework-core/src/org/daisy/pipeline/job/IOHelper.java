@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
+import javax.xml.namespace.QName;
+
 public class IOHelper {
 	private static final int BLOCK_SIZE = 1024;
 	private static final String DEFAULT_OUTPUT_FOLDER="output";
@@ -53,5 +55,15 @@ public class IOHelper {
 		}
 		fos.close();
 		is.close();
+	}
+
+	public static String generateOutput(String name, String type, String mediaType) {
+		if(type.equals(IOBridge.ANY_DIR_URI)){
+			return name+"/";
+		}else{
+			//TODO try to generate the extension using the media type
+			return name+".xml";
+		}
+		
 	}
 }
