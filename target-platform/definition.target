@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
+<<<<<<< local
+<target name="definition">
+=======
 <target name="definition" sequenceNumber="7">
+>>>>>>> other
 <locations>
 <location path="${project_loc}/../daisy.pipeline.site/target/site" type="Directory"/>
 <location path="${project_loc}/../test" type="Directory"/>
+<<<<<<< local
+<location path="${project_loc}/../daisy.pipeline.site/target/site" type="Directory"/>
+=======
 <location path="${project_loc}/../../daisy-pipeline-modules/daisy.pipeline.modules.site/target/site/" type="Directory"/>
 <location path="${project_loc}/../Main/bundle" type="Directory"/>
+>>>>>>> other
 <location path="${project_loc}/../repo" type="Directory"/>
+<<<<<<< local
+<location path="${project_loc}/../Main/bundle" type="Directory"/>
+<location path="${project_loc}/../../modules/daisy.pipeline.modules.site/target/site/plugins" type="Directory"/>
+<location path="${project_loc}/../../modules/daisy.pipeline.modules.site/target/site/" type="Directory"/>
+=======
 <location path="${project_loc}/../daisy.pipeline.frontend.site/target/site" type="Directory"/>
+>>>>>>> other
 </locations>
 <launcherArgs>
 <vmArgs>org.osgi.framework.system.packages=sun.misc</vmArgs>

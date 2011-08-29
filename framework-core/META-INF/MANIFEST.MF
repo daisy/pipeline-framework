@@ -8,6 +8,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: 
  com.google.common.base,
  com.google.common.collect,
+ javax.xml.namespace,
+ javax.xml.transform,
  org.daisy.common.base,
  org.daisy.common.xproc,
  org.slf4j

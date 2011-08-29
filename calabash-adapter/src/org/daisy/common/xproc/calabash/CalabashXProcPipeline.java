@@ -149,10 +149,10 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	}
 
 	private static XdmNode asXdmNode(Processor processor, Source source) {
+		//TODO set entity resolver
 		DocumentBuilder builder = processor.newDocumentBuilder();
 		builder.setDTDValidation(false);
 		builder.setLineNumbering(true);
-
 		try {
 			return builder.build(source);
 		} catch (SaxonApiException sae) {
