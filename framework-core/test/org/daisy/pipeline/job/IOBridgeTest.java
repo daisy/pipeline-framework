@@ -62,6 +62,7 @@ public class IOBridgeTest {
 		ResourceCollection ctxt = new ZipResourceContext(mFile);
 		bridge.storeResources(ctxt);
 		Assert.assertTrue(new File(this.tmpDir+"/"+IOBridge.DATA_SUBDIR,"1.txt").exists());
+		Assert.assertTrue(this.tmpDir.toString(),new File(this.tmpDir+"/"+IOBridge.DATA_SUBDIR,"/folder/3.txt").exists());
 	}
 	
 	@Test

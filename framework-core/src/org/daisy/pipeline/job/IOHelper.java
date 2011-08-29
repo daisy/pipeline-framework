@@ -41,7 +41,9 @@ public class IOHelper {
 	}
 	public static void dump(InputStream is,String base,String path) throws IOException{
 		File fout=new File(URI.create(base+"/"+path));
+		fout.getParentFile().mkdirs();
 		FileOutputStream fos=new FileOutputStream(fout);
+		
 		byte buff[]= new byte[1024];
 		int read=0;
 		while((read=is.read(buff))>0){
