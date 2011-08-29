@@ -19,6 +19,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
+import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.pipeline.job.DefaultJobManager;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
@@ -240,15 +241,37 @@ public class JobsResource extends ServerResource {
 
 				builder.withInput(name, prov);
 			}
+			
+			// TODO support inline docwrapper elements
 		}
 	
+		Iterator<XProcOptionInfo> it_option = script.getXProcPipelineInfo().getOptions().iterator();
 		NodeList optionNodes = doc.getElementsByTagName("option");
-		for (int i = 0; i< optionNodes.getLength(); i++) {
-			Element optionElm = (Element) optionNodes.item(i);
-			String name = optionElm.getAttribute("name");
-			String val = optionElm.getTextContent();
-			builder.withOption(new QName(name), val);
+		while(it_option.hasNext()) {
+			XProcOptionInfo opt = it_option.next();
+			String optionName = opt.getName().toString();
+			
+			// look for name
+			boolean found = false;
+			for (int i = 0; i< optionNodes.getLength(); i++) {
+				Element optionElm = (Element) optionNodes.item(i);
+				String name = optionElm.getAttribute("name");
+				if (name.equals(optionName)) {
+					String val = optionElm.getTextContent();
+					builder.withOption(new QName(name), val);
+					found = true;
+					break;
+				}
+			}
+			
+			// if the name was not found, as would be the case for optional options or those filtered out
+			if (!found) {
+				builder.withOption(new QName(optionName), "");
+			}
+			
 		}
+		
+		
 		
 		XProcInput input = builder.build();
 		
