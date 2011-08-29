@@ -3,20 +3,26 @@ package org.daisy.pipeline.job;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashSet;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
 import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
+import org.daisy.common.xproc.XProcInput.Builder;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
-import org.daisy.common.xproc.XProcInput.Builder;
 import org.daisy.pipeline.script.XProcScript;
-import org.daisy.pipeline.script.XProcOptionMetadata.Direction;
 
 public class IOBridge {
 	static String DATA_SUBDIR = "context";
+	static String OUTPUT_SUBDIR = "output";
+	static HashSet<String> INPUTS_TO_TRANSLATE = new HashSet<String>();
+	static{
+		INPUTS_TO_TRANSLATE.add("anyDirURI");
+		INPUTS_TO_TRANSLATE.add("anyFileURI");
+	}
 	private File mContextDir;
 
 	public IOBridge(File baseDir) throws IOException{
@@ -52,7 +58,7 @@ public class IOBridge {
 		Iterable<XProcOptionInfo> optionInfos = script.getXProcPipelineInfo()
 				.getOptions();
 		for (XProcOptionInfo optionInfo : optionInfos) {
-			if (script.getOptionMetadata(optionInfo.getName()).getDirection() == Direction.INPUT) {
+			if (script.getOptionMetadata(optionInfo.getName()).getDirection() == Direction.INPUT && INPUTS_TO_TRANSLATE.contains(script.getOptionMetadata(optionInfo.getName()).getType())) {
 				URI relUri = null;
 				try {
 					relUri = URI.create(input.getOptions().get(

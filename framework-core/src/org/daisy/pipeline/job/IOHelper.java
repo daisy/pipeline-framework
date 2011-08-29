@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.net.URI;
 
 public class IOHelper {
+	private static final int BLOCK_SIZE = 1024;
 	private static final String DEFAULT_OUTPUT_FOLDER="output";
 	private static final String DEFAULT_OUTPUT_FILE="file";
 	private int mFolderOuts;
@@ -44,10 +45,11 @@ public class IOHelper {
 		fout.getParentFile().mkdirs();
 		FileOutputStream fos=new FileOutputStream(fout);
 		
-		byte buff[]= new byte[1024];
+		byte buff[]= new byte[BLOCK_SIZE];
 		int read=0;
 		while((read=is.read(buff))>0){
-			fos.write(buff);
+			fos.write(buff,0,read);
+			
 		}
 		fos.close();
 		is.close();

@@ -1,6 +1,7 @@
 package org.daisy.pipeline.job;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.daisy.common.xproc.XProcInput;
@@ -8,7 +9,7 @@ import org.daisy.pipeline.script.XProcScript;
 
 public class DefaultJobManager implements JobManager {
 	
-	private Map<JobId, Job> jobs;
+	private Map<JobId, Job> jobs= new HashMap<JobId, Job>();
 
 	public Job newJob(XProcScript script, XProcInput input,
 			ResourceCollection context) {
