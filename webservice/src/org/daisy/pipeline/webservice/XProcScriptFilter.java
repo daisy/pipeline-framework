@@ -49,10 +49,12 @@ public final class XProcScriptFilter implements Filter<XProcScript> {
 					.getName());
 			// filter-out options that are both OUTPUT options with type
 			// inheriting from anyURI
-			if (!(metadata.getDirection() == Direction.OUTPUT && (ANY_URI_TYPE
-					.equals(metadata.getMediaType())
-					|| ANY_FILE_URI_TYPE.equals(metadata.getMediaType()) || ANY_DIR_URI_TYPE
-					.equals(metadata.getMediaType())))) {
+			if (!(metadata.getDirection() == Direction.OUTPUT && 
+					(ANY_URI_TYPE.equals(metadata.getMediaType())
+					 || 
+					 ANY_FILE_URI_TYPE.equals(metadata.getType()) 
+					 || 
+					 ANY_DIR_URI_TYPE.equals(metadata.getType())))) {
 				xprocBuilder.withOption(option);
 				scriptBuilder.withOptionMetadata(option.getName(),
 						script.getOptionMetadata(option.getName()));

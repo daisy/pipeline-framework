@@ -18,7 +18,7 @@
       <xs:attribute name="desc" use="required"/>
       <xs:attribute name="name" use="required" type="xs:string"/>
       <xs:attribute name="sequenceAllowed" use="required" type="xs:boolean"/>
-      <xs:attribute name="type" use="required"/>
+      <xs:attribute name="mediaType" use="required"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="option">
@@ -27,6 +27,7 @@
       <xs:attribute name="name" use="required" type="xs:string"/>
       <xs:attribute name="required" use="required" type="xs:boolean"/>
       <xs:attribute name="type" use="required" type="xs:string"/>
+      <xs:attribute name="mediaType" use="optional" type="xs:string"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

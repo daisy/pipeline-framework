@@ -9,7 +9,7 @@ def display_script(element)
   element.xpath(".//input").each do |arg|
 		puts "Input argument \n\tname=" + arg['name']
 		puts "\tdesc=" + arg['desc']
-		puts "\ttype=" + arg['type']
+		puts "\tmedia type=" + arg['mediaType']
 		puts "\tsequence allowed=" + arg['sequenceAllowed']
   end
 
@@ -17,6 +17,7 @@ element.xpath(".//option").each do |arg|
 		puts "Option argument \n\tname=" + arg['name']
 		puts "\tdesc=" + arg['desc']
 		puts "\ttype=" + arg['type']
+    puts "\tmedia type=" + arg['mediaType']
 		puts "\trequired=" + arg['required']
   end
 

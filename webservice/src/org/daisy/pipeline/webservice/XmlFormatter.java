@@ -155,7 +155,7 @@ public class XmlFormatter {
 			}
 			
 			XProcPortMetadata meta = script.getPortMetadata(input.getName());
-			inputElm.setAttribute("type", meta.getMediaType());
+			inputElm.setAttribute("mediaType", meta.getMediaType());
 			inputElm.setAttribute("desc", meta.getDescription());
 
 			rootElm.appendChild(inputElm);
@@ -174,7 +174,8 @@ public class XmlFormatter {
 			}
 			
 			XProcOptionMetadata meta = script.getOptionMetadata(option.getName());
-			optionElm.setAttribute("type", meta.getMediaType());
+			optionElm.setAttribute("type", meta.getType());
+			optionElm.setAttribute("mediaType", meta.getMediaType());
 			optionElm.setAttribute("desc", meta.getDescription());
 			
 			rootElm.appendChild(optionElm);

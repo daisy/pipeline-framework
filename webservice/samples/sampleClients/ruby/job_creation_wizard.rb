@@ -76,7 +76,13 @@ def prompt_for_options(doc)
     if node['required'] == 'false'
       req_or_opt = "Optional"
     end
-    puts "#{req_or_opt} option for **#{node['name']}**. Enter a #{node['type']}: "
+
+    addl_info = ""
+    if node['mediaType'] != ""
+      addl_info = " of type #{node['mediaType']}"
+    end
+
+    puts "#{req_or_opt} option for **#{node['name']}**. Enter a #{node['type']}#{addl_info}: "
     value = STDIN.gets().chomp()
     option_arg_data = ScriptArg.new(node['name'])
     option_arg_data.add_value(value)

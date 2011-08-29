@@ -72,7 +72,6 @@ def run_preset_job
   <input name='source'>
     <file src='./dtbook-basic.xml'/>
   </input>
-  <option name='opt-output-dir'>/tmp/d2z</option>
   <option name='opt-mods-filename'>m.xml</option>
   <option name='opt-css-filename'>c.css</option>
   <option name='opt-zedai-filename'>z.xml</option>

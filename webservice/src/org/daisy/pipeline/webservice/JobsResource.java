@@ -65,45 +65,59 @@ public class JobsResource extends ServerResource {
 	 * http://wiki.restlet.org/docs_2.0/13-restlet/28-restlet/64-restlet.html
 	 */
 	@Post
-    public Representation createResource(Representation entity) throws Exception {
-        if (entity == null) {
+    public Representation createResource(Representation representation) throws Exception {
+        if (representation == null) {
         	// POST request with no entity.
             setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
             return null;
         }
         
-        if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(), true)) {
+        Document doc = null;
+        ZipFile zipfile = null;
+        
+        if (MediaType.MULTIPART_FORM_DATA.equals(representation.getMediaType(), true)) {
             Request request = this.getRequest();
             // sort through the multipart request
             MultipartRequestData data = processMultipart(request);
             
-			boolean isValid = Validator.validateJobRequest(data.getXml(), (PipelineWebService)this.getApplication());
-			
-			if (!isValid) {
-				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return null;
-			}
-
-			Job job = createJob(data.getXml(), data.getZipFile());
-			
-			if (job == null) {
-				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return null;
-			}
-			JobId id = job.getId();
-			
-			// return the URI of the new job
-			Representation newJobUriRepresentation = new EmptyRepresentation();
-			String serverAddress = ((PipelineWebService) this.getApplication()).getServerAddress();
-			newJobUriRepresentation.setLocationRef(serverAddress + "/jobs/" + id.toString());
-
-			setStatus(Status.SUCCESS_CREATED);
-			return newJobUriRepresentation;
+            doc = data.getXml();
+            zipfile = data.getZipFile();
         }
+     // else it's not multipart; all data should be inline.
         else {
-        	// TODO deal with inline XML
-        	return null;
+        	String s = representation.getText();
+            
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(s));
+            doc = builder.parse(is);
         }
+        
+            
+		boolean isValid = Validator.validateJobRequest(doc, (PipelineWebService)this.getApplication());
+			
+		if (!isValid) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return null;
+		}
+
+		Job job = createJob(doc, zipfile);
+		
+		if (job == null) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return null;
+		}
+		JobId id = job.getId();
+		
+		// return the URI of the new job
+		Representation newJobUriRepresentation = new EmptyRepresentation();
+		String serverAddress = ((PipelineWebService) this.getApplication()).getServerAddress();
+		newJobUriRepresentation.setLocationRef(serverAddress + "/jobs/" + id.toString());
+
+		setStatus(Status.SUCCESS_CREATED);
+		return newJobUriRepresentation;
+        
     }
 	
 	private MultipartRequestData processMultipart(Request request) {
@@ -237,9 +251,17 @@ public class JobsResource extends ServerResource {
 		}
 		
 		XProcInput input = builder.build();
-		ResourceCollection resourceCollection = new ZipResourceContext(zip);
+		
 		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
-		Job job = jobMan.newJob(script, input, resourceCollection);
+		Job job = null;
+		if (zip != null){
+			ResourceCollection resourceCollection = new ZipResourceContext(zip);
+			job = jobMan.newJob(script, input, resourceCollection);
+		}
+		else {
+			job = jobMan.newJob(script, input);
+		}
+		
 		return  job;
 	}
 }
