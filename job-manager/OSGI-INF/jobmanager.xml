@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="close" immediate="true" name="job manager context">
-   <implementation class="org.daisy.pipeline.jobmanager.JobService"/>
-   <service>
-      <provide interface="org.daisy.pipeline.jobmanager.JobManager"/>
-   </service>
- <reference bind="setExecutor" cardinality="1..1" interface="org.daisy.pipeline.modules.converter.Executor" policy="static"/>
-</scr:component>
