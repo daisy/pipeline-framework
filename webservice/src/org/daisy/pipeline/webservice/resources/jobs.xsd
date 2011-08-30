@@ -3,7 +3,7 @@
   <xs:element name="jobs">
     <xs:complexType>
       <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="data:job"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="data:job"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -20,6 +20,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
+import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.DefaultJobManager;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
@@ -41,6 +42,7 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
@@ -220,58 +222,8 @@ public class JobsResource extends ServerResource {
 		XProcScript script = scriptService.load();
 		XProcInput.Builder builder = new XProcInput.Builder(script.getXProcPipelineInfo());
 		
-		// iterate through the input nodes and fill in the builder values
-		NodeList inputNodes = doc.getElementsByTagName("input");
-		for (int i = 0; i < inputNodes.getLength(); i++) {
-			Element inputElm = (Element) inputNodes.item(i);
-			String name = inputElm.getAttribute("name");
-			
-			
-			NodeList fileNodes = inputElm.getElementsByTagName("file");
-			for (int j = 0; j < fileNodes.getLength(); j++) {
-				String src = ((Element)fileNodes.item(j)).getAttribute("src");
-				final SAXSource source = new SAXSource();
-	            source.setSystemId(src);
-	            Provider<Source> prov= new Provider<Source>(){
-	            	@Override
-	                public Source provide(){
-	            		return source;
-	            	}
-	            };
-
-				builder.withInput(name, prov);
-			}
-			
-			// TODO support inline docwrapper elements
-		}
-	
-		Iterator<XProcOptionInfo> it_option = script.getXProcPipelineInfo().getOptions().iterator();
-		NodeList optionNodes = doc.getElementsByTagName("option");
-		while(it_option.hasNext()) {
-			XProcOptionInfo opt = it_option.next();
-			String optionName = opt.getName().toString();
-			
-			// look for name
-			boolean found = false;
-			for (int i = 0; i< optionNodes.getLength(); i++) {
-				Element optionElm = (Element) optionNodes.item(i);
-				String name = optionElm.getAttribute("name");
-				if (name.equals(optionName)) {
-					String val = optionElm.getTextContent();
-					builder.withOption(new QName(name), val);
-					found = true;
-					break;
-				}
-			}
-			
-			// if the name was not found, as would be the case for optional options or those filtered out
-			if (!found) {
-				builder.withOption(new QName(optionName), "");
-			}
-			
-		}
-		
-		
+		addInputsToJob(doc.getElementsByTagName("input"), script.getXProcPipelineInfo().getInputPorts(), builder);
+		addOptionsToJob(doc.getElementsByTagName("option"), script.getXProcPipelineInfo().getOptions(), builder);
 		
 		XProcInput input = builder.build();
 		
@@ -286,5 +238,93 @@ public class JobsResource extends ServerResource {
 		}
 		
 		return  job;
+	}
+
+	private void addInputsToJob(NodeList nodes, Iterable<XProcPortInfo> inputPorts, XProcInput.Builder builder) {
+		
+		Iterator<XProcPortInfo> it = inputPorts.iterator();
+		while (it.hasNext()) {
+			XProcPortInfo input = it.next();
+			String inputName = input.getName();
+			for (int i = 0; i < nodes.getLength(); i++) {
+				Element inputElm = (Element) nodes.item(i);
+				String name = inputElm.getAttribute("name");
+				if (name.equals(inputName)) {
+					NodeList fileNodes = inputElm.getElementsByTagName("file");
+					NodeList docwrapperNodes = inputElm.getElementsByTagName("docwrapper");
+				
+					if (fileNodes.getLength() > 0) {
+						for (int j = 0; j < fileNodes.getLength(); j++) {
+							String src = ((Element)fileNodes.item(j)).getAttribute("src");
+							final SAXSource source = new SAXSource();
+				            source.setSystemId(src);
+				            Provider<Source> prov= new Provider<Source>(){
+				            	@Override
+				                public Source provide(){
+				            		return source;
+				            	}
+				            };
+			
+							builder.withInput(name, prov);
+						}
+					}
+					else {
+						for (int j = 0; j< docwrapperNodes.getLength(); j++){
+							Element docwrapper = (Element)docwrapperNodes.item(j);
+							Node content = null;
+							// find the first element child
+							for (int q = 0; q < docwrapper.getChildNodes().getLength(); q++) {
+								if (docwrapper.getChildNodes().item(q).getNodeType() == Node.ELEMENT_NODE) {
+									content = docwrapper.getChildNodes().item(q);
+									break;
+								}
+							}
+							
+							final SAXSource source = new SAXSource();
+				            
+							// TODO any way to get Source directly from a node?
+							String xml = XmlFormatter.nodeToString(content);
+				            InputSource is = new org.xml.sax.InputSource(new java.io.StringReader(xml));
+							source.setInputSource(is);
+				            Provider<Source> prov= new Provider<Source>(){
+				            	@Override
+				                public Source provide(){
+				            		return source;
+				            	}
+				            };
+				            builder.withInput(name, prov);
+						}
+					}
+				}
+			}
+		}
+		
+	}
+	
+	private void addOptionsToJob(NodeList nodes, Iterable<XProcOptionInfo> options, XProcInput.Builder builder) {
+		
+		Iterator<XProcOptionInfo> it = options.iterator();
+		while(it.hasNext()) {
+			XProcOptionInfo opt = it.next();
+			String optionName = opt.getName().toString();
+			
+			// look for name
+			boolean found = false;
+			for (int i = 0; i< nodes.getLength(); i++) {
+				Element optionElm = (Element) nodes.item(i);
+				String name = optionElm.getAttribute("name");
+				if (name.equals(optionName)) {
+					String val = optionElm.getTextContent();
+					builder.withOption(new QName(name), val);
+					found = true;
+					break;
+				}
+			}
+			
+			// if the name was not found, as would be the case for optional options or those filtered out
+			if (!found) {
+				builder.withOption(new QName(optionName), "");
+			}
+		}
 	}
 }

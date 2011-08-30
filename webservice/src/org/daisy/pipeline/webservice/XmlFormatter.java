@@ -21,6 +21,9 @@ import org.daisy.pipeline.script.XProcScript;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
 
 public class XmlFormatter {
 
@@ -291,4 +294,15 @@ public class XmlFormatter {
         }
         return xmlString;
     }
+	
+	// with config -Dosgi.compatibility.bootdelegation=false, this gives a classdefnotfound
+	// TODO: this doesn't quite work as I would like .. it includes the parent node
+    public static String nodeToString(Node node) {
+            Document doc = node.getOwnerDocument();
+            DOMImplementationLS domImplLS = (DOMImplementationLS) doc.getImplementation();
+            LSSerializer serializer = domImplLS.createLSSerializer();
+            String string = serializer.writeToString(node);
+            return string;
+    }
+
 }

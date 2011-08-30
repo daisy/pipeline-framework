@@ -13,14 +13,20 @@ module Rest
       uri = URI.parse("#{Settings.instance.baseuri}script?id=#{script_uri}")
       response = Net::HTTP.get_response(uri)
       trace(response.body, "get script")
-      if response.code == "200"
-        doc = Nokogiri::XML(response.body)
-        doc.remove_namespaces!
-        return doc
-      else
-        error("Error: get script returned #{response.code.to_s}")
-        return nil
+
+      case response
+        when Net::HTTPSuccess
+          doc = Nokogiri::XML(response.body)
+          doc.remove_namespaces!
+          return doc
+        when Net::HTTPInternalServerError
+          error "Server blew up"
+          return nil
+        else
+          error "Unknown error: #{response}"
+          return nil
       end
+
     rescue
       error("Error: GET #{uri.to_s} failed.")
       return nil
@@ -32,10 +38,20 @@ module Rest
     begin
       uri = URI.parse("#{Settings.instance.baseuri}scripts")
       response = Net::HTTP.get_response(uri)
-      trace(response.body, "get scripts")
-      doc = Nokogiri::XML(response.body)
-      doc.remove_namespaces!
-      return doc
+      case response
+        when Net::HTTPSuccess
+          trace(response.body, "get scripts")
+          doc = Nokogiri::XML(response.body)
+          doc.remove_namespaces!
+          return doc
+        when Net::HTTPInternalServerError
+          error "Server blew up"
+          return nil
+        else
+          error "Unknown error: #{response}"
+          return nil
+      end
+
     rescue
       error("Error: GET #{uri.to_s} failed.")
       return nil
@@ -43,7 +59,34 @@ module Rest
   end
   module_function :get_scripts
 
-  def post_job(request_xml, zipfile_path)
+  # XML request version (no zip attachment)
+  def post_job_xml(request_xml)
+    begin
+      uri = URI.parse('http://localhost:8182/ws/jobs')
+      request = Net::HTTP::Post.new(uri.path)
+      request.body = request_xml
+
+      response = Net::HTTP.start(uri.host, uri.port) {|http| http.request(request)}
+      case response
+        when Net::HTTPCreated
+          message "Job created"
+          return true
+        when Net::HTTPInternalServerError
+          error "Server blew up"
+          return false
+        else
+          error "Unknown error: #{response}"
+          return false
+      end
+    rescue
+      error("Error: POST #{uri.to_s} failed.")
+      return false
+    end
+  end
+  module_function :post_job_xml
+
+  # multipart version
+  def post_job_multipart(request_xml, zipfile_path)
     begin
       params = {}
       file = File.open(zipfile_path, "rb")
@@ -52,7 +95,6 @@ module Rest
       params["jobRequest"] = request_xml
 
       mp = Multipart::MultipartPost.new
-      puts "hello"
       query, headers = mp.prepare_query(params)
 
       file.close
@@ -62,27 +104,23 @@ module Rest
       response = post_form(uri, query, headers)
 
       case response
-        when Net::HTTPSuccess
-        message("Hooray, got response: #{response.inspect}")
-      when Net::HTTPInternalServerError
-        raise "Server blew up"
-      else
-        raise "Unknown error: #{response}"
+        when Net::HTTPCreated
+          message "Job created"
+          return true
+        when Net::HTTPInternalServerError
+          error "Server blew up"
+          return false
+        else
+          error "Unknown error: #{response}"
+          return false
       end
-
-      if response.code == '201'
-        return true
-      else
-        error("Error: Job creation request returned #{response.code.to_s}")
-        return false
-      end
-
     rescue
       error("Error: POST #{uri.to_s} failed.")
       return false
     end
   end
-  module_function :post_job
+  module_function :post_job_multipart
+
 
   def post_form(url, query, headers)
     Net::HTTP.start(url.host, url.port) {|con|
@@ -100,10 +138,20 @@ module Rest
     begin
       uri = URI.parse("#{Settings.instance.baseuri}jobs")
       response = Net::HTTP.get_response(uri)
-      trace(response.body, "get jobs")
-      doc = Nokogiri::XML(response.body)
-      doc.remove_namespaces!
-      return doc
+
+      case response
+        when Net::HTTPSuccess
+          trace(response.body, "get jobs")
+          doc = Nokogiri::XML(response.body)
+          doc.remove_namespaces!
+          return doc
+        when Net::HTTPInternalServerError
+          error "Server blew up"
+          return nil
+        else
+          error "Unknown error: #{response}"
+          return nil
+      end
     rescue
       error("Error: GET #{uri.to_s} failed.")
       return nil
@@ -115,14 +163,19 @@ module Rest
     begin
       uri = URI.parse("#{Settings.instance.baseuri}jobs/#{id}")
       response = Net::HTTP.get_response(uri)
-      trace(response.body, "get job")
-      if response.code == "200"
-        doc = Nokogiri::XML(response.body)
-        doc.remove_namespaces!
-        return doc
-      else
-        error("Error: get job returned #{response.code.to_s}")
-        return nil
+
+      case response
+        when Net::HTTPSuccess
+          trace(response.body, "get job")
+          doc = Nokogiri::XML(response.body)
+          doc.remove_namespaces!
+          return doc
+        when Net::HTTPInternalServerError
+          error "Server blew up"
+          return nil
+        else
+          error "Unknown error: #{response}"
+          return nil
       end
     rescue
       error("Error: GET #{uri.to_s} failed.")
@@ -136,13 +189,21 @@ module Rest
     begin
       uri = URI.parse("#{Settings.instance.baseuri}jobs/#{id}/result")
       response = Net::HTTP.get_response(uri)
-      trace(response.body, "get job results")
-      if response.code == "200"
-        # TODO
-        # handle file download as response
-      else
-        error("Error: get job returned #{response.code.to_s}")
-        return nil
+
+      case response
+        when Net::HTTPSuccess
+          trace(response.body, "get job results")
+
+          # TODO
+          # handle file download as response
+          return nil
+
+        when Net::HTTPInternalServerError
+          error "Server blew up"
+          return nil
+        else
+          error "Unknown error: #{response}"
+          return nil
       end
     rescue
       error("Error: GET #{uri.to_s} failed.")
@@ -155,14 +216,19 @@ module Rest
     begin
       uri = URI.parse("#{Settings.instance.baseuri}jobs/#{id}/log")
       response = Net::HTTP.get_response(uri)
-      trace(response.body, "get log")
-      if response.code == "200"
-        doc = Nokogiri::XML(response.body)
-        doc.remove_namespaces!
-        return doc
-      else
-        error("Error: get log returned #{response.code.to_s}")
-        return nil
+
+      case response
+        when Net::HTTPSuccess
+          trace(response.body, "get job log")
+          doc = Nokogiri::XML(response.body)
+          doc.remove_namespaces!
+          return doc
+        when Net::HTTPInternalServerError
+          error "Server blew up"
+          return nil
+        else
+          error "Unknown error: #{response}"
+          return nil
       end
     rescue
       error("Error: GET #{uri.to_s} failed.")
@@ -176,13 +242,17 @@ module Rest
       uri = URI.parse("#{Settings.instance.baseuri}jobs/#{id}")
       request = Net::HTTP::Delete.new(uri.path)
       response = Net::HTTP.start(uri.host, uri.port) {|http| http.request(request)}
-      trace(response.body, "delete job")
 
-      if response.code == "204"
-        return true
-      else
-        error("Error: delete job returned #{response.code.to_s}")
-        return false
+      case response
+        when Net::HTTPNoContent
+          trace(response.body, "delete job")
+          return true
+        when Net::HTTPInternalServerError
+          error "Server blew up"
+          return false
+        else
+          error "Unknown error: #{response}"
+          return nil
       end
     rescue
       error("Error: DELETE #{uri.to_s} failed.")

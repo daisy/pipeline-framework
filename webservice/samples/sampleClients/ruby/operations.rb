@@ -13,6 +13,10 @@ def get_scripts
 end
 
 def get_script(name)
+  if name == ""
+    error "'Get script' requires a name"
+    return
+  end
   uri = get_uri_from_shortname(name)
   doc = Rest.get_script(uri)
   if doc == nil
@@ -30,6 +34,10 @@ def get_jobs
 end
 
 def get_job(id)
+  if id == ""
+    error "'Get job' requires an ID"
+    return
+  end
   doc = Rest.get_job(id)
   if doc == nil
     return
@@ -38,6 +46,10 @@ def get_job(id)
 end
 
 def get_log(id)
+  if id == ""
+    error "'Get log' requires an ID"
+    return
+  end
   doc = Rest.get_log(id)
   if doc == nil
     return
@@ -46,6 +58,10 @@ def get_log(id)
 end
 
 def get_result(id)
+  if id == ""
+    error "'Get result' requires an ID"
+    return
+  end
   # TODO store result
   display_result(id, "TODO")
 end
@@ -55,7 +71,10 @@ def create_job
 end
 
 def delete_job(id)
-
+  if id == ""
+    error "'Delete job' requires an ID"
+    return
+  end
   # TODO check if job is eligible for deletion
 
   puts "Really delete this job? (Y/n)"
@@ -65,7 +84,7 @@ def delete_job(id)
   end
 end
 
-def run_preset_job
+def run_preset_job1
   jobxml = "
 <jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
   <script href='http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl'/>
@@ -80,6 +99,74 @@ def run_preset_job
 
   zippath = File.expand_path(File.dirname($0)) + "/test/dtbook-basic.zip"
 
-  Rest.post_job(jobxml, zippath)
+  Rest.post_job_multipart(jobxml, zippath)
+
+end
+
+def run_preset_job2
+  jobxml = "
+<jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
+  <script href='http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl'/>
+  <input name='source'>
+    <docwrapper>
+<dtbook xmlns='http://www.daisy.org/z3986/2005/dtbook/' version='2005-3' xml:lang='en-US'>
+    <head>
+        <meta content='pipeline2-dtbook-test-20110301-basic' name='dtb:uid'/>
+        <meta content='Pipeline 2 DTBook Test Content: Basic' name='dc:Title'/>
+        <meta name='dc:Creator' content='Marisa D.'/>
+        <meta content='2011-03-01' name='dc:Date'/>
+        <meta name='dc:Publisher' content='Marisa D.'/>
+        <meta content='pipeline2-dtbook-test-20110301-basic' name='dc:Identifier'/>
+        <meta content='en-US' name='dc:Language'/>
+    </head>
+    <!-- test comment -->
+    <book>
+        <frontmatter>
+            <doctitle>Pipeline 2 DTBook Test Content: Basic</doctitle>
+            <docauthor>Marisa D.</docauthor>
+        </frontmatter>
+        <bodymatter>
+            <level1>
+                <h1>Introduction</h1>
+                <p><sent>The DAISY Pipeline 2 is an ongoing project to develop a next generation
+                        framework for automated production of accessible materials for people with
+                        print disabilities.</sent>
+                    <sent>It is the follow-up and total redesign of the original DAISY Pipeline 1
+                        project.</sent></p>
+            </level1>
+            <level1>
+                <h1>About the Pipeline</h1>
+                <p><sent>The overarching principle of the Pipeline 2 is to adopt recent
+                        platform-neutral standards (and off-the-shelf implementations of those
+                        standards) at the heart of a comprehensive framework, which will:</sent>
+                    <list type='ul'>
+                        <hd>The Heading For The List</hd>
+                        <li>minimize the development and maintenance cost, allowing developers to
+                            ultimately focus more on actual transformations rather than the engine
+                            that drives the transformations.</li>
+                        <li>lower the framework learning curve</li>
+                        <li>increase interoperability with the heterogeneous production
+                            workflows</li>
+                        <li>increase the likelihood of re-use in both open source and commercial
+                            applications.</li>
+                    </list>
+                </p>
+
+            </level1>
+
+        </bodymatter>
+    </book>
+</dtbook>
+
+    </docwrapper>
+  </input>
+  <option name='opt-mods-filename'>m.xml</option>
+  <option name='opt-css-filename'>c.css</option>
+  <option name='opt-zedai-filename'>z.xml</option>
+</jobRequest>
+"
+
+
+  Rest.post_job_xml(jobxml)
 
 end

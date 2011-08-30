@@ -49,7 +49,9 @@ public class IOBridge {
 	public XProcInput resolve(XProcScript script, XProcInput input,
 			ResourceCollection context) throws IOException {
 		XProcInput.Builder resolvedInput = new XProcInput.Builder();
-		this.storeResources(context);
+		if (context != null) {
+			this.storeResources(context);
+		}
 		this.resolveInputPorts(script, input, resolvedInput);
 		this.resolveOptions(script, input, resolvedInput);
 		this.resolveParams(script, input, resolvedInput);

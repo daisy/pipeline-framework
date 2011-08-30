@@ -21,7 +21,7 @@ def job_creation_wizard
   puts "Please enter the path to the zip file containing the data for this job:"
   zippath = STDIN.gets().chomp()
 
-  res = Rest.post_job(jobdoc.to_s, zippath)
+  res = Rest.post_job_multipart(jobdoc.to_s, zippath)
 
   if res == true
     message("Job created")

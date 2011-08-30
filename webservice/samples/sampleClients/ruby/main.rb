@@ -26,8 +26,10 @@ def main
     delete_job(Settings.options[:id])
   elsif Settings.instance.command == "createjob"
     create_job
-  elsif Settings.instance.command == "runpreset"
-    run_preset_job
+  elsif Settings.instance.command == "runpreset1"
+    run_preset_job1
+  elsif Settings.instance.command == "runpreset2"
+    run_preset_job2
   else
     puts "Command #{Settings.instance.command} not recognized"
   end
@@ -52,7 +54,8 @@ def checkargs
   result \t\t\t Show where the result is stored for a job.  Requires option --id=jobid.
   delete \t\t\t Delete a job.  Requires option --id=jobid.
   createjob \t\t\t Start creating a job.  Requires option --id=jobid.
-  runpreset \t\t\t Create a job with all pre-set values (for testing only).
+  runpreset1 \t\t\t Create a job with all pre-set values (for testing only).
+  runpreset2 \t\t\t Create a job with all pre-set values (for testing only).
 
   "
 
