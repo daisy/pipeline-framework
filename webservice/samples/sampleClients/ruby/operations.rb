@@ -12,17 +12,25 @@ def get_scripts
   display_scripts(doc.xpath("//script"))
 end
 
-def get_script(name)
+def get_script_by_id(id)
+  if id == ""
+    error "'Get script' requires an ID"
+    return
+  end
+  doc = Rest.get_script(id)
+  if doc == nil
+    return
+  end
+  display_script(doc.xpath("//script")[0])
+end
+
+def get_script_by_name(name)
   if name == ""
     error "'Get script' requires a name"
     return
   end
   uri = get_uri_from_shortname(name)
-  doc = Rest.get_script(uri)
-  if doc == nil
-    return
-  end
-  display_script(doc.xpath("//script")[0])
+  get_script_by_id(uri)
 end
 
 def get_jobs

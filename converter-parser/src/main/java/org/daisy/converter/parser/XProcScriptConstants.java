@@ -28,6 +28,7 @@ public final class XProcScriptConstants {
 		public static QName XD_NAME = new QName(XD_NS, "name");
 		public static QName XD_ORGANIZATION = new QName(XD_NS, "organization");
 		public static QName XD_SHORT = new QName(XD_NS, "short");
+		public static QName XD_HOMEPAGE = new QName(XD_NS, "homepage");
 
 		private Elements() {
 			// no instantiations

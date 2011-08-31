@@ -136,13 +136,18 @@ public class XmlFormatter {
 		
 		Element nicenameElm = doc.createElementNS(NS_PIPELINE_DATA, "nicename");
 		nicenameElm.setTextContent(script.getName());
-		
 		rootElm.appendChild(nicenameElm);
 		
 		Element descriptionElm = doc.createElementNS(NS_PIPELINE_DATA, "description");
 		descriptionElm.setTextContent(script.getDescription());
-		
 		rootElm.appendChild(descriptionElm);
+		
+		String homepage = script.getHomepage();
+		if (homepage != null && homepage.trim().length() > 0) {
+			Element homepageElm = doc.createElementNS(NS_PIPELINE_DATA, "homepage");
+			homepageElm.setTextContent(homepage);
+			rootElm.appendChild(homepageElm);
+		}
 		
 		Iterator<XProcPortInfo> it_input = script.getXProcPipelineInfo().getInputPorts().iterator();
 		Iterator<XProcOptionInfo> it_options = script.getXProcPipelineInfo().getOptions().iterator();

@@ -6,19 +6,22 @@ def display_script(element)
   message("\nScript: ")
   puts display_script_short(element)
 
+  if element.xpath(".//homepage").length > 0
+    puts "Homepage: #{element.xpath('.//homepage')[0].content}"
+  end
   element.xpath(".//input").each do |arg|
-		puts "Input argument \n\tname=" + arg['name']
-		puts "\tdesc=" + arg['desc']
-		puts "\tmedia type=" + arg['mediaType']
-		puts "\tsequence allowed=" + arg['sequenceAllowed']
+		puts "Input argument \n\tname = #{arg['name']}"
+		puts "\tdesc = #{arg['desc']}"
+		puts "\tmedia type = #{arg['mediaType']}"
+		puts "\tsequence allowed = #{arg['sequenceAllowed']}"
   end
 
 element.xpath(".//option").each do |arg|
-		puts "Option argument \n\tname=" + arg['name']
-		puts "\tdesc=" + arg['desc']
-		puts "\ttype=" + arg['type']
-    puts "\tmedia type=" + arg['mediaType']
-		puts "\trequired=" + arg['required']
+		puts "Option argument \n\tname = #{arg['name']}"
+		puts "\tdesc = #{arg['desc']}"
+		puts "\ttype = #{arg['type']}"
+    puts "\tmedia type = #{arg['mediaType']}"
+		puts "\trequired = #{arg['required']}"
   end
 
   message("\n")
@@ -45,7 +48,7 @@ def display_job(element)
 
   puts display_job_short(element)
   element.xpath(".//error").each do |err|
-    puts "ERROR: " + err['level'] + ".  " + err.content
+    puts "ERROR: #{err['level']}. #{err.content}"
   end
   message("\n")
 end

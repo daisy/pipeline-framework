@@ -13,7 +13,12 @@ def main
   if Settings.instance.command == "scripts"
     get_scripts
   elsif Settings.instance.command == "script"
-    get_script(Settings.instance.options[:id])
+    if Settings.instance.options[:id] == nil
+      get_script_by_name(Settings.instance.options[:name])
+    else
+      get_script_by_id(Settings.instance.options[:id])
+    end
+
   elsif Settings.instance.command == "jobs"
     get_jobs
   elsif Settings.instance.command == "job"
@@ -49,7 +54,7 @@ def checkargs
   Commands:
 
   scripts \t\t\t List all scripts
-  script \t\t\t List details for a single script. Requires option --id=shortname.
+  script \t\t\t List details for a single script. Requires option --name=shortname or --id=URI.
   jobs \t\t\t List all jobs
   job \t\t\t List details for a single job. Requires option --id=jobid.
   log \t\t\t Show the log for a job.  Requires option --id=jobid.
@@ -59,7 +64,6 @@ def checkargs
   runpreset1 \t\t\t Create a job with all pre-set values (for testing only).
   runpreset2 \t\t\t Create a job with all pre-set values (for testing only).
   resultpreset1 \t\t\t Get the results from the first job (for testing only).
-
   "
 
     Settings.instance.options[:trace] = false
@@ -68,13 +72,18 @@ def checkargs
     end
 
     Settings.instance.options[:id] = nil
-    opts.on('-i', '--id VALUE', 'specify an ID value') do |id|
+    opts.on('-i', '--id VALUE', 'Specify an ID value') do |id|
       Settings.instance.options[:id] = id
     end
 
     Settings.instance.options[:baseuri] = nil
     opts.on('-b', '--baseuri VALUE', "Override the default baseuri") do |baseuri|
       Settings.instance.set_baseuri(baseuri)
+    end
+
+    Settings.instance.options[:name] = nil
+    opts.on('-n', '--name VALUE', 'Specify an name value') do |name|
+      Settings.instance.options[:name] = name
     end
 
     opts.on('-h', '--help', 'Display this screen') do

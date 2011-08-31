@@ -6,6 +6,7 @@
     <p:documentation>
         <xd:short>short description</xd:short>
         <xd:detail>detail description</xd:detail>
+        <xd:homepage>homepage</xd:homepage>
         <xd:author>
             <xd:name>John Doe</xd:name>
             <xd:mailto>john.doe@example.com</xd:mailto>
