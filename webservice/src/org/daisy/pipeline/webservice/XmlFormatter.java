@@ -215,7 +215,7 @@ public class XmlFormatter {
 		
 		// TODO: get the script URI from the job (pending framework implementation)
 		Element scriptElm = doc.createElementNS(NS_PIPELINE_DATA, "script");
-		scriptElm.setAttribute("href", "TODO");
+		scriptElm.setAttribute("href", job.getScript().getURI().toString());
 		rootElm.appendChild(scriptElm);
 		
 		
