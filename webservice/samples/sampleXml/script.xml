@@ -1,10 +1,16 @@
-<script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl" xmlns="http://www.daisy.org/ns/pipeline/data">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<script href="http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"
+    xmlns="http://www.daisy.org/ns/pipeline/data">
     <nicename>DTBook to ZedAI</nicename>
-    <description>Transforms DTBook XML into ZedAI XML, and extracts metadata and CSS information into separate files. 
-            Homepage: http://code.google.com/p/daisy-pipeline/wiki/DTBookToZedAI</description>  
-        <input  name="source" type="application/x-dtbook+xml" desc="DTBook input file(s)" sequenceAllowed="true"/> 
-        <option name="opt-output-dir" type="anyDirURI" desc="Output directory" required="true"/>
-        <option name="opt-zedai-filename" type="string" desc="Filename for the output ZedAI file" required="false"/>
-        <option name="opt-mods-filename" type="string" desc="Filename for the output MODS file" required="false"/>
-        <option name="opt-css-filename" type="string" desc="Filename for the output CSS file" required="false"/>
+    <description>Transforms DTBook XML into ZedAI XML. Homepage:
+        http://code.google.com/p/daisy-pipeline/wiki/DTBookToZedAI</description>
+    <input
+        desc="One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed."
+        mediaType="application/x-dtbook+xml" name="source" sequenceAllowed="true"/>
+    <option desc="Filename for the generated MODS file" mediaType="" name="opt-mods-filename"
+        required="false" type="string"/>
+    <option desc="Filename for the generated CSS file" mediaType="" name="opt-css-filename"
+        required="false" type="string"/>
+    <option desc="Filename for the generated ZedAI file" mediaType="" name="opt-zedai-filename"
+        required="false" type="string"/>
 </script>

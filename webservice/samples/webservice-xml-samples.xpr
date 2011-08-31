@@ -6,5 +6,6 @@
     </meta>
     <projectTree name="webservice-xml-samples.xpr">
         <folder path="sampleXml/"/>
+        <folder path="../src/org/daisy/pipeline/webservice/resources/"/>
     </projectTree>
 </project>

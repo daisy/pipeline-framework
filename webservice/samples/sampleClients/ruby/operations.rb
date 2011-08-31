@@ -91,9 +91,9 @@ def run_preset_job1
   <input name='source'>
     <file src='./dtbook-basic.xml'/>
   </input>
-  <option name='opt-mods-filename'>m.xml</option>
-  <option name='opt-css-filename'>c.css</option>
-  <option name='opt-zedai-filename'>z.xml</option>
+  <option name='opt-mods-filename'>the-mods-file.xml</option>
+  <option name='opt-css-filename'>the-css-file.css</option>
+  <option name='opt-zedai-filename'>the-zedai-file.xml</option>
 </jobRequest>
 "
 
@@ -160,9 +160,7 @@ def run_preset_job2
 
     </docwrapper>
   </input>
-  <option name='opt-mods-filename'>m.xml</option>
-  <option name='opt-css-filename'>c.css</option>
-  <option name='opt-zedai-filename'>z.xml</option>
+  <!-- no options specified, so the script's default values will be used -->
 </jobRequest>
 "
 

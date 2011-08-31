@@ -4,8 +4,8 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="data:script" maxOccurs="1" minOccurs="1"/>
-        <xs:element ref="data:input" maxOccurs="unbounded"/>
-        <xs:element ref="data:option" maxOccurs="unbounded"/>
+        <xs:element ref="data:input" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="data:option" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -31,7 +31,7 @@
   <xs:element name="docwrapper">
     <xs:complexType>
       <xs:sequence>
-        <xs:any minOccurs="0"/>        
+        <xs:any namespace="##any" minOccurs="1" maxOccurs="1" processContents="lax"/>        
       </xs:sequence>
     </xs:complexType>
   </xs:element>

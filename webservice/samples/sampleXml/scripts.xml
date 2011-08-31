@@ -1,21 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <scripts xmlns="http://www.daisy.org/ns/pipeline/data">
-    <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl">
-        <nicename>DTBook to ZedAI</nicename>
-        <description>Transforms DTBook XML into ZedAI XML, and extracts metadata and CSS information into separate files. 
-            Homepage: http://code.google.com/p/daisy-pipeline/wiki/DTBookToZedAI</description>  
-        <input  name="source" type="application/x-dtbook+xml" desc="DTBook input file(s)" sequenceAllowed="true"/> 
-        <option name="opt-output-dir" type="anyDirURI" desc="Output directory" required="true"/>
-        <option name="opt-zedai-filename" type="string" desc="Filename for the output ZedAI file" required="false"/>
-        <option name="opt-mods-filename" type="string" desc="Filename for the output MODS file" required="false"/>
-        <option name="opt-css-filename" type="string" desc="Filename for the output CSS file" required="false"/>
-    </script>
-    
-    <script href="http://www.daisy.org/ns/pipeline/modules/zedai-to-epub3/zedai-to-epub3.xpl">
-        <nicename>DTBook to ZedAI</nicename>
+    <script href="http://www.daisy.org/pipeline/modules/zedai-to-epub3/xproc/zedai-to-epub3.xpl">
+        <nicename>zedai-to-epub3</nicename>
         <description>Transforms a ZedAI (DAISY 4 XML) document into an EPUB 3
-        publication.</description>  
-        <input name="source" type="application/x-zedai+xml" desc="Path to input ZedAI"/>
-        <option name="output" type="anyDirURI" desc="Path to output directory for the EPUB"/>
+            publication.</description>
+        <input desc="Path to input ZedAI." mediaType="application/x-Z39.86-AI+xml" name="source"
+            sequenceAllowed="false"/>
     </script>
-    
+    <script href="http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl">
+        <nicename>DTBook to ZedAI</nicename>
+        <description>Transforms DTBook XML into ZedAI XML. Homepage:
+            http://code.google.com/p/daisy-pipeline/wiki/DTBookToZedAI</description>
+        <input
+            desc="One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed."
+            mediaType="application/x-dtbook+xml" name="source" sequenceAllowed="true"/>
+        <option desc="Filename for the generated MODS file" mediaType="" name="opt-mods-filename"
+            required="false" type="string"/>
+        <option desc="Filename for the generated CSS file" mediaType="" name="opt-css-filename"
+            required="false" type="string"/>
+        <option desc="Filename for the generated ZedAI file" mediaType="" name="opt-zedai-filename"
+            required="false" type="string"/>
+    </script>
+    <script href="http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl">
+        <nicename>daisy202-to-epub3</nicename>
+        <description>Transforms a DAISY 2.02-book into an EPUB3-book.</description>
+        <option
+            desc="Whether or not to include media overlays and associated audio files (default 'true')"
+            mediaType="" name="mediaoverlay" required="false" type="string"/>
+        <option desc="Path to input NCC." mediaType="" name="href" required="true" type="anyFileURI"/>
+        <option desc="Whether or not to include NCX-file and OPF guide element." mediaType=""
+            name="compatibility-mode" required="false" type="string"/>
+    </script>
+    <script
+        href="http://www.daisy.org/pipeline/modules/dtbook-utils/upgrade-dtbook/upgrade-dtbook.xpl">
+        <nicename>upgrade-dtbook</nicename>
+        <description>Upgrade a DTBook document from version 1.1.0, 2005-1, or 2005-2 to version
+            2005-3. This module was imported from the Pipeline 1.</description>
+        <input desc="Single DTBook file" mediaType="application/x-dtbook+xml" name="source"
+            sequenceAllowed="false"/>
+    </script>
+    <script href="http://www.daisy.org/pipeline/modules/dtbook-utils/merge-dtbook/merge-dtbook.xpl">
+        <nicename>merge-dtbook</nicename>
+        <description>Merge 2 or more DTBook documents.</description>
+        <input desc="Sequence of DTBook files" mediaType="application/x-dtbook+xml" name="source"
+            sequenceAllowed="true"/>
+    </script>
 </scripts>

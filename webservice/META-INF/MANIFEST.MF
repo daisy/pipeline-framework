@@ -30,7 +30,8 @@ Import-Package: javax.servlet.http,
  org.restlet.util,
  org.slf4j,
  org.w3c.dom,
- org.xml.sax
+ org.xml.sax,
+ org.w3c.dom.ls
 Require-Bundle: org.daisy.pipeline.framework
 Service-Component: OSGI-INF/webservice.xml
 

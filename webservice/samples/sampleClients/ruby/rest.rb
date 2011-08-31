@@ -62,10 +62,10 @@ module Rest
   # XML request version (no zip attachment)
   def post_job_xml(request_xml)
     begin
+      trace(request_xml, "post job (xml)")
       uri = URI.parse('http://localhost:8182/ws/jobs')
       request = Net::HTTP::Post.new(uri.path)
       request.body = request_xml
-
       response = Net::HTTP.start(uri.host, uri.port) {|http| http.request(request)}
       case response
         when Net::HTTPCreated
@@ -88,6 +88,7 @@ module Rest
   # multipart version
   def post_job_multipart(request_xml, zipfile_path)
     begin
+      trace(request_xml, "post job (multipart)")
       params = {}
       file = File.open(zipfile_path, "rb")
       params["jobData"] = file

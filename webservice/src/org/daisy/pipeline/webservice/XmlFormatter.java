@@ -27,6 +27,8 @@ import org.w3c.dom.ls.LSSerializer;
 
 public class XmlFormatter {
 
+	private static final String NS_PIPELINE_DATA = "http://www.daisy.org/ns/pipeline/data";
+
 	/*
 	 * example output: daisy-pipeline/webservice/docs/sampleXml/job.xml
 	 */
@@ -103,9 +105,9 @@ public class XmlFormatter {
 	
 	public static Document jobLogToXml(Job job, String serverAddress) {
 		Document doc = createDom("log");
-		Element jobElm = doc.createElement("job");
+		Element jobElm = doc.createElementNS(NS_PIPELINE_DATA, "job");
 		jobElm.setAttribute("href", serverAddress + "/jobs/" + job.getId().toString());
-		Element dataElm = doc.createElement("data");
+		Element dataElm = doc.createElementNS(NS_PIPELINE_DATA, "data");
 		// TODO: replace with actual log file
 		dataElm.setTextContent(job.getStatus().name());
 		
@@ -127,16 +129,16 @@ public class XmlFormatter {
 			rootElm = doc.getDocumentElement();
 		}
 		else {
-			rootElm = doc.createElement("script");
+			rootElm = doc.createElementNS(NS_PIPELINE_DATA, "script");
 		}
 		rootElm.setAttribute("href", script.getURI().toString());
 		
-		Element nicenameElm = doc.createElement("nicename");
+		Element nicenameElm = doc.createElementNS(NS_PIPELINE_DATA, "nicename");
 		nicenameElm.setTextContent(script.getName());
 		
 		rootElm.appendChild(nicenameElm);
 		
-		Element descriptionElm = doc.createElement("description");
+		Element descriptionElm = doc.createElementNS(NS_PIPELINE_DATA, "description");
 		descriptionElm.setTextContent(script.getDescription());
 		
 		rootElm.appendChild(descriptionElm);
@@ -147,7 +149,7 @@ public class XmlFormatter {
 		while(it_input.hasNext()) {
 			XProcPortInfo input = it_input.next();			
 			
-			Element inputElm = doc.createElement("input");
+			Element inputElm = doc.createElementNS(NS_PIPELINE_DATA, "input");
 			inputElm.setAttribute("name", input.getName());
 			
 			if (input.isSequence() == true) {
@@ -167,7 +169,7 @@ public class XmlFormatter {
 		while(it_options.hasNext()) {
 			XProcOptionInfo option = it_options.next();
 			
-			Element optionElm = doc.createElement("option");
+			Element optionElm = doc.createElementNS(NS_PIPELINE_DATA, "option");
 			optionElm.setAttribute("name", option.getName().toString());
 			if (option.isRequired()) {
 				optionElm.setAttribute("required", "true");
@@ -194,7 +196,7 @@ public class XmlFormatter {
 			rootElm = doc.getDocumentElement();
 		}
 		else {
-			rootElm = doc.createElement("job");
+			rootElm = doc.createElementNS(NS_PIPELINE_DATA, "job");
 		}
 		
 		Job.Status status = job.getStatus();
@@ -211,13 +213,13 @@ public class XmlFormatter {
 		}
 		
 		// TODO: get the script URI from the job (pending framework implementation)
-		Element scriptElm = doc.createElement("script");
-		scriptElm.setAttribute("href", "NA");
+		Element scriptElm = doc.createElementNS(NS_PIPELINE_DATA, "script");
+		scriptElm.setAttribute("href", "TODO");
 		rootElm.appendChild(scriptElm);
 		
 		
 		if (status == Job.Status.DONE) {
-			Element resultElm = doc.createElement("result");
+			Element resultElm = doc.createElementNS(NS_PIPELINE_DATA, "result");
 			resultElm.setAttribute("href", serverAddress + "/jobs/" + job.getId().toString() + "/result");
 			rootElm.appendChild(resultElm);
 		}
@@ -225,12 +227,12 @@ public class XmlFormatter {
 		/*
 		 * TODO incorporate errors (pending framework implementation)
 		 
-		Element errorsElm = doc.createElement("errors");
+		Element errorsElm = doc.createElementNS(NS_PIPELINE_DATA, "errors");
 		
 		Iterator<org.daisy.pipeline.jobmanager.Error> it = jobStatus.getErrors().iterator();
 		
 		while(it.hasNext()) {
-			Element errorElm = doc.createElement("error");
+			Element errorElm = doc.createElementNS(NS_PIPELINE_DATA, "error");
 			JobStatus.JobError err = (JobStatus.JobError)it.next();
 			if (err.getLevel() == org.daisy.pipeline.jobmanager.Error.Level.WARNING) {
 				errorElm.setAttribute("level", "warning");
@@ -248,7 +250,7 @@ public class XmlFormatter {
 		rootElm.appendChild(errorsElm);*/
 		
 		if (status == Job.Status.DONE) {
-			Element logElm = doc.createElement("log");
+			Element logElm = doc.createElementNS(NS_PIPELINE_DATA, "log");
 			logElm.setAttribute("href", serverAddress + "/jobs/" + job.getId() + "/log");
 			rootElm.appendChild(logElm);
 		}
@@ -260,7 +262,8 @@ public class XmlFormatter {
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		    DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		    DOMImplementation domImpl = documentBuilder.getDOMImplementation();
-		    Document document = domImpl.createDocument("http://www.daisy.org/ns/pipeline/data", documentElementName, null);
+		    Document document = domImpl.createDocument(NS_PIPELINE_DATA, documentElementName, null);
+		    
 			return document;
 		
 		
@@ -295,14 +298,13 @@ public class XmlFormatter {
         return xmlString;
     }
 	
-	// with config -Dosgi.compatibility.bootdelegation=false, this gives a classdefnotfound
-	// TODO: this doesn't quite work as I would like .. it includes the parent node
-    public static String nodeToString(Node node) {
-            Document doc = node.getOwnerDocument();
-            DOMImplementationLS domImplLS = (DOMImplementationLS) doc.getImplementation();
-            LSSerializer serializer = domImplLS.createLSSerializer();
-            String string = serializer.writeToString(node);
-            return string;
+	public static String nodeToString(Node node) {
+        Document doc = node.getOwnerDocument();
+        DOMImplementationLS domImplLS = (DOMImplementationLS) doc.getImplementation();
+        LSSerializer serializer = domImplLS.createLSSerializer();
+        serializer.getDomConfig().setParameter("xml-declaration", false);        
+        String string = serializer.writeToString(node);
+        return string.trim();
     }
 
 }

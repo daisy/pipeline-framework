@@ -25,6 +25,7 @@ import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -34,8 +35,8 @@ public class Validator {
 	// although in everyday practice, the function validateJobRequest will be the most-used, 
 	// all the schema URLs are included here so that during testing, the web service can validate
 	// its own output by calling validateXml with the appropriate schema URL.
-	public static final URL scriptSchema = Validator.class.getResource("resources/converter.xsd");
-	public static final URL scriptsSchema = Validator.class.getResource("resources/converters.xsd");
+	public static final URL scriptSchema = Validator.class.getResource("resources/script.xsd");
+	public static final URL scriptsSchema = Validator.class.getResource("resources/scripts.xsd");
 	public static final URL jobSchema = Validator.class.getResource("resources/job.xsd");
 	public static final URL jobRequestSchema = Validator.class.getResource("resources/jobRequest.xsd");
 	public static final URL jobsSchema = Validator.class.getResource("resources/jobs.xsd");
@@ -44,7 +45,13 @@ public class Validator {
 	// If the Document isn't namespace-aware, this will likely fail
 	public static boolean validateXml(Document document, URL schemaUrl) {
 	    
-		if (document == null || schemaUrl == null) {
+		if (document == null) {
+			System.out.println("Could not validate null document");
+			return false;
+		}
+		
+		if (schemaUrl == null) {
+			System.out.println("Could not validate -- no schema given.");
 			return false;
 		}
 		
@@ -216,8 +223,16 @@ public class Validator {
 		boolean isValid = true;
 		
 		for (int i = 0; i<nodes.getLength(); i++) {
-			Element elm = (Element)nodes.item(i);
-			String xml = elm.getTextContent();
+			Node docwrapper = nodes.item(i);
+			Node content = null;
+			// find the first element child of docwrapper
+			for (int q = 0; q < docwrapper.getChildNodes().getLength(); q++) {
+				if (docwrapper.getChildNodes().item(q).getNodeType() == Node.ELEMENT_NODE) {
+					content = docwrapper.getChildNodes().item(q);
+					break;
+				}
+			}
+			String xml = XmlFormatter.nodeToString(content);
 			isValid &= validateWellFormedXml(xml);
 		}
 		
@@ -244,8 +259,8 @@ public class Validator {
 	}
 	
 	// just validate whether the xml is well-formed or not.  
-	// we don't collect data on what flavor of xml is expected; 
-	// that's handled by the xproc script itself
+	// we don't verify flavor of xml is expected; 
+	// that's expected to be handled by the xproc script itself
 	private static boolean validateWellFormedXml(String xml){
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
