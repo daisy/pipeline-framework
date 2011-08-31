@@ -21,7 +21,6 @@ import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
-import org.daisy.pipeline.job.DefaultJobManager;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobManager;
@@ -56,7 +55,7 @@ public class JobsResource extends ServerResource {
 	@Get("xml")
 	public Representation getResource() {
 		String serverAddress = ((PipelineWebService) this.getApplication()).getServerAddress();
-		DefaultJobManager jobMan = new DefaultJobManager(); 
+		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager(); 
 		Document doc = XmlFormatter.jobsToXml(jobMan.getJobs(), serverAddress);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
 		setStatus(Status.SUCCESS_OK);

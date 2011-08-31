@@ -105,14 +105,15 @@ public class XmlFormatter {
 	
 	public static Document jobLogToXml(Job job, String serverAddress) {
 		Document doc = createDom("log");
+		Element root = doc.getDocumentElement();
 		Element jobElm = doc.createElementNS(NS_PIPELINE_DATA, "job");
 		jobElm.setAttribute("href", serverAddress + "/jobs/" + job.getId().toString());
 		Element dataElm = doc.createElementNS(NS_PIPELINE_DATA, "data");
 		// TODO: replace with actual log file
 		dataElm.setTextContent(job.getStatus().name());
 		
-		doc.appendChild(jobElm);
-		doc.appendChild(dataElm);
+		root.appendChild(jobElm);
+		root.appendChild(dataElm);
 		
 		// for debugging only
 		if (!Validator.validateXml(doc, Validator.logSchema)) {

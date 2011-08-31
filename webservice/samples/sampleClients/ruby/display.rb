@@ -60,6 +60,7 @@ def display_jobs(elements)
   count = 1
   elements.each do |elm|
     puts "#{count.to_s}. #{display_job_short(elm)}"
+    count += 1
   end
   message("\n")
 end
@@ -71,7 +72,6 @@ end
 
 def display_log(element)
   message("\nLog for job #{element.xpath("./job")[0]['href']}: ")
-
-  puts element.xpath("./logfile")[0].content
+  puts element.xpath("./data")[0].content
   message("\n")
 end

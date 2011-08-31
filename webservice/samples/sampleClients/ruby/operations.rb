@@ -62,8 +62,16 @@ def get_result(id)
     error "'Get result' requires an ID"
     return
   end
-  # TODO store result
-  display_result(id, "TODO")
+  response = Rest.get_job_result(id)
+  if response == nil
+    error "Result is nil"
+    return
+  end
+  path = "/tmp/#{id}.zip"
+  open(path, "wb") { |file|
+    file.write(response)
+  }
+  display_result(id, path)
 end
 
 def create_job
@@ -166,5 +174,14 @@ def run_preset_job2
 
 
   Rest.post_job_xml(jobxml)
+
+end
+
+
+def result_preset_1
+  jobs_doc = Rest.get_jobs
+  first_job_id = jobs_doc.xpath(".//job")[0]['id']
+
+  get_result(first_job_id)
 
 end
