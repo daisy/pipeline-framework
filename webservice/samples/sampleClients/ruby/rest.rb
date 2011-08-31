@@ -107,6 +107,7 @@ module Rest
       case response
         when Net::HTTPCreated
           message "Job created"
+          message response.get_fields('content-location')
           return true
         when Net::HTTPInternalServerError
           error "Server blew up"

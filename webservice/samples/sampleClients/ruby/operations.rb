@@ -83,7 +83,6 @@ def delete_job(id)
     error "'Delete job' requires an ID"
     return
   end
-  # TODO check if job is eligible for deletion
 
   puts "Really delete this job? (Y/n)"
   input = STDIN.gets().chomp()
