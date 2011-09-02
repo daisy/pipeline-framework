@@ -55,13 +55,14 @@ public class DynamicXProcConfigurationFactory implements
 
 	public void addStep(XProcStepProvider stepProvider, Map<?, ?> properties) {
 		QName type = QName.fromClarkName((String) properties.get("type"));
-		logger.info("Adding step to registry: " + type.toString());
+		logger.debug("Adding step to registry: {}", type.toString());
 		stepProviders.put(type, stepProvider);
 	}
 
 	public void removeStep(XProcStepProvider stepProvider, Map<?, ?> properties) {
 		QName type = QName.fromClarkName((String) properties.get("type"));
-		stepProviders.remove(type);
+		logger.debug("Removing step from registry: {}", type.toString());
+ 		stepProviders.remove(type);
 	}
 
 	public boolean hasStep(QName type) {

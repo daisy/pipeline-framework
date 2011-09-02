@@ -3,9 +3,6 @@ package org.daisy.common.xproc.calabash;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.xmlcalabash.core.XProcConfiguration;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
@@ -14,7 +11,7 @@ import com.xmlcalabash.runtime.XAtomicStep;
 public class DynamicXProcConfiguration extends XProcConfiguration {
 
 	XProcStepRegistry stepRegistry;
-	Logger mLogger = LoggerFactory.getLogger(getClass().getCanonicalName());
+
 	public DynamicXProcConfiguration(XProcStepRegistry stepRegistry) {
 		super();
 		this.stepRegistry = stepRegistry;
@@ -43,7 +40,6 @@ public class DynamicXProcConfiguration extends XProcConfiguration {
 		if (step == null) {
 			return null;
 		} else {
-			mLogger.info("getting step:"+step.getName());
 			XProcStep xprocStep = stepRegistry.newStep(step.getType(), runtime,
 					step);
 			return (xprocStep != null) ? xprocStep : super.newStep(runtime,
