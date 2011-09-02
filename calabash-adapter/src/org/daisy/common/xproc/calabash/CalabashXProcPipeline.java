@@ -43,7 +43,6 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		public PipelineInstance get() {
 			XProcConfiguration config = configFactory.newConfiguration();
 			XProcRuntime runtime = new XProcRuntime(config);
-			runtime.setPhoneHome(false);
 			runtime.setMessageListener(new slf4jXProcMessageListener());
 			if (uriResolver != null) {
 				runtime.setURIResolver(uriResolver);
