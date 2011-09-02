@@ -16,7 +16,6 @@
 	<modules>
 	<module>../calabash-adapter</module>
 	<module>../calabash-custom-steps</module>
-	<module>../calabash-extensions</module>
 	<module>../commandline</module>
 	<module>../common-stax</module>
 	<module>../common-utils</module>

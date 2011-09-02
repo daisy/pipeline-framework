@@ -38,13 +38,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.daisy.calabash.extensions"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="calabash-custom-steps"
          download-size="0"
          install-size="0"
