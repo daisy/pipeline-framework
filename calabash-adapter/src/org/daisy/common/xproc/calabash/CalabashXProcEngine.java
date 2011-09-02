@@ -9,10 +9,14 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.EntityResolver;
 
 //TODO check thread safety
 public final class CalabashXProcEngine implements XProcEngine {
+	
+	private static final Logger logger = LoggerFactory.getLogger(CalabashXProcEngine.class);
 
 	private URIResolver uriResolver = null;
 	private EntityResolver entityResolver = null;
@@ -22,7 +26,11 @@ public final class CalabashXProcEngine implements XProcEngine {
 		// FIXME: default entity resolver
 		entityResolver = new CalabashXprocEntityResolver();
 	}
-
+	
+	public void activate(){
+		logger.trace("Activating XProc Engine");
+	}
+	
 	@Override
 	public XProcPipeline load(URI uri) {
 		if (configFactory == null) {

@@ -48,6 +48,10 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 
 	public StaxEXPathPackageParser() {
 	}
+	
+	public void activate(){
+		logger.trace("Activating EXPath package parser");
+	}
 
 	public void setFactory(XMLInputFactory factory) {
 		this.factory = factory;

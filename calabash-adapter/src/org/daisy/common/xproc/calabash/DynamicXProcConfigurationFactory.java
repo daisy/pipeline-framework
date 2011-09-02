@@ -36,6 +36,10 @@ public class DynamicXProcConfigurationFactory implements
 		loadConfigurationFile(config);
 		return config;
 	}
+	
+	public void activate(){
+		logger.trace("Activating XProc Configuration Factory");
+	}
 
 	public XProcConfiguration newConfiguration(boolean schemaAware) {
 		XProcConfiguration config = new DynamicXProcConfiguration(schemaAware, this);

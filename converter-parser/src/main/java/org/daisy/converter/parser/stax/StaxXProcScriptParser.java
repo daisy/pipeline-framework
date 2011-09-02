@@ -26,16 +26,18 @@ import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
 public class StaxXProcScriptParser implements XProcScriptParser {
+	
+	private static final Logger logger = LoggerFactory.getLogger(StaxXProcScriptParser.class);
 	/** The xmlinputfactory. */
 	private XMLInputFactory mFactory;
 	
-	
-
 	/** The uri resolver. */
 	private URIResolver mUriResolver;
 
@@ -45,6 +47,10 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 	public void setFactory(XMLInputFactory factory) {
 		this.mFactory = factory;
+	}
+	
+	public void activate(){
+		logger.trace("Activating XProc script parser");
 	}
 
 	@Override

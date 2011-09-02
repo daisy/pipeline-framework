@@ -17,6 +17,10 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	private final Map<URI, XProcScriptService> descriptors = Maps.newHashMap();
 	private XProcScriptParser parser;
 
+	public void activate(){
+		logger.trace("Activating script registry");
+	}
+	
 	public void register(final XProcScriptService script) {
 		logger.trace("registering script {}",script.getURI());
 		if (!script.hasParser()){

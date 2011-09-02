@@ -97,7 +97,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	}
 
 	public void init(BundleContext context) {
-		logger.trace("Initializing module registry");
+		logger.trace("Activating module registry");
 		tracker = new BundleTracker(context, Bundle.ACTIVE,
 				new ModuleTracker());
 		tracker.open();

@@ -4,9 +4,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.daisy.common.xproc.XProcEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultJobExecutionService implements JobExecutionService {
 
+	private static final Logger logger = LoggerFactory.getLogger(DefaultJobExecutionService.class);
 	private XProcEngine xprocEngine;
 	
 	public void setXProcEngine(XProcEngine xprocEngine) {
@@ -16,6 +19,10 @@ public class DefaultJobExecutionService implements JobExecutionService {
 
 	private ExecutorService executor = Executors.newCachedThreadPool(); 
 
+	public void activate(){
+		logger.trace("Activating job execution service");
+	}
+	
 	public void submit(final Job job) {
 		executor.submit(new Runnable() {
 			

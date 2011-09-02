@@ -19,7 +19,7 @@ public class PipelineCLI {
 	public static final String MODE_PROPERTY = "org.daisy.pipeline.mode";
 	private static final String CMD = "cmd";
 	private static boolean EXIT = false;
-
+	
 	private final OptionParser parser;
 	private ModuleRegistry moduleRegistry;
 	private ScriptRegistry scriptRegistry;
@@ -50,12 +50,13 @@ public class PipelineCLI {
 	}
 
 	public void activate() {
+		logger.trace("Activating CLI");
 		// TODO move MODE_PROPERTY constant
 		if (System.getProperty(MODE_PROPERTY) != null
 				&& System.getProperty(MODE_PROPERTY).equals(CMD)) {
-			logger.info("starting cmd");
 			new Thread() {
 				public void run() {
+					System.err.println("starting pipeline");
 					String args = System
 							.getProperty("org.daisy.pipeline.cmdargs");
 					// awful getevn thanks to the disappointing pax runner --vmo
@@ -87,8 +88,12 @@ public class PipelineCLI {
 					}
 
 				}
-			}.start();
+			}/*.start()*/;
 		}
+	}
+	
+	public void deactivate(int reason){
+			LoggerFactory.getLogger("tracer").trace("Deactivating {} {}",this.getClass().getSimpleName(),reason);
 	}
 
 	public void setModuleRegistry(ModuleRegistry moduleRegistry) {

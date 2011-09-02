@@ -12,5 +12,6 @@ Import-Package: com.google.common.base,
  javax.xml.transform,
  org.daisy.common.stax,
  org.daisy.common.xproc,
- org.daisy.pipeline.script
+ org.daisy.pipeline.script,
+ org.slf4j;version="1.6.2"
 Service-Component: OSGI-INF/parser.xml

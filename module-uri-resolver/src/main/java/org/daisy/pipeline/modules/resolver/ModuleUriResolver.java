@@ -19,13 +19,8 @@ public class ModuleUriResolver implements URIResolver {
 	private URIResolver mDelegated;
 
 	public void activate(){
-		mLogger.debug("Activating module URI resolver");
+		mLogger.trace("Activating module URI resolver");
 	}
-	
-	public void deactivate(){
-		mLogger.debug("Deactivating module URI resolver");
-	}
-
 
 	public void setModuleRegistry(ModuleRegistry reg) {
 		mRegistry = reg;
