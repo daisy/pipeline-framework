@@ -11,6 +11,7 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.calabash.XProcConfigurationFactory;
 import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
@@ -34,14 +35,15 @@ import com.xmlcalabash.runtime.XPipeline;
 public class CalabashXProcPipeline implements XProcPipeline {
 
 	private final URI uri;
-	private final XProcConfiguration configuration;
+	private final XProcConfigurationFactory configFactory;
 	private final URIResolver uriResolver;
 	private final EntityResolver entityResolver;
-	private final Supplier<XPipeline> xpipeline = new Supplier<XPipeline>() {
+	private final Supplier<PipelineInstance> pipelineSupplier = new Supplier<PipelineInstance>() {
 
 		@Override
-		public XPipeline get() {
-			XProcRuntime runtime = new XProcRuntime(configuration);
+		public PipelineInstance get() {
+			XProcConfiguration config = configFactory.newConfiguration();
+			XProcRuntime runtime = new XProcRuntime(config);
 			runtime.setPhoneHome(false);
 			runtime.setMessageListener(new slf4jXProcMessageListener());
 			if (uriResolver != null) {
@@ -58,7 +60,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			} catch (SaxonApiException e) {
 				throw new RuntimeException(e.getMessage(), e);
 			}
-			return xpipeline;
+			return new PipelineInstance(xpipeline, config);
 		}
 	};
 	private final Supplier<XProcPipelineInfo> info = Suppliers
@@ -68,9 +70,9 @@ public class CalabashXProcPipeline implements XProcPipeline {
 				public XProcPipelineInfo get() {
 					XProcPipelineInfo.Builder builder = new XProcPipelineInfo.Builder();
 					builder.withURI(uri);
-					DeclareStep pipeline = xpipeline.get().getDeclareStep();
+					DeclareStep declaration = pipelineSupplier.get().xpipe.getDeclareStep();
 					// input and parameter ports
-					for (Input input : pipeline.inputs()) {
+					for (Input input : declaration.inputs()) {
 						if (input.getParameterInput()) {
 							builder.withPort(XProcPortInfo.newInputPort(
 									input.getPort(), input.getSequence(),
@@ -81,13 +83,13 @@ public class CalabashXProcPipeline implements XProcPipeline {
 						}
 					}
 					// output ports
-					for (Output output : pipeline.outputs()) {
+					for (Output output : declaration.outputs()) {
 						builder.withPort(XProcPortInfo.newOutputPort(
 								output.getPort(), output.getSequence(),
 								output.getPrimary()));
 					}
 					// options
-					for (Option option : pipeline.options()) {
+					for (Option option : declaration.options()) {
 						builder.withOption(new XProcOptionInfo(new QName(option
 								.getName().getNamespaceURI(), option.getName()
 								.getLocalName(), option.getName().getPrefix()),
@@ -97,10 +99,10 @@ public class CalabashXProcPipeline implements XProcPipeline {
 				}
 			});
 
-	public CalabashXProcPipeline(URI uri, XProcConfiguration conf,
+	public CalabashXProcPipeline(URI uri, XProcConfigurationFactory configFactory,
 			URIResolver uriResolver, EntityResolver entityResolver) {
 		this.uri = uri;
-		this.configuration = conf;
+		this.configFactory = configFactory;
 		this.uriResolver = uriResolver;
 		this.entityResolver = entityResolver;
 	}
@@ -112,13 +114,13 @@ public class CalabashXProcPipeline implements XProcPipeline {
 
 	@Override
 	public XProcResult run(XProcInput data) {
-		XPipeline xpipe = this.xpipeline.get();
+		PipelineInstance pipeline = pipelineSupplier.get();
 		// bind inputs
-		for (String name : xpipe.getInputs()) {
+		for (String name : pipeline.xpipe.getInputs()) {
 			for (Provider<Source> source : data.getInputs(name)) {
-				xpipe.writeTo(
+				pipeline.xpipe.writeTo(
 						name,
-						asXdmNode(configuration.getProcessor(),
+						asXdmNode(pipeline.config.getProcessor(),
 								source.provide()));
 			}
 		}
@@ -126,7 +128,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		for (QName optname : data.getOptions().keySet()) {
 			RuntimeValue value = new RuntimeValue(data.getOptions()
 					.get(optname));
-			xpipe.passOption(new net.sf.saxon.s9api.QName(optname), value);
+			pipeline.xpipe.passOption(new net.sf.saxon.s9api.QName(optname), value);
 		}
 
 		// bind parameters
@@ -134,18 +136,18 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			for (QName name : data.getParameters(port).keySet()) {
 				RuntimeValue value = new RuntimeValue(data.getParameters(port)
 						.get(name), null, null);
-				xpipe.setParameter(port, new net.sf.saxon.s9api.QName(name),
+				pipeline.xpipe.setParameter(port, new net.sf.saxon.s9api.QName(name),
 						value);
 			}
 		}
 
 		// run
 		try {
-			xpipe.run();
+			pipeline.xpipe.run();
 		} catch (SaxonApiException e) {
 			e.printStackTrace();
 		}
-		return CalabashXProcResult.newInstance(xpipe, configuration);
+		return CalabashXProcResult.newInstance(pipeline.xpipe, pipeline.config);
 	}
 
 	private static XdmNode asXdmNode(Processor processor, Source source) {
@@ -156,8 +158,19 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		try {
 			return builder.build(source);
 		} catch (SaxonApiException sae) {
-			// TODO better exception handling
 			throw new RuntimeException(sae.getMessage(), sae);
+		}
+	}
+	
+
+
+	private static final class PipelineInstance {
+		private final XPipeline xpipe;
+		private final XProcConfiguration config;
+
+		private PipelineInstance(XPipeline xpipe, XProcConfiguration config) {
+			this.xpipe = xpipe;
+			this.config = config;
 		}
 	}
 }
