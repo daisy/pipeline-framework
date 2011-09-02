@@ -1,4 +1,4 @@
-package org.daisy.calabash;
+package org.daisy.common.xproc.calabash;
 
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;

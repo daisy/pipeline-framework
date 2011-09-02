@@ -5,5 +5,5 @@
       <provide interface="org.daisy.common.xproc.XProcEngine"/>
    </service>
    <reference name="uri-resolver" interface="javax.xml.transform.URIResolver"  bind="setUriResolver" cardinality="1..1" policy="static"/>
-   <reference name="calabash-config-factory" interface="org.daisy.calabash.XProcConfigurationFactory"  bind="setConfigurationFactory" cardinality="1..1" policy="static"/>
+   <reference name="calabash-config-factory" interface="org.daisy.common.xproc.calabash.XProcConfigurationFactory"  bind="setConfigurationFactory" cardinality="1..1" policy="static"/>
 </scr:component>

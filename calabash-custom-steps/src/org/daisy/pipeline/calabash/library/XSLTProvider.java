@@ -27,7 +27,7 @@ import java.util.Vector;
 import javax.xml.transform.Result;
 import javax.xml.transform.TransformerException;
 
-import org.daisy.calabash.XProcStepProvider;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

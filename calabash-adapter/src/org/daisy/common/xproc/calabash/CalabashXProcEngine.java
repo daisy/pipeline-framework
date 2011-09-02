@@ -4,7 +4,6 @@ import java.net.URI;
 
 import javax.xml.transform.URIResolver;
 
-import org.daisy.calabash.XProcConfigurationFactory;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipeline;

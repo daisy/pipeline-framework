@@ -5,7 +5,7 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
-import org.daisy.calabash.XProcStepProvider;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

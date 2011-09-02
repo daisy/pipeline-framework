@@ -1,4 +1,4 @@
-package org.daisy.calabash;
+package org.daisy.common.xproc.calabash;
 
 import java.util.HashMap;
 import java.util.Map;
