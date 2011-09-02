@@ -15,13 +15,13 @@
     </triggeringPolicy>
 
     <encoder>
-      <Pattern>%date [%level] - %logger{36} - %msg%n</Pattern>
+      <Pattern>%date [%-5level] %logger{36} - %msg%n</Pattern>
     </encoder>
   </appender>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <Pattern>[%level] %logger - %msg%n</Pattern>
+      <Pattern>%-5level [%40.40logger{40}] %msg   @%class{36}:%L#%M%n</Pattern>
     </encoder>
   </appender>
 
