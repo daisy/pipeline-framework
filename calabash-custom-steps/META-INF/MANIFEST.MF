@@ -10,12 +10,8 @@ Import-Package: com.xmlcalabash.core,
  com.xmlcalabash.model,
  com.xmlcalabash.runtime,
  com.xmlcalabash.util,
- javax.xml.transform,
- net.sf.saxon,
- net.sf.saxon.event,
- net.sf.saxon.lib,
  net.sf.saxon.s9api,
  org.daisy.common.xproc.calabash,
  org.slf4j
-Service-Component: OSGI-INF/step-message.xml,OSGI-INF/step-xslt.xml
+Service-Component: OSGI-INF/step-message.xml
 
