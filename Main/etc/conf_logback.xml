@@ -1,4 +1,7 @@
-<configuration>
+<configuration debug="false">
+
+  <!-- see http://logback.qos.ch/manual/configuration.html#LevelChangePropagator -->
+  <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator"/>
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>${org.daisy.pipeline.logdir}/daisy-pipeline.log</file>
@@ -11,26 +14,19 @@
       <maxFileSize>10MB</maxFileSize>
     </triggeringPolicy>
 
-    <layout class="ch.qos.logback.classic.PatternLayout" >
+    <encoder>
       <Pattern>%date [%level] - %logger{36} - %msg%n</Pattern>
-    </layout>
+    </encoder>
   </appender>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <layout class="ch.qos.logback.classic.PatternLayout">
+    <encoder>
       <Pattern>[%level] %logger - %msg%n</Pattern>
-    </layout>
+    </encoder>
   </appender>
-<!--   	
-  <logger name="org.daisy" level="ERROR">
-    <appender-ref ref="STDOUT" />
-  </logger>
-  <logger name="org.daisy" level="DEBUG">
-    <appender-ref ref="FILE" />
-  </logger>
--->
-  <root level="debug">
+
+  <root level="DEBUG">
     <appender-ref ref="FILE"/>
-    <appender-ref ref="STDOUT" />
+    <appender-ref ref="STDOUT"/>
   </root>
 </configuration>
