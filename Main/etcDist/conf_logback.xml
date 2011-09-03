@@ -28,4 +28,5 @@
   <root level="DEBUG">
     <appender-ref ref="FILE"/>
   </root>
+  <logger name="com.xmlcalabash" level="WARN"/>
 </configuration>
