@@ -153,6 +153,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 					if (isFirstChild()) {
 						scriptBuilder.withDescription(dHolder.mDetail);
 						scriptBuilder.withNiceName(dHolder.mShort);
+						scriptBuilder.withHomepage(dHolder.mHomepage);
 					} else if (mAncestors.get(mAncestors.size() - 2)
 							.asStartElement().getName()
 							.equals(Elements.P_INPUT)
@@ -235,7 +236,8 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			Predicate<XMLEvent> pred = Predicates.or(EventPredicates
 					.isStartOrStopElement(Elements.XD_SHORT), EventPredicates
 					.isStartOrStopElement(Elements.XD_DETAIL), EventPredicates
-					.isStartOrStopElement(Elements.P_DOCUMENTATION));
+					.isStartOrStopElement(Elements.P_DOCUMENTATION), EventPredicates
+					.isStartOrStopElement(Elements.XD_HOMEPAGE));
 			StaxEventHelper.loop(reader, pred,
 					EventPredicates.getChildOrSiblingPredicate(),
 					new EventProcessor() {
@@ -254,6 +256,12 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 								reader.next();
 								dHolder.mShort = reader.peek().asCharacters()
 										.getData();
+							}
+							else if (event.isStartElement()
+									&& event.asStartElement().getName()
+											.equals(Elements.XD_HOMEPAGE)) {
+								reader.next();
+								dHolder.mHomepage = reader.peek().asCharacters().getData();
 							}
 
 						}
@@ -276,6 +284,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 	private static class DocumentationHolder {
 		String mShort;
 		String mDetail;
+		String mHomepage;
 	}
 
 	private static class XProcOptionMetadataBuilderHolder {

@@ -7,6 +7,7 @@
       <xs:sequence>
         <xs:element ref="data:nicename"/>
         <xs:element ref="data:description"/>
+        <xs:element ref="data:homepage" minOccurs="0" maxOccurs="1"/>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="data:input"/>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="data:option"/>
       </xs:sequence>
@@ -15,6 +16,7 @@
   </xs:element>
   <xs:element name="nicename" type="xs:string"/>
   <xs:element name="description" type="xs:string"/>
+  <xs:element name="homepage" type="xs:string"/>
   <xs:element name="input">
     <xs:complexType>
       <xs:attribute name="desc" use="required"/>

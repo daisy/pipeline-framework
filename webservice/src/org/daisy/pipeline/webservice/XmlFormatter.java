@@ -105,14 +105,15 @@ public class XmlFormatter {
 	
 	public static Document jobLogToXml(Job job, String serverAddress) {
 		Document doc = createDom("log");
+		Element root = doc.getDocumentElement();
 		Element jobElm = doc.createElementNS(NS_PIPELINE_DATA, "job");
 		jobElm.setAttribute("href", serverAddress + "/jobs/" + job.getId().toString());
 		Element dataElm = doc.createElementNS(NS_PIPELINE_DATA, "data");
 		// TODO: replace with actual log file
 		dataElm.setTextContent(job.getStatus().name());
 		
-		doc.appendChild(jobElm);
-		doc.appendChild(dataElm);
+		root.appendChild(jobElm);
+		root.appendChild(dataElm);
 		
 		// for debugging only
 		if (!Validator.validateXml(doc, Validator.logSchema)) {
@@ -135,13 +136,18 @@ public class XmlFormatter {
 		
 		Element nicenameElm = doc.createElementNS(NS_PIPELINE_DATA, "nicename");
 		nicenameElm.setTextContent(script.getName());
-		
 		rootElm.appendChild(nicenameElm);
 		
 		Element descriptionElm = doc.createElementNS(NS_PIPELINE_DATA, "description");
 		descriptionElm.setTextContent(script.getDescription());
-		
 		rootElm.appendChild(descriptionElm);
+		
+		String homepage = script.getHomepage();
+		if (homepage != null && homepage.trim().length() > 0) {
+			Element homepageElm = doc.createElementNS(NS_PIPELINE_DATA, "homepage");
+			homepageElm.setTextContent(homepage);
+			rootElm.appendChild(homepageElm);
+		}
 		
 		Iterator<XProcPortInfo> it_input = script.getXProcPipelineInfo().getInputPorts().iterator();
 		Iterator<XProcOptionInfo> it_options = script.getXProcPipelineInfo().getOptions().iterator();
@@ -214,7 +220,7 @@ public class XmlFormatter {
 		
 		// TODO: get the script URI from the job (pending framework implementation)
 		Element scriptElm = doc.createElementNS(NS_PIPELINE_DATA, "script");
-		scriptElm.setAttribute("href", "TODO");
+		scriptElm.setAttribute("href", job.getScript().getURI().toString());
 		rootElm.appendChild(scriptElm);
 		
 		

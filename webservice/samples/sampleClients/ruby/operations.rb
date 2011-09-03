@@ -12,17 +12,25 @@ def get_scripts
   display_scripts(doc.xpath("//script"))
 end
 
-def get_script(name)
+def get_script_by_id(id)
+  if id == ""
+    error "'Get script' requires an ID"
+    return
+  end
+  doc = Rest.get_script(id)
+  if doc == nil
+    return
+  end
+  display_script(doc.xpath("//script")[0])
+end
+
+def get_script_by_name(name)
   if name == ""
     error "'Get script' requires a name"
     return
   end
   uri = get_uri_from_shortname(name)
-  doc = Rest.get_script(uri)
-  if doc == nil
-    return
-  end
-  display_script(doc.xpath("//script")[0])
+  get_script_by_id(uri)
 end
 
 def get_jobs
@@ -62,8 +70,16 @@ def get_result(id)
     error "'Get result' requires an ID"
     return
   end
-  # TODO store result
-  display_result(id, "TODO")
+  response = Rest.get_job_result(id)
+  if response == nil
+    error "Result is nil"
+    return
+  end
+  path = "/tmp/#{id}.zip"
+  open(path, "wb") { |file|
+    file.write(response)
+  }
+  display_result(id, path)
 end
 
 def create_job
@@ -75,7 +91,6 @@ def delete_job(id)
     error "'Delete job' requires an ID"
     return
   end
-  # TODO check if job is eligible for deletion
 
   puts "Really delete this job? (Y/n)"
   input = STDIN.gets().chomp()
@@ -166,5 +181,14 @@ def run_preset_job2
 
 
   Rest.post_job_xml(jobxml)
+
+end
+
+
+def result_preset_1
+  jobs_doc = Rest.get_jobs
+  first_job_id = jobs_doc.xpath(".//job")[0]['id']
+
+  get_result(first_job_id)
 
 end

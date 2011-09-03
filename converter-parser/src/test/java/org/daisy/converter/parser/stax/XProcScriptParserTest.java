@@ -34,6 +34,7 @@ public class XProcScriptParserTest {
 	public void testDescription() throws URISyntaxException {
 		assertEquals("short description", scp.getName());
 		assertEquals("detail description", scp.getDescription());
+		assertEquals("homepage", scp.getHomepage());
 	}
 
 	@Test

@@ -69,6 +69,10 @@ public class Job {
 		return status;
 	}
 
+	public XProcScript getScript() {
+		return script;
+	}
+	
 	XProcResult getXProcOutput() {
 		return null;
 	}

@@ -107,6 +107,7 @@ module Rest
       case response
         when Net::HTTPCreated
           message "Job created"
+          message response.get_fields('content-location')
           return true
         when Net::HTTPInternalServerError
           error "Server blew up"
@@ -194,10 +195,7 @@ module Rest
       case response
         when Net::HTTPSuccess
           trace(response.body, "get job results")
-
-          # TODO
-          # handle file download as response
-          return nil
+          return response.body
 
         when Net::HTTPInternalServerError
           error "Server blew up"

@@ -13,6 +13,7 @@ public final class XProcScript {
 		private XProcPipelineInfo pipelineInfo;
 		private String name;
 		private String description;
+		private String homepage;
 		private Map<String, XProcPortMetadata> portsMetadata=new HashMap<String, XProcPortMetadata>();
 		private Map<QName, XProcOptionMetadata> optionsMetadata=new HashMap<QName, XProcOptionMetadata>();
 		public Builder withPipelineInfo(XProcPipelineInfo pipelineInfo){
@@ -29,6 +30,11 @@ public final class XProcScript {
 				this.description=description;
 			return this;
 		}
+		public Builder withHomepage(String homepage) {
+			if (homepage != null)
+				this.homepage = homepage;
+			return this;
+		}
 		public Builder withPortMetadata(String name,XProcPortMetadata metadata){
 			portsMetadata.put(name,metadata);
 			return this;
@@ -39,22 +45,24 @@ public final class XProcScript {
 		}
 		
 		public XProcScript build(){
-			return new XProcScript(pipelineInfo,name,description,portsMetadata,optionsMetadata);
+			return new XProcScript(pipelineInfo,name,description,homepage,portsMetadata,optionsMetadata);
 		}
 	}
 	private final XProcPipelineInfo pipelineInfo;
 	private final String name;
 	private final String description;
+	private final String homepage;
 	private final Map<String, XProcPortMetadata> portsMetadata;
 	private final Map<QName, XProcOptionMetadata> optionsMetadata;
 
 	
 	public XProcScript(XProcPipelineInfo pipelineInfo, String name,
-			String description, Map<String, XProcPortMetadata> portsMetadata,
+			String description, String homepage, Map<String, XProcPortMetadata> portsMetadata,
 			Map<QName, XProcOptionMetadata> optionsMetadata) {
 		this.pipelineInfo = pipelineInfo;
 		this.name = name;
 		this.description = description;
+		this.homepage = homepage;
 		this.portsMetadata = portsMetadata;
 		this.optionsMetadata = optionsMetadata;
 	}
@@ -72,7 +80,9 @@ public final class XProcScript {
 	public final String getDescription() {
 		return description;
 	}
-
+	public final String getHomepage() {
+		return homepage;
+	}
 	public final XProcPortMetadata getPortMetadata(String name) {
 		return portsMetadata.get(name);
 	}
