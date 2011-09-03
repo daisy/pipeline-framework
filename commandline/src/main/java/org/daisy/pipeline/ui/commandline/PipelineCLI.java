@@ -56,7 +56,6 @@ public class PipelineCLI {
 				&& System.getProperty(MODE_PROPERTY).equals(CMD)) {
 			new Thread() {
 				public void run() {
-					System.err.println("starting pipeline");
 					String args = System
 							.getProperty("org.daisy.pipeline.cmdargs");
 					// awful getevn thanks to the disappointing pax runner --vmo
