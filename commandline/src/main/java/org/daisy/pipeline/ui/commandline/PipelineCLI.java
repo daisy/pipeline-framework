@@ -18,7 +18,7 @@ public class PipelineCLI {
 
 	public static final String MODE_PROPERTY = "org.daisy.pipeline.mode";
 	private static final String CMD = "cmd";
-	private static boolean EXIT = false;
+	private static boolean EXIT = true;
 	
 	private final OptionParser parser;
 	private ModuleRegistry moduleRegistry;

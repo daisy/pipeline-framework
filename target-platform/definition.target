@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="definition" sequenceNumber="1">
+<target name="definition">
 <locations>
 <location path="${project_loc}/../test" type="Directory"/>
 <location path="${project_loc}/../daisy.pipeline.frontend.site/target/site" type="Directory"/>
 <location path="${project_loc}/../daisy.pipeline.site/target/site" type="Directory"/>
 <location path="${project_loc}/../Main/bundle" type="Directory"/>
-<location path="${project_loc}/../../daisy-pipeline-modules/daisy.pipeline.modules.site/target/site/" type="Directory"/>
+<location path="${project_loc}/../../modules/daisy.pipeline.modules.site/target/site/" type="Directory"/>
 <location path="${project_loc}/../repo" type="Directory"/>
 </locations>
 <launcherArgs>
