@@ -45,7 +45,7 @@
     </fileSet>
     <!-- modules -->
     <fileSet>
-      <directory>../../daisy-pipeline-modules/daisy.pipeline.modules.site/target/site/plugins</directory>
+      <directory>../../modules/daisy.pipeline.modules.site/target/site/plugins</directory>
       <outputDirectory>modules</outputDirectory>
       <includes>
         <include>*.jar</include>

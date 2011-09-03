@@ -1,5 +1,5 @@
 ###############################################################################
-###          DAISY Pipeline 2 - 1.0 Beta 2 - July 2nd, 2011                 ###
+###          DAISY Pipeline 2 - 1.0 Beta 3 - September 3d, 2011             ###
 ###############################################################################
 
 
@@ -53,27 +53,26 @@ The package includes:
 The changes since the last release are:
 
  * Framework
-   * adopted Apache Felix as the underlying OSGi framework (instead of Eclipse Equinox)
-   * the launcher is now the built-in Felix launcher (instead of Pax Runner)
-     * reduced startup time
-     * no more "Pax Runner" ASCII banner
-   * adopted Apache Felix File Install to configure the installed bundles and start levels
-   * updated and fixed the logging framework (based on SLF4J + Logback)
+   * major overhaul of the core framework components
+   * revamped XProc, Script and Job APIs
+   * improved thread safety
+   * updated the underlying XProc engine to the latest Calabash build
+   * updated third-party dependencies (SLF4J+LogBack, Google Guava)
+   * updated the OSGi runtime configuration
  * Web service
-   * Restlet logging statements are now intercepted, using the JUL bridge for SLF4J
-   * Converters are now identified with their URI, in a query parameter
-   * minor fixes
+   * Updated the web service to the revamped APIs
+   * Input files can now be sent as a ZIP
+   * Improved validation of request formats
+   * Sample Ruby-based client (available in the source repository)
  * Modules
-   * daisy202-to-epub3: added an option to generate an NCX from the EPUB 3 Navigation Document
-   * daisy202-to-epub3: production of Media Overlays is now optional
-   * epub3-nav-utils: added an XSLT to generate an NCX from an EPUB 3 Navigation Document
-   * fileset-utils: bug fixes
-   * mediaoverlay-utils: added XSLTs to extract audio and text referenced from SMIL files
+   * all: updated the Script metadata
+   * epub3-ocf-utils: fixed the ZIP step
+   * dtbook-to-zedai: added referenced files copying
+   * dtbook-to-zedai: fixed imggroup/caption issue
+   * dtbook-to-zedai: minor fixes
 
 The full list of changes can be found at:
  http://code.google.com/p/daisy-pipeline/w/ReleaseNotes
-
-
 
 4. Prerequisites                   
 -------------------------------------------------------------------------------
@@ -92,14 +91,14 @@ A) Command line tool:
 
  1. get the short help by running the launcher script 'dp2.sh' on
  Mac/Linux or 'dp2.bat' on Windows
- 2. run with option '-c' to get the list of converters
- 3. run 'dp2.sh -h a-converter-name' to get the list of arguments for a
+ 2. run with option '-s' to get the list of scripts
+ 3. run 'dp2.sh -h script-name' to get the detailed description of a script
  converter
- 4. execute a job with the '-c converter-name -a list-of-arguments' options
+ 4. execute a job with the '-s script-name -i list-of-sources -t list-of-options' options
 
 For instance:
 
-> dp2.bat -c dtbook-to-zedai -a in=file:/D:/path/to/dtbook.xml,o=file:/path/to/out/zedai.xml
+> dp2.bat -s dtbook-to-zedai -i source=D:/path/to/dtbook.xml -t opt-output-dir=file:/path/to/out/zedai.xml
 
 will run the DTBook to ZedAI converter on Windows.
 
@@ -108,7 +107,7 @@ B) RESTful Web Service:
 
  1. start the web service by running './dp2ws.sh' on Mac/Linux or 'dp2ws.bat' on Windows
  2. the web service is available on http://localhost:8182/ws/
- 3. get the list of converters by issuing a GET request on http://localhost:8182/ws/converters
+ 3. get the list of scripts by issuing a GET request on http://localhost:8182/ws/scripts
 
 
 
@@ -119,28 +118,17 @@ Command line usage:
 
 Option                                  Description                            
 ------                                  -----------                            
--a                                      list of arguments in the format        
-                                          arg1=value1,arg2=value2 (only with - 
-                                          c modifier)                          
--c [converter]                          List of available converters or if a   
-                                          converter name is present it will be 
-                                          executed using the -a arguments      
--h [converter]                          Showe this help or the help for the    
+-h [converter]                          show this help or the help for the     
                                           given converter                      
--i                                      list of input ports in the format      
-                                          portName1=file1,portName2=file2      
-                                          (only with -x modifier)              
--l                                      List of available uris                 
--o                                      list of output ports in the format     
-                                          portName1=file1,portName2=file2      
--p                                      list of parameters in the format       
-                                          port1=param1=value1,                 
-                                          port1=param2=value2 (only with -x    
-                                          modifier)                            
--t                                      list of options in the format          
-                                          opt1=value1,opt2=value2 (only with - 
-                                          x modifier)                          
--x                                      xproc file to execute
+-i <portName1=file1,...>                list of input ports                    
+-l                                      list of available uris                 
+-o <portName1=file1,...>                list of output ports                   
+-p <port1=param1=value1,...>            list of parameters                     
+-s [script name]                        list of available scripts or if a      
+                                          script name is present it will be    
+                                          executed                             
+-t <opt1=value1,...>                    list of options                        
+-x <XProc document>                     xproc file to execute
 
 
 The Web service API is documented on the Pipeline 2 development wiki:
@@ -157,7 +145,6 @@ development wiki:
 
 Framework:
  - the installation path must not contain space characters
- - converter arguments must be absolute 'file:' URIs
  - the execution messages are only available in the debug log, and are
  not very user-friendly
  - no support for localization
