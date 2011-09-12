@@ -4,6 +4,8 @@ import java.net.URI;
 
 import javax.xml.transform.URIResolver;
 
+import org.daisy.common.messaging.DefaultMessageListenerFactory;
+import org.daisy.common.messaging.MessageListenerFactory;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipeline;
@@ -15,30 +17,39 @@ import org.xml.sax.EntityResolver;
 
 //TODO check thread safety
 public final class CalabashXProcEngine implements XProcEngine {
-	
-	private static final Logger logger = LoggerFactory.getLogger(CalabashXProcEngine.class);
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(CalabashXProcEngine.class);
+
+	private boolean schemaAware = false;
 	private URIResolver uriResolver = null;
 	private EntityResolver entityResolver = null;
 	private XProcConfigurationFactory configFactory = null;
 
-	public CalabashXProcEngine() {
-		// FIXME: default entity resolver
-		entityResolver = new CalabashXprocEntityResolver();
-	}
+	private MessageListenerFactory messageListenerFactory;
+
 	
+
+	public CalabashXProcEngine() {
+		//FIXME: default entity resolver
+		entityResolver= new CalabashXprocEntityResolver();
+	}
+
 	public void activate(){
 		logger.trace("Activating XProc Engine");
 	}
-	
+
 	@Override
 	public XProcPipeline load(URI uri) {
 		if (configFactory == null) {
 			throw new IllegalStateException(
 					"Calabash configuration factory unavailable");
 		}
-		return new CalabashXProcPipeline(uri, configFactory, uriResolver,
-				entityResolver);
+		XProcMessageListenerAggregator listeners= new XProcMessageListenerAggregator();
+		listeners.add(new slf4jXProcMessageListener());
+		if(messageListenerFactory!=null)
+			listeners.addAsAccessor(new MessageListenerWrapper(messageListenerFactory.createMessageListener()));
+		return new CalabashXProcPipeline(uri, configFactory, uriResolver, entityResolver,listeners);
 	}
 
 	@Override
@@ -61,6 +72,10 @@ public final class CalabashXProcEngine implements XProcEngine {
 
 	public void setUriResolver(URIResolver uriResolver) {
 		this.uriResolver = uriResolver;
+	}
+	
+	public void setMessageListenerFactory(MessageListenerFactory factory){
+		this.messageListenerFactory=factory;
 	}
 
 }

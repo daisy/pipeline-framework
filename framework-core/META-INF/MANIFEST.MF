@@ -12,6 +12,7 @@ Import-Package:
  javax.xml.transform,
  org.daisy.common.base,
  org.daisy.common.xproc,
+ org.daisy.common.messaging,
  org.slf4j
 Export-Package: org.daisy.pipeline.job,
  org.daisy.pipeline.script

@@ -1,7 +1,7 @@
 package org.daisy.pipeline.webservice;
 
 import java.io.File;
-import java.util.zip.ZipFile;
+import java.net.URI;
 
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
@@ -40,13 +40,13 @@ public class ResultResource extends ServerResource {
     	}
     	
 		JobResult result = job.getResult();
-		ZipFile zip = result.getZip();
+		URI zip = result.getZip();
 		// TODO check for errors instead of looking at null-ness of zip
 		if (zip == null) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
     		return null;
 		}
-		FileRepresentation rep = new FileRepresentation(new File(zip.getName()), MediaType.APPLICATION_ZIP);
+		FileRepresentation rep = new FileRepresentation(new File(zip), MediaType.APPLICATION_ZIP);
 		setStatus(Status.SUCCESS_OK);
 		return rep;
     }  

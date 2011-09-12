@@ -12,6 +12,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.base.Provider;
+import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipeline;
@@ -23,6 +24,7 @@ import org.xml.sax.EntityResolver;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.xmlcalabash.core.XProcConfiguration;
+import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.model.DeclareStep;
 import com.xmlcalabash.model.Input;
@@ -37,6 +39,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	private final XProcConfigurationFactory configFactory;
 	private final URIResolver uriResolver;
 	private final EntityResolver entityResolver;
+	private final XProcMessageListenerAggregator xProcMessageListener;
 	private final Supplier<PipelineInstance> pipelineSupplier = new Supplier<PipelineInstance>() {
 
 		@Override
@@ -50,7 +53,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			if (entityResolver != null) {
 				runtime.setEntityResolver(entityResolver);
 			}
-
+			runtime.setMessageListener(xProcMessageListener);
 			XPipeline xpipeline = null;
 
 			try {
@@ -98,11 +101,12 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			});
 
 	public CalabashXProcPipeline(URI uri, XProcConfigurationFactory configFactory,
-			URIResolver uriResolver, EntityResolver entityResolver) {
+			URIResolver uriResolver, EntityResolver entityResolver,XProcMessageListenerAggregator messageListener) {
 		this.uri = uri;
 		this.configFactory = configFactory;
 		this.uriResolver = uriResolver;
 		this.entityResolver = entityResolver;
+		this.xProcMessageListener = messageListener;
 	}
 
 	@Override
@@ -156,12 +160,15 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		try {
 			return builder.build(source);
 		} catch (SaxonApiException sae) {
+			// TODO better exception handling
 			throw new RuntimeException(sae.getMessage(), sae);
 		}
 	}
-	
 
-
+	@Override
+	public MessageAccessor getMessages() {
+		return this.xProcMessageListener.getAccessor();
+	}
 	private static final class PipelineInstance {
 		private final XPipeline xpipe;
 		private final XProcConfiguration config;

@@ -7,4 +7,5 @@ Bundle-Vendor: DAISY Consortium
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.daisy.common.xproc
 Import-Package: com.google.common.collect,
- org.daisy.common.base
+ org.daisy.common.base,
+ org.daisy.common.messaging

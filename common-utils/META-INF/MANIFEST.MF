@@ -5,4 +5,7 @@ Bundle-SymbolicName: org.daisy.common-utils
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: DAISY Consortium
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: org.daisy.common.base
+Export-Package: org.daisy.common.base,
+ org.daisy.common.messaging
+Import-Package: com.google.common.collect
+Service-Component: OSGI-INF/messaging.xml

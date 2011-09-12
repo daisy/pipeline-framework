@@ -1,12 +1,17 @@
 package org.daisy.pipeline.job;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
-
-import javax.xml.namespace.QName;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipOutputStream;
 
 public class IOHelper {
 	private static final int BLOCK_SIZE = 1024;
@@ -46,17 +51,20 @@ public class IOHelper {
 		File fout=new File(URI.create(base+"/"+path));
 		fout.getParentFile().mkdirs();
 		FileOutputStream fos=new FileOutputStream(fout);
-		
-		byte buff[]= new byte[BLOCK_SIZE];
-		int read=0;
-		while((read=is.read(buff))>0){
-			fos.write(buff,0,read);
-			
-		}
+		dump(is,fos);
 		fos.close();
 		is.close();
 	}
 
+	public static void dump(InputStream is,OutputStream os) throws IOException{
+		byte buff[]= new byte[BLOCK_SIZE];
+		int read=0;
+		while((read=is.read(buff))>0){
+			os.write(buff,0,read);
+			
+		}
+	}
+	
 	public static String generateOutput(String name, String type, String mediaType) {
 		if(type.equals(IOBridge.ANY_DIR_URI)){
 			return name+"/";
@@ -65,5 +73,32 @@ public class IOHelper {
 			return name+".xml";
 		}
 		
+	}
+
+	public static List<File> treeFileList(File base) {
+		LinkedList<File> result= new LinkedList<File>();
+		for(File f:base.listFiles()){
+			if(f.isDirectory()){
+				result.addAll(treeFileList(f));
+			}else{
+				result.add(f);
+			}
+		}
+		return result;
+	}
+
+	public static URI zipFromEntries(List<File> files, File output,String pathMask) throws ZipException, IOException {
+		ZipOutputStream zipOs = new ZipOutputStream(new FileOutputStream(output));
+		
+		for(File f:files){
+			ZipEntry entry= new ZipEntry(f.toString().replace(pathMask, ""));
+			zipOs.putNextEntry(entry);
+			InputStream is=new FileInputStream(f);
+			dump(is,zipOs);
+			is.close();
+			
+		}
+		zipOs.close();
+		return output.toURI();
 	}
 }

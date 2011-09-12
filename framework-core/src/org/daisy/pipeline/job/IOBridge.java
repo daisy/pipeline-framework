@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashSet;
+import java.util.List;
+import java.util.zip.ZipException;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
@@ -28,8 +30,11 @@ public class IOBridge {
 	}
 	private File mContextDir;
 	private File mOutputDir;
+	private File mBaseDir;
 
 	public IOBridge(File baseDir) throws IOException {
+		mBaseDir=baseDir;
+		mBaseDir.mkdirs();
 		mContextDir = new File(baseDir + File.separator
 				+ IOConstants.IO_DATA_SUBDIR);
 		if (!mContextDir.exists() && !mContextDir.mkdirs()) {
@@ -167,5 +172,13 @@ public class IOBridge {
 			}
 		}
 	}
-
+	public URI zipOutput(){
+		List<File> files = IOHelper.treeFileList(this.mOutputDir);
+		try {
+			URI zipFile = IOHelper.zipFromEntries(files,new File(mBaseDir,"results.zip"),mOutputDir.getAbsolutePath()+File.separator);
+			return zipFile;
+		} catch (Exception e) {
+			throw new RuntimeException("Error while building zip file with the results:"+e.getMessage(),e);
+		}
+	}
 }

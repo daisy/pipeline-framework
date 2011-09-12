@@ -2,7 +2,9 @@ package org.daisy.pipeline.job;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
+import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipeline;
@@ -28,18 +30,21 @@ public class Job {
 		// TODO check arguments
 		JobId id = JobIdFactory.newId();
 		// FIXME "common path"+id.toString
-		
+
 		try {
-			if (System.getProperty(ORG_DAISY_PIPELINE_IOBASE)==null){
-				throw new IllegalStateException("The property "+ORG_DAISY_PIPELINE_IOBASE+" is not set");
+			if (System.getProperty(ORG_DAISY_PIPELINE_IOBASE) == null) {
+				throw new IllegalStateException("The property "
+						+ ORG_DAISY_PIPELINE_IOBASE + " is not set");
 			}
-			File ioBase=new File(System.getProperty(ORG_DAISY_PIPELINE_IOBASE));
+			File ioBase = new File(
+					System.getProperty(ORG_DAISY_PIPELINE_IOBASE));
 			ioBase.mkdir();
-			File dataDir = new File(ioBase,id.toString());
+			File dataDir = new File(ioBase, id.toString());
 			IOBridge bridge = new IOBridge(dataDir);
 			XProcInput resolvedInput = bridge.resolve(script, input, context);
+
 			// TODO validate input
-			return new Job(id, script, resolvedInput, dataDir);
+			return new Job(id, script, resolvedInput, bridge);
 		} catch (IOException e) {
 			throw new RuntimeException("Error resolving pipeline info", e);
 		}
@@ -50,29 +55,31 @@ public class Job {
 	private final XProcScript script;
 	private XProcResult output;
 	private JobResult results;
-	private final File dataDir;
+	private MessageAccessor messages;
+	private final IOBridge ioBridge;
 	private Status status = Status.IDLE;
 
-	private Job(JobId id, XProcScript script, XProcInput input, File dataDir) {
+	private Job(JobId id, XProcScript script, XProcInput input,
+			IOBridge ioBridge) {
 		// TODO check arguments
 		this.id = id;
 		this.script = script;
 		this.input = input;
-		this.dataDir = dataDir;
+		this.ioBridge = ioBridge;
 	}
-	
-	public JobId getId(){
+
+	public JobId getId() {
 		return id;
 	}
-	
-	public Status getStatus(){
+
+	public Status getStatus() {
 		return status;
 	}
 
 	public XProcScript getScript() {
 		return script;
 	}
-	
+
 	XProcResult getXProcOutput() {
 		return null;
 	}
@@ -83,7 +90,9 @@ public class Job {
 		XProcPipeline pipeline = engine.load(script.getURI());
 		output = pipeline.run(input);
 		status = Status.DONE;
-		results = new JobResult();
+		messages = pipeline.getMessages();
+		results=new JobResult.Builder().withMessageAccessor(messages)
+				.withZipFile(this.ioBridge.zipOutput()).build();
 	}
 
 	public JobResult getResult() {
