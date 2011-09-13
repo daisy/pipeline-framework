@@ -13,6 +13,7 @@ import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.base.Provider;
 import org.daisy.common.messaging.MessageAccessor;
+import org.daisy.common.messaging.MessageListenerFactory;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipeline;
@@ -24,7 +25,6 @@ import org.xml.sax.EntityResolver;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.xmlcalabash.core.XProcConfiguration;
-import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.model.DeclareStep;
 import com.xmlcalabash.model.Input;
@@ -39,9 +39,11 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	private final XProcConfigurationFactory configFactory;
 	private final URIResolver uriResolver;
 	private final EntityResolver entityResolver;
-	private final XProcMessageListenerAggregator xProcMessageListener;
+	private final MessageListenerFactory messageListenerFactory;
+	 	
+	
 	private final Supplier<PipelineInstance> pipelineSupplier = new Supplier<PipelineInstance>() {
-
+	
 		@Override
 		public PipelineInstance get() {
 			XProcConfiguration config = configFactory.newConfiguration();
@@ -53,7 +55,11 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			if (entityResolver != null) {
 				runtime.setEntityResolver(entityResolver);
 			}
-			runtime.setMessageListener(xProcMessageListener);
+			
+			XProcMessageListenerAggregator listeners = new XProcMessageListenerAggregator();
+			listeners.add(new slf4jXProcMessageListener());
+			listeners.addAsAccessor(new MessageListenerWrapper(messageListenerFactory.createMessageListener()));
+			runtime.setMessageListener(listeners);
 			XPipeline xpipeline = null;
 
 			try {
@@ -61,7 +67,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			} catch (SaxonApiException e) {
 				throw new RuntimeException(e.getMessage(), e);
 			}
-			return new PipelineInstance(xpipeline, config);
+			return new PipelineInstance(xpipeline, config,listeners.getAccessor());
 		}
 	};
 	private final Supplier<XProcPipelineInfo> info = Suppliers
@@ -99,14 +105,15 @@ public class CalabashXProcPipeline implements XProcPipeline {
 					return builder.build();
 				}
 			});
+	
 
 	public CalabashXProcPipeline(URI uri, XProcConfigurationFactory configFactory,
-			URIResolver uriResolver, EntityResolver entityResolver,XProcMessageListenerAggregator messageListener) {
+			URIResolver uriResolver, EntityResolver entityResolver,MessageListenerFactory messageListenerFactory) {
 		this.uri = uri;
 		this.configFactory = configFactory;
 		this.uriResolver = uriResolver;
 		this.entityResolver = entityResolver;
-		this.xProcMessageListener = messageListener;
+		this.messageListenerFactory = messageListenerFactory;
 	}
 
 	@Override
@@ -149,7 +156,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		} catch (SaxonApiException e) {
 			e.printStackTrace();
 		}
-		return CalabashXProcResult.newInstance(pipeline.xpipe, pipeline.config);
+		return CalabashXProcResult.newInstance(pipeline.xpipe, pipeline.config,pipeline.messageAccessor);
 	}
 
 	private static XdmNode asXdmNode(Processor processor, Source source) {
@@ -165,17 +172,16 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		}
 	}
 
-	@Override
-	public MessageAccessor getMessages() {
-		return this.xProcMessageListener.getAccessor();
-	}
+	
 	private static final class PipelineInstance {
 		private final XPipeline xpipe;
 		private final XProcConfiguration config;
+		private final MessageAccessor messageAccessor;
 
-		private PipelineInstance(XPipeline xpipe, XProcConfiguration config) {
+		private PipelineInstance(XPipeline xpipe, XProcConfiguration config,MessageAccessor accessor) {
 			this.xpipe = xpipe;
 			this.config = config;
+			this.messageAccessor=accessor;
 		}
 	}
 }

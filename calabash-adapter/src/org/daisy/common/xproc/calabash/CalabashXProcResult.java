@@ -15,6 +15,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 
 import org.daisy.common.base.Provider;
+import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
 
@@ -26,14 +27,16 @@ public final class CalabashXProcResult implements XProcResult {
 
 	private final XPipeline xpipeline;
 	private final XProcConfiguration configuration;
+	private final MessageAccessor messageAccessor;
 
-	static XProcResult newInstance(XPipeline xpipeline,XProcConfiguration configuration) {
-		return new CalabashXProcResult(xpipeline,configuration);
+	static XProcResult newInstance(XPipeline xpipeline,XProcConfiguration configuration,MessageAccessor accessor) {
+		return new CalabashXProcResult(xpipeline,configuration,accessor);
 	}
 
-	private CalabashXProcResult(XPipeline xpipeline,XProcConfiguration configuration) {
+	private CalabashXProcResult(XPipeline xpipeline,XProcConfiguration configuration,MessageAccessor accessor) {
 		this.xpipeline = xpipeline;
 		this.configuration = configuration;
+		this.messageAccessor=accessor;
 	}
 
 	@Override
@@ -84,6 +87,11 @@ public final class CalabashXProcResult implements XProcResult {
 				}
 			}
 		}
+	}
+
+	@Override
+	public MessageAccessor getMessages() {
+		return this.messageAccessor;
 	}
 
 }

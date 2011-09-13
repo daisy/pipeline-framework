@@ -2,9 +2,7 @@ package org.daisy.pipeline.job;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
-import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipeline;
@@ -55,7 +53,6 @@ public class Job {
 	private final XProcScript script;
 	private XProcResult output;
 	private JobResult results;
-	private MessageAccessor messages;
 	private final IOBridge ioBridge;
 	private Status status = Status.IDLE;
 
@@ -90,9 +87,14 @@ public class Job {
 		XProcPipeline pipeline = engine.load(script.getURI());
 		output = pipeline.run(input);
 		status = Status.DONE;
-		messages = pipeline.getMessages();
-		results=new JobResult.Builder().withMessageAccessor(messages)
-				.withZipFile(this.ioBridge.zipOutput()).build();
+		
+		JobResult.Builder builder = new JobResult.Builder();
+		builder.withMessageAccessor(output.getMessages());
+		builder=(this.ioBridge!=null)? builder.withZipFile(ioBridge.zipOutput()):builder;
+		results=builder.build();
+		
+			
+		
 	}
 
 	public JobResult getResult() {

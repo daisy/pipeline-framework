@@ -4,7 +4,6 @@ import java.net.URI;
 
 import javax.xml.transform.URIResolver;
 
-import org.daisy.common.messaging.DefaultMessageListenerFactory;
 import org.daisy.common.messaging.MessageListenerFactory;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
@@ -21,11 +20,10 @@ public final class CalabashXProcEngine implements XProcEngine {
 	private static final Logger logger = LoggerFactory
 			.getLogger(CalabashXProcEngine.class);
 
-	private boolean schemaAware = false;
+
 	private URIResolver uriResolver = null;
 	private EntityResolver entityResolver = null;
 	private XProcConfigurationFactory configFactory = null;
-
 	private MessageListenerFactory messageListenerFactory;
 
 	
@@ -45,11 +43,8 @@ public final class CalabashXProcEngine implements XProcEngine {
 			throw new IllegalStateException(
 					"Calabash configuration factory unavailable");
 		}
-		XProcMessageListenerAggregator listeners= new XProcMessageListenerAggregator();
-		listeners.add(new slf4jXProcMessageListener());
-		if(messageListenerFactory!=null)
-			listeners.addAsAccessor(new MessageListenerWrapper(messageListenerFactory.createMessageListener()));
-		return new CalabashXProcPipeline(uri, configFactory, uriResolver, entityResolver,listeners);
+	
+		return new CalabashXProcPipeline(uri, configFactory, uriResolver, entityResolver,messageListenerFactory);
 	}
 
 	@Override

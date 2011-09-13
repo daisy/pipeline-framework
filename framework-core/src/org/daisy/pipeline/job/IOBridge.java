@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.List;
-import java.util.zip.ZipException;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
