@@ -12,7 +12,7 @@ import org.daisy.pipeline.script.XProcScript;
 //TODO check thread safety
 public class Job {
 
-	private static final String ORG_DAISY_PIPELINE_IOBASE = "org.daisy.pipeline.iobase";
+	
 
 	public static enum Status {
 		IDLE, RUNNING, DONE
@@ -30,15 +30,8 @@ public class Job {
 		// FIXME "common path"+id.toString
 
 		try {
-			if (System.getProperty(ORG_DAISY_PIPELINE_IOBASE) == null) {
-				throw new IllegalStateException("The property "
-						+ ORG_DAISY_PIPELINE_IOBASE + " is not set");
-			}
-			File ioBase = new File(
-					System.getProperty(ORG_DAISY_PIPELINE_IOBASE));
-			ioBase.mkdir();
-			File dataDir = new File(ioBase, id.toString());
-			IOBridge bridge = new IOBridge(dataDir);
+			
+			IOBridge bridge = new IOBridge(id);
 			XProcInput resolvedInput = bridge.resolve(script, input, context);
 
 			// TODO validate input
@@ -90,6 +83,7 @@ public class Job {
 		
 		JobResult.Builder builder = new JobResult.Builder();
 		builder.withMessageAccessor(output.getMessages());
+		builder.withLogFile(ioBridge.getLogFile());
 		builder=(this.ioBridge!=null)? builder.withZipFile(ioBridge.zipOutput()):builder;
 		results=builder.build();
 		

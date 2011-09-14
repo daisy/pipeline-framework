@@ -18,7 +18,7 @@ import org.daisy.pipeline.script.XProcOptionMetadata.Direction;
 import org.daisy.pipeline.script.XProcScript;
 
 public class IOBridge {
-
+	public static final String ORG_DAISY_PIPELINE_IOBASE = "org.daisy.pipeline.iobase";
 	public static final String ANY_FILE_URI = "anyFileURI";
 	public static final String ANY_DIR_URI = "anyDirURI";
 	static HashSet<String> OPTIONS_TO_TRANSLATE = new HashSet<String>();
@@ -30,24 +30,36 @@ public class IOBridge {
 	private File mContextDir;
 	private File mOutputDir;
 	private File mBaseDir;
-
-	public IOBridge(File baseDir) throws IOException {
-		mBaseDir=baseDir;
+	private JobId mId;
+	public IOBridge(JobId id) throws IOException {
+		mId=id;
+		
+		if (System.getProperty(ORG_DAISY_PIPELINE_IOBASE) == null) {
+			throw new IllegalStateException("The property "
+					+ ORG_DAISY_PIPELINE_IOBASE + " is not set");
+		}
+				
+		File ioBase = new File(
+				System.getProperty(ORG_DAISY_PIPELINE_IOBASE));
+		ioBase.mkdir();
+		mBaseDir = new File(ioBase, id.toString());
 		mBaseDir.mkdirs();
-		mContextDir = new File(baseDir + File.separator
+		
+		mContextDir = new File(mBaseDir + File.separator
 				+ IOConstants.IO_DATA_SUBDIR);
 		if (!mContextDir.exists() && !mContextDir.mkdirs()) {
 			throw new IOException("Could not create context dir:"
 					+ mContextDir.getAbsolutePath());
 		}
 		;
-		mOutputDir = new File(baseDir + File.separator
+		mOutputDir = new File(mBaseDir + File.separator
 				+ IOConstants.IO_OUTPUT_SUBDIR);
 		if (!mOutputDir.exists() && !mOutputDir.mkdirs()) {
 			throw new IOException("Could not create context dir:"
 					+ mOutputDir.getAbsolutePath());
 		}
 		;
+		
 	}
 
 	public XProcInput resolve(XProcScript script, XProcInput input,
@@ -179,5 +191,9 @@ public class IOBridge {
 		} catch (Exception e) {
 			throw new RuntimeException("Error while building zip file with the results:"+e.getMessage(),e);
 		}
+	}
+
+	public URI getLogFile() {
+		return new File(this.mBaseDir,mId.toString()+".log").toURI();
 	}
 }

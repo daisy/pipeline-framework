@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import org.daisy.common.xproc.XProcEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 public class DefaultJobExecutionService implements JobExecutionService {
 
@@ -28,7 +29,11 @@ public class DefaultJobExecutionService implements JobExecutionService {
 			
 			@Override
 			public void run() {
+				logger.info("Starting to log to job's log file too");
+				MDC.put("jobid", job.getId().toString());
 				job.run(xprocEngine);
+				MDC.remove("jobid");
+				logger.info("Stopping to log to job's log file");
 			}
 		});
 	}

@@ -41,7 +41,18 @@ public class IOBridgeTest {
 		tmpDir.delete();
 		tmpDir = new File(name);
 		tmpDir.mkdir();
-		bridge = new IOBridge(tmpDir);
+		System.setProperty(IOBridge.ORG_DAISY_PIPELINE_IOBASE, tmpDir.getAbsolutePath());
+		bridge = new IOBridge(new JobId() {
+			
+			@Override
+			public int compareTo(JobId o) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			public String toString(){
+				return "";
+			}
+		});
 		XProcPortInfo portInf = XProcPortInfo.newInputPort("source", false,
 				true);
 		XProcOptionInfo optionInf = XProcOptionInfo.newOption(new QName(

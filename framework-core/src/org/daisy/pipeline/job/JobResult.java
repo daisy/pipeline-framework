@@ -11,6 +11,7 @@ public class JobResult {
 	public static class Builder {
 		URI mZipFile;
 		MessageAccessor mMessages;
+		URI mLogFile;
 
 		public Builder withMessageAccessor(MessageAccessor messageAccessor) {
 			mMessages = messageAccessor;
@@ -21,19 +22,25 @@ public class JobResult {
 			mZipFile = zipFile;
 			return this;
 		}
-
-		public JobResult build() {
-			return new JobResult(mZipFile, mMessages);
+		public Builder withLogFile(URI logFile) {
+			this.mLogFile=logFile;
+			return this;
 		}
+		public JobResult build() {
+			return new JobResult(mZipFile, mMessages,mLogFile);
+		}
+
+		
 	}
 
 	final URI mZipFile;
 	final MessageAccessor mMessages;
-
-	private JobResult(URI zipFile, MessageAccessor messages) {
+	final URI mLogFile;
+	private JobResult(URI zipFile, MessageAccessor messages,URI logFile) {
 		super();
 		mZipFile = zipFile;
 		mMessages = messages;
+		mLogFile=logFile;
 	}
 
 	public List<Message> getErrors() {
@@ -52,6 +59,10 @@ public class JobResult {
 
 	public URI getZip() {
 		return mZipFile;
+	}
+	
+	public URI getLogFile(){
+		return mLogFile;
 	}
 
 }
