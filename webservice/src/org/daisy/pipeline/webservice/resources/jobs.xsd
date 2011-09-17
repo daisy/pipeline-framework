@@ -12,7 +12,7 @@
       <xs:sequence>
         <xs:element ref="data:script" maxOccurs="1" minOccurs="1"/>
         <xs:element ref="data:result" maxOccurs="1" minOccurs="0"/>
-        <xs:element ref="data:errors" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="data:messages" maxOccurs="1" minOccurs="0"/>
         <xs:element ref="data:log" maxOccurs="1" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="id" use="required" type="xs:string"/>
@@ -29,18 +29,16 @@
       <xs:attribute name="href" use="required" type="xs:anyURI"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="errors">
+  <xs:element name="messages">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="data:error" maxOccurs="unbounded"/>
+        <xs:element ref="data:error" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="data:warning" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="error">
-    <xs:complexType mixed="true">
-      <xs:attribute name="level" use="required" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
+  <xs:element name="error" type="xs:string"/>
+  <xs:element name="warning" type="xs:string"/>
   <xs:element name="log">
     <xs:complexType>
       <xs:attribute name="href" use="required" type="xs:anyURI"/>

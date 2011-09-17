@@ -1,26 +1,25 @@
 <jobs xmlns="http://www.daisy.org/ns/pipeline/data">
     <!--
         This job has completed and it has available results.
-        The log file will have more details about the errors.
+        There are no errors or warnings.
     -->
     <job id="job-id-01" status="DONE" xmlns="http://www.daisy.org/ns/pipeline/data">
         <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
-        <result href="http://ws.pipeline.org/jobs/job-id-01/result"/>
-        <errors>
-            <error level="WARNING">Warning about this job</error>
-        </errors>
+        <result href="http://ws.pipeline.org/jobs/job-id-01/result.zip"/>
+        <messages/>
         <log href="http://ws.pipeline.org/jobs/job-id-01/log"/>
     </job>
     
     <!--
         This job has completed but has no available results.
-        The error list reports a failure.
+        The messages list reports an error and a warning.
     -->
     <job id="job-id-02" status="DONE" xmlns="http://www.daisy.org/ns/pipeline/data">
         <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
-        <errors>
-            <error level="FATAL">Input XML dtbook.xml was not valid</error>
-        </errors>
+        <messages>
+            <error>Input XML dtbook.xml was not valid</error>
+            <warning>Warning about this job</warning>
+        </messages>
         <log href="http://ws.pipeline.org/jobs/job-id-02/log"/>
     </job>
     

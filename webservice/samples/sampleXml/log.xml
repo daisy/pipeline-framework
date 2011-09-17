@@ -1,6 +1,0 @@
-<log xmlns="http://www.daisy.org/ns/pipeline/data">
-    <job href="http://ws.pipeline.org/jobs/job-id-01"/>
-    <data>
-        plain text goes here
-    </data>
-</log>

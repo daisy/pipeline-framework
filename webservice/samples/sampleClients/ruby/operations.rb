@@ -58,11 +58,12 @@ def get_log(id)
     error "'Get log' requires an ID"
     return
   end
-  doc = Rest.get_log(id)
-  if doc == nil
-    return
-  end
-  display_log(doc.xpath("//log")[0])
+  # doc = Rest.get_log(id)
+  # if doc == nil
+  #   return
+  # end
+  # display_log(doc.xpath("//log")[0])
+  display_log(Rest.get_log(id), id)
 end
 
 def get_result(id)

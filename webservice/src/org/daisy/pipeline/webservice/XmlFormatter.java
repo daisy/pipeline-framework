@@ -12,6 +12,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.daisy.common.messaging.Message;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.Job;
@@ -218,7 +219,6 @@ public class XmlFormatter {
 			rootElm.setAttribute("status", "RUNNING");
 		}
 		
-		// TODO: get the script URI from the job (pending framework implementation)
 		Element scriptElm = doc.createElementNS(NS_PIPELINE_DATA, "script");
 		scriptElm.setAttribute("href", job.getScript().getURI().toString());
 		rootElm.appendChild(scriptElm);
@@ -226,40 +226,36 @@ public class XmlFormatter {
 		
 		if (status == Job.Status.DONE) {
 			Element resultElm = doc.createElementNS(NS_PIPELINE_DATA, "result");
-			resultElm.setAttribute("href", serverAddress + "/jobs/" + job.getId().toString() + "/result");
+			resultElm.setAttribute("href", serverAddress + "/jobs/" + job.getId().toString() + "/result.zip");
 			rootElm.appendChild(resultElm);
-		}
 		
-		/*
-		 * TODO incorporate errors (pending framework implementation)
-		 
-		Element errorsElm = doc.createElementNS(NS_PIPELINE_DATA, "errors");
-		
-		Iterator<org.daisy.pipeline.jobmanager.Error> it = jobStatus.getErrors().iterator();
-		
-		while(it.hasNext()) {
-			Element errorElm = doc.createElementNS(NS_PIPELINE_DATA, "error");
-			JobStatus.JobError err = (JobStatus.JobError)it.next();
-			if (err.getLevel() == org.daisy.pipeline.jobmanager.Error.Level.WARNING) {
-				errorElm.setAttribute("level", "warning");
+			// list the errors and warnings
+			Element messagesElm = doc.createElementNS(NS_PIPELINE_DATA, "messages");
+			Iterator<Message> it_error = job.getResult().getErrors().iterator();
+			while(it_error.hasNext()) {
+				Element errorElm = doc.createElementNS(NS_PIPELINE_DATA, "error");
+				Message err = it_error.next();
+				errorElm.setTextContent(err.getMsg());
+				messagesElm.appendChild(errorElm);
 			}
-			else if (err.getLevel() == org.daisy.pipeline.jobmanager.Error.Level.FATAL) {
-				errorElm.setAttribute("level", "fatal");
-			} 
-			else if (err.getLevel() == org.daisy.pipeline.jobmanager.Error.Level.ERROR) {
-				errorElm.setAttribute("level", "error");
+			
+			Iterator<Message> it_warn = job.getResult().getErrors().iterator();
+			while(it_warn.hasNext()) {
+				Element warningElm = doc.createElementNS(NS_PIPELINE_DATA, "warning");
+				Message warn = it_warn.next();
+				warningElm.setTextContent(warn.getMsg());
+				messagesElm.appendChild(warningElm);
 			}
-			errorElm.setTextContent(err.getDescription());
-			errorsElm.appendChild(errorElm);
-		}
-		
-		rootElm.appendChild(errorsElm);*/
-		
-		if (status == Job.Status.DONE) {
+			
+			rootElm.appendChild(messagesElm);
+			
+			
+			// reference the log file
 			Element logElm = doc.createElementNS(NS_PIPELINE_DATA, "log");
 			logElm.setAttribute("href", serverAddress + "/jobs/" + job.getId() + "/log");
 			rootElm.appendChild(logElm);
 		}
+		
 		return rootElm;
 	}
 	

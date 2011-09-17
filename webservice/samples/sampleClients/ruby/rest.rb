@@ -189,7 +189,7 @@ module Rest
 
   def get_job_result(id)
     begin
-      uri = URI.parse("#{Settings.instance.baseuri}jobs/#{id}/result")
+      uri = URI.parse("#{Settings.instance.baseuri}jobs/#{id}/result.zip")
       response = Net::HTTP.get_response(uri)
 
       case response
@@ -219,9 +219,7 @@ module Rest
       case response
         when Net::HTTPSuccess
           trace(response.body, "get job log")
-          doc = Nokogiri::XML(response.body)
-          doc.remove_namespaces!
-          return doc
+          return response.body
         when Net::HTTPInternalServerError
           error "Server blew up"
           return nil

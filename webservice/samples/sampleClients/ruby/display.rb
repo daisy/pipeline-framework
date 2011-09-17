@@ -50,6 +50,9 @@ def display_job(element)
   element.xpath(".//error").each do |err|
     puts "ERROR: #{err['level']}. #{err.content}"
   end
+  element.xpath(".//warning").each do |err|
+    puts "ERROR: #{err['level']}. #{err.content}"
+  end
   message("\n")
 end
 
@@ -73,8 +76,8 @@ def display_result(jobid, path)
   message("\n")
 end
 
-def display_log(element)
-  message("\nLog for job #{element.xpath("./job")[0]['href']}: ")
-  puts element.xpath("./data")[0].content
+def display_log(logfile, jobid)
+  message("\nLog for job #{jobid}: ")
+  puts logfile
   message("\n")
 end
