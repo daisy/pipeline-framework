@@ -7,10 +7,18 @@ import java.util.Map;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.script.XProcScript;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DefaultJobManager.
+ */
 public class DefaultJobManager implements JobManager {
 	
+	/** The jobs. */
 	private Map<JobId, Job> jobs= new HashMap<JobId, Job>();
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.job.JobManager#newJob(org.daisy.pipeline.script.XProcScript, org.daisy.common.xproc.XProcInput, org.daisy.pipeline.job.ResourceCollection)
+	 */
 	public Job newJob(XProcScript script, XProcInput input,
 			ResourceCollection context) {
 		Job job = Job.newJob(script, input, context);
@@ -18,21 +26,33 @@ public class DefaultJobManager implements JobManager {
 		return job;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.job.JobManager#newJob(org.daisy.pipeline.script.XProcScript, org.daisy.common.xproc.XProcInput)
+	 */
 	@Override
 	public Job newJob(XProcScript script, XProcInput input) {
 		return newJob(script, input, null);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.job.JobManager#getJobs()
+	 */
 	@Override
 	public Iterable<Job> getJobs() {
 		return Collections.unmodifiableCollection(jobs.values());
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.job.JobManager#deleteJob(org.daisy.pipeline.job.JobId)
+	 */
 	@Override
 	public Job deleteJob(JobId id) {
 		return jobs.remove(id);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.job.JobManager#getJob(org.daisy.pipeline.job.JobId)
+	 */
 	@Override
 	public Job getJob(JobId id) {
 		return jobs.get(id);

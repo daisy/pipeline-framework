@@ -8,22 +8,41 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
+
+/**
+ * The Class DefaultJobExecutionService.
+ */
 public class DefaultJobExecutionService implements JobExecutionService {
 
+	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory.getLogger(DefaultJobExecutionService.class);
+	
+	/** The xproc engine. */
 	private XProcEngine xprocEngine;
 	
+	/**
+	 * Sets the x proc engine.
+	 *
+	 * @param xprocEngine the new x proc engine
+	 */
 	public void setXProcEngine(XProcEngine xprocEngine) {
 		// TODO make it dynamic
 		this.xprocEngine = xprocEngine;
 	}
 
+	/** The executor. */
 	private ExecutorService executor = Executors.newCachedThreadPool(); 
 
+	/**
+	 * Activate.
+	 */
 	public void activate(){
 		logger.trace("Activating job execution service");
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.job.JobExecutionService#submit(org.daisy.pipeline.job.Job)
+	 */
 	public void submit(final Job job) {
 		executor.submit(new Runnable() {
 			

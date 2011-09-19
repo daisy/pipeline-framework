@@ -11,9 +11,20 @@ import org.daisy.common.base.Provider;
 
 import com.google.common.collect.ImmutableMap;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ZipResourceContext.
+ */
 public final class ZipResourceContext implements ResourceCollection {
+	
+	/** The resources. */
 	private final Map<String, Provider<InputStream>> resources;
 
+	/**
+	 * Instantiates a new zip resource context.
+	 *
+	 * @param zip the zip
+	 */
 	public ZipResourceContext(final ZipFile zip) {
 		ImmutableMap.Builder<String, Provider<InputStream>> mapBuilder = ImmutableMap
 				.builder();
@@ -36,16 +47,25 @@ public final class ZipResourceContext implements ResourceCollection {
 		this.resources = mapBuilder.build();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.job.ResourceCollection#getResources()
+	 */
 	@Override
 	public Iterable<Provider<InputStream>> getResources() {
 		return resources.values();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.job.ResourceCollection#getResource(java.lang.String)
+	 */
 	@Override
 	public Provider<InputStream> getResource(String name) {
 		return resources.get(name);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.job.ResourceCollection#getNames()
+	 */
 	@Override
 	public Iterable<String> getNames() {
 		return resources.keySet();

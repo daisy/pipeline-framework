@@ -17,20 +17,49 @@ import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.XProcOptionMetadata.Direction;
 import org.daisy.pipeline.script.XProcScript;
 
+
+/**
+ * The Class IOBridge handles some io operations relevant to the execution of pipelines.
+ */
 public class IOBridge {
+	
+	/** The Constant ORG_DAISY_PIPELINE_IOBASE. */
 	public static final String ORG_DAISY_PIPELINE_IOBASE = "org.daisy.pipeline.iobase";
+	
+	/** The Constant ANY_FILE_URI. */
 	public static final String ANY_FILE_URI = "anyFileURI";
+	
+	/** The Constant ANY_DIR_URI. */
 	public static final String ANY_DIR_URI = "anyDirURI";
+	
+	/** The OPTION s_ t o_ translate. */
 	static HashSet<String> OPTIONS_TO_TRANSLATE = new HashSet<String>();
+	
+	/** The m generated outputs. */
 	HashSet<String> mGeneratedOutputs = new HashSet<String>();
 	static {
 		OPTIONS_TO_TRANSLATE.add(ANY_DIR_URI);
 		OPTIONS_TO_TRANSLATE.add(ANY_FILE_URI);
 	}
+	
+	/** The m context dir. */
 	private File mContextDir;
+	
+	/** The m output dir. */
 	private File mOutputDir;
+	
+	/** The m base dir. */
 	private File mBaseDir;
+	
+	/** The m id. */
 	private JobId mId;
+	
+	/**
+	 * Instantiates a new iO bridge to be used by the job having the id provided
+	 *
+	 * @param id the id
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public IOBridge(JobId id) throws IOException {
 		mId=id;
 		
@@ -62,6 +91,15 @@ public class IOBridge {
 		
 	}
 
+	/**
+	 * Resolves the uris defined in the XProcInput input object to the actual files in the job context. 
+	 *
+	 * @param script the script
+	 * @param input the input
+	 * @param context the context
+	 * @return the x proc input
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public XProcInput resolve(XProcScript script, XProcInput input,
 			ResourceCollection context) throws IOException {
 		XProcInput.Builder resolvedInput = new XProcInput.Builder();
@@ -74,6 +112,13 @@ public class IOBridge {
 		return resolvedInput.build();
 	}
 
+	/**
+	 * Resolve params.
+	 *
+	 * @param script the script
+	 * @param input the input
+	 * @param resolvedInput the resolved input
+	 */
 	protected void resolveParams(XProcScript script, XProcInput input,
 			Builder resolvedInput) {
 
@@ -87,6 +132,13 @@ public class IOBridge {
 		}
 	}
 
+	/**
+	 * Resolve options, input/output options without value will be automaticaly assigned. 
+	 *
+	 * @param script the script
+	 * @param input the input
+	 * @param resolvedInput the resolved input
+	 */
 	protected void resolveOptions(XProcScript script, XProcInput input,
 			Builder resolvedInput) {
 		Iterable<XProcOptionInfo> optionInfos = script.getXProcPipelineInfo()
@@ -139,6 +191,12 @@ public class IOBridge {
 
 	}
 
+	/**
+	 * Store resources.
+	 *
+	 * @param context the context
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	protected void storeResources(ResourceCollection context)
 			throws IOException {
 		for (String path : context.getNames()) {
@@ -147,6 +205,14 @@ public class IOBridge {
 		}
 	}
 
+	/**
+	 * Resolve input ports.
+	 *
+	 * @param script the script
+	 * @param input the input
+	 * @param builder the builder
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	protected void resolveInputPorts(XProcScript script, XProcInput input,
 			XProcInput.Builder builder) throws IOException {
 		Iterable<XProcPortInfo> inputInfos = script.getXProcPipelineInfo()
@@ -183,6 +249,12 @@ public class IOBridge {
 			}
 		}
 	}
+	
+	/**
+	 * Zips outputs of the execution
+	 *
+	 * @return the uRI
+	 */
 	public URI zipOutput(){
 		List<File> files = IOHelper.treeFileList(this.mOutputDir);
 		try {
@@ -193,6 +265,11 @@ public class IOBridge {
 		}
 	}
 
+	/**
+	 * Gets the log file.
+	 *
+	 * @return the log file
+	 */
 	public URI getLogFile() {
 		return new File(this.mBaseDir,mId.toString()+".log").toURI();
 	}
