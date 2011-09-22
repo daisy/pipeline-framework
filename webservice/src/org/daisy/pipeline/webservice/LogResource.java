@@ -38,6 +38,12 @@ public class LogResource extends ServerResource {
     		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return null;
     	}
+		
+		if (!job.getStatus().equals(Job.Status.DONE)) {
+    		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+    		return null;
+    	}
+    	
     	setStatus(Status.SUCCESS_OK);
     	
     	FileRepresentation logfile;
