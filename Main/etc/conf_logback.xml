@@ -48,5 +48,5 @@
     <appender-ref ref="STDOUT"/>
     <appender-ref ref="JOB"/>
   </root>
-  <logger name="com.xmlcalabash" level="INFO"/>
+  <logger name="com.xmlcalabash" level="WARN"/>
 </configuration>
