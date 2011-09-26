@@ -1,5 +1,5 @@
 ###############################################################################
-###          DAISY Pipeline 2 - 1.0 Beta 3 - September 3d, 2011             ###
+###          DAISY Pipeline 2 - 1.0 RC - September 26th, 2011               ###
 ###############################################################################
 
 
@@ -29,10 +29,8 @@ For more information see:
 2. Contents of the package
 -------------------------------------------------------------------------------
 
-This package is an early beta release for the 1.0 version due in September
-2011. This is beta software with many rough edges, and it is not feature
-complete. It however contains an operational runtime and a set of functional
-converters.
+This package is a release candidate for the 1.0 version due in September
+2011.
 
 The package includes:
 
@@ -53,23 +51,28 @@ The package includes:
 The changes since the last release are:
 
  * Framework
-   * major overhaul of the core framework components
-   * revamped XProc, Script and Job APIs
-   * improved thread safety
-   * updated the underlying XProc engine to the latest Calabash build
-   * updated third-party dependencies (SLF4J+LogBack, Google Guava)
-   * updated the OSGi runtime configuration
- * Web service
-   * Updated the web service to the revamped APIs
-   * Input files can now be sent as a ZIP
-   * Improved validation of request formats
-   * Sample Ruby-based client (available in the source repository)
+   * Improved logging configuration
+   * Added support for job messages
+   * Added support for job result ZIP
+   * Updated libs: Calabash, Saxon, Xerces
+   * Update
+ * Web Service
+   * The result ZIP is now available
+   * Logs are dispatched to the jobs output directories
  * Modules
-   * all: updated the Script metadata
-   * epub3-ocf-utils: fixed the ZIP step
-   * dtbook-to-zedai: added referenced files copying
-   * dtbook-to-zedai: fixed imggroup/caption issue
-   * dtbook-to-zedai: minor fixes
+   * daisy202-to-epub3: several enhancements
+   * epub3-pub-utils: support for scripted content detection
+   * epub3-pub-utils: support for MathML content detection
+   * epub3-pub-utils: support for remote resources detection
+   * epub3-pub-utils: support for SVG content detection
+   * epub3-pub-utils: support for epub:switch detection
+   * epub3-pub-utils: added support for setting the cover-image
+   * epub3-pub-utils: dcterms:modified is now systematically generated
+   * epub3-pub-utils: dc:identifier is now added if not present (UUID scheme)
+   * zedai-to-epub3: fixed bug with internal links in HTML chunks
+   * zedai-to-epub3: metadata is now copied to the OPF
+   * zedai-to-html: poor man's ZedAI to EPUB vocabulary translation
+   * zedai-to-html: several fixes
 
 The full list of changes can be found at:
  http://code.google.com/p/daisy-pipeline/w/ReleaseNotes
@@ -149,38 +152,28 @@ Framework:
  not very user-friendly
  - no support for localization
 
-DTBook to ZedAI:
- - see http://code.google.com/p/daisy-pipeline/issues/list?can=2&q=DTBook-to-ZedAI
-
 EPUB 3 production:
  - Supports only toc and page-list navigation
  - No support for font mangling
  - No support for encryption
 
-DAISY 2.02 to EPUB 3:
- - see the EPUB 3 production limitations
-
 ZedAI to EPUB 3:
- - no support for NCX generation
- - the produced EPUB 3 may be invalid
- - ZedAI to HTML is partially implemented
- - ZedAI Metadata is not extracted
- - HTML5 outline is modified when producing multiple HTML5 chunks
+ - HTML5 chunking is only based on top-level sections
  - No support for ZedAI XInclude
  - No support for non-book ZedAI Profiles and additional features
  - No support for ZedAI containers
 
-... and some known (and unknown) bugs!
+... and some known (and unknown) bugs, please refer to the issue tracker:
+ http://code.google.com/p/daisy-pipeline/issues/list
 
 
 
 8. Contact 
 -------------------------------------------------------------------------------
 
-If you wish to join the effort and contribute to the Pipeline 2 project, feel
-free to contact the project lead (Romain Deltour) via email at
- rdeltour(at)gmail(dot)com
-
-Or simply join us on the developers discussion list hosted on Google Groups:
+If you want to join the effort and contribute to the Pipeline 2 project, feel
+free to join us on the developers discussion list hosted on Google Groups:
  http://groups.google.com/group/daisy-pipeline-dev
 
+or contact the project lead (Romain Deltour) via email at
+ rdeltour(at)gmail(dot)com
