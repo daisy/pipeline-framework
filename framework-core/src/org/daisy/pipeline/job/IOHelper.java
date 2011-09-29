@@ -19,6 +19,8 @@ import java.util.zip.ZipOutputStream;
  */
 public class IOHelper {
 	
+	private static final String SLASH = "/";
+
 	/** The Constant BLOCK_SIZE. */
 	private static final int BLOCK_SIZE = 1024;
 	
@@ -69,7 +71,7 @@ public class IOHelper {
 	 * @return the new output folder
 	 */
 	public URI getNewOutputFolder(String base){
-		String fUri=base+"/"+mOutputFolderPreffix+"_"+(++mFolderOuts)+"/";
+		String fUri=base+SLASH+mOutputFolderPreffix+"_"+(++mFolderOuts)+SLASH;
 		return URI.create(fUri);
 	}
 	
@@ -81,7 +83,7 @@ public class IOHelper {
 	 * @return the new output file
 	 */
 	public URI getNewOutputFile(String base,String suffix){
-		String fUri=base+"/"+mOutputFilePreffix+"_"+(++mFileOuts)+suffix;
+		String fUri=base+SLASH+mOutputFilePreffix+"_"+(++mFileOuts)+suffix;
 		return URI.create(fUri);
 	}
 	
@@ -112,12 +114,17 @@ public class IOHelper {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public static void dump(InputStream is,String base,String path) throws IOException{
-		File fout=new File(URI.create(base+"/"+path));
-		fout.getParentFile().mkdirs();
-		FileOutputStream fos=new FileOutputStream(fout);
-		dump(is,fos);
-		fos.close();
-		is.close();
+			//linux & mac doesnt create empty files out of outstreams where nothing was written
+			//but win does, anyway this piece is more elegant than before.
+			File fout=new File(URI.create(base+SLASH+path));
+			if(!path.endsWith(SLASH)){
+				FileOutputStream fos=new FileOutputStream(fout);
+				dump(is,fos);
+				fos.close();
+				is.close();
+			}else{
+				fout.mkdirs();
+			}
 	}
 
 	/**
@@ -146,7 +153,7 @@ public class IOHelper {
 	 */
 	public static String generateOutput(String name, String type, String mediaType) {
 		if(type.equals(IOBridge.ANY_DIR_URI)){
-			return name+"/";
+			return name+SLASH;
 		}else{
 			//TODO try to generate the extension using the media type
 			return name+".xml";
