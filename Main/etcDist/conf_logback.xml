@@ -2,6 +2,23 @@
 
   <!-- see http://logback.qos.ch/manual/configuration.html#LevelChangePropagator -->
   <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator"/>
+    <appender name="JOB" class="ch.qos.logback.classic.sift.SiftingAppender">
+    <!-- in the absence of the class attribute, it is assumed that the
+         desired discriminator type is
+         ch.qos.logback.classic.sift.MDCBasedDiscriminator -->
+    <discriminator>
+      <key>jobid</key>
+    </discriminator>
+    <sift>
+      <appender name="FILE-${jobid}" class="ch.qos.logback.core.FileAppender">
+        <file>${org.daisy.pipeline.iobase}/${jobid}/${jobid}.log</file>
+        <append>false</append>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+     		<Pattern>%date [%-5level] %logger{36} - %msg%n</Pattern>
+        </layout>
+      </appender>
+    </sift>
+  </appender>
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>${org.daisy.pipeline.logdir}/daisy-pipeline.log</file>
@@ -27,6 +44,8 @@
 
   <root level="DEBUG">
     <appender-ref ref="FILE"/>
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="JOB"/>
   </root>
   <logger name="com.xmlcalabash" level="WARN"/>
 </configuration>

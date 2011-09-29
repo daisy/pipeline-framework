@@ -8,7 +8,6 @@
          ch.qos.logback.classic.sift.MDCBasedDiscriminator -->
     <discriminator>
       <key>jobid</key>
-      <defaultValue>unknown</defaultValue>
     </discriminator>
     <sift>
       <appender name="FILE-${jobid}" class="ch.qos.logback.core.FileAppender">
