@@ -252,7 +252,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 								dHolder.mDetail = reader.peek().asCharacters().getData();
 							} else if (event.isStartElement()
 									&& event.asStartElement().getName()
-											.equals(Elements.XD_SHORT)) {
+											.equals(Elements.XD_SHORT) && dHolder.mShort==null) {
 								reader.next();
 								dHolder.mShort = reader.peek().asCharacters()
 										.getData();

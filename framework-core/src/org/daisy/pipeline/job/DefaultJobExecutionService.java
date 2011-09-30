@@ -48,7 +48,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
 			
 			@Override
 			public void run() {
-				logger.info("Starting to log to job's log file too");
+				logger.info("Starting to log to job's log file too:"+job.getId().toString());
 				MDC.put("jobid", job.getId().toString());
 				job.run(xprocEngine);
 				MDC.remove("jobid");
