@@ -11,14 +11,14 @@ import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
 
-public class ScriptResource extends ServerResource {
+public class ScriptResource extends AuthenticatedResource {
 	private XProcScript script = null;
 	
 	@Override
 	public void doInit() {
 		super.doInit();
+		if (!isAuthenticated()) return;
 		URI scriptUri = null;
 		
 		try {
@@ -35,6 +35,11 @@ public class ScriptResource extends ServerResource {
 
 	@Get("xml")
 	public Representation getResource() {
+		if (!isAuthenticated()) {
+    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+    		return null;
+    	}
+    	
 		if (script == null) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return null;

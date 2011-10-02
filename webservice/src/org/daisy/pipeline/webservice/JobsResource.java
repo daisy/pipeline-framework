@@ -38,14 +38,13 @@ import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
-import org.restlet.resource.ServerResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-public class JobsResource extends ServerResource {
+public class JobsResource extends AuthenticatedResource {
 
 	// TODO make configurable
 	private String tempfileDir = "/tmp/";
@@ -54,6 +53,11 @@ public class JobsResource extends ServerResource {
 	
 	@Get("xml")
 	public Representation getResource() {
+		if (!isAuthenticated()) {
+    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+    		return null;
+    	}
+    	
 		String serverAddress = ((PipelineWebService) this.getApplication()).getServerAddress();
 		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager(); 
 		Document doc = XmlFormatter.jobsToXml(jobMan.getJobs(), serverAddress);
@@ -68,6 +72,11 @@ public class JobsResource extends ServerResource {
 	 */
 	@Post
     public Representation createResource(Representation representation) throws Exception {
+		if (!isAuthenticated()) {
+    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+    		return null;
+    	}
+    	
         if (representation == null) {
         	// POST request with no entity.
             setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
