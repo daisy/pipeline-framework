@@ -82,14 +82,15 @@ public class DynamicXProcConfigurationFactory implements
 			logger.debug("Reading Calabash configuration from {}", configPath);
 			// Make this absolute because sometimes it fails from the command
 			// line otherwise. WTF?
-			String cfgURI = URIUtils.cwdAsURI().resolve(configPath)
-					.toASCIIString();
-			SAXSource source = new SAXSource(new InputSource(cfgURI));
+			
+					
+			SAXSource source = new SAXSource(new InputSource(configPath));
 			DocumentBuilder builder = conf.getProcessor().newDocumentBuilder();
 			XdmNode doc;
 			try {
 				doc = builder.build(source);
 			} catch (SaxonApiException e) {
+				logger.error("Error loading configuration file",e);
 				throw new RuntimeException("error loading configuration file",
 						e);
 			}
