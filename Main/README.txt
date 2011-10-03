@@ -1,5 +1,5 @@
 ###############################################################################
-###          DAISY Pipeline 2 - 1.0 RC - September 26th, 2011               ###
+###            DAISY Pipeline 2 - 1.0 - October 3d, 2011                    ###
 ###############################################################################
 
 
@@ -11,6 +11,7 @@
  6. Documentation
  7. Known limitations
  8. Contact
+
 
 
 1. What is the DAISY Pipeline 2 ?
@@ -26,11 +27,11 @@ For more information see:
  - the development site: http://code.google.com/p/daisy-pipeline/
 
 
+
 2. Contents of the package
 -------------------------------------------------------------------------------
 
-This package is a release candidate for the 1.0 version due in September
-2011.
+This package is the 1.0 version of the Pipeline 2 project.
 
 The package includes:
 
@@ -45,37 +46,14 @@ The package includes:
  - a set of sample documents to test the provided conversions
 
 
+
 3. Release Notes
 -------------------------------------------------------------------------------
 
-The changes since the last release are:
-
- * Framework
-   * Improved logging configuration
-   * Added support for job messages
-   * Added support for job result ZIP
-   * Updated libs: Calabash, Saxon, Xerces
-   * Update
- * Web Service
-   * The result ZIP is now available
-   * Logs are dispatched to the jobs output directories
- * Modules
-   * daisy202-to-epub3: several enhancements
-   * epub3-pub-utils: support for scripted content detection
-   * epub3-pub-utils: support for MathML content detection
-   * epub3-pub-utils: support for remote resources detection
-   * epub3-pub-utils: support for SVG content detection
-   * epub3-pub-utils: support for epub:switch detection
-   * epub3-pub-utils: added support for setting the cover-image
-   * epub3-pub-utils: dcterms:modified is now systematically generated
-   * epub3-pub-utils: dc:identifier is now added if not present (UUID scheme)
-   * zedai-to-epub3: fixed bug with internal links in HTML chunks
-   * zedai-to-epub3: metadata is now copied to the OPF
-   * zedai-to-html: poor man's ZedAI to EPUB vocabulary translation
-   * zedai-to-html: several fixes
-
 The full list of changes can be found at:
  http://code.google.com/p/daisy-pipeline/w/ReleaseNotes
+
+
 
 4. Prerequisites                   
 -------------------------------------------------------------------------------
@@ -147,7 +125,6 @@ development wiki:
 -------------------------------------------------------------------------------
 
 Framework:
- - the installation path must not contain space characters
  - the execution messages are only available in the debug log, and are
  not very user-friendly
  - no support for localization
@@ -163,7 +140,7 @@ ZedAI to EPUB 3:
  - No support for non-book ZedAI Profiles and additional features
  - No support for ZedAI containers
 
-... and some known (and unknown) bugs, please refer to the issue tracker:
+... and other known (and unknown) issues, please refer to the issue tracker:
  http://code.google.com/p/daisy-pipeline/issues/list
 
 
