@@ -1,11 +1,7 @@
 #!/bin/bash
-if [ -n $(uname | grep -v linux) ]; then 
-	DP2_HOME=$(readlink -f $(dirname $0 ))
-else
-	pushd $(dirname $0) >/dev/null
-	DP2_HOME=$(pwd)
-	popd>/dev/null
-fi
+pushd $(dirname $0) >/dev/null
+DP2_HOME=$(pwd)
+popd>/dev/null
 JAVA=java
 DS_MODE="-Dorg.daisy.pipeline.mode=cmd"
 FELIX_CONF="file:$DP2_HOME/etc/config.properties"
