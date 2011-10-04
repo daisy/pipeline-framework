@@ -10,15 +10,15 @@ import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
 
 
-public class JobResource extends ServerResource {
+public class JobResource extends AuthenticatedResource {
 	private Job job;
 	
 	@Override  
     public void doInit() {  
 		super.doInit();
+		if (!isAuthenticated()) return;
 		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
         String idParam = (String) getRequestAttributes().get("id");  
         JobId id = JobIdFactory.newIdFromString(idParam);
@@ -27,6 +27,10 @@ public class JobResource extends ServerResource {
   
     @Get("xml")
     public Representation getResource() {  
+    	if (!isAuthenticated()) {
+    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+    		return null;
+    	}
     	if (job == null) {
     		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return null;
@@ -40,6 +44,11 @@ public class JobResource extends ServerResource {
     
 	@Delete
 	public void deleteResource() {
+		if (!isAuthenticated()) {
+    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+    		return;
+    	}
+    	
 		if (job == null) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 		}

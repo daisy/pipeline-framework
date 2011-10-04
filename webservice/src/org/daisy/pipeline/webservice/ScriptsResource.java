@@ -11,14 +11,14 @@ import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
 
-public class ScriptsResource extends ServerResource {
+public class ScriptsResource extends AuthenticatedResource {
 	ArrayList<XProcScript> scripts = null;
 	
 	@Override
 	public void doInit() {
 		super.doInit();
+		if (!isAuthenticated()) return;
 		ScriptRegistry scriptRegistry = ((PipelineWebService)this.getApplication()).getScriptRegistry();
 		Iterable<XProcScriptService> unfilteredScripts = scriptRegistry.getScripts();
 		Iterator<XProcScriptService> it = unfilteredScripts.iterator();
@@ -33,6 +33,11 @@ public class ScriptsResource extends ServerResource {
 	
 	@Get("xml")
 	public Representation getResource() {
+		if (!isAuthenticated()) {
+    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+    		return null;
+    	}
+    	
 		setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.xprocScriptsToXml(scripts));
 		return dom;

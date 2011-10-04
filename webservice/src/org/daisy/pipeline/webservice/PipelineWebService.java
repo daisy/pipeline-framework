@@ -6,10 +6,6 @@ import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Restlet;
 import org.restlet.data.Protocol;
-/*import org.restlet.ext.oauth.OAuthAuthorizer;
-import org.restlet.ext.oauth.ValidationServerResource;
-import org.restlet.resource.ServerResource;
-*/
 import org.restlet.routing.Router;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,29 +25,12 @@ public class PipelineWebService extends Application {
 	@Override
 	public Restlet createInboundRoot() {
 		Router router = new Router(getContext());
-		
-		
-        /*
-        // setup authorization
-        
-        router.attach("/validate", ValidationServerResource.class);
-        
-		OAuthAuthorizer auth = new OAuthAuthorizer(serverAddress + "/validate");
-		
-		auth.setNext(ScriptsResource.class);
-	    router.attach("/scripts", auth);
-		*/
-		
 		router.attach("/scripts", ScriptsResource.class);
-		// TODO: is there any way to route this as "/script{?id=uri}" in
-		// order to be more explicit about the params?
 		router.attach("/script", ScriptResource.class);
 		router.attach("/jobs", JobsResource.class);
 		router.attach("/jobs/{id}", JobResource.class);
 		router.attach("/jobs/{id}/log", LogResource.class);
 		router.attach("/jobs/{id}/result.zip", ResultResource.class);
-		
-		
 		return router;
 	}
 

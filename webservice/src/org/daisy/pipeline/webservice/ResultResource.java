@@ -13,14 +13,14 @@ import org.restlet.data.Status;
 import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
 
-public class ResultResource extends ServerResource {
+public class ResultResource extends AuthenticatedResource {
 	private Job job;
 	
 	@Override  
     public void doInit() {  
 		super.doInit();
+		if (!isAuthenticated()) return;
 		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
         String idParam = (String) getRequestAttributes().get("id");  
         JobId id = JobIdFactory.newIdFromString(idParam);
@@ -29,6 +29,11 @@ public class ResultResource extends ServerResource {
   
 	@Get
     public Representation getResource() {  
+		if (!isAuthenticated()) {
+    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+    		return null;
+    	}
+    	
     	if (job == null) {
     		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return null;
