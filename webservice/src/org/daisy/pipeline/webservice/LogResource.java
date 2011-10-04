@@ -9,20 +9,19 @@ import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
-import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
 
 
-public class LogResource extends ServerResource {
+public class LogResource extends AuthenticatedResource {
 	private Job job;
 
 	@Override  
     public void doInit() {  
 		super.doInit();
+		if (!isAuthenticated()) return;
+		
 		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
         String idParam = (String) getRequestAttributes().get("id");  
         JobId id = JobIdFactory.newIdFromString(idParam);
@@ -34,6 +33,11 @@ public class LogResource extends ServerResource {
 	 */
 	@Get
 	public Representation getResource() {
+		if (!isAuthenticated()) {
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+			return null;
+		}
+	
 		if (job == null) {
     		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return null;
