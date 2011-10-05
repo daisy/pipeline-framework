@@ -12,12 +12,15 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Authenticator {
 	
 	// 10 minutes in ms
 	// TODO make configurable
 	private static final long MAX_REQUEST_TIME = 600000;
+	private static Logger logger = LoggerFactory.getLogger(PipelineWebService.class.getName());
 	
 	// just for testing
     private static final Map<String, String> clients = new HashMap<String, String>();
@@ -36,6 +39,7 @@ public class Authenticator {
 		// important!  put the hash last so we can easily strip it out
 		
 		int idx = URI.indexOf("&hash=", 0);
+		
 		if (idx > 1) {
 			String hashuri = URI.substring(0, idx);
 			String clientSecret = clients.get(key);
@@ -51,20 +55,20 @@ public class Authenticator {
 				try {
 					clientTimestamp = UTC_FORMATTER.parse(timestamp);
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
+					logger.warn("Web service - could not parse timestamp: " + timestamp);
 					e.printStackTrace();
 					return false;
-				}
-
+				}                                                                                                                                                                                                                                                                               
 				if(hash.equals(serverHash) && 
 						serverTimestamp.getTime() - clientTimestamp.getTime() < MAX_REQUEST_TIME) {
 					return true;
 				}
 				else {
+					logger.warn("Web service - hash values do not match");
 					return false;
 				}
 			} catch (SignatureException e) {
-				// TODO Auto-generated catch block
+				logger.warn("Web service - could not generate hash");
 				e.printStackTrace();
 				return false;
 			}
