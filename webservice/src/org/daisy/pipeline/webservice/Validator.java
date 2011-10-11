@@ -40,7 +40,6 @@ public class Validator {
 	public static final URL jobSchema = Validator.class.getResource("resources/job.xsd");
 	public static final URL jobRequestSchema = Validator.class.getResource("resources/jobRequest.xsd");
 	public static final URL jobsSchema = Validator.class.getResource("resources/jobs.xsd");
-	public static final URL logSchema = Validator.class.getResource("resources/log.xsd");
 	
 	// If the Document isn't namespace-aware, this will likely fail
 	public static boolean validateXml(Document document, URL schemaUrl) {

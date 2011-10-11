@@ -10,7 +10,7 @@ module Rest
 
   def get_script(script_uri)
     begin
-      uri = URI.parse("#{Settings.instance.baseuri}script?id=#{script_uri}")
+      uri = URI.parse(prepare_uri("#{Settings.instance.baseuri}script?id=#{script_uri}"))
       response = Net::HTTP.get_response(uri)
       trace(response.body, "get script")
 
@@ -36,7 +36,7 @@ module Rest
 
   def get_scripts
     begin
-      uri = URI.parse("#{Settings.instance.baseuri}scripts")
+      uri = URI.parse(prepare_uri("#{Settings.instance.baseuri}scripts"))
       response = Net::HTTP.get_response(uri)
       case response
         when Net::HTTPSuccess
@@ -63,13 +63,14 @@ module Rest
   def post_job_xml(request_xml)
     begin
       trace(request_xml, "post job (xml)")
-      uri = URI.parse('http://localhost:8182/ws/jobs')
+      uri = URI.parse(prepare_uri("#{Settings.instance.baseuri}jobs"))
       request = Net::HTTP::Post.new(uri.path)
       request.body = request_xml
       response = Net::HTTP.start(uri.host, uri.port) {|http| http.request(request)}
       case response
         when Net::HTTPCreated
           message "Job created"
+          message response.get_fields('content-location')
           return true
         when Net::HTTPInternalServerError
           error "Server blew up"
@@ -100,7 +101,7 @@ module Rest
 
       file.close
 
-      uri = URI.parse("#{Settings.instance.baseuri}jobs")
+      uri = URI.parse(prepare_uri("#{Settings.instance.baseuri}jobs"))
 
       response = post_form(uri, query, headers)
 
@@ -138,7 +139,7 @@ module Rest
 
   def get_jobs
     begin
-      uri = URI.parse("#{Settings.instance.baseuri}jobs")
+      uri = URI.parse(prepare_uri("#{Settings.instance.baseuri}jobs"))
       response = Net::HTTP.get_response(uri)
 
       case response
@@ -163,7 +164,7 @@ module Rest
 
   def get_job(id)
     begin
-      uri = URI.parse("#{Settings.instance.baseuri}jobs/#{id}")
+      uri = URI.parse(prepare_uri("#{Settings.instance.baseuri}jobs/#{id}"))
       response = Net::HTTP.get_response(uri)
 
       case response
@@ -189,7 +190,7 @@ module Rest
 
   def get_job_result(id)
     begin
-      uri = URI.parse("#{Settings.instance.baseuri}jobs/#{id}/result.zip")
+      uri = URI.parse(prepare_uri("#{Settings.instance.baseuri}jobs/#{id}/result.zip"))
       response = Net::HTTP.get_response(uri)
 
       case response
@@ -213,7 +214,7 @@ module Rest
 
   def get_log(id)
     begin
-      uri = URI.parse("#{Settings.instance.baseuri}jobs/#{id}/log")
+      uri = URI.parse(prepare_uri("#{Settings.instance.baseuri}jobs/#{id}/log"))
       response = Net::HTTP.get_response(uri)
 
       case response
@@ -236,7 +237,7 @@ module Rest
 
   def delete_job(id)
     begin
-      uri = URI.parse("#{Settings.instance.baseuri}jobs/#{id}")
+      uri = URI.parse(prepare_uri("#{Settings.instance.baseuri}jobs/#{id}"))
       request = Net::HTTP::Delete.new(uri.path)
       response = Net::HTTP.start(uri.host, uri.port) {|http| http.request(request)}
 
