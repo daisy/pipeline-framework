@@ -58,11 +58,7 @@ def get_log(id)
     error "'Get log' requires an ID"
     return
   end
-  # doc = Rest.get_log(id)
-  # if doc == nil
-  #   return
-  # end
-  # display_log(doc.xpath("//log")[0])
+
   display_log(Rest.get_log(id), id)
 end
 
@@ -93,11 +89,15 @@ def delete_job(id)
     return
   end
 
-  puts "Really delete this job? (Y/n)"
-  input = STDIN.gets().chomp()
-  if input == "Y"
-    Rest.delete_job(id)
+  # first check the job's status to make sure it can be deleted
+  status = get_job_status(id)
+  if status != "DONE"
+    error "'Delete job' requires that the job be done. The job is currently #{status}."
+    return
   end
+
+  Rest.delete_job(id)
+
 end
 
 def run_preset_job1
@@ -186,10 +186,24 @@ def run_preset_job2
 end
 
 
-def result_preset_1
+def get_result_from_first_job_in_queue
   jobs_doc = Rest.get_jobs
   first_job_id = jobs_doc.xpath(".//job")[0]['id']
 
   get_result(first_job_id)
 
+end
+
+def delete_first_job_in_queue
+  jobs_doc = Rest.get_jobs
+  first_job_id = jobs_doc.xpath(".//job")[0]['id']
+
+  delete_job(first_job_id)
+end
+
+def get_log_for_first_job_in_queue
+  jobs_doc = Rest.get_jobs
+  first_job_id = jobs_doc.xpath(".//job")[0]['id']
+
+  get_log(first_job_id)
 end

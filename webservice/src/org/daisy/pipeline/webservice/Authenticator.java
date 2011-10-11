@@ -4,8 +4,6 @@ import java.security.SignatureException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TimeZone;
 
 import javax.crypto.Mac;
@@ -22,27 +20,15 @@ public class Authenticator {
 	private static final long MAX_REQUEST_TIME = 600000;
 	private static Logger logger = LoggerFactory.getLogger(PipelineWebService.class.getName());
 	
-	// just for testing
-    private static final Map<String, String> clients = new HashMap<String, String>();
-    static {
-        clients.put("clientkey", "supersecret");
-    }
-	
-	public static boolean authenticate(String key, String hash, String timestamp, String URI) {
-		// rules for hashing: use the whole URL string, minus the hash param & value
-		// e.g. 
-		// http://localhost:8182/ws/script?id=theID&key=mykey&timestamp=12345
-		// becomes
-		// theHash = hash(http://localhost:8182/ws/script?id=theID&key=mykey&timestamp=12345, clientSecret)
-		// then submit:
-		// http://localhost:8182/ws/script?id=theID&key=mykey&timestamp=12345&hash=theHash
-		// important!  put the hash last so we can easily strip it out
+	public static boolean authenticate(String key, String hash, String timestamp, String nonce, String URI) {
+		// rules for hashing: use the whole URL string, minus the hash part (&sign=<some value>)
+		// important!  put the sign param last so we can easily strip it out
 		
-		int idx = URI.indexOf("&hash=", 0);
+		int idx = URI.indexOf("&sign=", 0);
 		
 		if (idx > 1) {
 			String hashuri = URI.substring(0, idx);
-			String clientSecret = clients.get(key);
+			String clientSecret = ClientStore.INSTANCE.getSecret(key);
 			String serverHash = "";
 			try {
 				serverHash = Authenticator.calculateRFC2104HMAC(hashuri, clientSecret);
@@ -55,20 +41,26 @@ public class Authenticator {
 				try {
 					clientTimestamp = UTC_FORMATTER.parse(timestamp);
 				} catch (ParseException e) {
-					logger.warn("Web service - could not parse timestamp: " + timestamp);
+					logger.warn("Could not parse timestamp: " + timestamp);
 					e.printStackTrace();
 					return false;
 				}                                                                                                                                                                                                                                                                               
-				if(hash.equals(serverHash) && 
-						serverTimestamp.getTime() - clientTimestamp.getTime() < MAX_REQUEST_TIME) {
-					return true;
-				}
-				else {
-					logger.warn("Web service - hash values do not match");
+				if(!hash.equals(serverHash)) {
+					logger.warn("Hash values do not match");
 					return false;
 				}
+				if (serverTimestamp.getTime() - clientTimestamp.getTime() > MAX_REQUEST_TIME) {
+					logger.warn("Request expired");
+					return false;
+				}
+				if (!ClientStore.INSTANCE.checkValidNonce(key, nonce, timestamp)) {
+					logger.warn("Invalid nonce");
+					return false;
+				}
+				return true;
+				
 			} catch (SignatureException e) {
-				logger.warn("Web service - could not generate hash");
+				logger.warn("Could not generate hash");
 				e.printStackTrace();
 				return false;
 			}

@@ -35,8 +35,12 @@ def main
     run_preset_job1
   elsif Settings.instance.command == "runpreset2"
     run_preset_job2
-  elsif Settings.instance.command == "resultpreset1"
-    result_preset_1
+  elsif Settings.instance.command == "firstresult"
+    get_result_from_first_job_in_queue
+  elsif Settings.instance.command == "deletefirst"
+    delete_first_job_in_queue
+  elsif Settings.instance.command == "firstlog"
+    get_log_for_first_job_in_queue
   else
     puts "Command #{Settings.instance.command} not recognized"
   end
@@ -63,7 +67,8 @@ def checkargs
   createjob \t\t\t Start creating a job.  Requires option --id=jobid.
   runpreset1 \t\t\t Create a job with all pre-set values (for testing only).
   runpreset2 \t\t\t Create a job with all pre-set values (for testing only).
-  resultpreset1 \t\t\t Get the results from the first job (for testing only).
+  firstresult \t\t\t Get the results from the first job in the queue (for testing only).
+  deletefirst \t\t\t Delete the first job in the queue (for testing only).
   "
 
     Settings.instance.options[:trace] = false

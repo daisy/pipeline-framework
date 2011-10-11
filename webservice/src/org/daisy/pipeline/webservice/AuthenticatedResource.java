@@ -13,8 +13,8 @@ public abstract class AuthenticatedResource extends ServerResource {
 	}
 	
 	private void authenticate() {
-		isAuthenticated = Authenticator.authenticate(getQuery().getFirstValue("key"), getQuery().getFirstValue("hash"),
-				getQuery().getFirstValue("timestamp"), getReference().toString());
+		isAuthenticated = Authenticator.authenticate(getQuery().getFirstValue("key"), getQuery().getFirstValue("sign"),
+				getQuery().getFirstValue("time"), getQuery().getFirstValue("nonce"), getReference().toString());
 	}
 	
 	public boolean isAuthenticated() {
