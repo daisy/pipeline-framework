@@ -14,7 +14,7 @@ public class Activator implements BundleActivator {
 			.getLogger(Activator.class);
 
 	public void start(BundleContext bundleContext) throws Exception {
-		mLogger.info("earlyStartup slf4j SLF4JBridgeHandler...");
+		mLogger.debug("earlyStartup slf4j SLF4JBridgeHandler...");
 		java.util.logging.Logger rootLogger = LogManager.getLogManager()
 				.getLogger("");
 		Handler[] handlers = rootLogger.getHandlers();
