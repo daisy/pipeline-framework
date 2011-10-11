@@ -66,9 +66,12 @@ public class JobsResource extends AuthenticatedResource {
 		return dom;
 	}
 
+	
 	/*
-	 * taken from an example at:
-	 * http://wiki.restlet.org/docs_2.0/13-restlet/28-restlet/64-restlet.html
+	 * Job requests are either posted as multipart, with an attached zip containing the data, or inline.
+	 * 
+	 * Example of XML for multipart: daisy-pipeline/webservice/samples/xml-formats/jobRequest1.xml
+	 * Example of XML for inline: daisy-pipeline/webservice/samples/xml-formats/jobRequest2.xml
 	 */
 	@Post
     public Representation createResource(Representation representation) throws Exception {
@@ -131,6 +134,10 @@ public class JobsResource extends AuthenticatedResource {
         
     }
 	
+	/*
+	 * taken from an example at:
+	 * http://wiki.restlet.org/docs_2.0/13-restlet/28-restlet/64-restlet.html
+	 */
 	private MultipartRequestData processMultipart(Request request) {
 		// 1/ Create a factory for disk-based file items
         DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();

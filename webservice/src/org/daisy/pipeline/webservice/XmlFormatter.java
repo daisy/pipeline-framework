@@ -31,7 +31,7 @@ public class XmlFormatter {
 	private static final String NS_PIPELINE_DATA = "http://www.daisy.org/ns/pipeline/data";
 
 	/*
-	 * example output: daisy-pipeline/webservice/docs/sampleXml/job.xml
+	 * example output: daisy-pipeline/webservice/samples/xml-formats/job.xml
 	 */
 	public static Document jobToXml(Job job, String serverAddress) {
 		Document doc = createDom("job");
@@ -46,7 +46,7 @@ public class XmlFormatter {
 	}
 	
 	/*
-	 * example output: daisy-pipeline/webservice/docs/sampleXml/jobs.xml
+	 * example output: daisy-pipeline/webservice/samples/xml-formats/jobs.xml
 	 */
 	public static Document jobsToXml(Iterable<Job> jobs, String serverAddress) {
 		Document doc = createDom("jobs");
@@ -68,7 +68,7 @@ public class XmlFormatter {
 	}
 	
 	/*
-	 * example output: daisy-pipeline/webservice/docs/sampleXml/script.xml
+	 * example output: daisy-pipeline/webservice/samples/xml-formats/script.xml
 	 */
 	public static Document xprocScriptToXml(XProcScript script) {
 		Document doc = createDom("script");
@@ -83,7 +83,7 @@ public class XmlFormatter {
 	}
 	
 	/*
-	 * example output: daisy-pipeline/webservice/docs/sampleXml/scripts.xml
+	 * example output: daisy-pipeline/webservice/samples/xml-formats/scripts.xml
 	 */
 	public static Document xprocScriptsToXml(Iterable<XProcScript> scripts) {
 		Document doc = createDom("scripts");
