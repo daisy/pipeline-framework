@@ -5,6 +5,7 @@ import java.net.URI;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
+import javax.xml.transform.sax.SAXSource;
 
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
@@ -21,6 +22,9 @@ import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcResult;
 import org.xml.sax.EntityResolver;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
@@ -40,10 +44,9 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	private final URIResolver uriResolver;
 	private final EntityResolver entityResolver;
 	private final MessageListenerFactory messageListenerFactory;
-	 	
-	
+
 	private final Supplier<PipelineInstance> pipelineSupplier = new Supplier<PipelineInstance>() {
-	
+
 		@Override
 		public PipelineInstance get() {
 			XProcConfiguration config = configFactory.newConfiguration();
@@ -55,10 +58,11 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			if (entityResolver != null) {
 				runtime.setEntityResolver(entityResolver);
 			}
-			
+
 			XProcMessageListenerAggregator listeners = new XProcMessageListenerAggregator();
 			listeners.add(new slf4jXProcMessageListener());
-			listeners.addAsAccessor(new MessageListenerWrapper(messageListenerFactory.createMessageListener()));
+			listeners.addAsAccessor(new MessageListenerWrapper(
+					messageListenerFactory.createMessageListener()));
 			runtime.setMessageListener(listeners);
 			XPipeline xpipeline = null;
 
@@ -67,7 +71,8 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			} catch (SaxonApiException e) {
 				throw new RuntimeException(e.getMessage(), e);
 			}
-			return new PipelineInstance(xpipeline, config,listeners.getAccessor());
+			return new PipelineInstance(xpipeline, config,
+					listeners.getAccessor());
 		}
 	};
 	private final Supplier<XProcPipelineInfo> info = Suppliers
@@ -77,7 +82,8 @@ public class CalabashXProcPipeline implements XProcPipeline {
 				public XProcPipelineInfo get() {
 					XProcPipelineInfo.Builder builder = new XProcPipelineInfo.Builder();
 					builder.withURI(uri);
-					DeclareStep declaration = pipelineSupplier.get().xpipe.getDeclareStep();
+					DeclareStep declaration = pipelineSupplier.get().xpipe
+							.getDeclareStep();
 					// input and parameter ports
 					for (Input input : declaration.inputs()) {
 						if (input.getParameterInput()) {
@@ -105,10 +111,11 @@ public class CalabashXProcPipeline implements XProcPipeline {
 					return builder.build();
 				}
 			});
-	
 
-	public CalabashXProcPipeline(URI uri, XProcConfigurationFactory configFactory,
-			URIResolver uriResolver, EntityResolver entityResolver,MessageListenerFactory messageListenerFactory) {
+	public CalabashXProcPipeline(URI uri,
+			XProcConfigurationFactory configFactory, URIResolver uriResolver,
+			EntityResolver entityResolver,
+			MessageListenerFactory messageListenerFactory) {
 		this.uri = uri;
 		this.configFactory = configFactory;
 		this.uriResolver = uriResolver;
@@ -126,18 +133,31 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		PipelineInstance pipeline = pipelineSupplier.get();
 		// bind inputs
 		for (String name : pipeline.xpipe.getInputs()) {
-			for (Provider<Source> source : data.getInputs(name)) {
-				pipeline.xpipe.writeTo(
-						name,
-						asXdmNode(pipeline.config.getProcessor(),
-								source.provide()));
+			for (Provider<Source> sourceProvider : data.getInputs(name)) {
+				Source source = sourceProvider.provide();
+				// TODO hack to set the entity resolver
+				if (source instanceof SAXSource) {
+					XMLReader reader = ((SAXSource) source).getXMLReader();
+					if (reader == null) {
+						try {
+							reader = XMLReaderFactory.createXMLReader();
+							((SAXSource) source).setXMLReader(reader);
+							reader.setEntityResolver(entityResolver);
+						} catch (SAXException se) {
+							// nop?
+						}
+					}
+				}
+				pipeline.xpipe.writeTo(name,
+						asXdmNode(pipeline.config.getProcessor(), source));
 			}
 		}
 		// bind options
 		for (QName optname : data.getOptions().keySet()) {
 			RuntimeValue value = new RuntimeValue(data.getOptions()
 					.get(optname));
-			pipeline.xpipe.passOption(new net.sf.saxon.s9api.QName(optname), value);
+			pipeline.xpipe.passOption(new net.sf.saxon.s9api.QName(optname),
+					value);
 		}
 
 		// bind parameters
@@ -145,8 +165,8 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			for (QName name : data.getParameters(port).keySet()) {
 				RuntimeValue value = new RuntimeValue(data.getParameters(port)
 						.get(name), null, null);
-				pipeline.xpipe.setParameter(port, new net.sf.saxon.s9api.QName(name),
-						value);
+				pipeline.xpipe.setParameter(port, new net.sf.saxon.s9api.QName(
+						name), value);
 			}
 		}
 
@@ -156,11 +176,11 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		} catch (SaxonApiException e) {
 			e.printStackTrace();
 		}
-		return CalabashXProcResult.newInstance(pipeline.xpipe, pipeline.config,pipeline.messageAccessor);
+		return CalabashXProcResult.newInstance(pipeline.xpipe, pipeline.config,
+				pipeline.messageAccessor);
 	}
 
 	private static XdmNode asXdmNode(Processor processor, Source source) {
-		//TODO set entity resolver
 		DocumentBuilder builder = processor.newDocumentBuilder();
 		builder.setDTDValidation(false);
 		builder.setLineNumbering(true);
@@ -172,16 +192,16 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		}
 	}
 
-	
 	private static final class PipelineInstance {
 		private final XPipeline xpipe;
 		private final XProcConfiguration config;
 		private final MessageAccessor messageAccessor;
 
-		private PipelineInstance(XPipeline xpipe, XProcConfiguration config,MessageAccessor accessor) {
+		private PipelineInstance(XPipeline xpipe, XProcConfiguration config,
+				MessageAccessor accessor) {
 			this.xpipe = xpipe;
 			this.config = config;
-			this.messageAccessor=accessor;
+			this.messageAccessor = accessor;
 		}
 	}
 }

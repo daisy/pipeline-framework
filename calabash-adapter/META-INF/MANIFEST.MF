@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Calabash adapter for the XProc API
 Bundle-SymbolicName: org.daisy.common.xproc.calabash-adapter
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1.qualifier
 Bundle-Vendor: DAISY Consortium
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.google.common.base,
@@ -23,6 +23,7 @@ Import-Package: com.google.common.base,
  org.daisy.common.messaging,
  org.daisy.common.xproc,
  org.slf4j,
- org.xml.sax
+ org.xml.sax,
+ org.xml.sax.helpers
 Export-Package: org.daisy.common.xproc.calabash
 Service-Component: OSGI-INF/xproc-engine.xml, OSGI-INF/config-factory.xml
