@@ -1,5 +1,5 @@
 ###############################################################################
-###            DAISY Pipeline 2 - 1.0 - October 3d, 2011                    ###
+###            DAISY Pipeline 2 - 1.0.1 - October 11th, 2011                    ###
 ###############################################################################
 
 
@@ -49,6 +49,11 @@ The package includes:
 
 3. Release Notes
 -------------------------------------------------------------------------------
+
+Changes since the last release:
+ * Fixed Issue 131: dtbook-to-zedai no longer references Calabash's remote libraries
+ * Fixed Issue 133: EntityResolver is set to input sources to enable offline execution
+ * Fixed Issue 134: launchers now work on Japanese Windows
 
 The full list of changes can be found at:
  http://code.google.com/p/daisy-pipeline/w/ReleaseNotes
