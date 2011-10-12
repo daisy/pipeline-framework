@@ -9,11 +9,17 @@ public abstract class AuthenticatedResource extends ServerResource {
 	@Override
 	public void doInit() {
 		super.doInit();
-		authenticate();
+		if (((PipelineWebService)this.getApplication()).isAuthenticationEnabled() == false) {
+			// if authentication is not enabled, then all requests can be considered automatically authenticated
+			isAuthenticated = true;
+		}
+		else {
+			isAuthenticated = authenticate();
+		}
 	}
 	
-	private void authenticate() {
-		isAuthenticated = Authenticator.authenticate(getQuery().getFirstValue("key"), getQuery().getFirstValue("sign"),
+	private boolean authenticate() {
+		return Authenticator.authenticate(getQuery().getFirstValue("key"), getQuery().getFirstValue("sign"),
 				getQuery().getFirstValue("time"), getQuery().getFirstValue("nonce"), getReference().toString());
 	}
 	

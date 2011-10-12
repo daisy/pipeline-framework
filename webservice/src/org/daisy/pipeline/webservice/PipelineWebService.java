@@ -15,10 +15,13 @@ public class PipelineWebService extends Application {
 			.getLogger(PipelineWebService.class.getName());
 	public static final String MODE_PROPERTY = "org.daisy.pipeline.mode";
 	private static final String WS = "ws";
+	
 
-	// TODO make port and address configurable
+	// TODO make port, address, and authentication on/off configurable
 	private final String serverAddress = "http://localhost:8182/ws";
 	private final int portNumber = 8182;
+	private final boolean usesAuthentication = false;
+	
 	private JobManager jobManager;
 	private ScriptRegistry scriptRegistry;
 
@@ -57,6 +60,10 @@ public class PipelineWebService extends Application {
 		return this.serverAddress;
 	}
 
+	public boolean isAuthenticationEnabled() {
+		return this.usesAuthentication;
+	}
+	
 	public JobManager getJobManager() {
 		return jobManager;
 	}
