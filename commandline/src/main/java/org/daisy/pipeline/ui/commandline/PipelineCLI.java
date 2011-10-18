@@ -11,20 +11,40 @@ import org.daisy.pipeline.script.XProcScriptService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+/**
+ *  CLI client 
+ */
 public class PipelineCLI {
 
+	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory
 			.getLogger(PipelineCLI.class);
 
+	/** The Constant MODE_PROPERTY. */
 	public static final String MODE_PROPERTY = "org.daisy.pipeline.mode";
+	
+	/** The Constant CMD. */
 	private static final String CMD = "cmd";
+	
+	/** The EXIT. */
 	private static boolean EXIT = true;
 	
+	/** The parser. */
 	private final OptionParser parser;
+	
+	/** The module registry. */
 	private ModuleRegistry moduleRegistry;
+	
+	/** The script registry. */
 	private ScriptRegistry scriptRegistry;
+	
+	/** The xproc engine. */
 	private XProcEngine xprocEngine;
 
+	/**
+	 * Instantiates a new pipeline cli.
+	 */
 	public PipelineCLI() {
 		parser = new OptionParser();
 		parser.accepts("l", "list of available uris");
@@ -49,6 +69,9 @@ public class PipelineCLI {
 
 	}
 
+	/**
+	 * Activate (OSGI)
+	 */
 	public void activate() {
 		logger.trace("Activating CLI");
 		// TODO move MODE_PROPERTY constant
@@ -91,22 +114,48 @@ public class PipelineCLI {
 		}
 	}
 	
+	/**
+	 * Deactivates the cli
+	 *
+	 * @param reason the reason
+	 */
 	public void deactivate(int reason){
 			LoggerFactory.getLogger("tracer").trace("Deactivating {} {}",this.getClass().getSimpleName(),reason);
 	}
 
+	/**
+	 * Sets the module registry.
+	 *
+	 * @param moduleRegistry the new module registry
+	 */
 	public void setModuleRegistry(ModuleRegistry moduleRegistry) {
 		this.moduleRegistry = moduleRegistry;
 	}
 
+	/**
+	 * Sets the script registry.
+	 *
+	 * @param scriptRegistry the new script registry
+	 */
 	public void setScriptRegistry(ScriptRegistry scriptRegistry) {
 		this.scriptRegistry = scriptRegistry;
 	}
 
+	/**
+	 * Sets the x proc engine.
+	 *
+	 * @param xprocEngine the new x proc engine
+	 */
 	public void setXProcEngine(XProcEngine xprocEngine) {
 		this.xprocEngine = xprocEngine;
 	}
 
+	/**
+	 * Parses the argument list from the command line.
+	 *
+	 * @param args the args
+	 * @return the command
+	 */
 	public Command parse(String... args) {
 
 		if (args == null) {
@@ -133,6 +182,12 @@ public class PipelineCLI {
 		return getUsage();
 	}
 
+	/**
+	 * Gets the help command.
+	 *
+	 * @param oSet the o set
+	 * @return the help command
+	 */
 	private Command getHelpCommand(OptionSet oSet) {
 		if (oSet.valueOf("h") != null
 				&& !oSet.valueOf("h").toString().isEmpty()) {
@@ -143,6 +198,12 @@ public class PipelineCLI {
 		}
 	}
 
+	/**
+	 * Gets the pipeline command.
+	 *
+	 * @param oSet the o set
+	 * @return the pipeline command
+	 */
 	private Command getPipelineCommand(OptionSet oSet) {
 		String inputs = "";
 		if (oSet.valueOf("i") != null)
@@ -163,6 +224,12 @@ public class PipelineCLI {
 				options, xprocEngine);
 	}
 
+	/**
+	 * Gets the script command.
+	 *
+	 * @param oSet the o set
+	 * @return the script command
+	 */
 	private Command getScriptCommand(OptionSet oSet) {
 		if (oSet.valueOf("s") == null || oSet.valueOf("s").toString().isEmpty()) {
 			return CommandListScripts.newInstance(scriptRegistry);
@@ -191,18 +258,40 @@ public class PipelineCLI {
 		}
 	}
 
+	/**
+	 * Gets the list ur is command.
+	 *
+	 * @return the list ur is command
+	 */
 	private Command getListURIsCommand() {
 		return CommandListURIs.newInstance(moduleRegistry);
 	}
 
+	/**
+	 * Gets the unrecovreable error.
+	 *
+	 * @param msg the msg
+	 * @return the unrecovreable error
+	 */
 	private Command getUnrecovreableError(String msg) {
 		return CommandUnrecoverableError.newInstance(msg);
 	}
 
+	/**
+	 * Gets the usage.
+	 *
+	 * @return the usage
+	 */
 	private Command getUsage() {
 		return CommandUsage.newInstance(parser);
 	}
 
+	/**
+	 * Gets the usage with error.
+	 *
+	 * @param err the err
+	 * @return the usage with error
+	 */
 	private Command getUsageWithError(String err) {
 		return CommandUsage.newInstance(parser, err);
 	}

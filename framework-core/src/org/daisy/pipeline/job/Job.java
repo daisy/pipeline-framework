@@ -9,9 +9,10 @@ import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.script.XProcScript;
 
+// TODO: Auto-generated Javadoc
 //TODO check thread safety
 /**
- * The Class Job defines the execution unit
+ * The Class Job defines the execution unit.
  */
 public class Job {
 
@@ -29,12 +30,10 @@ public class Job {
 	}
 
 	/**
-	 * Creates a new job
-	 * 
-	 * @param script
-	 *            the script to be executed
-	 * @param input
-	 *            the input
+	 * Creates a new job.
+	 *
+	 * @param script the script to be executed
+	 * @param input the input
 	 * @return the job
 	 */
 	public static Job newJob(XProcScript script, XProcInput input) {
@@ -43,14 +42,11 @@ public class Job {
 	}
 
 	/**
-	 * Creates a new job attached to a context
-	 * 
-	 * @param script
-	 *            the script
-	 * @param input
-	 *            the input
-	 * @param context
-	 *            the context
+	 * Creates a new job attached to a context.
+	 *
+	 * @param script the script
+	 * @param input the input
+	 * @param context the context
 	 * @return the job
 	 */
 	public static Job newJob(XProcScript script, XProcInput input,
@@ -150,10 +146,9 @@ public class Job {
 	}
 
 	/**
-	 * Runs the job using the XProcEngine as script loader
-	 * 
-	 * @param engine
-	 *            the engine
+	 * Runs the job using the XProcEngine as script loader.
+	 *
+	 * @param engine the engine
 	 */
 	public void run(XProcEngine engine) {
 		status = Status.RUNNING;

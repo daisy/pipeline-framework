@@ -9,8 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 
+// TODO: Auto-generated Javadoc
 /**
- * The Class DefaultJobExecutionService.
+ * DefaultJobExecutionService is the defualt way to execute jobs
  */
 public class DefaultJobExecutionService implements JobExecutionService {
 
@@ -30,11 +31,11 @@ public class DefaultJobExecutionService implements JobExecutionService {
 		this.xprocEngine = xprocEngine;
 	}
 
-	/** The executor. */
+	
 	private ExecutorService executor = Executors.newCachedThreadPool(); 
 
 	/**
-	 * Activate.
+	 * Activate (OSGI)
 	 */
 	public void activate(){
 		logger.trace("Activating job execution service");

@@ -7,11 +7,21 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+// TODO: Make a module containing the entities and wrap a uri resolver using this class
+/**
+ * This class prevents calabash downloading dtd and other entities from the internet. Also prevents crashes due to the impossibility of getting http related dtds
+ */
 public class CalabashXprocEntityResolver implements EntityResolver {
 
+	/** The Constant SMIL_DTD. */
 	private static final String SMIL_DTD = "resources/SMIL10.dtd";
+	
+	/** The Constant SMIL_PUBLIC. */
 	private static final String SMIL_PUBLIC = "http://www.w3.org/TR/REC-smil/SMIL10.dtd";
 
+	/* (non-Javadoc)
+	 * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public InputSource resolveEntity(String publicId, String systemId)
 			throws SAXException, IOException {

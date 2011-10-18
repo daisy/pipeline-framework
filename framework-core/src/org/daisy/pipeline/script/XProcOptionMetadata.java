@@ -3,62 +3,66 @@
  */
 package org.daisy.pipeline.script;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class XProcOptionMetadata.
+ * Option related metadata.
  */
 public class XProcOptionMetadata {
-	
+
 	/**
 	 * The Enum Direction.
 	 */
-	public enum Direction{
-		
+	public enum Direction {
+
 		/** The INPUT. */
 		INPUT,
-/** The OUTPUT. */
-OUTPUT,
-/** The NA. */
-NA
+		/** The OUTPUT. */
+		OUTPUT,
+		/** The NA. */
+		NA
 	}
-	
+
 	/** The nice name. */
 	final private String niceName;
-	
+
 	/** The description. */
 	final private String description;
-	
+
 	/** The type. */
 	final private String type;
-	
+
 	/** The media type. */
 	final private String mediaType;
-	
+
 	/** The direction. */
 	final private Direction direction;
-	
+
 	/**
-	 * Instantiates a new x proc option metadata.
-	 *
-	 * @param niceName the nice name
-	 * @param description the description
-	 * @param type the type
-	 * @param mediaType the media type
-	 * @param direction the direction
+	 * Instantiates a new {@link XProcOptionMetadata} object.
+	 * 
+	 * @param niceName
+	 *            the nice name
+	 * @param description
+	 *            the description
+	 * @param type
+	 *            the type
+	 * @param mediaType
+	 *            the media type
+	 * @param direction
+	 *            the direction
 	 */
 	private XProcOptionMetadata(String niceName, String description,
-			String type, String mediaType,Direction direction) {
+			String type, String mediaType, Direction direction) {
 		super();
 		this.niceName = niceName;
 		this.description = description;
 		this.type = type;
 		this.mediaType = mediaType;
-		this.direction=direction;
+		this.direction = direction;
 	}
 
 	/**
 	 * Gets the nice name.
-	 *
+	 * 
 	 * @return the nice name
 	 */
 	public String getNiceName() {
@@ -67,7 +71,7 @@ NA
 
 	/**
 	 * Gets the description.
-	 *
+	 * 
 	 * @return the description
 	 */
 	public String getDescription() {
@@ -76,7 +80,7 @@ NA
 
 	/**
 	 * Gets the type.
-	 *
+	 * 
 	 * @return the type
 	 */
 	public String getType() {
@@ -85,46 +89,47 @@ NA
 
 	/**
 	 * Gets the media type.
-	 *
+	 * 
 	 * @return the media type
 	 */
 	public String getMediaType() {
 		return mediaType;
 	}
-	
+
 	/**
-	 * Gets the direction.
-	 *
+	 * Gets the direction, if {@link Direction} is output it should be a uri with type AnyFileURI or AnyDirURI, input may be other any c:type.
+	 * 
 	 * @return the direction
 	 */
 	public Direction getDirection() {
 		return direction;
 	}
-	
+
 	/**
-	 * The Class Builder.
+	 * Builds the {@link XProcOptionMetadata} object.
 	 */
 	public static final class Builder {
-		
+
 		/** The nice name. */
 		private String niceName;
-		
+
 		/** The description. */
 		private String description;
-		
+
 		/** The type. */
 		private String type;
-		
+
 		/** The media type. */
 		private String mediaType;
-		
+
 		/** The direction. */
 		private Direction direction;
 
 		/**
 		 * With description.
-		 *
-		 * @param description the description
+		 * 
+		 * @param description
+		 *            the description
 		 * @return the builder
 		 */
 		public Builder withDescription(String description) {
@@ -134,8 +139,9 @@ NA
 
 		/**
 		 * With nice name.
-		 *
-		 * @param niceName the nice name
+		 * 
+		 * @param niceName
+		 *            the nice name
 		 * @return the builder
 		 */
 		public Builder withNiceName(String niceName) {
@@ -145,8 +151,9 @@ NA
 
 		/**
 		 * With type.
-		 *
-		 * @param type the type
+		 * 
+		 * @param type
+		 *            the type
 		 * @return the builder
 		 */
 		public Builder withType(String type) {
@@ -156,40 +163,41 @@ NA
 
 		/**
 		 * With media type.
-		 *
-		 * @param mediaType the media type
+		 * 
+		 * @param mediaType
+		 *            the media type
 		 * @return the builder
 		 */
 		public Builder withMediaType(String mediaType) {
 			this.mediaType = mediaType;
 			return this;
 		}
-		
+
 		/**
 		 * With direction.
-		 *
-		 * @param direction the direction
+		 * 
+		 * @param direction
+		 *            the direction
 		 * @return the builder
 		 */
 		public Builder withDirection(String direction) {
-			if(direction.equalsIgnoreCase(Direction.OUTPUT.toString())){
-				this.direction=Direction.OUTPUT;
-			}else{
-				this.direction=Direction.INPUT;
+			if (direction.equalsIgnoreCase(Direction.OUTPUT.toString())) {
+				this.direction = Direction.OUTPUT;
+			} else {
+				this.direction = Direction.INPUT;
 			}
 			return this;
 		}
-		
+
 		/**
-		 * Builds the.
-		 *
-		 * @return the x proc option metadata
+		 * Builds instance
+		 * 
+		 * @return the {@link XProcOptionMetadata}
 		 */
-		public XProcOptionMetadata build(){
-			return new XProcOptionMetadata(niceName,description,type,mediaType,direction);
+		public XProcOptionMetadata build() {
+			return new XProcOptionMetadata(niceName, description, type,
+					mediaType, direction);
 		}
 	}
-
-
 
 }

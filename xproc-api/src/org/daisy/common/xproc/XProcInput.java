@@ -108,7 +108,7 @@ public final class XProcInput {
 		}
 
 		/**
-		 * Builds the.
+		 * Builds the input object
 		 *
 		 * @return the x proc input
 		 */

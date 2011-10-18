@@ -32,8 +32,13 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
+// TODO: Auto-generated Javadoc
+/**
+ * StaxXProcScriptParser parses the xpl file extracting the metadata and buiding the XProcScript object 
+ */
 public class StaxXProcScriptParser implements XProcScriptParser {
 	
+	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory.getLogger(StaxXProcScriptParser.class);
 	/** The xmlinputfactory. */
 	private XMLInputFactory mFactory;
@@ -41,30 +46,62 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 	/** The uri resolver. */
 	private URIResolver mUriResolver;
 
+	/**
+	 * Sets the uri resolver.
+	 *
+	 * @param uriResolver the new uri resolver
+	 */
 	public void setUriResolver(URIResolver uriResolver) {
 		mUriResolver = uriResolver;
 	}
 
+	/**
+	 * Sets the factory.
+	 *
+	 * @param factory the new factory
+	 */
 	public void setFactory(XMLInputFactory factory) {
 		this.mFactory = factory;
 	}
 	
+	/**
+	 * Activate (OSGI)
+	 */
 	public void activate(){
 		logger.trace("Activating XProc script parser");
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.script.XProcScriptParser#parse(java.net.URI)
+	 */
 	@Override
 	public XProcScript parse(URI uri) {
 		return new StatefulParser().parse(uri);
 	}
 	
+	/**
+	 *StatefulParser makes the parsing process thread safe.
+	 */
 	private class StatefulParser {
 		
+		/** The m ancestors. */
 		private LinkedList<XMLEvent> mAncestors = new LinkedList<XMLEvent>();
+		
+		/** The m port builders. */
 		private LinkedList<XProcPortMetadataBuilderHolder> mPortBuilders = new LinkedList<XProcPortMetadataBuilderHolder>();
+		
+		/** The m option builders. */
 		private LinkedList<XProcOptionMetadataBuilderHolder> mOptionBuilders = new LinkedList<XProcOptionMetadataBuilderHolder>();
+		
+		/** The script builder. */
 		private XProcScript.Builder scriptBuilder = new XProcScript.Builder();
 		
+		/**
+		 * Parses the xpl file extracting the metadata attached to options,ports and the step
+		 *
+		 * @param uri the uri
+		 * @return the x proc script
+		 */
 		public XProcScript parse(URI uri) {
 			if (mFactory == null) {
 				throw new IllegalStateException();
@@ -123,10 +160,22 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			return scriptBuilder.build();
 		}
 
+		/**
+		 * Checks if is first child.
+		 *
+		 * @return true, if is first child
+		 */
 		public boolean isFirstChild() {
 			return mAncestors.size() == 2;
 		}
 
+		/**
+		 * Reads the next element
+		 *
+		 * @param reader the reader
+		 * @return the xML event
+		 * @throws XMLStreamException the xML stream exception
+		 */
 		private XMLEvent readNext(XMLEventReader reader)
 				throws XMLStreamException {
 			XMLEvent event = reader.nextEvent();
@@ -139,6 +188,12 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			return event;
 		}
 
+		/**
+		 * Parses the step.
+		 *
+		 * @param reader the reader
+		 * @throws XMLStreamException the xML stream exception
+		 */
 		public void parseStep(final XMLEventReader reader) throws XMLStreamException {
 
 			
@@ -209,6 +264,13 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			}
 		}
 
+		/**
+		 * Parses the option.
+		 *
+		 * @param optionElement the option element
+		 * @param optionBuilder the option builder
+		 * @throws XMLStreamException the xML stream exception
+		 */
 		protected void parseOption(final StartElement optionElement,
 				final XProcOptionMetadata.Builder optionBuilder)
 				throws XMLStreamException {
@@ -229,6 +291,14 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 		}
 
+		/**
+		 * Parses the documentation.
+		 *
+		 * @param reader the reader
+		 * @param dHolder the d holder
+		 * @return the documentation holder
+		 * @throws XMLStreamException the xML stream exception
+		 */
 		private DocumentationHolder parseDocumentation(
 				final XMLEventReader reader, final DocumentationHolder dHolder)
 				throws XMLStreamException {
@@ -269,6 +339,13 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			return dHolder;
 		}
 
+		/**
+		 * Parses the port.
+		 *
+		 * @param portElement the port element
+		 * @param portBuilder the port builder
+		 * @throws XMLStreamException the xML stream exception
+		 */
 		private void parsePort(final StartElement portElement,
 				final XProcPortMetadata.Builder portBuilder)
 				throws XMLStreamException {
@@ -281,19 +358,42 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		}
 	}
 
+	/**
+	 * DocumentationHolde holds documentation elements
+	 */
 	private static class DocumentationHolder {
+		
+		/** The m short. */
 		String mShort;
+		
+		/** The m detail. */
 		String mDetail;
+		
+		/** The m homepage. */
 		String mHomepage;
 	}
 
+	/**
+	 * The Class XProcOptionMetadataBuilderHolder holds metadata for options
+	 */
 	private static class XProcOptionMetadataBuilderHolder {
+		
+		/** The m name. */
 		String mName;
+		
+		/** The m builder. */
 		XProcOptionMetadata.Builder mBuilder;
 	}
 
+	/**
+	 * The Class XProcPortMetadataBuilderHolder holds metadata for ports
+	 */
 	private static class XProcPortMetadataBuilderHolder {
+		
+		/** The m name. */
 		String mName;
+		
+		/** The m builder. */
 		XProcPortMetadata.Builder mBuilder;
 	}
 

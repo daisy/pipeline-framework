@@ -18,6 +18,7 @@ import org.daisy.pipeline.script.XProcOptionMetadata.Direction;
 import org.daisy.pipeline.script.XProcScript;
 
 
+
 /**
  * The Class IOBridge handles some io operations relevant to the execution of pipelines.
  */
@@ -55,7 +56,7 @@ public class IOBridge {
 	private JobId mId;
 	
 	/**
-	 * Instantiates a new iO bridge to be used by the job having the id provided
+	 * Instantiates a new iO bridge to be used by the job having the id provided.
 	 *
 	 * @param id the id
 	 * @throws IOException Signals that an I/O exception has occurred.
@@ -251,7 +252,7 @@ public class IOBridge {
 	}
 	
 	/**
-	 * Zips outputs of the execution
+	 * Zips outputs of the execution.
 	 *
 	 * @return the uRI
 	 */

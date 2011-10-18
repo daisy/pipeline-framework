@@ -4,8 +4,9 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.script.XProcScript;
 
 
+// TODO: Auto-generated Javadoc
 /**
- * The Interface JobManager offers a simple way of managing jobs 
+ * The Interface JobManager offers a simple way of managing jobs.
  */
 public interface JobManager {
 
@@ -21,7 +22,7 @@ public interface JobManager {
 			ResourceCollection context);
 
 	/**
-	 * Creates a job without resource collection
+	 * Creates a job without resource collection.
 	 *
 	 * @param script the script
 	 * @param input the input

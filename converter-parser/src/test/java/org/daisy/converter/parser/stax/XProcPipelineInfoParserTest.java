@@ -18,10 +18,20 @@ import org.junit.Test;
 
 import com.google.common.collect.Iterables;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class XProcPipelineInfoParserTest.
+ */
 public class XProcPipelineInfoParserTest {
 
+	/** The xproc. */
 	private XProcPipelineInfo xproc;
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws URISyntaxException the uRI syntax exception
+	 */
 	@Before
 	public void setUp() throws URISyntaxException {
 		StaxXProcPipelineInfoParser parser = new StaxXProcPipelineInfoParser();
@@ -30,6 +40,9 @@ public class XProcPipelineInfoParserTest {
 				.getResource("script.xpl").toURI());
 	}
 
+	/**
+	 * Test input ports.
+	 */
 	@Test
 	public void testInputPorts() {
 		Iterable<XProcPortInfo> ports = xproc.getInputPorts();
@@ -37,6 +50,9 @@ public class XProcPipelineInfoParserTest {
 		assertEquals(2, Iterables.size(ports));
 	}
 	
+	/**
+	 * Test input port.
+	 */
 	@Test
 	public void testInputPort() {
 		XProcPortInfo port = xproc.getInputPort("source");
@@ -48,6 +64,9 @@ public class XProcPipelineInfoParserTest {
 
 	}
 	
+	/**
+	 * Test output ports.
+	 */
 	@Test
 	public void testOutputPorts() {
 		Iterable<XProcPortInfo> ports = xproc.getOutputPorts();
@@ -55,6 +74,9 @@ public class XProcPipelineInfoParserTest {
 		assertEquals(2, Iterables.size(ports));
 	}
 
+	/**
+	 * Test output port.
+	 */
 	@Test
 	public void testOutputPort() {
 		XProcPortInfo port = xproc.getOutputPort("result");
@@ -66,6 +88,9 @@ public class XProcPipelineInfoParserTest {
 
 	}
 
+	/**
+	 * Test parameter port.
+	 */
 	@Test
 	public void testParameterPort() {
 		// FIXME test parameter ports
@@ -77,6 +102,9 @@ public class XProcPipelineInfoParserTest {
 
 	}
 	
+	/**
+	 * Test option.
+	 */
 	@Test
 	public void testOption() {
 		XProcOptionInfo info = xproc.getOption(new QName("option1"));

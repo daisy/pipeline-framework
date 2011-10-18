@@ -8,18 +8,34 @@ import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcOptionMetadata.Direction;
 import org.daisy.pipeline.script.XProcScript;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class XProcScriptFilter.
+ */
 public final class XProcScriptFilter implements Filter<XProcScript> {
 
+	/** The Constant INSTANCE. */
 	public static final XProcScriptFilter INSTANCE = new XProcScriptFilter();
 
+	/** The Constant ANY_URI_TYPE. */
 	private static final String ANY_URI_TYPE = "anyURI";
+	
+	/** The Constant ANY_FILE_URI_TYPE. */
 	private static final String ANY_FILE_URI_TYPE = "anyFileURI";
+	
+	/** The Constant ANY_DIR_URI_TYPE. */
 	private static final String ANY_DIR_URI_TYPE = "anyDirURI";
 
+	/**
+	 * Instantiates a new x proc script filter.
+	 */
 	private XProcScriptFilter() {
 		// singleton
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.base.Filter#filter(java.lang.Object)
+	 */
 	@Override
 	public XProcScript filter(XProcScript script) {
 		XProcPipelineInfo xproc = script.getXProcPipelineInfo();

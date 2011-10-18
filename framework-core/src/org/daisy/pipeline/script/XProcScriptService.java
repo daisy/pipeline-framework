@@ -12,7 +12,7 @@ import com.google.common.base.Suppliers;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class XProcScriptService defines the script basic attributes loaded from the OSGI bundle
+ * The Class XProcScriptService defines the script basic attributes loaded from the OSGI bundle.
  */
 public final class XProcScriptService {
 
@@ -44,7 +44,7 @@ public final class XProcScriptService {
 	}
 
 	/**
-	 * Activate method called by ds
+	 * Activate method called by ds.
 	 *
 	 * @param properties the properties
 	 */
@@ -103,7 +103,7 @@ public final class XProcScriptService {
 	}
 
 	/**
-	 * Loads the script into a XProcScript object 
+	 * Loads the script into a XProcScript object.
 	 *
 	 * @return the x proc script
 	 */

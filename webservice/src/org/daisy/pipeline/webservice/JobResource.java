@@ -13,9 +13,18 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JobResource.
+ */
 public class JobResource extends ServerResource {
+	
+	/** The job. */
 	private Job job;
 	
+	/* (non-Javadoc)
+	 * @see org.restlet.resource.Resource#doInit()
+	 */
 	@Override  
     public void doInit() {  
 		super.doInit();
@@ -25,6 +34,11 @@ public class JobResource extends ServerResource {
         job = jobMan.getJob(id);
     }  
   
+    /**
+     * Gets the resource.
+     *
+     * @return the resource
+     */
     @Get("xml")
     public Representation getResource() {  
     	if (job == null) {
@@ -38,6 +52,9 @@ public class JobResource extends ServerResource {
 		return dom;
     }  
     
+	/**
+	 * Delete resource.
+	 */
 	@Delete
 	public void deleteResource() {
 		if (job == null) {

@@ -3,8 +3,9 @@ package org.daisy.pipeline.job;
 import java.util.UUID;
 
 
+// TODO: Auto-generated Javadoc
 /**
- * The Class JobUUIDGenerator.
+ * The Class JobUUIDGenerator relies on {@link UUID} objects to generate job ids
  */
 public class JobUUIDGenerator implements JobIdGenerator {
 	

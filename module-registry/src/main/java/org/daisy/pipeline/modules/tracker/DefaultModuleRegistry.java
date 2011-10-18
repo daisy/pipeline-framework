@@ -20,9 +20,20 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+/**
+ * The Class DefaultModuleRegistry tracks the modules loaded into the pipeline.
+ */
 public class DefaultModuleRegistry implements ModuleRegistry {
 
+	/**
+	 * ModuleTracker tracks bundles loaded into the OSGI framework, recognises the daisy pipeline 2 modules and stores them. 
+	 */
 	private final class ModuleTracker implements BundleTrackerCustomizer {
+		
+		/* (non-Javadoc)
+		 * @see org.osgi.util.tracker.BundleTrackerCustomizer#addingBundle(org.osgi.framework.Bundle, org.osgi.framework.BundleEvent)
+		 */
 		@Override
 		public Object addingBundle(final Bundle bundle,
 				final BundleEvent event) {
@@ -68,12 +79,18 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 			return result;
 		}
 
+		/* (non-Javadoc)
+		 * @see org.osgi.util.tracker.BundleTrackerCustomizer#modifiedBundle(org.osgi.framework.Bundle, org.osgi.framework.BundleEvent, java.lang.Object)
+		 */
 		@Override
 		public void modifiedBundle(Bundle bundle,
 				BundleEvent event, Object object) {
 			// TODO reset module
 		}
 
+		/* (non-Javadoc)
+		 * @see org.osgi.util.tracker.BundleTrackerCustomizer#removedBundle(org.osgi.framework.Bundle, org.osgi.framework.BundleEvent, java.lang.Object)
+		 */
 		@Override
 		public void removedBundle(Bundle bundle, BundleEvent event,
 				Object object) {
@@ -84,18 +101,33 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 		}
 	}
 
+	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory
 			.getLogger(DefaultModuleRegistry.class);
 
+	/** The components map. */
 	private HashMap<URI, Module> componentsMap = new HashMap<URI, Module>();
+	
+	/** The modules. */
 	private HashSet<Module> modules = new HashSet<Module>();
+	
+	/** The m parser. */
 	private EXPathPackageParser mParser;
 
+	/** The tracker. */
 	private BundleTracker tracker;
 
+	/**
+	 * Instantiates a new default module registry.
+	 */
 	public DefaultModuleRegistry() {
 	}
 
+	/**
+	 * Inits the the registry (OSGI)
+	 *
+	 * @param context the context
+	 */
 	public void init(BundleContext context) {
 		logger.trace("Activating module registry");
 		tracker = new BundleTracker(context, Bundle.ACTIVE,
@@ -111,32 +143,55 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 		logger.trace("Module registry up");
 	}
 
+	/**
+	 * Closes the registr (OSGI)
+	 */
 	public void close() {
 		tracker.close();
 	}
 
+	/**
+	 * Sets the expath parser to read the module's information
+	 *
+	 * @param parser the new parser
+	 */
 	public void setParser(EXPathPackageParser parser) {
 		this.mParser = parser;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Iterable#iterator()
+	 */
 	public Iterator<Module> iterator() {
 		return modules.iterator();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.modules.ModuleRegistry#getModuleByComponent(java.net.URI)
+	 */
 	public Module getModuleByComponent(URI uri) {
 		return componentsMap.get(uri);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.modules.ModuleRegistry#resolveDependency(java.net.URI, org.daisy.pipeline.modules.Module)
+	 */
 	public Module resolveDependency(URI component, Module source) {
 		// TODO check cache, otherwise delegate to resolver
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.modules.ModuleRegistry#getComponents()
+	 */
 	@Override
 	public Iterable<URI> getComponents() {
 		return componentsMap.keySet();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.modules.ModuleRegistry#addModule(org.daisy.pipeline.modules.Module)
+	 */
 	@Override
 	public void addModule(Module module) {
 		logger.debug("Registring module {}", module.getName());
