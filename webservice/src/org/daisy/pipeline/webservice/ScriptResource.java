@@ -30,7 +30,9 @@ public class ScriptResource extends AuthenticatedResource {
 		}
 		ScriptRegistry scriptRegistry = ((PipelineWebService)this.getApplication()).getScriptRegistry();
 		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptUri);
-		script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
+		if (unfilteredScript != null) {
+			script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
+		}
 	}
 
 	@Get("xml")

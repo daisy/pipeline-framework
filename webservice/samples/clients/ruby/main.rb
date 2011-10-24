@@ -5,6 +5,7 @@ require 'nokogiri'
 require 'optparse'
 require './settings.rb'
 require './operations.rb'
+require './presets.rb'
 
 def main
 

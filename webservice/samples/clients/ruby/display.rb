@@ -51,7 +51,7 @@ def display_job(element)
     puts "ERROR: #{err['level']}. #{err.content}"
   end
   element.xpath(".//warning").each do |err|
-    puts "ERROR: #{err['level']}. #{err.content}"
+    puts "WARNING: #{err['level']}. #{err.content}"
   end
   message("\n")
 end

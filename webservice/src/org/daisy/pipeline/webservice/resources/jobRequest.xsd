@@ -4,8 +4,10 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="data:script" maxOccurs="1" minOccurs="1"/>
-        <xs:element ref="data:input" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="data:option" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:choice maxOccurs="unbounded">
+            <xs:element ref="data:input" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="data:option" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:choice>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
