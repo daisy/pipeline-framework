@@ -1,257 +1,98 @@
 # takes care of all the rest calls
+require 'net/http'
+require 'uri'
+require 'nokogiri'
+require './multipart.rb'
+require './authentication'
 
 module Rest
+  module_function
 
-  require 'net/http'
-  require 'uri'
-  require 'nokogiri'
-  require './settings.rb'
-  require './multipart.rb'
-
-  def get_script(script_uri)
+  def get_resource(uri)
     begin
-      uri = URI.parse(prepare_auth_uri("#{Settings.instance.baseuri}script?id=#{script_uri}"))
-      response = Net::HTTP.get_response(uri)
-      trace(response.body, "get script")
+      authUri = URI.parse(Authentication.prepare_authenticated_uri(uri))
+      response = Net::HTTP.get_response(authUri)
+
+      puts "Response was #{response}"
 
       case response
         when Net::HTTPSuccess
-          doc = Nokogiri::XML(response.body)
-          doc.remove_namespaces!
-          return doc
+          return response.body
         when Net::HTTPInternalServerError
-          error "Server blew up"
           return nil
         else
-          error "Unknown error: #{response}"
           return nil
       end
 
     rescue
-      error("Error: GET #{uri.to_s} failed.")
+      puts "Error: GET #{uri.to_s} failed."
       return nil
     end
   end
-  module_function :get_script
 
-  def get_scripts
-    begin
-      uri = URI.parse(prepare_auth_uri("#{Settings.instance.baseuri}scripts"))
-      response = Net::HTTP.get_response(uri)
-      case response
-        when Net::HTTPSuccess
-          trace(response.body, "get scripts")
-          doc = Nokogiri::XML(response.body)
-          doc.remove_namespaces!
-          return doc
-        when Net::HTTPInternalServerError
-          error "Server blew up"
-          return nil
-        else
-          error "Unknown error: #{response}"
-          return nil
-      end
-
-    rescue
-      error("Error: GET #{uri.to_s} failed.")
+  def get_resource_as_xml(uri)
+    resource = get_resource(uri)
+    if resource == nil
       return nil
     end
-  end
-  module_function :get_scripts
-
-  # XML request version (no zip attachment)
-  def post_job_xml(request_xml)
-    begin
-      trace(request_xml, "post job (xml)")
-      uristring = prepare_auth_uri("#{Settings.instance.baseuri}jobs")
-      uri = URI.parse(uristring)
-      request = Net::HTTP::Post.new(uri.request_uri)
-      request.body = request_xml
-      response = Net::HTTP.start(uri.host, uri.port) {|http| http.request(request)}
-      case response
-        when Net::HTTPCreated
-          message "Job created"
-          message response.get_fields('content-location')
-          return true
-        when Net::HTTPInternalServerError
-          error "Server blew up"
-          return false
-        else
-          error "Unknown error: #{response}"
-          return false
-      end
-    rescue
-      error("Error: POST #{uri.to_s} failed.")
-      return false
+    doc = Nokogiri.XML(resource) do |config|
+      config.default_xml.noblanks
     end
+    return doc
   end
-  module_function :post_job_xml
 
-  # multipart version
-  def post_job_multipart(request_xml, zipfile_path)
+  def post_resource(uri, request_contents, data)
     begin
-      trace(request_xml, "post job (multipart)")
-      params = {}
-      file = File.open(zipfile_path, "rb")
-      params["jobData"] = file
+      authUri = URI.parse(Authentication.prepare_authenticated_uri(uri))
+      request = Net::HTTP::Post.new(authUri.request_uri)
 
-      params["jobRequest"] = request_xml
+      # send the request as the body
+      if data == nil
+        request.body = request_contents
+        response = Net::HTTP.start(authUri.host, authUri.port) {|http| http.request(request)}
 
-      mp = Multipart::MultipartPost.new
-      query, headers = mp.prepare_query(params)
+      # else attach the data as a file in a multipart request
+      else
+        params = {}
+        params["jobData"] = data
+        params["jobRequest"] = request_contents
 
-      file.close
+        mp = Multipart::MultipartPost.new
+        query, headers = mp.prepare_query(params)
+        response = post_form(authUri, query, headers)
 
-      uri = URI.parse(prepare_auth_uri("#{Settings.instance.baseuri}jobs"))
-
-      response = post_form(uri, query, headers)
+      end
+      puts "Response was #{response}"
 
       case response
         when Net::HTTPCreated
-          message "Job created"
-          message response.get_fields('content-location')
-          return true
+          return response.get_fields('content-location')[0]
         when Net::HTTPInternalServerError
-          error "Server blew up"
-          return false
-        else
-          error "Unknown error: #{response}"
-          return false
-      end
-    rescue
-      error("Error: POST #{uri.to_s} failed.")
-      return false
-    end
-  end
-  module_function :post_job_multipart
-
-
-  def post_form(url, query, headers)
-    Net::HTTP.start(url.host, url.port) {|con|
-      con.read_timeout = Settings::TIMEOUT_SECONDS
-      begin
-        return con.post(url.request_uri, query, headers)
-      rescue => e
-        error("POSTING Failed #{e}... #{Time.now}")
-      end
-    }
-  end
-  module_function :post_form
-
-  def get_jobs
-    begin
-      uri = URI.parse(prepare_auth_uri("#{Settings.instance.baseuri}jobs"))
-      response = Net::HTTP.get_response(uri)
-
-      case response
-        when Net::HTTPSuccess
-          trace(response.body, "get jobs")
-          doc = Nokogiri::XML(response.body)
-          doc.remove_namespaces!
-          return doc
-        when Net::HTTPInternalServerError
-          error "Server blew up"
           return nil
         else
-          error "Unknown error: #{response}"
           return nil
       end
     rescue
-      error("Error: GET #{uri.to_s} failed.")
+      puts "Error: POST #{uri.to_s} failed."
       return nil
     end
   end
-  module_function :get_jobs
 
-  def get_job(id)
+  def delete_resource(uri)
     begin
-      uri = URI.parse(prepare_auth_uri("#{Settings.instance.baseuri}jobs/#{id}"))
-      response = Net::HTTP.get_response(uri)
+      authUri = URI.parse(Authentication.prepare_authenticated_uri(uri))
+      request = Net::HTTP::Delete.new(authUri.request_uri)
+      response = Net::HTTP.start(authUri.host, authUri.port) {|http| http.request(request)}
 
-      case response
-        when Net::HTTPSuccess
-          trace(response.body, "get job")
-          doc = Nokogiri::XML(response.body)
-          doc.remove_namespaces!
-          return doc
-        when Net::HTTPInternalServerError
-          error "Server blew up"
-          return nil
-        else
-          error "Unknown error: #{response}"
-          return nil
-      end
-    rescue
-      error("Error: GET #{uri.to_s} failed.")
-      return nil
-    end
-
-  end
-  module_function :get_job
-
-  def get_job_result(id)
-    begin
-      uri = URI.parse(prepare_auth_uri("#{Settings.instance.baseuri}jobs/#{id}/result.zip"))
-      response = Net::HTTP.get_response(uri)
-
-      case response
-        when Net::HTTPSuccess
-          trace(response.body, "get job results")
-          return response.body
-
-        when Net::HTTPInternalServerError
-          error "Server blew up"
-          return nil
-        else
-          error "Unknown error: #{response}"
-          return nil
-      end
-    rescue
-      error("Error: GET #{uri.to_s} failed.")
-      return nil
-    end
-  end
-  module_function :get_job_result
-
-  def get_log(id)
-    begin
-      uri = URI.parse(prepare_auth_uri("#{Settings.instance.baseuri}jobs/#{id}/log"))
-      response = Net::HTTP.get_response(uri)
-
-      case response
-        when Net::HTTPSuccess
-          trace(response.body, "get job log")
-          return response.body
-        when Net::HTTPInternalServerError
-          error "Server blew up"
-          return nil
-        else
-          error "Unknown error: #{response}"
-          return nil
-      end
-    rescue
-      error("Error: GET #{uri.to_s} failed.")
-      return nil
-    end
-  end
-  module_function :get_log
-
-  def delete_job(id)
-    begin
-      uri = URI.parse(prepare_auth_uri("#{Settings.instance.baseuri}jobs/#{id}"))
-      request = Net::HTTP::Delete.new(uri.path)
-      response = Net::HTTP.start(uri.host, uri.port) {|http| http.request(request)}
+      puts "Response was #{response}"
 
       case response
         when Net::HTTPNoContent
-          trace(response.body, "delete job")
           return true
         when Net::HTTPInternalServerError
-          error "Server blew up"
           return false
         else
-          error "Unknown error: #{response}"
-          return nil
+          return false
       end
     rescue
       error("Error: DELETE #{uri.to_s} failed.")
@@ -259,6 +100,16 @@ module Rest
     end
 
   end
-  module_function :delete_job
+
+  def post_form(url, query, headers)
+    Net::HTTP.start(url.host, url.port) {|con|
+      con.read_timeout = Settings::TIMEOUT_SECONDS
+      begin
+        return con.post(url.request_uri, query, headers)
+      rescue => e
+        puts "POST Failed #{e}... #{Time.now}"
+      end
+    }
+  end
 
 end

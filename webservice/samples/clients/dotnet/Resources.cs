@@ -13,73 +13,75 @@ namespace PipelineWSClient
 		
 		public static string baseUri = "http://localhost:8182/ws";
 		
-		public static XmlDocument getScript(string id)
+		public static XmlDocument GetScript(string id)
 		{
 			string uri = String.Format("{0}/script?id={1}", baseUri, id);
-			return Rest.getResourceAsXml(uri);
+			return Rest.GetResourceAsXml(uri);
 		}	
 		
-		public static XmlDocument getScripts()
+		public static XmlDocument GetScripts()
 		{
 			string uri = String.Format("{0}/scripts", baseUri);
-			return Rest.getResourceAsXml(uri);
+			return Rest.GetResourceAsXml(uri);
 		}
 		
-		public static XmlDocument getJob(string id)
+		public static XmlDocument GetJob(string id)
 		{
 			string uri = String.Format("{0}/jobs/{1}", baseUri, id);
-			return Rest.getResourceAsXml(uri);
+			return Rest.GetResourceAsXml(uri);
 		}
 		
-		public static XmlDocument getJobs()
+		public static XmlDocument GetJobs()
 		{
 			string uri = String.Format("{0}/jobs", baseUri);
-			return Rest.getResourceAsXml(uri);
+			return Rest.GetResourceAsXml(uri);
 		}
 		
-		public static string getLog(string id)
+		public static string GetLog(string id)
 		{
 			string uri = String.Format("{0}/jobs/{1}/log", baseUri, id);
-			return Rest.getResource(uri);
+			return Rest.GetResource(uri);
 		}
 		
-		public static void getResult(string id, string filepath)
+		public static void GetResult(string id, string filepath)
 		{
 			string uri = String.Format("{0}/jobs/{1}/result.zip", baseUri, id);
+			string authUri = Authentication.PrepareAuthenticatedUri(uri);
 			using (var client = new WebClient())
 			{
-				client.DownloadFile(uri,filepath);
+				client.DownloadFile(authUri, filepath);
 			}
 		}
 		
-		public static bool deleteJob(string id)
+		public static bool DeleteJob(string id)
 		{
 			string uri = String.Format("{0}/jobs/{1}", baseUri, id);
-			return Rest.deleteResource(uri);
+			return Rest.DeleteResource(uri);
 		}
 		
-		public static string postJob(XmlDocument request)
+		public static string PostJob(string request, FileInfo data = null)
 		{
-			string uri = String.Format ("{0}/jobs", baseUri);
-			return Rest.postResource(uri, xmlDocToString(request));
-		}
-			
-		public static string postJob(XmlDocument request, FileInfo data)
-		{
-			string uri = String.Format ("{0}/jobs", baseUri);
-			Dictionary<string, string> postData = new Dictionary<string, string>();
-			postData.Add(JOB_REQUEST, xmlDocToString(request));
-			string fileMimeType = "application/zip";
-			string fileFormKey = JOB_DATA;
-			return Rest.postResource(uri, postData, data, fileMimeType, fileFormKey);			
+			string uri = String.Format("{0}/jobs", baseUri);
+			if (data == null)
+			{
+				return Rest.PostResource(uri, request);
+			}
+			else
+			{
+				Dictionary<string, string> postData = new Dictionary<string, string>();
+				postData.Add(JOB_REQUEST, request);
+				string fileMimeType = "application/zip";
+				string fileFormKey = JOB_DATA;
+				return Rest.PostResource(uri, postData, data, fileMimeType, fileFormKey);			
+			}
 		}	
 		
 		// returns "DONE", "IDLE", or "RUNNING"
 		// status isn't a core pipeline resource, but it's useful nonetheless
-		public static string getJobStatus(string id)
+		public static string GetJobStatus(string id)
 		{
 			
-			XmlDocument doc = getJob(id);
+			XmlDocument doc = GetJob(id);
 			XmlNamespaceManager manager = new XmlNamespaceManager(doc.NameTable);
 			manager.AddNamespace("ns", "http://www.daisy.org/ns/pipeline/data");
 
@@ -87,7 +89,7 @@ namespace PipelineWSClient
 			return node.Attributes.GetNamedItem("status").Value;
 		}
 		
-		private static string xmlDocToString(XmlDocument doc)
+		private static string XmlDocToString(XmlDocument doc)
 		{
 			StringWriter stringWriter = new StringWriter();
 			XmlTextWriter textWriter = new XmlTextWriter(stringWriter);

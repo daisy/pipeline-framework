@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Collections.Generic;
+using System;
 
 namespace PipelineWSClient
 {
@@ -11,19 +12,20 @@ namespace PipelineWSClient
 	{
 		// success: return response body
 		// failure: return empty string
-		public static string getResource(string uri)
+		public static string GetResource(string uri)
 		{
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+			string authUri = Authentication.PrepareAuthenticatedUri(uri);
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(authUri);
 			request.Method = "GET";
 			HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 			
+			System.Diagnostics.Debug.Print(String.Format("Received status code: {0}", response.StatusCode.ToString()));
+				
 			// 200
 			if (response.StatusCode == HttpStatusCode.OK) 
 			{
 				Stream receiveStream = response.GetResponseStream();
-				return normalizeData(receiveStream);
-				//StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF-8);
-				//return readStream.ReadToEnd();
+				return NormalizeData(receiveStream);
 			}
 			// 404
 			else if (response.StatusCode == HttpStatusCode.NotFound) 
@@ -38,9 +40,9 @@ namespace PipelineWSClient
 		
 		// success: return XmlDocument
 		// failure: return null
-		public static XmlDocument getResourceAsXml(string uri)
+		public static XmlDocument GetResourceAsXml(string uri)
 		{
-			string resource = getResource(uri);
+			string resource = GetResource(uri);
 			if (resource == "") 
 			{
 				return null;
@@ -54,11 +56,13 @@ namespace PipelineWSClient
 		// success: return the location of the new resource
 		// failure: return empty string
 		// use this to post non-mulitpart data (all data in one string)
-		public static string postResource(string uri, string postData)
+		public static string PostResource(string uri, string postData)
 		{
+			string authUri = Authentication.PrepareAuthenticatedUri(uri);
+			
 			byte[] bytes = System.Text.Encoding.UTF8.GetBytes(postData);
 			
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(authUri);
   			request.Method = "POST";
   			request.KeepAlive = true;
 			request.ContentType = "application/xml";
@@ -68,6 +72,7 @@ namespace PipelineWSClient
 			requestStream.Close();
 			
 			HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+			System.Diagnostics.Debug.Print(String.Format("Received status code: {0}", response.StatusCode.ToString()));
 			
 		  	// 201
 			if (response.StatusCode == HttpStatusCode.Created)
@@ -90,10 +95,12 @@ namespace PipelineWSClient
 		// failure: return empty string
 		// use this function to post multipart data, where postData contains each segment
 		// and fileToUpload is the file to upload
-		public static string postResource(string uri, Dictionary<string, string> postData,
+		public static string PostResource(string uri, Dictionary<string, string> postData,
 			FileInfo fileToUpload, string fileMimeType, string fileFormKey)
 		{
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+			string authUri = Authentication.PrepareAuthenticatedUri(uri);
+			
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(authUri);
   			request.Method = "POST";
   			request.KeepAlive = true;
   			string boundary = MultipartBoundary.CreateFormDataBoundary();
@@ -108,6 +115,8 @@ namespace PipelineWSClient
 		  	requestStream.Write(endBytes, 0, endBytes.Length);
 		  	requestStream.Close();
 		    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+			
+			System.Diagnostics.Debug.Print(String.Format("Received status code: {0}", response.StatusCode.ToString()));
 			
 		  	// 201
 			if (response.StatusCode == HttpStatusCode.Created)
@@ -128,11 +137,15 @@ namespace PipelineWSClient
 		
 		// success: return true
 		// failure: return false
-		public static bool deleteResource(string uri)
+		public static bool DeleteResource(string uri)
 		{
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+			string authUri = Authentication.PrepareAuthenticatedUri(uri);
+			
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(authUri);
 			request.Method = "DELETE";
 			HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+			
+			System.Diagnostics.Debug.Print(String.Format("Received status code: {0}", response.StatusCode.ToString()));
 			
 			// 204
 			if (response.StatusCode == HttpStatusCode.NoContent)
@@ -146,9 +159,9 @@ namespace PipelineWSClient
 		}
 		
 		// filter out null characters in the stream, otherwise the XML parser fails
-		private static string normalizeData(Stream data)
+		private static string NormalizeData(Stream data)
 		{
-			byte[] bytes = streamToByteArray(data);
+			byte[] bytes = StreamToByteArray(data);
 			using(MemoryStream buffer = new MemoryStream(bytes.Length)) 
 			{
 				foreach (byte b in bytes) 
@@ -164,7 +177,7 @@ namespace PipelineWSClient
 			return response;
 		}
 		
-		private static byte[] streamToByteArray(Stream data)
+		private static byte[] StreamToByteArray(Stream data)
 		{
 		    byte[] buffer = new byte[16*1024];
 		    using (MemoryStream ms = new MemoryStream())
