@@ -23,7 +23,7 @@ public class Component {
     Logger mLogger = LoggerFactory.getLogger(getClass().getName());
 	public Component(URI uri, String path, ResourceLoader loader) {
 		this.uri = uri;
-		this.path = path.replace("../", "");
+		this.path = path;
 		//this.space = space;
 		this.loader = loader;
 	}
@@ -40,8 +40,6 @@ public class Component {
 		try {
 			
 			mLogger.debug("getting resource from component:"+path);
-			//catalog is placed on the meta-inf folder, all the paths are relative to it
-			//url getResource or getEntry does not support relative paths then get rid of the starting ../
 			URL url= loader.loadResource(path);
 			if(url!=null)
 				return url.toURI();
