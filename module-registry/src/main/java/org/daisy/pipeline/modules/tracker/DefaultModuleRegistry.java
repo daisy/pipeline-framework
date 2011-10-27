@@ -1,17 +1,17 @@
 package org.daisy.pipeline.modules.tracker;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import org.daisy.expath.parser.DefaultModuleBuilder;
-import org.daisy.expath.parser.EXPathPackageParser;
 import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ModuleRegistry;
 import org.daisy.pipeline.modules.ResourceLoader;
+import org.daisy.pipeline.xmlcatalog.XmlCatalogParser;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -27,43 +27,26 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 		public Object addingBundle(final Bundle bundle,
 				final BundleEvent event) {
 			Bundle result = null;
-			URL url = bundle.getResource("expath-pkg.xml");
+			URL url = bundle.getResource("META-INF/catalog.xml");
 			if (url != null) {
 				logger.trace("tracking '{}' <{}>",
 						bundle.getSymbolicName(), url);
-
-				Module module = mParser.parse(url,
-						new DefaultModuleBuilder()
-								.withLoader(new ResourceLoader() {
-
-									public URL loadResource(
-											String path) {
-
-										// TODO: this is not
-										// efficient at all, assure
-										// to
-										// load the whole path
-										// while loading the bundle
-										// Enumeration res =
-										// bundle.findEntries("/",
-										// path,
-										// true);
-										// if(res==null)
-										// return null;
-										// String completePath =
-										// res.nextElement().toString();
-										URL url = bundle
-												.getResource(path);
-										return url;
-									}
-								}));
-
+				
+				Module module;
+				try {
+					module = new OSGIModuleBuilder().withBundle(bundle).withCatalog(mParser.parse(url.toURI())).build();
+				} catch (URISyntaxException e) {
+					logger.error("Error getting catalog uri from "+url+"",e);
+					throw new RuntimeException("Error getting catalog uri",e);
+					
+				}
+				
 				// System.out.println(module.getName());
 				addModule(module);
 				result = bundle;
 
 			}
-
+			
 			// Finally
 			return result;
 		}
@@ -89,7 +72,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 
 	private HashMap<URI, Module> componentsMap = new HashMap<URI, Module>();
 	private HashSet<Module> modules = new HashSet<Module>();
-	private EXPathPackageParser mParser;
+	private XmlCatalogParser mParser;
 
 	private BundleTracker tracker;
 
@@ -115,7 +98,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 		tracker.close();
 	}
 
-	public void setParser(EXPathPackageParser parser) {
+	public void setParser(XmlCatalogParser parser) {
 		this.mParser = parser;
 	}
 

@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.daisy.pipeline.xmlcatalog
+Bundle-SymbolicName: xmlcatalog
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: com.google.common.base,
+ javax.xml.namespace,
+ javax.xml.stream,
+ javax.xml.stream.events,
+ org.daisy.common.stax,
+ org.junit,
+ junit.framework,
+ org.slf4j
+Service-Component: OSGI-INF/parser.xml
+Export-Package: org.daisy.pipeline.xmlcatalog,
+ org.daisy.pipeline.xmlcatalog.stax
+
+

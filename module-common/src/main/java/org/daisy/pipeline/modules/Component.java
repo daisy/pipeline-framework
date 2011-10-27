@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 public class Component {
 
+	private static final String META_INF = "/META-INF/";
+
 	public enum Space {
 		XSLT, XPROC,XQUERY,RNC,XSD,NG
 	}
@@ -21,7 +23,7 @@ public class Component {
     Logger mLogger = LoggerFactory.getLogger(getClass().getName());
 	public Component(URI uri, String path, ResourceLoader loader) {
 		this.uri = uri;
-		this.path = path;
+		this.path = path.replace("../", "");
 		//this.space = space;
 		this.loader = loader;
 	}
@@ -36,8 +38,11 @@ public class Component {
 
 	public URI getResource() {
 		try {
-			mLogger.debug("getting resource from component:"+this.module.getName()+"/"+path);
-			URL url= loader.loadResource(this.module.getName()+"/"+path);
+			
+			mLogger.debug("getting resource from component:"+path);
+			//catalog is placed on the meta-inf folder, all the paths are relative to it
+			//url getResource or getEntry does not support relative paths then get rid of the starting ../
+			URL url= loader.loadResource(path);
 			if(url!=null)
 				return url.toURI();
 			else

@@ -1,9 +1,0 @@
-<package name="org.daisy.pipeline.modules.test-script" xmlns="http://expath.org/ns/pkg">
-	<module version="1.0.0" name="test-script">
-		<title>Test script</title>
-		<xslt>
-			<import-uri>http://www.daisy.org/pipeline/modules/test-script/test.xpl</import-uri>
-			<file>test.xpl</file>
-		</xslt>
-	</module>
-</package>

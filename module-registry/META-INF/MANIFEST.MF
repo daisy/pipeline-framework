@@ -4,7 +4,7 @@ Bundle-Name: DAISY Pipeline 2 Module Registry
 Bundle-SymbolicName: org.daisy.pipeline.modules.registry
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.daisy.expath.parser,
+Import-Package: org.daisy.pipeline.xmlcatalog,
  org.daisy.pipeline.modules,
  org.osgi.framework,
  org.osgi.util.tracker,

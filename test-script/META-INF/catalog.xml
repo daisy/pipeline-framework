@@ -1,0 +1,5 @@
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+         prefer="public">
+	<uri name="http://www.daisy.org/pipeline/modules/test-script/test.xpl" uri="../test-script/test.xpl"/>
+
+</catalog>

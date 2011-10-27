@@ -33,6 +33,7 @@
 	<module>../target-platform</module>
 	<module>../webservice</module>
 	<module>../woodstox-osgi-adapter</module>
+	<module>../xmlcatalog</module>
 	<module>../xproc-api</module>
 	<module>../Main</module>
 	</modules>
