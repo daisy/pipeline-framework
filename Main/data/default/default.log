@@ -1,0 +1,121 @@
+2011-11-02 17:12:40,931 [DEBUG] org.daisy.pipeline.logging.Activator - earlyStartup slf4j SLF4JBridgeHandler...
+2011-11-02 17:12:41,039 [DEBUG] o.d.c.x.c.DynamicXProcConfigurationFactory - Adding step to registry: message
+2011-11-02 17:12:41,041 [INFO ] o.d.p.webservice.PipelineWebService - Starting webservice on port 8182.
+2011-11-02 17:12:41,062 [INFO ] o.r.Component.InternalRouter.Server - Starting the internal [HTTP/1.1] server on port 8182
+2011-11-02 17:12:51,164 [DEBUG] o.r.Component.InternalRouter.Server - Connection from "/127.0.0.1:57175" accepted. New count: 1
+2011-11-02 17:12:51,168 [DEBUG] o.r.Component.InternalRouter.Server - GET /ws/scripts HTTP/1.1
+2011-11-02 17:12:51,168 [DEBUG] o.r.Component.InternalRouter.Server - Reading message from /127.0.0.1:57175
+2011-11-02 17:12:51,173 [DEBUG] o.r.Component.InternalRouter.Server - Host: localhost:8182
+2011-11-02 17:12:51,175 [DEBUG] o.r.Component.InternalRouter.Server - Accept: */*
+2011-11-02 17:12:51,175 [DEBUG] o.r.Component.InternalRouter.Server - 
+2011-11-02 17:12:51,178 [DEBUG] org.restlet.Component.LogService - Processing request to: "http://localhost:8182/ws/scripts"
+2011-11-02 17:12:51,179 [DEBUG] org.restlet.Component.ServerRouter - Default virtual host selected
+2011-11-02 17:12:51,180 [DEBUG] org.restlet.Component.ServerRouter - Base URI: "http://localhost:8182". Remaining part: "/ws/scripts"
+2011-11-02 17:12:51,180 [DEBUG] org.restlet.VirtualHost - Selected route: "/ws" -> org.daisy.pipeline.webservice.PipelineWebService@5288d319
+2011-11-02 17:12:51,181 [DEBUG] org.restlet.VirtualHost - New base URI: "http://localhost:8182/ws". New remaining part: "/scripts"
+2011-11-02 17:12:51,182 [DEBUG] o.r.C.I.PipelineWebService - Selected route: "/scripts" -> Finder for ScriptsResource
+2011-11-02 17:12:51,182 [DEBUG] o.r.C.I.PipelineWebService - New base URI: "http://localhost:8182/ws/scripts". No remaining part to match
+2011-11-02 17:12:51,206 [DEBUG] o.r.C.I.PipelineWebService - Score of annotation "AnnotationInfo [javaMethod: public org.restlet.representation.Representation org.daisy.pipeline.webservice.ScriptsResource.getResource(), resourceInterface: class org.daisy.pipeline.webservice.ScriptsResource, restletMethod: GET, input: xml, output: xml, query: null]"= 0.5
+2011-11-02 17:12:51,207 [DEBUG] o.r.C.I.PipelineWebService - Total score of variant "[text/xml]"= 0.08358333
+2011-11-02 17:12:51,208 [DEBUG] o.r.C.I.PipelineWebService - Score of annotation "AnnotationInfo [javaMethod: public org.restlet.representation.Representation org.daisy.pipeline.webservice.ScriptsResource.getResource(), resourceInterface: class org.daisy.pipeline.webservice.ScriptsResource, restletMethod: GET, input: xml, output: xml, query: null]"= 0.5
+2011-11-02 17:12:51,208 [DEBUG] o.r.C.I.PipelineWebService - Total score of variant "[application/xml]"= 0.08383334
+2011-11-02 17:12:51,261 [DEBUG] o.r.C.I.PipelineWebService - Converter selected for DomRepresentation: DefaultConverter
+2011-11-02 17:12:51,265 [INFO ] org.restlet.Component.LogService - 2011-11-02	17:12:51	127.0.0.1	-	-	8182	GET	/ws/scripts	-	200	-	0	84	http://localhost:8182	-	-
+2011-11-02 17:12:51,267 [DEBUG] o.r.Component.InternalRouter.Server - Writing message to /127.0.0.1:57175
+2011-11-02 17:12:51,268 [DEBUG] o.r.Component.InternalRouter.Server - HTTP/1.1 200 OK
+2011-11-02 17:12:51,278 [DEBUG] o.r.Component.InternalRouter.Server - Transfer-Encoding: chunked
+2011-11-02 17:12:51,278 [DEBUG] o.r.Component.InternalRouter.Server - Date: Wed, 02 Nov 2011 16:12:51 GMT
+2011-11-02 17:12:51,278 [DEBUG] o.r.Component.InternalRouter.Server - Accept-Ranges: bytes
+2011-11-02 17:12:51,279 [DEBUG] o.r.Component.InternalRouter.Server - Server: Restlet-Framework/2.1m7
+2011-11-02 17:12:51,279 [DEBUG] o.r.Component.InternalRouter.Server - Vary: Accept-Charset, Accept-Encoding, Accept-Language, Accept
+2011-11-02 17:12:51,279 [DEBUG] o.r.Component.InternalRouter.Server - Content-Type: application/xml; charset=UTF-8
+2011-11-02 17:12:51,282 [DEBUG] o.r.Component.InternalRouter.Server - 
+2011-11-02 17:12:51,300 [DEBUG] o.r.Component.InternalRouter.Server - Connection to /127.0.0.1:57175 is now closed
+2011-11-02 17:12:51,300 [DEBUG] o.r.Component.InternalRouter.Server - Connection from "/127.0.0.1:57176" accepted. New count: 2
+2011-11-02 17:12:51,301 [DEBUG] o.r.Component.InternalRouter.Server - POST /ws/jobs HTTP/1.1
+2011-11-02 17:12:51,301 [DEBUG] o.r.Component.InternalRouter.Server - Reading message from /127.0.0.1:57176
+2011-11-02 17:12:51,301 [DEBUG] o.r.Component.InternalRouter.Server - Host: localhost:8182
+2011-11-02 17:12:51,302 [DEBUG] o.r.Component.InternalRouter.Server - Accept: */*
+2011-11-02 17:12:51,302 [DEBUG] o.r.Component.InternalRouter.Server - Content-Length: 274613
+2011-11-02 17:12:51,302 [DEBUG] o.r.Component.InternalRouter.Server - Content-Type: application/x-www-form-urlencoded
+2011-11-02 17:12:51,302 [DEBUG] o.r.Component.InternalRouter.Server - Expect: 100-continue
+2011-11-02 17:12:51,302 [DEBUG] o.r.Component.InternalRouter.Server - 
+2011-11-02 17:12:51,304 [DEBUG] org.restlet.Component.LogService - Processing request to: "http://localhost:8182/ws/jobs"
+2011-11-02 17:12:51,304 [DEBUG] org.restlet.Component.ServerRouter - Default virtual host selected
+2011-11-02 17:12:51,305 [DEBUG] org.restlet.Component.ServerRouter - Base URI: "http://localhost:8182". Remaining part: "/ws/jobs"
+2011-11-02 17:12:51,305 [DEBUG] org.restlet.VirtualHost - Selected route: "/ws" -> org.daisy.pipeline.webservice.PipelineWebService@5288d319
+2011-11-02 17:12:51,305 [DEBUG] org.restlet.VirtualHost - New base URI: "http://localhost:8182/ws". New remaining part: "/jobs"
+2011-11-02 17:12:51,305 [DEBUG] o.r.C.I.PipelineWebService - Selected route: "/jobs" -> Finder for JobsResource
+2011-11-02 17:12:51,306 [DEBUG] o.r.C.I.PipelineWebService - New base URI: "http://localhost:8182/ws/jobs". No remaining part to match
+2011-11-02 17:12:51,310 [DEBUG] o.r.C.I.PipelineWebService - Score of annotation "AnnotationInfo [javaMethod: public org.restlet.representation.Representation org.daisy.pipeline.webservice.JobsResource.createResource(org.restlet.representation.Representation) throws java.lang.Exception, resourceInterface: class org.daisy.pipeline.webservice.JobsResource, restletMethod: POST, input: null, output: null, query: null]"= 0.5
+2011-11-02 17:12:51,311 [DEBUG] o.r.C.I.PipelineWebService - Total score of variant "[*/*]"= 0.08358333
+2011-11-02 17:12:51,311 [DEBUG] o.r.C.I.PipelineWebService - The following converter was selected for the [application/x-www-form-urlencoded] representation: org.restlet.engine.converter.DefaultConverter@12e4d0cd
+2011-11-02 17:12:52,338 [WARN ] o.r.C.I.PipelineWebService - Exception or error caught in server resource
+org.restlet.resource.ResourceException: Internal Server Error
+	at org.restlet.resource.ServerResource.doHandle(ServerResource.java:505) ~[na:na]
+	at org.restlet.resource.ServerResource.post(ServerResource.java:1163) ~[na:na]
+	at org.restlet.resource.ServerResource.doHandle(ServerResource.java:580) ~[na:na]
+	at org.restlet.resource.ServerResource.doNegotiatedHandle(ServerResource.java:637) ~[na:na]
+	at org.restlet.resource.ServerResource.doConditionalHandle(ServerResource.java:336) ~[na:na]
+	at org.restlet.resource.ServerResource.handle(ServerResource.java:899) ~[na:na]
+	at org.restlet.resource.Finder.handle(Finder.java:243) ~[na:na]
+	at org.restlet.routing.Filter.doHandle(Filter.java:156) ~[na:na]
+	at org.restlet.routing.Filter.handle(Filter.java:203) ~[na:na]
+	at org.restlet.routing.Router.doHandle(Router.java:428) ~[na:na]
+	at org.restlet.routing.Router.handle(Router.java:645) ~[na:na]
+	at org.restlet.routing.Filter.doHandle(Filter.java:156) ~[na:na]
+	at org.restlet.routing.Filter.handle(Filter.java:203) ~[na:na]
+	at org.restlet.routing.Filter.doHandle(Filter.java:156) ~[na:na]
+	at org.restlet.routing.Filter.handle(Filter.java:203) ~[na:na]
+	at org.restlet.routing.Filter.doHandle(Filter.java:156) ~[na:na]
+	at org.restlet.engine.application.StatusFilter.doHandle(StatusFilter.java:151) ~[na:na]
+	at org.restlet.routing.Filter.handle(Filter.java:203) ~[na:na]
+	at org.restlet.routing.Filter.doHandle(Filter.java:156) ~[na:na]
+	at org.restlet.routing.Filter.handle(Filter.java:203) ~[na:na]
+	at org.restlet.engine.CompositeHelper.handle(CompositeHelper.java:208) ~[na:na]
+	at org.restlet.engine.application.ApplicationHelper.handle(ApplicationHelper.java:75) ~[na:na]
+	at org.restlet.Application.handle(Application.java:377) ~[na:na]
+	at org.restlet.routing.Filter.doHandle(Filter.java:156) ~[na:na]
+	at org.restlet.routing.Filter.handle(Filter.java:203) ~[na:na]
+	at org.restlet.routing.Router.doHandle(Router.java:428) ~[na:na]
+	at org.restlet.routing.Router.handle(Router.java:645) ~[na:na]
+	at org.restlet.routing.Filter.doHandle(Filter.java:156) ~[na:na]
+	at org.restlet.routing.Filter.handle(Filter.java:203) ~[na:na]
+	at org.restlet.routing.Router.doHandle(Router.java:428) ~[na:na]
+	at org.restlet.routing.Router.handle(Router.java:645) ~[na:na]
+	at org.restlet.routing.Filter.doHandle(Filter.java:156) ~[na:na]
+	at org.restlet.engine.application.StatusFilter.doHandle(StatusFilter.java:151) ~[na:na]
+	at org.restlet.routing.Filter.handle(Filter.java:203) ~[na:na]
+	at org.restlet.routing.Filter.doHandle(Filter.java:156) ~[na:na]
+	at org.restlet.routing.Filter.handle(Filter.java:203) ~[na:na]
+	at org.restlet.engine.CompositeHelper.handle(CompositeHelper.java:208) ~[na:na]
+	at org.restlet.Component.handle(Component.java:389) ~[na:na]
+	at org.restlet.Server.handle(Server.java:513) ~[na:na]
+	at org.restlet.engine.connector.ServerConnectionHelper.handle(ServerConnectionHelper.java:250) ~[na:na]
+	at org.restlet.engine.connector.ServerConnectionHelper.doHandleInbound(ServerConnectionHelper.java:183) ~[na:na]
+	at org.restlet.engine.connector.BaseHelper$2.run(BaseHelper.java:585) ~[na:na]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110) ~[na:1.6.0_23]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603) ~[na:1.6.0_23]
+	at java.lang.Thread.run(Thread.java:679) ~[na:1.6.0_23]
+Caused by: org.xml.sax.SAXParseException: Content is not allowed in prolog.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:253) ~[na:1.6.0_23]
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:288) ~[na:1.6.0_23]
+	at org.daisy.pipeline.webservice.JobsResource.createResource(JobsResource.java:108) ~[na:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.6.0_23]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57) ~[na:1.6.0_23]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.6.0_23]
+	at java.lang.reflect.Method.invoke(Method.java:616) ~[na:1.6.0_23]
+	at org.restlet.resource.ServerResource.doHandle(ServerResource.java:491) ~[na:na]
+	... 44 common frames omitted
+2011-11-02 17:12:52,340 [INFO ] org.restlet.Component.LogService - 2011-11-02	17:12:52	127.0.0.1	-	-	8182	POST	/ws/jobs	-	500	426	274613	1035	http://localhost:8182	-	-
+2011-11-02 17:12:52,342 [DEBUG] o.r.Component.InternalRouter.Server - Writing message to /127.0.0.1:57176
+2011-11-02 17:12:52,342 [DEBUG] o.r.Component.InternalRouter.Server - HTTP/1.1 500 Internal Server Error
+2011-11-02 17:12:52,343 [DEBUG] o.r.Component.InternalRouter.Server - Date: Wed, 02 Nov 2011 16:12:52 GMT
+2011-11-02 17:12:52,343 [DEBUG] o.r.Component.InternalRouter.Server - Accept-Ranges: bytes
+2011-11-02 17:12:52,343 [DEBUG] o.r.Component.InternalRouter.Server - Server: Restlet-Framework/2.1m7
+2011-11-02 17:12:52,343 [DEBUG] o.r.Component.InternalRouter.Server - Vary: Accept-Charset, Accept-Encoding, Accept-Language, Accept
+2011-11-02 17:12:52,344 [DEBUG] o.r.Component.InternalRouter.Server - Content-Length: 426
+2011-11-02 17:12:52,344 [DEBUG] o.r.Component.InternalRouter.Server - Content-Type: text/html; charset=UTF-8
+2011-11-02 17:12:52,345 [DEBUG] o.r.Component.InternalRouter.Server - 
+2011-11-02 17:12:52,346 [DEBUG] o.r.Component.InternalRouter.Server - Connection to /127.0.0.1:57176 is now closed
+2011-11-02 17:13:08,796 [DEBUG] o.d.c.x.c.DynamicXProcConfigurationFactory - Removing step from registry: message

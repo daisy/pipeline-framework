@@ -58,13 +58,14 @@
 			show_message("Failed");
 		}
 	}
-	function show_xml($xml) {
+    function show_xml($xml) {
 		if ($xml == NULL) {
 			show_message("No data returned");
 			return;
-		}
-		header("Content-Type: application/xml");
-		echo $xml->asXML();
+		} else {
+		    header("Content-Type: application/xml");
+            echo preg_replace('/>/is',">\n<?xml-stylesheet type=\"text/xsl\" href=\"ws-xhtml.xsl\"?".">",$xml->asXML(),1);
+        }
 	}
 	
 	// this works for log (plain/text) files but zip files come through corrupted
@@ -96,7 +97,7 @@
 		echo "<p>" . $text . "</p>";
 	}
 	
-	$id = "2e4fdd16-5dbd-43c7-9329-7308e8491425";
+	$id = "882c3789-61ec-420b-bf11-f9e430f40434";
 	$script = "http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl";
 	
 	
@@ -116,6 +117,6 @@
 	//post_job($job1_request, null);
 	
 	// these don't
-	//get_result($id);
-	post_job($job2_request, $job2_data);
+	get_result($id);
+	//post_job($job2_request, $job2_data);
 ?>
