@@ -41,6 +41,7 @@ module Rest
     return doc
   end
 
+  # TODO make this more WS-agnostic (factor out post field names)
   def post_resource(uri, request_contents, data)
     begin
       authUri = URI.parse(Authentication.prepare_authenticated_uri(uri))
@@ -54,8 +55,8 @@ module Rest
       # else attach the data as a file in a multipart request
       else
         params = {}
-        params["jobData"] = data
-        params["jobRequest"] = request_contents
+        params["job-data"] = data
+        params["job-request"] = request_contents
 
         mp = Multipart::MultipartPost.new
         query, headers = mp.prepare_query(params)

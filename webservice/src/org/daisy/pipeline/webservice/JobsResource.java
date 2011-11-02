@@ -51,6 +51,9 @@ public class JobsResource extends AuthenticatedResource {
 	private String tempfilePrefix = "p2ws";
 	private String tempfileSuffix = ".zip";
 	
+	private String JOB_DATA_FIELD = "job-data";
+	private String JOB_REQUEST_FIELD = "job-request";
+	
 	@Get("xml")
 	public Representation getResource() {
 		if (!isAuthenticated()) {
@@ -156,7 +159,7 @@ public class JobsResource extends AuthenticatedResource {
 			Iterator<FileItem> it = items.iterator();
 	        while (it.hasNext()) {
 	            FileItem fi = it.next();
-	            if (fi.getFieldName().equals("jobData")) {
+	            if (fi.getFieldName().equals(JOB_DATA_FIELD)) {
 	            	File file = File.createTempFile(tempfilePrefix, tempfileSuffix, new File(tempfileDir));
 	                fi.write(file);	  
 	                
@@ -164,7 +167,7 @@ public class JobsResource extends AuthenticatedResource {
 	                File file2 = new File(file.getAbsolutePath());
 	                zip = new ZipFile(file2); 
 	            }
-	            else if (fi.getFieldName().equals("jobRequest")) {
+	            else if (fi.getFieldName().equals(JOB_REQUEST_FIELD)) {
 	            	xml = fi.getString("utf-8");
 	            }
 	        }

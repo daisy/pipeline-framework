@@ -8,6 +8,7 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobResult;
+import org.restlet.data.Disposition;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.FileRepresentation;
@@ -51,8 +52,16 @@ public class ResultResource extends AuthenticatedResource {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
     		return null;
 		}
-		FileRepresentation rep = new FileRepresentation(new File(zip), MediaType.APPLICATION_ZIP);
-		setStatus(Status.SUCCESS_OK);
-		return rep;
+		//FileRepresentation rep = new FileRepresentation(new File(zip), MediaType.APPLICATION_ZIP);
+		//setStatus(Status.SUCCESS_OK);
+		//return rep;
+		
+		File zipFile = new File(zip);
+		Representation rep = new FileRepresentation(zipFile,MediaType.APPLICATION_ZIP);
+		 Disposition disposition = new Disposition();
+		 disposition.setFilename(job.getId().toString() + ".zip");
+		 disposition.setType(Disposition.TYPE_ATTACHMENT);
+		 rep.setDisposition(disposition);
+		 return rep;
     }  
 }

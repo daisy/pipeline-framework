@@ -95,6 +95,7 @@ namespace PipelineWSClient
 		// failure: return empty string
 		// use this function to post multipart data, where postData contains each segment
 		// and fileToUpload is the file to upload
+		// TODO make one POST function instead of two
 		public static string PostResource(string uri, Dictionary<string, string> postData,
 			FileInfo fileToUpload, string fileMimeType, string fileFormKey)
 		{

@@ -8,8 +8,8 @@ namespace PipelineWSClient
 {
 	class Resources
 	{
-		private static string JOB_REQUEST = "jobRequest";
-		private static string JOB_DATA = "jobData";
+		private static string JOB_REQUEST = "job-request";
+		private static string JOB_DATA = "job-data";
 		
 		public static string baseUri = "http://localhost:8182/ws";
 		
@@ -45,7 +45,7 @@ namespace PipelineWSClient
 		
 		public static void GetResult(string id, string filepath)
 		{
-			string uri = String.Format("{0}/jobs/{1}/result.zip", baseUri, id);
+			string uri = String.Format("{0}/jobs/{1}/result", baseUri, id);
 			string authUri = Authentication.PrepareAuthenticatedUri(uri);
 			using (var client = new WebClient())
 			{

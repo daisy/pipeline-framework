@@ -33,7 +33,7 @@ public class PipelineWebService extends Application {
 		router.attach("/jobs", JobsResource.class);
 		router.attach("/jobs/{id}", JobResource.class);
 		router.attach("/jobs/{id}/log", LogResource.class);
-		router.attach("/jobs/{id}/result.zip", ResultResource.class);
+		router.attach("/jobs/{id}/result", ResultResource.class);
 		return router;
 	}
 

@@ -34,7 +34,7 @@ module Resources
   end
 
   def get_result(id)
-    uri = "#{BASEURI}/jobs/#{id}/result.zip"
+    uri = "#{BASEURI}/jobs/#{id}/result"
     doc = Rest.get_resource(uri)
     return doc
   end
