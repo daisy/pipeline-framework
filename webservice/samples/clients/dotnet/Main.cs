@@ -22,8 +22,8 @@ namespace PipelineWSClient
 			string jobDataFile = null;
 			OptionSet opts = new OptionSet () {
 				{ "id=", "ID of Job or Script", v => id = v },
-				{ "jobRequest=", "XML file representing the job request", v => jobRequestFile = v},
-				{ "jobData=", "Zip file containing the job data", v => jobDataFile = v},
+				{ "job-request=", "XML file representing the job request", v => jobRequestFile = v},
+				{ "job-data=", "Zip file containing the job data", v => jobDataFile = v},
 				{ "help", "Show this message", v => help = v != null },
 				
 			};
@@ -47,7 +47,7 @@ namespace PipelineWSClient
 			
 			if (jobRequestFile == null && command == "new")
 			{
-				Console.WriteLine(String.Format("The command {0} must have a jobRequest parameter, and may also have a jobData parameter.", command));
+				Console.WriteLine(String.Format("The command {0} must have a job-request parameter, and may also have a job-data parameter.", command));
 				ShowUsage(opts);
 				return;
 			}
@@ -118,8 +118,8 @@ namespace PipelineWSClient
 			Console.WriteLine("Show all scripts: \n\tPipelineWSClient.exe scripts");
 			Console.WriteLine("Show a specific script: \n\tPipelineWSClient.exe script --id=http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl");
 			Console.WriteLine("Show a specific job: \n\tPipelineWSClient.exe job --id=873ce8d7-0b92-42f6-a2ed-b5e6a13b8cd7");
-			Console.WriteLine("Create a job: \n\tPipelineWSClient.exe new --jobRequest=../../../testdata/job1Request.xml");
-			Console.WriteLine("Create a job: \n\tPipelineWSClient.exe new --jobRequest=../../../testdata/job2Request.xml --jobData=../../../testdata/job2Data.zip");
+			Console.WriteLine("Create a job: \n\tPipelineWSClient.exe new --job-request=../../../testdata/job1.request.xml");
+			Console.WriteLine("Create a job: \n\tPipelineWSClient.exe new --job-request=../../../testdata/job2.request.xml --job-data=../../../testdata/job2.data.zip");
 		}
 		
 		

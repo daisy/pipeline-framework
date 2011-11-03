@@ -23,7 +23,7 @@
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			
-			curl_setopt($ch, CURLOPT_HTTPHEADER, 'Content-Type: ' . $content_type);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: ' . $content_type));
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 			curl_setopt($ch, CURLOPT_HEADER, true);
 			$response = curl_exec($ch);
@@ -48,9 +48,11 @@
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			
 			// do a multipart upload
-			list($header, $content) = Rest::create_multipart($data);
-			echo $content;
-			curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+			$dataarr = Rest::create_multipart($data);
+			$headers = $dataarr["headers"];
+			$content = $dataarr["content"];
+			
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $content);
 			curl_setopt($ch, CURLOPT_HEADER, true);
 			
@@ -99,7 +101,7 @@
 			$eol = "\r\n";
 			
 			$boundary = md5(time());
-			$header = "Content-Type: multipart/form-data; boundary=" . $boundary; 
+			$headers = array("Content-Type: multipart/form-data; boundary=" . $boundary);
 			
 			foreach ($data_array as $field => $data) {
 				
@@ -134,7 +136,7 @@
 				}
 				
 				$content .= "Content-Type: " . $type . $eol;
-				$content .= "Content-Transfer-Encoding:" . $encoding . $eol;
+				$content .= "Content-Transfer-Encoding: " . $encoding . $eol;
 				
 				$content .= $eol;
 				
@@ -148,7 +150,7 @@
 			$content .= "--" . $boundary . "--" .  $eol;
 			$content .= $eol;
 			
-			return array($headers, $content);
+			return array("headers" => $headers, "content" => $content);
 		}
 		
 		// from http://snipplr.com/view/17242/
@@ -178,18 +180,18 @@
 	    		}
 	    		$str = strtok("\n");
 	    	}
-	    return array($headers, trim($content));
+	    	return array($headers, trim($content));
 	    }
 	
 		private static function array_implode($glue, $separator, $array) {
-		    if (!is_array( $array)) return $array;
+		    if (!is_array($array)) return $array;
 		    $string = array();
 		    foreach ($array as $key => $val) {
 		        if (is_array($val))
 		            $val = implode(',', $val);
 		        $string[] = "{$key}{$glue}{$val}";
 		    }
-		    return implode( $separator, $string );
+		    return implode($separator, $string);
 		}
 	}
 ?>

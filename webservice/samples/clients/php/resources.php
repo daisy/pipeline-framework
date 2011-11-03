@@ -53,7 +53,7 @@
 							
 				$job_data_arr = array("data" => $job_data,
 				 					  "content-type" => "application/zip", 
-				                      "encoding" => "base64", 
+				                      "encoding" => "binary", 
 									  "is-file-attachment" => true, 
 									  "filename" => "data.zip");
 				$data = array(

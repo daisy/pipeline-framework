@@ -90,20 +90,29 @@
 	// use the testdata folder in the root of the samples dir (copy wherever you need to)
 	$job1_request = file_get_contents("testdata/job1Request.xml");
 	$job2_request = file_get_contents("testdata/job2Request.xml");
-	$job2_data = file_get_contents("testdata/job2Data.zip");
-	
-	
-	// these work:
+	$job2_data = null;
+	$filename = "testdata/job2Data.zip";
+	$fh = fopen($filename, "rb");
+	if ($fh) {
+		$job2_data = fread($fh, filesize($filename));
+		fclose($fh);
+	}
 	
 	//get_scripts();
 	//get_script($script);
-	//post_job($job1_request, null);
+	
+	if ($job1_request != false) {
+	//	post_job($job1_request, null);
+	}
+	
+	if ($job2_data != null && $job2_request != false) {
+		post_job($job2_request, $job2_data);
+	}
+	
 	//get_jobs();
 	//get_job($id);
 	//get_result($id);
 	//get_log($id);
 	//delete($id);
 	
-	// this doesn't
-	post_job($job2_request, $job2_data);
 ?>

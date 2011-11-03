@@ -1,6 +1,7 @@
 package org.daisy.pipeline.webservice;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -11,6 +12,7 @@ import java.util.zip.ZipFile;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 
@@ -43,6 +45,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class JobsResource extends AuthenticatedResource {
 
@@ -77,7 +80,7 @@ public class JobsResource extends AuthenticatedResource {
 	 * Example of XML for inline: daisy-pipeline/webservice/samples/xml-formats/jobRequest2.xml
 	 */
 	@Post
-    public Representation createResource(Representation representation) throws Exception {
+    public Representation createResource(Representation representation) {
 		if (!isAuthenticated()) {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
@@ -96,19 +99,36 @@ public class JobsResource extends AuthenticatedResource {
             Request request = this.getRequest();
             // sort through the multipart request
             MultipartRequestData data = processMultipart(request);
-            
+            if (data == null) {
+            	setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+            	return null;
+            }
             doc = data.getXml();
             zipfile = data.getZipFile();
         }
      // else it's not multipart; all data should be inline.
         else {
-        	String s = representation.getText();
-            
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            InputSource is = new InputSource(new StringReader(s));
-            doc = builder.parse(is);
+        	String s;
+			try {
+				s = representation.getText();
+				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	            factory.setNamespaceAware(true);
+	            DocumentBuilder builder = factory.newDocumentBuilder();
+	            InputSource is = new InputSource(new StringReader(s));
+	            doc = builder.parse(is);
+			} catch (IOException e) {
+				e.printStackTrace();
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				return null;
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				return null;
+			} catch (SAXException e) {
+				e.printStackTrace();
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				return null;
+			}
         }
         
             

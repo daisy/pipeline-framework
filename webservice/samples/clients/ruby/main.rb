@@ -24,7 +24,7 @@ def main
   elsif Settings.instance.command == "delete"
     delete_job(Settings.instance.options[:id])
   elsif Settings.instance.command == "new"
-    post_job(Settings.instance.options[:jobRequest], Settings.instance.options[:jobData])
+    post_job(Settings.instance.options[:job_request], Settings.instance.options[:job_data])
   else
     puts "Command #{Settings.instance.command} not recognized"
   end
@@ -58,9 +58,9 @@ def checkargs
   Show a specific job:
 	  main.rb job --id=873ce8d7-0b92-42f6-a2ed-b5e6a13b8cd7
   Create a job:
-	  main.rb new --jobRequest=../../../testdata/job1Request.xml
+	  main.rb new --job-request=../testdata/job1.request.xml
   Create a job:
-  	main.rb new --jobRequest=../../../testdata/job2Request.xml --jobData=../../../testdata/job2Data.zip
+  	main.rb new --job-request=../testdata/job2.request.xml --job-data=../testdata/job2.data.zip
 
   "
 
@@ -69,14 +69,14 @@ def checkargs
       Settings.instance.options[:id] = val
     end
 
-    Settings.instance.options[:jobData] = nil
-      opts.on('--jobData VALUE', 'Zip file containing the job data') do |val|
-        Settings.instance.options[:jobData] = val
+    Settings.instance.options[:job_data] = nil
+      opts.on('--job-data VALUE', 'Zip file containing the job data') do |val|
+        Settings.instance.options[:job_data] = val
     end
 
-    Settings.instance.options[:jobRequest] = nil
-      opts.on('--jobRequest VALUE', 'XML file representing the job request') do |val|
-        Settings.instance.options[:jobRequest] = val
+    Settings.instance.options[:job_request] = nil
+      opts.on('--job-request VALUE', 'XML file representing the job request') do |val|
+        Settings.instance.options[:job_request] = val
     end
 
 
@@ -182,7 +182,7 @@ end
 
 def post_job(job_request_filepath, job_data_filepath)
   if job_request_filepath == ""
-    puts "jobRequest filepath required"
+    puts "job-request filepath required"
     return
   end
 
