@@ -42,16 +42,33 @@
 		
 		public static function post_job($job_request, $job_data) {
 			$uri = Resources::$BASEURI . "/jobs";
-			$data = null;
+			$result = null;
 			if ($job_data != null) {
-				$data = array();
-				$data['job-request'] = $job_request;
-				$data['job-data'] = $job_data;
+				
+				$job_request_arr = array("data" => $job_request, 
+										"content-type" => "text/xml", 
+										"encoding" => "utf8", 
+										"is-file-attachment" => false, 
+										"filename" => null);
+							
+				$job_data_arr = array("data" => $job_data,
+				 					  "content-type" => "application/zip", 
+				                      "encoding" => "base64", 
+									  "is-file-attachment" => true, 
+									  "filename" => "data.zip");
+				$data = array(
+					"job-request" => $job_request_arr,
+					"job-data" => $job_data_arr
+				);
+				
+				$result = Rest::post_resource_multipart($uri, $data);
 			}
 			else {
 				$data = $job_request;
+				$content_type = "text/xml";
+				$result = Rest::post_resource($uri, $data, $content_type);
 			}
-			$result = Rest::post_resource($uri, $data);
+			
 			return $result;
 		}
 		
