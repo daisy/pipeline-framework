@@ -40,7 +40,20 @@
 		download_file($result, $id . ".zip", "application/zip");
 	}
 
-	function post_job($job_request, $job_data) {
+	function post_job($job_request_filename, $job_data_filename) {
+	
+		$job_request = file_get_contents($job_request_filename);
+		
+		$job_data = null;
+		if ($job_data_filename != null) {
+			$fh = fopen($job_data_filename, "rb");
+			if ($fh) {
+				$job_data = fread($fh, filesize($job_data_filename));
+				fclose($fh);
+			}
+		}
+		
+	
 		$result = Resources::post_job($job_request, $job_data);
 		if ($result == null) {
 			show_message("No data returned");
@@ -83,31 +96,20 @@
 		echo "<p>" . $text . "</p>";
 	}
 	
+	
+	// examples of calling the above functions
+	
 	$id = "5650a8d0-16db-4dac-a1a9-0f1130c93c1c";
 	$script = "http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl";
-	
-	
-	// use the testdata folder in the root of the samples dir (copy wherever you need to)
-	$job1_request = file_get_contents("testdata/job1Request.xml");
-	$job2_request = file_get_contents("testdata/job2Request.xml");
-	$job2_data = null;
-	$filename = "testdata/job2Data.zip";
-	$fh = fopen($filename, "rb");
-	if ($fh) {
-		$job2_data = fread($fh, filesize($filename));
-		fclose($fh);
-	}
+	$job1_request_file = "testdata/job1.request.xml";
+	$job2_request_file = "testdata/job2.request.xml";
+	$job2_data_file = "testdata/job2.data.xml";
 	
 	//get_scripts();
 	//get_script($script);
+	//post_job($job1_request_file, null);
 	
-	if ($job1_request != false) {
-	//	post_job($job1_request, null);
-	}
-	
-	if ($job2_data != null && $job2_request != false) {
-		post_job($job2_request, $job2_data);
-	}
+	//post_job($job2_request_file, $job2_data_file);
 	
 	//get_jobs();
 	//get_job($id);
