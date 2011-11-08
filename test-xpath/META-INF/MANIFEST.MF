@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test-xpath
+Bundle-SymbolicName: test-xpath
+Bundle-Version: 1.0.0.qualifier
+Import-Package: net.sf.saxon;version="9.3.0",
+ net.sf.saxon.expr;version="9.3.0",
+ net.sf.saxon.functions;version="9.3.0",
+ net.sf.saxon.lib;version="9.3.0",
+ net.sf.saxon.om;version="9.3.0",
+ net.sf.saxon.trans;version="9.3.0",
+ net.sf.saxon.type;version="9.3.0",
+ net.sf.saxon.value;version="9.3.0",
+ net.sf.saxon.tree.iter,
+ org.osgi.framework;version="1.3.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Service-Component: OSGI-INF/xpath-hello.xml

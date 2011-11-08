@@ -3,7 +3,7 @@ package org.daisy.calabash.steps;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
-import org.daisy.calabash.XProcStepProvider;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
 
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;

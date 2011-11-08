@@ -10,6 +10,6 @@ Import-Package: com.xmlcalabash.core,
  com.xmlcalabash.model,
  com.xmlcalabash.runtime,
  net.sf.saxon.s9api;version="9.2.1.5",
- org.daisy.calabash
+ org.daisy.common.xproc.calabash
 Service-Component: OSGI-INF/step-hello.xml
 Export-Package: org.daisy.calabash.steps

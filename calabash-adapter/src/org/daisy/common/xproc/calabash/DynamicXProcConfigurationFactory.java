@@ -5,12 +5,16 @@ import java.util.Map;
 
 import javax.xml.transform.sax.SAXSource;
 
+import net.sf.saxon.functions.FunctionLibrary;
+import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.trans.XPathException;
 
+import org.daisy.pipeline.xpath.XPathFunctionRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -19,7 +23,6 @@ import com.xmlcalabash.core.XProcConfiguration;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.runtime.XAtomicStep;
-import com.xmlcalabash.util.URIUtils;
 
 public class DynamicXProcConfigurationFactory implements
 		XProcConfigurationFactory, XProcStepRegistry {
@@ -31,25 +34,37 @@ public class DynamicXProcConfigurationFactory implements
 
 	private Map<QName, XProcStepProvider> stepProviders = new HashMap<QName, XProcStepProvider>();
 
+	// private FunctionLibraryList mFunctionLibrary=new FunctionLibraryList();
+	private XPathFunctionRegistry mXPathRegistry = null;
+
 	public XProcConfiguration newConfiguration() {
 		XProcConfiguration config = new DynamicXProcConfiguration(this);
 		loadConfigurationFile(config);
+		this.registerExtensionFunctions(config);
+		// config.getProcessor().getUnderlyingConfiguration().addExtensionBinders(mFunctionLibrary);
+
 		return config;
 	}
-	
-	public void activate(){
+
+	public void activate() {
 		logger.trace("Activating XProc Configuration Factory");
 	}
 
 	public XProcConfiguration newConfiguration(boolean schemaAware) {
-		XProcConfiguration config = new DynamicXProcConfiguration(schemaAware, this);
+		XProcConfiguration config = new DynamicXProcConfiguration(schemaAware,
+				this);
 		loadConfigurationFile(config);
+		this.registerExtensionFunctions(config);
+		// config.getProcessor().getUnderlyingConfiguration().addExtensionBinders(mFunctionLibrary);
 		return config;
 	}
 
 	public XProcConfiguration newConfiguration(Processor processor) {
-		XProcConfiguration config = new DynamicXProcConfiguration(processor, this);
+		XProcConfiguration config = new DynamicXProcConfiguration(processor,
+				this);
 		loadConfigurationFile(config);
+		this.registerExtensionFunctions(config);
+		// config.getProcessor().getUnderlyingConfiguration().addExtensionBinders(mFunctionLibrary);
 		return config;
 	}
 
@@ -62,7 +77,7 @@ public class DynamicXProcConfigurationFactory implements
 	public void removeStep(XProcStepProvider stepProvider, Map<?, ?> properties) {
 		QName type = QName.fromClarkName((String) properties.get("type"));
 		logger.debug("Removing step from registry: {}", type.toString());
- 		stepProviders.remove(type);
+		stepProviders.remove(type);
 	}
 
 	public boolean hasStep(QName type) {
@@ -82,19 +97,38 @@ public class DynamicXProcConfigurationFactory implements
 			logger.debug("Reading Calabash configuration from {}", configPath);
 			// Make this absolute because sometimes it fails from the command
 			// line otherwise. WTF?
-			
-					
+
 			SAXSource source = new SAXSource(new InputSource(configPath));
 			DocumentBuilder builder = conf.getProcessor().newDocumentBuilder();
 			XdmNode doc;
 			try {
 				doc = builder.build(source);
 			} catch (SaxonApiException e) {
-				logger.error("Error loading configuration file",e);
+				logger.error("Error loading configuration file", e);
 				throw new RuntimeException("error loading configuration file",
 						e);
 			}
 			conf.parse(doc);
+		}
+	}
+
+	public void setXPathFunctionRegistry(XPathFunctionRegistry xpathFunctions) {
+		logger.debug("Setting function registry");
+		// mFunctionLibrary.addFunctionLibrary(xpathFunctions);
+		mXPathRegistry = xpathFunctions;
+	}
+
+	private void registerExtensionFunctions(XProcConfiguration config) {
+		if (mXPathRegistry != null) {
+			for (ExtensionFunctionDefinition func : mXPathRegistry
+					.getFunctions()) {
+				try {
+					config.getProcessor().getUnderlyingConfiguration()
+							.registerExtensionFunction(func);
+				} catch (XPathException e) {
+					throw new RuntimeException(e);
+				}
+			}
 		}
 	}
 }
