@@ -13,10 +13,18 @@ import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class LogResource.
+ */
 
 public class LogResource extends AuthenticatedResource {
+	/** The job. */
 	private Job job;
 
+	/* (non-Javadoc)
+	 * @see org.restlet.resource.Resource#doInit()
+	 */
 	@Override  
     public void doInit() {  
 		super.doInit();
@@ -30,6 +38,11 @@ public class LogResource extends AuthenticatedResource {
 	
 	/*
 	 * example output: daisy-pipeline/webservice/docs/sampleXml/log.xml
+	 */
+	/**
+	 * Gets the resource.
+	 *
+	 * @return the resource
 	 */
 	@Get
 	public Representation getResource() {

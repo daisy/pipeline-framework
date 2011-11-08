@@ -58,9 +58,9 @@ public class XProcOutput {
 		}
 
 		/**
-		 * Builds the.
+		 * Builds the xproc output object 
 		 *
-		 * @return the x proc output
+		 * @return the xproc output
 		 */
 		public XProcOutput build() {
 			return new XProcOutput(outputs);
@@ -80,7 +80,7 @@ public class XProcOutput {
 	}
 
 	/**
-	 * Gets the result provider for the given port.
+	 * Gets the result provider for the given port name
 	 *
 	 * @param port the port
 	 * @return the result provider

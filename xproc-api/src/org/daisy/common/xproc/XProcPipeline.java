@@ -13,7 +13,7 @@ public interface XProcPipeline {
 	XProcPipelineInfo getInfo();
 	
 	/**
-	 * Runs the pipline.
+	 * Runs the pipline plugging the input descriptions into the engine
 	 *
 	 * @param data the data
 	 * @return the x proc result

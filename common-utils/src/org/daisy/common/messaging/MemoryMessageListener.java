@@ -9,96 +9,159 @@ import org.daisy.common.messaging.Message.Level;
 
 import com.google.common.collect.HashMultimap;
 
+
+/**
+ * This class receives message events and stores them in memory and gives access to them via the accessor interface.  
+ * The class that is interested in processing a memoryMessage
+ * 
+ */
 public class MemoryMessageListener implements MessageListener,MessageAccessor {
+	
+	/** The m messages. */
 	HashMultimap<Level, Message> mMessages = HashMultimap.create();
 
+	/**
+	 * Stores the message
+	 *
+	 * @param level the level
+	 * @param str the str
+	 * @param thw the thw
+	 */
 	private void store(Level level,String str,Throwable thw){
 		Message msg= new Message.Builder().withLevel(level).withMessage(str).withThrowable(thw).build();
 		mMessages.put(level, msg);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageListener#trace(java.lang.String)
+	 */
 	@Override
 	public void trace(String msg) {
 		store(Level.TRACE, msg, null);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageListener#trace(java.lang.String, java.lang.Throwable)
+	 */
 	@Override
 	public void trace(String msg, Throwable throwable) {
 		store(Level.TRACE, msg, throwable);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageListener#debug(java.lang.String)
+	 */
 	@Override
 	public void debug(String msg) {
 		store(Level.DEBUG, msg, null);
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageListener#debug(java.lang.String, java.lang.Throwable)
+	 */
 	@Override
 	public void debug(String msg, Throwable throwable) {
 		store(Level.DEBUG, msg, throwable);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageListener#info(java.lang.String)
+	 */
 	@Override
 	public void info(String msg) {
 		store(Level.INFO, msg, null);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageListener#info(java.lang.String, java.lang.Throwable)
+	 */
 	@Override
 	public void info(String msg, Throwable throwable) {
 		store(Level.INFO, msg, throwable);
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageListener#warn(java.lang.String)
+	 */
 	@Override
 	public void warn(String msg) {
 		store(Level.WARNING, msg, null);
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageListener#warn(java.lang.String, java.lang.Throwable)
+	 */
 	@Override
 	public void warn(String msg, Throwable throwable) {
 		store(Level.WARNING, msg, throwable);
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageListener#error(java.lang.String)
+	 */
 	@Override
 	public void error(String msg) {
 		store(Level.ERROR, msg, null);
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageListener#error(java.lang.String, java.lang.Throwable)
+	 */
 	@Override
 	public void error(String msg, Throwable throwable) {
 		store(Level.ERROR, msg, throwable);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageAccessor#getErrors()
+	 */
 	@Override
 	public List<Message> getErrors() {
 		return getMessagesFrom(Level.ERROR);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageAccessor#getWarnings()
+	 */
 	@Override
 	public List<Message> getWarnings() {
 		return getMessagesFrom(Level.WARNING);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageAccessor#getInfos()
+	 */
 	@Override
 	public List<Message> getInfos() {
 		return getMessagesFrom(Level.INFO);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageAccessor#getDebugs()
+	 */
 	@Override
 	public List<Message> getDebugs() {
 		return getMessagesFrom(Level.DEBUG);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageAccessor#getTraces()
+	 */
 	@Override
 	public List<Message> getTraces() {
 		return getMessagesFrom(Level.TRACE);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageAccessor#getMessgages(org.daisy.common.messaging.Message.Level[])
+	 */
 	@Override
-	public List<Message> getMessgages(Level... fromLevel) {
+	public List<Message> getMessages(Level... fromLevel) {
 		HashSet<Level> set= new HashSet<Level>();
 		set.addAll(Arrays.asList(fromLevel));
 		LinkedList<Message> msgs= new LinkedList<Message>();
@@ -111,6 +174,12 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 	
 	}
 	
+	/**
+	 * Gets the messages from the given level.
+	 *
+	 * @param level the level
+	 * @return the messages from the level
+	 */
 	private List<Message> getMessagesFrom(Level level){
 		LinkedList<Message> msgs= new LinkedList<Message>();
 		for (Level iter:Level.values()){
@@ -123,6 +192,9 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 		return msgs;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.messaging.MessageListener#getAccessor()
+	 */
 	@Override
 	public MessageAccessor getAccessor() {
 		return this;

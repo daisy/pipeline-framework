@@ -7,9 +7,9 @@ import java.util.Map;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.script.XProcScript;
 
-// TODO: Auto-generated Javadoc
+
 /**
- * The Class DefaultJobManager.
+ * DefaultJobManager allows to manage the jobs submitted to the daisy pipeline 2 
  */
 public class DefaultJobManager implements JobManager {
 	

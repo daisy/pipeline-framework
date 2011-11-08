@@ -46,17 +46,28 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JobsResource.
+ */
 public class JobsResource extends AuthenticatedResource {
 
 	// TODO make configurable
+	/** The tempfile dir. */
 	private String tempfileDir = "/tmp/";
+	
+	/** The tempfile prefix. */
 	private String tempfilePrefix = "p2ws";
 	private String tempfileSuffix = ".zip";
 	
 	private String JOB_DATA_FIELD = "job-data";
 	private String JOB_REQUEST_FIELD = "job-request";
 	
+	/**
+	 * Gets the resource.
+	 *
+	 * @return the resource
+	 */
 	@Get("xml")
 	public Representation getResource() {
 		if (!isAuthenticated()) {
@@ -74,10 +85,15 @@ public class JobsResource extends AuthenticatedResource {
 
 	
 	/*
-	 * Job requests are either posted as multipart, with an attached zip containing the data, or inline.
-	 * 
-	 * Example of XML for multipart: daisy-pipeline/webservice/samples/xml-formats/jobRequest1.xml
-	 * Example of XML for inline: daisy-pipeline/webservice/samples/xml-formats/jobRequest2.xml
+	 * taken from an example at:
+	 * http://wiki.restlet.org/docs_2.0/13-restlet/28-restlet/64-restlet.html
+	 */
+	/**
+	 * Creates the resource.
+	 *
+	 * @param representation the representation
+	 * @return the representation
+	 * @throws Exception the exception
 	 */
 	@Post
     public Representation createResource(Representation representation) {
@@ -161,6 +177,12 @@ public class JobsResource extends AuthenticatedResource {
 	 * taken from an example at:
 	 * http://wiki.restlet.org/docs_2.0/13-restlet/28-restlet/64-restlet.html
 	 */
+	/**
+	 * Process multipart.
+	 *
+	 * @param request the request
+	 * @return the multipart request data
+	 */
 	private MultipartRequestData processMultipart(Request request) {
 		// 1/ Create a factory for disk-based file items
         DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
@@ -218,24 +240,60 @@ public class JobsResource extends AuthenticatedResource {
 	}
 	
 	// just a convenience class for representing the parts of a multipart request
+	/**
+	 * The Class MultipartRequestData.
+	 */
 	private class MultipartRequestData {
+		
+	/**
+	 * Process multipart.
+	 *
+	 * @param request the request
+	 * @return the multipart request data
+	 */
+		/** The zip. */
 		private ZipFile zip;
+		
+		/** The xml. */
 		private Document xml;
 		
+		/**
+		 * Instantiates a new multipart request data.
+		 *
+		 * @param zip the zip
+		 * @param xml the xml
+		 */
 		MultipartRequestData(ZipFile zip, Document xml) {
 			this.zip = zip;
 			this.xml = xml;
 		}
 		
+		/**
+		 * Gets the zip file.
+		 *
+		 * @return the zip file
+		 */
 		ZipFile getZipFile() {
 			return zip;
 		}
 		
+		/**
+		 * Gets the xml.
+		 *
+		 * @return the xml
+		 */
 		Document getXml() {
 			return xml;
 		}
 	}
 	
+	/**
+	 * Creates the job.
+	 *
+	 * @param doc the doc
+	 * @param zip the zip
+	 * @return the job
+	 */
 	private Job createJob(Document doc, ZipFile zip) {
 
 		Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
@@ -278,6 +336,13 @@ public class JobsResource extends AuthenticatedResource {
 		return  job;
 	}
 
+	/**
+	 * Adds the inputs to job.
+	 *
+	 * @param nodes the nodes
+	 * @param inputPorts the input ports
+	 * @param builder the builder
+	 */
 	private void addInputsToJob(NodeList nodes, Iterable<XProcPortInfo> inputPorts, XProcInput.Builder builder) {
 		
 		Iterator<XProcPortInfo> it = inputPorts.iterator();
@@ -339,6 +404,13 @@ public class JobsResource extends AuthenticatedResource {
 		
 	}
 	
+	/**
+	 * Adds the options to job.
+	 *
+	 * @param nodes the nodes
+	 * @param options the options
+	 * @param builder the builder
+	 */
 	private void addOptionsToJob(NodeList nodes, Iterable<XProcOptionInfo> options, XProcInput.Builder builder) {
 		
 		Iterator<XProcOptionInfo> it = options.iterator();

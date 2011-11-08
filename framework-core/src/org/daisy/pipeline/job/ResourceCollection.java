@@ -5,8 +5,9 @@ import java.io.InputStream;
 import org.daisy.common.base.Provider;
 
 
+// TODO: Auto-generated Javadoc
 /**
- * The Interface ResourceCollection defines a set of resources and methods to access them
+ * The Interface ResourceCollection defines a set of resources and methods to access them.
  */
 public interface ResourceCollection {
 	

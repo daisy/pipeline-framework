@@ -13,12 +13,12 @@ import org.daisy.common.xproc.XProcPipelineInfo;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class XProcScript.
+ * XProcScript is an enhanced {@link XProcPipeline} with some extra information, such as production, port and options metadata.  
  */
 public final class XProcScript {
 	
 	/**
-	 * The Class Builder.
+	 * Builder for {@link XProcScript} objects.
 	 */
 	public static class Builder {
 		
@@ -112,9 +112,9 @@ public final class XProcScript {
 		}
 		
 		/**
-		 * Builds the.
+		 * Builds the {@link XProcScript} instance.
 		 *
-		 * @return the x proc script
+		 * @return the {@link XProcScript}
 		 */
 		public XProcScript build(){
 			return new XProcScript(pipelineInfo,name,description,homepage,portsMetadata,optionsMetadata);
@@ -162,7 +162,7 @@ public final class XProcScript {
 	}
 
 	/**
-	 * Gets the x proc pipeline info.
+	 * Gets the {@link XProcPipelineInfo}
 	 *
 	 * @return the x proc pipeline info
 	 */

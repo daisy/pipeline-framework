@@ -6,8 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+
 /**
- * The Class ExecutingJobManager.
+ * Job manager + executing service 
  */
 public class ExecutingJobManager extends DefaultJobManager {
 
@@ -18,7 +19,7 @@ public class ExecutingJobManager extends DefaultJobManager {
 	private JobExecutionService executor = null;
 
 	/**
-	 * Activate.
+	 * Activate (OSGI)
 	 */
 	public void activate(){
 		logger.trace("Activating job manager");

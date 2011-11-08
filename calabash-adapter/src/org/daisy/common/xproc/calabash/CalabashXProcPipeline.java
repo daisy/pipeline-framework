@@ -37,16 +37,32 @@ import com.xmlcalabash.model.Output;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XPipeline;
 
+
+/**
+ * Calabash piplines allow to define and run xproc pipelines using calabash. The pipelines supplied by this class are reusable.   
+ */
 public class CalabashXProcPipeline implements XProcPipeline {
 
+	/** The uri. */
 	private final URI uri;
+	
+	/** The config factory. */
 	private final XProcConfigurationFactory configFactory;
+	
+	/** The uri resolver. */
 	private final URIResolver uriResolver;
+	
+	/** The entity resolver. */
 	private final EntityResolver entityResolver;
+	
+	/** The message listener factory. */
 	private final MessageListenerFactory messageListenerFactory;
 
+	/** The pipeline supplier returns a ready-to-go pipeline instance based on the XProcPipeline object */
 	private final Supplier<PipelineInstance> pipelineSupplier = new Supplier<PipelineInstance>() {
-
+		/**
+		 * configures the clone of the pipeline instance setting all the objects present in the XProcPipeline object
+		 */
 		@Override
 		public PipelineInstance get() {
 			XProcConfiguration config = configFactory.newConfiguration();
@@ -75,6 +91,8 @@ public class CalabashXProcPipeline implements XProcPipeline {
 					listeners.getAccessor());
 		}
 	};
+	
+	/** Suplies the current Pipeline info for this pipeline object */
 	private final Supplier<XProcPipelineInfo> info = Suppliers
 			.memoize(new Supplier<XProcPipelineInfo>() {
 
@@ -112,6 +130,15 @@ public class CalabashXProcPipeline implements XProcPipeline {
 				}
 			});
 
+	/**
+	 * Instantiates a new calabash x proc pipeline.
+	 *
+	 * @param uri the uri to load the xpl file
+	 * @param configFactory the configuration factory
+	 * @param uriResolver the uri resolver
+	 * @param entityResolver the entity resolver
+	 * @param messageListenerFactory the message listener factory used to process pipeline execution related messages
+	 */
 	public CalabashXProcPipeline(URI uri,
 			XProcConfigurationFactory configFactory, URIResolver uriResolver,
 			EntityResolver entityResolver,
@@ -123,11 +150,17 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		this.messageListenerFactory = messageListenerFactory;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.xproc.XProcPipeline#getInfo()
+	 */
 	@Override
 	public XProcPipelineInfo getInfo() {
 		return info.get();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.xproc.XProcPipeline#run(org.daisy.common.xproc.XProcInput)
+	 */
 	@Override
 	public XProcResult run(XProcInput data) {
 		PipelineInstance pipeline = pipelineSupplier.get();
@@ -180,6 +213,13 @@ public class CalabashXProcPipeline implements XProcPipeline {
 				pipeline.messageAccessor);
 	}
 
+	/**
+	 * As xdm node.
+	 *
+	 * @param processor the processor
+	 * @param source the source
+	 * @return the xdm node
+	 */
 	private static XdmNode asXdmNode(Processor processor, Source source) {
 		DocumentBuilder builder = processor.newDocumentBuilder();
 		builder.setDTDValidation(false);
@@ -192,11 +232,27 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		}
 	}
 
+	/**
+	 * The Class PipelineInstance is just a holder for various objects to connect with the suppliers .
+	 */
 	private static final class PipelineInstance {
+		
+		/** The xpipe. */
 		private final XPipeline xpipe;
+		
+		/** The config. */
 		private final XProcConfiguration config;
+		
+		/** The message accessor. */
 		private final MessageAccessor messageAccessor;
 
+		/**
+		 * Instantiates a new pipeline instance.
+		 *
+		 * @param xpipe the xpipe
+		 * @param config the config
+		 * @param accessor the accessor
+		 */
 		private PipelineInstance(XPipeline xpipe, XProcConfiguration config,
 				MessageAccessor accessor) {
 			this.xpipe = xpipe;
