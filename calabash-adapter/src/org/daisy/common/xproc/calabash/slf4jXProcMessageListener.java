@@ -9,10 +9,29 @@ import org.slf4j.LoggerFactory;
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRunnable;
 
+
+/**
+ * The listener interface for receiving slf4jXProcMessage events.
+ * The class that is interested in processing a slf4jXProcMessage
+ * event implements this interface, and the object created
+ * with that class is registered with a component using the
+ * component's <code>addslf4jXProcMessageListener<code> method. When
+ * the slf4jXProcMessage event occurs, that object's appropriate
+ * method is invoked.
+ *
+ * @see slf4jXProcMessageEvent
+ */
 public class slf4jXProcMessageListener implements XProcMessageListener {
+    
+    /** The default logger. */
     private static Logger defaultLogger = LoggerFactory.getLogger("com.xmlcalabash");
+    
+    /** The log. */
     private Logger log = defaultLogger;
 
+    /* (non-Javadoc)
+     * @see com.xmlcalabash.core.XProcMessageListener#error(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String, net.sf.saxon.s9api.QName)
+     */
     public void error(XProcRunnable step, XdmNode node, String message, QName code) {
     	
         if (step != null) {
@@ -24,12 +43,18 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
         log.error(XprocMessageHelper.message(step, node, message, code));
     }
 
+    /* (non-Javadoc)
+     * @see com.xmlcalabash.core.XProcMessageListener#error(java.lang.Throwable)
+     */
     public void error(Throwable exception) {
  
 
         log.error(XprocMessageHelper.errorMessage(exception));
     }
 
+    /* (non-Javadoc)
+     * @see com.xmlcalabash.core.XProcMessageListener#warning(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
+     */
     public void warning(XProcRunnable step, XdmNode node, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
@@ -39,6 +64,9 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
         log.warn(XprocMessageHelper.message(step, node, message));
     }
 
+    /* (non-Javadoc)
+     * @see com.xmlcalabash.core.XProcMessageListener#info(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
+     */
     public void info(XProcRunnable step, XdmNode node, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
@@ -48,6 +76,9 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
         log.info(XprocMessageHelper.message(step, node, message));
     }
 
+    /* (non-Javadoc)
+     * @see com.xmlcalabash.core.XProcMessageListener#fine(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
+     */
     public void fine(XProcRunnable step, XdmNode node, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
@@ -57,6 +88,9 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
         log.debug(XprocMessageHelper.message(step, node, message));
     }
 
+    /* (non-Javadoc)
+     * @see com.xmlcalabash.core.XProcMessageListener#finer(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
+     */
     public void finer(XProcRunnable step, XdmNode node, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
@@ -66,6 +100,9 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
         log.debug(XprocMessageHelper.message(step, node, message));
     }
 
+    /* (non-Javadoc)
+     * @see com.xmlcalabash.core.XProcMessageListener#finest(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
+     */
     public void finest(XProcRunnable step, XdmNode node, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
@@ -75,6 +112,9 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
         log.info(XprocMessageHelper.message(step, node, message));
     }
 
+	/* (non-Javadoc)
+	 * @see com.xmlcalabash.core.XProcMessageListener#warning(java.lang.Throwable)
+	 */
 	@Override
 	public void warning(Throwable exception) {
 		 log.error(XprocMessageHelper.errorMessage(exception));

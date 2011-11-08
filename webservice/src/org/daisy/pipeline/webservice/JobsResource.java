@@ -45,13 +45,27 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JobsResource.
+ */
 public class JobsResource extends ServerResource {
 
 	// TODO make configurable
+	/** The tempfile dir. */
 	private String tempfileDir = "/tmp/";
+	
+	/** The tempfile prefix. */
 	private String tempfilePrefix = "p2ws";
+	
+	/** The tempfile suffix. */
 	private String tempfileSuffix = ".zip";
 	
+	/**
+	 * Gets the resource.
+	 *
+	 * @return the resource
+	 */
 	@Get("xml")
 	public Representation getResource() {
 		String serverAddress = ((PipelineWebService) this.getApplication()).getServerAddress();
@@ -65,6 +79,13 @@ public class JobsResource extends ServerResource {
 	/*
 	 * taken from an example at:
 	 * http://wiki.restlet.org/docs_2.0/13-restlet/28-restlet/64-restlet.html
+	 */
+	/**
+	 * Creates the resource.
+	 *
+	 * @param representation the representation
+	 * @return the representation
+	 * @throws Exception the exception
 	 */
 	@Post
     public Representation createResource(Representation representation) throws Exception {
@@ -122,6 +143,12 @@ public class JobsResource extends ServerResource {
         
     }
 	
+	/**
+	 * Process multipart.
+	 *
+	 * @param request the request
+	 * @return the multipart request data
+	 */
 	private MultipartRequestData processMultipart(Request request) {
 		// 1/ Create a factory for disk-based file items
         DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
@@ -179,24 +206,54 @@ public class JobsResource extends ServerResource {
 	}
 	
 	// just a convenience class for representing the parts of a multipart request
+	/**
+	 * The Class MultipartRequestData.
+	 */
 	private class MultipartRequestData {
+		
+		/** The zip. */
 		private ZipFile zip;
+		
+		/** The xml. */
 		private Document xml;
 		
+		/**
+		 * Instantiates a new multipart request data.
+		 *
+		 * @param zip the zip
+		 * @param xml the xml
+		 */
 		MultipartRequestData(ZipFile zip, Document xml) {
 			this.zip = zip;
 			this.xml = xml;
 		}
 		
+		/**
+		 * Gets the zip file.
+		 *
+		 * @return the zip file
+		 */
 		ZipFile getZipFile() {
 			return zip;
 		}
 		
+		/**
+		 * Gets the xml.
+		 *
+		 * @return the xml
+		 */
 		Document getXml() {
 			return xml;
 		}
 	}
 	
+	/**
+	 * Creates the job.
+	 *
+	 * @param doc the doc
+	 * @param zip the zip
+	 * @return the job
+	 */
 	private Job createJob(Document doc, ZipFile zip) {
 
 		Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
@@ -239,6 +296,13 @@ public class JobsResource extends ServerResource {
 		return  job;
 	}
 
+	/**
+	 * Adds the inputs to job.
+	 *
+	 * @param nodes the nodes
+	 * @param inputPorts the input ports
+	 * @param builder the builder
+	 */
 	private void addInputsToJob(NodeList nodes, Iterable<XProcPortInfo> inputPorts, XProcInput.Builder builder) {
 		
 		Iterator<XProcPortInfo> it = inputPorts.iterator();
@@ -300,6 +364,13 @@ public class JobsResource extends ServerResource {
 		
 	}
 	
+	/**
+	 * Adds the options to job.
+	 *
+	 * @param nodes the nodes
+	 * @param options the options
+	 * @param builder the builder
+	 */
 	private void addOptionsToJob(NodeList nodes, Iterable<XProcOptionInfo> options, XProcInput.Builder builder) {
 		
 		Iterator<XProcOptionInfo> it = options.iterator();

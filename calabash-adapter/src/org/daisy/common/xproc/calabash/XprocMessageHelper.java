@@ -14,7 +14,21 @@ import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRunnable;
 import com.xmlcalabash.util.URIUtils;
 
+// TODO: Auto-generated Javadoc
+/**
+ * Collection of message formating function from the calabash dependent objects to strings
+ */
 public class XprocMessageHelper {
+	
+	/**
+	 * Formats the message from the objects passed as argument.
+	 *
+	 * @param step the step
+	 * @param node the node
+	 * @param message the message
+	 * @param code the code
+	 * @return the string
+	 */
 	public static String message(XProcRunnable step, XdmNode node,
 			String message, QName code) {
 		String prefix = "";
@@ -38,11 +52,25 @@ public class XprocMessageHelper {
 		return prefix + message;
 	}
 
+	/**
+	 * Formats the message from the objects passed as argument.
+	 *
+	 * @param step the step
+	 * @param node the node
+	 * @param message the message
+	 * @return the string
+	 */
 	public static String message(XProcRunnable step, XdmNode node,
 			String message) {
 		return message(step, node, message, null);
 	}
 
+	/**
+	 * Formats an error message from the given exception.
+	 *
+	 * @param exception the exception
+	 * @return the string
+	 */
 	public static String errorMessage(Throwable exception) {
 		StructuredQName qCode = null;
 		SourceLocator loc = null;

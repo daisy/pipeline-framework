@@ -10,7 +10,7 @@ import com.google.common.collect.Maps;
 
 /**
  * The Class XProcPipelineInfo gives access to the collection of ports and options from a pipeline. 
- * This class is immutable, in order to give actual values to ports and options use an XProcInput object.  
+ * This class is immutable, in order to give actual values to ports and options use an {@link XProcInput} object.  
  */
 public final class XProcPipelineInfo {
 

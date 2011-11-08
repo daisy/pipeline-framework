@@ -9,9 +9,16 @@ import org.osgi.framework.ServiceRegistration;
 import com.ctc.wstx.api.ReaderConfig;
 import com.ctc.wstx.stax.WstxInputFactory;
 
+// TODO: Auto-generated Javadoc
+/**
+ * A factory for creating StaxInputFactoryService objects.
+ */
 public class StaxInputFactoryServiceFactory implements ServiceFactory {
 
 
+	/* (non-Javadoc)
+	 * @see org.osgi.framework.ServiceFactory#getService(org.osgi.framework.Bundle, org.osgi.framework.ServiceRegistration)
+	 */
 	@Override
 	public Object getService(Bundle bundle, ServiceRegistration registration) {
         Properties props = new Properties();
@@ -21,6 +28,9 @@ public class StaxInputFactoryServiceFactory implements ServiceFactory {
 		return new  WstxInputFactory();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.osgi.framework.ServiceFactory#ungetService(org.osgi.framework.Bundle, org.osgi.framework.ServiceRegistration, java.lang.Object)
+	 */
 	@Override
 	public void ungetService(Bundle bundle, ServiceRegistration registration,
 			Object service) {

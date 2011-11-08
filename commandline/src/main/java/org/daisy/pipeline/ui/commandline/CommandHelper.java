@@ -2,8 +2,20 @@ package org.daisy.pipeline.ui.commandline;
 
 import java.util.HashMap;
 
+
 //TODO move to CommandPipeline (only used there) ?
+/**
+ * Utilities for CLI command processing
+ */
 public class CommandHelper {
+	
+	/**
+	 * Parses the input list.
+	 *
+	 * @param list the list
+	 * @return the hash map
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
 	public static HashMap<String, String> parseInputList(String list)
 			throws IllegalArgumentException {
 

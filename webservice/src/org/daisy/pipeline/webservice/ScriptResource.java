@@ -13,9 +13,18 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ScriptResource.
+ */
 public class ScriptResource extends ServerResource {
+	
+	/** The script. */
 	private XProcScript script = null;
 	
+	/* (non-Javadoc)
+	 * @see org.restlet.resource.Resource#doInit()
+	 */
 	@Override
 	public void doInit() {
 		super.doInit();
@@ -33,6 +42,11 @@ public class ScriptResource extends ServerResource {
 		script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
 	}
 
+	/**
+	 * Gets the resource.
+	 *
+	 * @return the resource
+	 */
 	@Get("xml")
 	public Representation getResource() {
 		if (script == null) {

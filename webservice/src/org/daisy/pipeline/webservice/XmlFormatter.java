@@ -26,12 +26,24 @@ import org.w3c.dom.Node;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class XmlFormatter.
+ */
 public class XmlFormatter {
 
+	/** The Constant NS_PIPELINE_DATA. */
 	private static final String NS_PIPELINE_DATA = "http://www.daisy.org/ns/pipeline/data";
 
 	/*
 	 * example output: daisy-pipeline/webservice/docs/sampleXml/job.xml
+	 */
+	/**
+	 * Job to xml.
+	 *
+	 * @param job the job
+	 * @param serverAddress the server address
+	 * @return the document
 	 */
 	public static Document jobToXml(Job job, String serverAddress) {
 		Document doc = createDom("job");
@@ -47,6 +59,13 @@ public class XmlFormatter {
 	
 	/*
 	 * example output: daisy-pipeline/webservice/docs/sampleXml/jobs.xml
+	 */
+	/**
+	 * Jobs to xml.
+	 *
+	 * @param jobs the jobs
+	 * @param serverAddress the server address
+	 * @return the document
 	 */
 	public static Document jobsToXml(Iterable<Job> jobs, String serverAddress) {
 		Document doc = createDom("jobs");
@@ -70,6 +89,12 @@ public class XmlFormatter {
 	/*
 	 * example output: daisy-pipeline/webservice/docs/sampleXml/script.xml
 	 */
+	/**
+	 * Xproc script to xml.
+	 *
+	 * @param script the script
+	 * @return the document
+	 */
 	public static Document xprocScriptToXml(XProcScript script) {
 		Document doc = createDom("script");
 		toXmlElm(script, doc);
@@ -84,6 +109,12 @@ public class XmlFormatter {
 	
 	/*
 	 * example output: daisy-pipeline/webservice/docs/sampleXml/scripts.xml
+	 */
+	/**
+	 * Xproc scripts to xml.
+	 *
+	 * @param scripts the scripts
+	 * @return the document
 	 */
 	public static Document xprocScriptsToXml(Iterable<XProcScript> scripts) {
 		Document doc = createDom("scripts");
@@ -104,6 +135,13 @@ public class XmlFormatter {
 		return doc;
 	}
 	
+	/**
+	 * Job log to xml.
+	 *
+	 * @param job the job
+	 * @param serverAddress the server address
+	 * @return the document
+	 */
 	public static Document jobLogToXml(Job job, String serverAddress) {
 		Document doc = createDom("log");
 		Element root = doc.getDocumentElement();
@@ -124,6 +162,13 @@ public class XmlFormatter {
 		return doc;
 	}
 	
+	/**
+	 * To xml elm.
+	 *
+	 * @param script the script
+	 * @param doc the doc
+	 * @return the element
+	 */
 	private static Element toXmlElm(XProcScript script, Document doc) {
 		Element rootElm = null;
 		
@@ -196,6 +241,14 @@ public class XmlFormatter {
 		return rootElm;
 	}
 	
+	/**
+	 * To xml elm.
+	 *
+	 * @param job the job
+	 * @param doc the doc
+	 * @param serverAddress the server address
+	 * @return the element
+	 */
 	private static Element toXmlElm(Job job, Document doc, String serverAddress) {
 		Element rootElm = null;
 		
@@ -259,6 +312,12 @@ public class XmlFormatter {
 		return rootElm;
 	}
 	
+	/**
+	 * Creates the dom.
+	 *
+	 * @param documentElementName the document element name
+	 * @return the document
+	 */
 	public static Document createDom(String documentElementName){
 		try {
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -280,6 +339,12 @@ public class XmlFormatter {
 	 * from: 
 	 * http://www.journaldev.com/71/utility-java-class-to-format-xml-document-to-xml-string-and-xml-to-document
 	 */
+	/**
+	 * DOM to string.
+	 *
+	 * @param doc the doc
+	 * @return the string
+	 */
 	public static String DOMToString(Document doc) {
         String xmlString = "";
         if (doc != null) {
@@ -300,6 +365,12 @@ public class XmlFormatter {
         return xmlString;
     }
 	
+	/**
+	 * Node to string.
+	 *
+	 * @param node the node
+	 * @return the string
+	 */
 	public static String nodeToString(Node node) {
         Document doc = node.getOwnerDocument();
         DOMImplementationLS domImplLS = (DOMImplementationLS) doc.getImplementation();

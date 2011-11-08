@@ -5,12 +5,12 @@ package org.daisy.pipeline.script;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class XProcPortMetadata.
+ * Metadata associated to a port.
  */
 public class XProcPortMetadata {
 	
 	/**
-	 * The Class Builder.
+	 *  Builds the {@link XProcPortMetadata} object
 	 */
 	public static final class Builder {
 		
@@ -57,7 +57,7 @@ public class XProcPortMetadata {
 		}
 		
 		/**
-		 * Builds the.
+		 * Builds the instance.
 		 *
 		 * @return the x proc port metadata
 		 */

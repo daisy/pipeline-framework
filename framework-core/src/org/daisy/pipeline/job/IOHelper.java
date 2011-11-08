@@ -13,12 +13,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
-// TODO: Auto-generated Javadoc
+
 /**
- * The Class IOHelper.
+ * The Class IOHelper offers some utilities to the {@link IOBridge} class.
  */
 public class IOHelper {
 	
+	/** The Constant SLASH. */
 	private static final String SLASH = "/";
 
 	/** The Constant BLOCK_SIZE. */
@@ -51,7 +52,7 @@ public class IOHelper {
 	}
 	
 	/**
-	 * Maps relative uris
+	 * Maps relative uris to the base
 	 *
 	 * @param base the base
 	 * @param uri the uri
@@ -65,7 +66,7 @@ public class IOHelper {
 	
 
 	/**
-	 * Gets the new output folder
+	 * Gets a new output folder
 	 *
 	 * @param base the base
 	 * @return the new output folder
@@ -76,7 +77,7 @@ public class IOHelper {
 	}
 	
 	/**
-	 * Gets the new output file.
+	 * Gets a new output file.
 	 *
 	 * @param base the base
 	 * @param suffix the suffix
@@ -106,7 +107,7 @@ public class IOHelper {
 	}
 	
 	/**
-	 * Dumps the content of the IS to the given path
+	 * Dumps the content of the IS to the given path.
 	 *
 	 * @param is the is
 	 * @param base the base
@@ -128,7 +129,7 @@ public class IOHelper {
 	}
 
 	/**
-	 * Dumps the IS into the OS
+	 * Dumps the given input stream into the output stream
 	 *
 	 * @param is the is
 	 * @param os the os
@@ -144,7 +145,7 @@ public class IOHelper {
 	}
 	
 	/**
-	 * Generate output names  based on its media type
+	 * Generate output names  based on its media type.
 	 *
 	 * @param name the name
 	 * @param type the type
@@ -162,7 +163,7 @@ public class IOHelper {
 	}
 
 	/**
-	 * creates a flat list out of a tree directory
+	 * creates a flat list out of a tree directory.
 	 *
 	 * @param base the base
 	 * @return the list

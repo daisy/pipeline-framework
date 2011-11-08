@@ -10,21 +10,44 @@ import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
 
+
+/**
+ * shows help for a script 
+ */
 public final class CommandScriptHelp implements Command {
 
+	/**
+	 * New instance 
+	 *
+	 * @param scriptName the script name
+	 * @param scriptRegistry the script registry
+	 * @return the command script help
+	 */
 	public static CommandScriptHelp newInstance(String scriptName,
 			ScriptRegistry scriptRegistry) {
 		return new CommandScriptHelp(scriptName, scriptRegistry);
 	}
 
+	/** The script name. */
 	private final String scriptName;
+	
+	/** The script registry. */
 	private final ScriptRegistry scriptRegistry;
 
+	/**
+	 * Instantiates a new command script help.
+	 *
+	 * @param scriptName the script name
+	 * @param scriptRegistry the script registry
+	 */
 	private CommandScriptHelp(String scriptName, ScriptRegistry scriptRegistry) {
 		this.scriptName = scriptName;
 		this.scriptRegistry = scriptRegistry;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.ui.commandline.Command#execute()
+	 */
 	@Override
 	public void execute() throws IllegalArgumentException {
 		for (XProcScriptService scriptService : scriptRegistry.getScripts()) {
@@ -36,6 +59,12 @@ public final class CommandScriptHelp implements Command {
 		System.out.println("Script '" + scriptName + "' not found");
 	}
 
+	/**
+	 * To string.
+	 *
+	 * @param script the script
+	 * @return the string
+	 */
 	private static String toString(XProcScript script) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SCRIPT").append('\n');
@@ -148,6 +177,12 @@ public final class CommandScriptHelp implements Command {
 		return sb.toString();
 	}
 
+	/**
+	 * To file name.
+	 *
+	 * @param uri the uri
+	 * @return the string
+	 */
 	private static String toFileName(URI uri) {
 		String path = uri.getPath();
 		int begin = path.lastIndexOf('/') + 1;

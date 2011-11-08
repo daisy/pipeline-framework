@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableMap;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ZipResourceContext.
+ * The Class ZipResourceContext wrapps a zip file into a resource collection, it is used as context to execute pipelines.
  */
 public final class ZipResourceContext implements ResourceCollection {
 	

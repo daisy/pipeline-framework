@@ -11,7 +11,19 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.xml.sax.InputSource;
 
+
+/**
+ * Some Sax utilities.
+ */
 public class SAXHelper {
+	
+	/**
+	 * Gets the sax source.
+	 *
+	 * @param path the path
+	 * @return the sax source
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
 	public static Source getSaxSource(String path) throws IllegalArgumentException {
 		File file = new File(path);
 		if (!file.exists() || !file.canRead()) {
@@ -21,6 +33,13 @@ public class SAXHelper {
 		return new SAXSource(new InputSource(file.toURI().toString()));
 	}
 
+	/**
+	 * Gets the sax result.
+	 *
+	 * @param output the output
+	 * @return the sax result
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
 	public static Result getSaxResult(String output) throws IllegalArgumentException {
 		if (output == null || output.isEmpty()) {
 			return new StreamResult(System.out);

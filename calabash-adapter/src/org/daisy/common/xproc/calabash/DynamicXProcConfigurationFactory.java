@@ -21,60 +21,102 @@ import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.runtime.XAtomicStep;
 import com.xmlcalabash.util.URIUtils;
 
+// TODO: Auto-generated Javadoc
+/**
+ * Mainly thought to be used throught OSGI this class creates configuration objects used with the calabash engine wrapper.
+ */
 public class DynamicXProcConfigurationFactory implements
 		XProcConfigurationFactory, XProcStepRegistry {
 
+	/** The Constant CONFIG_PATH. */
 	public static final String CONFIG_PATH = "org.daisy.pipeline.xproc.configuration";
 
+	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory
 			.getLogger(DynamicXProcConfigurationFactory.class);
 
+	/** The step providers. */
 	private Map<QName, XProcStepProvider> stepProviders = new HashMap<QName, XProcStepProvider>();
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.xproc.calabash.XProcConfigurationFactory#newConfiguration()
+	 */
 	public XProcConfiguration newConfiguration() {
 		XProcConfiguration config = new DynamicXProcConfiguration(this);
 		loadConfigurationFile(config);
 		return config;
 	}
 	
+	/**
+	 * Activate (OSGI)
+	 */
 	public void activate(){
 		logger.trace("Activating XProc Configuration Factory");
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.xproc.calabash.XProcConfigurationFactory#newConfiguration(boolean)
+	 */
 	public XProcConfiguration newConfiguration(boolean schemaAware) {
 		XProcConfiguration config = new DynamicXProcConfiguration(schemaAware, this);
 		loadConfigurationFile(config);
 		return config;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.xproc.calabash.XProcConfigurationFactory#newConfiguration(net.sf.saxon.s9api.Processor)
+	 */
 	public XProcConfiguration newConfiguration(Processor processor) {
 		XProcConfiguration config = new DynamicXProcConfiguration(processor, this);
 		loadConfigurationFile(config);
 		return config;
 	}
 
+	/**
+	 * Adds the step.
+	 *
+	 * @param stepProvider the step provider
+	 * @param properties the properties
+	 */
 	public void addStep(XProcStepProvider stepProvider, Map<?, ?> properties) {
 		QName type = QName.fromClarkName((String) properties.get("type"));
 		logger.debug("Adding step to registry: {}", type.toString());
 		stepProviders.put(type, stepProvider);
 	}
 
+	/**
+	 * Removes the step from the registry
+	 *
+	 * @param stepProvider the step provider
+	 * @param properties the properties
+	 */
 	public void removeStep(XProcStepProvider stepProvider, Map<?, ?> properties) {
 		QName type = QName.fromClarkName((String) properties.get("type"));
 		logger.debug("Removing step from registry: {}", type.toString());
  		stepProviders.remove(type);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.xproc.calabash.XProcStepRegistry#hasStep(net.sf.saxon.s9api.QName)
+	 */
 	public boolean hasStep(QName type) {
 		return stepProviders.containsKey(type);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.xproc.calabash.XProcStepRegistry#newStep(net.sf.saxon.s9api.QName, com.xmlcalabash.core.XProcRuntime, com.xmlcalabash.runtime.XAtomicStep)
+	 */
 	public XProcStep newStep(QName type, XProcRuntime runtime, XAtomicStep step) {
 		XProcStepProvider stepProvider = stepProviders.get(type);
 		return (stepProvider != null) ? stepProvider.newStep(runtime, step)
 				: null;
 	}
 
+	/**
+	 *  Loads the custom configuration file located in CONFIG_PATH 
+	 *
+	 * @param conf the conf
+	 */
 	private void loadConfigurationFile(XProcConfiguration conf) {
 		// TODO cleanup and cache
 		String configPath = System.getProperty(CONFIG_PATH);

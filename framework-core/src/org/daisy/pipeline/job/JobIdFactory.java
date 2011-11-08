@@ -2,13 +2,14 @@ package org.daisy.pipeline.job;
 
 
 
+// TODO: Auto-generated Javadoc
 /**
  * A factory for creating JobId objects.
  */
 public class JobIdFactory {
 	
 	/**
-	 * New id object
+	 * New id object.
 	 *
 	 * @return the job id
 	 */
@@ -18,7 +19,7 @@ public class JobIdFactory {
 	}
 	
 	/**
-	 * New id using a string object as base 
+	 * New id using a string object as base.
 	 *
 	 * @param base the base
 	 * @return the job id

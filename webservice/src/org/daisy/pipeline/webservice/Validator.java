@@ -30,19 +30,41 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Validator.
+ */
 public class Validator {
 	
 	// although in everyday practice, the function validateJobRequest will be the most-used, 
 	// all the schema URLs are included here so that during testing, the web service can validate
 	// its own output by calling validateXml with the appropriate schema URL.
+	/** The Constant scriptSchema. */
 	public static final URL scriptSchema = Validator.class.getResource("resources/script.xsd");
+	
+	/** The Constant scriptsSchema. */
 	public static final URL scriptsSchema = Validator.class.getResource("resources/scripts.xsd");
+	
+	/** The Constant jobSchema. */
 	public static final URL jobSchema = Validator.class.getResource("resources/job.xsd");
+	
+	/** The Constant jobRequestSchema. */
 	public static final URL jobRequestSchema = Validator.class.getResource("resources/jobRequest.xsd");
+	
+	/** The Constant jobsSchema. */
 	public static final URL jobsSchema = Validator.class.getResource("resources/jobs.xsd");
+	
+	/** The Constant logSchema. */
 	public static final URL logSchema = Validator.class.getResource("resources/log.xsd");
 	
 	// If the Document isn't namespace-aware, this will likely fail
+	/**
+	 * Validate xml.
+	 *
+	 * @param document the document
+	 * @param schemaUrl the schema url
+	 * @return true, if successful
+	 */
 	public static boolean validateXml(Document document, URL schemaUrl) {
 	    
 		if (document == null) {
@@ -85,6 +107,13 @@ public class Validator {
 		return false;
 	}
 	
+	/**
+	 * Validate job request.
+	 *
+	 * @param doc the doc
+	 * @param application the application
+	 * @return true, if successful
+	 */
 	public static boolean validateJobRequest(Document doc, PipelineWebService application) {
 		
 		// validate against the schema
@@ -97,6 +126,13 @@ public class Validator {
 	
 	// check that there is a value for each required argument
 	// check data of the argument value to the fullest extent possible
+	/**
+	 * Validate arguments.
+	 *
+	 * @param doc the doc
+	 * @param application the application
+	 * @return true, if successful
+	 */
 	private static boolean validateArguments(Document doc, PipelineWebService application) {
 		
 		Element scriptElm = (Element)doc.getElementsByTagName("script").item(0);
@@ -131,6 +167,14 @@ public class Validator {
 		return hasAllRequiredInputs & hasAllRequiredOptions;
 	}
 
+	/**
+	 * Validate option data.
+	 *
+	 * @param options the options
+	 * @param nodes the nodes
+	 * @param script the script
+	 * @return true, if successful
+	 */
 	private static boolean validateOptionData(Iterable<XProcOptionInfo> options, NodeList nodes, XProcScript script) {
 		Iterator<XProcOptionInfo>it = options.iterator();
 		boolean hasAllRequiredArgs = true;
@@ -160,6 +204,14 @@ public class Validator {
 		return hasAllRequiredArgs;
 	}
 
+	/**
+	 * Validate input port data.
+	 *
+	 * @param ports the ports
+	 * @param nodes the nodes
+	 * @param script the script
+	 * @return true, if successful
+	 */
 	private static boolean validateInputPortData(Iterable<XProcPortInfo> ports, NodeList nodes, XProcScript script) {
 		
 		Iterator<XProcPortInfo>it = ports.iterator();
@@ -219,6 +271,13 @@ public class Validator {
 	// nodes must contain at least one item
 	// nodes must be <docwrapper> elements
 	// TODO incorporate media type
+	/**
+	 * Validate docwrapper elements.
+	 *
+	 * @param nodes the nodes
+	 * @param mediaType the media type
+	 * @return true, if successful
+	 */
 	private static boolean validateDocwrapperElements(NodeList nodes, String mediaType) {
 		boolean isValid = true;
 		
@@ -242,6 +301,12 @@ public class Validator {
 	// make sure these @src attributes are non-empty
 	// nodes must contain at least one item
 	// all nodes must be <file> elements
+	/**
+	 * Validate file elements.
+	 *
+	 * @param nodes the nodes
+	 * @return true, if successful
+	 */
 	private static boolean validateFileElements(NodeList nodes) {
 		boolean isValid = true;
 		
@@ -252,6 +317,13 @@ public class Validator {
 		return isValid;
 	}
 
+	/**
+	 * Validate option type.
+	 *
+	 * @param value the value
+	 * @param mediaType the media type
+	 * @return true, if successful
+	 */
 	private static boolean validateOptionType(String value, String mediaType) {
 		// TODO what are all the possibilities for mediaType?
 		// for now, just check that the string is non-empty
@@ -261,6 +333,12 @@ public class Validator {
 	// just validate whether the xml is well-formed or not.  
 	// we don't verify flavor of xml is expected; 
 	// that's expected to be handled by the xproc script itself
+	/**
+	 * Validate well formed xml.
+	 *
+	 * @param xml the xml
+	 * @return true, if successful
+	 */
 	private static boolean validateWellFormedXml(String xml){
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
