@@ -33,7 +33,7 @@ public class Authenticator {
 			try {
 				serverHash = Authenticator.calculateRFC2104HMAC(hashuri, clientSecret);
 				
-				SimpleDateFormat UTC_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+				SimpleDateFormat UTC_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 				UTC_FORMATTER.setTimeZone(TimeZone.getTimeZone("UTC"));
 				
 				Date serverTimestamp = new Date(System.currentTimeMillis());

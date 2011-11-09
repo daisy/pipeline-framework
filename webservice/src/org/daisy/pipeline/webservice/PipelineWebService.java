@@ -20,7 +20,7 @@ public class PipelineWebService extends Application {
 	// TODO make port, address, and authentication on/off configurable
 	private final String serverAddress = "http://localhost:8182/ws";
 	private final int portNumber = 8182;
-	private final boolean usesAuthentication = false;
+	private final boolean usesAuthentication = true;
 	
 	private JobManager jobManager;
 	private ScriptRegistry scriptRegistry;

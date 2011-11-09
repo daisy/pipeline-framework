@@ -1,25 +1,54 @@
 <?php 
+	require("authentication.php");
 	class Rest {
 		
+		// return an associative array
+		// ['success'] = did the request work
+		// ['status-code'] = HTTP status code
+		// ['data'] = response data
 		public static function get_resource($uri) {
+			$auth_uri = Authentication::prepare_authenticated_uri($uri);
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $uri); 
+			curl_setopt($ch, CURLOPT_URL, $auth_uri); 
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_TIMEOUT, '3');
-			$resource = curl_exec($ch);
+			curl_setopt($ch, CURLOPT_TIMEOUT, '10');
+			$response = curl_exec($ch);
+			$info = curl_getinfo($ch);
 			curl_close($ch);
-			return $resource;			
+			
+			if($info['http_code'] == 200) {
+				return array("success" => true, "status-code" => $info['http_code'], "data" => $response);			
+			}
+			else {
+				return array("success" => false, "status-code" => $info['http_code'], "data" => null);
+			}
+			
 		}
 		
+		// return an associative array
+		// ['success'] = did the request work
+		// ['status-code'] = HTTP status code
+		// ['data'] = response data as XML object
 		public static function get_resource_as_xml($uri) {
 			$resource = Rest::get_resource($uri);
-			$xml = new SimpleXMLElement($resource);
-			return $xml;
+			
+			if ($resource['data'] == null) {
+				// $resource[status-code] should give the reason for null data, so just pass it along
+				return $resource;
+			}
+			$xml = new SimpleXMLElement($resource['data']);
+			$resource['data'] = $xml;
+			return $resource;
 		}
 	
 		// to send raw data as the request, just pass in the raw data
+		// return an associative array
+		// ['success'] = did the request work
+		// ['status-code'] = HTTP status code
+		// ['data'] = location of new resource
 		public static function post_resource($uri, $data, $content_type){
-			$ch = curl_init($uri);
+			$auth_uri = Authentication::prepare_authenticated_uri($uri);
+			$ch = curl_init($auth_uri);
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			
@@ -33,17 +62,22 @@
 			// return the content location header
 			if ($info['http_code'] == 201) {
 				$parsed = Rest::parse_http_response($response);
-				return $parsed[0]['content-location'];
+				return array("success" => true, "status-code" => $info['http_code'], "data" => $parsed[0]['content-location']);
 			}
 			else {
-				return null;
+				return array("success" => false, "status-code" => $info['http_code'], "data" => null);
 			}
 		}
+		
 		// to send a multipart request, send an array with field names and data 
 		// in the form of data['field'] = [rawdata, content_type, encoding, is_file_attachment, filename]
+		// return an associative array
+		// ['success'] = did the request work
+		// ['status-code'] = HTTP status code
+		// ['data'] = response data
 		public static function post_resource_multipart($uri, $data) {
-		
-			$ch = curl_init($uri);
+			$auth_uri = Authentication::prepare_authenticated_uri($uri);
+			$ch = curl_init($auth_uri);
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			
@@ -63,17 +97,23 @@
 			// return the content location header
 			if ($info['http_code'] == 201) {
 				$parsed = Rest::parse_http_response($response);
-				return $parsed[0]['content-location'];
+				return array("success" => true, "status-code" => $info['http_code'], "data" => $parsed[0]['content-location']);
 			}
 			else {
-				return null;
+				return array("success" => false, "status-code" => $info['http_code'], "data" => null);
 			}
 			
 		}
 	
+		// return an associative array
+		// ['success'] = did the request work
+		// ['status-code'] = HTTP status code
+		// ['data'] = response data (always null for delete operations)
 		public static function delete_resource($uri) {
+			$auth_uri = Authentication::prepare_authenticated_uri($uri);
+			
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $uri); 
+			curl_setopt($ch, CURLOPT_URL, $auth_uri); 
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_TIMEOUT, '3');
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
@@ -82,16 +122,16 @@
 			
 			curl_close($ch);
 			if ($info['http_code'] == 204) {
-				return true;
+				return array("success" => true, "status-code" => $info['http_code'], "data" => null);
 			}
 			else {
-				return false;
+				return array("success" => false, "status-code" => $info['http_code'], "data" => null);
 			}
 		}
 		
 		// data_array is an associative array indexed by form field name
 		// it contains associative arrays
-		//$data_array['field'] = ("data" => raw data, 
+		//$data_array['field'] = ("response" => raw data, 
 		//						  "content-type" => type, 
 		//						  "encoding" => character encoding, 
 		// 						  "is-file-attachment" => true/false

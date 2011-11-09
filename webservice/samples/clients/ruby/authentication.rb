@@ -13,7 +13,7 @@ module Authentication
   # the input URI includes all parameters except key, timestamp, and hash
   def prepare_authenticated_uri(uri)
     uristring = ""
-    timestamp = Time.now.utc.strftime('%Y-%m-%dT%H:%M:%S.%3NZ')
+    timestamp = Time.now.utc.strftime('%Y-%m-%dT%H:%M:%SZ')
     nonce = generate_nonce
     params = "key=#{CLIENT_KEY}&time=#{timestamp}&nonce=#{nonce}"
     if uri.index("?") == nil

@@ -13,7 +13,7 @@ namespace PipelineWSClient
 		public static string PrepareAuthenticatedUri(string uri)
 		{
 			string uristring = null;
-  			string timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+  			string timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
   			string nonce = GenerateNonce();
   			string query = String.Format("key={0}&time={1}&nonce={2}", CLIENT_KEY, timestamp, nonce);
   			if (uri.Contains("?"))

@@ -4,40 +4,44 @@
 
 	function get_scripts() {
 		$result = Resources::get_scripts();
-		show_xml($result);
+		handle_xml_result($result);
 	}
 
 	function get_script($id) {
 		$result = Resources::get_script($id);
-		show_xml($result);
+		handle_xml_result($result);
 	}
 
 	function get_jobs() {
 		$result = Resources::get_jobs();
-		show_xml($result);
+		handle_xml_result($result);
 	}
 
 	function get_job($id) {
 		$result = Resources::get_job($id);
-		show_xml($result);
+		handle_xml_result($result);
 	}
 
 	function get_log($id) {
 		$result = Resources::get_log($id);
-		if ($result == null) {
-			show_message("No data returned");
+		
+		if ($result["success"] == false) {
+			show_message("Operation failed with status code " . $result['status-code']);
 			return;
 		}
-		download_file($result, $id . ".log", "text/plain");
+		
+		download_file($result['data'], $id . ".log", "text/plain");
 	}
 
 	function get_result($id) {
 		$result = Resources::get_result($id);
-		if ($result == null) {
-			show_message("No data returned");
+		
+		if ($result["success"] == false) {
+			show_message("Operation failed with status code " . $result['status-code']);
 			return;
-		}
-		download_file($result, $id . ".zip", "application/zip");
+		}	
+		
+		download_file($result['data'], $id . ".zip", "application/zip");
 	}
 
 	function post_job($job_request_filename, $job_data_filename) {
@@ -55,30 +59,42 @@
 		
 	
 		$result = Resources::post_job($job_request, $job_data);
-		if ($result == null) {
-			show_message("No data returned");
+		
+		if ($result['success'] == false) {
+			show_message("Operation failed with status code " . $result['status-code']);
 			return;
 		}
-		show_message($result);
+		
+		show_message("New job created: " . $result['data']);
 	}
 
 	function delete($id) {
 		$result = Resources::delete($id);
-		if ($result == true) {
-			show_message("Success");
+		
+		if ($result["success"] == false) {
+			show_message("Operation failed with status code " . $result['status-code']);
+			return;
 		}
-		else {
-			show_message("Failed");
-		}
+		
+		show_message("Job deleted.");
 	}
+	function handle_xml_result($result) {
+		if ($result["success"] == false) {
+			show_message("Operation failed with status code " . $result['status-code']);
+			return;
+		}	
+		
+		show_xml($result['data']);
+	}
+	
     function show_xml($xml) {
 		if ($xml == NULL) {
 			show_message("No data returned");
 			return;
-		} else {
-		    header("Content-Type: application/xml");
-            echo preg_replace('/>/is',">\n<?xml-stylesheet type=\"text/xsl\" href=\"ws-xhtml.xsl\"?".">",$xml->asXML(),1);
-        }
+		} 
+		
+		header("Content-Type: application/xml");
+        echo preg_replace('/>/is',">\n<?xml-stylesheet type=\"text/xsl\" href=\"ws-xhtml.xsl\"?".">",$xml->asXML(),1);
 	}
 	
 	function download_file($file_contents, $filename, $content_type) {
@@ -99,7 +115,7 @@
 	
 	// examples of calling the above functions
 	
-	$id = "5650a8d0-16db-4dac-a1a9-0f1130c93c1c";
+	$id = "fc5e02c9-e499-44ce-b6be-14c6b44df2d3";
 	$script = "http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl";
 	$job1_request_file = "testdata/job1.request.xml";
 	$job2_request_file = "testdata/job2.request.xml";
@@ -113,7 +129,7 @@
 	
 	//get_jobs();
 	//get_job($id);
-	//get_result($id);
+	get_result($id);
 	//get_log($id);
 	//delete($id);
 	
