@@ -12,9 +12,16 @@ import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 
 
+/**
+ * The Class JobResource.
+ */
 public class JobResource extends AuthenticatedResource {
+	/** The job. */
 	private Job job;
 	
+	/* (non-Javadoc)
+	 * @see org.restlet.resource.Resource#doInit()
+	 */
 	@Override  
     public void doInit() {  
 		super.doInit();
@@ -25,6 +32,11 @@ public class JobResource extends AuthenticatedResource {
         job = jobMan.getJob(id);
     }  
   
+    /**
+     * Gets the resource.
+     *
+     * @return the resource
+     */
     @Get("xml")
     public Representation getResource() {  
     	if (!isAuthenticated()) {
@@ -42,6 +54,9 @@ public class JobResource extends AuthenticatedResource {
 		return dom;
     }  
     
+	/**
+	 * Delete resource.
+	 */
 	@Delete
 	public void deleteResource() {
 		if (!isAuthenticated()) {

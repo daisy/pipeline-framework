@@ -12,7 +12,7 @@ import java.net.URI;
 public interface XProcScriptParser  {
 
 	/**
-	 * Parses the script file
+	 * Parses the script file.
 	 *
 	 * @param uri the uri
 	 * @return the x proc script

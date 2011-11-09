@@ -12,9 +12,17 @@ import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ScriptsResource.
+ */
 public class ScriptsResource extends AuthenticatedResource {
+	/** The scripts. */
 	ArrayList<XProcScript> scripts = null;
 	
+	/* (non-Javadoc)
+	 * @see org.restlet.resource.Resource#doInit()
+	 */
 	@Override
 	public void doInit() {
 		super.doInit();
@@ -31,6 +39,11 @@ public class ScriptsResource extends AuthenticatedResource {
 		}
 	}
 	
+	/**
+	 * Gets the resource.
+	 *
+	 * @return the resource
+	 */
 	@Get("xml")
 	public Representation getResource() {
 		if (!isAuthenticated()) {

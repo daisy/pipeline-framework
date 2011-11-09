@@ -23,22 +23,49 @@ import com.xmlcalabash.core.XProcConfiguration;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.runtime.XPipeline;
 
+// TODO: Auto-generated Javadoc
+/**
+ * Implementation of the XProcResult interface
+ */
 public final class CalabashXProcResult implements XProcResult {
 
+	/** The xpipeline. */
 	private final XPipeline xpipeline;
+	
+	/** The configuration. */
 	private final XProcConfiguration configuration;
+	
+	/** The message accessor. */
 	private final MessageAccessor messageAccessor;
 
+	/**
+	 * creates a new XProcResult instance
+	 *
+	 * @param xpipeline the xpipeline whose results where be processed by this object
+	 * @param configuration the pipeline config object
+	 * @param accessor Allows to access the messages produced during the pipeline execution;
+	 * @return the x proc result
+	 */
 	static XProcResult newInstance(XPipeline xpipeline,XProcConfiguration configuration,MessageAccessor accessor) {
 		return new CalabashXProcResult(xpipeline,configuration,accessor);
 	}
 
+	/**
+	 * Instantiates a new calabash x proc result.
+	 *
+	 * @param xpipeline the xpipeline
+	 * @param configuration the configuration
+	 * @param accessor the accessor
+	 */
 	private CalabashXProcResult(XPipeline xpipeline,XProcConfiguration configuration,MessageAccessor accessor) {
 		this.xpipeline = xpipeline;
 		this.configuration = configuration;
 		this.messageAccessor=accessor;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.xproc.XProcResult#writeTo(org.daisy.common.xproc.XProcOutput)
+	 */
 	@Override
 	public void writeTo(XProcOutput output) {
 		for (String port : xpipeline.getOutputs()) {
@@ -89,6 +116,9 @@ public final class CalabashXProcResult implements XProcResult {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.common.xproc.XProcResult#getMessages()
+	 */
 	@Override
 	public MessageAccessor getMessages() {
 		return this.messageAccessor;

@@ -5,7 +5,7 @@ import org.daisy.common.messaging.MessageAccessor;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface XProcResult.
+ * The Interface XProcResult gives access to the result of executing the pipeline and the message produced during the process.
  */
 public interface XProcResult {
 	

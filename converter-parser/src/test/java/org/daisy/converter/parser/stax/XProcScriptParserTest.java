@@ -19,9 +19,20 @@ import org.daisy.pipeline.script.XProcScript;
 import org.junit.Before;
 import org.junit.Test;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class XProcScriptParserTest.
+ */
 public class XProcScriptParserTest {
+	
+	/** The scp. */
 	XProcScript scp;
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws URISyntaxException the uRI syntax exception
+	 */
 	@Before
 	public void setUp() throws URISyntaxException {
 		StaxXProcScriptParser parser = new StaxXProcScriptParser();
@@ -30,6 +41,11 @@ public class XProcScriptParserTest {
 				.getResource("script.xpl").toURI());
 	}
 
+	/**
+	 * Test description.
+	 *
+	 * @throws URISyntaxException the uRI syntax exception
+	 */
 	@Test
 	public void testDescription() throws URISyntaxException {
 		assertEquals("short description", scp.getName());
@@ -37,6 +53,9 @@ public class XProcScriptParserTest {
 		assertEquals("homepage", scp.getHomepage());
 	}
 
+	/**
+	 * Test port metadata is set.
+	 */
 	@Test
 	public void testPortMetadataIsSet() {
 		for (XProcPortInfo port : scp.getXProcPipelineInfo().getInputPorts()) {
@@ -50,6 +69,9 @@ public class XProcScriptParserTest {
 		//TODO test parameter ports
 	}
 
+	/**
+	 * Test input port.
+	 */
 	@Test
 	public void testInputPort() {
 		XProcPortMetadata port = scp.getPortMetadata("source");
@@ -59,6 +81,9 @@ public class XProcScriptParserTest {
 
 	}
 
+	/**
+	 * Test missing input metadata.
+	 */
 	@Test
 	public void testMissingInputMetadata() {
 		XProcPortMetadata meta = scp.getPortMetadata("source2");
@@ -68,6 +93,9 @@ public class XProcScriptParserTest {
 		assertNull(meta.getDescription());
 	}
 	
+	/**
+	 * Test output port.
+	 */
 	@Test
 	public void testOutputPort() {
 		XProcPortMetadata port = scp.getPortMetadata("result");
@@ -78,6 +106,9 @@ public class XProcScriptParserTest {
 
 	}
 
+	/**
+	 * Test missing output metadata.
+	 */
 	@Test
 	public void testMissingOutputMetadata() {
 		XProcPortMetadata meta = scp.getPortMetadata("result2");
@@ -87,16 +118,25 @@ public class XProcScriptParserTest {
 		assertNull(meta.getDescription());
 	}
 
+	/**
+	 * Test parameter port.
+	 */
 	@Test
 	public void testParameterPort() {
 		// TODO test parameter metadata
 	}
 	
+	/**
+	 * Test missing parameter metadata.
+	 */
 	@Test
 	public void testMissingParameterMetadata() {
 		// TODO test missing parameter metadata
 	}
 
+	/**
+	 * Test option.
+	 */
 	@Test
 	public void testOption() {
 		XProcOptionMetadata opt = scp.getOptionMetadata(new QName("option1"));
@@ -105,6 +145,9 @@ public class XProcScriptParserTest {
 		assertEquals("Option 1", opt.getNiceName());
 	}
 
+	/**
+	 * Test info.
+	 */
 	@Test
 	public void testInfo() {
 		// just a simple test to see if is correctly set

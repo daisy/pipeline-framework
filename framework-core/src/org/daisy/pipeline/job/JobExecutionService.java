@@ -8,7 +8,7 @@ package org.daisy.pipeline.job;
 public interface JobExecutionService {
 
 	/**
-	 * Submits a new job to execute
+	 * Submits a new job to execute.
 	 *
 	 * @param job the job
 	 */

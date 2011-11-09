@@ -61,7 +61,7 @@ public class JobResult {
 		}
 		
 		/**
-		 * Builds the job result object
+		 * Builds the job result object.
 		 *
 		 * @return the job result
 		 */
@@ -96,7 +96,7 @@ public class JobResult {
 	}
 
 	/**
-	 * Gets the errors produced during the pipeline execution
+	 * Gets the errors produced during the pipeline execution.
 	 *
 	 * @return the errors
 	 */
@@ -108,7 +108,7 @@ public class JobResult {
 	}
 
 	/**
-	 * Gets the warnings produced during the pipeline execution
+	 * Gets the warnings produced during the pipeline execution.
 	 *
 	 * @return the warnings
 	 */

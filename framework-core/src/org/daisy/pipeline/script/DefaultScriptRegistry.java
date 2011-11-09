@@ -12,10 +12,10 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
-// TODO: Auto-generated Javadoc
+
 //TODO check thread safety 
 /**
- * The Class DefaultScriptRegistry.
+ *  Default implementation for the ScriptRegistry interface.
  */
 public class DefaultScriptRegistry implements ScriptRegistry {
 	
@@ -29,14 +29,14 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	private XProcScriptParser parser;
 
 	/**
-	 * Activate.
+	 * Activate (OSGI).
 	 */
 	public void activate(){
 		logger.trace("Activating script registry");
 	}
 	
 	/**
-	 * Register.
+	 * Registers a script service loaded from DS 
 	 *
 	 * @param script the script
 	 */
@@ -50,7 +50,7 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	}
 
 	/**
-	 * Unregister.
+	 * Unregisters the script
 	 *
 	 * @param script the script
 	 */
@@ -76,7 +76,7 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	}
 
 	/**
-	 * Sets the parser.
+	 * Sets the parser to load {@link XProcScript} objects from xpl files.
 	 *
 	 * @param parser the new parser
 	 */
@@ -86,7 +86,7 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	}
 
 	/**
-	 * Unset parser.
+	 * Unsets the current parser object.
 	 *
 	 * @param parser the parser
 	 */

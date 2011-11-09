@@ -15,9 +15,16 @@ import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 
+/**
+ * The Class ResultResource.
+ */
 public class ResultResource extends AuthenticatedResource {
+	/** The job. */
 	private Job job;
 	
+	/* (non-Javadoc)
+	 * @see org.restlet.resource.Resource#doInit()
+	 */
 	@Override  
     public void doInit() {  
 		super.doInit();
@@ -28,6 +35,11 @@ public class ResultResource extends AuthenticatedResource {
         job = jobMan.getJob(id); 
     }  
   
+	/**
+	 * Gets the resource.
+	 *
+	 * @return the resource
+	 */
 	@Get
     public Representation getResource() {  
 		if (!isAuthenticated()) {

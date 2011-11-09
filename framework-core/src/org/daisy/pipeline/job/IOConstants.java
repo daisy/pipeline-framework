@@ -2,7 +2,7 @@ package org.daisy.pipeline.job;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface IOConstants.
+ * IO bridge related constants
  */
 public interface IOConstants {
 	

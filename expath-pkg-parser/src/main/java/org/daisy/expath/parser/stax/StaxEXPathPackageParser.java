@@ -28,11 +28,17 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class StaxEXPathPackageParser.
+ */
 public class StaxEXPathPackageParser implements EXPathPackageParser {
 
+	/** The Constant logger. */
 	private final static Logger logger = LoggerFactory
 			.getLogger(StaxEXPathPackageParser.class);
 
+	/** The COMPONEN t_ elements. */
 	private static HashSet<QName> COMPONENT_ELEMENTS = new HashSet<QName>();
 	static {
 		COMPONENT_ELEMENTS.add(Elements.XSLT);
@@ -44,19 +50,34 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 
 	};
 
+	/** The factory. */
 	private XMLInputFactory factory;
 
+	/**
+	 * Instantiates a new stax ex path package parser.
+	 */
 	public StaxEXPathPackageParser() {
 	}
 	
+	/**
+	 * Activate.
+	 */
 	public void activate(){
 		logger.trace("Activating EXPath package parser");
 	}
 
+	/**
+	 * Sets the factory.
+	 *
+	 * @param factory the new factory
+	 */
 	public void setFactory(XMLInputFactory factory) {
 		this.factory = factory;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.expath.parser.EXPathPackageParser#parse(java.net.URL, org.daisy.expath.parser.ModuleBuilder)
+	 */
 	public Module parse(URL url, ModuleBuilder builder) {
 		logger.trace("parsing EXPath package <{}>", url);
 		if (factory == null) {
@@ -104,6 +125,13 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 		return builder.build();
 	}
 
+	/**
+	 * Parses the dependencies.
+	 *
+	 * @param reader the reader
+	 * @param builder the builder
+	 * @throws XMLStreamException the xML stream exception
+	 */
 	private void parseDependencies(final XMLEventReader reader,
 			final ModuleBuilder builder) throws XMLStreamException {
 		StaxEventHelper.loop(reader, EventPredicates.IS_START_ELEMENT,
@@ -121,6 +149,13 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 				});
 	}
 
+	/**
+	 * Parses the module.
+	 *
+	 * @param reader the reader
+	 * @param builder the builder
+	 * @throws XMLStreamException the xML stream exception
+	 */
 	private void parseModule(final XMLEventReader reader,
 			final ModuleBuilder builder) throws XMLStreamException {
 		StartElement module = StaxEventHelper.peekNextElement(reader,
@@ -141,6 +176,13 @@ public class StaxEXPathPackageParser implements EXPathPackageParser {
 
 	}
 
+	/**
+	 * Parses the components.
+	 *
+	 * @param reader the reader
+	 * @param builder the builder
+	 * @throws XMLStreamException the xML stream exception
+	 */
 	private void parseComponents(final XMLEventReader reader,
 			final ModuleBuilder builder) throws XMLStreamException {
 		// changed this because otherwise mvn won't work

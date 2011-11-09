@@ -15,8 +15,23 @@ import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
 
+// TODO: Auto-generated Javadoc
+/**
+ * Class CommandPipeline executes pipelines using the daisy pipeline 2 framework
+ */
 public class CommandPipeline implements Command {
 
+	/**
+	 * New instance using the the parameters provided using the CLI 
+	 *
+	 * @param pipeline the pipeline
+	 * @param inputArgs the input args
+	 * @param outputArgs the output args
+	 * @param paramsArgs the params args
+	 * @param optionsArgs the options args
+	 * @param xprocEngine the xproc engine
+	 * @return the command
+	 */
 	public static Command newInstance(String pipeline, String inputArgs,
 			String outputArgs, String paramsArgs, String optionsArgs,
 			XProcEngine xprocEngine) {
@@ -24,13 +39,34 @@ public class CommandPipeline implements Command {
 				optionsArgs, xprocEngine);
 	}
 
+	/** The xproc engine. */
 	private final XProcEngine xprocEngine;
+	
+	/** The uri. */
 	private final String uri;
+	
+	/** The inputs. */
 	private final Map<String, String> inputs;
+	
+	/** The outputs. */
 	private final Map<String, String> outputs;
+	
+	/** The options. */
 	private final Map<String, String> options;// FIXME use QNames
+	
+	/** The params. */
 	private final Map<String, HashMap<String, String>> params;
 
+	/**
+	 * Instantiates a new command pipeline.
+	 *
+	 * @param uri the uri
+	 * @param inputArgs the input args
+	 * @param outputArgs the output args
+	 * @param paramsArgs the params args
+	 * @param optionsArgs the options args
+	 * @param xprocEngine the xproc engine
+	 */
 	private CommandPipeline(String uri, String inputArgs, String outputArgs,
 			String paramsArgs, String optionsArgs, XProcEngine xprocEngine) {
 		if (uri == null || uri.isEmpty()) {
@@ -44,6 +80,9 @@ public class CommandPipeline implements Command {
 		this.xprocEngine = xprocEngine;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.daisy.pipeline.ui.commandline.Command#execute()
+	 */
 	@Override
 	public void execute() throws IllegalArgumentException {
 
@@ -90,6 +129,13 @@ public class CommandPipeline implements Command {
 		result.writeTo(outputBuilder.build());
 	}
 
+	/**
+	 * Parses the params list.
+	 *
+	 * @param list the list
+	 * @return the hash map
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
 	public HashMap<String, HashMap<String, String>> parseParamsList(String list)
 			throws IllegalArgumentException {
 

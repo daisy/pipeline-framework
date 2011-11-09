@@ -24,6 +24,10 @@ import org.daisy.converter.parser.XProcScriptConstants.Attributes;
 import org.daisy.converter.parser.XProcScriptConstants.Elements;
 import org.daisy.converter.parser.XProcScriptConstants.Values;
 
+// TODO: Auto-generated Javadoc
+/**
+ * Parser the xproc pipeline info, not only for scripts but for regular steps.
+ */
 public class StaxXProcPipelineInfoParser {
 	/** The xmlinputfactory. */
 	private XMLInputFactory mFactory;
@@ -34,19 +38,49 @@ public class StaxXProcPipelineInfoParser {
 	
 
 	
+	/**
+	 * Sets the uri resolver.
+	 *
+	 * @param uriResolver the new uri resolver
+	 */
 	public void setUriResolver(URIResolver uriResolver) {
 		mUriResolver = uriResolver;
 	}
 
 	
+	/**
+	 * Sets the factory.
+	 *
+	 * @param factory the new factory
+	 */
 	public void setFactory(XMLInputFactory factory) {
 		this.mFactory = factory;
 	}
+	
+	/**
+	 * Parses the the pipeline file
+	 *
+	 * @param uri the uri
+	 * @return the x proc pipeline info
+	 */
 	public XProcPipelineInfo parse(URI uri) {
 		return new StatefulParser().parse(uri);
 	}
+	
+	/**
+	 *StatefulParser is thread safe.
+	 */
 	private class StatefulParser {
+		
+		/** The m ancestors. */
 		private LinkedList<XMLEvent> mAncestors = new LinkedList<XMLEvent>();
+		
+		/**
+		 * Parses the info from the xproc pipeline located at the provided uri
+		 *
+		 * @param uri the uri
+		 * @return the x proc pipeline info
+		 */
 		public XProcPipelineInfo parse(URI uri) {
 			if (mFactory == null) {
 				throw new IllegalStateException();
@@ -92,10 +126,22 @@ public class StaxXProcPipelineInfoParser {
 
 		}
 
+		/**
+		 * Checks if is first child.
+		 *
+		 * @return true, if is first child
+		 */
 		public boolean isFirstChild() {
 			return mAncestors.size() == 2;
 		}
 
+		/**
+		 * Reads the next element
+		 *
+		 * @param reader the reader
+		 * @return the xML event
+		 * @throws XMLStreamException the xML stream exception
+		 */
 		private XMLEvent readNext(XMLEventReader reader)
 				throws XMLStreamException {
 			XMLEvent event = reader.nextEvent();
@@ -108,6 +154,13 @@ public class StaxXProcPipelineInfoParser {
 			return event;
 		}
 
+		/**
+		 * Parses the info elements (options, input and outputs)
+		 *
+		 * @param reader the reader
+		 * @param infoBuilder the info builder
+		 * @throws XMLStreamException the xML stream exception
+		 */
 		private void parseInfoElements(final XMLEventReader reader,
 				final Builder infoBuilder) throws XMLStreamException {
 
@@ -130,6 +183,12 @@ public class StaxXProcPipelineInfoParser {
 
 		}
 
+		/**
+		 * Parses a port.
+		 *
+		 * @param event the event
+		 * @param infoBuilder the info builder
+		 */
 		private void parsePort(XMLEvent event, Builder infoBuilder) {
 			QName elemName = event.asStartElement().getName();
 			boolean primary = false;
@@ -168,6 +227,12 @@ public class StaxXProcPipelineInfoParser {
 
 		}
 
+		/**
+		 * Parses an option.
+		 *
+		 * @param event the event
+		 * @param infoBuilder the info builder
+		 */
 		private void parseOption(final XMLEvent event, final Builder infoBuilder) {
 			QName name = null;
 			boolean required = false;
