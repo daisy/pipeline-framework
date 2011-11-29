@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.daisy.pipeline.modules.Component;
+import org.daisy.pipeline.modules.Entity;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ModuleBuilder;
 import org.daisy.pipeline.modules.ResourceLoader;
@@ -25,10 +26,11 @@ public class OSGIModuleBuilder implements ModuleBuilder {
 	private String title;
 	private Map<String, String> dependencies = new HashMap<String, String>();
 	private List<Component> components = new ArrayList<Component>();
+	private List<Entity> entities = new ArrayList<Entity>();
 	private Logger mLogger = LoggerFactory.getLogger(getClass());
 
 	public Module build() {
-		return new Module(name, version, title, dependencies, components);
+		return new Module(name, version, title, dependencies, components,entities);
 	}
 
 	public ModuleBuilder withName(String name) {
@@ -100,7 +102,23 @@ public class OSGIModuleBuilder implements ModuleBuilder {
 		for (Map.Entry<URI, URI> entry:catalog.getUriMappings().entrySet()){
 			this.withComponent(entry.getKey(), entry.getValue().toString());
 		}
+		for (Map.Entry<String, URI> entry:catalog.getPublicMappings().entrySet()){
+			this.withEntity(entry.getKey(), entry.getValue().toString());
+		}
+		
 		return this;
 	}
+
+	@Override
+	public ModuleBuilder withEntities(Collection<? extends Entity> entities) {
+		this.entities.addAll(entities);
+		return this;
+	}
+	public ModuleBuilder withEntity(String publicId, String path) {
+		mLogger.trace("withEntity:" + publicId.toString() + ", path: " + path);
+		entities.add(new Entity(publicId, path, loader));
+		return this;
+	}
+
 
 }

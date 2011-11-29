@@ -44,8 +44,7 @@ public final class CalabashXProcEngine implements XProcEngine {
 	 * Instantiates a new calabash x proc engine.
 	 */
 	public CalabashXProcEngine() {
-		//FIXME: default entity resolver
-		entityResolver= new CalabashXprocEntityResolver();
+		
 	}
 
 	/**

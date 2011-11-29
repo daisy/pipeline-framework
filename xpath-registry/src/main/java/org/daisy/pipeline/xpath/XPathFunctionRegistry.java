@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.xml.namespace.QName;
 
-import net.sf.saxon.functions.IntegratedFunctionLibrary;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.trans.XPathException;
 

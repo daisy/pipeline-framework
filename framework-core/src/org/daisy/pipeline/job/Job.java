@@ -1,6 +1,5 @@
 package org.daisy.pipeline.job;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.daisy.common.xproc.XProcEngine;

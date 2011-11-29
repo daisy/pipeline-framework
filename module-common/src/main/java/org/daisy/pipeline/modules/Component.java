@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Component {
 
-	private static final String META_INF = "/META-INF/";
+	//private static final String META_INF = "/META-INF/";
 
 	/**
 	 * The Enum Space.

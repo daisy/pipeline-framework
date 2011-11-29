@@ -8,9 +8,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import org.daisy.pipeline.modules.Component;
+import org.daisy.pipeline.modules.Entity;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ModuleRegistry;
-import org.daisy.pipeline.modules.ResourceLoader;
 import org.daisy.pipeline.xmlcatalog.XmlCatalogParser;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -71,6 +71,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 			.getLogger(DefaultModuleRegistry.class);
 
 	private HashMap<URI, Module> componentsMap = new HashMap<URI, Module>();
+	private HashMap<String, Module> entityMap = new HashMap<String, Module>();
 	private HashSet<Module> modules = new HashSet<Module>();
 	private XmlCatalogParser mParser;
 
@@ -128,5 +129,21 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 			logger.debug("  - {}", component.getURI());
 			componentsMap.put(component.getURI(), module);
 		}
+		for (Entity entity: module.getEntities()) {
+			logger.debug("  - {}", entity.getPublicId());
+			entityMap.put(entity.getPublicId(), module);
+		}
 	}
+
+	@Override
+	public Module getModuleByEntity(String publicId) {
+		return entityMap.get(publicId);
+	}
+
+	@Override
+	public Iterable<String> getEntities() {
+		return entityMap.keySet();
+	}
+
+	
 }

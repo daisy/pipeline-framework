@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.xml.transform.sax.SAXSource;
 
-import net.sf.saxon.functions.FunctionLibrary;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;

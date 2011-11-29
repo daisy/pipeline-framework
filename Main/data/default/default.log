@@ -1,6 +1,0 @@
-2011-11-08 20:21:56,490 [DEBUG] org.daisy.pipeline.logging.Activator - earlyStartup slf4j SLF4JBridgeHandler...
-2011-11-08 20:21:56,608 [DEBUG] o.d.c.x.c.DynamicXProcConfigurationFactory - Adding step to registry: message
-2011-11-08 20:21:56,611 [DEBUG] o.d.c.x.c.DynamicXProcConfigurationFactory - Setting function registry
-2011-11-08 20:21:56,653 [INFO ] o.d.p.webservice.PipelineWebService - Starting webservice on port 8182.
-2011-11-08 20:21:56,757 [INFO ] o.r.Component.InternalRouter.Server - Starting the internal [HTTP/1.1] server on port 8182
-2011-11-08 20:23:35,373 [DEBUG] o.d.c.x.c.DynamicXProcConfigurationFactory - Removing step from registry: message

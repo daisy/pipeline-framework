@@ -123,6 +123,7 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 		 * @throws XMLStreamException the xML stream exception
 		 */
 		private void parseCatalog(XMLEventReader reader) throws XMLStreamException {
+			@SuppressWarnings("unchecked")
 			Predicate<XMLEvent> pred = Predicates.or(
 					EventPredicates.isStartOrStopElement(Elements.E_CATALOG),
 					EventPredicates.isStartOrStopElement(Elements.E_GROUP),

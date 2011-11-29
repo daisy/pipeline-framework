@@ -4,5 +4,7 @@
    <reference bind="setModuleRegistry" cardinality="1..1" interface="org.daisy.pipeline.modules.ModuleRegistry" name="module-registry" policy="static"/>
    <service>
       <provide interface="javax.xml.transform.URIResolver"/>
+      <provide interface="org.xml.sax.EntityResolver"/>
    </service>
 </scr:component>
+

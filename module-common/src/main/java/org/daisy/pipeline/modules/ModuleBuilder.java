@@ -27,6 +27,8 @@ public interface ModuleBuilder {
 
 	ModuleBuilder withComponents(
 			Collection<? extends Component> components);
+	ModuleBuilder withEntities(
+			Collection<? extends Entity> entities);
 
 	ModuleBuilder withComponent(URI uri, String path);
 
