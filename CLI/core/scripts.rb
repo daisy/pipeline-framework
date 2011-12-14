@@ -51,7 +51,6 @@ class Script
 	end
 
 	def self.fromXmlElement(node)
-			puts node
 			script=Script.new(node.attr("href"),Helpers.normalise_name(node.at_xpath("./nicename").content),node.at_xpath("./description").content)
 			#options	
 			node.xpath("./option").to_a.each {|option|
