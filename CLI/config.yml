@@ -1,0 +1,12 @@
+#WS CONFIGURATION
+host: http://localhost
+port: 8182
+ws_path: ws   
+ws_timeup: 15
+#DP2 launch config 
+exec_line: /home/javi/daisy/daisy-pipeline/Main/dp2ws.sh  
+local: true
+# ROBOT CONF
+client_key: clientkey
+client_secret: supersecret
+
