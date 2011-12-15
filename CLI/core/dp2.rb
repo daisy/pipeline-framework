@@ -44,6 +44,14 @@ class Dp2
 		return nil
 	end
 
+	def job(script)
+		if alive?
+			puts "[TODO] post job"
+			#return JobResource.new.postResource(Job.fromScript(script))
+		end
+		return nil
+	end
+
 	def alive?	
   		return AliveResource.new.getResource 
 	end	

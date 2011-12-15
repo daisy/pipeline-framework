@@ -20,6 +20,13 @@ class Script
 		@inputs=[]
 		@outputs=[]
 	end
+	def clone
+		clone=Script.new(@href,@nicename,@desc)
+		clone.opts=@opts
+		clone.inputs=@inputs.clone
+		clone.outputs=@outputs.clone
+		return clone
+	end
 
 	def to_s
 		s="Name: #{@nicename}\n"

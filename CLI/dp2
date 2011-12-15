@@ -24,7 +24,8 @@ def main
 			cmds[command].execute(ARGV[1..-1])
 		rescue Exception=>e
 			error=e.message
-			hasErr=true		
+			hasErr=true	
+			raise e	
 		end
 	else
 		hasErr=true

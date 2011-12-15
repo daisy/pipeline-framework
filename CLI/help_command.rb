@@ -27,7 +27,7 @@ class HelpCommand < Command
 		end		
 	end
 	def help
-		s="Usage:\ndp2 command [options]\n\n"
+		s="Usage: dp2 command [options]\n\n"
 		s+="Available commands:\n\n"
 		@commands.each{|name,cmd| s+="#{cmd.to_s}\n" if name!="help"}
 		s+="#{self.to_s}\n"
