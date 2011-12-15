@@ -4,13 +4,17 @@ require './core/alive'
 class Dp2
 	def initialize
 		Ctxt.logger.debug("initialising dp2 link")
+		@basePath=File::dirname(__FILE__)+File::SEPARATOR+".."+File::SEPARATOR
 		alive!
+		
 	end
 
 	#private methods
 	def alive! 
 		if !alive?
-			ex=IO.popen(Ctxt.conf[Ctxt.conf.class::EXEC_LINE])
+		
+			execPath=File::expand_path(Ctxt.conf[Ctxt.conf.class::EXEC_LINE],@basePath)
+			ex=IO.popen(execPath)
 			#will throw execetion the command is not found
 			pid =ex.pid
 			Ctxt.logger().debug("ws launched with pid #{pid}")
