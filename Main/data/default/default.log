@@ -207,3 +207,90 @@
 2011-12-19 18:20:09,265 [DEBUG] o.r.Component.InternalRouter.Server - Content-Type: application/xml; charset=UTF-8
 2011-12-19 18:20:09,278 [DEBUG] o.r.Component.InternalRouter.Server - 
 2011-12-19 18:20:09,311 [DEBUG] o.r.Component.InternalRouter.Server - Connection to /127.0.0.1:45704 is now closed
+2011-12-19 18:29:57,328 [DEBUG] o.r.Component.InternalRouter.Server - Connection from "/127.0.0.1:59698" accepted. New count: 1
+2011-12-19 18:29:57,329 [DEBUG] o.r.Component.InternalRouter.Server - GET /ws/jobs?key=clientkey&time=2011-12-19T18:29:57Z&nonce=132641841294039525791188877436&sign=FGcJRwh94hDX8dumvWpY1F2xnt8%3D HTTP/1.1
+2011-12-19 18:29:57,329 [DEBUG] o.r.Component.InternalRouter.Server - Reading message from /127.0.0.1:59698
+2011-12-19 18:29:57,329 [DEBUG] o.r.Component.InternalRouter.Server - Accept: */*
+2011-12-19 18:29:57,329 [DEBUG] o.r.Component.InternalRouter.Server - Host: localhost:8182
+2011-12-19 18:29:57,330 [DEBUG] o.r.Component.InternalRouter.Server - 
+2011-12-19 18:29:57,330 [DEBUG] org.restlet.Component.LogService - Processing request to: "http://localhost:8182/ws/jobs?key=clientkey&time=2011-12-19T18:29:57Z&nonce=132641841294039525791188877436&sign=FGcJRwh94hDX8dumvWpY1F2xnt8%3D"
+2011-12-19 18:29:57,330 [DEBUG] org.restlet.Component.ServerRouter - Default virtual host selected
+2011-12-19 18:29:57,330 [DEBUG] org.restlet.Component.ServerRouter - Base URI: "http://localhost:8182". Remaining part: "/ws/jobs?key=clientkey&time=2011-12-19T18:29:57Z&nonce=132641841294039525791188877436&sign=FGcJRwh94hDX8dumvWpY1F2xnt8%3D"
+2011-12-19 18:29:57,331 [DEBUG] org.restlet.VirtualHost - Selected route: "/ws" -> org.daisy.pipeline.webservice.PipelineWebService@848ecc
+2011-12-19 18:29:57,331 [DEBUG] org.restlet.VirtualHost - New base URI: "http://localhost:8182/ws". New remaining part: "/jobs"
+2011-12-19 18:29:57,336 [DEBUG] o.r.C.I.PipelineWebService - Selected route: "/jobs" -> Finder for JobsResource
+2011-12-19 18:29:57,337 [DEBUG] o.r.C.I.PipelineWebService - New base URI: "http://localhost:8182/ws/jobs". No remaining part to match
+2011-12-19 18:29:57,337 [DEBUG] o.r.C.I.PipelineWebService - Score of annotation "AnnotationInfo [javaMethod: public org.restlet.representation.Representation org.daisy.pipeline.webservice.JobsResource.getResource(), resourceInterface: class org.daisy.pipeline.webservice.JobsResource, restletMethod: GET, input: xml, output: xml, query: null]"= 0.25
+2011-12-19 18:29:57,338 [DEBUG] o.r.C.I.PipelineWebService - Total score of variant "[text/xml]"= 0.04191667
+2011-12-19 18:29:57,338 [DEBUG] o.r.C.I.PipelineWebService - Score of annotation "AnnotationInfo [javaMethod: public org.restlet.representation.Representation org.daisy.pipeline.webservice.JobsResource.getResource(), resourceInterface: class org.daisy.pipeline.webservice.JobsResource, restletMethod: GET, input: xml, output: xml, query: null]"= 0.25
+2011-12-19 18:29:57,338 [DEBUG] o.r.C.I.PipelineWebService - Total score of variant "[application/xml]"= 0.042166665
+2011-12-19 18:29:57,347 [DEBUG] o.r.C.I.PipelineWebService - Converter selected for DomRepresentation: DefaultConverter
+2011-12-19 18:29:57,348 [INFO ] org.restlet.Component.LogService - 2011-12-19	18:29:57	127.0.0.1	-	-	8182	GET	/ws/jobs	key=clientkey&time=2011-12-19T18:29:57Z&nonce=132641841294039525791188877436&sign=FGcJRwh94hDX8dumvWpY1F2xnt8%3D	200	-	0	18	http://localhost:8182	-	-
+2011-12-19 18:29:57,354 [DEBUG] o.r.Component.InternalRouter.Server - Writing message to /127.0.0.1:59698
+2011-12-19 18:29:57,354 [DEBUG] o.r.Component.InternalRouter.Server - HTTP/1.1 200 OK
+2011-12-19 18:29:57,355 [DEBUG] o.r.Component.InternalRouter.Server - Transfer-Encoding: chunked
+2011-12-19 18:29:57,355 [DEBUG] o.r.Component.InternalRouter.Server - Date: Mon, 19 Dec 2011 18:29:57 GMT
+2011-12-19 18:29:57,355 [DEBUG] o.r.Component.InternalRouter.Server - Accept-Ranges: bytes
+2011-12-19 18:29:57,355 [DEBUG] o.r.Component.InternalRouter.Server - Server: Restlet-Framework/2.1snapshot
+2011-12-19 18:29:57,356 [DEBUG] o.r.Component.InternalRouter.Server - Vary: Accept-Charset, Accept-Encoding, Accept-Language, Accept
+2011-12-19 18:29:57,356 [DEBUG] o.r.Component.InternalRouter.Server - Content-Type: application/xml; charset=UTF-8
+2011-12-19 18:29:57,356 [DEBUG] o.r.Component.InternalRouter.Server - 
+2011-12-19 18:29:57,375 [DEBUG] o.r.Component.InternalRouter.Server - Connection to /127.0.0.1:59698 is now closed
+2011-12-19 18:29:57,377 [DEBUG] o.r.Component.InternalRouter.Server - Connection from "/127.0.0.1:59699" accepted. New count: 2
+2011-12-19 18:29:57,380 [DEBUG] o.r.Component.InternalRouter.Server - GET /ws/jobs?key=clientkey&time=2011-12-19T18:29:57Z&nonce=583835409004304082531049223015&sign=WhmDJm3yo8dOuZglTHtCNvsgwwo%3D HTTP/1.1
+2011-12-19 18:29:57,381 [DEBUG] o.r.Component.InternalRouter.Server - Reading message from /127.0.0.1:59699
+2011-12-19 18:29:57,381 [DEBUG] o.r.Component.InternalRouter.Server - Accept: */*
+2011-12-19 18:29:57,381 [DEBUG] o.r.Component.InternalRouter.Server - Host: localhost:8182
+2011-12-19 18:29:57,381 [DEBUG] o.r.Component.InternalRouter.Server - 
+2011-12-19 18:29:57,382 [DEBUG] org.restlet.Component.LogService - Processing request to: "http://localhost:8182/ws/jobs?key=clientkey&time=2011-12-19T18:29:57Z&nonce=583835409004304082531049223015&sign=WhmDJm3yo8dOuZglTHtCNvsgwwo%3D"
+2011-12-19 18:29:57,382 [DEBUG] org.restlet.Component.ServerRouter - Default virtual host selected
+2011-12-19 18:29:57,382 [DEBUG] org.restlet.Component.ServerRouter - Base URI: "http://localhost:8182". Remaining part: "/ws/jobs?key=clientkey&time=2011-12-19T18:29:57Z&nonce=583835409004304082531049223015&sign=WhmDJm3yo8dOuZglTHtCNvsgwwo%3D"
+2011-12-19 18:29:57,382 [DEBUG] org.restlet.VirtualHost - Selected route: "/ws" -> org.daisy.pipeline.webservice.PipelineWebService@848ecc
+2011-12-19 18:29:57,382 [DEBUG] org.restlet.VirtualHost - New base URI: "http://localhost:8182/ws". New remaining part: "/jobs"
+2011-12-19 18:29:57,387 [DEBUG] o.r.C.I.PipelineWebService - Selected route: "/jobs" -> Finder for JobsResource
+2011-12-19 18:29:57,387 [DEBUG] o.r.C.I.PipelineWebService - New base URI: "http://localhost:8182/ws/jobs". No remaining part to match
+2011-12-19 18:29:57,388 [DEBUG] o.r.C.I.PipelineWebService - Score of annotation "AnnotationInfo [javaMethod: public org.restlet.representation.Representation org.daisy.pipeline.webservice.JobsResource.getResource(), resourceInterface: class org.daisy.pipeline.webservice.JobsResource, restletMethod: GET, input: xml, output: xml, query: null]"= 0.25
+2011-12-19 18:29:57,388 [DEBUG] o.r.C.I.PipelineWebService - Total score of variant "[text/xml]"= 0.04191667
+2011-12-19 18:29:57,389 [DEBUG] o.r.C.I.PipelineWebService - Score of annotation "AnnotationInfo [javaMethod: public org.restlet.representation.Representation org.daisy.pipeline.webservice.JobsResource.getResource(), resourceInterface: class org.daisy.pipeline.webservice.JobsResource, restletMethod: GET, input: xml, output: xml, query: null]"= 0.25
+2011-12-19 18:29:57,389 [DEBUG] o.r.C.I.PipelineWebService - Total score of variant "[application/xml]"= 0.042166665
+2011-12-19 18:29:57,424 [DEBUG] o.r.C.I.PipelineWebService - Converter selected for DomRepresentation: DefaultConverter
+2011-12-19 18:29:57,424 [INFO ] org.restlet.Component.LogService - 2011-12-19	18:29:57	127.0.0.1	-	-	8182	GET	/ws/jobs	key=clientkey&time=2011-12-19T18:29:57Z&nonce=583835409004304082531049223015&sign=WhmDJm3yo8dOuZglTHtCNvsgwwo%3D	200	-	0	42	http://localhost:8182	-	-
+2011-12-19 18:29:57,434 [DEBUG] o.r.Component.InternalRouter.Server - Writing message to /127.0.0.1:59699
+2011-12-19 18:29:57,435 [DEBUG] o.r.Component.InternalRouter.Server - HTTP/1.1 200 OK
+2011-12-19 18:29:57,435 [DEBUG] o.r.Component.InternalRouter.Server - Transfer-Encoding: chunked
+2011-12-19 18:29:57,435 [DEBUG] o.r.Component.InternalRouter.Server - Date: Mon, 19 Dec 2011 18:29:57 GMT
+2011-12-19 18:29:57,435 [DEBUG] o.r.Component.InternalRouter.Server - Accept-Ranges: bytes
+2011-12-19 18:29:57,436 [DEBUG] o.r.Component.InternalRouter.Server - Server: Restlet-Framework/2.1snapshot
+2011-12-19 18:29:57,436 [DEBUG] o.r.Component.InternalRouter.Server - Vary: Accept-Charset, Accept-Encoding, Accept-Language, Accept
+2011-12-19 18:29:57,436 [DEBUG] o.r.Component.InternalRouter.Server - Content-Type: application/xml; charset=UTF-8
+2011-12-19 18:29:57,449 [DEBUG] o.r.Component.InternalRouter.Server - 
+2011-12-19 18:29:57,467 [DEBUG] o.r.Component.InternalRouter.Server - Connection from "/127.0.0.1:59700" accepted. New count: 2
+2011-12-19 18:29:57,467 [DEBUG] o.r.Component.InternalRouter.Server - Connection to /127.0.0.1:59699 is now closed
+2011-12-19 18:29:57,468 [DEBUG] o.r.Component.InternalRouter.Server - GET /ws/scripts?key=clientkey&time=2011-12-19T18:29:57Z&nonce=922181149992114039844205698276&sign=vJrrrBTTmNkCfaqh7F4qKGzJEik%3D HTTP/1.1
+2011-12-19 18:29:57,472 [DEBUG] o.r.Component.InternalRouter.Server - Reading message from /127.0.0.1:59700
+2011-12-19 18:29:57,472 [DEBUG] o.r.Component.InternalRouter.Server - Accept: */*
+2011-12-19 18:29:57,473 [DEBUG] o.r.Component.InternalRouter.Server - Host: localhost:8182
+2011-12-19 18:29:57,473 [DEBUG] o.r.Component.InternalRouter.Server - 
+2011-12-19 18:29:57,473 [DEBUG] org.restlet.Component.LogService - Processing request to: "http://localhost:8182/ws/scripts?key=clientkey&time=2011-12-19T18:29:57Z&nonce=922181149992114039844205698276&sign=vJrrrBTTmNkCfaqh7F4qKGzJEik%3D"
+2011-12-19 18:29:57,473 [DEBUG] org.restlet.Component.ServerRouter - Default virtual host selected
+2011-12-19 18:29:57,473 [DEBUG] org.restlet.Component.ServerRouter - Base URI: "http://localhost:8182". Remaining part: "/ws/scripts?key=clientkey&time=2011-12-19T18:29:57Z&nonce=922181149992114039844205698276&sign=vJrrrBTTmNkCfaqh7F4qKGzJEik%3D"
+2011-12-19 18:29:57,474 [DEBUG] org.restlet.VirtualHost - Selected route: "/ws" -> org.daisy.pipeline.webservice.PipelineWebService@848ecc
+2011-12-19 18:29:57,474 [DEBUG] org.restlet.VirtualHost - New base URI: "http://localhost:8182/ws". New remaining part: "/scripts"
+2011-12-19 18:29:57,474 [DEBUG] o.r.C.I.PipelineWebService - Selected route: "/scripts" -> Finder for ScriptsResource
+2011-12-19 18:29:57,474 [DEBUG] o.r.C.I.PipelineWebService - New base URI: "http://localhost:8182/ws/scripts". No remaining part to match
+2011-12-19 18:29:57,475 [DEBUG] o.r.C.I.PipelineWebService - Score of annotation "AnnotationInfo [javaMethod: public org.restlet.representation.Representation org.daisy.pipeline.webservice.ScriptsResource.getResource(), resourceInterface: class org.daisy.pipeline.webservice.ScriptsResource, restletMethod: GET, input: xml, output: xml, query: null]"= 0.25
+2011-12-19 18:29:57,475 [DEBUG] o.r.C.I.PipelineWebService - Total score of variant "[text/xml]"= 0.04191667
+2011-12-19 18:29:57,476 [DEBUG] o.r.C.I.PipelineWebService - Score of annotation "AnnotationInfo [javaMethod: public org.restlet.representation.Representation org.daisy.pipeline.webservice.ScriptsResource.getResource(), resourceInterface: class org.daisy.pipeline.webservice.ScriptsResource, restletMethod: GET, input: xml, output: xml, query: null]"= 0.25
+2011-12-19 18:29:57,476 [DEBUG] o.r.C.I.PipelineWebService - Total score of variant "[application/xml]"= 0.042166665
+2011-12-19 18:29:57,511 [DEBUG] o.r.C.I.PipelineWebService - Converter selected for DomRepresentation: DefaultConverter
+2011-12-19 18:29:57,512 [INFO ] org.restlet.Component.LogService - 2011-12-19	18:29:57	127.0.0.1	-	-	8182	GET	/ws/scripts	key=clientkey&time=2011-12-19T18:29:57Z&nonce=922181149992114039844205698276&sign=vJrrrBTTmNkCfaqh7F4qKGzJEik%3D	200	-	0	39	http://localhost:8182	-	-
+2011-12-19 18:29:57,518 [DEBUG] o.r.Component.InternalRouter.Server - Writing message to /127.0.0.1:59700
+2011-12-19 18:29:57,519 [DEBUG] o.r.Component.InternalRouter.Server - HTTP/1.1 200 OK
+2011-12-19 18:29:57,520 [DEBUG] o.r.Component.InternalRouter.Server - Transfer-Encoding: chunked
+2011-12-19 18:29:57,520 [DEBUG] o.r.Component.InternalRouter.Server - Date: Mon, 19 Dec 2011 18:29:57 GMT
+2011-12-19 18:29:57,520 [DEBUG] o.r.Component.InternalRouter.Server - Accept-Ranges: bytes
+2011-12-19 18:29:57,520 [DEBUG] o.r.Component.InternalRouter.Server - Server: Restlet-Framework/2.1snapshot
+2011-12-19 18:29:57,520 [DEBUG] o.r.Component.InternalRouter.Server - Vary: Accept-Charset, Accept-Encoding, Accept-Language, Accept
+2011-12-19 18:29:57,521 [DEBUG] o.r.Component.InternalRouter.Server - Content-Type: application/xml; charset=UTF-8
+2011-12-19 18:29:57,530 [DEBUG] o.r.Component.InternalRouter.Server - 
+2011-12-19 18:29:57,548 [DEBUG] o.r.Component.InternalRouter.Server - Connection to /127.0.0.1:59700 is now closed

@@ -1,12 +1,30 @@
 #!/usr/bin/env ruby
 require 'rubygems'
-require 'optparse'
-require 'nokogiri'
-require './core/dp2'
+require "./command"
+require './core/alive'
+require './core/authentication'
 require './core/conf'
+require './core/ctxt'
+require './core/dp2'
+require "./core/helpers"
+require './core/job'
+require './core/multipart.rb'
+require './core/resource'
+require './core/rest'
+require "./core/result_processor"
 require './core/scripts'
+require 'digest'
 require './dynamic_commands'
 require './help_command.rb'
+require 'logger'
+require 'net/http'
+require 'nokogiri'
+require 'openssl'
+require 'optparse'
+require 'time'
+require 'uri'
+require 'yaml'
+require 'optparse'
 
 def main
 	command=checkargs
