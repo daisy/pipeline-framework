@@ -2,6 +2,7 @@ require './core/ctxt'
 require './core/scripts'
 require './core/alive'
 require './core/job'
+require "open3"
 #TODO asking if the service is alive before every call may not be a good idea, store that it's alive once and asume it in next calls
 class Dp2
 	def initialize
@@ -16,7 +17,10 @@ class Dp2
 		if !alive?
 		
 			execPath=File::expand_path(Ctxt.conf[Ctxt.conf.class::EXEC_LINE],@basePath)
-			ex=IO.popen(execPath)
+			#
+			ex=IO.popen(execPath ) 
+
+			#system('start '+execPath)
 			#will throw execetion the command is not found
 			pid =ex.pid
 			Ctxt.logger().debug("ws launched with pid #{pid}")
@@ -29,7 +33,7 @@ class Dp2
 
 	def wait_till_up
 		time_waiting=0
-		time_to_wait=0.25
+		time_to_wait=0.33
 		while !alive?  && time_waiting<Ctxt.conf[Ctxt.conf.class::WS_TIMEUP]
 			#Ctxt.logger.debug("going to sleep #{time_to_wait}")
 			sleep time_to_wait

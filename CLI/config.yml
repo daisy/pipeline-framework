@@ -2,9 +2,10 @@
 host: http://localhost
 port: 8182
 ws_path: ws   
-ws_timeup: 15
+ws_timeup: 60
 #DP2 launch config 
 exec_line_nix: ../Main/dp2ws.sh  
+#exec_line_win: c:\Users\javi\daisy-pipeline\dp2ws.bat  
 exec_line_win: ..\Main\dp2ws.bat  
 local: true
 # ROBOT CONF
