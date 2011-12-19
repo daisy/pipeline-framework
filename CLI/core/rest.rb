@@ -51,6 +51,7 @@ module Rest
       # send the request as the body
       if data == nil
         request.body = request_contents
+	Ctxt.logger.debug(request.body)	
         response = Net::HTTP.start(authUri.host, authUri.port) {|http| http.request(request)}
 
       # else attach the data as a file in a multipart request
@@ -64,7 +65,7 @@ module Rest
         response = post_form(authUri, query, headers)
 
       end
-      puts "Response was #{response}"
+      Ctxt.logger.debug("Response was #{response}")
 
       case response
         when Net::HTTPCreated

@@ -5,6 +5,8 @@ class Conf
 	PORT="port"
 	HOST="host"
 	WS_PATH="ws_path"
+	EXEC_LINE_WIN="exec_line_win"
+	EXEC_LINE_NIX="exec_line_nix"
 	EXEC_LINE="exec_line"
 	LOCAL="local"
 	BASE_URI="base_uri"
@@ -15,6 +17,11 @@ class Conf
 	def initialize(file)
 		@map=YAML.load_file file
 		Ctxt.logger.debug(@map)
+		if RUBY_PLATFORM =~ /mswin32/
+			@map[EXEC_LINE]=@map[EXEC_LINE_WIN]
+		else
+			@map[EXEC_LINE]=@map[EXEC_LINE_NIX]
+		end
 		@map[BASE_URI]= @map[HOST]+":"+@map[PORT].to_s+"/"+@map[WS_PATH]
 	end
 

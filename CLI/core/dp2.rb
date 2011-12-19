@@ -1,6 +1,8 @@
 require './core/ctxt'
 require './core/scripts'
 require './core/alive'
+require './core/job'
+#TODO asking if the service is alive before every call may not be a good idea, store that it's alive once and asume it in next calls
 class Dp2
 	def initialize
 		Ctxt.logger.debug("initialising dp2 link")
@@ -44,14 +46,27 @@ class Dp2
 		return nil
 	end
 
-	def job(script)
+	def job(script,data,wait)
 		if alive?
-			puts "[TODO] post job"
-			#return JobResource.new.postResource(Job.fromScript(script))
+			id=JobResource.new.postResource(script.to_xml_request,nil)
+			job=nil
+			if wait==true
+				begin
+					sleep 1.5 
+					job=job_status(id)
+				end while job.status!='DONE'
+			end 
 		end
 		return nil
 	end
 
+	def job_status(id)
+		#if alive?
+			return JobStatusResource.new(id).getResource
+		#end
+		return nil
+
+	end	
 	def alive?	
   		return AliveResource.new.getResource 
 	end	

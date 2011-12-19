@@ -9,7 +9,6 @@ require './dynamic_commands'
 require './help_command.rb'
 
 def main
-
 	command=checkargs
 	Ctxt.conf("config.yml")
 	dynCommands=DynamicCommands.get

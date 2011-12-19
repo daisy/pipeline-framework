@@ -25,8 +25,9 @@ class CommandScript < Command
 
 		begin
 			@parser.parse(str_args)	
-			Dp2.new.job(@script)
+			Dp2.new.job(@script,nil,true)
 		rescue Exception => e
+				Ctxt.logger.info(e)
 				puts "\nERROR: #{e}\n\n"
 				puts help
 		end
@@ -74,7 +75,7 @@ class CommandScript < Command
 
 		@opt_modifiers.keys.each{|option|
 			@opt_modifiers[option][:value]=nil
-			opts.on(option+" option_value",@opt_modifiers[option][:help]) do |v|
+			opts.on(option+" [option_value]",@opt_modifiers[option][:help]) do |v|
 			    @opt_modifiers[option][:value] = v
 			end
 		}

@@ -95,6 +95,22 @@ class Script
 			Ctxt.logger.debug("inserting script href: #{script.href} #{script.nicename} ")
 			return script	
 	end
+
+	def to_xml_request
+	
+#		<jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
+#		    <script href='http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl'/>
+#		    <input name='source'>
+#			<file src='./dtbook-basic.xml'/>
+#		    </input>
+#		    <option name='opt-mods-filename'>the-mods-file.xml</option>
+#		    <option name='opt-css-filename'>the-css-file.css</option>
+#		    <option name='opt-zedai-filename'>the-zedai-file.xml</option>
+#		</jobRequest>
+		doc=XmlBuilder.new(self).xml
+		return doc.to_s 
+		
+	end
 end
 
 
@@ -118,3 +134,83 @@ class ScriptsResultProcessor < ResultProcessor
 		return map
 	end
 end
+
+class XmlBuilder
+	NS='http://www.daisy.org/ns/pipeline/data'
+	E_JOB_REQUEST='jobRequest'
+	E_SCRIPT='script'
+	E_INPUT='input'
+	E_FILE='file'
+	E_OPTION='option'
+	A_HREF='href'
+	A_NAME='name'
+	A_XMLNS='xmlns'
+	A_SRC='src'
+
+		
+	def initialize(script)
+		@script=script
+	end
+	def xml
+		@doc=Nokogiri::XML::Document.new
+		@doc << @doc.create_element(E_JOB_REQUEST,{A_XMLNS=>NS})
+		@doc.root << @doc.create_element(E_SCRIPT,{A_HREF=>@script.href})
+		addInputs
+		addOutputs
+		addOptions
+		return @doc
+	end	
+
+	def addOptions
+		@script.opts.each{ |opt|
+			raise "missing required option #{opt[:name]}" if !(opt[:value]!=nil && !opt[:value].empty?) && opt[:required]==('true')
+			if (opt[:value]!=nil && !opt[:value].empty?)
+				n=@doc.create_element(E_OPTION,{A_NAME=>opt[:name]})
+				n.content=opt[:value]
+				@doc.root << n
+			end
+		}
+	end
+	def addInputs
+
+		@script.inputs.each{ |input|
+			raise "Input empty: #{input[:name]}" if !(input[:value]!=nil && !input[:value].empty?)
+			values=input[:value]
+			if values.class != Array
+				values=[input[:value]] 
+			end
+			in_elem=@doc.create_element(E_INPUT,{A_NAME=>input[:name]})
+			
+			@doc.root << in_elem
+			values.each{|file| in_elem << @doc.create_element(E_FILE,{A_SRC=>file})} 
+		}
+	end
+	def addOutputs
+		#TODO: not sure about how to hadle outputs... specially sequences, now relaying in the ws behaviour 
+#		@script.outputs.each{ |output|
+#			raise "Input empty: #{output[:name]}" if !(output[:value]!=nil && !output[:value].empty?)
+#			values=output[:value]
+#			if values.class != Array
+#				values=[output[:value]] 
+#			end
+#			in_elem=@doc.create_element(E_INPUT,{A_NAME=>output[:name]})
+#			
+#			@doc.root << in_elem
+#			values.each{|file| in_elem << @doc.create_element(E_FILE,{A_SRC=>file})} 
+#		}
+	end
+end
+
+
+#def test
+#	scr=Script.new("http://google.com",nil,nil)
+#	scr.opts.push({})
+#	scr.inputs.push({})
+#	scr.opts[0][:required]='true'
+#	scr.opts[0][:name]='paco'
+#	scr.opts[0][:value]='ratata'
+#	scr.inputs[0][:name]='source'
+#	scr.inputs[0][:value]='file1.xom'
+#	puts XmlBuilder.new(scr).xml
+#	
+#end
