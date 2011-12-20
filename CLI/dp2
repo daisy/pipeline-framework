@@ -42,7 +42,6 @@ def main
 		rescue Exception=>e
 			error=e.message
 			hasErr=true	
-			raise e	
 		end
 	else
 		hasErr=true
