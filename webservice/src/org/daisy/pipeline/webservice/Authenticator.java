@@ -15,12 +15,9 @@ import org.slf4j.LoggerFactory;
 
 public class Authenticator {
 	
-	// 10 minutes in ms
-	// TODO make configurable
-	private static final long MAX_REQUEST_TIME = 600000;
 	private static Logger logger = LoggerFactory.getLogger(PipelineWebService.class.getName());
 	
-	public static boolean authenticate(String key, String hash, String timestamp, String nonce, String URI) {
+	public static boolean authenticate(String key, String hash, String timestamp, String nonce, String URI, long maxRequestTime) {
 		// rules for hashing: use the whole URL string, minus the hash part (&sign=<some value>)
 		// important!  put the sign param last so we can easily strip it out
 		
@@ -49,7 +46,7 @@ public class Authenticator {
 					logger.warn("Hash values do not match");
 					return false;
 				}
-				if (serverTimestamp.getTime() - clientTimestamp.getTime() > MAX_REQUEST_TIME) {
+				if (serverTimestamp.getTime() - clientTimestamp.getTime() > maxRequestTime) {
 					logger.warn("Request expired");
 					return false;
 				}

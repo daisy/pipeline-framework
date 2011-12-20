@@ -146,7 +146,7 @@ def get_log(id)
   status = Resources.get_job_status(id)
   if status != "DONE"
     puts "Cannot get log until the job is done. Job status: #{status}."
-    return
+    # return
   end
 
   log = Resources.get_log(id)

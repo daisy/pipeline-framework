@@ -19,8 +19,12 @@ public abstract class AuthenticatedResource extends ServerResource {
 	}
 	
 	private boolean authenticate() {
+		
+		long maxRequestTime = ((PipelineWebService)this.getApplication()).getMaxRequestTime();
+		
 		return Authenticator.authenticate(getQuery().getFirstValue("key"), getQuery().getFirstValue("sign"),
-				getQuery().getFirstValue("time"), getQuery().getFirstValue("nonce"), getReference().toString());
+				getQuery().getFirstValue("time"), getQuery().getFirstValue("nonce"), getReference().toString(),
+				maxRequestTime);
 	}
 	
 	public boolean isAuthenticated() {

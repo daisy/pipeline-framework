@@ -60,20 +60,18 @@ public class ResultResource extends AuthenticatedResource {
 		JobResult result = job.getResult();
 		URI zip = result.getZip();
 		// TODO check for errors instead of looking at null-ness of zip
+		// although, does the presence of errors indicate that the result is not available?
 		if (zip == null) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
     		return null;
 		}
-		//FileRepresentation rep = new FileRepresentation(new File(zip), MediaType.APPLICATION_ZIP);
-		//setStatus(Status.SUCCESS_OK);
-		//return rep;
 		
 		File zipFile = new File(zip);
 		Representation rep = new FileRepresentation(zipFile,MediaType.APPLICATION_ZIP);
-		 Disposition disposition = new Disposition();
-		 disposition.setFilename(job.getId().toString() + ".zip");
-		 disposition.setType(Disposition.TYPE_ATTACHMENT);
-		 rep.setDisposition(disposition);
-		 return rep;
+		Disposition disposition = new Disposition();
+		disposition.setFilename(job.getId().toString() + ".zip");
+		disposition.setType(Disposition.TYPE_ATTACHMENT);
+		rep.setDisposition(disposition);
+		return rep;
     }  
 }

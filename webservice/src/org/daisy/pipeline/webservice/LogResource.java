@@ -56,10 +56,10 @@ public class LogResource extends AuthenticatedResource {
 			return null;
     	}
 		
-		if (!job.getStatus().equals(Job.Status.DONE)) {
+		/*if (!job.getStatus().equals(Job.Status.DONE)) {
     		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
     		return null;
-    	}
+    	}*/
     	
     	setStatus(Status.SUCCESS_OK);
     	

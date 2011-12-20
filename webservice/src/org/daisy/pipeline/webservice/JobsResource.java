@@ -52,10 +52,6 @@ import org.xml.sax.SAXException;
  */
 public class JobsResource extends AuthenticatedResource {
 
-	// TODO make configurable
-	/** The tempfile dir. */
-	private String tempfileDir = "/tmp/";
-	
 	/** The tempfile prefix. */
 	private String tempfilePrefix = "p2ws";
 	private String tempfileSuffix = ".zip";
@@ -184,6 +180,9 @@ public class JobsResource extends AuthenticatedResource {
 	 * @return the multipart request data
 	 */
 	private MultipartRequestData processMultipart(Request request) {
+		
+		String tmpdir = ((PipelineWebService) this.getApplication()).getTmpDir();
+		
 		// 1/ Create a factory for disk-based file items
         DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
         fileItemFactory.setSizeThreshold(1000240);
@@ -202,7 +201,7 @@ public class JobsResource extends AuthenticatedResource {
 	        while (it.hasNext()) {
 	            FileItem fi = it.next();
 	            if (fi.getFieldName().equals(JOB_DATA_FIELD)) {
-	            	File file = File.createTempFile(tempfilePrefix, tempfileSuffix, new File(tempfileDir));
+	            	File file = File.createTempFile(tempfilePrefix, tempfileSuffix, new File(tmpdir));
 	                fi.write(file);	  
 	                
 	                // re-opening the file after writing to it
