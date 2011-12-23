@@ -228,7 +228,7 @@ public class XmlFormatter {
 		Job.Status status = job.getStatus();
 		
 		rootElm.setAttribute("id", job.getId().toString());
-		if (status == Job.Status.DONE) {
+		/*if (status == Job.Status.DONE) {
 			rootElm.setAttribute("status", "DONE");
 		}
 		else if (status == Job.Status.IDLE) {
@@ -236,7 +236,8 @@ public class XmlFormatter {
 		}
 		else if (status == Job.Status.RUNNING) {
 			rootElm.setAttribute("status", "RUNNING");
-		}
+		}*/
+		rootElm.setAttribute("status", status.toString());
 		
 		Element scriptElm = doc.createElementNS(NS_PIPELINE_DATA, "script");
 		scriptElm.setAttribute("href", job.getScript().getURI().toString());

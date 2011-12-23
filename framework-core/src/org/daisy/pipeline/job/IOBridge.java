@@ -27,6 +27,8 @@ public class IOBridge {
 	/** The Constant ORG_DAISY_PIPELINE_IOBASE. */
 	public static final String ORG_DAISY_PIPELINE_IOBASE = "org.daisy.pipeline.iobase";
 	
+	
+	public static final String ORG_DAISY_PIPELINE_LOCAL = "org.daisy.pipeline.local";
 	/** The Constant ANY_FILE_URI. */
 	public static final String ANY_FILE_URI = "anyFileURI";
 	
@@ -152,7 +154,7 @@ public class IOBridge {
 						.toURI().toString() : mOutputDir.toURI().toString();
 
 				String strUri = input.getOptions().get(optionInfo.getName());
-				;
+				
 				if (script.getOptionMetadata(optionInfo.getName())
 						.getDirection() == Direction.OUTPUT) {
 					if (strUri == null || strUri.isEmpty()) {
@@ -182,7 +184,12 @@ public class IOBridge {
 							"Error parsing uri for input option:"
 									+ optionInfo.getName(), e);
 				}
-				URI uri = IOHelper.map(subDir, relUri.toString());
+				URI uri = null;
+				//absolute means  mapping
+				if(relUri.getScheme()==null)
+						uri=IOHelper.map(subDir, relUri.toString());
+				else
+					uri= relUri;
 				resolvedInput.withOption(optionInfo.getName(), uri.toString());
 			} else {
 				resolvedInput.withOption(optionInfo.getName(), input

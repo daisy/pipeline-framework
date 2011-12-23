@@ -6,7 +6,7 @@ class Ctxt
 	def self.logger
 		if @@logger==nil
 			@@logger=Logger.new(STDERR)
-			@@logger.level=Logger::DEBUG
+			@@logger.level=Logger::INFO
 		end
 		@@logger
 	end

@@ -25,7 +25,8 @@ public class Job {
 		/** The RUNNING. */
 		RUNNING,
 		/** The DONE. */
-		DONE
+		DONE,
+		ERROR
 	}
 
 	/**
@@ -153,8 +154,13 @@ public class Job {
 		status = Status.RUNNING;
 		// TODO use a pipeline cache
 		XProcPipeline pipeline = engine.load(script.getURI());
-		output = pipeline.run(input);
-		status = Status.DONE;
+		try{
+			output = pipeline.run(input);
+			status=Status.DONE;
+		}catch(Exception e){
+			status=Status.ERROR;
+		}
+	
 
 		JobResult.Builder builder = new JobResult.Builder();
 		builder.withMessageAccessor(output.getMessages());

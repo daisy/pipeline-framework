@@ -51,17 +51,17 @@ class Dp2
 	end
 
 	def job(script,data,wait)
+		job=nil
 		if alive?
 			id=JobResource.new.postResource(script.to_xml_request,nil)
-			job=nil
 			if wait==true
 				begin
 					sleep 1.5 
 					job=job_status(id)
-				end while job.status!='DONE'
+				end while job.status=='RUNNING' 
 			end 
 		end
-		return nil
+		return job
 	end
 
 	def job_status(id)

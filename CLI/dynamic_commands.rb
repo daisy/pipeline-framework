@@ -25,7 +25,8 @@ class CommandScript < Command
 
 		begin
 			@parser.parse(str_args)	
-			Dp2.new.job(@script,nil,true)
+			job=Dp2.new.job(@script,nil,true)
+			puts job.status
 		rescue Exception => e
 				Ctxt.logger.info(e)
 				puts "\nERROR: #{e}\n\n"
@@ -54,7 +55,7 @@ class CommandScript < Command
 				end
 			else
 				opts.on(input+" input",@input_modifiers[input][:help]) do |v|
-				   @input_modifiers[input][:value] = v
+				   @input_modifiers[input][:value] = [v]
 				end
 			end
 

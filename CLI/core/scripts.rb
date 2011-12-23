@@ -10,7 +10,7 @@ require "./core/helpers"
 # ScriptsResultProcessor
 
 class Script
-	attr_accessor :href,:nicename,:desc,:opts,:inputs,:outputs
+	attr_accessor :href,:nicename,:desc,:opts,:inputs,:outputs,:local
 
 	def initialize(href,nicename,desc)
 		@href=href
@@ -19,6 +19,7 @@ class Script
 		@opts=[]
 		@inputs=[]
 		@outputs=[]
+		@local=true
 	end
 	def clone
 		clone=Script.new(@href,@nicename,@desc)
@@ -166,7 +167,9 @@ class XmlBuilder
 			raise "missing required option #{opt[:name]}" if !(opt[:value]!=nil && !opt[:value].empty?) && opt[:required]==('true')
 			if (opt[:value]!=nil && !opt[:value].empty?)
 				n=@doc.create_element(E_OPTION,{A_NAME=>opt[:name]})
-				n.content=opt[:value]
+				value=opt[:value]
+				value = Helpers.path_to_uri(value,@script.local) if opt[:type]=="anyFileURI" || opt[:type] == "anyDirURI"
+				n.content=value
 				@doc.root << n
 			end
 		}
@@ -176,13 +179,10 @@ class XmlBuilder
 		@script.inputs.each{ |input|
 			raise "Input empty: #{input[:name]}" if !(input[:value]!=nil && !input[:value].empty?)
 			values=input[:value]
-			if values.class != Array
-				values=[input[:value]] 
-			end
 			in_elem=@doc.create_element(E_INPUT,{A_NAME=>input[:name]})
 			
 			@doc.root << in_elem
-			values.each{|file| in_elem << @doc.create_element(E_FILE,{A_SRC=>file})} 
+			values.each{|file| in_elem << @doc.create_element(E_FILE,{A_SRC=>Helpers.path_to_uri(file,@script.local)})} 
 		}
 	end
 	def addOutputs

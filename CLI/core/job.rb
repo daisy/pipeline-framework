@@ -19,7 +19,9 @@ end
 
 class JobStatusResultProcessor < ResultProcessor
 	def process(input)
+		raise "Empty job result from server ",RuntimeError if input==nil
 		doc=input
+		
 		doc.remove_namespaces!
 		xjob=doc.at_xpath("//job")
 		job=Job.fromXml(xjob)
