@@ -16,6 +16,7 @@ import org.daisy.common.base.Provider;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.MessageListenerFactory;
 import org.daisy.common.xproc.XProcInput;
+import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
@@ -157,13 +158,20 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	public XProcPipelineInfo getInfo() {
 		return info.get();
 	}
-
+	@Override
+	public XProcResult run(XProcInput data) {
+		return run(data,null);
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.daisy.common.xproc.XProcPipeline#run(org.daisy.common.xproc.XProcInput)
 	 */
 	@Override
-	public XProcResult run(XProcInput data) {
+	public XProcResult run(XProcInput data, XProcMonitor monitor) {
 		PipelineInstance pipeline = pipelineSupplier.get();
+		if (monitor!=null){
+			monitor.setMessageAccessor(pipeline.messageAccessor);
+		}
 		// bind inputs
 		for (String name : pipeline.xpipe.getInputs()) {
 			for (Provider<Source> sourceProvider : data.getInputs(name)) {
@@ -260,4 +268,5 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			this.messageAccessor = accessor;
 		}
 	}
+
 }

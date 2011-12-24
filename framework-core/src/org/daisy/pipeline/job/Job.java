@@ -2,11 +2,15 @@ package org.daisy.pipeline.job;
 
 import java.io.IOException;
 
+import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
+import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.script.XProcScript;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 //TODO check thread safety
@@ -14,7 +18,8 @@ import org.daisy.pipeline.script.XProcScript;
  * The Class Job defines the execution unit.
  */
 public class Job {
-
+	private static final Logger logger = LoggerFactory
+			.getLogger(Job.class);
 	/**
 	 * The Enum Status.
 	 */
@@ -87,6 +92,21 @@ public class Job {
 
 	/** The status. */
 	private Status status = Status.IDLE;
+	
+	private XProcMonitor monitor= new XProcMonitor() {
+		MessageAccessor accessor = null; 
+		@Override
+		public MessageAccessor getMessageAccessor() {
+			
+			return accessor;
+		}
+		
+		@Override
+		public void setMessageAccessor(MessageAccessor accessor) {
+			this.accessor=accessor;
+			
+		}
+	};
 
 	/**
 	 * Instantiates a new job.
@@ -155,9 +175,10 @@ public class Job {
 		// TODO use a pipeline cache
 		XProcPipeline pipeline = engine.load(script.getURI());
 		try{
-			output = pipeline.run(input);
+			output = pipeline.run(input,monitor);
 			status=Status.DONE;
 		}catch(Exception e){
+			logger.error("job finished with error state",e);
 			status=Status.ERROR;
 		}
 	
@@ -178,6 +199,10 @@ public class Job {
 	 */
 	public JobResult getResult() {
 		return results;
+	}
+	
+	public XProcMonitor getMonitor(){
+		return monitor;
 	}
 
 }

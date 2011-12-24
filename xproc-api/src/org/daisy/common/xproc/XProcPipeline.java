@@ -19,5 +19,17 @@ public interface XProcPipeline {
 	 * @return the x proc result
 	 */
 	XProcResult run(XProcInput data);
+	
+	
+	/**
+	 * Runs the pipline plugging the input descriptions into the engine
+	 *
+	 * @param data the data
+	 * @param monitor observer object to monitorise the execution 
+	 * @return the x proc result
+	 */
+	XProcResult run(XProcInput data,XProcMonitor monitor);
+	
+	
 
 }

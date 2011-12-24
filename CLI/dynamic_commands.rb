@@ -26,7 +26,7 @@ class CommandScript < Command
 		begin
 			@parser.parse(str_args)	
 			job=Dp2.new.job(@script,nil,true)
-			puts job.status
+				puts job.status
 		rescue Exception => e
 				Ctxt.logger.info(e)
 				puts "\nERROR: #{e}\n\n"

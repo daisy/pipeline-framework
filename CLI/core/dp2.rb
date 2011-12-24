@@ -52,12 +52,21 @@ class Dp2
 
 	def job(script,data,wait)
 		job=nil
+		msgIdx=0
 		if alive?
 			id=JobResource.new.postResource(script.to_xml_request,nil)
 			if wait==true
 				begin
 					sleep 1.5 
 					job=job_status(id)
+					if job.messages.size >= msgIdx
+						job.messages[msgIdx..-1].each{|msg|
+							puts msg.to_s	
+						}
+						msgIdx = job.messages.size - msgIdx
+					else 
+						Ctxt.logger.warn("msg index and the current msg size are not maching #{msgIdx} #{job.messages.size}") 
+					end
 				end while job.status=='RUNNING' 
 			end 
 		end

@@ -7,6 +7,7 @@ import javax.xml.transform.URIResolver;
 import org.daisy.common.messaging.MessageListenerFactory;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
+import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcResult;

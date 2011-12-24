@@ -20,6 +20,7 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 	/** The m messages. */
 	HashMultimap<Level, Message> mMessages = HashMultimap.create();
 
+	
 	/**
 	 * Stores the message
 	 *
@@ -166,7 +167,7 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 		set.addAll(Arrays.asList(fromLevel));
 		LinkedList<Message> msgs= new LinkedList<Message>();
 		for (Level iter:Level.values()){
-			if(set.contains(iter)){
+			if(set.contains(iter) && mMessages.containsKey(iter) && mMessages.get(iter)!=null){
 				msgs.addAll(mMessages.get(iter));
 			}
 		}

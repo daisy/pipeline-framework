@@ -25,7 +25,7 @@ class JobStatusResultProcessor < ResultProcessor
 		doc.remove_namespaces!
 		xjob=doc.at_xpath("//job")
 		job=Job.fromXml(xjob)
-		Ctxt.logger.debug(job.to_s)
+		#Ctxt.logger.debug(job.to_s)
 		return  job
 	end
 end
@@ -38,6 +38,12 @@ class JobPostResultProcessor < ResultProcessor
 		id=input.split(/\//)[-1]
 		puts "Job with ID #{id} submitted"
 		return id 
+	end
+end
+class Message
+	attr_accessor :msg,:level
+	def to_s
+			return "#{@level} - #{@msg[0..200]}"
 	end
 end
 class Job
@@ -54,7 +60,13 @@ class Job
 		xscript=element.at_xpath("./script")
 		xresult=element.at_xpath("./result")
 		xlog=element.at_xpath("./log")
-
+		xmessages=element.xpath("./messages/message")
+		xmessages.each{|xmsg|
+			msg= Message.new 
+			msg.msg=xmsg.content
+			msg.level=xmsg.attr("level")
+			job.messages.push(msg)		
+		}
 		job.script=xscript.attr("href") if xscript!=nil
 		job.result=xresult.attr("href") if xresult!=nil
 		job.log=xlog.attr("href") if xlog!=nil
