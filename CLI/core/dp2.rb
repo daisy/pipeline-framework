@@ -59,6 +59,7 @@ class Dp2
 				begin
 					sleep 1.5 
 					job=job_status(id)
+						
 					if job.messages.size >= msgIdx
 						job.messages[msgIdx..-1].each{|msg|
 							puts msg.to_s	

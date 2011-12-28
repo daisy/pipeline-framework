@@ -1,10 +1,13 @@
 package org.daisy.common.messaging;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
+import org.daisy.common.base.Filter;
 import org.daisy.common.messaging.Message.Level;
 
 import com.google.common.collect.HashMultimap;
@@ -19,7 +22,8 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 	
 	/** The m messages. */
 	HashMultimap<Level, Message> mMessages = HashMultimap.create();
-
+	List<Message> mSeqList=new ArrayList<Message>();
+	int mSequence = 0;
 	
 	/**
 	 * Stores the message
@@ -29,7 +33,8 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 	 * @param thw the thw
 	 */
 	private void store(Level level,String str,Throwable thw){
-		Message msg= new Message.Builder().withLevel(level).withMessage(str).withThrowable(thw).build();
+		Message msg= new Message.Builder().withLevel(level).withMessage(str).withThrowable(thw).withSequence(mSequence++).build();
+		mSeqList.add(msg);
 		mMessages.put(level, msg);
 	}
 
@@ -200,5 +205,19 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 	public MessageAccessor getAccessor() {
 		return this;
 	}
-
+	@Override
+	public List<Message> getAll() {
+		return new ArrayList<Message>(mSeqList);
+	}
+	
+	@Override
+	public List<Message> filtered(Filter<List<Message>>... filters) {
+		List<Message> filtered = this.getAll();
+		
+		for(Filter<List<Message>> filter:filters){
+			filtered=filter.filter(filtered);
+		}
+		return filtered;
+	}
+	
 }

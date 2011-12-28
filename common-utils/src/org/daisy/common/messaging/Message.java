@@ -2,6 +2,8 @@ package org.daisy.common.messaging;
 
 import java.util.Date;
 
+import org.daisy.common.messaging.Message.Builder;
+
 /**
  * Simple yet useful message definition
  */
@@ -35,6 +37,7 @@ public class Message {
 	/** The m time stamp. */
 	final Date mTimeStamp;
 
+	private int mSequence;
 	/**
 	 * Instantiates a new message object
 	 * 
@@ -45,7 +48,7 @@ public class Message {
 	 * @param throwable
 	 *            the throwable
 	 */
-	private Message(Level level, String msg, Throwable throwable) {
+	private Message(Level level, String msg, Throwable throwable,int sequence) {
 		mLevel = level;
 		mMsg = msg;
 		mThrowable = throwable;
@@ -88,6 +91,11 @@ public class Message {
 		return mTimeStamp;
 	}
 
+	public int getSequence() {
+		return mSequence;
+	}
+
+
 	/**
 	 * Builder for creating new messages
 	 */
@@ -102,6 +110,7 @@ public class Message {
 		/** The m level. */
 		Level mLevel;
 
+		int mSequence;
 		/**
 		 * With message.
 		 * 
@@ -144,7 +153,12 @@ public class Message {
 		 * @return the message
 		 */
 		public Message build() {
-			return new Message(mLevel, mMsg, mThrowable);
+			return new Message(mLevel, mMsg, mThrowable,mSequence);
+		}
+
+		public Builder withSequence(int i) {
+			mSequence=i;
+			return this;
 		}
 	}
 }

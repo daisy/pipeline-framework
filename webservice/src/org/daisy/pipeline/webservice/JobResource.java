@@ -18,7 +18,7 @@ import org.restlet.resource.Get;
 public class JobResource extends AuthenticatedResource {
 	/** The job. */
 	private Job job;
-	
+	private int msgSeq=0;
 	/* (non-Javadoc)
 	 * @see org.restlet.resource.Resource#doInit()
 	 */
@@ -27,7 +27,11 @@ public class JobResource extends AuthenticatedResource {
 		super.doInit();
 		if (!isAuthenticated()) return;
 		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
-        String idParam = (String) getRequestAttributes().get("id");  
+        String idParam = (String) getRequestAttributes().get("id");
+        String msgSeqParam = (String) getRequestAttributes().get("msgSeq");
+        if (msgSeqParam!=null){
+        	msgSeq=Integer.parseInt(msgSeqParam);
+        }
         JobId id = JobIdFactory.newIdFromString(idParam);
         job = jobMan.getJob(id);
     }  
@@ -50,7 +54,7 @@ public class JobResource extends AuthenticatedResource {
 	
     	String serverAddress = ((PipelineWebService)this.getApplication()).getServerAddress();
 		setStatus(Status.SUCCESS_OK);
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.jobToXml(job, serverAddress));
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.jobToXml(job, serverAddress,msgSeq));
 		return dom;
     }  
     

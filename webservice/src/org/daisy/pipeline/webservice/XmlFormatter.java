@@ -1,7 +1,9 @@
 package org.daisy.pipeline.webservice;
 
 import java.io.StringWriter;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,7 +14,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.daisy.common.base.Filter;
 import org.daisy.common.messaging.Message;
+import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
@@ -48,9 +52,9 @@ public class XmlFormatter {
 	 *            the server address
 	 * @return the document
 	 */
-	public static Document jobToXml(Job job, String serverAddress) {
+	public static Document jobToXml(Job job, String serverAddress,int msgSeq) {
 		Document doc = createDom("job");
-		toXmlElm(job, doc, serverAddress);
+		toXmlElm(job, doc, serverAddress,msgSeq);
 
 		// for debugging only
 		//if (!Validator.validateXml(doc, Validator.jobSchema)) {
@@ -79,7 +83,7 @@ public class XmlFormatter {
 		Iterator<Job> it = jobs.iterator();
 		while (it.hasNext()) {
 			Job job = it.next();
-			Element jobElm = toXmlElm(job, doc, serverAddress);
+			Element jobElm = toXmlElm(job, doc, serverAddress,0);
 			jobsElm.appendChild(jobElm);
 		}
 
@@ -227,7 +231,7 @@ public class XmlFormatter {
 	 *            the server address
 	 * @return the element
 	 */
-	private static Element toXmlElm(Job job, Document doc, String serverAddress) {
+	private static Element toXmlElm(Job job, Document doc, String serverAddress,int msgSeq) {
 		Element rootElm = null;
 
 		if (doc.getDocumentElement().getNodeName().equals("job")) {
@@ -254,12 +258,21 @@ public class XmlFormatter {
 		// messages: TODO get rid of the message gathering in the
 		// done status
 		Element messagesElm = doc.createElementNS(NS_PIPELINE_DATA, "messages");
+		//TODO wrap this in a static context
+		HashSet<Level> levels= new HashSet<Level>();
+		levels.add(Level.WARNING);
+		levels.add(Level.INFO);
+		levels.add(Level.ERROR);
+		Filter<List<Message>> seqFilt= new MessageAccessor.SequenceFilter(2);
+		Filter<List<Message>> levelFilt= new MessageAccessor.LevelFilter(levels);
+		//end of wrapping things
+		List<Message> msgs= job.getMonitor().getMessageAccessor().filtered(new Filter[]{seqFilt,levelFilt});
 		try {
-			for (Message msg : job.getMonitor().getMessageAccessor()
-					.getMessages(new Level[]{Level.INFO,Level.WARNING,Level.ERROR})) {
+			for (Message msg :msgs) {
 				Element singleMsgElm = doc.createElementNS(NS_PIPELINE_DATA,
 						"message");
 				singleMsgElm.setAttributeNS(NS_PIPELINE_DATA, "level",msg.getLevel().toString());
+				singleMsgElm.setAttributeNS(NS_PIPELINE_DATA, "sequence",msg.getSequence()+"");
 				singleMsgElm.setTextContent(msg.getMsg());
 				messagesElm.appendChild(singleMsgElm);
 			}

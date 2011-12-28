@@ -6,8 +6,8 @@ class JobResource < Resource
 end
 
 class JobStatusResource < Resource
-	def initialize(id)
-		super("/jobs",{:id=>id},JobStatusResultProcessor.new)
+	def initialize(id,seq=0)
+		super("/jobs",{:id=>id,:seq=>seq},JobStatusResultProcessor.new)
 	end
 	def buildUri
     		uri = "#{Ctxt.conf[Ctxt.conf.class::BASE_URI]}#{@path}/#{@params[:id]}"
@@ -25,7 +25,7 @@ class JobStatusResultProcessor < ResultProcessor
 		doc.remove_namespaces!
 		xjob=doc.at_xpath("//job")
 		job=Job.fromXml(xjob)
-		#Ctxt.logger.debug(job.to_s)
+		Ctxt.logger.debug(job.to_s)
 		return  job
 	end
 end
