@@ -10,7 +10,7 @@ class JobStatusResource < Resource
 		super("/jobs",{:id=>id,:seq=>seq},JobStatusResultProcessor.new)
 	end
 	def buildUri
-    		uri = "#{Ctxt.conf[Ctxt.conf.class::BASE_URI]}#{@path}/#{@params[:id]}"
+    		uri = "#{Ctxt.conf[Ctxt.conf.class::BASE_URI]}#{@path}/#{@params[:id]}?msgSeq=#{@params[:seq]}"
 		Ctxt.logger.debug("URI:"+uri)
 		uri
 	end
@@ -41,9 +41,9 @@ class JobPostResultProcessor < ResultProcessor
 	end
 end
 class Message
-	attr_accessor :msg,:level
+	attr_accessor :msg,:level,:seq
 	def to_s
-			return "#{@level} - #{@msg[0..200]}"
+			return "#{@level}(#{@seq}) - #{@msg[0..150]}"
 	end
 end
 class Job
@@ -54,6 +54,7 @@ class Job
 		@messages=[]
 	end
 	def self.fromXml(element)
+		Ctxt.logger.debug("from element: #{element.to_s}")
 		job=Job.new(element.attr("id"))
 		job.status=element.attr("status")
 	
@@ -65,13 +66,13 @@ class Job
 			msg= Message.new 
 			msg.msg=xmsg.content
 			msg.level=xmsg.attr("level")
+			msg.seq=xmsg.attr("sequence")
 			job.messages.push(msg)		
 		}
 		job.script=xscript.attr("href") if xscript!=nil
 		job.result=xresult.attr("href") if xresult!=nil
 		job.log=xlog.attr("href") if xlog!=nil
 	
-		#TODO: messages	
 		return job
 	end
 
@@ -81,6 +82,7 @@ class Job
 		s+="\t Script: #{@script}\n" if @script!=nil
 		s+="\t Result: #{@result}\n" if @result!=nil
 		s+="\t Log: #{@log}\n" if @log!=nil
+		s+="\t Messages: #{@messages.size}\n"
 		s+="\n"
 		return s	
 	end	

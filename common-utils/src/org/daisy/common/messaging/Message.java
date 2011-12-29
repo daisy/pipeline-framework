@@ -53,6 +53,7 @@ public class Message {
 		mMsg = msg;
 		mThrowable = throwable;
 		mTimeStamp = new Date();
+		mSequence=sequence;
 	}
 
 	/**

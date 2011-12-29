@@ -58,25 +58,21 @@ class Dp2
 			if wait==true
 				begin
 					sleep 1.5 
-					job=job_status(id)
-						
-					if job.messages.size >= msgIdx
-						job.messages[msgIdx..-1].each{|msg|
-							puts msg.to_s	
-						}
-						msgIdx = job.messages.size - msgIdx
-					else 
-						Ctxt.logger.warn("msg index and the current msg size are not maching #{msgIdx} #{job.messages.size}") 
+					job=job_status(id,msgIdx)
+					job.messages.each{|msg| puts msg.to_s}
+					if job.messages.size > 0
+						msgIdx=job.messages[-1].seq
 					end
+					Ctxt.logger.debug("msg idx #{msgIdx}")	
 				end while job.status=='RUNNING' 
 			end 
 		end
 		return job
 	end
 
-	def job_status(id)
+	def job_status(id,msgSeq=0)
 		#if alive?
-			return JobStatusResource.new(id).getResource
+			return JobStatusResource.new(id,msgSeq).getResource
 		#end
 		return nil
 

@@ -266,8 +266,9 @@ public class XmlFormatter {
 		Filter<List<Message>> seqFilt= new MessageAccessor.SequenceFilter(2);
 		Filter<List<Message>> levelFilt= new MessageAccessor.LevelFilter(levels);
 		//end of wrapping things
-		List<Message> msgs= job.getMonitor().getMessageAccessor().filtered(new Filter[]{seqFilt,levelFilt});
+		
 		try {
+			List<Message> msgs= job.getMonitor().getMessageAccessor().filtered(new Filter[]{seqFilt,levelFilt});
 			for (Message msg :msgs) {
 				Element singleMsgElm = doc.createElementNS(NS_PIPELINE_DATA,
 						"message");

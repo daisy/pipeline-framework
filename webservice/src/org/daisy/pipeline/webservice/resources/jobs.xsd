@@ -32,13 +32,16 @@
   <xs:element name="messages">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="data:error" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="data:warning" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="data:message" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="error" type="xs:string"/>
-  <xs:element name="warning" type="xs:string"/>
+  <xs:element name="message" >
+  	<xs:complexType>
+      <xs:attribute name="level" use="required" type="xs:string"/>
+      <xs:attribute name="msgSeq" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="log">
     <xs:complexType>
       <xs:attribute name="href" use="required" type="xs:anyURI"/>

@@ -36,6 +36,7 @@ public class MemoryMessageListenerTest {
 		List<Message> filtered = accessor.filtered(arr);
 		Assert.assertEquals(1, filtered.size());
 		Assert.assertEquals("m4", filtered.get(filtered.size()-1).getMsg());
+		Assert.assertEquals(4, filtered.get(filtered.size()-1).getSequence());
 
 	}
 

@@ -29,6 +29,7 @@ public class JobResource extends AuthenticatedResource {
 		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
         String idParam = (String) getRequestAttributes().get("id");
         String msgSeqParam = (String) getRequestAttributes().get("msgSeq");
+        
         if (msgSeqParam!=null){
         	msgSeq=Integer.parseInt(msgSeqParam);
         }
