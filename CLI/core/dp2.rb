@@ -61,7 +61,7 @@ class Dp2
 					job=job_status(id,msgIdx)
 					job.messages.each{|msg| puts msg.to_s}
 					if job.messages.size > 0
-						msgIdx=job.messages[-1].seq
+						msgIdx=(Integer(job.messages[-1].seq)+1).to_s
 					end
 					Ctxt.logger.debug("msg idx #{msgIdx}")	
 				end while job.status=='RUNNING' 

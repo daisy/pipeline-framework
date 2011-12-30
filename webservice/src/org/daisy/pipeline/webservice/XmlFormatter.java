@@ -263,7 +263,7 @@ public class XmlFormatter {
 		levels.add(Level.WARNING);
 		levels.add(Level.INFO);
 		levels.add(Level.ERROR);
-		Filter<List<Message>> seqFilt= new MessageAccessor.SequenceFilter(2);
+		Filter<List<Message>> seqFilt= new MessageAccessor.SequenceFilter(msgSeq);
 		Filter<List<Message>> levelFilt= new MessageAccessor.LevelFilter(levels);
 		//end of wrapping things
 		
