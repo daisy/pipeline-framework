@@ -1,7 +1,7 @@
 require './rest'
 module Resources
   module_function
-  BASEURI = "http://localhost:8182/ws"
+  BASEURI = "http://localhost:8183/ws"
 #  BASEURI = "http://localhost:9000/web/service"
 
   def get_scripts

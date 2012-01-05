@@ -4,9 +4,10 @@ Bundle-Name: Webservice
 Bundle-SymbolicName: org.daisy.pipeline.webservice;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: javax.servlet.http,
- javax.crypto,
+Import-Package: javax.crypto,
  javax.crypto.spec,
+ javax.persistence;version="2.0.3",
+ javax.servlet.http,
  javax.xml,
  javax.xml.namespace,
  javax.xml.parsers,
@@ -32,9 +33,11 @@ Import-Package: javax.servlet.http,
  org.restlet.util,
  org.slf4j,
  org.w3c.dom,
+ org.w3c.dom.ls,
  org.xml.sax,
- org.w3c.dom.ls
+ org.apache.derby.jdbc
 Require-Bundle: org.daisy.pipeline.framework,
  org.daisy.common-utils
 Service-Component: OSGI-INF/webservice.xml
+JPA-PersistenceUnits: org.daisy.pipeline.webservice.db
 

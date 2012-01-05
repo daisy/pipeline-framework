@@ -32,14 +32,16 @@ public class PipelineWebService extends Application {
 	public static final String MAX_REQUEST_TIME_PROPERTY = "org.daisy.pipeline.ws.maxrequesttime";
 	public static final String TMPDIR_PROPERTY = "org.daisy.pipeline.ws.tmpdir";
 	public static final String AUTHENTICATION_PROPERTY = "org.daisy.pipeline.ws.authentication";
+	public static final String DBPATH_PROPERTY = "org.daisy.pipeline.ws.dbpath";
 	
 	/* options and their default values */
 	private String host = "localhost";
 	private String path = "/ws";
-	private int portNumber = 8182;
+	private int portNumber = 8183;
 	private boolean usesAuthentication = true;
 	private long maxRequestTime = 600000; // 10 minutes in ms
 	private String tmpDir = "/tmp";
+	private String dbPath = "";
 	
 	/** The Constant WS. */
 	private static final String WS = "ws";
@@ -116,6 +118,10 @@ public class PipelineWebService extends Application {
 	// the length of time in ms that a request is valid for, counting from its timestamp value
 	public long getMaxRequestTime() {
 		return this.maxRequestTime;
+	}
+	
+	public String getDBPath() {
+		return this.dbPath;
 	}
 	
 	/**
@@ -231,6 +237,11 @@ public class PipelineWebService extends Application {
 						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.", 
 						MAX_REQUEST_TIME_PROPERTY, maxrequesttime, this.maxRequestTime));
 			}
+		}
+		
+		String dbpath = System.getProperty(DBPATH_PROPERTY);
+		if (dbpath != null) {
+			this.dbPath = dbpath;
 		}
 	}
 }
