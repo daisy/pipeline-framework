@@ -1,8 +1,8 @@
 <job id="job-id-01" status="DONE" xmlns="http://www.daisy.org/ns/pipeline/data">
     <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
-    <result href="http://ws.pipeline.org/jobs/job-id-01/result.zip"/>
     <messages>
         <message level="WARNING" sequence="22">Warning about this job</message>
     </messages>
+    <result href="http://ws.pipeline.org/jobs/job-id-01/result.zip"/>
     <log href="http://ws.pipeline.org/jobs/job-id-01/log"/>
 </job>
