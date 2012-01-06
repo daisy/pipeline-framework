@@ -9,7 +9,16 @@
         <xs:element ref="data:log" maxOccurs="1" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="id" use="required" type="xs:string"/>
-      <xs:attribute name="status" use="required" type="xs:string"/>
+      <xs:attribute name="status" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="IDLE"/>
+            <xs:enumeration value="RUNNING"/>
+            <xs:enumeration value="DONE"/>
+            <xs:enumeration value="ERROR"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="script">
