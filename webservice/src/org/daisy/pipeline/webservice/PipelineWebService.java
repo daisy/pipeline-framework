@@ -181,6 +181,10 @@ public class PipelineWebService extends Application {
 		}
 		
 		String authentication = System.getProperty(AUTHENTICATION_PROPERTY);
+		
+		// TODO remove this line; it's is for TESTING ONLY
+		this.usesAuthentication = false;
+		/*
 		if (authentication != null) {
 			if (authentication.equalsIgnoreCase("true")) {
 				this.usesAuthentication = true;
@@ -194,7 +198,7 @@ public class PipelineWebService extends Application {
 						"Value specified in option %s (%s) is not valid. Using default value of %s.", 
 						AUTHENTICATION_PROPERTY, authentication, this.usesAuthentication));
 			}
-		}
+		}*/
 		
 		String port = System.getProperty(PORT_PROPERTY);
 		if (port != null) {
