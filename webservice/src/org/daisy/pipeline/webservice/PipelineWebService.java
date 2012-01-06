@@ -37,7 +37,7 @@ public class PipelineWebService extends Application {
 	/* options and their default values */
 	private String host = "localhost";
 	private String path = "/ws";
-	private int portNumber = 8183;
+	private int portNumber = 8182;
 	private boolean usesAuthentication = true;
 	private long maxRequestTime = 600000; // 10 minutes in ms
 	private String tmpDir = "/tmp";
@@ -187,6 +187,7 @@ public class PipelineWebService extends Application {
 			}
 			else if (authentication.equalsIgnoreCase("false")) {
 				this.usesAuthentication = false;
+				logger.info("Web service authentication is OFF");
 			}
 			else {
 				logger.error(String.format(

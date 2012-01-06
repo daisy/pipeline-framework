@@ -57,9 +57,9 @@ public class XmlFormatter {
 		toXmlElm(job, doc, serverAddress,msgSeq);
 
 		// for debugging only
-		//if (!Validator.validateXml(doc, Validator.jobSchema)) {
-		//	System.out.println("INVALID XML:\n" + DOMToString(doc));
-		//}
+		if (!Validator.validateXml(doc, Validator.jobSchema)) {
+			System.out.println("INVALID XML:\n" + DOMToString(doc));
+		}
 
 		return doc;
 	}
@@ -243,20 +243,12 @@ public class XmlFormatter {
 		Job.Status status = job.getStatus();
 
 		rootElm.setAttribute("id", job.getId().toString());
-		/*
-		 * if (status == Job.Status.DONE) { rootElm.setAttribute("status",
-		 * "DONE"); } else if (status == Job.Status.IDLE) {
-		 * rootElm.setAttribute("status", "IDLE"); } else if (status ==
-		 * Job.Status.RUNNING) { rootElm.setAttribute("status", "RUNNING"); }
-		 */
 		rootElm.setAttribute("status", status.toString());
 
 		Element scriptElm = doc.createElementNS(NS_PIPELINE_DATA, "script");
 		scriptElm.setAttribute("href", job.getScript().getURI().toString());
 		rootElm.appendChild(scriptElm);
 
-		// messages: TODO get rid of the message gathering in the
-		// done status
 		Element messagesElm = doc.createElementNS(NS_PIPELINE_DATA, "messages");
 		//TODO wrap this in a static context
 		HashSet<Level> levels= new HashSet<Level>();
@@ -266,6 +258,16 @@ public class XmlFormatter {
 		Filter<List<Message>> seqFilt= new MessageAccessor.SequenceFilter(msgSeq);
 		Filter<List<Message>> levelFilt= new MessageAccessor.LevelFilter(levels);
 		//end of wrapping things
+		
+		
+		// TESTING force a dummy message
+		Element testelm = doc.createElementNS(NS_PIPELINE_DATA, "message");
+		testelm.setAttribute("level", "INFO");
+		testelm.setAttribute("sequence", "45");
+		testelm.setTextContent("Hello. I am a message.");
+		messagesElm.appendChild(testelm);
+		rootElm.appendChild(messagesElm);
+		// end TESTING
 		
 		try {
 			List<Message> msgs= job.getMonitor().getMessageAccessor().filtered(new Filter[]{seqFilt,levelFilt});
@@ -281,35 +283,13 @@ public class XmlFormatter {
 		} catch (Exception e) {
 			System.out.println(e.getCause());
 		}
-
+		
 		if (status == Job.Status.DONE) {
 			Element resultElm = doc.createElementNS(NS_PIPELINE_DATA, "result");
 			resultElm.setAttribute("href", serverAddress + "/jobs/"
 					+ job.getId().toString() + "/result.zip");
 			rootElm.appendChild(resultElm);
-
-			// list the errors and warnings
-			messagesElm = doc.createElementNS(NS_PIPELINE_DATA, "messages");
-			Iterator<Message> it_error = job.getResult().getErrors().iterator();
-			while (it_error.hasNext()) {
-				Element errorElm = doc.createElementNS(NS_PIPELINE_DATA,
-						"error");
-				Message err = it_error.next();
-				errorElm.setTextContent(err.getMsg());
-				messagesElm.appendChild(errorElm);
-			}
-
-			Iterator<Message> it_warn = job.getResult().getErrors().iterator();
-			while (it_warn.hasNext()) {
-				Element warningElm = doc.createElementNS(NS_PIPELINE_DATA,
-						"warning");
-				Message warn = it_warn.next();
-				warningElm.setTextContent(warn.getMsg());
-				messagesElm.appendChild(warningElm);
-			}
-
-			rootElm.appendChild(messagesElm);
-
+			
 			// reference the log file
 			Element logElm = doc.createElementNS(NS_PIPELINE_DATA, "log");
 			logElm.setAttribute("href", serverAddress + "/jobs/" + job.getId()
