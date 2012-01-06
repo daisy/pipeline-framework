@@ -10,9 +10,10 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-import org.daisy.pipeline.webservice.db.WSClient;
+/*import org.daisy.pipeline.webservice.db.WSClient;
 import org.daisy.pipeline.webservice.db.WSRequestLogEntry;
 import org.daisy.pipeline.webservice.db.WSDatabaseManager;
+*/
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +72,11 @@ public class Authenticator {
 	
 	// nonces, along with timestamps, protect against replay attacks
 	private static boolean checkValidNonce(String key, String nonce, String timestamp, String dbPath) {
-		WSDatabaseManager manager = new WSDatabaseManager(dbPath);
+		
+		// TESTING ONLY
+		return true;
+		
+		/*WSDatabaseManager manager = new WSDatabaseManager(dbPath);
 		WSClient client = manager.getClientByKey(key);
 		if (client == null) {
 			//TODO: log error
@@ -90,17 +95,22 @@ public class Authenticator {
 		// else, it is unique and therefore ok
 		manager.addObject(entry);
 		return true;
-			
+		*/
+		
 	}
 	
 	private static String getClientSecret(String key, String dbPath) {
+		// TESTING ONLY
+		return "";
 		
+		/*
 		WSDatabaseManager manager = new WSDatabaseManager(dbPath);
 		WSClient client = manager.getClientByKey(key);
 		if (client != null) {
 			return client.getSecret();
 		}
-		return "";		
+		return "";
+		*/		
 	}
 	
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
