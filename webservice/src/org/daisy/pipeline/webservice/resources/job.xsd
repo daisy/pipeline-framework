@@ -4,8 +4,8 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="data:script" maxOccurs="1" minOccurs="1"/>
-        <xs:element ref="data:result" maxOccurs="1" minOccurs="0"/>
         <xs:element ref="data:messages" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="data:result" maxOccurs="1" minOccurs="0"/>
         <xs:element ref="data:log" maxOccurs="1" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="id" use="required" type="xs:string"/>
@@ -44,7 +44,7 @@
               </xs:restriction>
             </xs:simpleType>
           </xs:attribute>
-          <xs:attribute name="msgSeq" use="required" type="xs:string"/>
+          <xs:attribute name="sequence" use="required" type="xs:string"/>
         </xs:extension>
       </xs:simpleContent>
     </xs:complexType>
