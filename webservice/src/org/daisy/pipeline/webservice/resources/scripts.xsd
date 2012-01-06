@@ -1,42 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.daisy.org/ns/pipeline/data" xmlns:data="http://www.daisy.org/ns/pipeline/data">
+  <xs:include schemaLocation="script.xsd"/>
   <xs:element name="scripts">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="data:script"/>
       </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="script">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="data:nicename"/>
-        <xs:element ref="data:description"/>
-        <xs:element ref="data:homepage" minOccurs="0" maxOccurs="1"/>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="data:input"/>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="data:option"/>
-      </xs:sequence>
-      <xs:attribute name="href" use="required" type="xs:anyURI"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="nicename" type="xs:string"/>
-  <xs:element name="description" type="xs:string"/>
-  <xs:element name="homepage" type="xs:string"/>
-  <xs:element name="input">
-    <xs:complexType>
-      <xs:attribute name="desc" use="required"/>
-      <xs:attribute name="name" use="required" type="xs:string"/>
-      <xs:attribute name="sequenceAllowed" type="xs:boolean"/>
-      <xs:attribute name="mediaType" use="required"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="option">
-    <xs:complexType>
-      <xs:attribute name="desc" use="required"/>
-      <xs:attribute name="name" use="required" type="xs:string"/>
-      <xs:attribute name="required" type="xs:boolean"/>
-      <xs:attribute name="type" use="required" type="xs:string"/>
-      <xs:attribute name="mediaType" use="optional" type="xs:string"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>
