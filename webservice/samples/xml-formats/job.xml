@@ -2,7 +2,7 @@
     <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
     <result href="http://ws.pipeline.org/jobs/job-id-01/result.zip"/>
     <messages>
-        <message level="WARNING" msgSeq="22">Warning about this job</message>
+        <message level="WARNING" sequence="22">Warning about this job</message>
     </messages>
     <log href="http://ws.pipeline.org/jobs/job-id-01/log"/>
 </job>

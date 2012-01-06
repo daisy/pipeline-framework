@@ -17,8 +17,8 @@
     <job id="job-id-02" status="DONE" xmlns="http://www.daisy.org/ns/pipeline/data">
         <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
         <messages>
-            <message level="INFO" msgSeq="5">Input XML dtbook.xml was not valid</message>
-            <message level="WARNING" msgSeq="8">Warning about this job</message>
+            <message level="INFO" sequence="5">Input XML dtbook.xml was not valid</message>
+            <message level="WARNING" sequence="8">Warning about this job</message>
         </messages>
         <log href="http://ws.pipeline.org/jobs/job-id-02/log"/>
     </job>
