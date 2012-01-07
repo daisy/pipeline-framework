@@ -260,7 +260,8 @@ public class XmlFormatter {
 		//end of wrapping things
 		
 		
-		// TESTING force a dummy message
+		// TODO remove this
+		//TESTING force a dummy message
 		Element testelm = doc.createElementNS(NS_PIPELINE_DATA, "message");
 		testelm.setAttribute("level", "INFO");
 		testelm.setAttribute("sequence", "45");

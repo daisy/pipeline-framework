@@ -77,13 +77,16 @@ public class Validator {
 			return false;
 		}
 		
+		SchemaResourceResolver resolver = new SchemaResourceResolver();
 		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		factory.setResourceResolver(resolver);
 	    Source schemaFile;
 	    InputStream is = null;
 	    try {
 			is = schemaUrl.openStream();
 			schemaFile = new StreamSource(is);
 		    Schema schema = factory.newSchema(schemaFile);
+		    
 		    javax.xml.validation.Validator validator = schema.newValidator();
 		    validator.validate(new DOMSource(document));
 		    is.close();
