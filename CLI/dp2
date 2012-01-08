@@ -52,7 +52,7 @@ def main
 	error=""
 	hasErr=false
 	cmds={}
-	cmds=cmds.merge(s_cmds).merge(s_cmds)
+	cmds=cmds.merge(s_cmds).merge(d_cmds)
 	if command!=nil && cmds.has_key?(command)
 		begin
 			cmds[command].execute(ARGV[1..-1])
