@@ -1,34 +1,36 @@
 #!/usr/bin/env ruby
+#All the requires in the entire app so ocra will fecth everything
 require 'rubygems'
-require "./command"
+require 'base64'
+require 'cgi'
+require './command'
 require './core/alive'
 require './core/authentication'
 require './core/conf'
 require './core/ctxt'
 require './core/dp2'
-require "./core/helpers"
+require './core/helpers'
 require './core/job'
 require './core/multipart.rb'
 require './core/resource'
 require './core/rest'
-require "./core/result_processor"
+require './core/result_processor'
 require './core/scripts'
+require 'delete_command'
 require 'digest'
 require './dynamic_commands'
 require './help_command.rb'
+require 'job_command'
+require 'jobs_command'
 require 'logger'
 require 'net/http'
 require 'nokogiri'
+require 'open3'
 require 'openssl'
 require 'optparse'
 require 'time'
 require 'uri'
 require 'yaml'
-require 'optparse'
-require 'jobs_command'
-require 'job_command'
-require 'delete_command'
-
 def main
 	command=checkargs
 	if command == nil || command.empty?

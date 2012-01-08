@@ -264,6 +264,8 @@ public class IOBridge {
 	 * @return the uRI
 	 */
 	public URI zipOutput(){
+		if (isLocal())
+			return this.mOutputDir.toURI();
 		List<File> files = IOHelper.treeFileList(this.mOutputDir);
 		try {
 			URI zipFile = IOHelper.zipFromEntries(files,new File(mBaseDir,"results.zip"),mOutputDir.getAbsolutePath()+File.separator);
@@ -280,5 +282,9 @@ public class IOBridge {
 	 */
 	public URI getLogFile() {
 		return new File(this.mBaseDir,mId.toString()+".log").toURI();
+	}
+
+	private boolean isLocal(){
+		return System.getProperty(ORG_DAISY_PIPELINE_LOCAL)!=null&&System.getProperty(ORG_DAISY_PIPELINE_LOCAL).equalsIgnoreCase("true");  
 	}
 }
