@@ -10,7 +10,7 @@
     <!-- third party modules -->	
     <fileSet>
       <directory>../repo/plugins</directory>
-      <outputDirectory>lib</outputDirectory>
+      <outputDirectory>fwk/lib</outputDirectory>
       <includes>
         <include>*.jar</include>
       </includes>
@@ -21,7 +21,7 @@
     </fileSet>
     <fileSet>
       <directory>../repo/plugins</directory>
-      <outputDirectory>bundle</outputDirectory>
+      <outputDirectory>fwk/bundle</outputDirectory>
       <includes>
 	<include>*logback*</include>	
 	<include>*slf4*</include>	
@@ -30,7 +30,7 @@
     <!-- framework backend-->	
     <fileSet>
       <directory>../daisy.pipeline.site/target/site/plugins</directory>
-      <outputDirectory>framework</outputDirectory>
+      <outputDirectory>fwk/framework</outputDirectory>
       <includes>
         <include>*.jar</include>
       </includes>
@@ -38,15 +38,15 @@
     <!-- framework frontend-->	
     <fileSet>
       <directory>../daisy.pipeline.frontend.site/target/site/plugins</directory>
-      <outputDirectory>frontend</outputDirectory>
+      <outputDirectory>fwk/frontend</outputDirectory>
       <includes>
         <include>*.jar</include>
       </includes>
     </fileSet>
     <!-- modules -->
     <fileSet>
-      <directory>../../modules/daisy.pipeline.modules.site/target/site/plugins</directory>
-      <outputDirectory>modules</outputDirectory>
+      <directory>../../daisy-pipeline.modules/daisy.pipeline.modules.site/target/site/plugins</directory>
+      <outputDirectory>fwk/modules</outputDirectory>
       <includes>
         <include>*.jar</include>
       </includes>
@@ -54,22 +54,22 @@
     <!-- conf -->
     <fileSet>
       <directory>etcDist</directory>
-      <outputDirectory>etc</outputDirectory>
+      <outputDirectory>fwk/etc</outputDirectory>
     </fileSet>
     <!-- felix launcher-->
     <fileSet>
       <directory>fbin</directory>
-      <outputDirectory>fbin</outputDirectory>
+      <outputDirectory>fwk/fbin</outputDirectory>
     </fileSet>
     <!-- felix dependencies-->
     <fileSet>
       <directory>bundle</directory>
-      <outputDirectory>bundle</outputDirectory>
+      <outputDirectory>fwk/bundle</outputDirectory>
     </fileSet>
     <!-- felix shell (just for beta version, get rid of this in the future ) -->
     <fileSet>
       <directory>bundle_shell</directory>
-      <outputDirectory>bundle_shell</outputDirectory>
+      <outputDirectory>fwk/bundle_shell</outputDirectory>
     </fileSet>
 	<!-- LICENSES -->	
     <fileSet>
@@ -87,22 +87,40 @@
         <include>**/*.*</include>
       </includes> -->
     </fileSet>
+    <fileSet>
+      <directory>../CLI</directory>
+      <outputDirectory>cli</outputDirectory>
+      <excludes>
+        <exclude>*ocra*</exclude>
+        <exclude>config*.yml</exclude>
+      </excludes>
+    </fileSet>
   </fileSets>
   <files>
      <file>
-      <source>dp2.sh</source>
+      <source>../CLI/config_dist.yml</source>
+      <outputDirectory>./cli</outputDirectory>
+      <destName>config.yml</destName>
+    </file>
+     <file>
+      <source>dp2ws_local.sh</source>
+      <outputDirectory>./fwk</outputDirectory>
     </file>
      <file>
       <source>dp2ws.sh</source>
+      <outputDirectory>./fwk</outputDirectory>
     </file>
      <file>
-      <source>dp2.bat</source>
+      <source>dp2ws_local.bat</source>
+      <outputDirectory>./fwk</outputDirectory>
     </file>
      <file>
       <source>dp2ws.bat</source>
+      <outputDirectory>./fwk</outputDirectory>
     </file>
      <file>
       <source>README.txt</source>
+      <outputDirectory>.</outputDirectory>
     </file>
      <file>
       <source>NOTICE.txt</source>
