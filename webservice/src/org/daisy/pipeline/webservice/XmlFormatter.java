@@ -260,15 +260,6 @@ public class XmlFormatter {
 		//end of wrapping things
 		
 		
-		// TODO remove this
-		//TESTING force a dummy message
-		Element testelm = doc.createElementNS(NS_PIPELINE_DATA, "message");
-		testelm.setAttribute("level", "INFO");
-		testelm.setAttribute("sequence", "45");
-		testelm.setTextContent("Hello. I am a message.");
-		messagesElm.appendChild(testelm);
-		rootElm.appendChild(messagesElm);
-		// end TESTING
 		
 		try {
 			List<Message> msgs= job.getMonitor().getMessageAccessor().filtered(new Filter[]{seqFilt,levelFilt});
