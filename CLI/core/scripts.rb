@@ -1,5 +1,5 @@
 require "nokogiri"
-require "./command"
+require "./commands/command"
 require "./core/resource"
 require "./core/result_processor"
 require "./core/helpers"

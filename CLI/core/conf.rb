@@ -14,6 +14,7 @@ class Conf
 	CLIENT_KEY="client_key"
 	CLIENT_SECRET="client_secret"
 	AUTHENTICATE="authenticate"
+	TIMEOUT_SECONDS="timeout_seconds"
 	@map=nil
 	def initialize(file)
 		@map=YAML.load_file file

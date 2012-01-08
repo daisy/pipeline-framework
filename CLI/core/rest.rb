@@ -106,7 +106,7 @@ module Rest
 
   def post_form(url, query, headers)
     Net::HTTP.start(url.host, url.port) {|con|
-      con.read_timeout = Settings::TIMEOUT_SECONDS
+      con.read_timeout = Ctxt.config[Ctxt.config.class::TIMEOUT_SECONDS].to_s.to_i
       begin
         return con.post(url.request_uri, query, headers)
       rescue => e

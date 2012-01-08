@@ -1,4 +1,4 @@
-require "./command"
+require "./commands/command"
 
 class JobCommand < Command
 
