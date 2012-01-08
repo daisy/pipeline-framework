@@ -76,6 +76,14 @@ class Dp2
 		#end
 		return nil
 
+	end
+
+	def job_statuses
+		return JobsStatusResource.new.getResource
+	end
+
+	def delete_job(id)
+		return DeleteJobResource.new(id).deleteResource	
 	end	
 	def alive?	
   		return AliveResource.new.getResource 

@@ -25,17 +25,34 @@ require 'time'
 require 'uri'
 require 'yaml'
 require 'optparse'
+require 'jobs_command'
+require 'job_command'
+require 'delete_command'
 
 def main
 	command=checkargs
+	if command == nil || command.empty?
+		puts "Usage: dp2 command [options]\n"
+		puts "type dp2 help for more info\n"
+		exit -1	
+	end
+ 
 	Ctxt.conf("config.yml")
 	dynCommands=DynamicCommands.get
-	cmds={}
-	dynCommands.each{|cmd| cmds[cmd.name]=cmd}
-	cmds["help"]=HelpCommand.new(cmds)
+	s_cmds={}
+	d_cmds={}
+	#static commands
+	s_cmds=load(JobsCommand.new,s_cmds)
+	s_cmds=load(JobCommand.new,s_cmds)
+	s_cmds=load(DeleteCommand.new,s_cmds)
+	
+	#scripts	
+	dynCommands.each{|cmd| d_cmds[cmd.name]=cmd}
+	s_cmds["help"]=HelpCommand.new(s_cmds,d_cmds)
 	error=""
 	hasErr=false
-
+	cmds={}
+	cmds=cmds.merge(s_cmds).merge(s_cmds)
 	if command!=nil && cmds.has_key?(command)
 		begin
 			cmds[command].execute(ARGV[1..-1])
@@ -60,6 +77,10 @@ def checkargs
     break
   end
   return cmd
+end
+def load(cmd,cmds)
+	cmds[cmd.name]=cmd
+	return cmds
 end
 
 # execution starts here

@@ -25,7 +25,10 @@ class Resource
 		return @resultProcessor.process(@result)
 		#return @resultProcessor.process(@result)
 	end
-		
+	def deleteResource
+		@result=Rest.delete_resource(buildUri())
+		return @resultProcessor.process(@result)
+	end	
 end
 
 

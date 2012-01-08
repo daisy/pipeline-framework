@@ -2,10 +2,14 @@ require "./command"
 
 class HelpCommand < Command
 	
-	def initialize(commands)
+	def initialize(static_commands,dynamic_commands)
 		super("help")
-		@commands=commands
-		@commands[@name]=self
+		@s_commands=static_commands
+		@s_commands[@name]=self
+		@d_commands=dynamic_commands
+		@commands={}
+	        @commands.merge!(@s_commands)
+		@commands.merge!(@d_commands)	
 	end
 	def execute(str_args)
 		if str_args.size==0
@@ -28,9 +32,12 @@ class HelpCommand < Command
 	end
 	def help
 		s="Usage: dp2 command [options]\n\n"
-		s+="Available commands:\n\n"
-		@commands.each{|name,cmd| s+="#{cmd.to_s}\n" if name!="help"}
+		s+="Available commands:\n"
+		
+		@s_commands.each{|name,cmd| s+="#{cmd.to_s}\n" if name!="help"}
 		s+="#{self.to_s}\n"
+		s+="\nScript commands:\n"
+		@d_commands.each{|name,cmd| s+="#{cmd.to_s}\n"}
 		s+="\nTo get help for a command write:\ndp2 help COMMAND"
 		
 		return s

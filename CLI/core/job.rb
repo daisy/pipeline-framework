@@ -5,6 +5,21 @@ class JobResource < Resource
 	end	
 end
 
+class DeleteJobResource < Resource
+	def initialize(id)
+		super("/jobs",{:id=>id},DeleteJobResultProcessor.new)
+	end	
+	def buildUri
+    		uri = "#{Ctxt.conf[Ctxt.conf.class::BASE_URI]}#{@path}/#{@params[:id]}"
+		Ctxt.logger.debug("URI:"+uri)
+		uri
+	end
+end
+class JobsStatusResource < Resource
+	def initialize
+		super("/jobs",{},JobsStatusResultProcessor.new)
+	end	
+end
 class JobStatusResource < Resource
 	def initialize(id,seq=0)
 		super("/jobs",{:id=>id,:seq=>seq},JobStatusResultProcessor.new)
@@ -30,6 +45,21 @@ class JobStatusResultProcessor < ResultProcessor
 	end
 end
 
+class JobsStatusResultProcessor < ResultProcessor
+	def process(input)
+		raise "Empty job result from server ",RuntimeError if input==nil
+		doc=input
+		
+		doc.remove_namespaces!
+		xjobs=doc.xpath("//job")
+		jobs=[]
+		xjobs.each { |xjob|
+			jobs.push(Job.fromXml(xjob))
+		}
+		Ctxt.logger.debug(" Jobs retrieved #{jobs.size}")
+		return  jobs
+	end
+end
 class JobPostResultProcessor < ResultProcessor
 	def process(input)
 		if input==nil
@@ -38,6 +68,11 @@ class JobPostResultProcessor < ResultProcessor
 		id=input.split(/\//)[-1]
 		puts "Job with ID #{id} submitted"
 		return id 
+	end
+end
+class DeleteJobResultProcessor < ResultProcessor
+	def process(bool)
+		return bool
 	end
 end
 class Message

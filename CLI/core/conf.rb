@@ -13,6 +13,7 @@ class Conf
 	WS_TIMEUP="ws_timeup"
 	CLIENT_KEY="client_key"
 	CLIENT_SECRET="client_secret"
+	AUTHENTICATE="authenticate"
 	@map=nil
 	def initialize(file)
 		@map=YAML.load_file file
