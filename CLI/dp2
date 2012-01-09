@@ -41,8 +41,11 @@ def main
 		puts "type dp2 help for more info\n"
 		exit -1	
 	end
- 
-	Ctxt.conf(File.expand_path("config.yml",File.dirname(__FILE__)))
+	if ENV["OCRA_EXECUTABLE"]==nil
+		Ctxt.conf(File.expand_path("config.yml",File.dirname(__FILE__)))
+	else
+		Ctxt.conf(File.expand_path("config.yml",File.dirname(ENV["OCRA_EXECUTABLE"])))
+	end
 	dynCommands=DynamicCommands.get
 	s_cmds={}
 	d_cmds={}

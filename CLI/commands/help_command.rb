@@ -47,7 +47,11 @@ class HelpCommand < Command
 	end	
 	def showpipeliners!
 		puts "The pipeliners!\n"
+	if ENV["OCRA_EXECUTABLE"]==nil
 		File.foreach(File.dirname(__FILE__)+File::SEPARATOR+'rb.dat') { |s| puts s}
+	else
+		File.foreach(File.dirname(ENV["OCRA_EXECUTABLE"])+File::SEPARATOR+"commands"+File::SEPARATOR+'rb.dat') { |s| puts s}
+	end
 		puts "Make sure your command window is wide enough :D\n"
 	end
 end
