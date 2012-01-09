@@ -1,4 +1,4 @@
-require "./commands/command"
+require_rel "./commands/command"
 
 class JobsCommand < Command
 

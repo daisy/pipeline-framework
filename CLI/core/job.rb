@@ -1,4 +1,4 @@
-require './core/resource'
+require_rel './core/resource'
 class JobResource < Resource
 	def initialize
 		super("/jobs",{},JobPostResultProcessor.new)

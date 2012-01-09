@@ -1,4 +1,4 @@
-require "./core/dp2"
+require_rel "./core/dp2"
 class DynamicCommands
 
 	def self.get

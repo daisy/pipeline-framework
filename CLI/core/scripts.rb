@@ -1,8 +1,8 @@
 require "nokogiri"
-require "./commands/command"
-require "./core/resource"
-require "./core/result_processor"
-require "./core/helpers"
+require_rel "./commands/command"
+require_rel "./core/resource"
+require_rel "./core/result_processor"
+require_rel "./core/helpers"
 
 # In this file:
 # Script

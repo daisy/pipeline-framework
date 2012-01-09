@@ -3,7 +3,7 @@ require 'openssl'
 require 'base64'
 require 'time'
 require 'cgi'
-require './core/ctxt'
+require_rel './core/ctxt'
 module Authentication
   module_function
 

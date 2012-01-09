@@ -1,5 +1,5 @@
 require 'logger'
-require './core/conf'
+require_rel './core/conf'
 class Ctxt
 	@@logger=nil
 	@@conf=nil

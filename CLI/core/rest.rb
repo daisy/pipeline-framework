@@ -2,9 +2,9 @@
 require 'net/http'
 require 'uri'
 require 'nokogiri'
-require './core/multipart.rb'
-require './core/authentication'
-require './core/ctxt'
+require_rel './core/multipart.rb'
+require_rel './core/authentication'
+require_rel './core/ctxt'
 module Rest
   module_function
 

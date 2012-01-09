@@ -1,5 +1,5 @@
 require 'yaml'
-require './core/ctxt'
+require_rel './core/ctxt'
 class Conf
 	#KEYS
 	PORT="port"

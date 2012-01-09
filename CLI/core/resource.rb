@@ -1,5 +1,5 @@
-require './core/ctxt'
-require './core/rest'
+require_rel './core/ctxt'
+require_rel './core/rest'
 class Resource
 	attr_accessor :path,:params,:resultProcessor,:result
 

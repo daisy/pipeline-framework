@@ -1,7 +1,7 @@
-require './core/ctxt'
-require './core/scripts'
-require './core/alive'
-require './core/job'
+require_rel './core/ctxt'
+require_rel './core/scripts'
+require_rel './core/alive'
+require_rel './core/job'
 require "open3"
 #TODO asking if the service is alive before every call may not be a good idea, store that it's alive once and asume it in next calls
 class Dp2

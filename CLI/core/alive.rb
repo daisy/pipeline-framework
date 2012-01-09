@@ -1,5 +1,5 @@
-require "./core/resource"
-require "./core/result_processor"
+require_rel "./core/resource"
+require_rel "./core/result_processor"
 require "nokogiri"
 class AliveResource < Resource
 	def initialize

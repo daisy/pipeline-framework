@@ -1,4 +1,4 @@
-require './core/ctxt'
+require_rel './core/ctxt'
 module Helpers 
 
   	module_function
