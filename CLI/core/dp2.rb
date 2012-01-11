@@ -24,7 +24,7 @@ class Dp2
 			#will throw execetion the command is not found
 			pid =ex.pid
 			Ctxt.logger().debug("ws launched with pid #{pid}")
-			Ctxt.logger().info("wainting for the ws to come up...")
+			Ctxt.logger().info("waiting for the ws to come up...")
 			wait_till_up	
 			Ctxt.logger().info("ws up!")
 		end	
