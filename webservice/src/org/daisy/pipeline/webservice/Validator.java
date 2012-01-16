@@ -164,7 +164,10 @@ public class Validator {
 		// options
 		boolean hasAllRequiredOptions = validateOptionData(script.getXProcPipelineInfo().getOptions(), 
 				doc.getElementsByTagName("option"), script);
-		
+		// outputs (if run in local mode)
+		boolean hasAllRequiredOutputs = validateOutputPortData(script
+				.getXProcPipelineInfo().getOutputPorts(),
+				doc.getElementsByTagName("output"), script);
 		// note that we don't validate output ports because it doesn't make sense in the context of the web service
 		
 		return hasAllRequiredInputs & hasAllRequiredOptions;
@@ -255,6 +258,49 @@ public class Validator {
 						}
 						else {
 							validArg = validateDocwrapperElements(docwrapperNodes, script.getPortMetadata(arg.getName()).getMediaType());
+						}
+					}
+					break;
+				}
+			}
+			hasAllRequiredArgs &= validArg;
+		}
+		
+		if (hasAllRequiredArgs == false) {
+			// TODO: be more specific
+			System.out.println("ERROR: Required args missing");
+		}
+		return hasAllRequiredArgs;
+	}
+	
+	/**
+	 * Validate output port data.
+	 *
+	 * @param ports the ports
+	 * @param nodes the nodes
+	 * @param script the script
+	 * @return true, if successful
+	 */
+	private static boolean validateOutputPortData(Iterable<XProcPortInfo> ports, NodeList nodes, XProcScript script) {
+		
+
+		Iterator<XProcPortInfo>it = ports.iterator();
+		boolean hasAllRequiredArgs = true;
+		
+		while (it.hasNext()) {
+			XProcPortInfo arg = it.next();
+			boolean validArg = false;
+			for (int i=0; i<nodes.getLength(); i++) {
+				Element elm = (Element)nodes.item(i);
+				if (elm.getAttribute("name").equals(arg.getName())) {
+					NodeList fileNodes = elm.getElementsByTagName("file");
+					
+					if (fileNodes.getLength() == 0) {
+						validArg = false;
+					}
+					else {
+						if (fileNodes.getLength() > 0) {
+							validArg = validateFileElements(fileNodes);
 						}
 					}
 					break;

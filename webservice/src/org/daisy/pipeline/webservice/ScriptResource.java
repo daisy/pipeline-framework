@@ -19,16 +19,19 @@ import org.restlet.resource.Get;
 public class ScriptResource extends AuthenticatedResource {
 	/** The script. */
 	private XProcScript script = null;
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.restlet.resource.Resource#doInit()
 	 */
 	@Override
 	public void doInit() {
 		super.doInit();
-		if (!isAuthenticated()) return;
+		if (!isAuthenticated())
+			return;
 		URI scriptUri = null;
-		
+
 		try {
 			scriptUri = new URI((String) getQuery().getFirstValue("id"));
 		} catch (URISyntaxException e) {
@@ -36,31 +39,37 @@ public class ScriptResource extends AuthenticatedResource {
 			e.printStackTrace();
 			return;
 		}
-		ScriptRegistry scriptRegistry = ((PipelineWebService)this.getApplication()).getScriptRegistry();
-		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptUri);
+		ScriptRegistry scriptRegistry = ((PipelineWebService) this
+				.getApplication()).getScriptRegistry();
+		XProcScriptService unfilteredScript = scriptRegistry
+				.getScript(scriptUri);
 		if (unfilteredScript != null) {
-			script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
+			script = (((PipelineWebService) this.getApplication()).isLocal()) ? unfilteredScript
+					.load() : XProcScriptFilter.INSTANCE
+					.filter(unfilteredScript.load());
 		}
 	}
 
 	/**
 	 * Gets the resource.
-	 *
+	 * 
 	 * @return the resource
 	 */
 	@Get("xml")
 	public Representation getResource() {
 		if (!isAuthenticated()) {
-    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-    		return null;
-    	}
-    	
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+			return null;
+		}
+
 		if (script == null) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return null;
 		}
 		setStatus(Status.SUCCESS_OK);
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.xprocScriptToXml(script));
+		DomRepresentation dom = new DomRepresentation(
+				MediaType.APPLICATION_XML,
+				XmlFormatter.xprocScriptToXml(script));
 		return dom;
 	}
 }

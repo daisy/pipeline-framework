@@ -34,7 +34,9 @@ public class ScriptsResource extends AuthenticatedResource {
 		
 		while (it.hasNext()) {
 			XProcScriptService unfilteredScript = it.next();
-			XProcScript script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
+			XProcScript script = (((PipelineWebService) this.getApplication()).isLocal()) ? unfilteredScript
+					.load() : XProcScriptFilter.INSTANCE
+					.filter(unfilteredScript.load());
 			scripts.add(script);
 		}
 	}

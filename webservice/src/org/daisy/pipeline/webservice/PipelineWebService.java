@@ -22,9 +22,6 @@ public class PipelineWebService extends Application {
 	private static Logger logger = LoggerFactory
 			.getLogger(PipelineWebService.class.getName());
 	
-	/** The Constant MODE_PROPERTY. */
-	public static final String MODE_PROPERTY = "org.daisy.pipeline.mode";
-	
 	/* other runtime-configurable property names */
 	public static final String PORT_PROPERTY = "org.daisy.pipeline.ws.port";
 	public static final String HOST_PROPERTY = "org.daisy.pipeline.ws.host";
@@ -33,6 +30,7 @@ public class PipelineWebService extends Application {
 	public static final String TMPDIR_PROPERTY = "org.daisy.pipeline.ws.tmpdir";
 	public static final String AUTHENTICATION_PROPERTY = "org.daisy.pipeline.ws.authentication";
 	public static final String DBPATH_PROPERTY = "org.daisy.pipeline.ws.dbpath";
+	public static final String LOCAL_MODE = "org.daisy.pipeline.ws.local";
 	
 	/* options and their default values */
 	private String host = "localhost";
@@ -72,16 +70,15 @@ public class PipelineWebService extends Application {
 	 */
 	public void init() {
 		readOptions();
-		if (System.getProperty(MODE_PROPERTY) != null && System.getProperty(MODE_PROPERTY).equalsIgnoreCase(WS)) {
-			logger.info(String.format("Starting webservice on port %d", this.portNumber));
-			Component component = new Component();
-			component.getServers().add(Protocol.HTTP, portNumber);
-			component.getDefaultHost().attach(path, this);
-			try {
-				component.start();
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
+		logger.info(String.format("Starting webservice on port %d",
+				this.portNumber));
+		Component component = new Component();
+		component.getServers().add(Protocol.HTTP, portNumber);
+		component.getDefaultHost().attach(path, this);
+		try {
+			component.start();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -92,6 +89,11 @@ public class PipelineWebService extends Application {
 		logger.info("Webservice stopped.");
 	}
 
+
+	public boolean isLocal() {
+		return Boolean.valueOf(System.getProperty(LOCAL_MODE));
+	}
+	
 	/**
 	 * Gets the server address.
 	 *
@@ -161,11 +163,6 @@ public class PipelineWebService extends Application {
 	}
 	
 	private void readOptions() {
-		// make sure we're in WS mode; else don't bother reading options
-		if (System.getProperty(MODE_PROPERTY) == null || 
-				!System.getProperty(MODE_PROPERTY).equalsIgnoreCase(WS)) {
-			return;
-		}
 		
 		String host = System.getProperty(HOST_PROPERTY);
 		if (host != null) {
