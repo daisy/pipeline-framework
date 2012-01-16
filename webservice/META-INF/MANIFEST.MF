@@ -6,7 +6,6 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: javax.crypto,
  javax.crypto.spec,
- javax.persistence;version="2.0.3",
  javax.servlet.http,
  javax.xml,
  javax.xml.namespace,
@@ -34,8 +33,7 @@ Import-Package: javax.crypto,
  org.slf4j,
  org.w3c.dom,
  org.w3c.dom.ls,
- org.xml.sax,
- org.apache.derby.jdbc
+ org.xml.sax
 Require-Bundle: org.daisy.pipeline.framework,
  org.daisy.common-utils
 Service-Component: OSGI-INF/webservice.xml
