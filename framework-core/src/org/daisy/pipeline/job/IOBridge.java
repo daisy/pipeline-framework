@@ -28,7 +28,7 @@ public class IOBridge {
 	public static final String ORG_DAISY_PIPELINE_IOBASE = "org.daisy.pipeline.iobase";
 	
 	
-	public static final String ORG_DAISY_PIPELINE_LOCAL = "org.daisy.pipeline.local";
+	public static final String ORG_DAISY_PIPELINE_LOCAL = "org.daisy.pipeline.ws.local";
 	/** The Constant ANY_FILE_URI. */
 	public static final String ANY_FILE_URI = "anyFileURI";
 	
