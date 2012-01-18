@@ -36,7 +36,7 @@ function install_apt {
 	exit 0;
 }
 #feadora/red-hat like based installation
-function installiyum {
+function install_yum {
 	echo "Installing dependencies...(yum based installation)"
 	#by def
 	YUM_PKGS="libxml2-devel libxslt1-devel "
