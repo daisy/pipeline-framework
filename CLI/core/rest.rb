@@ -87,7 +87,7 @@ module Rest
       request = Net::HTTP::Delete.new(authUri.request_uri)
       response = Net::HTTP.start(authUri.host, authUri.port) {|http| http.request(request)}
 
-      puts "Response was #{response}"
+      Ctxt.logger.debug("Response was #{response}")
 
       case response
         when Net::HTTPNoContent

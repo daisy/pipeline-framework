@@ -67,7 +67,8 @@ class JobPostResultProcessor < ResultProcessor
 		end
 		id=input.split(/\//)[-1]
 		puts "Job with ID #{id} submitted"
-		return id 
+		job=Job.new(id)
+		return job 
 	end
 end
 class DeleteJobResultProcessor < ResultProcessor

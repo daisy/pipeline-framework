@@ -18,15 +18,24 @@ class CommandScript < Command
 		@opt_modifiers={}
 		@input_modifiers={}
 		@output_modifiers={}
+		@background=false
+		@persistent=false
+		
 		build_modifiers
 		build_parser
 	end
 	def execute(str_args)
 
 		begin
+			dp2ws=Dp2.new
 			@parser.parse(str_args)	
-			job=Dp2.new.job(@script,nil,true)
-			puts job.status
+			job=dp2ws.job(@script,nil,!@background)
+			if !@persistent
+				puts job.status
+				if  dp2ws.delete_job(job.id)
+					puts "The job has been cleaned from the server"
+				end
+			end
 		rescue Exception => e
 				Ctxt.logger.info(e)
 				puts "\nERROR: #{e}\n\n"
@@ -46,40 +55,47 @@ class CommandScript < Command
 
 
 		@parser=OptionParser.new do |opts|
+			
+			@input_modifiers.keys.each{|input|
+				@input_modifiers[input][:value]=nil
+				if @input_modifiers[input][:sequenceAllowed]=='true'
+					opts.on(input+" input1,input2,input3",Array,@input_modifiers[input][:help]) do |v|
+					   @input_modifiers[input][:value] = v
+					end
+				else
+					opts.on(input+" input",@input_modifiers[input][:help]) do |v|
+					   @input_modifiers[input][:value] = [v]
+					end
+				end
 
-		@input_modifiers.keys.each{|input|
-			@input_modifiers[input][:value]=nil
-			if @input_modifiers[input][:sequenceAllowed]=='true'
-				opts.on(input+" input1,input2,input3",Array,@input_modifiers[input][:help]) do |v|
-				   @input_modifiers[input][:value] = v
+			}
+			@output_modifiers.keys.each{|output|
+				@output_modifiers[output][:value]=nil
+				if @output_modifiers[output][:sequenceAllowed]=='true'
+					opts.on(output+" output1,output2,output3",Array) do |v|
+					   @output_modifiers[output][:value] = v
+					end
+				else
+					opts.on(output+" output") do |v|
+					   @output_modifiers[output][:value] = v
+					end
 				end
-			else
-				opts.on(input+" input",@input_modifiers[input][:help]) do |v|
-				   @input_modifiers[input][:value] = [v]
+
+			}
+
+			@opt_modifiers.keys.each{|option|
+				@opt_modifiers[option][:value]=nil
+				opts.on(option+" [option_value]",@opt_modifiers[option][:help]) do |v|
+				    @opt_modifiers[option][:value] = v
 				end
+			}
+			opts.on("--background","-b","Runs the job in the background (will be persistent)") do |v|
+				@background=true
+				@persistent=true
 			end
-
-		}
-		@output_modifiers.keys.each{|output|
-			@output_modifiers[output][:value]=nil
-			if @output_modifiers[output][:sequenceAllowed]=='true'
-				opts.on(output+" output1,output2,output3",Array) do |v|
-				   @output_modifiers[output][:value] = v
-				end
-			else
-				opts.on(output+" output") do |v|
-				   @output_modifiers[output][:value] = v
-				end
+			opts.on("--persistent","-p","Forces to keep the job data in the server") do |v|
+				@persistent=true
 			end
-
-		}
-
-		@opt_modifiers.keys.each{|option|
-			@opt_modifiers[option][:value]=nil
-			opts.on(option+" [option_value]",@opt_modifiers[option][:help]) do |v|
-			    @opt_modifiers[option][:value] = v
-			end
-		}
 
 		end
 		

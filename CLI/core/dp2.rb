@@ -56,11 +56,11 @@ class Dp2
 		job=nil
 		msgIdx=0
 		if alive?
-			id=JobResource.new.postResource(script.to_xml_request,nil)
+			job=JobResource.new.postResource(script.to_xml_request,nil)
 			if wait==true
 				begin
 					sleep 1.5 
-					job=job_status(id,msgIdx)
+					job=job_status(job.id,msgIdx)
 					job.messages.each{|msg| puts msg.to_s}
 					if job.messages.size > 0
 						msgIdx=(Integer(job.messages[-1].seq)+1).to_s
