@@ -24,9 +24,11 @@ class Dp2
 			#will throw execetion the command is not found
 			pid =ex.pid
 			Ctxt.logger().debug("ws launched with pid #{pid}")
-			Ctxt.logger().info("waiting for the ws to come up...")
+			Ctxt.logger().debug("waiting for the ws to come up...")
+			puts "Waiting for the WS to come up"
 			wait_till_up	
-			Ctxt.logger().info("ws up!")
+			Ctxt.logger().debug("ws up!")
+			puts("The daisy pipeline 2 WS is up!")
 		end	
 		return true
 	end
