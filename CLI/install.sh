@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#figures out the package system
 function package_management {
 
 	hash apt-get 2>/dev/null
@@ -14,7 +14,7 @@ function package_management {
 		INSTALL_TYPE=2
 	fi
 }
-
+#debian-like based installation
 function install_apt {
 	echo "Installing dependencies...(apt based installation)"
 	#by def
@@ -35,9 +35,9 @@ function install_apt {
 	echo "Your system is ready to cope with dp2 CLI";
 	exit 0;
 }
-
+#feadora/red-hat like based installation
 function installiyum {
-	echo "Installing dependencies...(apt based installation)"
+	echo "Installing dependencies...(yum based installation)"
 	#by def
 	YUM_PKGS="libxml2-devel libxslt1-devel "
 	if [ $RUBY_OK != "0" ]; then
@@ -60,10 +60,6 @@ RUBY_OK=-1
 NOKOGIRI_OK=-1
 MIME_OK=-1
 GEMS_OK=-1
-if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run as root" 1>&2
-   exit 1
-fi
 
 
 hash ruby  2>/dev/null
@@ -81,6 +77,12 @@ fi
 if [ $MIME_OK == "0"  -a $NOKOGIRI_OK == "0" ]; then 
 	echo "Your system is ready to cope with dp2 CLI";
 	exit 0;
+fi
+
+#we need super powers to keep on going
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
 fi
 
 package_management
@@ -103,8 +105,5 @@ case $INSTALL_TYPE in
 
 esac
 
-#	echo "Installing dependencies...(rpm based installation)"
-#	yum install -y rubygem-nokogiri
-#	gem install mime-types
 
 
