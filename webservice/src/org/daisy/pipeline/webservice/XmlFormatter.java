@@ -266,8 +266,8 @@ public class XmlFormatter {
 			for (Message msg :msgs) {
 				Element singleMsgElm = doc.createElementNS(NS_PIPELINE_DATA,
 						"message");
-				singleMsgElm.setAttributeNS(NS_PIPELINE_DATA, "level",msg.getLevel().toString());
-				singleMsgElm.setAttributeNS(NS_PIPELINE_DATA, "sequence",msg.getSequence()+"");
+				singleMsgElm.setAttribute( "level",msg.getLevel().toString());
+				singleMsgElm.setAttribute( "sequence",msg.getSequence()+"");
 				singleMsgElm.setTextContent(msg.getMsg());
 				messagesElm.appendChild(singleMsgElm);
 			}
