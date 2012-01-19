@@ -20,26 +20,24 @@ class CommandScript < Command
 		@output_modifiers={}
 		@background=false
 		@persistent=false
+		@data=nil
 		
 		build_modifiers
 		build_parser
 	end
 	def execute(str_args)
 
-		begin
-			dp2ws=Dp2.new
-			@parser.parse(str_args)	
-			job=dp2ws.job(@script,nil,!@background)
-			if !@persistent
-				puts job.status
-				if  dp2ws.delete_job(job.id)
-					puts "The job has been cleaned from the server"
-				end
+		dp2ws=Dp2.new
+		@parser.parse(str_args)	
+		if Ctxt.conf[Ctxt.conf.class::LOCAL]!='true' && @data==nil
+			raise RuntimeError,"dp2 is running in remote mode, so you need to supply a zip file containing the data"
+		end
+		job=dp2ws.job(@script,@data,!@background)
+		if !@persistent
+			puts job.status
+			if  dp2ws.delete_job(job.id)
+				puts "The job has been cleaned from the server"
 			end
-		rescue Exception => e
-				Ctxt.logger.info(e)
-				puts "\nERROR: #{e}\n\n"
-				puts help
 		end
 	end
 	def help
@@ -89,6 +87,11 @@ class CommandScript < Command
 				    @opt_modifiers[option][:value] = v
 				end
 			}
+			if Ctxt.conf[Ctxt.conf.class::LOCAL]!='true'
+				opts.on("--data ZIP_FILE","-d ZIP_FILE","Zip file with the data needed to perform the job (Keep in mind that options and inputs MUST be relative uris to the zip file's root)") do |v|
+					@data=File.open(File.expand_path(v), "rb")
+				end
+			end
 			opts.on("--background","-b","Runs the job in the background (will be persistent)") do |v|
 				@background=true
 				@persistent=true
@@ -121,7 +124,7 @@ class CommandScript < Command
 			@input_modifiers[modifier]=input
 		}
 		@script.outputs.each {|out|
-			modifier="--i-#{out[:name]}"
+			modifier="--o-#{out[:name]}"
 			@output_modifiers[modifier]=output
 		}
 	end

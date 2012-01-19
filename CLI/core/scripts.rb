@@ -19,7 +19,7 @@ class Script
 		@opts=[]
 		@inputs=[]
 		@outputs=[]
-		@local=true
+		@local=Ctxt.conf[Ctxt.conf.class::LOCAL]=='true'
 	end
 	def clone
 		clone=Script.new(@href,@nicename,@desc)

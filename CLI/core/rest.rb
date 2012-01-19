@@ -75,7 +75,8 @@ module Rest
         else
           return nil
       end
-    rescue
+    rescue Exception => e
+      puts e 
       puts "Error: POST #{uri.to_s} failed."
       return nil
     end
@@ -106,7 +107,7 @@ module Rest
 
   def post_form(url, query, headers)
     Net::HTTP.start(url.host, url.port) {|con|
-      con.read_timeout = Ctxt.config[Ctxt.config.class::TIMEOUT_SECONDS].to_s.to_i
+      con.read_timeout = Ctxt.conf[Ctxt.conf.class::TIMEOUT_SECONDS].to_s.to_i
       begin
         return con.post(url.request_uri, query, headers)
       rescue => e

@@ -46,7 +46,13 @@ def main
 	else
 		Ctxt.conf(File.expand_path("config.yml",File.dirname(ENV["OCRA_EXECUTABLE"])))
 	end
-	dynCommands=DynamicCommands.get
+	begin
+		dynCommands=DynamicCommands.get
+	rescue Exception=>e
+		puts "ERROR: #{e.message}"
+		exit -1
+	end
+	
 	s_cmds={}
 	d_cmds={}
 	#static commands
