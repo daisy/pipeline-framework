@@ -20,7 +20,7 @@ class JobsCommand < Command
 			
 		rescue Exception => e
 			 
-			Ctxt.logger.info(e)
+			Ctxt.logger.debug(e)
 			puts "\nERROR: #{e}\n\n"
 			puts help
 		end

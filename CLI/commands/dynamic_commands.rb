@@ -21,23 +21,40 @@ class CommandScript < Command
 		@background=false
 		@persistent=false
 		@data=nil
+		@outfile=nil
 		
 		build_modifiers
 		build_parser
 	end
 	def execute(str_args)
+		begin
+			dp2ws=Dp2.new
+			@parser.parse(str_args)	
+			raise RuntimeError,"dp2 is running in remote mode, so you need to supply a zip file containing the data (--data)" if Ctxt.conf[Ctxt.conf.class::LOCAL]!=true && @data==nil
+			raise RuntimeError,"dp2 is running in remote mode, so you need to supply an output file to store the results (--file)" if Ctxt.conf[Ctxt.conf.class::LOCAL]!=true && @outfile==nil && !@background
 
-		dp2ws=Dp2.new
-		@parser.parse(str_args)	
-		if Ctxt.conf[Ctxt.conf.class::LOCAL]!='true' && @data==nil
-			raise RuntimeError,"dp2 is running in remote mode, so you need to supply a zip file containing the data"
-		end
-		job=dp2ws.job(@script,@data,!@background)
-		if !@persistent
-			puts job.status
-			if  dp2ws.delete_job(job.id)
-				puts "The job has been cleaned from the server"
+			puts "IGNORING #{@outfile} as the job is set to be executed in the background"  if @outfile!=nil && @background
+
+			if @outfile!=nil && !@background
+				raise RuntimeError,"#{@outfile}: directory doesn't exists " if !File.exists?(File.dirname(File.expand_path(@outfile)))
+			end	
+			job=dp2ws.job(@script,@data,!@background)
+			if Ctxt.conf[Ctxt.conf.class::LOCAL]!=true && !@background
+				dp2ws.job_zip_result(job.id,@outfile)
+				puts "Result stored at #{@outfile}"
 			end
+			
+			if !@persistent
+				if  dp2ws.delete_job(job.id)
+					puts "The job has been cleaned from the server"
+				end
+				puts job.status
+			end
+		rescue Exception => e
+			 
+			Ctxt.logger.debug(e)
+			puts "\nERROR: #{e.message}\n\n"
+			puts help
 		end
 	end
 	def help
@@ -87,7 +104,10 @@ class CommandScript < Command
 				    @opt_modifiers[option][:value] = v
 				end
 			}
-			if Ctxt.conf[Ctxt.conf.class::LOCAL]!='true'
+			if Ctxt.conf[Ctxt.conf.class::LOCAL]!=true
+				opts.on("--file FILE","-f FILE","Zip file where to store the results from the server(not applied if running in background mode)") do |v|
+					@outfile=v
+				end
 				opts.on("--data ZIP_FILE","-d ZIP_FILE","Zip file with the data needed to perform the job (Keep in mind that options and inputs MUST be relative uris to the zip file's root)") do |v|
 					@data=File.open(File.expand_path(v), "rb")
 				end

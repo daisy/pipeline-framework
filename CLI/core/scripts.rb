@@ -19,7 +19,7 @@ class Script
 		@opts=[]
 		@inputs=[]
 		@outputs=[]
-		@local=Ctxt.conf[Ctxt.conf.class::LOCAL]=='true'
+		@local=Ctxt.conf[Ctxt.conf.class::LOCAL]==true
 	end
 	def clone
 		clone=Script.new(@href,@nicename,@desc)
@@ -125,7 +125,7 @@ end
 
 class ScriptsResultProcessor < ResultProcessor
 	def process(input)
-		doc=input
+		doc=Nokogiri.XML(input)
 		doc.remove_namespaces!
 		scripts=doc.xpath("//script")
 		map={}

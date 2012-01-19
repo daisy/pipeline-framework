@@ -11,13 +11,13 @@ module Rest
   def get_resource(uri)
     begin
       authUri = URI.parse(Authentication.prepare_authenticated_uri(uri))
-      Ctxt.logger.debug(authUri)
+      Ctxt.logger.debug(authUri) 
       response = Net::HTTP.get_response(authUri)
-
       #puts "Response was #{response}"
 
       case response
         when Net::HTTPSuccess
+	 # puts "yayyy?!"	
           return response.body
         when Net::HTTPInternalServerError
           return nil
@@ -76,7 +76,6 @@ module Rest
           return nil
       end
     rescue Exception => e
-      puts e 
       puts "Error: POST #{uri.to_s} failed."
       return nil
     end

@@ -20,6 +20,16 @@ class JobsStatusResource < Resource
 		super("/jobs",{},JobsStatusResultProcessor.new)
 	end	
 end
+class JobResultZipResource < Resource
+	def initialize(id,output_path)
+		super("/jobs",{:id=>id},JobZipResultProcessor.new(output_path))
+	end	
+	def buildUri
+    		uri = "#{Ctxt.conf[Ctxt.conf.class::BASE_URI]}#{@path}/#{@params[:id]}/result"
+		Ctxt.logger.debug("URI:"+uri)
+		uri
+	end
+end
 class JobStatusResource < Resource
 	def initialize(id,seq=0)
 		super("/jobs",{:id=>id,:seq=>seq},JobStatusResultProcessor.new)
@@ -35,7 +45,7 @@ end
 class JobStatusResultProcessor < ResultProcessor
 	def process(input)
 		raise "Empty job result from server ",RuntimeError if input==nil
-		doc=input
+		doc=Nokogiri.XML(input)
 		
 		doc.remove_namespaces!
 		xjob=doc.at_xpath("//job")
@@ -45,10 +55,21 @@ class JobStatusResultProcessor < ResultProcessor
 	end
 end
 
+class JobZipResultProcessor < ResultProcessor
+	def initialize(path)
+		@path=path	
+	end
+	def process(input)
+		f=File.open(@path, 'wb')
+		f.write(input)
+		f.close
+		return @path
+	end
+end
 class JobsStatusResultProcessor < ResultProcessor
 	def process(input)
 		raise "Empty job result from server ",RuntimeError if input==nil
-		doc=input
+		doc=Nokogiri.XML(input)
 		
 		doc.remove_namespaces!
 		xjobs=doc.xpath("//job")

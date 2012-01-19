@@ -16,7 +16,7 @@ class Dp2
 	def alive! 
 		if !alive?
 			
-			if Ctxt.conf[Ctxt.conf.class::LOCAL == 'true']
+			if Ctxt.conf[Ctxt.conf.class::LOCAL] == true
 				execPath=File::expand_path(Ctxt.conf[Ctxt.conf.class::EXEC_LINE],@basePath)
 				#
 				ex=IO.popen(execPath ) 
@@ -90,6 +90,9 @@ class Dp2
 
 	def delete_job(id)
 		return DeleteJobResource.new(id).deleteResource	
+	end	
+	def job_zip_result(id,outpath)
+		return JobResultZipResource.new(id,outpath).getResource	
 	end	
 	def alive?	
   		return AliveResource.new.getResource 

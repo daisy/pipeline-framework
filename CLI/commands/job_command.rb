@@ -26,8 +26,8 @@ class JobCommand < Command
 			puts str
 		rescue Exception => e
 			 
-			Ctxt.logger.info(e)
-			puts "\nERROR: #{e}\n\n"
+			Ctxt.logger.debug(e)
+			puts "\nERROR: #{e.message}\n\n"
 			puts help
 		end
 	end
