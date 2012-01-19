@@ -7,7 +7,7 @@ ws_timeup: 60
 
 exec_line_nix: ../Main/dp2ws_local.sh  
 exec_line_win: ..\Main\dp2ws_local.bat  
-local: false
+local: true
 authenticate: false
 # ROBOT CONF
 client_key: clientkey
