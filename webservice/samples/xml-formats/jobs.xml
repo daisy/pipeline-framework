@@ -1,42 +1,6 @@
 <jobs xmlns="http://www.daisy.org/ns/pipeline/data">
-    <!--
-        This job has completed and it has available results.
-        There are no errors or warnings.
-    -->
-    <job id="job-id-01" status="DONE" xmlns="http://www.daisy.org/ns/pipeline/data">
-        <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
-        <result href="http://ws.pipeline.org/jobs/job-id-01/result.zip"/>
-        <messages/>
-        <log href="http://ws.pipeline.org/jobs/job-id-01/log"/>
-    </job>
-    
-    <!--
-        This job has completed but has no available results.
-        The messages list reports an error and a warning.
-    -->
-    <job id="job-id-02" status="DONE" xmlns="http://www.daisy.org/ns/pipeline/data">
-        <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
-        <messages>
-            <message level="INFO" sequence="5">Input XML dtbook.xml was not valid</message>
-            <message level="WARNING" sequence="8">Warning about this job</message>
-        </messages>
-        <log href="http://ws.pipeline.org/jobs/job-id-02/log"/>
-    </job>
-    
-    <!--
-        This job hasn't started yet.
-        It has no result, errors, or log.
-    -->
-    <job id="job-id-03" status="IDLE" xmlns="http://www.daisy.org/ns/pipeline/data">
-        <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
-    </job>
-    
-    <!--
-        This job is running.
-        It has no result, errors, or log.
-    -->
-    <job id="job-id-03" status="RUNNING" xmlns="http://www.daisy.org/ns/pipeline/data">
-        <script href="http://www.daisy.org/ns/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
-    </job>
-    
+    <job id="job-id-01" href="/jobs/job-id-01" status="DONE"/>
+    <job id="job-id-02" href="/jobs/job-id-02" status="ERROR"/>
+    <job id="job-id-03" href="/jobs/job-id-03" status="IDLE"/>
+    <job id="job-id-04" href="/jobs/job-id-04" status="RUNNING"/>
 </jobs>

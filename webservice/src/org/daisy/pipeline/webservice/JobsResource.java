@@ -24,7 +24,6 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.ResourceCollection;
 import org.daisy.pipeline.job.ZipResourceContext;
@@ -36,10 +35,11 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.fileupload.RestletFileUpload;
 import org.restlet.ext.xml.DomRepresentation;
-import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -59,6 +59,9 @@ public class JobsResource extends AuthenticatedResource {
 	private String JOB_DATA_FIELD = "job-data";
 	private String JOB_REQUEST_FIELD = "job-request";
 	
+	/** The logger. */
+	private static Logger logger = LoggerFactory.getLogger(XmlFormatter.class.getName());
+	
 	/**
 	 * Gets the resource.
 	 *
@@ -71,19 +74,14 @@ public class JobsResource extends AuthenticatedResource {
     		return null;
     	}
     	
-		String serverAddress = ((PipelineWebService) this.getApplication()).getServerAddress();
 		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager(); 
-		Document doc = XmlFormatter.jobsToXml(jobMan.getJobs(), serverAddress);
+		Document doc = XmlFormatter.jobsToXml(jobMan.getJobs());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
 		setStatus(Status.SUCCESS_OK);
 		return dom;
 	}
 
 	
-	/*
-	 * taken from an example at:
-	 * http://wiki.restlet.org/docs_2.0/13-restlet/28-restlet/64-restlet.html
-	 */
 	/**
 	 * Creates the resource.
 	 *
@@ -129,21 +127,20 @@ public class JobsResource extends AuthenticatedResource {
 	            InputSource is = new InputSource(new StringReader(s));
 	            doc = builder.parse(is);
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 				return null;
 			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 				return null;
 			} catch (SAXException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 				return null;
 			}
         }
         
-            
 		boolean isValid = Validator.validateJobRequest(doc, (PipelineWebService)this.getApplication());
 			
 		if (!isValid) {
@@ -157,15 +154,11 @@ public class JobsResource extends AuthenticatedResource {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return null;
 		}
-		JobId id = job.getId();
 		
-		// return the URI of the new job
-		Representation newJobUriRepresentation = new EmptyRepresentation();
-		String serverAddress = ((PipelineWebService) this.getApplication()).getServerAddress();
-		newJobUriRepresentation.setLocationRef(serverAddress + "/jobs/" + id.toString());
-
+		Document jobXml = XmlFormatter.jobToXml(job, 0);
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
 		setStatus(Status.SUCCESS_CREATED);
-		return newJobUriRepresentation;
+		return dom;
         
     }
 	
@@ -228,12 +221,10 @@ public class JobsResource extends AuthenticatedResource {
 	        return data;
 	        
 		} catch (FileUploadException e) {
-			// TODO log an error
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return null;
 		} catch (Exception e) {
-			// TODO log an error
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return null;
 		}
 	}
@@ -301,8 +292,7 @@ public class JobsResource extends AuthenticatedResource {
 		try {
 			scriptUri = new URI(scriptElm.getAttribute("href"));
 		} catch (URISyntaxException e) {
-			// TODO log an error
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return null;
 		}
 		

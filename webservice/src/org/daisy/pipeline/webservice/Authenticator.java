@@ -10,26 +10,31 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-/*import org.daisy.pipeline.webservice.db.WSClient;
-import org.daisy.pipeline.webservice.db.WSRequestLogEntry;
-import org.daisy.pipeline.webservice.db.WSDatabaseManager;
-*/
+import org.daisy.pipeline.database.Client;
+import org.daisy.pipeline.database.DatabaseManager;
+import org.daisy.pipeline.database.RequestLogEntry;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Authenticator {
 	
-	private static Logger logger = LoggerFactory.getLogger(PipelineWebService.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(Authenticator.class.getName());
 	
-	public static boolean authenticate(String key, String hash, String timestamp, String nonce, String URI, long maxRequestTime, String dbPath) {
+	public static boolean authenticate(String id, String hash, String timestamp, String nonce, String URI, long maxRequestTime) {
 		// rules for hashing: use the whole URL string, minus the hash part (&sign=<some value>)
 		// important!  put the sign param last so we can easily strip it out
 		
 		int idx = URI.indexOf("&sign=", 0);
 		
 		if (idx > 1) {
+			// make sure the client exists
+			if (DatabaseManager.getInstance().getClientById(id) == null) {
+				logger.error(String.format("Client with user ID %s not found", id));
+				return false;
+			}
 			String hashuri = URI.substring(0, idx);
-			String clientSecret = getClientSecret(key, dbPath);
+			String clientSecret = getClientSecret(id);
 			String serverHash = "";
 			try {
 				serverHash = calculateRFC2104HMAC(hashuri, clientSecret);
@@ -42,26 +47,26 @@ public class Authenticator {
 				try {
 					clientTimestamp = UTC_FORMATTER.parse(timestamp);
 				} catch (ParseException e) {
-					logger.warn("Could not parse timestamp: " + timestamp);
+					logger.error(String.format("Could not parse timestamp: %s", timestamp));
 					e.printStackTrace();
 					return false;
 				}                                                                                                                                                                                                                                                                               
 				if(!hash.equals(serverHash)) {
-					logger.warn("Hash values do not match");
+					logger.error("Hash values do not match");
 					return false;
 				}
 				if (serverTimestamp.getTime() - clientTimestamp.getTime() > maxRequestTime) {
-					logger.warn("Request expired");
+					logger.error("Request expired");
 					return false;
 				}
-				if (!checkValidNonce(key, nonce, timestamp, dbPath)) {
-					logger.warn("Invalid nonce");
+				if (!checkValidNonce(id, nonce, timestamp)) {
+					logger.error("Invalid nonce");
 					return false;
 				}
 				return true;
 				
 			} catch (SignatureException e) {
-				logger.warn("Could not generate hash");
+				logger.error("Could not generate hash");
 				e.printStackTrace();
 				return false;
 			}
@@ -71,46 +76,37 @@ public class Authenticator {
 	
 	
 	// nonces, along with timestamps, protect against replay attacks
-	private static boolean checkValidNonce(String key, String nonce, String timestamp, String dbPath) {
+	private static boolean checkValidNonce(String id, String nonce, String timestamp) {
 		
-		// TESTING ONLY
-		return true;
-		
-		/*WSDatabaseManager manager = new WSDatabaseManager(dbPath);
-		WSClient client = manager.getClientByKey(key);
+		Client client = DatabaseManager.getInstance().getClientById(id);
 		if (client == null) {
-			//TODO: log error
+			logger.warn(String.format("Client with user ID %s not found", id));
 			return false;
 		}
 		
-		WSRequestLogEntry entry = new WSRequestLogEntry(client.getId(), nonce, timestamp);
+		RequestLogEntry entry = new RequestLogEntry(client.getId(), nonce, timestamp);
 		
 		// if this nonce was already used with this timestamp, don't accept it again
-		boolean isDuplicate = manager.isDuplicate(entry);
+		boolean isDuplicate = DatabaseManager.getInstance().isDuplicate(entry);
 		if (isDuplicate) {
-			//TODO: log error
+			logger.warn("Duplicate nonce detected.");
 			return false;
 		}
 		
 		// else, it is unique and therefore ok
-		manager.addObject(entry);
+		DatabaseManager.getInstance().addObject(entry);
 		return true;
-		*/
 		
 	}
 	
-	private static String getClientSecret(String key, String dbPath) {
-		// TESTING ONLY
-		return "";
+	private static String getClientSecret(String id) {
 		
-		/*
-		WSDatabaseManager manager = new WSDatabaseManager(dbPath);
-		WSClient client = manager.getClientByKey(key);
+		Client client = DatabaseManager.getInstance().getClientById(id);
 		if (client != null) {
 			return client.getSecret();
 		}
 		return "";
-		*/		
+				
 	}
 	
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
@@ -122,22 +118,22 @@ public class Authenticator {
 	* Computes RFC 2104-compliant HMAC signature.
 	* * @param data
 	* The data to be signed.
-	* @param key
-	* The signing key.
+	* @param secret
+	* The signing secret.
 	* @return
 	* The Base64-encoded RFC 2104-compliant HMAC signature.
 	* @throws
 	* java.security.SignatureException when signature generation fails
 	*/
-	private static String calculateRFC2104HMAC(String data, String key) throws java.security.SignatureException {
+	private static String calculateRFC2104HMAC(String data, String secret) throws java.security.SignatureException {
 		String result;
 		try {
 			// get an hmac_sha1 key from the raw key bytes
-			SecretKeySpec signingKey = new SecretKeySpec(key.getBytes(), HMAC_SHA1_ALGORITHM);
+			SecretKeySpec signingSecret = new SecretKeySpec(secret.getBytes(), HMAC_SHA1_ALGORITHM);
 		
 			// get an hmac_sha1 Mac instance and initialize with the signing key
 			Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
-			mac.init(signingKey);
+			mac.init(signingSecret);
 		
 			// compute the hmac on input data bytes
 			byte[] rawHmac = mac.doFinal(data.getBytes());

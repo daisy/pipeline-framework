@@ -1,14 +1,14 @@
 <?php 
 	class Authentication {
 		
-		private static $CLIENT_KEY = "clientkey";
+		private static $CLIENT_ID = "clientid";
 		private static $CLIENT_SECRET = "supersecret";
 		
 		public static function prepare_authenticated_uri($uri) {
 			$uristring = "";
 			$timestamp = gmdate("Y-m-d\TH:i:s\Z");
 			$nonce = Authentication::generate_nonce();
-			$params = "key=" . Authentication::$CLIENT_KEY . "&time=" . $timestamp . "&nonce=" . $nonce;
+			$params = "id=" . Authentication::$CLIENT_ID . "&time=" . $timestamp . "&nonce=" . $nonce;
 			if (strpos($uri, "?") == false) {
 				$uristring = $uri . "?" . $params;
 			}
