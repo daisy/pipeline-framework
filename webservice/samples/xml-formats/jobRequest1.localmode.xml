@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
+    <script href='http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl'/>
+    <input name='source'>
+        <!-- file @src is referring to a file inside a separate folder or archive -->
+        <file src='./dtbook-basic.xml'/>
+    </input>
+    <option name='opt-mods-filename'>the-mods-file.xml</option>
+    <option name='opt-css-filename'>the-css-file.css</option>
+    <option name='opt-zedai-filename'>the-zedai-file.xml</option>
+    <!-- in local mode, there is an additional option to specify -->
+    <option name='opt-output-dir'>/tmp</option>
+</jobRequest>
