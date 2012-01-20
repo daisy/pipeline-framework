@@ -7,7 +7,7 @@ namespace PipelineWSClient
 {
 	public class Authentication
 	{
-		private static string CLIENT_KEY = "clientkey";
+		private static string CLIENT_ID = "clientid";
 		private static string CLIENT_SECRET = "supersecret";
 		
 		public static string PrepareAuthenticatedUri(string uri)
@@ -15,7 +15,7 @@ namespace PipelineWSClient
 			string uristring = null;
   			string timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
   			string nonce = GenerateNonce();
-  			string query = String.Format("key={0}&time={1}&nonce={2}", CLIENT_KEY, timestamp, nonce);
+  			string query = String.Format("id={0}&time={1}&nonce={2}", CLIENT_KEY, timestamp, nonce);
   			if (uri.Contains("?"))
 			{
 				uristring = String.Format("{0}&{1}", uri, query);

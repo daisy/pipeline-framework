@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<script href="http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"
-    xmlns="http://www.daisy.org/ns/pipeline/data">
+<script xmlns="http://www.daisy.org/ns/pipeline/data"
+    script="http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"
+    id="dtbook-to-zedai" 
+    href="/scripts/dtbook-to-zedai">
     <nicename>DTBook to ZedAI</nicename>
     <description>Transforms DTBook XML into ZedAI XML.</description>
     <homepage>http://code.google.com/p/daisy-pipeline/wiki/DTBookToZedAI</homepage>

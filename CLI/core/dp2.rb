@@ -15,18 +15,24 @@ class Dp2
 	#private methods
 	def alive! 
 		if !alive?
-		
-			execPath=File::expand_path(Ctxt.conf[Ctxt.conf.class::EXEC_LINE],@basePath)
-			#
-			ex=IO.popen(execPath ) 
+			
+			if Ctxt.conf[Ctxt.conf.class::LOCAL] == true
+				execPath=File::expand_path(Ctxt.conf[Ctxt.conf.class::EXEC_LINE],@basePath)
+				#
+				ex=IO.popen(execPath ) 
 
-			#system('start '+execPath)
-			#will throw execetion the command is not found
-			pid =ex.pid
-			Ctxt.logger().debug("ws launched with pid #{pid}")
-			Ctxt.logger().info("waiting for the ws to come up...")
-			wait_till_up	
-			Ctxt.logger().info("ws up!")
+				#system('start '+execPath)
+				#will throw execetion the command is not found
+				pid =ex.pid
+				Ctxt.logger().debug("ws launched with pid #{pid}")
+				Ctxt.logger().debug("waiting for the ws to come up...")
+				puts "Waiting for the WS to come up"
+				wait_till_up	
+				Ctxt.logger().debug("ws up!")
+				puts("The daisy pipeline 2 WS is up!")
+			else
+				raise RuntimeError,"Unable to reach the WS"
+			end
 		end	
 		return true
 	end
@@ -54,11 +60,11 @@ class Dp2
 		job=nil
 		msgIdx=0
 		if alive?
-			id=JobResource.new.postResource(script.to_xml_request,nil)
+			job=JobResource.new.postResource(script.to_xml_request,data)
 			if wait==true
 				begin
 					sleep 1.5 
-					job=job_status(id,msgIdx)
+					job=job_status(job.id,msgIdx)
 					job.messages.each{|msg| puts msg.to_s}
 					if job.messages.size > 0
 						msgIdx=(Integer(job.messages[-1].seq)+1).to_s
@@ -84,6 +90,9 @@ class Dp2
 
 	def delete_job(id)
 		return DeleteJobResource.new(id).deleteResource	
+	end	
+	def job_zip_result(id,outpath)
+		return JobResultZipResource.new(id,outpath).getResource	
 	end	
 	def alive?	
   		return AliveResource.new.getResource 

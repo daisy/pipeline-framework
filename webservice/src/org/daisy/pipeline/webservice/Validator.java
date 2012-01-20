@@ -23,6 +23,8 @@ import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -57,6 +59,13 @@ public class Validator {
 	/** The Constant logSchema. */
 	public static final URL logSchema = Validator.class.getResource("resources/log.xsd");
 	
+	public static final URL clientSchema = Validator.class.getResource("resources/client.xsd");
+	
+	public static final URL clientsSchema = Validator.class.getResource("resources/clients.xsd");
+	
+	/** The logger. */
+	private static Logger logger = LoggerFactory.getLogger(Validator.class.getName());
+	
 	// If the Document isn't namespace-aware, this will likely fail
 	/**
 	 * Validate xml.
@@ -68,16 +77,16 @@ public class Validator {
 	public static boolean validateXml(Document document, URL schemaUrl) {
 	    
 		if (document == null) {
-			System.out.println("Could not validate null document");
+			logger.error("Could not validate null document");
 			return false;
 		}
 		
 		if (schemaUrl == null) {
-			System.out.println("Could not validate -- no schema given.");
+			logger.error("Could not validate -- no schema given.");
 			return false;
 		}
 		
-		SchemaResourceResolver resolver = new SchemaResourceResolver();
+		XmlResourceResolver resolver = new XmlResourceResolver();
 		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		factory.setResourceResolver(resolver);
 	    Source schemaFile;
@@ -93,17 +102,14 @@ public class Validator {
 		    return true;
 		    
 		} catch (IOException e3) {
-			// TODO log an error
-			e3.printStackTrace();
+			logger.error(e3.getMessage());
 		} catch (SAXException e) {
-			// TODO log an error
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			try {
 				is.close();
 			} catch (IOException e) {
-				// TODO log an error
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
 		
@@ -144,7 +150,7 @@ public class Validator {
 			scriptUri = new URI(scriptElm.getAttribute("href"));
 		}
 		catch (URISyntaxException e) {
-			System.out.print("ERROR: Malformed URI");
+			logger.error(e.getMessage());
 			return false;
 		}
 		
@@ -152,7 +158,7 @@ public class Validator {
 		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptUri);
 		
 		if (unfilteredScript == null) {
-			System.out.println("ERROR: Script not found");
+			logger.error("Script not found");
 			return false;
 		}
 		
@@ -168,8 +174,8 @@ public class Validator {
 		boolean hasAllRequiredOutputs = validateOutputPortData(script
 				.getXProcPipelineInfo().getOutputPorts(),
 				doc.getElementsByTagName("output"), script);
-		// note that we don't validate output ports because it doesn't make sense in the context of the web service
 		
+		// TODO if in local mode, add hasAllRequiredOutputs to this calculation
 		return hasAllRequiredInputs & hasAllRequiredOptions;
 	}
 
@@ -205,7 +211,7 @@ public class Validator {
 		
 		if (hasAllRequiredArgs == false) {
 			// TODO: be more specific
-			System.out.println("ERROR: Required args missing");
+			logger.error("Required args missing");
 		}
 		return hasAllRequiredArgs;
 	}
@@ -268,7 +274,7 @@ public class Validator {
 		
 		if (hasAllRequiredArgs == false) {
 			// TODO: be more specific
-			System.out.println("ERROR: Required args missing");
+			logger.error("Required args missing");
 		}
 		return hasAllRequiredArgs;
 	}
@@ -399,13 +405,13 @@ public class Validator {
 		    db.parse(is);
 		    is.close();
 		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return false;
 		} catch (SAXException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return false;
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return false;
 		}		
 		return true;

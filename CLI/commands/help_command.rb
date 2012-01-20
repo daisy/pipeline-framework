@@ -32,12 +32,12 @@ class HelpCommand < Command
 	end
 	def help
 		s="Usage: dp2 command [options]\n\n"
-		s+="Available commands:\n"
+		s+="#{self.to_s}\n"
+		s+="\nScript commands:\n\n"
+		@d_commands.each{|name,cmd| s+="#{cmd.to_s}\n"}
+		s+="\nAdvanced commands:\n\n"
 		
 		@s_commands.each{|name,cmd| s+="#{cmd.to_s}\n" if name!="help"}
-		s+="#{self.to_s}\n"
-		s+="\nScript commands:\n"
-		@d_commands.each{|name,cmd| s+="#{cmd.to_s}\n"}
 		s+="\nTo get help for a command write:\ndp2 help COMMAND"
 		
 		return s

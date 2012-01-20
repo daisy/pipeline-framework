@@ -10,6 +10,8 @@ import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -18,7 +20,11 @@ import org.restlet.resource.Get;
 public class JobResource extends AuthenticatedResource {
 	/** The job. */
 	private Job job;
-	private int msgSeq=0;
+	private int msgSeq = 0;
+	
+	/** The logger. */
+	private static Logger logger = LoggerFactory.getLogger(XmlFormatter.class.getName());
+	
 	/* (non-Javadoc)
 	 * @see org.restlet.resource.Resource#doInit()
 	 */
@@ -28,13 +34,19 @@ public class JobResource extends AuthenticatedResource {
 		if (!isAuthenticated()) return;
 		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
         String idParam = (String) getRequestAttributes().get("id");
-        String msgSeqParam = (String) getQuery().getFirstValue("msgSeq");
+        String msgSeqParam = (String)getQuery().getFirstValue("msgSeq");
 
         if (msgSeqParam!=null){
-        	msgSeq=Integer.parseInt(msgSeqParam);
+        	msgSeq = Integer.parseInt(msgSeqParam);
         }
-        JobId id = JobIdFactory.newIdFromString(idParam);
-        job = jobMan.getJob(id);
+        try {
+        	JobId id = JobIdFactory.newIdFromString(idParam);
+        	job = jobMan.getJob(id);
+        }
+        catch(Exception e) {
+        	logger.error(e.getMessage());
+        	job = null;
+        }
     }  
   
     /**
@@ -53,9 +65,8 @@ public class JobResource extends AuthenticatedResource {
 			return null;
     	}
 	
-    	String serverAddress = ((PipelineWebService)this.getApplication()).getServerAddress();
-		setStatus(Status.SUCCESS_OK);
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.jobToXml(job, serverAddress,msgSeq));
+    	setStatus(Status.SUCCESS_OK);
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.jobToXml(job, msgSeq));
 		return dom;
     }  
     

@@ -11,6 +11,8 @@ import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -19,10 +21,10 @@ import org.restlet.resource.Get;
 public class ScriptResource extends AuthenticatedResource {
 	/** The script. */
 	private XProcScript script = null;
-
-	/*
-	 * (non-Javadoc)
-	 * 
+	/** The logger. */
+	private static Logger logger = LoggerFactory.getLogger(ScriptResource.class.getName());
+	
+	/* (non-Javadoc)
 	 * @see org.restlet.resource.Resource#doInit()
 	 */
 	@Override
@@ -30,13 +32,16 @@ public class ScriptResource extends AuthenticatedResource {
 		super.doInit();
 		if (!isAuthenticated())
 			return;
+		
+		// TODO refer to scripts by their IDs instead of URIs
+		// however, scripts don't have IDs yet so we have to wait
+		// introduced temporary parameter "scriptid" to avoid conflict with auth param, recently renamed to "id"
 		URI scriptUri = null;
 
 		try {
-			scriptUri = new URI((String) getQuery().getFirstValue("id"));
+			scriptUri = new URI((String) getQuery().getFirstValue("scriptid"));
 		} catch (URISyntaxException e) {
-			// TODO log an error
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return;
 		}
 		ScriptRegistry scriptRegistry = ((PipelineWebService) this

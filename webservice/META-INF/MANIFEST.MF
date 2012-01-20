@@ -37,5 +37,5 @@ Import-Package: javax.crypto,
 Require-Bundle: org.daisy.pipeline.framework,
  org.daisy.common-utils
 Service-Component: OSGI-INF/webservice.xml
-JPA-PersistenceUnits: org.daisy.pipeline.webservice.db
+JPA-PersistenceUnits: org.daisy.pipeline.database.persistenceUnit
 

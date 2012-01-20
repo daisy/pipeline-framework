@@ -17,7 +17,7 @@ class Resource
 	end	
 	def getResource
 		
-		@result=Rest.get_resource_as_xml(buildUri())
+		@result=Rest.get_resource(buildUri())
 		return @resultProcessor.process(@result)
 	end
 	def postResource(contents,data)

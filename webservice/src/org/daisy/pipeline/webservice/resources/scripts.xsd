@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.daisy.org/ns/pipeline/data" xmlns:data="http://www.daisy.org/ns/pipeline/data">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" 
+  targetNamespace="http://www.daisy.org/ns/pipeline/data" 
+  xmlns:data="http://www.daisy.org/ns/pipeline/data">
   <xs:include schemaLocation="script.xsd"/>
   <xs:element name="scripts">
     <xs:complexType>

@@ -18,19 +18,43 @@ class CommandScript < Command
 		@opt_modifiers={}
 		@input_modifiers={}
 		@output_modifiers={}
+		@background=false
+		@persistent=false
+		@data=nil
+		@outfile=nil
+		
 		build_modifiers
 		build_parser
 	end
 	def execute(str_args)
-
 		begin
+			dp2ws=Dp2.new
 			@parser.parse(str_args)	
-			job=Dp2.new.job(@script,nil,true)
-			puts job.status
+			raise RuntimeError,"dp2 is running in remote mode, so you need to supply a zip file containing the data (--data)" if Ctxt.conf[Ctxt.conf.class::LOCAL]!=true && @data==nil
+			raise RuntimeError,"dp2 is running in remote mode, so you need to supply an output file to store the results (--file)" if Ctxt.conf[Ctxt.conf.class::LOCAL]!=true && @outfile==nil && !@background
+
+			puts "IGNORING #{@outfile} as the job is set to be executed in the background"  if @outfile!=nil && @background
+
+			if @outfile!=nil && !@background
+				raise RuntimeError,"#{@outfile}: directory doesn't exists " if !File.exists?(File.dirname(File.expand_path(@outfile)))
+			end	
+			job=dp2ws.job(@script,@data,!@background)
+			if Ctxt.conf[Ctxt.conf.class::LOCAL]!=true && !@background
+				dp2ws.job_zip_result(job.id,@outfile)
+				puts "Result stored at #{@outfile}"
+			end
+			
+			if !@persistent
+				if  dp2ws.delete_job(job.id)
+					puts "The job has been cleaned from the server"
+				end
+				puts job.status
+			end
 		rescue Exception => e
-				Ctxt.logger.info(e)
-				puts "\nERROR: #{e}\n\n"
-				puts help
+			 
+			Ctxt.logger.debug(e)
+			puts "\nERROR: #{e.message}\n\n"
+			puts help
 		end
 	end
 	def help
@@ -46,40 +70,55 @@ class CommandScript < Command
 
 
 		@parser=OptionParser.new do |opts|
-
-		@input_modifiers.keys.each{|input|
-			@input_modifiers[input][:value]=nil
-			if @input_modifiers[input][:sequenceAllowed]=='true'
-				opts.on(input+" input1,input2,input3",Array,@input_modifiers[input][:help]) do |v|
-				   @input_modifiers[input][:value] = v
+			
+			@input_modifiers.keys.each{|input|
+				@input_modifiers[input][:value]=nil
+				if @input_modifiers[input][:sequenceAllowed]=='true'
+					opts.on(input+" input1,input2,input3",Array,@input_modifiers[input][:help]) do |v|
+					   @input_modifiers[input][:value] = v
+					end
+				else
+					opts.on(input+" input",@input_modifiers[input][:help]) do |v|
+					   @input_modifiers[input][:value] = [v]
+					end
 				end
-			else
-				opts.on(input+" input",@input_modifiers[input][:help]) do |v|
-				   @input_modifiers[input][:value] = [v]
+
+			}
+			@output_modifiers.keys.each{|output|
+				@output_modifiers[output][:value]=nil
+				if @output_modifiers[output][:sequenceAllowed]=='true'
+					opts.on(output+" output1,output2,output3",Array) do |v|
+					   @output_modifiers[output][:value] = v
+					end
+				else
+					opts.on(output+" output") do |v|
+					   @output_modifiers[output][:value] = v
+					end
+				end
+
+			}
+
+			@opt_modifiers.keys.each{|option|
+				@opt_modifiers[option][:value]=nil
+				opts.on(option+" [option_value]",@opt_modifiers[option][:help]) do |v|
+				    @opt_modifiers[option][:value] = v
+				end
+			}
+			if Ctxt.conf[Ctxt.conf.class::LOCAL]!=true
+				opts.on("--file FILE","-f FILE","Zip file where to store the results from the server(not applied if running in background mode)") do |v|
+					@outfile=v
+				end
+				opts.on("--data ZIP_FILE","-d ZIP_FILE","Zip file with the data needed to perform the job (Keep in mind that options and inputs MUST be relative uris to the zip file's root)") do |v|
+					@data=File.open(File.expand_path(v), "rb")
 				end
 			end
-
-		}
-		@output_modifiers.keys.each{|output|
-			@output_modifiers[output][:value]=nil
-			if @output_modifiers[output][:sequenceAllowed]=='true'
-				opts.on(output+" output1,output2,output3",Array) do |v|
-				   @output_modifiers[output][:value] = v
-				end
-			else
-				opts.on(output+" output") do |v|
-				   @output_modifiers[output][:value] = v
-				end
+			opts.on("--background","-b","Runs the job in the background (will be persistent)") do |v|
+				@background=true
+				@persistent=true
 			end
-
-		}
-
-		@opt_modifiers.keys.each{|option|
-			@opt_modifiers[option][:value]=nil
-			opts.on(option+" [option_value]",@opt_modifiers[option][:help]) do |v|
-			    @opt_modifiers[option][:value] = v
+			opts.on("--persistent","-p","Forces to keep the job data in the server") do |v|
+				@persistent=true
 			end
-		}
 
 		end
 		
@@ -105,7 +144,7 @@ class CommandScript < Command
 			@input_modifiers[modifier]=input
 		}
 		@script.outputs.each {|out|
-			modifier="--i-#{out[:name]}"
+			modifier="--o-#{out[:name]}"
 			@output_modifiers[modifier]=output
 		}
 	end

@@ -19,30 +19,35 @@ import org.slf4j.LoggerFactory;
 public class PipelineWebService extends Application {
 	
 	/** The logger. */
-	private static Logger logger = LoggerFactory
-			.getLogger(PipelineWebService.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(PipelineWebService.class.getName());
 	
 	/* other runtime-configurable property names */
 	public static final String PORT_PROPERTY = "org.daisy.pipeline.ws.port";
-	public static final String HOST_PROPERTY = "org.daisy.pipeline.ws.host";
 	public static final String PATH_PROPERTY = "org.daisy.pipeline.ws.path";
 	public static final String MAX_REQUEST_TIME_PROPERTY = "org.daisy.pipeline.ws.maxrequesttime";
 	public static final String TMPDIR_PROPERTY = "org.daisy.pipeline.ws.tmpdir";
 	public static final String AUTHENTICATION_PROPERTY = "org.daisy.pipeline.ws.authentication";
-	public static final String DBPATH_PROPERTY = "org.daisy.pipeline.ws.dbpath";
 	public static final String LOCAL_MODE = "org.daisy.pipeline.ws.local";
 	
+	public static final String SCRIPTS_ROUTE = "/scripts";
+	public static final String SCRIPT_ROUTE = "/script"; // TODO change to /scripts/{id}
+	public static final String JOBS_ROUTE = "/jobs";
+	public static final String JOB_ROUTE = "/jobs/{id}";
+	public static final String LOG_ROUTE = "/jobs/{id}/log";
+	public static final String RESULT_ROUTE = "/jobs/{id}/result";
+	public static final String CLIENTS_ROUTE = "/admin/clients";
+	public static final String CLIENT_ROUTE = "/admin/clients/{id}";
+	
+	
 	/* options and their default values */
-	private String host = "localhost";
 	private String path = "/ws";
 	private int portNumber = 8182;
 	private boolean usesAuthentication = true;
 	private long maxRequestTime = 600000; // 10 minutes in ms
 	private String tmpDir = "/tmp";
-	private String dbPath = "";
 	
 	/** The Constant WS. */
-	private static final String WS = "ws";
+	//private static final String WS = "ws";
 	
 	/** The job manager. */
 	private JobManager jobManager;
@@ -56,12 +61,17 @@ public class PipelineWebService extends Application {
 	@Override
 	public Restlet createInboundRoot() {
 		Router router = new Router(getContext());
-		router.attach("/scripts", ScriptsResource.class);
-		router.attach("/script", ScriptResource.class);
-		router.attach("/jobs", JobsResource.class);
-		router.attach("/jobs/{id}", JobResource.class);
-		router.attach("/jobs/{id}/log", LogResource.class);
-		router.attach("/jobs/{id}/result", ResultResource.class);
+		router.attach(SCRIPTS_ROUTE, ScriptsResource.class);
+		router.attach(SCRIPT_ROUTE, ScriptResource.class);
+		router.attach(JOBS_ROUTE, JobsResource.class);
+		router.attach(JOB_ROUTE, JobResource.class);
+		router.attach(LOG_ROUTE, LogResource.class);
+		router.attach(RESULT_ROUTE, ResultResource.class);
+		
+		// init the administrative paths
+		router.attach(CLIENTS_ROUTE, ClientsResource.class);
+		router.attach(CLIENT_ROUTE, ClientResource.class);
+		
 		return router;
 	}
 
@@ -94,17 +104,6 @@ public class PipelineWebService extends Application {
 		return Boolean.valueOf(System.getProperty(LOCAL_MODE));
 	}
 	
-	/**
-	 * Gets the server address.
-	 *
-	 * @return the server address
-	 */
-	public String getServerAddress() {
-		// format as http://hostname:port/path
-		String serverAddress = String.format("http://%s:%d%s", this.host, this.portNumber, this.path);
-		return serverAddress;
-	}
-
 	public String getTmpDir() {
 		return this.tmpDir;
 	}
@@ -113,17 +112,9 @@ public class PipelineWebService extends Application {
 		return this.usesAuthentication;
 	}
 	
-	public int getPortNumber() {
-		return this.portNumber;
-	}
-	
 	// the length of time in ms that a request is valid for, counting from its timestamp value
 	public long getMaxRequestTime() {
 		return this.maxRequestTime;
-	}
-	
-	public String getDBPath() {
-		return this.dbPath;
 	}
 	
 	/**
@@ -164,11 +155,6 @@ public class PipelineWebService extends Application {
 	
 	private void readOptions() {
 		
-		String host = System.getProperty(HOST_PROPERTY);
-		if (host != null) {
-			this.host = host;
-		}
-		
 		String path = System.getProperty(PATH_PROPERTY);
 		if (path != null) {
 			if (!path.startsWith("/")) {
@@ -179,9 +165,6 @@ public class PipelineWebService extends Application {
 		
 		String authentication = System.getProperty(AUTHENTICATION_PROPERTY);
 		
-		// TODO remove this line; it's is for TESTING ONLY
-		this.usesAuthentication = false;
-		/*
 		if (authentication != null) {
 			if (authentication.equalsIgnoreCase("true")) {
 				this.usesAuthentication = true;
@@ -195,7 +178,7 @@ public class PipelineWebService extends Application {
 						"Value specified in option %s (%s) is not valid. Using default value of %s.", 
 						AUTHENTICATION_PROPERTY, authentication, this.usesAuthentication));
 			}
-		}*/
+		}
 		
 		String port = System.getProperty(PORT_PROPERTY);
 		if (port != null) {
@@ -239,11 +222,6 @@ public class PipelineWebService extends Application {
 						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.", 
 						MAX_REQUEST_TIME_PROPERTY, maxrequesttime, this.maxRequestTime));
 			}
-		}
-		
-		String dbpath = System.getProperty(DBPATH_PROPERTY);
-		if (dbpath != null) {
-			this.dbPath = dbpath;
 		}
 	}
 }

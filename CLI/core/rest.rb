@@ -11,13 +11,13 @@ module Rest
   def get_resource(uri)
     begin
       authUri = URI.parse(Authentication.prepare_authenticated_uri(uri))
-      Ctxt.logger.debug(authUri)
+      Ctxt.logger.debug(authUri) 
       response = Net::HTTP.get_response(authUri)
-
       #puts "Response was #{response}"
 
       case response
         when Net::HTTPSuccess
+	 # puts "yayyy?!"	
           return response.body
         when Net::HTTPInternalServerError
           return nil
@@ -75,7 +75,7 @@ module Rest
         else
           return nil
       end
-    rescue
+    rescue Exception => e
       puts "Error: POST #{uri.to_s} failed."
       return nil
     end
@@ -87,7 +87,7 @@ module Rest
       request = Net::HTTP::Delete.new(authUri.request_uri)
       response = Net::HTTP.start(authUri.host, authUri.port) {|http| http.request(request)}
 
-      puts "Response was #{response}"
+      Ctxt.logger.debug("Response was #{response}")
 
       case response
         when Net::HTTPNoContent
@@ -106,7 +106,7 @@ module Rest
 
   def post_form(url, query, headers)
     Net::HTTP.start(url.host, url.port) {|con|
-      con.read_timeout = Ctxt.config[Ctxt.config.class::TIMEOUT_SECONDS].to_s.to_i
+      con.read_timeout = Ctxt.conf[Ctxt.conf.class::TIMEOUT_SECONDS].to_s.to_i
       begin
         return con.post(url.request_uri, query, headers)
       rescue => e

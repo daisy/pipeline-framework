@@ -30,6 +30,7 @@ require_rel './core/rest'
 require_rel './core/result_processor'
 require_rel './core/scripts'
 require_rel './commands/delete_command'
+require_rel './commands/result_command'
 require_rel './commands/dynamic_commands'
 require_rel './commands/help_command.rb'
 require_rel './commands/job_command'
@@ -46,13 +47,20 @@ def main
 	else
 		Ctxt.conf(File.expand_path("config.yml",File.dirname(ENV["OCRA_EXECUTABLE"])))
 	end
-	dynCommands=DynamicCommands.get
+	begin
+		dynCommands=DynamicCommands.get
+	rescue Exception=>e
+		puts "ERROR: #{e.message}"
+		exit -1
+	end
+	
 	s_cmds={}
 	d_cmds={}
 	#static commands
 	s_cmds=load(JobsCommand.new,s_cmds)
 	s_cmds=load(JobCommand.new,s_cmds)
 	s_cmds=load(DeleteCommand.new,s_cmds)
+	s_cmds=load(ResultCommand.new,s_cmds)
 	
 	#scripts	
 	dynCommands.each{|cmd| d_cmds[cmd.name]=cmd}

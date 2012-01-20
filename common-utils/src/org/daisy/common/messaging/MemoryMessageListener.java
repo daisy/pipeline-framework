@@ -19,7 +19,7 @@ import com.google.common.collect.HashMultimap;
  * 
  */
 public class MemoryMessageListener implements MessageListener,MessageAccessor {
-	
+	/* TODO add a configuration item for message level */ 
 	/** The m messages. */
 	HashMultimap<Level, Message> mMessages = HashMultimap.create();
 	List<Message> mSeqList=new ArrayList<Message>();
@@ -43,7 +43,7 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 	 */
 	@Override
 	public void trace(String msg) {
-		store(Level.TRACE, msg, null);
+	//	store(Level.TRACE, msg, null);
 	}
 
 	/* (non-Javadoc)
@@ -51,7 +51,8 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 	 */
 	@Override
 	public void trace(String msg, Throwable throwable) {
-		store(Level.TRACE, msg, throwable);
+		//ignore
+		//store(Level.TRACE, msg, throwable);
 	}
 
 	/* (non-Javadoc)
@@ -59,7 +60,8 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 	 */
 	@Override
 	public void debug(String msg) {
-		store(Level.DEBUG, msg, null);
+		//ignore for now
+		//store(Level.DEBUG, msg, null);
 
 	}
 
@@ -68,7 +70,7 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 	 */
 	@Override
 	public void debug(String msg, Throwable throwable) {
-		store(Level.DEBUG, msg, throwable);
+		//store(Level.DEBUG, msg, throwable);
 	}
 
 	/* (non-Javadoc)

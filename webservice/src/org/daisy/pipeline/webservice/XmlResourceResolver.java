@@ -8,18 +8,23 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 
 
-public class SchemaResourceResolver implements LSResourceResolver {
+public class XmlResourceResolver implements LSResourceResolver {
+	/** The logger. */
+	private static Logger logger = LoggerFactory.getLogger(XmlResourceResolver.class.getName());
+	
 	@Override
 	public LSInput resolveResource(String type, String namespaceURI, String publicId, String systemId, String baseURI) {
 		
 		// schema are in the resources directory
-		URL resourceUrl = SchemaResourceResolver.class.getResource("resources/" + systemId);
+		URL resourceUrl = XmlResourceResolver.class.getResource("resources/" + systemId);
 		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db;
@@ -32,12 +37,10 @@ public class SchemaResourceResolver implements LSResourceResolver {
 	        lsi.setByteStream(is);
 			return lsi;
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return null;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return null;
 		}
 	}
