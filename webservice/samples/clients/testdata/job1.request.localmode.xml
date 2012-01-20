@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
-	<script href="http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
+    <script href="http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl"/>
     <input name='source'>
-        <!-- example of inline content instead of file elements -->
         <docwrapper>
             <dtbook xmlns='http://www.daisy.org/z3986/2005/dtbook/' version='2005-3' xml:lang='en-US'>
                 <head>
@@ -14,7 +13,6 @@
                     <meta content='pipeline2-dtbook-test-20110301-basic' name='dc:Identifier'/>
                     <meta content='en-US' name='dc:Language'/>
                 </head>
-                <!-- test comment -->
                 <book>
                     <frontmatter>
                         <doctitle>Pipeline 2 DTBook Test Content: Basic</doctitle>
@@ -46,14 +44,11 @@
                                         applications.</li>
                                 </list>
                             </p>
-                            
                         </level1>
-                        
                     </bodymatter>
                 </book>
             </dtbook>
-            
         </docwrapper>
     </input>
-    <!-- no options specified, so the script's default values will be used -->
+	<option name='opt-output-dir'>/tmp</option>
 </jobRequest>

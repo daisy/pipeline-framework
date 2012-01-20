@@ -10,6 +10,7 @@
         <xs:element ref="data:homepage" minOccurs="0" maxOccurs="1"/>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="data:input"/>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="data:option"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="data:output"/>
       </xs:sequence>
       <xs:attribute name="id" use="required" type="xs:string"/>
       <xs:attribute name="href" use="required" type="xs:anyURI"/>
@@ -23,7 +24,7 @@
     <xs:complexType>
       <xs:attribute name="desc" use="required"/>
       <xs:attribute name="name" use="required" type="xs:string"/>
-      <xs:attribute name="sequenceAllowed" use="required" type="xs:boolean"/>
+      <xs:attribute name="sequence" use="required" type="xs:boolean"/>
       <xs:attribute name="mediaType" use="required"/>
     </xs:complexType>
   </xs:element>
@@ -34,6 +35,14 @@
       <xs:attribute name="required" use="required" type="xs:boolean"/>
       <xs:attribute name="type" use="required" type="xs:string"/>
       <xs:attribute name="mediaType" use="optional" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="output">
+    <xs:complexType>
+      <xs:attribute name="desc" use="required"/>
+      <xs:attribute name="name" use="required" type="xs:string"/>
+      <xs:attribute name="sequence" use="required" type="xs:boolean"/>
+      <xs:attribute name="mediaType" use="required"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

@@ -57,7 +57,7 @@ public class XmlFormatter {
 	 */
 	public static Document jobToXml(Job job, int msgSeq) {
 		Document doc = XmlFormatter.createDom("job");
-		toXmlElm(job, doc, msgSeq);
+		toXmlElm(job, doc, msgSeq, true);
 
 		// for debugging only
 		if (!Validator.validateXml(doc, Validator.jobSchema)) {
@@ -86,7 +86,7 @@ public class XmlFormatter {
 		Iterator<Job> it = jobs.iterator();
 		while (it.hasNext()) {
 			Job job = it.next();
-			Element jobElm = toXmlElm(job, doc, 0);
+			Element jobElm = toXmlElm(job, doc, 0, false);
 			jobsElm.appendChild(jobElm);
 		}
 
@@ -110,7 +110,7 @@ public class XmlFormatter {
 	 */
 	public static Document xprocScriptToXml(XProcScript script) {
 		Document doc = XmlFormatter.createDom("script");
-		toXmlElm(script, doc);
+		toXmlElm(script, doc, true);
 
 		// for debugging only
 		if (!Validator.validateXml(doc, Validator.scriptSchema)) {
@@ -137,7 +137,7 @@ public class XmlFormatter {
 		Iterator<XProcScript> it = scripts.iterator();
 		while (it.hasNext()) {
 			XProcScript script = it.next();
-			Element scriptElm = toXmlElm(script, doc);
+			Element scriptElm = toXmlElm(script, doc, false);
 			scriptsElm.appendChild(scriptElm);
 		}
 
@@ -149,7 +149,7 @@ public class XmlFormatter {
 		return doc;
 	}
 
-	private static Element toXmlElm(XProcScript script, Document doc) {
+	private static Element toXmlElm(XProcScript script, Document doc, boolean detail) {
 		Element rootElm = null;
 
 		if (doc.getDocumentElement().getNodeName().equals("script")) {
@@ -157,8 +157,13 @@ public class XmlFormatter {
 		} else {
 			rootElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "script");
 		}
-		rootElm.setAttribute("href", script.getURI().toString());
-
+		
+		String scriptHref = PipelineWebService.SCRIPT_ROUTE.replaceFirst("\\{id\\}", "TODO");
+		
+		rootElm.setAttribute("id", "TODO");
+		rootElm.setAttribute("href", scriptHref);
+		rootElm.setAttribute("script", script.getURI().toString());
+		
 		Element nicenameElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "nicename");
 		nicenameElm.setTextContent(script.getName());
 		rootElm.appendChild(nicenameElm);
@@ -167,55 +172,77 @@ public class XmlFormatter {
 		descriptionElm.setTextContent(script.getDescription());
 		rootElm.appendChild(descriptionElm);
 
-		String homepage = script.getHomepage();
-		if (homepage != null && homepage.trim().length() > 0) {
-			Element homepageElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "homepage");
-			homepageElm.setTextContent(homepage);
-			rootElm.appendChild(homepageElm);
-		}
-
-		Iterator<XProcPortInfo> it_input = script.getXProcPipelineInfo()
-				.getInputPorts().iterator();
-		Iterator<XProcOptionInfo> it_options = script.getXProcPipelineInfo()
-				.getOptions().iterator();
-
-		while (it_input.hasNext()) {
-			XProcPortInfo input = it_input.next();
-
-			Element inputElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "input");
-			inputElm.setAttribute("name", input.getName());
-
-			if (input.isSequence() == true) {
-				inputElm.setAttribute("sequenceAllowed", "true");
-			} else {
-				inputElm.setAttribute("sequenceAllowed", "false");
+		if (detail) {
+			String homepage = script.getHomepage();
+			if (homepage != null && homepage.trim().length() > 0) {
+				Element homepageElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "homepage");
+				homepageElm.setTextContent(homepage);
+				rootElm.appendChild(homepageElm);
 			}
-
-			XProcPortMetadata meta = script.getPortMetadata(input.getName());
-			inputElm.setAttribute("mediaType", meta.getMediaType());
-			inputElm.setAttribute("desc", meta.getDescription());
-
-			rootElm.appendChild(inputElm);
-		}
-
-		while (it_options.hasNext()) {
-			XProcOptionInfo option = it_options.next();
-
-			Element optionElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "option");
-			optionElm.setAttribute("name", option.getName().toString());
-			if (option.isRequired()) {
-				optionElm.setAttribute("required", "true");
-			} else {
-				optionElm.setAttribute("required", "false");
+	
+			Iterator<XProcPortInfo> it_input = script.getXProcPipelineInfo()
+					.getInputPorts().iterator();
+			Iterator<XProcOptionInfo> it_options = script.getXProcPipelineInfo()
+					.getOptions().iterator();
+			Iterator<XProcPortInfo> it_output = script.getXProcPipelineInfo()
+					.getOutputPorts().iterator();
+	
+			while (it_input.hasNext()) {
+				XProcPortInfo input = it_input.next();
+	
+				Element inputElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "input");
+				inputElm.setAttribute("name", input.getName());
+	
+				if (input.isSequence() == true) {
+					inputElm.setAttribute("sequence", "true");
+				} else {
+					inputElm.setAttribute("sequence", "false");
+				}
+	
+				XProcPortMetadata meta = script.getPortMetadata(input.getName());
+				inputElm.setAttribute("mediaType", meta.getMediaType());
+				inputElm.setAttribute("desc", meta.getDescription());
+	
+				rootElm.appendChild(inputElm);
 			}
-
-			XProcOptionMetadata meta = script.getOptionMetadata(option
-					.getName());
-			optionElm.setAttribute("type", meta.getType());
-			optionElm.setAttribute("mediaType", meta.getMediaType());
-			optionElm.setAttribute("desc", meta.getDescription());
-
-			rootElm.appendChild(optionElm);
+	
+			while (it_options.hasNext()) {
+				XProcOptionInfo option = it_options.next();
+	
+				Element optionElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "option");
+				optionElm.setAttribute("name", option.getName().toString());
+				if (option.isRequired()) {
+					optionElm.setAttribute("required", "true");
+				} else {
+					optionElm.setAttribute("required", "false");
+				}
+	
+				XProcOptionMetadata meta = script.getOptionMetadata(option
+						.getName());
+				optionElm.setAttribute("type", meta.getType());
+				optionElm.setAttribute("mediaType", meta.getMediaType());
+				optionElm.setAttribute("desc", meta.getDescription());
+	
+				rootElm.appendChild(optionElm);
+			}
+			
+			while (it_output.hasNext()) {
+				XProcPortInfo output = it_output.next();
+	
+				Element outputElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "output");
+				outputElm.setAttribute("name", output.getName());
+	
+				if (output.isSequence() == true) {
+					outputElm.setAttribute("sequence", "true");
+				} else {
+					outputElm.setAttribute("sequence", "false");
+				}
+				XProcPortMetadata meta = script.getPortMetadata(output.getName());
+				outputElm.setAttribute("mediaType", meta.getMediaType());
+				outputElm.setAttribute("desc", meta.getDescription());
+	
+				rootElm.appendChild(outputElm);
+			}
 		}
 
 		return rootElm;
@@ -232,7 +259,7 @@ public class XmlFormatter {
 	 *            the server address
 	 * @return the element
 	 */
-	private static Element toXmlElm(Job job, Document doc, int msgSeq) {
+	private static Element toXmlElm(Job job, Document doc, int msgSeq, boolean detail) {
 		Element rootElm = null;
 
 		if (doc.getDocumentElement().getNodeName().equals("job")) {
@@ -242,41 +269,55 @@ public class XmlFormatter {
 		}
 
 		Job.Status status = job.getStatus();
-
+		String jobHref = PipelineWebService.JOB_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+		
 		rootElm.setAttribute("id", job.getId().toString());
+		rootElm.setAttribute("href", jobHref);
 		rootElm.setAttribute("status", status.toString());
 
-		Element scriptElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "script");
-		scriptElm.setAttribute("href", job.getScript().getURI().toString());
-		rootElm.appendChild(scriptElm);
-
-		Element messagesElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "messages");
-		//TODO wrap this in a static context
-		HashSet<Level> levels= new HashSet<Level>();
-		levels.add(Level.WARNING);
-		levels.add(Level.INFO);
-		levels.add(Level.ERROR);
-		Filter<List<Message>> seqFilt= new MessageAccessor.SequenceFilter(msgSeq);
-		Filter<List<Message>> levelFilt= new MessageAccessor.LevelFilter(levels);
-		//end of wrapping things
-		
-		try {
-			List<Message> msgs= job.getMonitor().getMessageAccessor().filtered(new Filter[]{seqFilt,levelFilt});
-			for (Message msg :msgs) {
-				Element singleMsgElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA,
-						"message");
-				singleMsgElm.setAttribute( "level",msg.getLevel().toString());
-				singleMsgElm.setAttribute( "sequence",msg.getSequence()+"");
-				singleMsgElm.setTextContent(msg.getMsg());
-				messagesElm.appendChild(singleMsgElm);
+		if (detail) {
+			Element scriptElm = toXmlElm(job.getScript(), doc, false);
+			rootElm.appendChild(scriptElm);
+	
+			Element messagesElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "messages");
+			//TODO wrap this in a static context
+			HashSet<Level> levels= new HashSet<Level>();
+			levels.add(Level.WARNING);
+			levels.add(Level.INFO);
+			levels.add(Level.ERROR);
+			Filter<List<Message>> seqFilt= new MessageAccessor.SequenceFilter(msgSeq);
+			Filter<List<Message>> levelFilt= new MessageAccessor.LevelFilter(levels);
+			//end of wrapping things
+			
+			try {
+				List<Message> msgs= job.getMonitor().getMessageAccessor().filtered(new Filter[]{seqFilt,levelFilt});
+				for (Message msg :msgs) {
+					Element singleMsgElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA,
+							"message");
+					singleMsgElm.setAttribute( "level",msg.getLevel().toString());
+					singleMsgElm.setAttribute( "sequence",msg.getSequence()+"");
+					singleMsgElm.setTextContent(msg.getMsg());
+					messagesElm.appendChild(singleMsgElm);
+				}
+				if (msgs.size() > 0) {
+					rootElm.appendChild(messagesElm);
+				}
+			} catch (Exception e) {
+				System.out.println(e.getCause());
 			}
-			if (msgs.size() > 0) {
-				rootElm.appendChild(messagesElm);
+			
+			Element logElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "log");
+			String logHref = PipelineWebService.LOG_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+			logElm.setAttribute("href", logHref);
+			rootElm.appendChild(logElm);
+			
+			if (job.getStatus() == Job.Status.DONE) {
+				Element resultElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "result");
+				String resultHref = PipelineWebService.RESULT_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+				resultElm.setAttribute("href", resultHref);
+				rootElm.appendChild(resultElm);
 			}
-		} catch (Exception e) {
-			System.out.println(e.getCause());
 		}
-		
 		return rootElm;
 	}
 
@@ -311,9 +352,6 @@ public class XmlFormatter {
 		return doc;
 	}
 
-	/*
-	 * <client id="" secret="" role="" contact=""/>
-	 */
 	public static Element toXmlElm(Client client, Document doc) {
 		Element rootElm = null;
 	
@@ -323,6 +361,9 @@ public class XmlFormatter {
 			rootElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "client");
 		}
 		
+		String clientHref = PipelineWebService.CLIENT_ROUTE.replaceFirst("\\{id\\}", client.getId());
+		
+		rootElm.setAttribute("href", clientHref);
 		rootElm.setAttribute("id", client.getId());
 		rootElm.setAttribute("secret", client.getSecret());
 		rootElm.setAttribute("role", client.getRole().toString());

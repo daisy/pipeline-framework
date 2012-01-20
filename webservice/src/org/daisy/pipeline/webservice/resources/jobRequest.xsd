@@ -7,6 +7,7 @@
           <xs:choice maxOccurs="unbounded">
             <xs:element ref="data:input" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="data:option" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="data:output" minOccurs="0" maxOccurs="unbounded"/>
           </xs:choice>
       </xs:sequence>
     </xs:complexType>
@@ -38,6 +39,15 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="option">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="output">
     <xs:complexType>
       <xs:simpleContent>
         <xs:extension base="xs:string">

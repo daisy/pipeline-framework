@@ -2,6 +2,7 @@
 <jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
     <script href='http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl'/>
     <input name='source'>
+        <!-- file @src is referring to a file inside a separate folder or archive -->
         <file src='./dtbook-basic.xml'/>
     </input>
     <option name='opt-mods-filename'>the-mods-file.xml</option>

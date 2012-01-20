@@ -162,7 +162,13 @@ public class Validator {
 			return false;
 		}
 		
-		XProcScript script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
+		XProcScript script;
+		if (application.isLocal()) {
+			script = unfilteredScript.load();
+		}
+		else {
+			script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
+		}
 		
 		// inputs
 		boolean hasAllRequiredInputs = validateInputPortData(script.getXProcPipelineInfo().getInputPorts(), 
@@ -175,8 +181,12 @@ public class Validator {
 				.getXProcPipelineInfo().getOutputPorts(),
 				doc.getElementsByTagName("output"), script);
 		
-		// TODO if in local mode, add hasAllRequiredOutputs to this calculation
-		return hasAllRequiredInputs & hasAllRequiredOptions;
+		if (application.isLocal()) {
+			return hasAllRequiredInputs & hasAllRequiredOutputs & hasAllRequiredOptions;
+		}
+		else {
+			return hasAllRequiredInputs & hasAllRequiredOptions;
+		}
 	}
 
 	/**
