@@ -5,55 +5,65 @@ require 'nokogiri'
 require_rel './core/multipart.rb'
 require_rel './core/authentication'
 require_rel './core/ctxt'
-module Rest
-  module_function
+class Rest
+  	@@conn=nil
+	def self.init_conn(authUri)
+		if @@conn==nil
+			@@conn= Net::HTTP.start(authUri.host,authUri.port)
+		end
+	end
+	def self.restart()
+		@@conn.finish()
+		@@conn=nil
+	end
+	def self.get_resource(uri,time_out=nil)
+		begin
+   
+      			authUri = URI.parse(Authentication.prepare_authenticated_uri(uri))
+			self.init_conn(authUri)
+			Ctxt.logger.debug(authUri) 
+			if time_out==nil
+				@@conn.read_timeout = Ctxt.conf[Ctxt.conf.class::TIMEOUT_SECONDS].to_s.to_i
+			else
+				@@conn.read_timeout=time_out
+			end
+			
+      			request = Net::HTTP::Get.new(authUri.request_uri)
+			@@conn.request(request){ |response|
+				#puts "Response was #{response}"
+				case response
+					when Net::HTTPSuccess
+						 return response.body
+					when Net::HTTPInternalServerError
+						return nil
+					else
+						return nil
+				end
+      			}
+	    rescue Exception=>e
+		#puts e.message
+      		#puts e.backtrace
+		puts "Error: GET #{uri.to_s} failed."
+	       return nil
+	    end
+      	##response = Net::HTTP.get_response(authUri)
+      	#puts "Response was #{response}"
 
-  def get_resource(uri)
-    begin
-      authUri = URI.parse(Authentication.prepare_authenticated_uri(uri))
-      Ctxt.logger.debug(authUri) 
-      response = Net::HTTP.get_response(authUri)
-      #puts "Response was #{response}"
+	end
 
-      case response
-        when Net::HTTPSuccess
-	 # puts "yayyy?!"	
-          return response.body
-        when Net::HTTPInternalServerError
-          return nil
-        else
-          return nil
-      end
-
-    rescue
-      #puts "Error: GET #{uri.to_s} failed."
-      return nil
-    end
-  end
-
-  def get_resource_as_xml(uri)
-    resource = get_resource(uri)
-    if resource == nil
-      return nil
-    end
-    doc = Nokogiri.XML(resource) do |config|
-      config.default_xml.noblanks
-    end
-    return doc
-  end
 
   # TODO make this more WS-agnostic (factor out post field names)
-  def post_resource(uri, request_contents, data)
+  def self.post_resource(uri, request_contents, data)
     begin
       authUri = URI.parse(Authentication.prepare_authenticated_uri(uri))
+      self.init_conn(authUri)
       request = Net::HTTP::Post.new(authUri.request_uri)
 
       # send the request as the body
       if data == nil
         request.body = request_contents
 	Ctxt.logger.debug(request.body)	
-        response = Net::HTTP.start(authUri.host, authUri.port) {|http| http.request(request)}
-
+        response = @@conn.request(request)
       # else attach the data as a file in a multipart request
       else
         params = {}
@@ -69,23 +79,26 @@ module Rest
 
       case response
         when Net::HTTPCreated
-          return response.get_fields('content-location')[0]
+          return response.body
         when Net::HTTPInternalServerError
           return nil
         else
           return nil
       end
     rescue Exception => e
-      puts "Error: POST #{uri.to_s} failed."
-      return nil
+      #puts e.backtrace	
+      #puts e.message 
+      raise RuntimeError,"Error: POST #{uri.to_s} failed."
+      
     end
   end
 
-  def delete_resource(uri)
+  def self.delete_resource(uri)
     begin
       authUri = URI.parse(Authentication.prepare_authenticated_uri(uri))
       request = Net::HTTP::Delete.new(authUri.request_uri)
-      response = Net::HTTP.start(authUri.host, authUri.port) {|http| http.request(request)}
+      self.init_conn(authUri)	
+      response = @@conn.request(request)
 
       Ctxt.logger.debug("Response was #{response}")
 
@@ -104,15 +117,13 @@ module Rest
 
   end
 
-  def post_form(url, query, headers)
-    Net::HTTP.start(url.host, url.port) {|con|
-      con.read_timeout = Ctxt.conf[Ctxt.conf.class::TIMEOUT_SECONDS].to_s.to_i
+  def self.post_form(url, query, headers)
+      @@conn.read_timeout = Ctxt.conf[Ctxt.conf.class::TIMEOUT_SECONDS].to_s.to_i
       begin
-        return con.post(url.request_uri, query, headers)
+        return @@conn.post(url.request_uri, query, headers)
       rescue => e
         puts "POST Failed #{e}... #{Time.now}"
       end
-    }
   end
 
 end

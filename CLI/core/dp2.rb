@@ -27,7 +27,7 @@ class Dp2
 				Ctxt.logger().debug("ws launched with pid #{pid}")
 				Ctxt.logger().debug("waiting for the ws to come up...")
 				puts "Waiting for the WS to come up"
-				wait_till_up	
+				wait_till_up
 				Ctxt.logger().debug("ws up!")
 				puts("The daisy pipeline 2 WS is up!")
 			else

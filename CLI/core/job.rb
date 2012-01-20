@@ -44,7 +44,9 @@ end
 
 class JobStatusResultProcessor < ResultProcessor
 	def process(input)
-		raise "Empty job result from server ",RuntimeError if input==nil
+		raise RuntimeError,"Empty result from WS" if input==nil
+		#return Job.new if input==nil
+
 		doc=Nokogiri.XML(input)
 		
 		doc.remove_namespaces!
@@ -68,7 +70,7 @@ class JobZipResultProcessor < ResultProcessor
 end
 class JobsStatusResultProcessor < ResultProcessor
 	def process(input)
-		raise "Empty job result from server ",RuntimeError if input==nil
+		raise RuntimeError,"Empty job result from server " if input==nil
 		doc=Nokogiri.XML(input)
 		
 		doc.remove_namespaces!
@@ -83,12 +85,16 @@ class JobsStatusResultProcessor < ResultProcessor
 end
 class JobPostResultProcessor < ResultProcessor
 	def process(input)
-		if input==nil
-			raise "Error submitting job"
-		end
-		id=input.split(/\//)[-1]
-		puts "Job with ID #{id} submitted"
-		job=Job.new(id)
+		raise RuntimeError,"Empty result from WS" if input==nil
+		#return Job.new if input==nil
+
+		doc=Nokogiri.XML(input)
+		
+		doc.remove_namespaces!
+		xjob=doc.at_xpath("//job")
+		job=Job.fromXml(xjob)
+		Ctxt.logger.debug(job.to_s)
+		puts "Job with id #{job.id} submitted to the server"
 		return job 
 	end
 end
