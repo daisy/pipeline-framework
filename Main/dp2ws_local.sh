@@ -3,7 +3,6 @@ pushd $(dirname $0) >/dev/null
 DP2_HOME=$(pwd)
 popd>/dev/null
 JAVA=java
-DS_MODE="-Dorg.daisy.pipeline.mode=ws"
 FELIX_CONF="file:$DP2_HOME/etc/config.properties"
 DP_LOG_DIR=$DP2_HOME/log
 XPROC_CONF=$DP2_HOME/etc/conf_calabash.xml
