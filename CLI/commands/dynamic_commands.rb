@@ -46,12 +46,13 @@ class CommandScript < Command
 			
 			if !@persistent
 				if  dp2ws.delete_job(job.id)
-					puts "The job has been cleaned from the server"
+					puts "The job has been deleted from the server"
 				end
+			end
+			if !@background
 				puts job.status
 			end
 		rescue Exception => e
-			 
 			Ctxt.logger.debug(e)
 			puts "\nERROR: #{e.message}\n\n"
 			puts help
@@ -145,7 +146,7 @@ class CommandScript < Command
 		}
 		@script.outputs.each {|out|
 			modifier="--o-#{out[:name]}"
-			@output_modifiers[modifier]=output
+			@output_modifiers[modifier]=out
 		}
 	end
 end

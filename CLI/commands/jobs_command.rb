@@ -13,7 +13,6 @@ class JobsCommand < Command
 			jobs.each { |job|
 				str="Job Id:#{job.id}\n" 
 				str+="\t Status: #{job.status}\n" 
-				str+="\t Script: #{job.script}\n\n"
 				puts str
 			}
 			puts "No jobs where found" if jobs.size==0

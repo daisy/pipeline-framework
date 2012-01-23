@@ -132,7 +132,7 @@ class Job
 			msg.seq=xmsg.attr("sequence")
 			job.messages.push(msg)		
 		}
-		job.script=xscript.attr("href") if xscript!=nil
+		job.script=Script.fromXmlElement(xscript) if xscript!=nil
 		job.result=xresult.attr("href") if xresult!=nil
 		job.log=xlog.attr("href") if xlog!=nil
 	
@@ -142,7 +142,7 @@ class Job
 	def to_s
 		s="Job Id: #{@id}\n"
 		s+="\t Status: #{@status}\n"
-		s+="\t Script: #{@script}\n" if @script!=nil
+		s+="\t Script: #{@script.uri}\n" if @script!=nil
 		s+="\t Result: #{@result}\n" if @result!=nil
 		s+="\t Log: #{@log}\n" if @log!=nil
 		s+="\t Messages: #{@messages.size}\n"

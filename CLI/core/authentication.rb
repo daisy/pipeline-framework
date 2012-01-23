@@ -15,7 +15,7 @@ module Authentication
     uristring = ""
     timestamp = Time.now.utc.strftime('%Y-%m-%dT%H:%M:%SZ')
     nonce = generate_nonce
-    params = "key=#{Ctxt.conf[Ctxt.conf.class::CLIENT_KEY]}&time=#{timestamp}&nonce=#{nonce}"
+    params = "id=#{Ctxt.conf[Ctxt.conf.class::CLIENT_KEY]}&time=#{timestamp}&nonce=#{nonce}"
     if uri.index("?") == nil
       uristring = "#{uri}?#{params}"
     else

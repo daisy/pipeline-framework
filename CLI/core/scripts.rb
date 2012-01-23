@@ -10,21 +10,23 @@ require_rel "./core/helpers"
 # ScriptsResultProcessor
 
 class Script
-	attr_accessor :href,:nicename,:desc,:opts,:inputs,:outputs,:local
+	attr_accessor :href,:nicename,:desc,:opts,:inputs,:outputs,:local,:uri
 
-	def initialize(href,nicename,desc)
+	def initialize(href,nicename,desc,uri)
 		@href=href
 		@nicename=nicename
 		@desc=desc
+		@uri=uri
 		@opts=[]
 		@inputs=[]
 		@outputs=[]
 		@local=Ctxt.conf[Ctxt.conf.class::LOCAL]==true
 	end
 	def clone
-		clone=Script.new(@href,@nicename,@desc)
+		clone=Script.new(@href,@nicename,@desc,@uri)
 		clone.opts=@opts
 		clone.inputs=@inputs.clone
+		clone.outputs=@outputs.clone
 		clone.outputs=@outputs.clone
 		return clone
 	end
@@ -32,7 +34,8 @@ class Script
 	def to_s
 		s="Name: #{@nicename}\n"
 		s+="Description: #{@desc}\n"
-		s+="URI: #{@href}\n"
+		s+="HREF: #{@href}\n"
+		s+="script: #{@uri}"
 		s+="\nInputs:\n"
 		@inputs.each{|input| 
 			s+="\t* #{input[:name]}:\n"
@@ -59,7 +62,7 @@ class Script
 	end
 
 	def self.fromXmlElement(node)
-			script=Script.new(node.attr("href"),Helpers.normalise_name(node.at_xpath("./nicename").content),node.at_xpath("./description").content)
+			script=Script.new(node.attr("href"),Helpers.normalise_name(node.at_xpath("./nicename").content),node.at_xpath("./description").content,node.attr("script"))
 			#options	
 			node.xpath("./option").to_a.each {|option|
 				opt={:name=>option.attr("name"),
@@ -125,6 +128,7 @@ end
 
 class ScriptsResultProcessor < ResultProcessor
 	def process(input)
+
 		doc=Nokogiri.XML(input)
 		doc.remove_namespaces!
 		scripts=doc.xpath("//script")
@@ -135,6 +139,29 @@ class ScriptsResultProcessor < ResultProcessor
 		return map
 	end
 end
+
+
+class ScriptResource < Resource
+	def initialize(id)
+		super("/scripts",{:id=>URI.escape(id, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))},ScriptResultProcessor.new)
+	end	
+	def buildUri
+    		uri = "#{Ctxt.conf[Ctxt.conf.class::BASE_URI]}#{@path}/#{@params[:id]}"
+		Ctxt.logger.debug("URI:"+uri)
+		uri
+	end
+end
+
+class ScriptResultProcessor < ResultProcessor
+	def process(input)
+		doc=Nokogiri.XML(input)
+		doc.remove_namespaces!
+		xscript=doc.at_xpath("//script")
+		script=Script.fromXmlElement(xscript)
+		return script
+	end
+end
+
 
 class XmlBuilder
 	NS='http://www.daisy.org/ns/pipeline/data'
@@ -155,7 +182,7 @@ class XmlBuilder
 	def xml
 		@doc=Nokogiri::XML::Document.new
 		@doc << @doc.create_element(E_JOB_REQUEST,{A_XMLNS=>NS})
-		@doc.root << @doc.create_element(E_SCRIPT,{A_HREF=>@script.href})
+		@doc.root << @doc.create_element(E_SCRIPT,{A_HREF=>@script.uri})
 		addInputs
 		addOutputs
 		addOptions

@@ -51,7 +51,13 @@ class Dp2
 	#public methods
 	def scripts
 		if alive?
-			return ScriptsResource.new.getResource
+			map={}
+			scripts =  ScriptsResource.new.getResource
+			scripts.each{|key,val|
+				script=ScriptResource.new(val.uri).getResource
+				map[script.nicename]=script
+			}
+			return map
 		end
 		return nil
 	end

@@ -11,6 +11,9 @@ class DeleteCommand < Command
 			
 		begin
 			@parser.parse(str_args)
+			if @id == nil
+				raise RuntimeError,"Missing id"
+			end
 			res=Dp2.new.delete_job(@id)
 			str="The job wasn't deleted"
 			if res 

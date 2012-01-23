@@ -43,7 +43,7 @@ class Rest
 	    rescue Exception=>e
 		#puts e.message
       		#puts e.backtrace
-		puts "Error: GET #{uri.to_s} failed."
+		#puts "Error: GET #{uri.to_s} failed."
 	       return nil
 	    end
       	##response = Net::HTTP.get_response(authUri)
@@ -111,7 +111,7 @@ class Rest
           return false
       end
     rescue
-      error("Error: DELETE #{uri.to_s} failed.")
+      #error("Error: DELETE #{uri.to_s} failed.")
       return false
     end
 
