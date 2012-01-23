@@ -1,7 +1,10 @@
 package org.daisy.pipeline.webservice;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLDecoder;
 
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
@@ -39,11 +42,15 @@ public class ScriptResource extends AuthenticatedResource {
 		URI scriptUri = null;
 
 		try {
-			scriptUri = new URI((String) getQuery().getFirstValue("scriptid"));
-		} catch (URISyntaxException e) {
+			String tmp = (String) getRequestAttributes().get("scriptid");
+			tmp = URLDecoder.decode(tmp.toString(), "UTF-8");
+			scriptUri=URI.create(tmp);
+		
+		} catch (UnsupportedEncodingException e) {
 			logger.error(e.getMessage());
 			return;
 		}
+		logger.debug("Script with id :"+scriptUri);
 		ScriptRegistry scriptRegistry = ((PipelineWebService) this
 				.getApplication()).getScriptRegistry();
 		XProcScriptService unfilteredScript = scriptRegistry
