@@ -17,10 +17,10 @@ public class DefaultJobExecutionService implements JobExecutionService {
 
 	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory.getLogger(DefaultJobExecutionService.class);
-	
+
 	/** The xproc engine. */
 	private XProcEngine xprocEngine;
-	
+
 	/**
 	 * Sets the x proc engine.
 	 *
@@ -31,8 +31,8 @@ public class DefaultJobExecutionService implements JobExecutionService {
 		this.xprocEngine = xprocEngine;
 	}
 
-	
-	private ExecutorService executor = Executors.newCachedThreadPool(); 
+
+	private final ExecutorService executor = Executors.newCachedThreadPool();
 
 	/**
 	 * Activate (OSGI)
@@ -40,13 +40,14 @@ public class DefaultJobExecutionService implements JobExecutionService {
 	public void activate(){
 		logger.trace("Activating job execution service");
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.daisy.pipeline.job.JobExecutionService#submit(org.daisy.pipeline.job.Job)
 	 */
+	@Override
 	public void submit(final Job job) {
 		executor.submit(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				try{

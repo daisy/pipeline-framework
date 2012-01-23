@@ -7,7 +7,7 @@ import java.util.List;
 public class DatabaseManager {
 
 private static DatabaseManager instance;
-	
+
 	// singleton
 	public static DatabaseManager getInstance() {
 		if (instance == null) {
@@ -15,9 +15,9 @@ private static DatabaseManager instance;
 		}
 		return instance;
 	}
-	
-	private Client theOnlyClient;
-	
+
+	private final Client theOnlyClient;
+
 	private DatabaseManager() {
 		theOnlyClient = new Client();
 		theOnlyClient.setId("clientid");
@@ -33,19 +33,19 @@ private static DatabaseManager instance;
 	public boolean isDuplicate(RequestLogEntry entry) {
 		return false;
 	}
-	
+
 	public void addObject(Object obj) {
 		return;
 	}
-	
+
 	public boolean deleteObject(Object obj) {
 		return true;
 	}
-	
+
 	public void updateObject(String str, Object obj) {
 		return;
 	}
-	
+
 	public List<BasicDatabaseObject> runQuery(String str) {
 		return new ArrayList<BasicDatabaseObject>();
 	}

@@ -5,7 +5,7 @@ package org.daisy.common.messaging;
  * A factory for creating MessageListener objects.
  */
 public interface MessageListenerFactory {
-	
+
 	/**
 	 * Creates a new MessageListener object.
 	 *

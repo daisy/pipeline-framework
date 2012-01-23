@@ -14,6 +14,7 @@ import com.xmlcalabash.runtime.XAtomicStep;
 
 public class HelloProvider implements XProcStepProvider {
 
+	@Override
 	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
 		return new Hello(runtime, step);
 	}
@@ -30,19 +31,23 @@ public class HelloProvider implements XProcStepProvider {
 			super(runtime, step);
 		}
 
+		@Override
 		public void setInput(String port, ReadablePipe pipe) {
 			source = pipe;
 		}
 
+		@Override
 		public void setOutput(String port, WritablePipe pipe) {
 			result = pipe;
 		}
 
+		@Override
 		public void reset() {
 			source.resetReader();
 			result.resetWriter();
 		}
 
+		@Override
 		public void run() throws SaxonApiException {
 			super.run();
 

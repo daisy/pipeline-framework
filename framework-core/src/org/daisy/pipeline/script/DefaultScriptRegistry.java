@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package org.daisy.pipeline.script;
 
@@ -13,18 +13,18 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 
-//TODO check thread safety 
+//TODO check thread safety
 /**
  *  Default implementation for the ScriptRegistry interface.
  */
 public class DefaultScriptRegistry implements ScriptRegistry {
-	
+
 	/** The Constant logger. */
-	private static final Logger logger = LoggerFactory.getLogger(DefaultScriptRegistry.class); 
+	private static final Logger logger = LoggerFactory.getLogger(DefaultScriptRegistry.class);
 
 	/** The descriptors. */
 	private final Map<URI, XProcScriptService> descriptors = Maps.newHashMap();
-	
+
 	/** The parser. */
 	private XProcScriptParser parser;
 
@@ -34,9 +34,9 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	public void activate(){
 		logger.trace("Activating script registry");
 	}
-	
+
 	/**
-	 * Registers a script service loaded from DS 
+	 * Registers a script service loaded from DS
 	 *
 	 * @param script the script
 	 */

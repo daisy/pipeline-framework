@@ -35,9 +35,9 @@ public class StaxXProcPipelineInfoParser {
 	/** The uri resolver. */
 	private URIResolver mUriResolver;
 
-	
 
-	
+
+
 	/**
 	 * Sets the uri resolver.
 	 *
@@ -47,16 +47,16 @@ public class StaxXProcPipelineInfoParser {
 		mUriResolver = uriResolver;
 	}
 
-	
+
 	/**
 	 * Sets the factory.
 	 *
 	 * @param factory the new factory
 	 */
 	public void setFactory(XMLInputFactory factory) {
-		this.mFactory = factory;
+		mFactory = factory;
 	}
-	
+
 	/**
 	 * Parses the the pipeline file
 	 *
@@ -66,15 +66,15 @@ public class StaxXProcPipelineInfoParser {
 	public XProcPipelineInfo parse(URI uri) {
 		return new StatefulParser().parse(uri);
 	}
-	
+
 	/**
 	 *StatefulParser is thread safe.
 	 */
 	private class StatefulParser {
-		
+
 		/** The m ancestors. */
-		private LinkedList<XMLEvent> mAncestors = new LinkedList<XMLEvent>();
-		
+		private final LinkedList<XMLEvent> mAncestors = new LinkedList<XMLEvent>();
+
 		/**
 		 * Parses the info from the xproc pipeline located at the provided uri
 		 *
@@ -115,10 +115,12 @@ public class StaxXProcPipelineInfoParser {
 						+ te.getMessage(), te);
 			} finally {
 				try {
-					if (reader != null)
+					if (reader != null) {
 						reader.close();
-					if (is != null)
+					}
+					if (is != null) {
 						is.close();
+					}
 				} catch (Exception e) {
 					// ignore;
 				}
@@ -170,7 +172,7 @@ public class StaxXProcPipelineInfoParser {
 					if (event.asStartElement().getName()
 							.equals(Elements.P_OPTION)) {
 						parseOption(event, infoBuilder);
-					} else if (this.isFirstChild()
+					} else if (isFirstChild()
 							&& (event.asStartElement().getName()
 									.equals(Elements.P_INPUT)
 							|| event.asStartElement().getName()

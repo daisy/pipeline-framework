@@ -11,7 +11,7 @@ import com.xmlcalabash.model.Serialization;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class SerializationUtils holds a collection of functions to help out with the arduous task of serialising xml files.   
+ * The Class SerializationUtils holds a collection of functions to help out with the arduous task of serialising xml files.
  */
 public class SerializationUtils {
 
@@ -19,7 +19,7 @@ public class SerializationUtils {
 	 * The Enum SerializationOptions.
 	 */
 	private static enum SerializationOptions {
-		
+
 		/** The BYT e_ orde r_ mark. */
 		BYTE_ORDER_MARK(new Function<Serialization, String>() {
 
@@ -27,7 +27,7 @@ public class SerializationUtils {
 			public String apply(Serialization serial) {
 				return Boolean.toString(serial.getByteOrderMark());
 			}
-		}, true), 
+		}, true),
  /** The DOCTYP e_ public. */
  DOCTYPE_PUBLIC(new Function<Serialization, String>() {
 
@@ -35,7 +35,7 @@ public class SerializationUtils {
 			public String apply(Serialization serial) {
 				return serial.getDoctypePublic();
 			}
-		}, false), 
+		}, false),
  /** The DOCTYP e_ system. */
  DOCTYPE_SYSTEM(new Function<Serialization, String>() {
 
@@ -43,7 +43,7 @@ public class SerializationUtils {
 			public String apply(Serialization serial) {
 				return serial.getDoctypeSystem();
 			}
-		}, false), 
+		}, false),
  /** The ENCODING. */
  ENCODING(new Function<Serialization, String>() {
 
@@ -51,7 +51,7 @@ public class SerializationUtils {
 			public String apply(Serialization serial) {
 				return serial.getEncoding();
 			}
-		}, false), 
+		}, false),
  /** The ESCAP e_ ur i_ attributes. */
  ESCAPE_URI_ATTRIBUTES(new Function<Serialization, String>() {
 
@@ -59,7 +59,7 @@ public class SerializationUtils {
 			public String apply(Serialization serial) {
 				return Boolean.toString(serial.getEscapeURIAttributes());
 			}
-		}, true), 
+		}, true),
  /** The INCLUD e_ conten t_ type. */
  INCLUDE_CONTENT_TYPE(new Function<Serialization, String>() {
 
@@ -67,7 +67,7 @@ public class SerializationUtils {
 			public String apply(Serialization serial) {
 				return Boolean.toString(serial.getIncludeContentType());
 			}
-		}, true), 
+		}, true),
  /** The INDENT. */
  INDENT(new Function<Serialization, String>() {
 
@@ -75,7 +75,7 @@ public class SerializationUtils {
 			public String apply(Serialization serial) {
 				return Boolean.toString(serial.getIndent());
 			}
-		}, true), 
+		}, true),
  /** The MEDI a_ type. */
  MEDIA_TYPE(new Function<Serialization, String>() {
 
@@ -83,7 +83,7 @@ public class SerializationUtils {
 			public String apply(Serialization serial) {
 				return serial.getMediaType();
 			}
-		}, false), 
+		}, false),
  /** The METHOD. */
  METHOD(new Function<Serialization, String>() {
 
@@ -91,7 +91,7 @@ public class SerializationUtils {
 			public String apply(Serialization serial) {
 				return serial.getMethod().getLocalName();
 			}
-		}, false), 
+		}, false),
  /** The NORMALIZATIO n_ form. */
  NORMALIZATION_FORM(new Function<Serialization, String>() {
 
@@ -99,7 +99,7 @@ public class SerializationUtils {
 			public String apply(Serialization serial) {
 				return serial.getNormalizationForm();
 			}
-		}, false), 
+		}, false),
  /** The OMI t_ xm l_ declaration. */
  OMIT_XML_DECLARATION(new Function<Serialization, String>() {
 
@@ -107,7 +107,7 @@ public class SerializationUtils {
 			public String apply(Serialization serial) {
 				return Boolean.toString(serial.getOmitXMLDeclaration());
 			}
-		}, true), 
+		}, true),
  /** The STANDALONE. */
  STANDALONE(new Function<Serialization, String>() {
 
@@ -115,7 +115,7 @@ public class SerializationUtils {
 			public String apply(Serialization serial) {
 				return serial.getStandalone();
 			}
-		}, true), 
+		}, true),
  /** The UNDECLAR e_ prefixes. */
  UNDECLARE_PREFIXES(new Function<Serialization, String>() {
 
@@ -127,12 +127,12 @@ public class SerializationUtils {
 
 		/** The is boolean. */
 		private final boolean isBoolean;
-		
+
 		/** The from serialization. */
 		private final Function<Serialization, String> fromSerialization;
 
 		/**
-		 * Instantiates a new serialization options 
+		 * Instantiates a new serialization options
 		 *
 		 * @param fromSerialization the from serialization
 		 * @param isBoolean the is boolean

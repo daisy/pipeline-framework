@@ -17,7 +17,7 @@ public class HelloCall extends ExtensionFunctionCall {
 	@Override
 	public SequenceIterator call(SequenceIterator[] arguments, XPathContext context) throws XPathException {
 		Item[] hello = new Item[1];
-		
+
 		if (arguments.length == 1) {
 			Item item = arguments[0].next();
 			if (item instanceof StringValue) {
@@ -25,11 +25,11 @@ public class HelloCall extends ExtensionFunctionCall {
 			} else {
 				throw new XPathException("Invalid string value"+(item!=null?(": "+item.toString()):""));
 			}
-			
-		} else { 
+
+		} else {
 			throw new XPathException("Incorrect number of params: "+arguments.length);
 		}
-		
+
 		return new ArrayIterator(hello);
 	}
 

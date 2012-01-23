@@ -9,16 +9,17 @@ import org.daisy.pipeline.script.XProcScript;
 
 
 /**
- * DefaultJobManager allows to manage the jobs submitted to the daisy pipeline 2 
+ * DefaultJobManager allows to manage the jobs submitted to the daisy pipeline 2
  */
 public class DefaultJobManager implements JobManager {
-	
+
 	/** The jobs. */
-	private Map<JobId, Job> jobs= new HashMap<JobId, Job>();
+	private final Map<JobId, Job> jobs= new HashMap<JobId, Job>();
 
 	/* (non-Javadoc)
 	 * @see org.daisy.pipeline.job.JobManager#newJob(org.daisy.pipeline.script.XProcScript, org.daisy.common.xproc.XProcInput, org.daisy.pipeline.job.ResourceCollection)
 	 */
+	@Override
 	public Job newJob(XProcScript script, XProcInput input,
 			ResourceCollection context) {
 		Job job = Job.newJob(script, input, context);

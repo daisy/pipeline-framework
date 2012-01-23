@@ -26,54 +26,54 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class ClientsResource extends AdminResource {
-	
+
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(XmlFormatter.class.getName());
-	
-	@Override  
-    public void doInit() { 
+
+	@Override
+    public void doInit() {
 		super.doInit();
 	}
-  
+
     /**
      * Gets the resource.
      *
      * @return the resource
      */
     @Get("xml")
-    public Representation getResource() {  
+    public Representation getResource() {
     	if (!isAuthorized()) {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
     	}
-    	
+
     	List<BasicDatabaseObject> objs = DatabaseManager.getInstance().runQuery("SELECT client FROM Client client");
-		
+
     	List<Client> clients = new ArrayList<Client>();
 		for (BasicDatabaseObject obj : objs) {
 			clients.add((Client)obj);
 		}
-    	
+
     	setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.clientsToXml(clients));
 		return dom;
     }
-    
+
     @Post
     public Representation createResource(Representation representation) {
     	if (!isAuthorized()) {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
     	}
-    	    	
+
         if (representation == null) {
         	// POST request with no entity.
             setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
             return null;
         }
-        
+
         Document doc = null;
-        
+
         String s;
 		try {
 			s = representation.getText();
@@ -95,32 +95,32 @@ public class ClientsResource extends AdminResource {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return null;
 		}
-           
+
 		boolean isValid = Validator.validateXml(doc, Validator.clientSchema);
-			
+
 		if (!isValid) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return null;
 		}
-		
+
 		Element root = doc.getDocumentElement();
 		String newid = root.getAttribute("id");
 		String newcontact = root.getAttribute("contact");
 		String newsecret = root.getAttribute("secret");
 		String newrole = root.getAttribute("role");
-		
+
 		Client newClient = new Client();
 		newClient.setContactInfo(newcontact);
 		newClient.setId(newid);
 		newClient.setRole(Client.Role.valueOf(newrole));
 		newClient.setSecret(newsecret);
-		
+
 		if (!DatabaseManager.getInstance().addClient(newClient)) {
 			// the client ID was probably not unique
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return null;
 		}
-		
+
 		setStatus(Status.SUCCESS_CREATED);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.clientToXml(newClient));
 		return dom;

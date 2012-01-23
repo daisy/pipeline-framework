@@ -14,14 +14,14 @@ package org.daisy.common.messaging;
  * @see MessageEvent
  */
 public interface MessageListener {
-	
+
 	/**
 	 * Posts a trace.
 	 *
 	 * @param msg the msg
 	 */
 	public void trace(String msg);
-	
+
 	/**
 	 * Posts a trace.
 	 *
@@ -29,14 +29,14 @@ public interface MessageListener {
 	 * @param throwable the throwable
 	 */
 	public void trace(String msg,Throwable throwable);
-	
+
 	/**
 	 * Posts a debug.
 	 *
 	 * @param msg the msg
 	 */
 	public void debug(String msg);
-	
+
 	/**
 	 * Posts a debug.
 	 *
@@ -44,14 +44,14 @@ public interface MessageListener {
 	 * @param throwable the throwable
 	 */
 	public void debug(String msg,Throwable throwable);
-	
+
 	/**
 	 * Posts a info.
 	 *
 	 * @param msg the msg
 	 */
 	public void info(String msg);
-	
+
 	/**
 	 * Posts a info.
 	 *
@@ -59,14 +59,14 @@ public interface MessageListener {
 	 * @param throwable the throwable
 	 */
 	public void info(String msg,Throwable throwable);
-	
+
 	/**
 	 * Posts a warn.
 	 *
 	 * @param msg the msg
 	 */
 	public void warn(String msg);
-	
+
 	/**
 	 * Posts a warn.
 	 *
@@ -74,14 +74,14 @@ public interface MessageListener {
 	 * @param throwable the throwable
 	 */
 	public void warn(String msg,Throwable throwable);
-	
+
 	/**
 	 * Posts an error.
 	 *
 	 * @param msg the msg
 	 */
 	public void error(String msg);
-	
+
 	/**
 	 * Posts an error.
 	 *
@@ -89,7 +89,7 @@ public interface MessageListener {
 	 * @param throwable the throwable
 	 */
 	public void error(String msg,Throwable throwable);
-	
+
 	/**
 	 * Gets the accessor.
 	 *

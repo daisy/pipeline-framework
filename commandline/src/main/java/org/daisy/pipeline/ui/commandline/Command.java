@@ -6,7 +6,7 @@ package org.daisy.pipeline.ui.commandline;
  * Contract for CLI commands.
  */
 public interface Command {
-	
+
 	/**
 	 * Executes the command.
 	 *

@@ -19,13 +19,13 @@ import org.w3c.dom.ls.LSResourceResolver;
 public class XmlResourceResolver implements LSResourceResolver {
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(XmlResourceResolver.class.getName());
-	
+
 	@Override
 	public LSInput resolveResource(String type, String namespaceURI, String publicId, String systemId, String baseURI) {
-		
+
 		// schema are in the resources directory
 		URL resourceUrl = XmlResourceResolver.class.getResource("resources/" + systemId);
-		
+
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db;
 		try {

@@ -6,13 +6,13 @@ import org.daisy.pipeline.script.XProcScriptService;
 
 
 /**
- * CommandListScripts lists the available scripts. 
+ * CommandListScripts lists the available scripts.
  */
 public final class CommandListScripts implements Command {
 
 	/** The script registry. */
 	private final ScriptRegistry scriptRegistry;
-	
+
 	/**
 	 * New instance.
 	 *
@@ -22,7 +22,7 @@ public final class CommandListScripts implements Command {
 	public static CommandListScripts newInstance(ScriptRegistry scriptRegistry){
 		return new CommandListScripts(scriptRegistry);
 	}
-	
+
 	/**
 	 * Instantiates a new command list scripts.
 	 *

@@ -8,13 +8,13 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Job manager + executing service 
+ * Job manager + executing service
  */
 public class ExecutingJobManager extends DefaultJobManager {
 
 	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory.getLogger(ExecutingJobManager.class);
-	
+
 	/** The executor. */
 	private JobExecutionService executor = null;
 
@@ -24,10 +24,11 @@ public class ExecutingJobManager extends DefaultJobManager {
 	public void activate(){
 		logger.trace("Activating job manager");
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.daisy.pipeline.job.DefaultJobManager#newJob(org.daisy.pipeline.script.XProcScript, org.daisy.common.xproc.XProcInput, org.daisy.pipeline.job.ResourceCollection)
 	 */
+	@Override
 	public Job newJob(XProcScript script, XProcInput input,
 			ResourceCollection context) {
 		if (executor == null) {

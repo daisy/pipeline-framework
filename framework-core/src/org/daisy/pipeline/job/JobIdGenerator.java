@@ -3,16 +3,16 @@ package org.daisy.pipeline.job;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface JobIdGenerator . 
+ * The Interface JobIdGenerator .
  */
 public interface JobIdGenerator {
-	
+
 	/**
 	 * Generate id.
 	 * @return the job id
 	 */
 	public JobId generateId();
-	
+
 	/**
 	 * Generate id from string.
 	 *

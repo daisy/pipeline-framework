@@ -21,42 +21,44 @@ import org.restlet.resource.Get;
 public class ResultResource extends AuthenticatedResource {
 	/** The job. */
 	private Job job;
-	
+
 	/* (non-Javadoc)
 	 * @see org.restlet.resource.Resource#doInit()
 	 */
-	@Override  
-    public void doInit() {  
+	@Override
+    public void doInit() {
 		super.doInit();
-		if (!isAuthenticated()) return;
-		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
-        String idParam = (String) getRequestAttributes().get("id");  
+		if (!isAuthenticated()) {
+			return;
+		}
+		JobManager jobMan = ((PipelineWebService)getApplication()).getJobManager();
+        String idParam = (String) getRequestAttributes().get("id");
         JobId id = JobIdFactory.newIdFromString(idParam);
-        job = jobMan.getJob(id); 
-    }  
-  
+        job = jobMan.getJob(id);
+    }
+
 	/**
 	 * Gets the resource.
 	 *
 	 * @return the resource
 	 */
 	@Get
-    public Representation getResource() {  
+    public Representation getResource() {
 		if (!isAuthenticated()) {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
     	}
-    	
+
     	if (job == null) {
     		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return null;
     	}
-		
+
 		if (!job.getStatus().equals(Job.Status.DONE)) {
     		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
     		return null;
     	}
-    	
+
 		JobResult result = job.getResult();
 		URI zip = result.getZip();
 		// TODO check for errors instead of looking at null-ness of zip
@@ -65,7 +67,7 @@ public class ResultResource extends AuthenticatedResource {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
     		return null;
 		}
-		
+
 		File zipFile = new File(zip);
 		Representation rep = new FileRepresentation(zipFile,MediaType.APPLICATION_ZIP);
 		Disposition disposition = new Disposition();
@@ -73,5 +75,5 @@ public class ResultResource extends AuthenticatedResource {
 		disposition.setType(Disposition.TYPE_ATTACHMENT);
 		rep.setDisposition(disposition);
 		return rep;
-    }  
+    }
 }

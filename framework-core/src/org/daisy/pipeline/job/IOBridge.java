@@ -23,40 +23,40 @@ import org.daisy.pipeline.script.XProcScript;
  * The Class IOBridge handles some io operations relevant to the execution of pipelines.
  */
 public class IOBridge {
-	
+
 	/** The Constant ORG_DAISY_PIPELINE_IOBASE. */
 	public static final String ORG_DAISY_PIPELINE_IOBASE = "org.daisy.pipeline.iobase";
-	
-	
+
+
 	public static final String ORG_DAISY_PIPELINE_LOCAL = "org.daisy.pipeline.ws.local";
 	/** The Constant ANY_FILE_URI. */
 	public static final String ANY_FILE_URI = "anyFileURI";
-	
+
 	/** The Constant ANY_DIR_URI. */
 	public static final String ANY_DIR_URI = "anyDirURI";
-	
+
 	/** The OPTION s_ t o_ translate. */
 	static HashSet<String> OPTIONS_TO_TRANSLATE = new HashSet<String>();
-	
+
 	/** The m generated outputs. */
 	HashSet<String> mGeneratedOutputs = new HashSet<String>();
 	static {
 		OPTIONS_TO_TRANSLATE.add(ANY_DIR_URI);
 		OPTIONS_TO_TRANSLATE.add(ANY_FILE_URI);
 	}
-	
+
 	/** The m context dir. */
-	private File mContextDir;
-	
+	private final File mContextDir;
+
 	/** The m output dir. */
-	private File mOutputDir;
-	
+	private final File mOutputDir;
+
 	/** The m base dir. */
-	private File mBaseDir;
-	
+	private final File mBaseDir;
+
 	/** The m id. */
-	private JobId mId;
-	
+	private final JobId mId;
+
 	/**
 	 * Instantiates a new iO bridge to be used by the job having the id provided.
 	 *
@@ -65,18 +65,18 @@ public class IOBridge {
 	 */
 	public IOBridge(JobId id) throws IOException {
 		mId=id;
-		
+
 		if (System.getProperty(ORG_DAISY_PIPELINE_IOBASE) == null) {
 			throw new IllegalStateException("The property "
 					+ ORG_DAISY_PIPELINE_IOBASE + " is not set");
 		}
-				
+
 		File ioBase = new File(
 				System.getProperty(ORG_DAISY_PIPELINE_IOBASE));
 		ioBase.mkdir();
 		mBaseDir = new File(ioBase, id.toString());
 		mBaseDir.mkdirs();
-		
+
 		mContextDir = new File(mBaseDir + File.separator
 				+ IOConstants.IO_DATA_SUBDIR);
 		if (!mContextDir.exists() && !mContextDir.mkdirs()) {
@@ -91,11 +91,11 @@ public class IOBridge {
 					+ mOutputDir.getAbsolutePath());
 		}
 		;
-		
+
 	}
 
 	/**
-	 * Resolves the uris defined in the XProcInput input object to the actual files in the job context. 
+	 * Resolves the uris defined in the XProcInput input object to the actual files in the job context.
 	 *
 	 * @param script the script
 	 * @param input the input
@@ -107,11 +107,11 @@ public class IOBridge {
 			ResourceCollection context) throws IOException {
 		XProcInput.Builder resolvedInput = new XProcInput.Builder();
 		if (context != null) {
-			this.storeResources(context);
+			storeResources(context);
 		}
-		this.resolveInputPorts(script, input, resolvedInput);
-		this.resolveOptions(script, input, resolvedInput);
-		this.resolveParams(script, input, resolvedInput);
+		resolveInputPorts(script, input, resolvedInput);
+		resolveOptions(script, input, resolvedInput);
+		resolveParams(script, input, resolvedInput);
 		return resolvedInput.build();
 	}
 
@@ -136,7 +136,7 @@ public class IOBridge {
 	}
 
 	/**
-	 * Resolve options, input/output options without value will be automaticaly assigned. 
+	 * Resolve options, input/output options without value will be automaticaly assigned.
 	 *
 	 * @param script the script
 	 * @param input the input
@@ -154,7 +154,7 @@ public class IOBridge {
 						.toURI().toString() : mOutputDir.toURI().toString();
 
 				String strUri = input.getOptions().get(optionInfo.getName());
-				
+
 				if (script.getOptionMetadata(optionInfo.getName())
 						.getDirection() == Direction.OUTPUT) {
 					if (strUri == null || strUri.isEmpty()) {
@@ -186,10 +186,11 @@ public class IOBridge {
 				}
 				URI uri = null;
 				//absolute means  mapping
-				if(relUri.getScheme()==null)
-						uri=IOHelper.map(subDir, relUri.toString());
-				else
+				if(relUri.getScheme()==null) {
+					uri=IOHelper.map(subDir, relUri.toString());
+				} else {
 					uri= relUri;
+				}
 				resolvedInput.withOption(optionInfo.getName(), uri.toString());
 			} else {
 				resolvedInput.withOption(optionInfo.getName(), input
@@ -257,16 +258,17 @@ public class IOBridge {
 			}
 		}
 	}
-	
+
 	/**
 	 * Zips outputs of the execution.
 	 *
 	 * @return the uRI
 	 */
 	public URI zipOutput(){
-		if (isLocal())
-			return this.mOutputDir.toURI();
-		List<File> files = IOHelper.treeFileList(this.mOutputDir);
+		if (isLocal()) {
+			return mOutputDir.toURI();
+		}
+		List<File> files = IOHelper.treeFileList(mOutputDir);
 		try {
 			URI zipFile = IOHelper.zipFromEntries(files,new File(mBaseDir,"results.zip"),mOutputDir.getAbsolutePath()+File.separator);
 			return zipFile;
@@ -281,10 +283,10 @@ public class IOBridge {
 	 * @return the log file
 	 */
 	public URI getLogFile() {
-		return new File(this.mBaseDir,mId.toString()+".log").toURI();
+		return new File(mBaseDir,mId.toString()+".log").toURI();
 	}
 
 	private boolean isLocal(){
-		return System.getProperty(ORG_DAISY_PIPELINE_LOCAL)!=null&&System.getProperty(ORG_DAISY_PIPELINE_LOCAL).equalsIgnoreCase("true");  
+		return System.getProperty(ORG_DAISY_PIPELINE_LOCAL)!=null&&System.getProperty(ORG_DAISY_PIPELINE_LOCAL).equalsIgnoreCase("true");
 	}
 }

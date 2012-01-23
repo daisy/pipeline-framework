@@ -25,7 +25,7 @@ public class IOHelperTest {
 		Assert.assertEquals(base+uri, res.toString());
 
 	}
-	
+
 	@Test
 	public void testFolderDefault(){
 		IOHelper help =  new IOHelper();
@@ -34,7 +34,7 @@ public class IOHelperTest {
 		Assert.assertEquals(base+"/"+"output_1/", folder1.toString());
 		Assert.assertEquals(base+"/"+"output_2/", folder2.toString());
 	}
-	
+
 	@Test
 	public void testFolderCustom(){
 		IOHelper help =  new IOHelper();
@@ -44,7 +44,7 @@ public class IOHelperTest {
 		Assert.assertEquals(base+"/"+"my/folder_1/", folder1.toString());
 		Assert.assertEquals(base+"/"+"my/folder_2/", folder2.toString());
 	}
-	
+
 	@Test
 	public void testFileDefault(){
 		IOHelper help =  new IOHelper();
@@ -69,11 +69,11 @@ public class IOHelperTest {
 		HashSet<File> files=new HashSet<File>();
 		files.addAll(IOHelper.treeFileList(dir));
 		Assert.assertEquals(3,files.size());
-		
+
 		Assert.assertTrue(files.contains(new File(dir.getAbsolutePath()+"/1.txt")));
 		Assert.assertTrue(files.contains(new File(dir.getAbsolutePath()+"/folder/2.txt")));
 		Assert.assertTrue(files.contains(new File(dir.getAbsolutePath()+"/folder/3.txt")));
-		
+
 	}
 	@Test
 	public void testZipOutput() throws URISyntaxException, IOException{
@@ -86,16 +86,16 @@ public class IOHelperTest {
 		ZipFile zipFile=new ZipFile(ziptmp);
 		Assert.assertEquals(fileOut, ziptmp.toURI());
 		Assert.assertEquals(3, zipFile.size());
-		
-		
+
+
 		Enumeration entries=zipFile.entries();
 		HashSet<String> set = new HashSet<String>();
 		while(entries.hasMoreElements()){
 			ZipEntry entry=(ZipEntry)entries.nextElement();
-			
+
 			set.add(entry.getName());
 		}
-		
+
 		Assert.assertTrue(set.contains("1.txt"));
 		Assert.assertTrue(set.contains("folder/2.txt"));
 		Assert.assertTrue(set.contains("folder/3.txt"));

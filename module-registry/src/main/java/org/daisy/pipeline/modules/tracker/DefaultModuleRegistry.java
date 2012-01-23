@@ -31,22 +31,22 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 			if (url != null) {
 				logger.trace("tracking '{}' <{}>",
 						bundle.getSymbolicName(), url);
-				
+
 				Module module;
 				try {
 					module = new OSGIModuleBuilder().withBundle(bundle).withCatalog(mParser.parse(url.toURI())).build();
 				} catch (URISyntaxException e) {
 					logger.error("Error getting catalog uri from "+url+"",e);
 					throw new RuntimeException("Error getting catalog uri",e);
-					
+
 				}
-				
+
 				// System.out.println(module.getName());
 				addModule(module);
 				result = bundle;
 
 			}
-			
+
 			// Finally
 			return result;
 		}
@@ -70,9 +70,9 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DefaultModuleRegistry.class);
 
-	private HashMap<URI, Module> componentsMap = new HashMap<URI, Module>();
-	private HashMap<String, Module> entityMap = new HashMap<String, Module>();
-	private HashSet<Module> modules = new HashSet<Module>();
+	private final HashMap<URI, Module> componentsMap = new HashMap<URI, Module>();
+	private final HashMap<String, Module> entityMap = new HashMap<String, Module>();
+	private final HashSet<Module> modules = new HashSet<Module>();
 	private XmlCatalogParser mParser;
 
 	private BundleTracker tracker;
@@ -100,17 +100,20 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	}
 
 	public void setParser(XmlCatalogParser parser) {
-		this.mParser = parser;
+		mParser = parser;
 	}
 
+	@Override
 	public Iterator<Module> iterator() {
 		return modules.iterator();
 	}
 
+	@Override
 	public Module getModuleByComponent(URI uri) {
 		return componentsMap.get(uri);
 	}
 
+	@Override
 	public Module resolveDependency(URI component, Module source) {
 		// TODO check cache, otherwise delegate to resolver
 		return null;
@@ -145,5 +148,5 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 		return entityMap.keySet();
 	}
 
-	
+
 }

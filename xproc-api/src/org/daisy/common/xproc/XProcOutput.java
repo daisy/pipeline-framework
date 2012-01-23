@@ -15,15 +15,15 @@ import com.google.common.collect.Maps;
  * The Class XProcOutput gives access to the result documents generated after the pipeline exection, this class is immutable.
  */
 public class XProcOutput {
-	
+
 	/**
 	 * The Class Builder.
 	 */
 	public static final class Builder {
-		
+
 		/** The info. */
 		private final XProcPipelineInfo info;
-		
+
 		/** The outputs. */
 		private final HashMap<String, Provider<Result>> outputs = Maps
 				.newHashMap();
@@ -32,7 +32,7 @@ public class XProcOutput {
 		 * Instantiates a new builder.
 		 */
 		public Builder() {
-			this.info = null;
+			info = null;
 		}
 
 		/**
@@ -58,7 +58,7 @@ public class XProcOutput {
 		}
 
 		/**
-		 * Builds the xproc output object 
+		 * Builds the xproc output object
 		 *
 		 * @return the xproc output
 		 */

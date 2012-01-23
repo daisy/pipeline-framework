@@ -7,7 +7,6 @@ import javax.xml.transform.URIResolver;
 import org.daisy.common.messaging.MessageListenerFactory;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcResult;
@@ -18,7 +17,7 @@ import org.xml.sax.EntityResolver;
 
 //TODO check thread safety
 /**
- * Calabash xproc engine wrapper 
+ * Calabash xproc engine wrapper
  */
 public final class CalabashXProcEngine implements XProcEngine {
 
@@ -29,23 +28,23 @@ public final class CalabashXProcEngine implements XProcEngine {
 
 	/** The uri resolver. */
 	private URIResolver uriResolver = null;
-	
+
 	/** The entity resolver. */
 	private EntityResolver entityResolver = null;
-	
+
 	/** The config factory. */
 	private XProcConfigurationFactory configFactory = null;
-	
+
 	/** The message listener factory. */
 	private MessageListenerFactory messageListenerFactory;
 
-	
+
 
 	/**
 	 * Instantiates a new calabash x proc engine.
 	 */
 	public CalabashXProcEngine() {
-		
+
 	}
 
 	/**
@@ -64,7 +63,7 @@ public final class CalabashXProcEngine implements XProcEngine {
 			throw new IllegalStateException(
 					"Calabash configuration factory unavailable");
 		}
-	
+
 		return new CalabashXProcPipeline(uri, configFactory, uriResolver, entityResolver,messageListenerFactory);
 	}
 
@@ -110,14 +109,14 @@ public final class CalabashXProcEngine implements XProcEngine {
 	public void setUriResolver(URIResolver uriResolver) {
 		this.uriResolver = uriResolver;
 	}
-	
+
 	/**
-	 * Sets the message listener factory used to create new message listeners to catch and process the messages thrown while executing pipelines 
+	 * Sets the message listener factory used to create new message listeners to catch and process the messages thrown while executing pipelines
 	 *
 	 * @param factory the new message listener factory
 	 */
 	public void setMessageListenerFactory(MessageListenerFactory factory){
-		this.messageListenerFactory=factory;
+		messageListenerFactory=factory;
 	}
 
 }

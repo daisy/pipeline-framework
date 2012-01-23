@@ -10,7 +10,7 @@ import org.daisy.common.base.Provider;
  * The Interface ResourceCollection defines a set of resources and methods to access them.
  */
 public interface ResourceCollection {
-	
+
 	/**
 	 * Gets the resources.
 	 *

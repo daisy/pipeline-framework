@@ -51,20 +51,22 @@ public class DynamicXProcConfiguration extends XProcConfiguration {
 		this.stepRegistry = stepRegistry;
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see com.xmlcalabash.core.XProcConfiguration#isStepAvailable(net.sf.saxon.s9api.QName)
 	 */
+	@Override
 	public boolean isStepAvailable(QName type) {
-		return stepRegistry.hasStep(type) || super.isStepAvailable(type); 
+		return stepRegistry.hasStep(type) || super.isStepAvailable(type);
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see com.xmlcalabash.core.XProcConfiguration#newStep(com.xmlcalabash.core.XProcRuntime, com.xmlcalabash.runtime.XAtomicStep)
 	 */
+	@Override
 	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-		
+
 		if (step == null) {
 			return null;
 		} else {
