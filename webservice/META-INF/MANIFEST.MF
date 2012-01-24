@@ -33,7 +33,9 @@ Import-Package: javax.crypto,
  org.slf4j,
  org.w3c.dom,
  org.w3c.dom.ls,
- org.xml.sax
+ org.xml.sax,
+ org.osgi.framework,
+ org.osgi.framework.launch
 Require-Bundle: org.daisy.pipeline.framework,
  org.daisy.common-utils
 Service-Component: OSGI-INF/webservice.xml

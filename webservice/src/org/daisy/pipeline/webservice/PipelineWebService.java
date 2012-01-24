@@ -1,9 +1,15 @@
 package org.daisy.pipeline.webservice;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Random;
 
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.script.ScriptRegistry;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.launch.Framework;
 import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Restlet;
@@ -18,6 +24,8 @@ import org.slf4j.LoggerFactory;
  */
 public class PipelineWebService extends Application {
 	
+	
+
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(PipelineWebService.class.getName());
 	
@@ -29,12 +37,16 @@ public class PipelineWebService extends Application {
 	public static final String AUTHENTICATION_PROPERTY = "org.daisy.pipeline.ws.authentication";
 	public static final String LOCAL_MODE = "org.daisy.pipeline.ws.local";
 	
+	public static final String KEY_FILE_NAME="dp2key.txt";
+	private static final String JAVA_IO_TMPDIR = "java.io.tmpdir";
+	
 	public static final String SCRIPTS_ROUTE = "/scripts";
 	public static final String SCRIPT_ROUTE = "/scripts/{scriptid}"; 
 	public static final String JOBS_ROUTE = "/jobs";
 	public static final String JOB_ROUTE = "/jobs/{id}";
 	public static final String LOG_ROUTE = "/jobs/{id}/log";
 	public static final String RESULT_ROUTE = "/jobs/{id}/result";
+	public static final String HALT_ROUTE = "/admin/halt/{key}";
 	public static final String CLIENTS_ROUTE = "/admin/clients";
 	public static final String CLIENT_ROUTE = "/admin/clients/{id}";
 	
@@ -55,6 +67,9 @@ public class PipelineWebService extends Application {
 	/** The script registry. */
 	private ScriptRegistry scriptRegistry;
 	
+	private long shutDownKey=0L;
+
+	private BundleContext bundleCtxt; 
 	/* (non-Javadoc)
 	 * @see org.restlet.Application#createInboundRoot()
 	 */
@@ -68,9 +83,11 @@ public class PipelineWebService extends Application {
 		router.attach(LOG_ROUTE, LogResource.class);
 		router.attach(RESULT_ROUTE, ResultResource.class);
 		
+		
 		// init the administrative paths
 		router.attach(CLIENTS_ROUTE, ClientsResource.class);
 		router.attach(CLIENT_ROUTE, ClientResource.class);
+		router.attach(HALT_ROUTE, HaltResource.class);
 		
 		return router;
 	}
@@ -78,7 +95,8 @@ public class PipelineWebService extends Application {
 	/**
 	 * Inits the WS.
 	 */
-	public void init() {
+	public void init(BundleContext ctxt) {
+		bundleCtxt=ctxt;
 		readOptions();
 		logger.info(String.format("Starting webservice on port %d",
 				this.portNumber));
@@ -87,16 +105,40 @@ public class PipelineWebService extends Application {
 		component.getDefaultHost().attach(path, this);
 		try {
 			component.start();
+			this.generateStopKey();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
+	private void generateStopKey() throws IOException {
+		shutDownKey = new Random().nextLong();
+		File fout = new File(System.getProperty(JAVA_IO_TMPDIR)+File.separator+KEY_FILE_NAME);
+		FileOutputStream fos= new FileOutputStream(fout);
+		fos.write((shutDownKey+"").getBytes());
+		fos.close();
+		logger.info("Shutdown key stored to: "+System.getProperty(JAVA_IO_TMPDIR)+File.separator+KEY_FILE_NAME);
+	}
+	
+	public boolean shutDown(long key) throws BundleException{
+		if(key==shutDownKey){
+			//framework bundle id == 0
+			((Framework)bundleCtxt.getBundle(0)).stop();
+			return true;
+		}
+		return false;
+		
+	}
+
 	/**
 	 * Close.
+	 * @throws Exception 
+	 * @throws Throwable 
 	 */
-	public void close() {
+	public void close() throws Exception {
 		logger.info("Webservice stopped.");
+		this.stop();
+		
 	}
 
 
