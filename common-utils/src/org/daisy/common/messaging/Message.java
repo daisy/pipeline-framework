@@ -2,8 +2,6 @@ package org.daisy.common.messaging;
 
 import java.util.Date;
 
-import org.daisy.common.messaging.Message.Builder;
-
 /**
  * Simple yet useful message definition
  */
@@ -37,10 +35,10 @@ public class Message {
 	/** The m time stamp. */
 	final Date mTimeStamp;
 
-	private int mSequence;
+	private final int mSequence;
 	/**
 	 * Instantiates a new message object
-	 * 
+	 *
 	 * @param level
 	 *            the level
 	 * @param msg
@@ -58,7 +56,7 @@ public class Message {
 
 	/**
 	 * Gets the throwable in case was defined in the constructor or null otherwise.
-	 * 
+	 *
 	 * @return the throwable
 	 */
 	public Throwable getThrowable() {
@@ -66,8 +64,8 @@ public class Message {
 	}
 
 	/**
-	 * Gets the msg 
-	 * 
+	 * Gets the msg
+	 *
 	 * @return the msg
 	 */
 	public String getMsg() {
@@ -76,7 +74,7 @@ public class Message {
 
 	/**
 	 * Gets the level.
-	 * 
+	 *
 	 * @return the level
 	 */
 	public Level getLevel() {
@@ -85,7 +83,7 @@ public class Message {
 
 	/**
 	 * Gets the time stamp.
-	 * 
+	 *
 	 * @return the time stamp
 	 */
 	public Date getTimeStamp() {
@@ -114,7 +112,7 @@ public class Message {
 		int mSequence;
 		/**
 		 * With message.
-		 * 
+		 *
 		 * @param message
 		 *            the message
 		 * @return the builder
@@ -126,7 +124,7 @@ public class Message {
 
 		/**
 		 * With level.
-		 * 
+		 *
 		 * @param level
 		 *            the level
 		 * @return the builder
@@ -138,7 +136,7 @@ public class Message {
 
 		/**
 		 * With throwable.
-		 * 
+		 *
 		 * @param throwable
 		 *            the throwable
 		 * @return the builder
@@ -150,7 +148,7 @@ public class Message {
 
 		/**
 		 * Builds the message based on the objects provided using the "with" methods.
-		 * 
+		 *
 		 * @return the message
 		 */
 		public Message build() {

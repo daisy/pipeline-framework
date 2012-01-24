@@ -11,7 +11,6 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
-import net.sf.saxon.trans.XPathException;
 
 import org.daisy.pipeline.xpath.XPathFunctionRegistry;
 import org.slf4j.Logger;
@@ -24,7 +23,8 @@ import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.runtime.XAtomicStep;
 
 /**
- * Mainly thought to be used throught OSGI this class creates configuration objects used with the calabash engine wrapper.
+ * Mainly thought to be used throught OSGI this class creates configuration
+ * objects used with the calabash engine wrapper.
  */
 public class DynamicXProcConfigurationFactory implements
 		XProcConfigurationFactory, XProcStepRegistry {
@@ -37,49 +37,65 @@ public class DynamicXProcConfigurationFactory implements
 			.getLogger(DynamicXProcConfigurationFactory.class);
 
 	/** The step providers. */
-	private Map<QName, XProcStepProvider> stepProviders = new HashMap<QName, XProcStepProvider>();
+	private final Map<QName, XProcStepProvider> stepProviders = new HashMap<QName, XProcStepProvider>();
 
 	// private FunctionLibraryList mFunctionLibrary=new FunctionLibraryList();
 	private XPathFunctionRegistry mXPathRegistry = null;
 
-	/* (non-Javadoc)
-	 * @see org.daisy.common.xproc.calabash.XProcConfigurationFactory#newConfiguration()
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.daisy.common.xproc.calabash.XProcConfigurationFactory#newConfiguration
+	 * ()
 	 */
+	@Override
 	public XProcConfiguration newConfiguration() {
 		XProcConfiguration config = new DynamicXProcConfiguration(this);
 		loadConfigurationFile(config);
-		this.registerExtensionFunctions(config);
+		registerExtensionFunctions(config);
 		// config.getProcessor().getUnderlyingConfiguration().addExtensionBinders(mFunctionLibrary);
 
 		return config;
 	}
-	
+
 	/**
 	 * Activate (OSGI)
 	 */
-	public void activate(){
+	public void activate() {
 		logger.trace("Activating XProc Configuration Factory");
 	}
 
-	/* (non-Javadoc)
-	 * @see org.daisy.common.xproc.calabash.XProcConfigurationFactory#newConfiguration(boolean)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.daisy.common.xproc.calabash.XProcConfigurationFactory#newConfiguration
+	 * (boolean)
 	 */
+	@Override
 	public XProcConfiguration newConfiguration(boolean schemaAware) {
-		XProcConfiguration config = new DynamicXProcConfiguration(schemaAware, this);
+		XProcConfiguration config = new DynamicXProcConfiguration(schemaAware,
+				this);
 		loadConfigurationFile(config);
-		this.registerExtensionFunctions(config);
+		registerExtensionFunctions(config);
 		// config.getProcessor().getUnderlyingConfiguration().addExtensionBinders(mFunctionLibrary);
 		return config;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.daisy.common.xproc.calabash.XProcConfigurationFactory#newConfiguration(net.sf.saxon.s9api.Processor)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.daisy.common.xproc.calabash.XProcConfigurationFactory#newConfiguration
+	 * (net.sf.saxon.s9api.Processor)
 	 */
+	@Override
 	public XProcConfiguration newConfiguration(Processor processor) {
 		XProcConfiguration config = new DynamicXProcConfiguration(processor,
 				this);
 		loadConfigurationFile(config);
-		this.registerExtensionFunctions(config);
+		registerExtensionFunctions(config);
 		// config.getProcessor().getUnderlyingConfiguration().addExtensionBinders(mFunctionLibrary);
 		return config;
 	}
@@ -87,8 +103,10 @@ public class DynamicXProcConfigurationFactory implements
 	/**
 	 * Adds the step.
 	 *
-	 * @param stepProvider the step provider
-	 * @param properties the properties
+	 * @param stepProvider
+	 *            the step provider
+	 * @param properties
+	 *            the properties
 	 */
 	public void addStep(XProcStepProvider stepProvider, Map<?, ?> properties) {
 		QName type = QName.fromClarkName((String) properties.get("type"));
@@ -99,8 +117,10 @@ public class DynamicXProcConfigurationFactory implements
 	/**
 	 * Removes the step from the registry
 	 *
-	 * @param stepProvider the step provider
-	 * @param properties the properties
+	 * @param stepProvider
+	 *            the step provider
+	 * @param properties
+	 *            the properties
 	 */
 	public void removeStep(XProcStepProvider stepProvider, Map<?, ?> properties) {
 		QName type = QName.fromClarkName((String) properties.get("type"));
@@ -108,16 +128,27 @@ public class DynamicXProcConfigurationFactory implements
 		stepProviders.remove(type);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.daisy.common.xproc.calabash.XProcStepRegistry#hasStep(net.sf.saxon.s9api.QName)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.daisy.common.xproc.calabash.XProcStepRegistry#hasStep(net.sf.saxon
+	 * .s9api.QName)
 	 */
+	@Override
 	public boolean hasStep(QName type) {
 		return stepProviders.containsKey(type);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.daisy.common.xproc.calabash.XProcStepRegistry#newStep(net.sf.saxon.s9api.QName, com.xmlcalabash.core.XProcRuntime, com.xmlcalabash.runtime.XAtomicStep)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.daisy.common.xproc.calabash.XProcStepRegistry#newStep(net.sf.saxon
+	 * .s9api.QName, com.xmlcalabash.core.XProcRuntime,
+	 * com.xmlcalabash.runtime.XAtomicStep)
 	 */
+	@Override
 	public XProcStep newStep(QName type, XProcRuntime runtime, XAtomicStep step) {
 		XProcStepProvider stepProvider = stepProviders.get(type);
 		return (stepProvider != null) ? stepProvider.newStep(runtime, step)
@@ -125,9 +156,10 @@ public class DynamicXProcConfigurationFactory implements
 	}
 
 	/**
-	 *  Loads the custom configuration file located in CONFIG_PATH 
+	 * Loads the custom configuration file located in CONFIG_PATH
 	 *
-	 * @param conf the conf
+	 * @param conf
+	 *            the conf
 	 */
 	private void loadConfigurationFile(XProcConfiguration conf) {
 		// TODO cleanup and cache
@@ -161,12 +193,7 @@ public class DynamicXProcConfigurationFactory implements
 		if (mXPathRegistry != null) {
 			for (ExtensionFunctionDefinition func : mXPathRegistry
 					.getFunctions()) {
-				try {
-					config.getProcessor().getUnderlyingConfiguration()
-							.registerExtensionFunction(func);
-				} catch (XPathException e) {
-					throw new RuntimeException(e);
-				}
+				config.getProcessor().registerExtensionFunction(func);
 			}
 		}
 	}

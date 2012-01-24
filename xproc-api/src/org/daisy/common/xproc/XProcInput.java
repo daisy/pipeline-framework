@@ -19,23 +19,23 @@ import com.google.common.collect.Maps;
  * The Class XProcInput maps ports and options with a value for the pipeline execution, this object is immutable.
  */
 public final class XProcInput {
-	
+
 	/**
 	 * The Class Builder builds XProcInput objects to make them immutable.
 	 */
 	public static final class Builder {
-		
+
 		/** The info. */
 		private final XProcPipelineInfo info;
-		
+
 		/** The inputs. */
 		private final HashMap<String, List<Provider<Source>>> inputs = Maps
 				.newHashMap();
-		
+
 		/** The parameters. */
 		private final Map<String, Map<QName, String>> parameters = Maps
 				.newHashMap();
-		
+
 		/** The options. */
 		private final Map<QName, String> options = Maps.newHashMap();
 
@@ -43,7 +43,7 @@ public final class XProcInput {
 		 * Instantiates a new builder.
 		 */
 		public Builder() {
-			this.info = null;
+			info = null;
 		}
 
 		/**
@@ -120,16 +120,16 @@ public final class XProcInput {
 	/** The Constant emptySources. */
 	private final static List<Provider<Source>> emptySources = ImmutableList
 			.of();
-	
+
 	/** The Constant emptyParams. */
 	private final static Map<QName, String> emptyParams = ImmutableMap.of();
 
 	/** The inputs. */
 	private final Map<String, List<Provider<Source>>> inputs;
-	
+
 	/** The parameters. */
 	private final Map<String, Map<QName, String>> parameters;
-	
+
 	/** The options. */
 	private final Map<QName, String> options;
 

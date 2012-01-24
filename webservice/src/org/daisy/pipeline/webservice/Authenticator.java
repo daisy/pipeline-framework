@@ -13,20 +13,19 @@ import org.apache.commons.codec.binary.Base64;
 import org.daisy.pipeline.database.Client;
 import org.daisy.pipeline.database.DatabaseManager;
 import org.daisy.pipeline.database.RequestLogEntry;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Authenticator {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(Authenticator.class.getName());
-	
+
 	public static boolean authenticate(String id, String hash, String timestamp, String nonce, String URI, long maxRequestTime) {
 		// rules for hashing: use the whole URL string, minus the hash part (&sign=<some value>)
 		// important!  put the sign param last so we can easily strip it out
-		
+
 		int idx = URI.indexOf("&sign=", 0);
-		
+
 		if (idx > 1) {
 			// make sure the client exists
 			if (DatabaseManager.getInstance().getClientById(id) == null) {
@@ -38,10 +37,10 @@ public class Authenticator {
 			String serverHash = "";
 			try {
 				serverHash = calculateRFC2104HMAC(hashuri, clientSecret);
-				
+
 				SimpleDateFormat UTC_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 				UTC_FORMATTER.setTimeZone(TimeZone.getTimeZone("UTC"));
-				
+
 				Date serverTimestamp = new Date(System.currentTimeMillis());
 				Date clientTimestamp;
 				try {
@@ -50,7 +49,7 @@ public class Authenticator {
 					logger.error(String.format("Could not parse timestamp: %s", timestamp));
 					e.printStackTrace();
 					return false;
-				}                                                                                                                                                                                                                                                                               
+				}
 				if(!hash.equals(serverHash)) {
 					logger.error("Hash values do not match");
 					return false;
@@ -64,55 +63,56 @@ public class Authenticator {
 					return false;
 				}
 				return true;
-				
+
 			} catch (SignatureException e) {
 				logger.error("Could not generate hash");
 				e.printStackTrace();
 				return false;
 			}
+		} else {
+			return false;
 		}
-		else return false;
 	}
-	
-	
+
+
 	// nonces, along with timestamps, protect against replay attacks
 	private static boolean checkValidNonce(String id, String nonce, String timestamp) {
-		
+
 		Client client = DatabaseManager.getInstance().getClientById(id);
 		if (client == null) {
 			logger.warn(String.format("Client with user ID %s not found", id));
 			return false;
 		}
-		
+
 		RequestLogEntry entry = new RequestLogEntry(client.getId(), nonce, timestamp);
-		
+
 		// if this nonce was already used with this timestamp, don't accept it again
 		boolean isDuplicate = DatabaseManager.getInstance().isDuplicate(entry);
 		if (isDuplicate) {
 			logger.warn("Duplicate nonce detected.");
 			return false;
 		}
-		
+
 		// else, it is unique and therefore ok
 		DatabaseManager.getInstance().addObject(entry);
 		return true;
-		
+
 	}
-	
+
 	private static String getClientSecret(String id) {
-		
+
 		Client client = DatabaseManager.getInstance().getClientById(id);
 		if (client != null) {
 			return client.getSecret();
 		}
 		return "";
-				
+
 	}
-	
+
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
 
-	// adapted slightly from 
+	// adapted slightly from
 	// http://docs.amazonwebservices.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/index.html?AuthJavaSampleHMACSignature.html
 	/**
 	* Computes RFC 2104-compliant HMAC signature.
@@ -130,23 +130,23 @@ public class Authenticator {
 		try {
 			// get an hmac_sha1 key from the raw key bytes
 			SecretKeySpec signingSecret = new SecretKeySpec(secret.getBytes(), HMAC_SHA1_ALGORITHM);
-		
+
 			// get an hmac_sha1 Mac instance and initialize with the signing key
 			Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
 			mac.init(signingSecret);
-		
+
 			// compute the hmac on input data bytes
 			byte[] rawHmac = mac.doFinal(data.getBytes());
-		
+
 			// base64-encode the hmac
 			result = Base64.encodeBase64String(rawHmac);
-		
+
 			} catch (Exception e) {
 				throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
 		}
 		return result;
 	}
-	
-	
-	
+
+
+
 }

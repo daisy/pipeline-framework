@@ -21,7 +21,7 @@ public interface XProcStepRegistry {
 	boolean hasStep(QName type);
 
 	/**
-	 * returns the step implementation for the atomic step using the the step provider type given by the first argument. 
+	 * returns the step implementation for the atomic step using the the step provider type given by the first argument.
 	 *
 	 * @param type the type
 	 * @param runtime the runtime

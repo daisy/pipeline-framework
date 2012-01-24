@@ -13,25 +13,25 @@ import com.xmlcalabash.core.XProcRunnable;
 
 // TODO: Auto-generated Javadoc
 /**
- * Aggregates a collection of {@link XProcMessageListener} rerouting the events listened 
+ * Aggregates a collection of {@link XProcMessageListener} rerouting the events listened
  */
 public class XProcMessageListenerAggregator implements XProcMessageListener{
-	
+
 	/** The m listeners. */
 	List<XProcMessageListener> mListeners = new LinkedList<XProcMessageListener>();
-	
+
 	/** The m as accessor. */
 	MessageAccessor mAsAccessor;
-	
+
 	/**
-	 * Adds a new listener 
+	 * Adds a new listener
 	 *
 	 * @param listener the listener
 	 */
 	public void add(XProcMessageListener listener){
 		mListeners.add(listener);
 	}
-	
+
 	/**
 	 * Adds the accessor to get the messages passed to this listener.
 	 *
@@ -41,7 +41,7 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 		mListeners.add(listener);
 		mAsAccessor=listener.getAccessor();
 	}
-	
+
 	/**
 	 * Gets the accessor
 	 *
@@ -50,7 +50,7 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 	public MessageAccessor getAccessor(){
 		return mAsAccessor;
 	}
-	
+
 	/**
 	 * Removes the given listener
 	 *
@@ -59,7 +59,7 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 	public void remove(XProcMessageListener listener){
 		mListeners.remove(listener);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.xmlcalabash.core.XProcMessageListener#error(java.lang.Throwable)
 	 */
@@ -68,9 +68,9 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 		for(XProcMessageListener l:mListeners){
 			l.error(throwable);
 		}
-		
+
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.xmlcalabash.core.XProcMessageListener#error(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String, net.sf.saxon.s9api.QName)
 	 */
@@ -79,9 +79,9 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 		for(XProcMessageListener l:mListeners){
 			l.error(runnable,xnode,str,qname);
 		}
-		
+
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.xmlcalabash.core.XProcMessageListener#fine(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
 	 */
@@ -90,9 +90,9 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 		for(XProcMessageListener l:mListeners){
 			l.fine(arg0,arg1,arg2);
 		}
-		
+
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.xmlcalabash.core.XProcMessageListener#finer(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
 	 */
@@ -102,7 +102,7 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 			l.finer(arg0,arg1,arg2);
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.xmlcalabash.core.XProcMessageListener#finest(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
 	 */
@@ -111,9 +111,9 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 		for(XProcMessageListener l:mListeners){
 			l.finest(arg0,arg1,arg2);
 		}
-		
+
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.xmlcalabash.core.XProcMessageListener#info(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
 	 */
@@ -123,7 +123,7 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 			l.info(arg0,arg1,arg2);
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.xmlcalabash.core.XProcMessageListener#warning(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
 	 */
@@ -132,9 +132,9 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 		for(XProcMessageListener l:mListeners){
 			l.warning(arg0,arg1,arg2);
 		}
-		
+
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.xmlcalabash.core.XProcMessageListener#warning(java.lang.Throwable)
 	 */
@@ -143,7 +143,7 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 		for(XProcMessageListener l:mListeners){
 			l.error(throwable);
 		}
-		
+
 	}
-	
+
 }

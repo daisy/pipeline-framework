@@ -11,7 +11,7 @@ import javax.xml.stream.events.XMLEvent;
 import com.google.common.base.Predicate;
 
 /**
- * The Class StaxEventHelper offers some stax utilities. 
+ * The Class StaxEventHelper offers some stax utilities.
  */
 public final class StaxEventHelper {
 
@@ -28,6 +28,7 @@ public final class StaxEventHelper {
 		 */
 		public static Predicate<XMLEvent> isElement(final QName name) {
 			return new Predicate<XMLEvent>() {
+				@Override
 				public boolean apply(XMLEvent event) {
 					return event.isStartElement()
 							&& event.asStartElement().getName().equals(name);
@@ -43,6 +44,7 @@ public final class StaxEventHelper {
 		 */
 		public static Predicate<XMLEvent> isStartOrStopElement(final QName name) {
 			return new Predicate<XMLEvent>() {
+				@Override
 				public boolean apply(XMLEvent event) {
 					return (event.isStartElement() && event.asStartElement()
 							.getName().equals(name))
@@ -54,6 +56,7 @@ public final class StaxEventHelper {
 
 		/** The I s_ star t_ element. */
 		public static Predicate<XMLEvent> IS_START_ELEMENT = new Predicate<XMLEvent>() {
+			@Override
 			public boolean apply(XMLEvent event) {
 				return event.isStartElement();
 			}
@@ -61,6 +64,7 @@ public final class StaxEventHelper {
 
 		/** The I s_ en d_ element. */
 		public static Predicate<XMLEvent> IS_END_ELEMENT = new Predicate<XMLEvent>() {
+			@Override
 			public boolean apply(XMLEvent event) {
 				return event.isEndElement();
 			}
@@ -71,13 +75,14 @@ public final class StaxEventHelper {
 		 */
 		public static class ChildOrSiblingPredicate implements
 				Predicate<XMLEvent> {
-			
+
 			/** The opened. */
 			private int opened = 1;
 
 			/* (non-Javadoc)
 			 * @see com.google.common.base.Predicate#apply(java.lang.Object)
 			 */
+			@Override
 			public boolean apply(XMLEvent event) {
 				switch (event.getEventType()) {
 				case XMLEvent.START_ELEMENT:
@@ -106,13 +111,14 @@ public final class StaxEventHelper {
 		 * Checks if the event is offspring.
 		 */
 		public static class ChildPredicate implements Predicate<XMLEvent> {
-			
+
 			/** The opened. */
 			private int opened = 0;
 
 			/* (non-Javadoc)
 			 * @see com.google.common.base.Predicate#apply(java.lang.Object)
 			 */
+			@Override
 			public boolean apply(XMLEvent event) {
 
 				switch (event.getEventType()) {
@@ -143,7 +149,7 @@ public final class StaxEventHelper {
 	}
 
 	/**
-	 * Peek next element matching the QName 
+	 * Peek next element matching the QName
 	 *
 	 * @param reader the reader
 	 * @param name the name
@@ -205,8 +211,9 @@ public final class StaxEventHelper {
 				}
 				processor.process(event);
 			}
-			if (reader.hasNext())// nested loops
+			if (reader.hasNext()) {
 				reader.next();
+			}
 		}
 	}
 

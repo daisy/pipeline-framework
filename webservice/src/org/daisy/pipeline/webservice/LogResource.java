@@ -25,18 +25,20 @@ public class LogResource extends AuthenticatedResource {
 	private Job job;
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(XmlFormatter.class.getName());
-	
+
 	/* (non-Javadoc)
 	 * @see org.restlet.resource.Resource#doInit()
 	 */
-	@Override  
-    public void doInit() {  
+	@Override
+    public void doInit() {
 		super.doInit();
-		if (!isAuthenticated()) return;
-		
-		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
+		if (!isAuthenticated()) {
+			return;
+		}
+
+		JobManager jobMan = ((PipelineWebService)getApplication()).getJobManager();
         String idParam = (String) getRequestAttributes().get("id");
-        
+
         try {
         	JobId id = JobIdFactory.newIdFromString(idParam);
         	job = jobMan.getJob(id);
@@ -45,9 +47,9 @@ public class LogResource extends AuthenticatedResource {
         	logger.error(e.getMessage());
         	job = null;
         }
-        
+
     }
-	
+
 	/*
 	 * example output: daisy-pipeline/webservice/docs/sampleXml/log.xml
 	 */
@@ -62,20 +64,21 @@ public class LogResource extends AuthenticatedResource {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
 		}
-	
+
 		if (job == null) {
     		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return null;
     	}
-		
+
     	setStatus(Status.SUCCESS_OK);
-    	
+
     	FileRepresentation logfile;
     	URI logfileUri = job.getResult().getLogFile();
     	if (logfileUri != null) {
     		logfile = new FileRepresentation(new File(job.getResult().getLogFile()), MediaType.TEXT_PLAIN);
     		return logfile;
-    	}
-    	else return null;
+    	} else {
+			return null;
+		}
 	}
 }

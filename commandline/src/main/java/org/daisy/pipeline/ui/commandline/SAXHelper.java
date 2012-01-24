@@ -16,7 +16,7 @@ import org.xml.sax.InputSource;
  * Some Sax utilities.
  */
 public class SAXHelper {
-	
+
 	/**
 	 * Gets the sax source.
 	 *

@@ -4,10 +4,10 @@ import java.net.URL;
 
 
 /**
- * The Interface ResourceLoader allows to get an accessible URI from the path provided. This is used for loading {@link Component} objects. 
+ * The Interface ResourceLoader allows to get an accessible URI from the path provided. This is used for loading {@link Component} objects.
  */
 public interface ResourceLoader {
-	
+
 	/**
 	 * Loads the resource.
 	 *

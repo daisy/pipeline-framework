@@ -12,7 +12,7 @@ public final class CommandListURIs implements Command {
 
 	/** The module registry. */
 	private final ModuleRegistry moduleRegistry;
-	
+
 	/**
 	 * New instance.
 	 *
@@ -25,7 +25,7 @@ public final class CommandListURIs implements Command {
 		}
 		return new CommandListURIs(moduleRegistry);
 	}
-	
+
 	/**
 	 * Instantiates a new command list ur is.
 	 *
@@ -38,6 +38,7 @@ public final class CommandListURIs implements Command {
 	/* (non-Javadoc)
 	 * @see org.daisy.pipeline.ui.commandline.Command#execute()
 	 */
+	@Override
 	public void execute() throws IllegalArgumentException {
 		Iterable<URI> uris = moduleRegistry.getComponents();
 		System.out.println("Available URIs:");

@@ -41,17 +41,18 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 	/* (non-Javadoc)
 	 * @see org.daisy.pipeline.xmlcatalog.XmlCatalogParser#parse(java.net.URI)
 	 */
+	@Override
 	public XmlCatalog parse(URI uri) {
 		return new StatefulParser().parse(uri);
 	}
 
 	/**
-	 * Sets the {@link XMLInputFactory} 
+	 * Sets the {@link XMLInputFactory}
 	 *
 	 * @param factory the new factory
 	 */
 	public void setFactory(XMLInputFactory factory) {
-		this.mFactory = factory;
+		mFactory = factory;
 	}
 
 	/**
@@ -65,10 +66,10 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 	 * The Class StatefulParser.
 	 */
 	private class StatefulParser {
-		
+
 		/** The m catalog builder. */
 		XmlCatalog.Builder mCatalogBuilder = new XmlCatalog.Builder();
-		
+
 		/** The m base. */
 		LinkedList<URI> mBase = new LinkedList<URI>();
 
@@ -102,13 +103,15 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 				throw new RuntimeException(
 						"Couldn't access package descriptor: " + e.getMessage(),
 						e);
-			
+
 			} finally {
 				try {
-					if (reader != null)
+					if (reader != null) {
 						reader.close();
-					if (is != null)
+					}
+					if (is != null) {
 						is.close();
+					}
 				} catch (Exception e) {
 					// ignore;
 				}
@@ -133,7 +136,7 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 			StaxEventHelper.loop(reader, pred,
 					EventPredicates.getChildOrSiblingPredicate(),
 					new EventProcessor() {
-						@Override 
+						@Override
 						public void process(XMLEvent event)
 								throws XMLStreamException {
 							//catalog and group controlled for xml:base changes
@@ -146,7 +149,7 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 								}else{
 									mBase.push(mBase.peek());
 								}
-							//xml:base pop	
+							//xml:base pop
 							}else if(event.isEndElement()&&(event.asEndElement().getName()
 									.equals(Elements.E_CATALOG)||event.asEndElement().getName()
 									.equals(Elements.E_GROUP))){
@@ -165,13 +168,13 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 
 						}
 
-					
 
-						
+
+
 					});
 
 		}
-		
+
 		/**
 		 * Parses the uri.
 		 *
@@ -215,10 +218,10 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 			}else{
 				throw new IllegalStateException("uri is null");
 			}
-			
+
 			mCatalogBuilder.withPublicMapping(publicIdStr, uriUri);
 		}
-		
+
 		/**
 		 * Parses the system.
 		 *
@@ -243,7 +246,7 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 			mCatalogBuilder.withSystemIdMapping(systemIdUri, uriUri);
 		}
 	}
-	
+
 	/**
 	 * Adds the base.
 	 *
@@ -253,7 +256,7 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 	 */
 	private URI addBase(String uri,URI base){
 		if (base.toString().isEmpty()){
-			return URI.create(uri); 
+			return URI.create(uri);
 		}else{
 			if(base.toString().charAt(base.toString().length()-1)=='/'){
 				return URI.create(base.toString()+uri);

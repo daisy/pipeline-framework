@@ -21,13 +21,14 @@ public class Activator implements BundleActivator {
 	/* (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext bundleContext) throws Exception {
 		mLogger.debug("earlyStartup slf4j SLF4JBridgeHandler...");
 		java.util.logging.Logger rootLogger = LogManager.getLogManager()
 				.getLogger("");
 		Handler[] handlers = rootLogger.getHandlers();
-		for (int i = 0; i < handlers.length; i++) {
-			rootLogger.removeHandler(handlers[i]);
+		for (Handler handler : handlers) {
+			rootLogger.removeHandler(handler);
 		}
 		org.slf4j.bridge.SLF4JBridgeHandler.install();
 	}
@@ -35,6 +36,7 @@ public class Activator implements BundleActivator {
 	/* (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext bundleContext) throws Exception {
 	}
 

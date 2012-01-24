@@ -21,20 +21,22 @@ public class JobResource extends AuthenticatedResource {
 	/** The job. */
 	private Job job;
 	private int msgSeq = 0;
-	
+
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(XmlFormatter.class.getName());
-	
+
 	/* (non-Javadoc)
 	 * @see org.restlet.resource.Resource#doInit()
 	 */
-	@Override  
-    public void doInit() {  
+	@Override
+    public void doInit() {
 		super.doInit();
-		if (!isAuthenticated()) return;
-		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
+		if (!isAuthenticated()) {
+			return;
+		}
+		JobManager jobMan = ((PipelineWebService)getApplication()).getJobManager();
         String idParam = (String) getRequestAttributes().get("id");
-        String msgSeqParam = (String)getQuery().getFirstValue("msgSeq");
+        String msgSeqParam = getQuery().getFirstValue("msgSeq");
 
         if (msgSeqParam!=null){
         	msgSeq = Integer.parseInt(msgSeqParam);
@@ -47,15 +49,15 @@ public class JobResource extends AuthenticatedResource {
         	logger.error(e.getMessage());
         	job = null;
         }
-    }  
-  
+    }
+
     /**
      * Gets the resource.
      *
      * @return the resource
      */
     @Get("xml")
-    public Representation getResource() {  
+    public Representation getResource() {
     	if (!isAuthenticated()) {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
@@ -64,12 +66,12 @@ public class JobResource extends AuthenticatedResource {
     		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return null;
     	}
-	
+
     	setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.jobToXml(job, msgSeq));
 		return dom;
-    }  
-    
+    }
+
 	/**
 	 * Delete resource.
 	 */
@@ -79,18 +81,18 @@ public class JobResource extends AuthenticatedResource {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return;
     	}
-    	
+
 		if (job == null) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 		}
-		
-		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
+
+		JobManager jobMan = ((PipelineWebService)getApplication()).getJobManager();
 		if (jobMan.deleteJob(job.getId())!=null) {
 			setStatus(Status.SUCCESS_NO_CONTENT);
 		}
 		else {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 		}
-	}   
-    
+	}
+
 }

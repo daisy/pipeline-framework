@@ -92,25 +92,25 @@ public class Job {
 
 	/** The status. */
 	private Status status = Status.IDLE;
-	
-	private XProcMonitor monitor= new XProcMonitor() {
-		MessageAccessor accessor = null; 
+
+	private final XProcMonitor monitor= new XProcMonitor() {
+		MessageAccessor accessor = null;
 		@Override
 		public MessageAccessor getMessageAccessor() {
-			
+
 			return accessor;
 		}
-		
+
 		@Override
 		public void setMessageAccessor(MessageAccessor accessor) {
 			this.accessor=accessor;
-			
+
 		}
 	};
 
 	/**
 	 * Instantiates a new job.
-	 * 
+	 *
 	 * @param id
 	 *            the id
 	 * @param script
@@ -131,7 +131,7 @@ public class Job {
 
 	/**
 	 * Gets the id.
-	 * 
+	 *
 	 * @return the id
 	 */
 	public JobId getId() {
@@ -140,7 +140,7 @@ public class Job {
 
 	/**
 	 * Gets the status.
-	 * 
+	 *
 	 * @return the status
 	 */
 	public Status getStatus() {
@@ -149,7 +149,7 @@ public class Job {
 
 	/**
 	 * Gets the script.
-	 * 
+	 *
 	 * @return the script
 	 */
 	public XProcScript getScript() {
@@ -158,7 +158,7 @@ public class Job {
 
 	/**
 	 * Gets the x proc output.
-	 * 
+	 *
 	 * @return the x proc output
 	 */
 	XProcResult getXProcOutput() {
@@ -181,12 +181,12 @@ public class Job {
 			logger.error("job finished with error state",e);
 			status=Status.ERROR;
 		}
-	
+
 
 		JobResult.Builder builder = new JobResult.Builder();
 		builder.withMessageAccessor(output.getMessages());
 		builder.withLogFile(ioBridge.getLogFile());
-		builder = (this.ioBridge != null) ? builder.withZipFile(ioBridge
+		builder = (ioBridge != null) ? builder.withZipFile(ioBridge
 				.zipOutput()) : builder;
 		results = builder.build();
 
@@ -194,13 +194,13 @@ public class Job {
 
 	/**
 	 * Gets the result.
-	 * 
+	 *
 	 * @return the result
 	 */
 	public JobResult getResult() {
 		return results;
 	}
-	
+
 	public XProcMonitor getMonitor(){
 		return monitor;
 	}

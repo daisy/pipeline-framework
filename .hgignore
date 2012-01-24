@@ -12,7 +12,7 @@ syntax: glob
 .*.swp
 
 # Log files
-.*.log
+*.log
 
 # A hidden file created by the Mac OS X Finder.
 .DS_Store

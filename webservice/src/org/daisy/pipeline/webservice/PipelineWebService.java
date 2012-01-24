@@ -17,10 +17,10 @@ import org.slf4j.LoggerFactory;
  * The Class PipelineWebService.
  */
 public class PipelineWebService extends Application {
-	
+
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(PipelineWebService.class.getName());
-	
+
 	/* other runtime-configurable property names */
 	public static final String PORT_PROPERTY = "org.daisy.pipeline.ws.port";
 	public static final String PATH_PROPERTY = "org.daisy.pipeline.ws.path";
@@ -28,7 +28,7 @@ public class PipelineWebService extends Application {
 	public static final String TMPDIR_PROPERTY = "org.daisy.pipeline.ws.tmpdir";
 	public static final String AUTHENTICATION_PROPERTY = "org.daisy.pipeline.ws.authentication";
 	public static final String LOCAL_MODE = "org.daisy.pipeline.ws.local";
-	
+
 	public static final String SCRIPTS_ROUTE = "/scripts";
 	public static final String SCRIPT_ROUTE = "/scripts/{scriptid}"; 
 	public static final String JOBS_ROUTE = "/jobs";
@@ -37,24 +37,24 @@ public class PipelineWebService extends Application {
 	public static final String RESULT_ROUTE = "/jobs/{id}/result";
 	public static final String CLIENTS_ROUTE = "/admin/clients";
 	public static final String CLIENT_ROUTE = "/admin/clients/{id}";
-	
-	
+
+
 	/* options and their default values */
 	private String path = "/ws";
 	private int portNumber = 8182;
 	private boolean usesAuthentication = true;
 	private long maxRequestTime = 600000; // 10 minutes in ms
 	private String tmpDir = "/tmp";
-	
+
 	/** The Constant WS. */
 	//private static final String WS = "ws";
-	
+
 	/** The job manager. */
 	private JobManager jobManager;
-	
+
 	/** The script registry. */
 	private ScriptRegistry scriptRegistry;
-	
+
 	/* (non-Javadoc)
 	 * @see org.restlet.Application#createInboundRoot()
 	 */
@@ -67,11 +67,11 @@ public class PipelineWebService extends Application {
 		router.attach(JOB_ROUTE, JobResource.class);
 		router.attach(LOG_ROUTE, LogResource.class);
 		router.attach(RESULT_ROUTE, ResultResource.class);
-		
+
 		// init the administrative paths
 		router.attach(CLIENTS_ROUTE, ClientsResource.class);
 		router.attach(CLIENT_ROUTE, ClientResource.class);
-		
+
 		return router;
 	}
 
@@ -81,7 +81,7 @@ public class PipelineWebService extends Application {
 	public void init() {
 		readOptions();
 		logger.info(String.format("Starting webservice on port %d",
-				this.portNumber));
+				portNumber));
 		Component component = new Component();
 		component.getServers().add(Protocol.HTTP, portNumber);
 		component.getDefaultHost().attach(path, this);
@@ -103,20 +103,20 @@ public class PipelineWebService extends Application {
 	public boolean isLocal() {
 		return Boolean.valueOf(System.getProperty(LOCAL_MODE));
 	}
-	
+
 	public String getTmpDir() {
-		return this.tmpDir;
+		return tmpDir;
 	}
-	
+
 	public boolean isAuthenticationEnabled() {
-		return this.usesAuthentication;
+		return usesAuthentication;
 	}
-	
+
 	// the length of time in ms that a request is valid for, counting from its timestamp value
 	public long getMaxRequestTime() {
-		return this.maxRequestTime;
+		return maxRequestTime;
 	}
-	
+
 	/**
 	 * Gets the job manager.
 	 *
@@ -152,9 +152,9 @@ public class PipelineWebService extends Application {
 	public void setScriptRegistry(ScriptRegistry scriptRegistry) {
 		this.scriptRegistry = scriptRegistry;
 	}
-	
+
 	private void readOptions() {
-		
+
 		String path = System.getProperty(PATH_PROPERTY);
 		if (path != null) {
 			if (!path.startsWith("/")) {
@@ -162,65 +162,65 @@ public class PipelineWebService extends Application {
 			}
 			this.path = path;
 		}
-		
+
 		String authentication = System.getProperty(AUTHENTICATION_PROPERTY);
-		
+
 		if (authentication != null) {
 			if (authentication.equalsIgnoreCase("true")) {
-				this.usesAuthentication = true;
+				usesAuthentication = true;
 			}
 			else if (authentication.equalsIgnoreCase("false")) {
-				this.usesAuthentication = false;
+				usesAuthentication = false;
 				logger.info("Web service authentication is OFF");
 			}
 			else {
 				logger.error(String.format(
-						"Value specified in option %s (%s) is not valid. Using default value of %s.", 
-						AUTHENTICATION_PROPERTY, authentication, this.usesAuthentication));
+						"Value specified in option %s (%s) is not valid. Using default value of %s.",
+						AUTHENTICATION_PROPERTY, authentication, usesAuthentication));
 			}
 		}
-		
+
 		String port = System.getProperty(PORT_PROPERTY);
 		if (port != null) {
 			try {
 				int portnum = Integer.parseInt(port);
-				if (portnum >= 0 && portnum <= 65535) { 
-					this.portNumber = portnum;
+				if (portnum >= 0 && portnum <= 65535) {
+					portNumber = portnum;
 				}
 				else {
 					logger.error(String.format(
-							"Value specified in option %s (%d) is not valid. Using default value of %d.", 
-							PORT_PROPERTY, portnum, this.portNumber));
+							"Value specified in option %s (%d) is not valid. Using default value of %d.",
+							PORT_PROPERTY, portnum, portNumber));
 				}
 			} catch (NumberFormatException e) {
 				logger.error(String.format(
-						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.", 
-						PORT_PROPERTY, port, this.portNumber));
+						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.",
+						PORT_PROPERTY, port, portNumber));
 			}
 		}
-		
+
 		String tmp = System.getProperty(TMPDIR_PROPERTY);
 		if (tmp != null) {
 			File f = new File(tmp);
 			if (f.exists()) {
-				this.tmpDir = tmp;
+				tmpDir = tmp;
 			}
 			else {
 				logger.error(String.format(
-						"Value specified in option %s (%s) is not valid. Using default value of %s.", 
-						TMPDIR_PROPERTY, tmp, this.tmpDir));
+						"Value specified in option %s (%s) is not valid. Using default value of %s.",
+						TMPDIR_PROPERTY, tmp, tmpDir));
 			}
 		}
-		
+
 		String maxrequesttime = System.getProperty(MAX_REQUEST_TIME_PROPERTY);
 		if (maxrequesttime != null) {
 			try {
 				long ms = Long.parseLong(maxrequesttime);
-				this.maxRequestTime = ms;
+				maxRequestTime = ms;
 			} catch(NumberFormatException e) {
 				logger.error(String.format(
-						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.", 
-						MAX_REQUEST_TIME_PROPERTY, maxrequesttime, this.maxRequestTime));
+						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.",
+						MAX_REQUEST_TIME_PROPERTY, maxrequesttime, maxRequestTime));
 			}
 		}
 	}

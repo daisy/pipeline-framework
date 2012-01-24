@@ -37,7 +37,7 @@ public class ModuleUriResolver implements URIResolver, EntityResolver {
 
 	/**
 	 * Sets the module registry.
-	 * 
+	 *
 	 * @param reg
 	 *            the new module registry
 	 */
@@ -47,10 +47,11 @@ public class ModuleUriResolver implements URIResolver, EntityResolver {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.xml.transform.URIResolver#resolve(java.lang.String,
 	 * java.lang.String)
 	 */
+	@Override
 	public Source resolve(String href, String base) {
 		// System.out.println("Resolving:"+href);
 		URI uhref = URI.create(href);
@@ -72,7 +73,7 @@ public class ModuleUriResolver implements URIResolver, EntityResolver {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -83,9 +84,9 @@ public class ModuleUriResolver implements URIResolver, EntityResolver {
 		Module mod = mRegistry.getModuleByEntity(publicId);
 		//by public id
 		if (mod != null) {
-			
+
 			src=new InputSource(mod.getEntity(publicId).getResource().toString());
-			
+
 		}else{
 			//by systemId
 			mLogger.debug("No module found for publicId:" + publicId);

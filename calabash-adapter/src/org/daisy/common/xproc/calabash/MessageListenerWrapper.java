@@ -14,10 +14,10 @@ import com.xmlcalabash.core.XProcRunnable;
  * Wrapps the org.daisy.common.messaging.MessageListener to a XProcMessageListener to be plugged in calabash
  */
 public class MessageListenerWrapper implements XProcMessageListener{
-	
+
 	/** The listener. */
 	MessageListener mListener;
-	
+
 	/**
 	 * Instantiates a new message listener wrapper
 	 *
@@ -25,8 +25,8 @@ public class MessageListenerWrapper implements XProcMessageListener{
 	 */
 	public MessageListenerWrapper(MessageListener messageListener){
 		mListener=messageListener;
-	} 
-	
+	}
+
 	/**
 	 * Gets the message accessor to sneak into the messages sent by calabash.
 	 *
@@ -35,14 +35,14 @@ public class MessageListenerWrapper implements XProcMessageListener{
 	public MessageAccessor getAccessor(){
 		return mListener.getAccessor();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.xmlcalabash.core.XProcMessageListener#error(java.lang.Throwable)
 	 */
 	@Override
 	public void error(Throwable arg0) {
 		mListener.error(XprocMessageHelper.errorMessage(arg0), arg0);
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -51,7 +51,7 @@ public class MessageListenerWrapper implements XProcMessageListener{
 	@Override
 	public void error(XProcRunnable step, XdmNode node, String message, QName qName) {
 		 mListener.error(XprocMessageHelper.message(step, node, message));
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -60,7 +60,7 @@ public class MessageListenerWrapper implements XProcMessageListener{
 	@Override
 	public void fine(XProcRunnable step, XdmNode node, String message) {
 		mListener.debug(XprocMessageHelper.message(step, node, message));
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -69,7 +69,7 @@ public class MessageListenerWrapper implements XProcMessageListener{
 	@Override
 	public void finer(XProcRunnable step, XdmNode node, String message) {
 		mListener.debug(XprocMessageHelper.message(step, node, message));
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -78,7 +78,7 @@ public class MessageListenerWrapper implements XProcMessageListener{
 	@Override
 	public void finest(XProcRunnable step, XdmNode node, String message) {
 		mListener.trace(XprocMessageHelper.message(step, node, message));
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -87,7 +87,7 @@ public class MessageListenerWrapper implements XProcMessageListener{
 	@Override
 	public void info(XProcRunnable step, XdmNode node, String message) {
 		mListener.info(XprocMessageHelper.message(step, node, message));
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -96,7 +96,7 @@ public class MessageListenerWrapper implements XProcMessageListener{
 	@Override
 	public void warning(XProcRunnable step, XdmNode node, String message) {
 		 mListener.warn(XprocMessageHelper.message(step, node, message));
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -105,7 +105,7 @@ public class MessageListenerWrapper implements XProcMessageListener{
 	@Override
 	public void warning(Throwable arg0) {
 		mListener.error(XprocMessageHelper.errorMessage(arg0), arg0);
-		
+
 	}
 
 }

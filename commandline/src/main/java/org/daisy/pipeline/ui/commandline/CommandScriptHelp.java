@@ -12,12 +12,12 @@ import org.daisy.pipeline.script.XProcScriptService;
 
 
 /**
- * shows help for a script 
+ * shows help for a script
  */
 public final class CommandScriptHelp implements Command {
 
 	/**
-	 * New instance 
+	 * New instance
 	 *
 	 * @param scriptName the script name
 	 * @param scriptRegistry the script registry
@@ -30,7 +30,7 @@ public final class CommandScriptHelp implements Command {
 
 	/** The script name. */
 	private final String scriptName;
-	
+
 	/** The script registry. */
 	private final ScriptRegistry scriptRegistry;
 

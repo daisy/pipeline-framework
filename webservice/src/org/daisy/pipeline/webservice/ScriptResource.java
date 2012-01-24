@@ -2,8 +2,6 @@ package org.daisy.pipeline.webservice;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URLDecoder;
 
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -26,16 +24,17 @@ public class ScriptResource extends AuthenticatedResource {
 	private XProcScript script = null;
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(ScriptResource.class.getName());
-	
+
 	/* (non-Javadoc)
 	 * @see org.restlet.resource.Resource#doInit()
 	 */
 	@Override
 	public void doInit() {
 		super.doInit();
-		if (!isAuthenticated())
+		if (!isAuthenticated()) {
 			return;
-		
+		}
+
 		// TODO refer to scripts by their IDs instead of URIs
 		// however, scripts don't have IDs yet so we have to wait
 		// introduced temporary parameter "scriptid" to avoid conflict with auth param, recently renamed to "id"
@@ -45,18 +44,17 @@ public class ScriptResource extends AuthenticatedResource {
 			String tmp = (String) getRequestAttributes().get("scriptid");
 			tmp = URLDecoder.decode(tmp.toString(), "UTF-8");
 			scriptUri=URI.create(tmp);
-		
+
 		} catch (UnsupportedEncodingException e) {
 			logger.error(e.getMessage());
 			return;
 		}
 		logger.debug("Script with id :"+scriptUri);
-		ScriptRegistry scriptRegistry = ((PipelineWebService) this
-				.getApplication()).getScriptRegistry();
+		ScriptRegistry scriptRegistry = ((PipelineWebService) getApplication()).getScriptRegistry();
 		XProcScriptService unfilteredScript = scriptRegistry
 				.getScript(scriptUri);
 		if (unfilteredScript != null) {
-			script = (((PipelineWebService) this.getApplication()).isLocal()) ? unfilteredScript
+			script = (((PipelineWebService) getApplication()).isLocal()) ? unfilteredScript
 					.load() : XProcScriptFilter.INSTANCE
 					.filter(unfilteredScript.load());
 		}
@@ -64,7 +62,7 @@ public class ScriptResource extends AuthenticatedResource {
 
 	/**
 	 * Gets the resource.
-	 * 
+	 *
 	 * @return the resource
 	 */
 	@Get("xml")

@@ -42,13 +42,13 @@ public class XmlFormatter {
 
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(XmlFormatter.class.getName());
-	
+
 	/*
 	 * example output: daisy-pipeline/webservice/docs/sampleXml/job.xml
 	 */
 	/**
 	 * Job to xml.
-	 * 
+	 *
 	 * @param job
 	 *            the job
 	 * @param serverAddress
@@ -72,7 +72,7 @@ public class XmlFormatter {
 	 */
 	/**
 	 * Jobs to xml.
-	 * 
+	 *
 	 * @param jobs
 	 *            the jobs
 	 * @param serverAddress
@@ -103,7 +103,7 @@ public class XmlFormatter {
 	 */
 	/**
 	 * Xproc script to xml.
-	 * 
+	 *
 	 * @param script
 	 *            the script
 	 * @return the document
@@ -125,7 +125,7 @@ public class XmlFormatter {
 	 */
 	/**
 	 * Xproc scripts to xml.
-	 * 
+	 *
 	 * @param scripts
 	 *            the scripts
 	 * @return the document
@@ -157,13 +157,13 @@ public class XmlFormatter {
 		} else {
 			rootElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "script");
 		}
-		
+
 		String scriptHref = PipelineWebService.SCRIPT_ROUTE.replaceFirst("\\{id\\}", "TODO");
-		
+
 		rootElm.setAttribute("id", "TODO");
 		rootElm.setAttribute("href", scriptHref);
 		rootElm.setAttribute("script", script.getURI().toString());
-		
+
 		Element nicenameElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "nicename");
 		nicenameElm.setTextContent(script.getName());
 		rootElm.appendChild(nicenameElm);
@@ -179,36 +179,36 @@ public class XmlFormatter {
 				homepageElm.setTextContent(homepage);
 				rootElm.appendChild(homepageElm);
 			}
-	
+
 			Iterator<XProcPortInfo> it_input = script.getXProcPipelineInfo()
 					.getInputPorts().iterator();
 			Iterator<XProcOptionInfo> it_options = script.getXProcPipelineInfo()
 					.getOptions().iterator();
 			Iterator<XProcPortInfo> it_output = script.getXProcPipelineInfo()
 					.getOutputPorts().iterator();
-	
+
 			while (it_input.hasNext()) {
 				XProcPortInfo input = it_input.next();
-	
+
 				Element inputElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "input");
 				inputElm.setAttribute("name", input.getName());
-	
+
 				if (input.isSequence() == true) {
 					inputElm.setAttribute("sequence", "true");
 				} else {
 					inputElm.setAttribute("sequence", "false");
 				}
-	
+
 				XProcPortMetadata meta = script.getPortMetadata(input.getName());
 				inputElm.setAttribute("mediaType", meta.getMediaType());
 				inputElm.setAttribute("desc", meta.getDescription());
-	
+
 				rootElm.appendChild(inputElm);
 			}
-	
+
 			while (it_options.hasNext()) {
 				XProcOptionInfo option = it_options.next();
-	
+
 				Element optionElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "option");
 				optionElm.setAttribute("name", option.getName().toString());
 				if (option.isRequired()) {
@@ -216,22 +216,22 @@ public class XmlFormatter {
 				} else {
 					optionElm.setAttribute("required", "false");
 				}
-	
+
 				XProcOptionMetadata meta = script.getOptionMetadata(option
 						.getName());
 				optionElm.setAttribute("type", meta.getType());
 				optionElm.setAttribute("mediaType", meta.getMediaType());
 				optionElm.setAttribute("desc", meta.getDescription());
-	
+
 				rootElm.appendChild(optionElm);
 			}
-			
+
 			while (it_output.hasNext()) {
 				XProcPortInfo output = it_output.next();
-	
+
 				Element outputElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "output");
 				outputElm.setAttribute("name", output.getName());
-	
+
 				if (output.isSequence() == true) {
 					outputElm.setAttribute("sequence", "true");
 				} else {
@@ -240,7 +240,7 @@ public class XmlFormatter {
 				XProcPortMetadata meta = script.getPortMetadata(output.getName());
 				outputElm.setAttribute("mediaType", meta.getMediaType());
 				outputElm.setAttribute("desc", meta.getDescription());
-	
+
 				rootElm.appendChild(outputElm);
 			}
 		}
@@ -250,7 +250,7 @@ public class XmlFormatter {
 
 	/**
 	 * To xml elm.
-	 * 
+	 *
 	 * @param job
 	 *            the job
 	 * @param doc
@@ -270,7 +270,7 @@ public class XmlFormatter {
 
 		Job.Status status = job.getStatus();
 		String jobHref = PipelineWebService.JOB_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
-		
+
 		rootElm.setAttribute("id", job.getId().toString());
 		rootElm.setAttribute("href", jobHref);
 		rootElm.setAttribute("status", status.toString());
@@ -278,7 +278,7 @@ public class XmlFormatter {
 		if (detail) {
 			Element scriptElm = toXmlElm(job.getScript(), doc, false);
 			rootElm.appendChild(scriptElm);
-	
+
 			Element messagesElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "messages");
 			//TODO wrap this in a static context
 			HashSet<Level> levels= new HashSet<Level>();
@@ -288,7 +288,7 @@ public class XmlFormatter {
 			Filter<List<Message>> seqFilt= new MessageAccessor.SequenceFilter(msgSeq);
 			Filter<List<Message>> levelFilt= new MessageAccessor.LevelFilter(levels);
 			//end of wrapping things
-			
+
 			try {
 				List<Message> msgs= job.getMonitor().getMessageAccessor().filtered(new Filter[]{seqFilt,levelFilt});
 				for (Message msg :msgs) {
@@ -305,12 +305,12 @@ public class XmlFormatter {
 			} catch (Exception e) {
 				System.out.println(e.getCause());
 			}
-			
+
 			Element logElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "log");
 			String logHref = PipelineWebService.LOG_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
 			logElm.setAttribute("href", logHref);
 			rootElm.appendChild(logElm);
-			
+
 			if (job.getStatus() == Job.Status.DONE) {
 				Element resultElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "result");
 				String resultHref = PipelineWebService.RESULT_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
@@ -324,51 +324,51 @@ public class XmlFormatter {
 	public static Document clientToXml(Client client) {
 		Document doc = XmlFormatter.createDom("client");
 		XmlFormatter.toXmlElm(client, doc);
-				
+
 		// for debugging only
 		if (!Validator.validateXml(doc, Validator.clientSchema)) {
 			XmlFormatter.logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
 		}
-		
+
 		return doc;
 	}
 
 	public static Document clientsToXml(Iterable<Client> clients) {
 		Document doc = XmlFormatter.createDom("clients");
 		Element clientsElm = doc.getDocumentElement();
-	
+
 		Iterator<Client> it = clients.iterator();
 		while (it.hasNext()) {
 			Client client = it.next();
 			Element clientElm = XmlFormatter.toXmlElm(client, doc);
 			clientsElm.appendChild(clientElm);
 		}
-	
+
 		// for debugging only
 		if (!Validator.validateXml(doc, Validator.clientsSchema)) {
 			XmlFormatter.logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
 		}
-	
+
 		return doc;
 	}
 
 	public static Element toXmlElm(Client client, Document doc) {
 		Element rootElm = null;
-	
+
 		if (doc.getDocumentElement().getNodeName().equals("client")) {
 			rootElm = doc.getDocumentElement();
 		} else {
 			rootElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "client");
 		}
-		
+
 		String clientHref = PipelineWebService.CLIENT_ROUTE.replaceFirst("\\{id\\}", client.getId());
-		
+
 		rootElm.setAttribute("href", clientHref);
 		rootElm.setAttribute("id", client.getId());
 		rootElm.setAttribute("secret", client.getSecret());
 		rootElm.setAttribute("role", client.getRole().toString());
 		rootElm.setAttribute("contact", client.getContactInfo());
-		
+
 		return rootElm;
 	}
 
@@ -379,7 +379,7 @@ public class XmlFormatter {
 	 */
 	/**
 	 * DOM to string.
-	 * 
+	 *
 	 * @param doc
 	 *            the doc
 	 * @return the string
@@ -409,7 +409,7 @@ public class XmlFormatter {
 
 	/**
 	 * Node to string.
-	 * 
+	 *
 	 * @param node
 	 *            the node
 	 * @return the string
@@ -425,7 +425,7 @@ public class XmlFormatter {
 
 	/**
 	 * Creates the dom.
-	 * 
+	 *
 	 * @param documentElementName
 	 *            the document element name
 	 * @return the document
@@ -436,14 +436,14 @@ public class XmlFormatter {
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			DOMImplementation domImpl = documentBuilder.getDOMImplementation();
 			Document document = domImpl.createDocument(NS_PIPELINE_DATA, documentElementName, null);
-	
+
 			return document;
-	
+
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 			return null;
 		}
-	
+
 	}
 
 }

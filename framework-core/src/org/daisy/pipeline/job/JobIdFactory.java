@@ -7,7 +7,7 @@ package org.daisy.pipeline.job;
  * A factory for creating JobId objects.
  */
 public class JobIdFactory {
-	
+
 	/**
 	 * New id object.
 	 *
@@ -17,7 +17,7 @@ public class JobIdFactory {
 		//TODO: based on config
 		return new JobUUIDGenerator().generateId();
 	}
-	
+
 	/**
 	 * New id using a string object as base.
 	 *

@@ -7,26 +7,26 @@ import java.util.Map;
 
 // TODO: Auto-generated Javadoc
 /**
- * Daisy pipeline module holds a set of components accesible via their uri, its name, version and dependencies.  
+ * Daisy pipeline module holds a set of components accesible via their uri, its name, version and dependencies.
  */
 public class Module {
 
 	/** The name. */
-	private String name;
-	
+	private final String name;
+
 	/** The version. */
-	private String version;
-	
+	private final String version;
+
 	/** The title. */
-	private String title;
-	
+	private final String title;
+
 	/** The dependencies. */
-	private Map<String, String> dependencies;
-	
+	private final Map<String, String> dependencies;
+
 	/** The components. */
-	private HashMap<URI,Component> components = new HashMap<URI, Component>();
+	private final HashMap<URI,Component> components = new HashMap<URI, Component>();
 	/** The entities. */
-	private HashMap<String,Entity> entities = new HashMap<String, Entity>();
+	private final HashMap<String,Entity> entities = new HashMap<String, Entity>();
 
 	/**
 	 * Instantiates a new module.
@@ -48,12 +48,12 @@ public class Module {
 			component.setModule(this);
 			this.components.put(component.getURI(), component);
 		}
-		
+
 		for (Entity entity:entities){
 			entity.setModule(this);
 			this.entities.put(entity.getPublicId(), entity);
 		}
-		
+
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class Module {
 	public Iterable<Component> getComponents() {
 		return components.values();
 	}
-	
+
 	/**
 	 * Gets the component identified by the given uri.
 	 *
@@ -110,7 +110,7 @@ public class Module {
 	public Component getComponent(URI uri){
 		return components.get(uri);
 	}
-	
+
 	/**
 	 * Gets the list of entities.
 	 *
@@ -119,7 +119,7 @@ public class Module {
 	public Iterable<Entity> getEntities(){
 		return entities.values();
 	}
-	
+
 	/**
 	 * Gets the entity identified by the given public id.
 	 *
@@ -129,7 +129,7 @@ public class Module {
 	public Entity getEntity(String publicId){
 		return entities.get(publicId);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

@@ -53,15 +53,15 @@ import org.xml.sax.SAXException;
 public class JobsResource extends AuthenticatedResource {
 
 	/** The tempfile prefix. */
-	private String tempfilePrefix = "p2ws";
-	private String tempfileSuffix = ".zip";
-	
-	private String JOB_DATA_FIELD = "job-data";
-	private String JOB_REQUEST_FIELD = "job-request";
-	
+	private final String tempfilePrefix = "p2ws";
+	private final String tempfileSuffix = ".zip";
+
+	private final String JOB_DATA_FIELD = "job-data";
+	private final String JOB_REQUEST_FIELD = "job-request";
+
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(XmlFormatter.class.getName());
-	
+
 	/**
 	 * Gets the resource.
 	 *
@@ -73,15 +73,15 @@ public class JobsResource extends AuthenticatedResource {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
     	}
-    	
-		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager(); 
+
+		JobManager jobMan = ((PipelineWebService)getApplication()).getJobManager();
 		Document doc = XmlFormatter.jobsToXml(jobMan.getJobs());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
 		setStatus(Status.SUCCESS_OK);
 		return dom;
 	}
 
-	
+
 	/**
 	 * Creates the resource.
 	 *
@@ -95,18 +95,18 @@ public class JobsResource extends AuthenticatedResource {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
     	}
-    	
+
         if (representation == null) {
         	// POST request with no entity.
             setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
             return null;
         }
-        
+
         Document doc = null;
         ZipFile zipfile = null;
-        
+
         if (MediaType.MULTIPART_FORM_DATA.equals(representation.getMediaType(), true)) {
-            Request request = this.getRequest();
+            Request request = getRequest();
             // sort through the multipart request
             MultipartRequestData data = processMultipart(request);
             if (data == null) {
@@ -140,28 +140,28 @@ public class JobsResource extends AuthenticatedResource {
 				return null;
 			}
         }
-        
-		boolean isValid = Validator.validateJobRequest(doc, (PipelineWebService)this.getApplication());
-			
+
+		boolean isValid = Validator.validateJobRequest(doc, (PipelineWebService)getApplication());
+
 		if (!isValid) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return null;
 		}
 
 		Job job = createJob(doc, zipfile);
-		
+
 		if (job == null) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return null;
 		}
-		
+
 		Document jobXml = XmlFormatter.jobToXml(job, 0);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
 		setStatus(Status.SUCCESS_CREATED);
 		return dom;
-        
+
     }
-	
+
 	/*
 	 * taken from an example at:
 	 * http://wiki.restlet.org/docs_2.0/13-restlet/28-restlet/64-restlet.html
@@ -173,9 +173,9 @@ public class JobsResource extends AuthenticatedResource {
 	 * @return the multipart request data
 	 */
 	private MultipartRequestData processMultipart(Request request) {
-		
-		String tmpdir = ((PipelineWebService) this.getApplication()).getTmpDir();
-		
+
+		String tmpdir = ((PipelineWebService) getApplication()).getTmpDir();
+
 		// 1/ Create a factory for disk-based file items
         DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
         fileItemFactory.setSizeThreshold(1000240);
@@ -195,11 +195,11 @@ public class JobsResource extends AuthenticatedResource {
 	            FileItem fi = it.next();
 	            if (fi.getFieldName().equals(JOB_DATA_FIELD)) {
 	            	File file = File.createTempFile(tempfilePrefix, tempfileSuffix, new File(tmpdir));
-	                fi.write(file);	  
-	                
+	                fi.write(file);
+
 	                // re-opening the file after writing to it
 	                File file2 = new File(file.getAbsolutePath());
-	                zip = new ZipFile(file2); 
+	                zip = new ZipFile(file2);
 	            }
 	            else if (fi.getFieldName().equals(JOB_REQUEST_FIELD)) {
 	            	xml = fi.getString("utf-8");
@@ -210,7 +210,7 @@ public class JobsResource extends AuthenticatedResource {
 	        	setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 	        	return null;
 	        }
-	        
+
 	        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			docFactory.setNamespaceAware(true);
 			DocumentBuilder builder = docFactory.newDocumentBuilder();
@@ -219,7 +219,7 @@ public class JobsResource extends AuthenticatedResource {
 
 	        MultipartRequestData data = new MultipartRequestData(zip, doc);
 	        return data;
-	        
+
 		} catch (FileUploadException e) {
 			logger.error(e.getMessage());
 			return null;
@@ -228,13 +228,13 @@ public class JobsResource extends AuthenticatedResource {
 			return null;
 		}
 	}
-	
+
 	// just a convenience class for representing the parts of a multipart request
 	/**
 	 * The Class MultipartRequestData.
 	 */
 	private class MultipartRequestData {
-		
+
 	/**
 	 * Process multipart.
 	 *
@@ -242,11 +242,11 @@ public class JobsResource extends AuthenticatedResource {
 	 * @return the multipart request data
 	 */
 		/** The zip. */
-		private ZipFile zip;
-		
+		private final ZipFile zip;
+
 		/** The xml. */
-		private Document xml;
-		
+		private final Document xml;
+
 		/**
 		 * Instantiates a new multipart request data.
 		 *
@@ -257,7 +257,7 @@ public class JobsResource extends AuthenticatedResource {
 			this.zip = zip;
 			this.xml = xml;
 		}
-		
+
 		/**
 		 * Gets the zip file.
 		 *
@@ -266,7 +266,7 @@ public class JobsResource extends AuthenticatedResource {
 		ZipFile getZipFile() {
 			return zip;
 		}
-		
+
 		/**
 		 * Gets the xml.
 		 *
@@ -276,7 +276,7 @@ public class JobsResource extends AuthenticatedResource {
 			return xml;
 		}
 	}
-	
+
 	/**
 	 * Creates the job.
 	 *
@@ -287,7 +287,7 @@ public class JobsResource extends AuthenticatedResource {
 	private Job createJob(Document doc, ZipFile zip) {
 
 		Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
-		
+
 		URI scriptUri = null;
 		try {
 			scriptUri = new URI(scriptElm.getAttribute("href"));
@@ -295,24 +295,24 @@ public class JobsResource extends AuthenticatedResource {
 			logger.error(e.getMessage());
 			return null;
 		}
-		
+
 		// get the script from the URI
-		ScriptRegistry scriptRegistry = ((PipelineWebService)this.getApplication()).getScriptRegistry();
+		ScriptRegistry scriptRegistry = ((PipelineWebService)getApplication()).getScriptRegistry();
 		XProcScriptService scriptService = scriptRegistry.getScript(scriptUri);
-		
+
 		if (scriptService == null) {
 			return null;
 		}
-		
+
 		XProcScript script = scriptService.load();
 		XProcInput.Builder builder = new XProcInput.Builder(script.getXProcPipelineInfo());
-		
+
 		addInputsToJob(doc.getElementsByTagName("input"), script.getXProcPipelineInfo().getInputPorts(), builder);
 		addOptionsToJob(doc.getElementsByTagName("option"), script.getXProcPipelineInfo().getOptions(), builder);
-		
+
 		XProcInput input = builder.build();
-		
-		JobManager jobMan = ((PipelineWebService)this.getApplication()).getJobManager();
+
+		JobManager jobMan = ((PipelineWebService)getApplication()).getJobManager();
 		Job job = null;
 		if (zip != null){
 			ResourceCollection resourceCollection = new ZipResourceContext(zip);
@@ -321,7 +321,7 @@ public class JobsResource extends AuthenticatedResource {
 		else {
 			job = jobMan.newJob(script, input);
 		}
-		
+
 		return  job;
 	}
 
@@ -333,7 +333,7 @@ public class JobsResource extends AuthenticatedResource {
 	 * @param builder the builder
 	 */
 	private void addInputsToJob(NodeList nodes, Iterable<XProcPortInfo> inputPorts, XProcInput.Builder builder) {
-		
+
 		Iterator<XProcPortInfo> it = inputPorts.iterator();
 		while (it.hasNext()) {
 			XProcPortInfo input = it.next();
@@ -344,7 +344,7 @@ public class JobsResource extends AuthenticatedResource {
 				if (name.equals(inputName)) {
 					NodeList fileNodes = inputElm.getElementsByTagName("file");
 					NodeList docwrapperNodes = inputElm.getElementsByTagName("docwrapper");
-				
+
 					if (fileNodes.getLength() > 0) {
 						for (int j = 0; j < fileNodes.getLength(); j++) {
 							String src = ((Element)fileNodes.item(j)).getAttribute("src");
@@ -356,7 +356,7 @@ public class JobsResource extends AuthenticatedResource {
 				            		return source;
 				            	}
 				            };
-			
+
 							builder.withInput(name, prov);
 						}
 					}
@@ -371,9 +371,9 @@ public class JobsResource extends AuthenticatedResource {
 									break;
 								}
 							}
-							
+
 							final SAXSource source = new SAXSource();
-				            
+
 							// TODO any way to get Source directly from a node?
 							String xml = XmlFormatter.nodeToString(content);
 				            InputSource is = new org.xml.sax.InputSource(new java.io.StringReader(xml));
@@ -390,9 +390,9 @@ public class JobsResource extends AuthenticatedResource {
 				}
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * Adds the options to job.
 	 *
@@ -401,12 +401,12 @@ public class JobsResource extends AuthenticatedResource {
 	 * @param builder the builder
 	 */
 	private void addOptionsToJob(NodeList nodes, Iterable<XProcOptionInfo> options, XProcInput.Builder builder) {
-		
+
 		Iterator<XProcOptionInfo> it = options.iterator();
 		while(it.hasNext()) {
 			XProcOptionInfo opt = it.next();
 			String optionName = opt.getName().toString();
-			
+
 			// look for name
 			boolean found = false;
 			for (int i = 0; i< nodes.getLength(); i++) {
@@ -419,7 +419,7 @@ public class JobsResource extends AuthenticatedResource {
 					break;
 				}
 			}
-			
+
 			// if the name was not found, as would be the case for optional options or those filtered out
 			if (!found) {
 				builder.withOption(new QName(optionName), "");

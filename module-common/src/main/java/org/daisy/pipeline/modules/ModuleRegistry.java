@@ -10,16 +10,16 @@ import java.net.URI;
  */
 public interface ModuleRegistry extends Iterable<Module> {
 
-	
+
 	/**
 	 * Adds the module.
 	 *
 	 * @param module the module
 	 */
 	public void addModule(Module module);
-	
-	
-	
+
+
+
 	/**
 	 * Gets the module which has a component identified by the unique systemId.
 	 *
@@ -27,7 +27,7 @@ public interface ModuleRegistry extends Iterable<Module> {
 	 * @return the module by component
 	 */
 	public Module getModuleByComponent(URI uri);
-	
+
 	/**
 	 * Gets the module which has declared the entity with the given public id.
 	 *
@@ -45,14 +45,14 @@ public interface ModuleRegistry extends Iterable<Module> {
 	 * @return the module
 	 */
 	public Module resolveDependency(URI component, Module source);
-	
+
 	/**
 	 * Returns the list of available components.
 	 *
 	 * @return an iterable with all the available components
 	 */
 	public Iterable<URI> getComponents();
-	
+
 	/**
 	 * Returns the list of available entities.
 	 *

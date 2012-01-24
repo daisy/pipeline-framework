@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package org.daisy.pipeline.script;
 
@@ -18,22 +18,22 @@ public final class XProcScriptService {
 
 	/** The Constant SCRIPT_URL. */
 	public static final String SCRIPT_URL = "script.url";
-	
+
 	/** The Constant SCRIPT_DESCRIPTION. */
 	public static final String SCRIPT_DESCRIPTION = "script.description";
-	
+
 	/** The Constant SCRIPT_NAME. */
 	public static final String SCRIPT_NAME = "script.name";
 
 	/** The uri. */
 	private URI uri;
-	
+
 	/** The name. */
 	private String name;
-	
+
 	/** The description. */
 	private String description;
-	
+
 	/** The script. */
 	private Supplier<XProcScript> script;
 
@@ -66,13 +66,13 @@ public final class XProcScriptService {
 					+ " property must not be empty");
 		}
 		try {
-			this.uri = new URI(properties.get(SCRIPT_URL).toString());
+			uri = new URI(properties.get(SCRIPT_URL).toString());
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(SCRIPT_URL
 					+ " property must not be a legal URI");
 		}
-		this.name = properties.get(SCRIPT_NAME).toString();
-		this.description = properties.get(SCRIPT_DESCRIPTION).toString();
+		name = properties.get(SCRIPT_NAME).toString();
+		description = properties.get(SCRIPT_DESCRIPTION).toString();
 	}
 
 	/**
@@ -137,6 +137,7 @@ public final class XProcScriptService {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
+	@Override
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		buf.append("Name: " + name);

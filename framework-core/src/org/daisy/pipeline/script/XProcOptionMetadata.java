@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package org.daisy.pipeline.script;
 
@@ -38,7 +38,7 @@ public class XProcOptionMetadata {
 
 	/**
 	 * Instantiates a new {@link XProcOptionMetadata} object.
-	 * 
+	 *
 	 * @param niceName
 	 *            the nice name
 	 * @param description
@@ -62,7 +62,7 @@ public class XProcOptionMetadata {
 
 	/**
 	 * Gets the nice name.
-	 * 
+	 *
 	 * @return the nice name
 	 */
 	public String getNiceName() {
@@ -71,7 +71,7 @@ public class XProcOptionMetadata {
 
 	/**
 	 * Gets the description.
-	 * 
+	 *
 	 * @return the description
 	 */
 	public String getDescription() {
@@ -80,7 +80,7 @@ public class XProcOptionMetadata {
 
 	/**
 	 * Gets the type.
-	 * 
+	 *
 	 * @return the type
 	 */
 	public String getType() {
@@ -89,7 +89,7 @@ public class XProcOptionMetadata {
 
 	/**
 	 * Gets the media type.
-	 * 
+	 *
 	 * @return the media type
 	 */
 	public String getMediaType() {
@@ -98,7 +98,7 @@ public class XProcOptionMetadata {
 
 	/**
 	 * Gets the direction, if {@link Direction} is output it should be a uri with type AnyFileURI or AnyDirURI, input may be other any c:type.
-	 * 
+	 *
 	 * @return the direction
 	 */
 	public Direction getDirection() {
@@ -127,7 +127,7 @@ public class XProcOptionMetadata {
 
 		/**
 		 * With description.
-		 * 
+		 *
 		 * @param description
 		 *            the description
 		 * @return the builder
@@ -139,7 +139,7 @@ public class XProcOptionMetadata {
 
 		/**
 		 * With nice name.
-		 * 
+		 *
 		 * @param niceName
 		 *            the nice name
 		 * @return the builder
@@ -151,7 +151,7 @@ public class XProcOptionMetadata {
 
 		/**
 		 * With type.
-		 * 
+		 *
 		 * @param type
 		 *            the type
 		 * @return the builder
@@ -163,7 +163,7 @@ public class XProcOptionMetadata {
 
 		/**
 		 * With media type.
-		 * 
+		 *
 		 * @param mediaType
 		 *            the media type
 		 * @return the builder
@@ -175,7 +175,7 @@ public class XProcOptionMetadata {
 
 		/**
 		 * With direction.
-		 * 
+		 *
 		 * @param direction
 		 *            the direction
 		 * @return the builder
@@ -191,7 +191,7 @@ public class XProcOptionMetadata {
 
 		/**
 		 * Builds instance
-		 * 
+		 *
 		 * @return the {@link XProcOptionMetadata}
 		 */
 		public XProcOptionMetadata build() {

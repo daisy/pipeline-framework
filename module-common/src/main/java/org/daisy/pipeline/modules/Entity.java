@@ -16,13 +16,13 @@ import org.slf4j.LoggerFactory;
 public class Entity {
 
 	/** The Public id. */
-	private String mPublicId;
+	private final String mPublicId;
 
 	/** The Path. */
-	private String mPath;
+	private final String mPath;
 
 		/** The loader. */
-	private ResourceLoader mLoader;
+	private final ResourceLoader mLoader;
 
 	/** The module. */
 	private Module mModule;
@@ -76,14 +76,15 @@ public class Entity {
 	 */
 	public URI getResource() {
 try {
-			
+
 			mLogger.debug("getting resource from entity:"+mPath);
 			URL url= mLoader.loadResource(mPath);
-			if(url!=null)
+			if(url!=null) {
 				return url.toURI();
-			else
+			} else {
 				return null;
-			
+			}
+
 		} catch (URISyntaxException e) {
 			return null;
 		}
@@ -97,6 +98,6 @@ try {
 	public ResourceLoader getLoader() {
 		return mLoader;
 	}
-	
-	
+
+
 }

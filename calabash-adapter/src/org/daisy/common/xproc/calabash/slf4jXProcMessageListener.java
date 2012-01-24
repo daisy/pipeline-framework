@@ -22,18 +22,19 @@ import com.xmlcalabash.core.XProcRunnable;
  * @see slf4jXProcMessageEvent
  */
 public class slf4jXProcMessageListener implements XProcMessageListener {
-    
+
     /** The default logger. */
     private static Logger defaultLogger = LoggerFactory.getLogger("com.xmlcalabash");
-    
+
     /** The log. */
     private Logger log = defaultLogger;
 
     /* (non-Javadoc)
      * @see com.xmlcalabash.core.XProcMessageListener#error(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String, net.sf.saxon.s9api.QName)
      */
-    public void error(XProcRunnable step, XdmNode node, String message, QName code) {
-    	
+    @Override
+	public void error(XProcRunnable step, XdmNode node, String message, QName code) {
+
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
@@ -46,8 +47,9 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
     /* (non-Javadoc)
      * @see com.xmlcalabash.core.XProcMessageListener#error(java.lang.Throwable)
      */
-    public void error(Throwable exception) {
- 
+    @Override
+	public void error(Throwable exception) {
+
 
         log.error(XprocMessageHelper.errorMessage(exception));
     }
@@ -55,7 +57,8 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
     /* (non-Javadoc)
      * @see com.xmlcalabash.core.XProcMessageListener#warning(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
      */
-    public void warning(XProcRunnable step, XdmNode node, String message) {
+    @Override
+	public void warning(XProcRunnable step, XdmNode node, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
@@ -67,7 +70,8 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
     /* (non-Javadoc)
      * @see com.xmlcalabash.core.XProcMessageListener#info(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
      */
-    public void info(XProcRunnable step, XdmNode node, String message) {
+    @Override
+	public void info(XProcRunnable step, XdmNode node, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
@@ -79,7 +83,8 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
     /* (non-Javadoc)
      * @see com.xmlcalabash.core.XProcMessageListener#fine(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
      */
-    public void fine(XProcRunnable step, XdmNode node, String message) {
+    @Override
+	public void fine(XProcRunnable step, XdmNode node, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
@@ -91,7 +96,8 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
     /* (non-Javadoc)
      * @see com.xmlcalabash.core.XProcMessageListener#finer(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
      */
-    public void finer(XProcRunnable step, XdmNode node, String message) {
+    @Override
+	public void finer(XProcRunnable step, XdmNode node, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
@@ -103,7 +109,8 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
     /* (non-Javadoc)
      * @see com.xmlcalabash.core.XProcMessageListener#finest(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
      */
-    public void finest(XProcRunnable step, XdmNode node, String message) {
+    @Override
+	public void finest(XProcRunnable step, XdmNode node, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
@@ -118,7 +125,7 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
 	@Override
 	public void warning(Throwable exception) {
 		 log.error(XprocMessageHelper.errorMessage(exception));
-		
+
 	}
 
 
