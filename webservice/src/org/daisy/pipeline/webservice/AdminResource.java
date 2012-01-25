@@ -21,7 +21,7 @@ public class AdminResource extends AuthenticatedResource {
 
 	private boolean authorizeAsAdmin() {
 
-		String id = getQuery().getFirstValue("id");
+		String id = getQuery().getFirstValue("authid");
 
 		Client client = DatabaseManager.getInstance().getClientById(id);
 		if (client == null) {

@@ -41,7 +41,7 @@ public class ScriptResource extends AuthenticatedResource {
 		URI scriptUri = null;
 
 		try {
-			String tmp = (String) getRequestAttributes().get("scriptid");
+			String tmp = (String) getRequestAttributes().get("id");
 			tmp = URLDecoder.decode(tmp.toString(), "UTF-8");
 			scriptUri=URI.create(tmp);
 

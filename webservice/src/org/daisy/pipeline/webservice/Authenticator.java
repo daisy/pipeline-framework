@@ -20,7 +20,7 @@ public class Authenticator {
 
 	private static Logger logger = LoggerFactory.getLogger(Authenticator.class.getName());
 
-	public static boolean authenticate(String id, String hash, String timestamp, String nonce, String URI, long maxRequestTime) {
+	public static boolean authenticate(String authid, String hash, String timestamp, String nonce, String URI, long maxRequestTime) {
 		// rules for hashing: use the whole URL string, minus the hash part (&sign=<some value>)
 		// important!  put the sign param last so we can easily strip it out
 
@@ -28,12 +28,12 @@ public class Authenticator {
 
 		if (idx > 1) {
 			// make sure the client exists
-			if (DatabaseManager.getInstance().getClientById(id) == null) {
-				logger.error(String.format("Client with user ID %s not found", id));
+			if (DatabaseManager.getInstance().getClientById(authid) == null) {
+				logger.error(String.format("Client with auth ID %s not found", authid));
 				return false;
 			}
 			String hashuri = URI.substring(0, idx);
-			String clientSecret = getClientSecret(id);
+			String clientSecret = getClientSecret(authid);
 			String serverHash = "";
 			try {
 				serverHash = calculateRFC2104HMAC(hashuri, clientSecret);
@@ -58,7 +58,7 @@ public class Authenticator {
 					logger.error("Request expired");
 					return false;
 				}
-				if (!checkValidNonce(id, nonce, timestamp)) {
+				if (!checkValidNonce(authid, nonce, timestamp)) {
 					logger.error("Invalid nonce");
 					return false;
 				}
@@ -76,11 +76,11 @@ public class Authenticator {
 
 
 	// nonces, along with timestamps, protect against replay attacks
-	private static boolean checkValidNonce(String id, String nonce, String timestamp) {
+	private static boolean checkValidNonce(String authid, String nonce, String timestamp) {
 
-		Client client = DatabaseManager.getInstance().getClientById(id);
+		Client client = DatabaseManager.getInstance().getClientById(authid);
 		if (client == null) {
-			logger.warn(String.format("Client with user ID %s not found", id));
+			logger.warn(String.format("Client with auth ID %s not found", authid));
 			return false;
 		}
 
@@ -99,9 +99,9 @@ public class Authenticator {
 
 	}
 
-	private static String getClientSecret(String id) {
+	private static String getClientSecret(String authid) {
 
-		Client client = DatabaseManager.getInstance().getClientById(id);
+		Client client = DatabaseManager.getInstance().getClientById(authid);
 		if (client != null) {
 			return client.getSecret();
 		}

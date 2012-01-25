@@ -10,12 +10,12 @@ module Authentication
 
   # the input URI includes all parameters except key, timestamp, and hash
   def prepare_authenticated_uri(uri)
-    Ctxt.logger.debug("autenticated #{Ctxt.conf[Ctxt.conf.class::AUTHENTICATE]}")	
+    Ctxt.logger.debug("authenticated #{Ctxt.conf[Ctxt.conf.class::AUTHENTICATE]}")	
     return uri if Ctxt.conf[Ctxt.conf.class::AUTHENTICATE].to_s=="false" 
     uristring = ""
     timestamp = Time.now.utc.strftime('%Y-%m-%dT%H:%M:%SZ')
     nonce = generate_nonce
-    params = "id=#{Ctxt.conf[Ctxt.conf.class::CLIENT_KEY]}&time=#{timestamp}&nonce=#{nonce}"
+    params = "authid=#{Ctxt.conf[Ctxt.conf.class::CLIENT_KEY]}&time=#{timestamp}&nonce=#{nonce}"
     if uri.index("?") == nil
       uristring = "#{uri}?#{params}"
     else

@@ -30,7 +30,7 @@ public class PipelineWebService extends Application {
 	public static final String LOCAL_MODE = "org.daisy.pipeline.ws.local";
 
 	public static final String SCRIPTS_ROUTE = "/scripts";
-	public static final String SCRIPT_ROUTE = "/scripts/{scriptid}"; 
+	public static final String SCRIPT_ROUTE = "/scripts/{id}";
 	public static final String JOBS_ROUTE = "/jobs";
 	public static final String JOB_ROUTE = "/jobs/{id}";
 	public static final String LOG_ROUTE = "/jobs/{id}/log";

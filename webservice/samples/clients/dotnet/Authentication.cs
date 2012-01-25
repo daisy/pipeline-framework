@@ -7,15 +7,15 @@ namespace PipelineWSClient
 {
 	public class Authentication
 	{
-		private static string CLIENT_ID = "clientid";
-		private static string CLIENT_SECRET = "supersecret";
+		private static string AUTH_ID = "clientid";
+		private static string SECRET = "supersecret";
 		
 		public static string PrepareAuthenticatedUri(string uri)
 		{
 			string uristring = null;
   			string timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
   			string nonce = GenerateNonce();
-  			string query = String.Format("id={0}&time={1}&nonce={2}", CLIENT_KEY, timestamp, nonce);
+  			string query = String.Format("authid={0}&time={1}&nonce={2}", AUTH_ID, timestamp, nonce);
   			if (uri.Contains("?"))
 			{
 				uristring = String.Format("{0}&{1}", uri, query);
@@ -33,7 +33,7 @@ namespace PipelineWSClient
 		public static string GenerateHash(string data)
 		{
 			byte[] dataBytes = Encoding.UTF8.GetBytes(data);
-			byte[] secretBytes = Encoding.UTF8.GetBytes(CLIENT_SECRET);
+			byte[] secretBytes = Encoding.UTF8.GetBytes(SECRET);
 			HMAC hmac = new HMACSHA1(secretBytes);
 			byte[] hashBytes = hmac.ComputeHash(dataBytes);
 			string signature = Convert.ToBase64String(hashBytes);
