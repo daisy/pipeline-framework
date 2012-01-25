@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package org.daisy.pipeline.script;
 
@@ -8,21 +8,21 @@ package org.daisy.pipeline.script;
  * Metadata associated to a port.
  */
 public class XProcPortMetadata {
-	
+
 	/**
 	 *  Builds the {@link XProcPortMetadata} object
 	 */
 	public static final class Builder {
-		
+
 		/** The nice name. */
 		private String niceName;
-		
+
 		/** The description. */
 		private String description;
-		
+
 		/** The media type. */
 		private String mediaType;
-		
+
 		/**
 		 * With nice name.
 		 *
@@ -31,9 +31,9 @@ public class XProcPortMetadata {
 		 */
 		public Builder withNiceName(String niceName){
 			this.niceName=niceName;
-			return this;			
+			return this;
 		}
-		
+
 		/**
 		 * With description.
 		 *
@@ -42,9 +42,9 @@ public class XProcPortMetadata {
 		 */
 		public Builder withDescription(String description){
 			this.description=description;
-			return this;			
+			return this;
 		}
-		
+
 		/**
 		 * With media type.
 		 *
@@ -53,9 +53,9 @@ public class XProcPortMetadata {
 		 */
 		public Builder withMediaType(String mediaType){
 			this.mediaType=mediaType;
-			return this;			
+			return this;
 		}
-		
+
 		/**
 		 * Builds the instance.
 		 *
@@ -64,19 +64,19 @@ public class XProcPortMetadata {
 		public XProcPortMetadata build(){
 			return new XProcPortMetadata(niceName, description, mediaType);
 		}
-		
+
 	}
-	
+
 	/** The nice name. */
 	final private String niceName;
-	
+
 	/** The description. */
 	final private String description;
-	
+
 	/** The media type. */
 	final private String mediaType;
 
-	
+
 	/**
 	 * Instantiates a new x proc port metadata.
 	 *

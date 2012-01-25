@@ -41,7 +41,7 @@ public class PipelineWebService extends Application {
 	private static final String JAVA_IO_TMPDIR = "java.io.tmpdir";
 	
 	public static final String SCRIPTS_ROUTE = "/scripts";
-	public static final String SCRIPT_ROUTE = "/scripts/{scriptid}"; 
+	public static final String SCRIPT_ROUTE = "/scripts/{id}";
 	public static final String JOBS_ROUTE = "/jobs";
 	public static final String JOB_ROUTE = "/jobs/{id}";
 	public static final String LOG_ROUTE = "/jobs/{id}/log";
@@ -99,7 +99,7 @@ public class PipelineWebService extends Application {
 		bundleCtxt=ctxt;
 		readOptions();
 		logger.info(String.format("Starting webservice on port %d",
-				this.portNumber));
+				portNumber));
 		Component component = new Component();
 		component.getServers().add(Protocol.HTTP, portNumber);
 		component.getDefaultHost().attach(path, this);
@@ -145,20 +145,20 @@ public class PipelineWebService extends Application {
 	public boolean isLocal() {
 		return Boolean.valueOf(System.getProperty(LOCAL_MODE));
 	}
-	
+
 	public String getTmpDir() {
-		return this.tmpDir;
+		return tmpDir;
 	}
-	
+
 	public boolean isAuthenticationEnabled() {
-		return this.usesAuthentication;
+		return usesAuthentication;
 	}
-	
+
 	// the length of time in ms that a request is valid for, counting from its timestamp value
 	public long getMaxRequestTime() {
-		return this.maxRequestTime;
+		return maxRequestTime;
 	}
-	
+
 	/**
 	 * Gets the job manager.
 	 *
@@ -194,9 +194,9 @@ public class PipelineWebService extends Application {
 	public void setScriptRegistry(ScriptRegistry scriptRegistry) {
 		this.scriptRegistry = scriptRegistry;
 	}
-	
+
 	private void readOptions() {
-		
+
 		String path = System.getProperty(PATH_PROPERTY);
 		if (path != null) {
 			if (!path.startsWith("/")) {
@@ -204,65 +204,65 @@ public class PipelineWebService extends Application {
 			}
 			this.path = path;
 		}
-		
+
 		String authentication = System.getProperty(AUTHENTICATION_PROPERTY);
-		
+
 		if (authentication != null) {
 			if (authentication.equalsIgnoreCase("true")) {
-				this.usesAuthentication = true;
+				usesAuthentication = true;
 			}
 			else if (authentication.equalsIgnoreCase("false")) {
-				this.usesAuthentication = false;
+				usesAuthentication = false;
 				logger.info("Web service authentication is OFF");
 			}
 			else {
 				logger.error(String.format(
-						"Value specified in option %s (%s) is not valid. Using default value of %s.", 
-						AUTHENTICATION_PROPERTY, authentication, this.usesAuthentication));
+						"Value specified in option %s (%s) is not valid. Using default value of %s.",
+						AUTHENTICATION_PROPERTY, authentication, usesAuthentication));
 			}
 		}
-		
+
 		String port = System.getProperty(PORT_PROPERTY);
 		if (port != null) {
 			try {
 				int portnum = Integer.parseInt(port);
-				if (portnum >= 0 && portnum <= 65535) { 
-					this.portNumber = portnum;
+				if (portnum >= 0 && portnum <= 65535) {
+					portNumber = portnum;
 				}
 				else {
 					logger.error(String.format(
-							"Value specified in option %s (%d) is not valid. Using default value of %d.", 
-							PORT_PROPERTY, portnum, this.portNumber));
+							"Value specified in option %s (%d) is not valid. Using default value of %d.",
+							PORT_PROPERTY, portnum, portNumber));
 				}
 			} catch (NumberFormatException e) {
 				logger.error(String.format(
-						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.", 
-						PORT_PROPERTY, port, this.portNumber));
+						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.",
+						PORT_PROPERTY, port, portNumber));
 			}
 		}
-		
+
 		String tmp = System.getProperty(TMPDIR_PROPERTY);
 		if (tmp != null) {
 			File f = new File(tmp);
 			if (f.exists()) {
-				this.tmpDir = tmp;
+				tmpDir = tmp;
 			}
 			else {
 				logger.error(String.format(
-						"Value specified in option %s (%s) is not valid. Using default value of %s.", 
-						TMPDIR_PROPERTY, tmp, this.tmpDir));
+						"Value specified in option %s (%s) is not valid. Using default value of %s.",
+						TMPDIR_PROPERTY, tmp, tmpDir));
 			}
 		}
-		
+
 		String maxrequesttime = System.getProperty(MAX_REQUEST_TIME_PROPERTY);
 		if (maxrequesttime != null) {
 			try {
 				long ms = Long.parseLong(maxrequesttime);
-				this.maxRequestTime = ms;
+				maxRequestTime = ms;
 			} catch(NumberFormatException e) {
 				logger.error(String.format(
-						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.", 
-						MAX_REQUEST_TIME_PROPERTY, maxrequesttime, this.maxRequestTime));
+						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.",
+						MAX_REQUEST_TIME_PROPERTY, maxrequesttime, maxRequestTime));
 			}
 		}
 	}

@@ -4,10 +4,10 @@ import java.net.URI;
 
 
 /**
- * The Interface XmlCatalogParser is used to parse xml catalogs 
+ * The Interface XmlCatalogParser is used to parse xml catalogs
  */
 public interface XmlCatalogParser {
-	
+
 	/**
 	 * Parses the xml catalog at uri and returns a {@link XmlCatalog} object
 	 *

@@ -6,15 +6,15 @@ import java.util.List;
 import org.daisy.common.base.Filter;
 import org.daisy.common.messaging.MemoryMessageListener;
 import org.daisy.common.messaging.Message;
-import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.Message.Level;
+import org.daisy.common.messaging.MessageAccessor;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class MemoryMessageListenerTest {
 	MemoryMessageListener accessor;
-	
+
 	@Before
 	public void setUp(){
 		accessor=new MemoryMessageListener();
@@ -24,12 +24,12 @@ public class MemoryMessageListenerTest {
 		accessor.warn("m3");
 		accessor.debug("m4");
 	}
-	
+
 	@Test
 	public void applyFiltersTest() {
 		HashSet<Level> levels= new HashSet<Level>();
 		levels.add(Level.DEBUG);
-		
+
 		Filter<List<Message>> seqFilt= new MessageAccessor.SequenceFilter(2);
 		Filter<List<Message>> levelFilt= new MessageAccessor.LevelFilter(levels);
 		Filter[] arr = new Filter[]{seqFilt,levelFilt};

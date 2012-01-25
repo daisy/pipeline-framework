@@ -22,7 +22,7 @@ import org.daisy.common.xproc.XProcResult;
 public class CommandPipeline implements Command {
 
 	/**
-	 * New instance using the the parameters provided using the CLI 
+	 * New instance using the the parameters provided using the CLI
 	 *
 	 * @param pipeline the pipeline
 	 * @param inputArgs the input args
@@ -41,19 +41,19 @@ public class CommandPipeline implements Command {
 
 	/** The xproc engine. */
 	private final XProcEngine xprocEngine;
-	
+
 	/** The uri. */
 	private final String uri;
-	
+
 	/** The inputs. */
 	private final Map<String, String> inputs;
-	
+
 	/** The outputs. */
 	private final Map<String, String> outputs;
-	
+
 	/** The options. */
 	private final Map<String, String> options;// FIXME use QNames
-	
+
 	/** The params. */
 	private final Map<String, HashMap<String, String>> params;
 
@@ -73,10 +73,10 @@ public class CommandPipeline implements Command {
 			throw new IllegalArgumentException("Error: no XProc document URI");
 		}
 		this.uri = uri;
-		this.inputs = CommandHelper.parseInputList(inputArgs);
-		this.outputs = CommandHelper.parseInputList(outputArgs);
-		this.params = parseParamsList(paramsArgs);
-		this.options = CommandHelper.parseInputList(optionsArgs);
+		inputs = CommandHelper.parseInputList(inputArgs);
+		outputs = CommandHelper.parseInputList(outputArgs);
+		params = parseParamsList(paramsArgs);
+		options = CommandHelper.parseInputList(optionsArgs);
 		this.xprocEngine = xprocEngine;
 	}
 
@@ -140,8 +140,9 @@ public class CommandPipeline implements Command {
 			throws IllegalArgumentException {
 
 		HashMap<String, HashMap<String, String>> pairs = new HashMap<String, HashMap<String, String>>();
-		if (list.isEmpty())
+		if (list.isEmpty()) {
 			return pairs;
+		}
 
 		String[] parts = list.split(",");
 		for (String part : parts) {

@@ -25,40 +25,42 @@ import org.xml.sax.SAXException;
 
 public class ClientResource extends AdminResource {
 	private Client client;
-	
+
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(XmlFormatter.class.getName());
-	
-	@Override  
-    public void doInit() {  
+
+	@Override
+    public void doInit() {
 		super.doInit();
-		if (!isAuthorized()) return;
+		if (!isAuthorized()) {
+			return;
+		}
 		String idParam = (String) getRequestAttributes().get("id");
 		client = DatabaseManager.getInstance().getClientById(idParam);
 	}
-  
+
     /**
      * Gets the resource.
      *
      * @return the resource
      */
     @Get("xml")
-    public Representation getResource() {  
+    public Representation getResource() {
     	if (!isAuthorized()) {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
     	}
-    	
+
     	if (client == null) {
     		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return null;
     	}
-    	
+
     	setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, org.daisy.pipeline.webservice.XmlFormatter.clientToXml(client));
 		return dom;
-    }  
-    
+    }
+
 	/**
 	 * Delete resource.
 	 */
@@ -68,13 +70,13 @@ public class ClientResource extends AdminResource {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return;
     	}
-    	
+
     	if (client == null) {
     		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return;
     	}
-    	
-    	
+
+
 		if (DatabaseManager.getInstance().deleteObject(client)) {
 			setStatus(Status.SUCCESS_NO_CONTENT);
 		}
@@ -82,29 +84,29 @@ public class ClientResource extends AdminResource {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 		}
 	}
-	
+
 	@Put
 	public Representation putResource(Representation representation) {
-		
+
 		if (!isAuthorized()) {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
     	}
-    	
+
     	// our PUT method won't create a client, just replace information for an existing client
     	if (client == null) {
     		setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
             return null;
     	}
-    	
+
         if (representation == null) {
         	// PUT request with no entity.
             setStatus(Status.CLIENT_ERROR_NOT_FOUND);
             return null;
         }
-        
+
         Document doc = null;
-        
+
         String s;
 		try {
 			s = representation.getText();
@@ -126,32 +128,32 @@ public class ClientResource extends AdminResource {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return null;
 		}
-        
-           
+
+
 		boolean isValid = Validator.validateXml(doc, Validator.clientSchema);
-			
+
 		if (!isValid) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return null;
 		}
-        
+
 		Client newClient = new Client();
 		Element root = doc.getDocumentElement();
 		String newid = root.getAttribute("id");
 		String newcontact = root.getAttribute("contact");
 		String newsecret = root.getAttribute("secret");
 		String newrole = root.getAttribute("role");
-		
+
 		newClient.setId(newid);
 		newClient.setSecret(newsecret);
 		newClient.setRole(Client.Role.valueOf(newrole));
 		newClient.setContactInfo(newcontact);
-		
+
 		DatabaseManager.getInstance().updateObject(client.getInternalId(), newClient);
-		
+
 		setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.clientToXml(newClient));
 		return dom;
-		
-    }  
+
+    }
 }

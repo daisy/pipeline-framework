@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.daisy.common.base.Filter;
 import org.daisy.common.messaging.Message.Level;
@@ -14,17 +13,17 @@ import com.google.common.collect.HashMultimap;
 
 
 /**
- * This class receives message events and stores them in memory and gives access to them via the accessor interface.  
+ * This class receives message events and stores them in memory and gives access to them via the accessor interface.
  * The class that is interested in processing a memoryMessage
- * 
+ *
  */
 public class MemoryMessageListener implements MessageListener,MessageAccessor {
-	/* TODO add a configuration item for message level */ 
+	/* TODO add a configuration item for message level */
 	/** The m messages. */
 	HashMultimap<Level, Message> mMessages = HashMultimap.create();
 	List<Message> mSeqList=new ArrayList<Message>();
 	int mSequence = 0;
-	
+
 	/**
 	 * Stores the message
 	 *
@@ -179,9 +178,9 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 			}
 		}
 		return msgs;
-	
+
 	}
-	
+
 	/**
 	 * Gets the messages from the given level.
 	 *
@@ -211,15 +210,15 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 	public List<Message> getAll() {
 		return new ArrayList<Message>(mSeqList);
 	}
-	
+
 	@Override
 	public List<Message> filtered(Filter<List<Message>>... filters) {
-		List<Message> filtered = this.getAll();
-		
+		List<Message> filtered = getAll();
+
 		for(Filter<List<Message>> filter:filters){
 			filtered=filter.filter(filtered);
 		}
 		return filtered;
 	}
-	
+
 }

@@ -16,18 +16,18 @@ Import-Package: com.google.common.base,
  javax.xml.transform,
  javax.xml.transform.sax,
  javax.xml.transform.stream,
+ net.sf.saxon,
+ net.sf.saxon.functions,
+ net.sf.saxon.lib,
  net.sf.saxon.om,
  net.sf.saxon.s9api,
  net.sf.saxon.trans,
- net.sf.saxon.functions,
- net.sf.saxon,
- net.sf.saxon.lib,
  org.daisy.common.base,
  org.daisy.common.messaging,
  org.daisy.common.xproc,
+ org.daisy.pipeline.xpath,
  org.slf4j,
  org.xml.sax,
- org.xml.sax.helpers,
- org.daisy.pipeline.xpath
+ org.xml.sax.helpers
 Export-Package: org.daisy.common.xproc.calabash
 Service-Component: OSGI-INF/xproc-engine.xml, OSGI-INF/config-factory.xml

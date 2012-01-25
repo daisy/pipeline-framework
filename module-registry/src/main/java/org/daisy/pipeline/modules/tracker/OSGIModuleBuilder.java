@@ -24,52 +24,61 @@ public class OSGIModuleBuilder implements ModuleBuilder {
 	private String name;
 	private String version;
 	private String title;
-	private Map<String, String> dependencies = new HashMap<String, String>();
-	private List<Component> components = new ArrayList<Component>();
-	private List<Entity> entities = new ArrayList<Entity>();
-	private Logger mLogger = LoggerFactory.getLogger(getClass());
+	private final Map<String, String> dependencies = new HashMap<String, String>();
+	private final List<Component> components = new ArrayList<Component>();
+	private final List<Entity> entities = new ArrayList<Entity>();
+	private final Logger mLogger = LoggerFactory.getLogger(getClass());
 
+	@Override
 	public Module build() {
 		return new Module(name, version, title, dependencies, components,entities);
 	}
 
+	@Override
 	public ModuleBuilder withName(String name) {
 		this.name = name;
 		return this;
 	}
 
+	@Override
 	public ModuleBuilder withLoader(ResourceLoader loader) {
 		this.loader = loader;
 		return this;
 	}
 
+	@Override
 	public ModuleBuilder withVersion(String version) {
 		this.version = version;
 		return this;
 	}
 
+	@Override
 	public ModuleBuilder withTitle(String title) {
 		this.title = title;
 		return this;
 	}
 
+	@Override
 	public ModuleBuilder withDependencies(
 			Map<? extends String, ? extends String> dependencies) {
 		this.dependencies.putAll(dependencies);
 		return this;
 	}
 
+	@Override
 	public ModuleBuilder withDependency(String name, String version) {
 		dependencies.put(name, version);
 		return this;
 	}
 
+	@Override
 	public ModuleBuilder withComponents(
 			Collection<? extends Component> components) {
 		this.components.addAll(components);
 		return this;
 	}
 
+	@Override
 	public ModuleBuilder withComponent(URI uri, String path) {
 		mLogger.trace("withComponent:" + uri.toString() + ", path: " + path);
 		components.add(new Component(uri, path, loader));
@@ -80,11 +89,12 @@ public class OSGIModuleBuilder implements ModuleBuilder {
 		String title = bundle.getSymbolicName();
 		String version=bundle.getVersion().toString();
 		String name=bundle.getHeaders().get("Bundle-Name").toString();
-		this.withVersion(version);
-		this.withName(name);
-		this.withTitle(title);
-		this.withLoader(new ResourceLoader() {
+		withVersion(version);
+		withName(name);
+		withTitle(title);
+		withLoader(new ResourceLoader() {
 
+			@Override
 			public URL loadResource(String path) {
 				//catalog is placed on the meta-inf folder, all the paths are relative to it
 				//url getResource or getEntry does not support relative paths then get rid of the starting ../
@@ -97,15 +107,15 @@ public class OSGIModuleBuilder implements ModuleBuilder {
 
 	public OSGIModuleBuilder withCatalog(XmlCatalog catalog) {
 		for (Map.Entry<URI, URI> entry:catalog.getSystemIdMappings().entrySet()){
-			this.withComponent(entry.getKey(), entry.getValue().toString());
+			withComponent(entry.getKey(), entry.getValue().toString());
 		}
 		for (Map.Entry<URI, URI> entry:catalog.getUriMappings().entrySet()){
-			this.withComponent(entry.getKey(), entry.getValue().toString());
+			withComponent(entry.getKey(), entry.getValue().toString());
 		}
 		for (Map.Entry<String, URI> entry:catalog.getPublicMappings().entrySet()){
-			this.withEntity(entry.getKey(), entry.getValue().toString());
+			withEntity(entry.getKey(), entry.getValue().toString());
 		}
-		
+
 		return this;
 	}
 

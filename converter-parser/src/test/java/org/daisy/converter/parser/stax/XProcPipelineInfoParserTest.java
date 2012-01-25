@@ -49,7 +49,7 @@ public class XProcPipelineInfoParserTest {
 		assertNotNull(ports);
 		assertEquals(2, Iterables.size(ports));
 	}
-	
+
 	/**
 	 * Test input port.
 	 */
@@ -63,7 +63,7 @@ public class XProcPipelineInfoParserTest {
 		assertTrue(port.isSequence());
 
 	}
-	
+
 	/**
 	 * Test output ports.
 	 */
@@ -101,7 +101,7 @@ public class XProcPipelineInfoParserTest {
 		// assertEquals(true, port.isSequence());
 
 	}
-	
+
 	/**
 	 * Test option.
 	 */

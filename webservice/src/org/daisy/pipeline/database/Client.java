@@ -4,26 +4,26 @@ package org.daisy.pipeline.database;
 public class Client extends BasicDatabaseObject{
 
 	private String internalId;
-	
+
 	public String getInternalId() {
 		return internalId;
 	}
-	
+
 	public enum Role {
 	    ADMIN, CLIENTAPP
 	}
-	
+
 	// the fields for each client object
 	private String id;
 	private String secret;
 	private Role role = Role.CLIENTAPP;
-	
+
 	// in the future, use a separate table to list contact information for client app maintainers
 	// with a single field, we'll just store email info
 	private String contactInfo;
-	
-	
-	public Client() {		
+
+
+	public Client() {
 	}
 
 	public Client(String id, String secret, Role role, String contactInfo) {
@@ -32,7 +32,7 @@ public class Client extends BasicDatabaseObject{
 		this.role = role;
 		this.contactInfo = contactInfo;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -64,6 +64,6 @@ public class Client extends BasicDatabaseObject{
 	public void setContactInfo(String contactInfo) {
 		this.contactInfo = contactInfo;
 	}
-	
-		
+
+
 }

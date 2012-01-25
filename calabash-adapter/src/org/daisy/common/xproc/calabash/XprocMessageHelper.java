@@ -19,7 +19,7 @@ import com.xmlcalabash.util.URIUtils;
  * Collection of message formating function from the calabash dependent objects to strings
  */
 public class XprocMessageHelper {
-	
+
 	/**
 	 * Formats the message from the objects passed as argument.
 	 *

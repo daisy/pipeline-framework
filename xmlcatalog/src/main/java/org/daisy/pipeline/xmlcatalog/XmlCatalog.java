@@ -6,16 +6,16 @@ import java.util.Map;
 
 // TODO: Auto-generated Javadoc
 /**
- * Simple xml catalog respresentation which gives access to the mapped uri, systemId's and publicId's 
+ * Simple xml catalog respresentation which gives access to the mapped uri, systemId's and publicId's
  */
 public class XmlCatalog {
 
 	/** The m public mappings. */
 	HashMap<String, URI> mPublicMappings = new HashMap<String, URI>();
-	
+
 	/** The m system id mappings. */
 	HashMap<URI, URI> mSystemIdMappings = new HashMap<URI, URI>();
-	
+
 	/** The m uri mappings. */
 	HashMap<URI, URI> mURIMappings = new HashMap<URI, URI>();
 
@@ -64,16 +64,16 @@ public class XmlCatalog {
 	}
 
 	/**
-	 *  Builds a xml catalog 
+	 *  Builds a xml catalog
 	 */
 	public static class Builder {
-		
+
 		/** The m public mappings. */
 		HashMap<String, URI> mPublicMappings = new HashMap<String, URI>();
-		
+
 		/** The m system id mappings. */
 		HashMap<URI, URI> mSystemIdMappings = new HashMap<URI, URI>();
-		
+
 		/** The m uri mappings. */
 		HashMap<URI, URI> mURIMappings = new HashMap<URI, URI>();
 
@@ -121,6 +121,6 @@ public class XmlCatalog {
 		public XmlCatalog build(){
 			return new XmlCatalog(mPublicMappings,mSystemIdMappings,mURIMappings);
 		}
-		
+
 	}
 }

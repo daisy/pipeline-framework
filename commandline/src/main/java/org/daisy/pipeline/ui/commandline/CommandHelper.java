@@ -8,7 +8,7 @@ import java.util.HashMap;
  * Utilities for CLI command processing
  */
 public class CommandHelper {
-	
+
 	/**
 	 * Parses the input list.
 	 *
@@ -20,8 +20,9 @@ public class CommandHelper {
 			throws IllegalArgumentException {
 
 		HashMap<String, String> pairs = new HashMap<String, String>();
-		if (list.isEmpty())
+		if (list.isEmpty()) {
 			return pairs;
+		}
 
 		String[] parts = list.split(",");
 		for (String part : parts) {

@@ -6,7 +6,7 @@ import joptsimple.OptionParser;
 
 
 /**
- * The Class CommandUsage shows the detailed help for the command line interface. 
+ * The Class CommandUsage shows the detailed help for the command line interface.
  */
 public final class CommandUsage implements Command {
 
@@ -33,7 +33,7 @@ public final class CommandUsage implements Command {
 
 	/** The message. */
 	private final String message;
-	
+
 	/** The parser. */
 	private final OptionParser parser;
 

@@ -15,7 +15,7 @@ import org.junit.Test;
 public class MessageAccessorTest {
 
 	List<Message> l;
-	@Before 
+	@Before
 	public void setUp(){
 		l= new LinkedList<Message>();
 		l.add(new Message.Builder().withLevel(Level.INFO).withMessage("m0").withSequence(0).build());

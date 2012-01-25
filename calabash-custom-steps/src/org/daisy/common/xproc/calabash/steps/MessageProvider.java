@@ -17,16 +17,17 @@ import com.xmlcalabash.runtime.XAtomicStep;
 
 
 /**
- * This class offers a reimplementation of calabash's Message step (cx:message) which uses internal message throwing mechanisms instead of dumping the messages to stdout.   
+ * This class offers a reimplementation of calabash's Message step (cx:message) which uses internal message throwing mechanisms instead of dumping the messages to stdout.
  */
 public class MessageProvider implements XProcStepProvider {
-	
+
 	/** The logger. */
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/* (non-Javadoc)
 	 * @see org.daisy.common.xproc.calabash.XProcStepProvider#newStep(com.xmlcalabash.core.XProcRuntime, com.xmlcalabash.runtime.XAtomicStep)
 	 */
+	@Override
 	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
 		return new Message(runtime, step);
 	}
@@ -41,8 +42,8 @@ public class MessageProvider implements XProcStepProvider {
 
 /**
  * Actual implementation of the Message step
- * 
- * 
+ *
+ *
  */
 class Message extends DefaultStep {
 	private static final QName _message = new QName("", "message");
@@ -56,19 +57,23 @@ class Message extends DefaultStep {
 		super(runtime, step);
 	}
 
+	@Override
 	public void setInput(String port, ReadablePipe pipe) {
 		source = pipe;
 	}
 
+	@Override
 	public void setOutput(String port, WritablePipe pipe) {
 		result = pipe;
 	}
 
+	@Override
 	public void reset() {
 		source.resetReader();
 		result.resetWriter();
 	}
 
+	@Override
 	public void run() throws SaxonApiException {
 		super.run();
 

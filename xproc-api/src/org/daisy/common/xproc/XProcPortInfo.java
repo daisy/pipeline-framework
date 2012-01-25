@@ -10,11 +10,11 @@ public final class XProcPortInfo {
 	 * The Enum Kind.
 	 */
 	public static enum Kind {
-		
+
 		/** The INPUT. */
-		INPUT, 
+		INPUT,
  /** The OUTPUT. */
- OUTPUT, 
+ OUTPUT,
  /** The PARAMETER. */
  PARAMETER
 	};
@@ -58,13 +58,13 @@ public final class XProcPortInfo {
 
 	/** The kind. */
 	private final Kind kind;
-	
+
 	/** The name. */
 	private final String name;
-	
+
 	/** The is primary. */
 	private final boolean isPrimary;
-	
+
 	/** The is sequence. */
 	private final boolean isSequence;
 

@@ -9,8 +9,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 /**
- * The Class XProcPipelineInfo gives access to the collection of ports and options from a pipeline. 
- * This class is immutable, in order to give actual values to ports and options use an {@link XProcInput} object.  
+ * The Class XProcPipelineInfo gives access to the collection of ports and options from a pipeline.
+ * This class is immutable, in order to give actual values to ports and options use an {@link XProcInput} object.
  */
 public final class XProcPipelineInfo {
 
@@ -21,16 +21,16 @@ public final class XProcPipelineInfo {
 
 		/** The uri. */
 		private URI uri;
-		
+
 		/** The input ports. */
 		private final Map<String, XProcPortInfo> inputPorts = Maps.newHashMap();
-		
+
 		/** The parameter ports. */
 		private final Map<String, XProcPortInfo> parameterPorts = Maps.newHashMap();
-		
+
 		/** The output ports. */
 		private final Map<String, XProcPortInfo> outputPorts = Maps.newHashMap();
-		
+
 		/** The options. */
 		private final Map<QName, XProcOptionInfo> options = Maps.newHashMap();
 
@@ -79,7 +79,7 @@ public final class XProcPipelineInfo {
 		 * @return the builder
 		 */
 		public Builder withOption(XProcOptionInfo option) {
-			this.options.put(option.getName(), option);
+			options.put(option.getName(), option);
 			return this;
 		}
 
@@ -96,16 +96,16 @@ public final class XProcPipelineInfo {
 
 	/** The uri. */
 	private final URI uri;
-	
+
 	/** The input ports. */
 	private final Map<String, XProcPortInfo> inputPorts;
-	
+
 	/** The parameter ports. */
 	private final Map<String, XProcPortInfo> parameterPorts;
-	
+
 	/** The output ports. */
 	private final Map<String, XProcPortInfo> outputPorts;
-	
+
 	/** The options. */
 	private final Map<QName, XProcOptionInfo> options;
 

@@ -18,31 +18,31 @@ import java.util.zip.ZipOutputStream;
  * The Class IOHelper offers some utilities to the {@link IOBridge} class.
  */
 public class IOHelper {
-	
+
 	/** The Constant SLASH. */
 	private static final String SLASH = "/";
 
 	/** The Constant BLOCK_SIZE. */
 	private static final int BLOCK_SIZE = 1024;
-	
+
 	/** The Constant DEFAULT_OUTPUT_FOLDER. */
 	private static final String DEFAULT_OUTPUT_FOLDER="output";
-	
+
 	/** The Constant DEFAULT_OUTPUT_FILE. */
 	private static final String DEFAULT_OUTPUT_FILE="file";
-	
+
 	/** The m folder outs. */
 	private int mFolderOuts;
-	
+
 	/** The m file outs. */
 	private int mFileOuts;
-	
+
 	/** The m output folder preffix. */
 	private String mOutputFolderPreffix;
-	
+
 	/** The m output file preffix. */
 	private String mOutputFilePreffix;
-	
+
 	/**
 	 * Instantiates a new iO helper.
 	 */
@@ -50,7 +50,7 @@ public class IOHelper {
 		mOutputFolderPreffix=DEFAULT_OUTPUT_FOLDER;
 		mOutputFilePreffix=DEFAULT_OUTPUT_FILE;
 	}
-	
+
 	/**
 	 * Maps relative uris to the base
 	 *
@@ -62,8 +62,8 @@ public class IOHelper {
 		String furi= base+uri;
 		return URI.create(furi);
 	}
-	
-	
+
+
 
 	/**
 	 * Gets a new output folder
@@ -75,7 +75,7 @@ public class IOHelper {
 		String fUri=base+SLASH+mOutputFolderPreffix+"_"+(++mFolderOuts)+SLASH;
 		return URI.create(fUri);
 	}
-	
+
 	/**
 	 * Gets a new output file.
 	 *
@@ -87,7 +87,7 @@ public class IOHelper {
 		String fUri=base+SLASH+mOutputFilePreffix+"_"+(++mFileOuts)+suffix;
 		return URI.create(fUri);
 	}
-	
+
 	/**
 	 * Sets the folder output preffix.
 	 *
@@ -96,7 +96,7 @@ public class IOHelper {
 	public void setFolderOutputPreffix(String outputPreffix) {
 		mOutputFolderPreffix = outputPreffix;
 	}
-	
+
 	/**
 	 * Sets the file output preffix.
 	 *
@@ -105,7 +105,7 @@ public class IOHelper {
 	public void setFileOutputPreffix(String outputPreffix) {
 		mOutputFilePreffix = outputPreffix;
 	}
-	
+
 	/**
 	 * Dumps the content of the IS to the given path.
 	 *
@@ -140,10 +140,10 @@ public class IOHelper {
 		int read=0;
 		while((read=is.read(buff))>0){
 			os.write(buff,0,read);
-			
+
 		}
 	}
-	
+
 	/**
 	 * Generate output names  based on its media type.
 	 *
@@ -159,7 +159,7 @@ public class IOHelper {
 			//TODO try to generate the extension using the media type
 			return name+".xml";
 		}
-		
+
 	}
 
 	/**
@@ -192,14 +192,14 @@ public class IOHelper {
 	 */
 	public static URI zipFromEntries(List<File> files, File output,String pathMask) throws ZipException, IOException {
 		ZipOutputStream zipOs = new ZipOutputStream(new FileOutputStream(output));
-		
+
 		for(File f:files){
 			ZipEntry entry= new ZipEntry(f.toString().replace(pathMask, ""));
 			zipOs.putNextEntry(entry);
 			InputStream is=new FileInputStream(f);
 			dump(is,zipOs);
 			is.close();
-			
+
 		}
 		zipOs.close();
 		return output.toURI();

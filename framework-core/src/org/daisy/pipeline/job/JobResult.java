@@ -12,18 +12,18 @@ import org.daisy.common.messaging.MessageAccessor;
  * The Class JobResult.
  */
 public class JobResult {
-	
+
 	/**
 	 * The Class Builder.
 	 */
 	public static class Builder {
-		
+
 		/** The m zip file. */
 		URI mZipFile;
-		
+
 		/** The m messages. */
 		MessageAccessor mMessages;
-		
+
 		/** The m log file. */
 		URI mLogFile;
 
@@ -48,7 +48,7 @@ public class JobResult {
 			mZipFile = zipFile;
 			return this;
 		}
-		
+
 		/**
 		 * With log file.
 		 *
@@ -56,10 +56,10 @@ public class JobResult {
 		 * @return the builder
 		 */
 		public Builder withLogFile(URI logFile) {
-			this.mLogFile=logFile;
+			mLogFile=logFile;
 			return this;
 		}
-		
+
 		/**
 		 * Builds the job result object.
 		 *
@@ -69,18 +69,18 @@ public class JobResult {
 			return new JobResult(mZipFile, mMessages,mLogFile);
 		}
 
-		
+
 	}
 
 	/** The zip file. */
 	final URI mZipFile;
-	
+
 	/** The  messages. */
 	final MessageAccessor mMessages;
-	
+
 	/** The  log file. */
 	final URI mLogFile;
-	
+
 	/**
 	 * Instantiates a new job result.
 	 *
@@ -101,10 +101,11 @@ public class JobResult {
 	 * @return the errors
 	 */
 	public List<Message> getErrors() {
-		if (mMessages == null)
+		if (mMessages == null) {
 			return new LinkedList<Message>();
-		else
+		} else {
 			return mMessages.getErrors();
+		}
 	}
 
 	/**
@@ -113,10 +114,11 @@ public class JobResult {
 	 * @return the warnings
 	 */
 	public List<Message> getWarnings() {
-		if (mMessages == null)
+		if (mMessages == null) {
 			return new LinkedList<Message>();
-		else
+		} else {
 			return mMessages.getWarnings();
+		}
 	}
 
 	/**
@@ -127,7 +129,7 @@ public class JobResult {
 	public URI getZip() {
 		return mZipFile;
 	}
-	
+
 	/**
 	 * Gets the log file.
 	 *

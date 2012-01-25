@@ -7,15 +7,15 @@ require 'cgi'
 module Authentication
   module_function
 
-  CLIENT_ID = "clientid"
-  CLIENT_SECRET = "supersecret"
+  AUTH_ID = "clientid"
+  SECRET = "supersecret"
 
   # the input URI includes all parameters except id, timestamp, and hash
   def prepare_authenticated_uri(uri)
     uristring = ""
     timestamp = Time.now.utc.strftime('%Y-%m-%dT%H:%M:%SZ')
     nonce = generate_nonce
-    params = "id=#{CLIENT_ID}&time=#{timestamp}&nonce=#{nonce}"
+    params = "authid=#{AUTH_ID}&time=#{timestamp}&nonce=#{nonce}"
     if uri.index("?") == nil
       uristring = "#{uri}?#{params}"
     else
@@ -29,7 +29,7 @@ module Authentication
 
   def generate_hash(data)
     digest = OpenSSL::Digest::Digest.new('sha1')
-    hash = OpenSSL::HMAC.digest(digest, CLIENT_SECRET, data)
+    hash = OpenSSL::HMAC.digest(digest, SECRET, data)
     hash64 = Base64.encode64(hash).chomp
     return CGI.escape(hash64)
   end

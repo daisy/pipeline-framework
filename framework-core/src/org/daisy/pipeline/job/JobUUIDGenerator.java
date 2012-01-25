@@ -8,7 +8,7 @@ import java.util.UUID;
  * The Class JobUUIDGenerator relies on {@link UUID} objects to generate job ids
  */
 public class JobUUIDGenerator implements JobIdGenerator {
-	
+
 	/* (non-Javadoc)
 	 * @see org.daisy.pipeline.job.JobIdGenerator#generateId()
 	 */
@@ -24,14 +24,14 @@ public class JobUUIDGenerator implements JobIdGenerator {
 	public JobId generateIdFromString(String base) {
 		return new JobUUID(base);
 	}
-	
+
 	/**
 	 * The Class JobUUID.
 	 */
 	private static class JobUUID implements JobId {
 
 		/** The m id. */
-		private UUID mId;
+		private final UUID mId;
 
 		/**
 		 * Instantiates a new job uuid.
@@ -48,7 +48,7 @@ public class JobUUIDGenerator implements JobIdGenerator {
 		private JobUUID(String base) {
 			mId = UUID.fromString(base);
 		}
-		
+
 		/* (non-Javadoc)
 		 * @see java.lang.Comparable#compareTo(java.lang.Object)
 		 */
@@ -74,18 +74,23 @@ public class JobUUIDGenerator implements JobIdGenerator {
 		 */
 		@Override
 		public boolean equals(Object obj) {
-			if (this == obj)
+			if (this == obj) {
 				return true;
-			if (obj == null)
+			}
+			if (obj == null) {
 				return false;
-			if (getClass() != obj.getClass())
+			}
+			if (getClass() != obj.getClass()) {
 				return false;
+			}
 			JobUUID other = (JobUUID) obj;
 			if (mId == null) {
-				if (other.mId != null)
+				if (other.mId != null) {
 					return false;
-			} else if (!mId.equals(other.mId))
+				}
+			} else if (!mId.equals(other.mId)) {
 				return false;
+			}
 			return true;
 		}
 

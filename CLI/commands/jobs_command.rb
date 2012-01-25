@@ -15,7 +15,7 @@ class JobsCommand < Command
 				str+="\t Status: #{job.status}\n" 
 				puts str
 			}
-			puts "No jobs where found" if jobs.size==0
+			puts "No jobs were found" if jobs.size==0
 			
 		rescue Exception => e
 			 

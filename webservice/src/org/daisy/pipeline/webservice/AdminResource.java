@@ -5,24 +5,24 @@ import org.daisy.pipeline.database.DatabaseManager;
 
 public class AdminResource extends AuthenticatedResource {
 	private boolean isAuthorized = false;
-	
+
 	@Override
 	public void doInit() {
 		super.doInit();
-		if (((PipelineWebService)this.getApplication()).isAuthenticationEnabled() == false) {
+		if (((PipelineWebService)getApplication()).isAuthenticationEnabled() == false) {
 			// if authentication is not enabled, then all requests can be considered automatically authorized
 			isAuthorized = true;
 		}
 		else {
-			
+
 			isAuthorized = super.isAuthenticated() && authorizeAsAdmin();
 		}
 	}
-	
+
 	private boolean authorizeAsAdmin() {
-		
-		String id = getQuery().getFirstValue("id");
-		
+
+		String id = getQuery().getFirstValue("authid");
+
 		Client client = DatabaseManager.getInstance().getClientById(id);
 		if (client == null) {
 			return false;
@@ -32,10 +32,10 @@ public class AdminResource extends AuthenticatedResource {
 		}
 		return false;
 	}
-	
+
 	public boolean isAuthorized() {
 		return isAuthorized;
-	}	
-	
+	}
+
 
 }

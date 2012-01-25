@@ -16,7 +16,7 @@ import com.google.common.collect.ImmutableMap;
  * The Class ZipResourceContext wrapps a zip file into a resource collection, it is used as context to execute pipelines.
  */
 public final class ZipResourceContext implements ResourceCollection {
-	
+
 	/** The resources. */
 	private final Map<String, Provider<InputStream>> resources;
 
@@ -44,7 +44,7 @@ public final class ZipResourceContext implements ResourceCollection {
 
 			});
 		}
-		this.resources = mapBuilder.build();
+		resources = mapBuilder.build();
 	}
 
 	/* (non-Javadoc)

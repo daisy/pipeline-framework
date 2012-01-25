@@ -8,7 +8,7 @@ import javax.xml.stream.events.XMLEvent;
  * Stax event processor.
  */
 public interface EventProcessor {
-	
+
 	/**
 	 * Process the event
 	 *

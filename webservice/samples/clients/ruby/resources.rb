@@ -8,8 +8,10 @@ module Resources
     return doc
   end
 
-  def get_script(script_uri)
-    uri = "#{Settings::BASEURI}/script?scriptid=#{script_uri}"
+  def get_script(id)
+    # escape the ID for now since it's actually a URI
+    escaped_id = CGI.escape(id)
+    uri = "#{Settings::BASEURI}/scripts/#{escaped_id}"
     doc = Rest.get_resource_as_xml(uri)
     return doc
   end

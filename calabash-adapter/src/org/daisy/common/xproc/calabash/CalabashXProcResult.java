@@ -31,10 +31,10 @@ public final class CalabashXProcResult implements XProcResult {
 
 	/** The xpipeline. */
 	private final XPipeline xpipeline;
-	
+
 	/** The configuration. */
 	private final XProcConfiguration configuration;
-	
+
 	/** The message accessor. */
 	private final MessageAccessor messageAccessor;
 
@@ -60,7 +60,7 @@ public final class CalabashXProcResult implements XProcResult {
 	private CalabashXProcResult(XPipeline xpipeline,XProcConfiguration configuration,MessageAccessor accessor) {
 		this.xpipeline = xpipeline;
 		this.configuration = configuration;
-		this.messageAccessor=accessor;
+		messageAccessor=accessor;
 	}
 
 	/* (non-Javadoc)
@@ -121,7 +121,7 @@ public final class CalabashXProcResult implements XProcResult {
 	 */
 	@Override
 	public MessageAccessor getMessages() {
-		return this.messageAccessor;
+		return messageAccessor;
 	}
 
 }

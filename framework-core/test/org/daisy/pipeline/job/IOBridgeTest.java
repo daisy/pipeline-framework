@@ -43,12 +43,13 @@ public class IOBridgeTest {
 		tmpDir.mkdir();
 		System.setProperty(IOBridge.ORG_DAISY_PIPELINE_IOBASE, tmpDir.getAbsolutePath());
 		bridge = new IOBridge(new JobId() {
-			
+
 			@Override
 			public int compareTo(JobId o) {
 				// TODO Auto-generated method stub
 				return 0;
 			}
+			@Override
 			public String toString(){
 				return "";
 			}
@@ -95,9 +96,9 @@ public class IOBridgeTest {
 				.getResource("test.zip").toURI()));
 		ResourceCollection ctxt = new ZipResourceContext(mFile);
 		bridge.storeResources(ctxt);
-		Assert.assertTrue(new File(this.tmpDir + "/"
+		Assert.assertTrue(new File(tmpDir + "/"
 				+ IOConstants.IO_DATA_SUBDIR, "1.txt").exists());
-		Assert.assertTrue(this.tmpDir.toString(), new File(this.tmpDir + "/"
+		Assert.assertTrue(tmpDir.toString(), new File(tmpDir + "/"
 				+ IOConstants.IO_DATA_SUBDIR, "/folder/3.txt").exists());
 	}
 

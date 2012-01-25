@@ -9,7 +9,7 @@ import javax.xml.namespace.QName;
 public final class XProcOptionInfo {
 
 	/**
-	 * This method creates a new option hiding the instantation process. 
+	 * This method creates a new option hiding the instantation process.
 	 *
 	 * @param name the name
 	 * @param isRequired the is required
@@ -23,10 +23,10 @@ public final class XProcOptionInfo {
 
 	/** The name. */
 	private final QName name;
-	
+
 	/** ifthe option is required. */
 	private final boolean isRequired;
-	
+
 	/** The select statement */
 	private final String select;
 

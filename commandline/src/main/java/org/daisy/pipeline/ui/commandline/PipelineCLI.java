@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- *  CLI client 
+ *  CLI client
  */
 public class PipelineCLI {
 
@@ -23,22 +23,22 @@ public class PipelineCLI {
 
 	/** The Constant MODE_PROPERTY. */
 	public static final String MODE_PROPERTY = "org.daisy.pipeline.mode";
-	
+
 	/** The Constant CMD. */
 	private static final String CMD = "cmd";
-	
+
 	/** The EXIT. */
 	private static boolean EXIT = true;
-	
+
 	/** The parser. */
 	private final OptionParser parser;
-	
+
 	/** The module registry. */
 	private ModuleRegistry moduleRegistry;
-	
+
 	/** The script registry. */
 	private ScriptRegistry scriptRegistry;
-	
+
 	/** The xproc engine. */
 	private XProcEngine xprocEngine;
 
@@ -78,6 +78,7 @@ public class PipelineCLI {
 		if (System.getProperty(MODE_PROPERTY) != null
 				&& System.getProperty(MODE_PROPERTY).equals(CMD)) {
 			new Thread() {
+				@Override
 				public void run() {
 					String args = System
 							.getProperty("org.daisy.pipeline.cmdargs");
@@ -113,7 +114,7 @@ public class PipelineCLI {
 			}.start();
 		}
 	}
-	
+
 	/**
 	 * Deactivates the cli
 	 *
@@ -206,20 +207,25 @@ public class PipelineCLI {
 	 */
 	private Command getPipelineCommand(OptionSet oSet) {
 		String inputs = "";
-		if (oSet.valueOf("i") != null)
+		if (oSet.valueOf("i") != null) {
 			inputs = oSet.valueOf("i").toString();
+		}
 		String outputs = "";
-		if (oSet.valueOf("o") != null)
+		if (oSet.valueOf("o") != null) {
 			outputs = oSet.valueOf("o").toString();
+		}
 		String params = "";
-		if (oSet.valueOf("p") != null)
+		if (oSet.valueOf("p") != null) {
 			params = oSet.valueOf("p").toString();
+		}
 		String pipeline = "";
-		if (oSet.valueOf("x") != null)
+		if (oSet.valueOf("x") != null) {
 			pipeline = oSet.valueOf("x").toString();
+		}
 		String options = "";
-		if (oSet.valueOf("t") != null)
+		if (oSet.valueOf("t") != null) {
 			options = oSet.valueOf("t").toString();
+		}
 		return CommandPipeline.newInstance(pipeline, inputs, outputs, params,
 				options, xprocEngine);
 	}
@@ -238,17 +244,21 @@ public class PipelineCLI {
 			for (XProcScriptService scriptService : scriptRegistry.getScripts()) {
 				if (scriptService.getName().equals(scriptName)) {
 					String inputs = "";
-					if (oSet.valueOf("i") != null)
+					if (oSet.valueOf("i") != null) {
 						inputs = oSet.valueOf("i").toString();
+					}
 					String outputs = "";
-					if (oSet.valueOf("o") != null)
+					if (oSet.valueOf("o") != null) {
 						outputs = oSet.valueOf("o").toString();
+					}
 					String params = "";
-					if (oSet.valueOf("p") != null)
+					if (oSet.valueOf("p") != null) {
 						params = oSet.valueOf("p").toString();
+					}
 					String options = "";
-					if (oSet.valueOf("t") != null)
+					if (oSet.valueOf("t") != null) {
 						options = oSet.valueOf("t").toString();
+					}
 					return CommandPipeline.newInstance(scriptService.getURI()
 							.toString(), inputs, outputs, params, options,
 							xprocEngine);

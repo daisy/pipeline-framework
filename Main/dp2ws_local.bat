@@ -1,7 +1,6 @@
 @echo off
 set DP2_HOME=%~d0%~p0
 set JAVA=java
-set DS_MODE=-Dorg.daisy.pipeline.mode=ws
 set DP_LOG_DIR=%DP2_HOME%log
 set FELIX_CONF=file:%DP2_HOME:\=/%etc/config.properties
 set XPROC_CONF=%DP2_HOME%etc/conf_calabash.xml

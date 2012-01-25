@@ -7,7 +7,7 @@ package org.daisy.common.base;
  * @param <T> the generic type
  */
 public interface Filter<T> {
-	
+
 	/**
 	 * Filters the input parameter
 	 *

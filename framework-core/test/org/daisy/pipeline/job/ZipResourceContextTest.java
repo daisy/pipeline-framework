@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-import javax.xml.transform.sax.SAXSource;
-
 import org.daisy.common.base.Provider;
 import org.junit.Assert;
 import org.junit.Before;
