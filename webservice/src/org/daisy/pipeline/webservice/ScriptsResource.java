@@ -39,7 +39,7 @@ public class ScriptsResource extends AuthenticatedResource {
 			XProcScript script = (((PipelineWebService) getApplication()).isLocal()) ? unfilteredScript
 					.load() : XProcScriptFilter.INSTANCE
 					.filter(unfilteredScript.load());
-			scripts.add(script);
+					scripts.add(script);
 		}
 	}
 
@@ -55,7 +55,7 @@ public class ScriptsResource extends AuthenticatedResource {
     		return null;
     	}
 
-		setStatus(Status.SUCCESS_OK);
+		this.setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.xprocScriptsToXml(scripts));
 		return dom;
 

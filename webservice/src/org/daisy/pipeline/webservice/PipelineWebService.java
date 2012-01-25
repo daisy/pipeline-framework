@@ -23,12 +23,12 @@ import org.slf4j.LoggerFactory;
  * The Class PipelineWebService.
  */
 public class PipelineWebService extends Application {
-	
-	
+
+
 
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(PipelineWebService.class.getName());
-	
+
 	/* other runtime-configurable property names */
 	public static final String PORT_PROPERTY = "org.daisy.pipeline.ws.port";
 	public static final String PATH_PROPERTY = "org.daisy.pipeline.ws.path";
@@ -36,10 +36,10 @@ public class PipelineWebService extends Application {
 	public static final String TMPDIR_PROPERTY = "org.daisy.pipeline.ws.tmpdir";
 	public static final String AUTHENTICATION_PROPERTY = "org.daisy.pipeline.ws.authentication";
 	public static final String LOCAL_MODE = "org.daisy.pipeline.ws.local";
-	
+
 	public static final String KEY_FILE_NAME="dp2key.txt";
 	private static final String JAVA_IO_TMPDIR = "java.io.tmpdir";
-	
+
 	public static final String SCRIPTS_ROUTE = "/scripts";
 	public static final String SCRIPT_ROUTE = "/scripts/{id}";
 	public static final String JOBS_ROUTE = "/jobs";
@@ -49,27 +49,27 @@ public class PipelineWebService extends Application {
 	public static final String HALT_ROUTE = "/admin/halt/{key}";
 	public static final String CLIENTS_ROUTE = "/admin/clients";
 	public static final String CLIENT_ROUTE = "/admin/clients/{id}";
-	
-	
+
+
 	/* options and their default values */
 	private String path = "/ws";
 	private int portNumber = 8182;
 	private boolean usesAuthentication = true;
 	private long maxRequestTime = 600000; // 10 minutes in ms
 	private String tmpDir = "/tmp";
-	
+
 	/** The Constant WS. */
 	//private static final String WS = "ws";
-	
+
 	/** The job manager. */
 	private JobManager jobManager;
-	
+
 	/** The script registry. */
 	private ScriptRegistry scriptRegistry;
-	
+
 	private long shutDownKey=0L;
 
-	private BundleContext bundleCtxt; 
+	private BundleContext bundleCtxt;
 	/* (non-Javadoc)
 	 * @see org.restlet.Application#createInboundRoot()
 	 */
@@ -82,13 +82,13 @@ public class PipelineWebService extends Application {
 		router.attach(JOB_ROUTE, JobResource.class);
 		router.attach(LOG_ROUTE, LogResource.class);
 		router.attach(RESULT_ROUTE, ResultResource.class);
-		
-		
+
+
 		// init the administrative paths
 		router.attach(CLIENTS_ROUTE, ClientsResource.class);
 		router.attach(CLIENT_ROUTE, ClientResource.class);
 		router.attach(HALT_ROUTE, HaltResource.class);
-		
+
 		return router;
 	}
 
@@ -105,7 +105,7 @@ public class PipelineWebService extends Application {
 		component.getDefaultHost().attach(path, this);
 		try {
 			component.start();
-			this.generateStopKey();
+			generateStopKey();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -119,7 +119,7 @@ public class PipelineWebService extends Application {
 		fos.close();
 		logger.info("Shutdown key stored to: "+System.getProperty(JAVA_IO_TMPDIR)+File.separator+KEY_FILE_NAME);
 	}
-	
+
 	public boolean shutDown(long key) throws BundleException{
 		if(key==shutDownKey){
 			//framework bundle id == 0
@@ -127,18 +127,18 @@ public class PipelineWebService extends Application {
 			return true;
 		}
 		return false;
-		
+
 	}
 
 	/**
 	 * Close.
-	 * @throws Exception 
-	 * @throws Throwable 
+	 * @throws Exception
+	 * @throws Throwable
 	 */
 	public void close() throws Exception {
 		logger.info("Webservice stopped.");
-		this.stop();
-		
+		stop();
+
 	}
 
 
