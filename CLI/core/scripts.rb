@@ -128,7 +128,7 @@ end
 
 class ScriptsResultProcessor < ResultProcessor
 	def process(input)
-
+		raise RuntimeError,"scripts returned an empty result" if input==nil
 		doc=Nokogiri.XML(input)
 		doc.remove_namespaces!
 		scripts=doc.xpath("//script")
@@ -154,8 +154,10 @@ end
 
 class ScriptResultProcessor < ResultProcessor
 	def process(input)
+		raise RuntimeError,"script returned an empty result" if input==nil
 		doc=Nokogiri.XML(input)
 		doc.remove_namespaces!
+		
 		xscript=doc.at_xpath("//script")
 		script=Script.fromXmlElement(xscript)
 		return script

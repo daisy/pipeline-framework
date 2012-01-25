@@ -29,12 +29,14 @@ require_rel './core/resource'
 require_rel './core/rest'
 require_rel './core/result_processor'
 require_rel './core/scripts'
+require_rel './core/halt'
 require_rel './commands/delete_command'
 require_rel './commands/result_command'
 require_rel './commands/dynamic_commands'
 require_rel './commands/help_command.rb'
 require_rel './commands/job_command'
 require_rel './commands/jobs_command'
+require_rel './commands/halt_command'
 def main
 	command=checkargs
 	if command == nil || command.empty?
@@ -61,6 +63,9 @@ def main
 	s_cmds=load(JobCommand.new,s_cmds)
 	s_cmds=load(DeleteCommand.new,s_cmds)
 	s_cmds=load(ResultCommand.new,s_cmds)
+	if Ctxt.conf[Ctxt.conf.class::LOCAL]==true
+		s_cmds=load(HaltCommand.new,s_cmds)
+	end
 	
 	#scripts	
 	dynCommands.each{|cmd| d_cmds[cmd.name]=cmd}

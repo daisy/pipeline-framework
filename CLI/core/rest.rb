@@ -6,45 +6,31 @@ require_rel './core/multipart.rb'
 require_rel './core/authentication'
 require_rel './core/ctxt'
 class Rest
+	@@count=0
   	@@conn=nil
 	def self.init_conn(authUri)
 		if @@conn==nil
 			@@conn= Net::HTTP.start(authUri.host,authUri.port)
+			@@conn.read_timeout = Ctxt.conf[Ctxt.conf.class::TIMEOUT_SECONDS].to_s.to_i
 		end
-	end
-	def self.restart()
-		@@conn.finish()
-		@@conn=nil
 	end
 	def self.get_resource(uri,time_out=nil)
 		begin
-   
       			authUri = URI.parse(Authentication.prepare_authenticated_uri(uri))
 			self.init_conn(authUri)
 			Ctxt.logger.debug(authUri) 
-			if time_out==nil
-				@@conn.read_timeout = Ctxt.conf[Ctxt.conf.class::TIMEOUT_SECONDS].to_s.to_i
-			else
-				@@conn.read_timeout=time_out
-			end
-			
       			request = Net::HTTP::Get.new(authUri.request_uri)
-			@@conn.request(request){ |response|
-				#puts "Response was #{response}"
-				case response
-					when Net::HTTPSuccess
-						 return response.body
-					when Net::HTTPInternalServerError
-						return nil
-					else
-						return nil
-				end
-      			}
+			response=@@conn.request(request)
+			case response
+				when Net::HTTPSuccess
+					 return response.body
+				when Net::HTTPInternalServerError
+					return nil
+				else
+					return nil
+			end
 	    rescue Exception=>e
-		#puts e.message
-      		#puts e.backtrace
-		#puts "Error: GET #{uri.to_s} failed."
-	       return nil
+	        return nil
 	    end
       	##response = Net::HTTP.get_response(authUri)
       	#puts "Response was #{response}"
@@ -111,7 +97,7 @@ class Rest
           return false
       end
     rescue
-      #error("Error: DELETE #{uri.to_s} failed.")
+      puts "Error: DELETE #{uri.to_s} failed."
       return false
     end
 

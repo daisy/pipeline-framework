@@ -2,6 +2,7 @@ require_rel './core/ctxt'
 require_rel './core/scripts'
 require_rel './core/alive'
 require_rel './core/job'
+require_rel './core/halt'
 require "open3"
 #TODO asking if the service is alive before every call may not be a good idea, store that it's alive once and asume it in next calls
 class Dp2
@@ -20,11 +21,12 @@ class Dp2
 				execPath=File::expand_path(Ctxt.conf[Ctxt.conf.class::EXEC_LINE],@basePath)
 				#
 				ex=IO.popen(execPath ) 
-
+				pid=ex.pid
+				ex.close
 				#system('start '+execPath)
 				#will throw execetion the command is not found
-				pid =ex.pid
-				Ctxt.logger().debug("ws launched with pid #{pid}")
+				#pid =ex.pid
+				#Ctxt.logger().debug("ws launched with pid #{pid}")
 				Ctxt.logger().debug("waiting for the ws to come up...")
 				puts "Waiting for the WS to come up"
 				wait_till_up
@@ -65,7 +67,7 @@ class Dp2
 	def job(script,data,wait)
 		job=nil
 		msgIdx=0
-		if alive?
+		#if alive?
 			job=JobResource.new.postResource(script.to_xml_request,data)
 			if wait==true
 				begin
@@ -78,7 +80,7 @@ class Dp2
 					Ctxt.logger.debug("msg idx #{msgIdx}")	
 				end while job.status=='RUNNING' 
 			end 
-		end
+		#end
 		return job
 	end
 
@@ -100,8 +102,11 @@ class Dp2
 	def job_zip_result(id,outpath)
 		return JobResultZipResource.new(id,outpath).getResource	
 	end	
-	def alive?	
-  		return AliveResource.new.getResource 
+	def halt(key)
+		return HaltResource.new(key).getResource	
+	end	
+	def alive?
+	  	 return AliveResource.new.getResource 
 	end	
 	
 	private :alive?,:alive!,:wait_till_up
