@@ -22,7 +22,7 @@ public final class XProcScript {
 	 * Builder for {@link XProcScript} objects.
 	 */
 	public static class Builder {
-
+		private XProcScriptService descriptor;
 		/** The pipeline info. */
 		private XProcPipelineInfo pipelineInfo;
 
@@ -49,6 +49,11 @@ public final class XProcScript {
 		 */
 		public Builder withPipelineInfo(XProcPipelineInfo pipelineInfo){
 			this.pipelineInfo=pipelineInfo;
+			return this;
+		}
+
+		public Builder withDescriptor(XProcScriptService descriptor){
+			this.descriptor=descriptor;
 			return this;
 		}
 
@@ -121,7 +126,7 @@ public final class XProcScript {
 		 * @return the {@link XProcScript}
 		 */
 		public XProcScript build(){
-			return new XProcScript(pipelineInfo,name,description,homepage,portsMetadata,optionsMetadata);
+			return new XProcScript(pipelineInfo,name,description,homepage,portsMetadata,optionsMetadata,descriptor);
 		}
 	}
 
@@ -143,6 +148,8 @@ public final class XProcScript {
 	/** The options metadata. */
 	private final Map<QName, XProcOptionMetadata> optionsMetadata;
 
+	private final XProcScriptService descriptor;
+
 
 	/**
 	 * Instantiates a new x proc script.
@@ -156,13 +163,14 @@ public final class XProcScript {
 	 */
 	public XProcScript(XProcPipelineInfo pipelineInfo, String name,
 			String description, String homepage, Map<String, XProcPortMetadata> portsMetadata,
-			Map<QName, XProcOptionMetadata> optionsMetadata) {
+			Map<QName, XProcOptionMetadata> optionsMetadata,XProcScriptService descriptor) {
 		this.pipelineInfo = pipelineInfo;
 		this.name = name;
 		this.description = description;
 		this.homepage = homepage;
 		this.portsMetadata = portsMetadata;
 		this.optionsMetadata = optionsMetadata;
+		this.descriptor = descriptor;
 	}
 
 	/**
@@ -228,5 +236,14 @@ public final class XProcScript {
 	 */
 	public final XProcOptionMetadata getOptionMetadata(QName name) {
 		return optionsMetadata.get(name);
+	}
+	/**
+	 * Gets the descriptor
+	 *
+	 * @param name the name
+	 * @return the option metadata
+	 */
+	public XProcScriptService getDescriptor() {
+		return descriptor;
 	}
 }

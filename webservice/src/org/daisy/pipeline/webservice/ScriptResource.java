@@ -1,9 +1,5 @@
 package org.daisy.pipeline.webservice;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLDecoder;
-
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
@@ -38,21 +34,15 @@ public class ScriptResource extends AuthenticatedResource {
 		// TODO refer to scripts by their IDs instead of URIs
 		// however, scripts don't have IDs yet so we have to wait
 		// introduced temporary parameter "scriptid" to avoid conflict with auth param, recently renamed to "id"
-		URI scriptUri = null;
+		String scriptId = null;
 
-		try {
-			String tmp = (String) getRequestAttributes().get("id");
-			tmp = URLDecoder.decode(tmp.toString(), "UTF-8");
-			scriptUri=URI.create(tmp);
 
-		} catch (UnsupportedEncodingException e) {
-			logger.error(e.getMessage());
-			return;
-		}
-		logger.debug("Script with id :"+scriptUri);
+		scriptId = (String) getRequestAttributes().get("id");
+
+		logger.debug("Script with id :"+scriptId);
 		ScriptRegistry scriptRegistry = ((PipelineWebService) getApplication()).getScriptRegistry();
 		XProcScriptService unfilteredScript = scriptRegistry
-				.getScript(scriptUri);
+				.getScript(scriptId);
 		if (unfilteredScript != null) {
 			script = (((PipelineWebService) getApplication()).isLocal()) ? unfilteredScript
 					.load() : XProcScriptFilter.INSTANCE
@@ -79,7 +69,7 @@ public class ScriptResource extends AuthenticatedResource {
 		setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(
 				MediaType.APPLICATION_XML,
-				XmlFormatter.xprocScriptToXml(this.script));
+				XmlFormatter.xprocScriptToXml(script));
 		return dom;
 	}
 }

@@ -56,8 +56,12 @@ class Dp2
 			map={}
 			scripts =  ScriptsResource.new.getResource
 			scripts.each{|key,val|
-				script=ScriptResource.new(val.uri).getResource
-				map[script.nicename]=script
+				begin
+					script=ScriptResource.new(val.href).getResource
+					map[script.nicename]=script
+				rescue 
+					puts "(Ignoring #{key})"
+				end
 			}
 			return map
 		end

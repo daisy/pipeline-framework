@@ -19,6 +19,14 @@ public interface ScriptRegistry {
 	 * @return the script
 	 */
 	public XProcScriptService getScript(URI uri);
+	/**
+	 * Gets the script looking it up by its short name.
+	 *
+	 * @param name the script name
+	 * @return the script
+	 */
+
+	public XProcScriptService getScript(String name);
 
 	/**
 	 * Gets all the scripts.

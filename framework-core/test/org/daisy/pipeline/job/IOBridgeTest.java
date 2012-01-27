@@ -86,7 +86,7 @@ public class IOBridgeTest {
 		ometas.put(new QName("out1"), meta3);
 		ometas.put(new QName("out2"), meta4);
 		ometas.put(new QName("out3"), meta5);
-		script = new XProcScript(info, null, null, null, null, ometas);
+		script = new XProcScript(info, null, null, null, null, ometas,null);
 
 	}
 

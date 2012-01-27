@@ -35,10 +35,15 @@ public class XProcScriptParserTest {
 	 */
 	@Before
 	public void setUp() throws URISyntaxException {
+
+
+		this.getClass().getClassLoader()
+		.getResource("script.xpl").toURI();
 		StaxXProcScriptParser parser = new StaxXProcScriptParser();
 		parser.setFactory(XMLInputFactory.newInstance());
-		scp = parser.parse(this.getClass().getClassLoader()
-				.getResource("script.xpl").toURI());
+		//scp = parser.parse(); Try to fix this using a service
+
+
 	}
 
 	/**

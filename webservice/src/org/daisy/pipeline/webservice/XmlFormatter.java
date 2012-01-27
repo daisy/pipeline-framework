@@ -158,9 +158,9 @@ public class XmlFormatter {
 			rootElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "script");
 		}
 
-		String scriptHref = PipelineWebService.SCRIPT_ROUTE.replaceFirst("\\{id\\}", "TODO");
+		String scriptHref = PipelineWebService.SCRIPT_ROUTE.replaceFirst("\\{id\\}", script.getName());
 
-		rootElm.setAttribute("id", "TODO");
+		rootElm.setAttribute("id", script.getDescriptor().getName());
 		rootElm.setAttribute("href", scriptHref);
 		rootElm.setAttribute("script", script.getURI().toString());
 

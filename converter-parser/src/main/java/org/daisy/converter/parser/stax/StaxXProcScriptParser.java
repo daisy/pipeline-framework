@@ -2,7 +2,6 @@ package org.daisy.converter.parser.stax;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URL;
 import java.util.LinkedList;
 
@@ -26,6 +25,7 @@ import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptParser;
+import org.daisy.pipeline.script.XProcScriptService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,8 +75,8 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 	 * @see org.daisy.pipeline.script.XProcScriptParser#parse(java.net.URI)
 	 */
 	@Override
-	public XProcScript parse(URI uri) {
-		return new StatefulParser().parse(uri);
+	public XProcScript parse(XProcScriptService descriptor) {
+		return new StatefulParser().parse(descriptor);
 	}
 
 	/**
@@ -102,21 +102,22 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		 * @param uri the uri
 		 * @return the x proc script
 		 */
-		public XProcScript parse(URI uri) {
+		public XProcScript parse(XProcScriptService descriptor) {
 			if (mFactory == null) {
 				throw new IllegalStateException();
 			}
 			InputStream is = null;
 			XMLEventReader reader = null;
 			scriptBuilder = new XProcScript.Builder();
+			scriptBuilder.withDescriptor(descriptor);
 			StaxXProcPipelineInfoParser infoParser = new StaxXProcPipelineInfoParser();
 			infoParser.setFactory(mFactory);
 			infoParser.setUriResolver(mUriResolver);
 			try {
 				// init the XMLStreamReader
 				// uRL descUrl = pipelineInfo.getURI().toURL();
-				scriptBuilder.withPipelineInfo(infoParser.parse(uri));
-				URL descUrl = uri.toURL();
+				scriptBuilder.withPipelineInfo(infoParser.parse(descriptor.getURI()));
+				URL descUrl = descriptor.getURI().toURL();
 				// if we have a url resolver resolve the
 				if (mUriResolver != null) {
 					Source src = mUriResolver.resolve(descUrl.toString(), "");

@@ -11,7 +11,7 @@
     exclude-inline-prefixes="cx p c cxo px xd pxi z tmp">
 
     <p:documentation>
-        <xd:short>short documentation</xd:short>
+        <xd:short>test-script</xd:short>
         <xd:detail>detailed description</xd:detail>
         <xd:author>
             <xd:name>Romain Deltour</xd:name>

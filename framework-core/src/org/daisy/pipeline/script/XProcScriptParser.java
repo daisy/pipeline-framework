@@ -3,7 +3,6 @@
  */
 package org.daisy.pipeline.script;
 
-import java.net.URI;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -17,6 +16,6 @@ public interface XProcScriptParser  {
 	 * @param uri the uri
 	 * @return the x proc script
 	 */
-	public XProcScript parse(URI uri);
+	public XProcScript parse(XProcScriptService service);
 
 }

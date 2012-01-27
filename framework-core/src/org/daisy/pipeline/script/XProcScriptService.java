@@ -120,7 +120,7 @@ public final class XProcScriptService {
 		script = Suppliers.memoize(new Supplier<XProcScript>() {
 			@Override
 			public XProcScript get() {
-				return parser.parse(uri);
+				return parser.parse(XProcScriptService.this);
 			}
 		});
 	}

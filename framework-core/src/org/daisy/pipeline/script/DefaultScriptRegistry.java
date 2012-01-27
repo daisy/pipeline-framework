@@ -4,6 +4,7 @@
 package org.daisy.pipeline.script;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 
 	/** The descriptors. */
 	private final Map<URI, XProcScriptService> descriptors = Maps.newHashMap();
+	private final Map<String, URI> byNameDirectory = new HashMap<String, URI>();
 
 	/** The parser. */
 	private XProcScriptParser parser;
@@ -47,6 +49,7 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 		}
 		// TODO check
 		descriptors.put(script.getURI(), script);
+		byNameDirectory.put(script.getName(), script.getURI());
 	}
 
 	/**
@@ -91,5 +94,16 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	 * @param parser the parser
 	 */
 	public void unsetParser(XProcScriptParser parser) {
+	}
+
+	@Override
+	public XProcScriptService getScript(String name) {
+		URI uri = byNameDirectory.get(name);
+		if (uri==null){
+			String err="There is no script named as "+name;
+			logger.warn(err);
+			throw new IllegalArgumentException(err);
+		}
+		return descriptors.get(uri);
 	}
 }
