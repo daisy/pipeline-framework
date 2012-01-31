@@ -43,6 +43,7 @@ public class ScriptResource extends AuthenticatedResource {
 		ScriptRegistry scriptRegistry = ((PipelineWebService) getApplication()).getScriptRegistry();
 		XProcScriptService unfilteredScript = scriptRegistry
 				.getScript(scriptId);
+
 		if (unfilteredScript != null) {
 			script = (((PipelineWebService) getApplication()).isLocal()) ? unfilteredScript
 					.load() : XProcScriptFilter.INSTANCE
