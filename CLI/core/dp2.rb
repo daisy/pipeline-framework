@@ -22,7 +22,9 @@ class Dp2
 				#
 				ex=IO.popen(execPath ) 
 				pid=ex.pid
-				ex.close
+				if RUBY_PLATFORM.downcase.include?("linux")
+					ex.close
+				end
 				#system('start '+execPath)
 				#will throw execetion the command is not found
 				#pid =ex.pid
