@@ -94,7 +94,7 @@ class JobPostResultProcessor < ResultProcessor
 		xjob=doc.at_xpath("//job")
 		job=Job.fromXml(xjob)
 		Ctxt.logger.debug(job.to_s)
-		puts "Job with id #{job.id} submitted to the server"
+		puts "[DP2] Job with id #{job.id} submitted to the server"
 		return job 
 	end
 end

@@ -97,7 +97,7 @@ class Rest
           return false
       end
     rescue
-      puts "Error: DELETE #{uri.to_s} failed."
+      #puts "Error: DELETE #{uri.to_s} failed."
       return false
     end
 
@@ -108,7 +108,7 @@ class Rest
       begin
         return @@conn.post(url.request_uri, query, headers)
       rescue => e
-        puts "POST Failed #{e}... #{Time.now}"
+        puts "[DP2] POST Failed #{e}... #{Time.now}"
       end
   end
 

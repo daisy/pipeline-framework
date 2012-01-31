@@ -52,7 +52,7 @@ def main
 	begin
 		dynCommands=DynamicCommands.get
 	rescue Exception=>e
-		puts "ERROR: #{e.message}"
+		puts "[DP2] ERROR: #{e.message}"
 		exit -1
 	end
 	
@@ -86,7 +86,7 @@ def main
 	end
 
 	if hasErr
-		puts "\nERROR: #{error}\n\n" if error!=nil && !error.empty?
+		puts "\n[DP2] ERROR: #{error}\n\n" if error!=nil && !error.empty?
 		puts cmds["help"].help
 	end
 end

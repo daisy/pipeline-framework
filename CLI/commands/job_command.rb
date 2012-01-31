@@ -23,11 +23,11 @@ class JobCommand < Command
 				end
 				str+= "\n"
 			end
-			puts str
+			puts "[DP2] "+ str
 		rescue Exception => e
 			 
 			Ctxt.logger.debug(e)
-			puts "\nERROR: #{e.message}\n\n"
+			puts "\n[DP2] ERROR: #{e.message}\n\n"
 			puts help
 		end
 	end

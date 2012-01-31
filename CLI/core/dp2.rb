@@ -28,10 +28,10 @@ class Dp2
 				#pid =ex.pid
 				#Ctxt.logger().debug("ws launched with pid #{pid}")
 				Ctxt.logger().debug("waiting for the ws to come up...")
-				puts "Waiting for the WS to come up"
+				puts "[DP2] Waiting for the WS to come up"
 				wait_till_up
 				Ctxt.logger().debug("ws up!")
-				puts("The daisy pipeline 2 WS is up!")
+				puts("[DP2] The daisy pipeline 2 WS is up!")
 			else
 				raise RuntimeError,"Unable to reach the WS"
 			end
@@ -60,7 +60,7 @@ class Dp2
 					script=ScriptResource.new(val.href).getResource
 					map[script.nicename]=script
 				rescue 
-					puts "(Ignoring #{key})"
+					puts "[DP2] (Ignoring #{key})"
 				end
 			}
 			return map
@@ -77,7 +77,7 @@ class Dp2
 				begin
 					sleep 1.5 
 					job=job_status(job.id,msgIdx)
-					job.messages.each{|msg| puts msg.to_s}
+					job.messages.each{|msg| puts "[WS] "+ msg.to_s}
 					if job.messages.size > 0
 						msgIdx=(Integer(job.messages[-1].seq)+1).to_s
 					end

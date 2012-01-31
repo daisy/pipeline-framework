@@ -11,16 +11,16 @@ class JobsCommand < Command
 		begin
 			jobs=Dp2.new.job_statuses
 			jobs.each { |job|
-				str="Job Id:#{job.id}\n" 
+				str="[DP2] Job Id:#{job.id}\n" 
 				str+="\t Status: #{job.status}\n" 
 				puts str
 			}
-			puts "No jobs were found" if jobs.size==0
+			puts "[DP2] No jobs were found on the WS" if jobs.size==0
 			
 		rescue Exception => e
 			 
 			Ctxt.logger.debug(e)
-			puts "\nERROR: #{e}\n\n"
+			puts "\n[DP2] ERROR: #{e}\n\n"
 			puts help
 		end
 	end

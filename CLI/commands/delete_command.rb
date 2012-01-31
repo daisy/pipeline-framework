@@ -20,11 +20,11 @@ class DeleteCommand < Command
 				str="Job #{@id} has been deleted\n" 
 				str+= "\n"
 			end
-			puts str
+			puts "[DP2] "+str
 		rescue Exception => e
 			 
 			Ctxt.logger.debug(e)
-			puts "\nERROR: #{e}\n\n"
+			puts "\n[DP2] ERROR: #{e}\n\n"
 			puts help
 		end
 	end

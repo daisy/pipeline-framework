@@ -16,11 +16,11 @@ class ResultCommand < Command
 			raise RuntimeError,"no job id provided" if @id==nil
 			raise RuntimeError,"no output file provided" if @output==nil
 			res=Dp2.new.job_zip_result(@id,@output)
-			puts "Job #{@id} stored at #{res}\n"
+			puts "[DP2] Job #{@id} stored at #{res}\n"
 		rescue Exception => e
 			 
 			Ctxt.logger.debug(e)
-			puts "\nERROR: #{e}\n\n"
+			puts "\n[DP2] ERROR: #{e}\n\n"
 			puts help
 		end
 	end

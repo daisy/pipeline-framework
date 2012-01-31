@@ -33,7 +33,7 @@ class CommandScript < Command
 			raise RuntimeError,"dp2 is running in remote mode, so you need to supply a zip file containing the data (--data)" if Ctxt.conf[Ctxt.conf.class::LOCAL]!=true && @data==nil
 			raise RuntimeError,"dp2 is running in remote mode, so you need to supply an output file to store the results (--file)" if Ctxt.conf[Ctxt.conf.class::LOCAL]!=true && @outfile==nil && !@background
 
-			puts "IGNORING #{@outfile} as the job is set to be executed in the background"  if @outfile!=nil && @background
+			puts "[DP2] IGNORING #{@outfile} as the job is set to be executed in the background"  if @outfile!=nil && @background
 
 			if @outfile!=nil && !@background
 				raise RuntimeError,"#{@outfile}: directory doesn't exists " if !File.exists?(File.dirname(File.expand_path(@outfile)))
@@ -41,20 +41,20 @@ class CommandScript < Command
 			job=dp2ws.job(@script,@data,!@background)
 			if Ctxt.conf[Ctxt.conf.class::LOCAL]!=true && !@background
 				dp2ws.job_zip_result(job.id,@outfile)
-				puts "Result stored at #{@outfile}"
+				puts "[DP2] Result stored at #{@outfile}"
 			end
 			
 			if !@persistent
 				if  dp2ws.delete_job(job.id)
-					puts "The job has been deleted from the server"
+					puts "[DP2] The job #{job.id} has been deleted from the server"
 				end
 			end
 			if !@background
-				puts job.status
+				puts "[DP2] #{job.status}"
 			end
 		rescue Exception => e
 			Ctxt.logger.debug(e)
-			puts "\nERROR: #{e.message}\n\n"
+			puts "\n[DP2] ERROR: #{e.message}\n\n"
 			puts help
 		end
 	end
