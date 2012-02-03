@@ -1,4 +1,5 @@
-require "nokogiri"
+require "rexml/document"
+include REXML
 require_rel "./commands/command"
 require_rel "./core/resource"
 require_rel "./core/result_processor"
@@ -64,36 +65,38 @@ class Script
 	end
 
 	def self.fromXmlElement(node)
-			script=Script.new(node.attr("href"),Helpers.normalise_name(node.at_xpath("./nicename").content),node.at_xpath("./description").content,node.attr("id"),node.attr("script"))
+			ns={"ns"=>'http://www.daisy.org/ns/pipeline/data'}
+			script=Script.new(node.attributes["href"],Helpers.normalise_name(XPath.first(node,"./ns:nicename",ns).text),XPath.first(node,"./ns:description",ns).text,node.attributes["id"],node.attributes["script"])
+			print script
 			#options	
-			node.xpath("./option").to_a.each {|option|
-				opt={:name=>option.attr("name"),
-					:desc=>option.attr("desc"),
-					:mediaType=>option.attr("mediaType"),
-					:name=>option.attr("name"),
-					:required=>option.attr("required"),
-					:type=>option.attr("type"),
+			XPath.each(node,"./ns:option",ns){|option|
+				opt={:name=>option.attributes["name"],
+					:desc=>option.attributes["desc"],
+					:mediaType=>option.attributes["mediaType"],
+					:name=>option.attributes["name"],
+					:required=>option.attributes["required"],
+					:type=>option.attributes["type"],
 				}
 				script.opts.push(opt)
 
 			}
 			
 			#outputs				
-			node.xpath("./output").to_a.each {|output|
-				out={:name=>output.attr("name"),
-					:desc=>output.attr("desc"),
-					:mediaType=>output.attr("mediaType"),
-					:sequenceAllowed=>output.attr("sequenceAllowed"),
+			XPath.each(node,"./ns:output",ns){ |output|
+				out={:name=>output.attributes["name"],
+					:desc=>output.attributes["desc"],
+					:mediaType=>output.attributes["mediaType"],
+					:sequenceAllowed=>output.attributes["sequenceAllowed"],
 				}
 				script.outputs.push(out)
 		
 			}	
 			#inputs				
-			node.xpath("./input").to_a.each {|input|
-				inp={:name=>input.attr("name"),
-					:desc=>input.attr("desc"),
-					:mediaType=>input.attr("mediaType"),
-					:sequenceAllowed=>input.attr("sequenceAllowed"),
+			XPath.each(node,"./ns:input",ns) {|input|
+				inp={:name=>input.attributes["name"],
+					:desc=>input.attributes["desc"],
+					:mediaType=>input.attributes["mediaType"],
+					:sequenceAllowed=>input.attributes["sequenceAllowed"],
 				}
 				script.inputs.push(inp)
 		
@@ -131,10 +134,13 @@ end
 class ScriptsResultProcessor < ResultProcessor
 	def process(input)
 		raise RuntimeError,"scripts returned an empty result" if input==nil
-		doc=Nokogiri.XML(input)
-		doc.remove_namespaces!
-		scripts=doc.xpath("//script")
+#		doc=Nokogiri.XML(input)
+#		doc.remove_namespaces!
+#		scripts=doc.xpath("//script")
 		map={}
+		doc= Document.new input
+		ns={"ns"=>'http://www.daisy.org/ns/pipeline/data'}
+		scripts=XPath.match(doc,"//ns:script",ns)
 		scripts.to_a.each { |xscript| 
 			script=Script.fromXmlElement(xscript)
 			map[script.nicename]=script }
@@ -157,10 +163,13 @@ end
 class ScriptResultProcessor < ResultProcessor
 	def process(input)
 		raise RuntimeError,"script returned an empty result" if input==nil
-		doc=Nokogiri.XML(input)
-		doc.remove_namespaces!
-		
-		xscript=doc.at_xpath("//script")
+#		doc=Nokogiri.XML(input)
+#		doc.remove_namespaces!
+#		
+#		xscript=doc.at_xpath("//script")
+		doc= Document.new input
+		ns={"ns"=>'http://www.daisy.org/ns/pipeline/data'}
+		xscript = XPath.first(doc,"//ns:script",ns)
 		script=Script.fromXmlElement(xscript)
 		return script
 	end
