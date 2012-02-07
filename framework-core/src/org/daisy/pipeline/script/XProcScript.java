@@ -11,6 +11,8 @@ import javax.xml.namespace.QName;
 
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -53,6 +55,7 @@ public final class XProcScript {
 		}
 
 		public Builder withDescriptor(XProcScriptService descriptor){
+
 			this.descriptor=descriptor;
 			return this;
 		}
@@ -126,9 +129,11 @@ public final class XProcScript {
 		 * @return the {@link XProcScript}
 		 */
 		public XProcScript build(){
+
 			return new XProcScript(pipelineInfo,name,description,homepage,portsMetadata,optionsMetadata,descriptor);
 		}
 	}
+	private static Logger logger = LoggerFactory.getLogger(XProcScript.class);
 
 	/** The pipeline info. */
 	private final XProcPipelineInfo pipelineInfo;
@@ -171,6 +176,7 @@ public final class XProcScript {
 		this.portsMetadata = portsMetadata;
 		this.optionsMetadata = optionsMetadata;
 		this.descriptor = descriptor;
+
 	}
 
 	/**

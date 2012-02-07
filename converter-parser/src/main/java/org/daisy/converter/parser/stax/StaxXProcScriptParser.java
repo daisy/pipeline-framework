@@ -75,7 +75,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 	 * @see org.daisy.pipeline.script.XProcScriptParser#parse(java.net.URI)
 	 */
 	@Override
-	public XProcScript parse(XProcScriptService descriptor) {
+	public XProcScript parse(final XProcScriptService descriptor) {
 		return new StatefulParser().parse(descriptor);
 	}
 
@@ -94,7 +94,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		private final LinkedList<XProcOptionMetadataBuilderHolder> mOptionBuilders = new LinkedList<XProcOptionMetadataBuilderHolder>();
 
 		/** The script builder. */
-		private XProcScript.Builder scriptBuilder = new XProcScript.Builder();
+		private XProcScript.Builder scriptBuilder ;
 
 		/**
 		 * Parses the xpl file extracting the metadata attached to options,ports and the step
@@ -102,14 +102,15 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		 * @param uri the uri
 		 * @return the x proc script
 		 */
-		public XProcScript parse(XProcScriptService descriptor) {
+		public XProcScript parse(final XProcScriptService descriptor) {
 			if (mFactory == null) {
 				throw new IllegalStateException();
 			}
 			InputStream is = null;
 			XMLEventReader reader = null;
 			scriptBuilder = new XProcScript.Builder();
-			scriptBuilder.withDescriptor(descriptor);
+			logger.debug("Parsing with descriptor:"+descriptor);
+			scriptBuilder=scriptBuilder.withDescriptor(descriptor);
 			StaxXProcPipelineInfoParser infoParser = new StaxXProcPipelineInfoParser();
 			infoParser.setFactory(mFactory);
 			infoParser.setUriResolver(mUriResolver);
