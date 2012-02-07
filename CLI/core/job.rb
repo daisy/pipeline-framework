@@ -47,10 +47,8 @@ class JobStatusResultProcessor < ResultProcessor
 		raise RuntimeError,"Empty result from WS" if input==nil
 		#return Job.new if input==nil
 
-		doc=Nokogiri.XML(input)
-		
-		doc.remove_namespaces!
-		xjob=doc.at_xpath("//job")
+		doc= Document.new input
+		xjob = XPath.first(doc,"//ns:job",Resource::NS)
 		job=Job.fromXml(xjob)
 		Ctxt.logger.debug(job.to_s)
 		return  job
@@ -71,12 +69,9 @@ end
 class JobsStatusResultProcessor < ResultProcessor
 	def process(input)
 		raise RuntimeError,"Empty job result from server " if input==nil
-		doc=Nokogiri.XML(input)
-		
-		doc.remove_namespaces!
-		xjobs=doc.xpath("//job")
+		doc= Document.new input
 		jobs=[]
-		xjobs.each { |xjob|
+		XPath.each(doc,"//ns:job",Resource::NS) { |xjob|
 			jobs.push(Job.fromXml(xjob))
 		}
 		Ctxt.logger.debug(" Jobs retrieved #{jobs.size}")
@@ -85,15 +80,7 @@ class JobsStatusResultProcessor < ResultProcessor
 end
 class JobPostResultProcessor < ResultProcessor
 	def process(input)
-		raise RuntimeError,"Empty result from WS" if input==nil
-		#return Job.new if input==nil
-
-		doc=Nokogiri.XML(input)
-		
-		doc.remove_namespaces!
-		xjob=doc.at_xpath("//job")
-		job=Job.fromXml(xjob)
-		Ctxt.logger.debug(job.to_s)
+		job=JobStatusResultProcessor.new.process(input)
 		puts "[DP2] Job with id #{job.id} submitted to the server"
 		return job 
 	end
@@ -118,23 +105,22 @@ class Job
 	end
 	def self.fromXml(element)
 		Ctxt.logger.debug("from element: #{element.to_s}")
-		job=Job.new(element.attr("id"))
-		job.status=element.attr("status")
+		job=Job.new(element.attributes["id"])
+		job.status=element.attributes["status"]
 	
-		xscript=element.at_xpath("./script")
-		xresult=element.at_xpath("./result")
-		xlog=element.at_xpath("./log")
-		xmessages=element.xpath("./messages/message")
-		xmessages.each{|xmsg|
+		xscript=XPath.first(element,"./ns:script",Resource::NS)
+		xresult=XPath.first(element,"./ns:result",Resource::NS)
+		xlog=XPath.first(element,"./ns:log",Resource::NS)
+		XPath.each(element,"./ns:messages/ns:message",Resource::NS){|xmsg|
 			msg= Message.new 
-			msg.msg=xmsg.content
-			msg.level=xmsg.attr("level")
-			msg.seq=xmsg.attr("sequence")
+			msg.msg=xmsg.text
+			msg.level=xmsg.attributes["level"]
+			msg.seq=xmsg.attributes["sequence"]
 			job.messages.push(msg)		
 		}
 		job.script=Script.fromXmlElement(xscript) if xscript!=nil
-		job.result=xresult.attr("href") if xresult!=nil
-		job.log=xlog.attr("href") if xlog!=nil
+		job.result=xresult.attributes["href"] if xresult!=nil
+		job.log=xlog.attributes["href"] if xlog!=nil
 	
 		return job
 	end

@@ -1,7 +1,6 @@
 # takes care of all the rest calls
 require 'net/http'
 require 'uri'
-require 'nokogiri'
 require_rel './core/multipart.rb'
 require_rel './core/authentication'
 require_rel './core/ctxt'

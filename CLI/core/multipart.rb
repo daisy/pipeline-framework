@@ -10,9 +10,6 @@ module Multipart
   ##(bill@marginalia.org)
   ### NOW:
   ## Everything wrong is due to keith@oreilly.com
-  require 'rubygems'
-  require 'mime/types'
-  require 'net/http'
   require 'cgi'
 
   class Param
@@ -40,7 +37,7 @@ module Multipart
     def to_multipart
       #return "Content-Disposition: form-data; name=\"#{CGI::escape(k)}\"; filename=\"#{filename}\"\r\n" + "Content-Transfer-Encoding: binary\r\n" + "Content-Type: #{MIME::Types.type_for(@filename)}\r\n\r\n" + content + "\r\n "
       # Don't escape mine
-      return "Content-Disposition: form-data; name=\"#{k}\"; filename=\"#{filename}\"\r\n" + "Content-Transfer-Encoding: binary\r\n" + "Content-Type: #{MIME::Types.type_for(@filename)}\r\n\r\n" + content + "\r\n"
+      return "Content-Disposition: form-data; name=\"#{k}\"; filename=\"#{filename}\"\r\n" + "Content-Transfer-Encoding: binary\r\n" + "Content-Type: application/zip\r\n\r\n" + content + "\r\n"
     end
   end
 

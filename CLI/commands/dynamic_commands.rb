@@ -53,6 +53,7 @@ class CommandScript < Command
 				puts "[DP2] #{job.status}"
 			end
 		rescue Exception => e
+			puts e.backtrace
 			Ctxt.logger.debug(e)
 			puts "\n[DP2] ERROR: #{e.message}\n\n"
 			puts help

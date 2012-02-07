@@ -1,6 +1,5 @@
 require_rel "./core/resource"
 require_rel "./core/result_processor"
-require "nokogiri"
 class AliveResource < Resource
 	def initialize
 		super("/jobs",{},AliveProcessor.new)

@@ -1,5 +1,3 @@
-require "rexml/document"
-include REXML
 require_rel "./commands/command"
 require_rel "./core/resource"
 require_rel "./core/result_processor"
@@ -65,11 +63,9 @@ class Script
 	end
 
 	def self.fromXmlElement(node)
-			ns={"ns"=>'http://www.daisy.org/ns/pipeline/data'}
-			script=Script.new(node.attributes["href"],Helpers.normalise_name(XPath.first(node,"./ns:nicename",ns).text),XPath.first(node,"./ns:description",ns).text,node.attributes["id"],node.attributes["script"])
-			print script
+			script=Script.new(node.attributes["href"],Helpers.normalise_name(XPath.first(node,"./ns:nicename",Resource::NS).text),XPath.first(node,"./ns:description",Resource::NS).text,node.attributes["id"],node.attributes["script"])
 			#options	
-			XPath.each(node,"./ns:option",ns){|option|
+			XPath.each(node,"./ns:option",Resource::NS){|option|
 				opt={:name=>option.attributes["name"],
 					:desc=>option.attributes["desc"],
 					:mediaType=>option.attributes["mediaType"],
@@ -82,7 +78,7 @@ class Script
 			}
 			
 			#outputs				
-			XPath.each(node,"./ns:output",ns){ |output|
+			XPath.each(node,"./ns:output",Resource::NS){ |output|
 				out={:name=>output.attributes["name"],
 					:desc=>output.attributes["desc"],
 					:mediaType=>output.attributes["mediaType"],
@@ -92,7 +88,7 @@ class Script
 		
 			}	
 			#inputs				
-			XPath.each(node,"./ns:input",ns) {|input|
+			XPath.each(node,"./ns:input",Resource::NS) {|input|
 				inp={:name=>input.attributes["name"],
 					:desc=>input.attributes["desc"],
 					:mediaType=>input.attributes["mediaType"],
@@ -134,13 +130,9 @@ end
 class ScriptsResultProcessor < ResultProcessor
 	def process(input)
 		raise RuntimeError,"scripts returned an empty result" if input==nil
-#		doc=Nokogiri.XML(input)
-#		doc.remove_namespaces!
-#		scripts=doc.xpath("//script")
 		map={}
 		doc= Document.new input
-		ns={"ns"=>'http://www.daisy.org/ns/pipeline/data'}
-		scripts=XPath.match(doc,"//ns:script",ns)
+		scripts=XPath.match(doc,"//ns:script",Resource::NS)
 		scripts.to_a.each { |xscript| 
 			script=Script.fromXmlElement(xscript)
 			map[script.nicename]=script }
@@ -163,13 +155,9 @@ end
 class ScriptResultProcessor < ResultProcessor
 	def process(input)
 		raise RuntimeError,"script returned an empty result" if input==nil
-#		doc=Nokogiri.XML(input)
-#		doc.remove_namespaces!
 #		
-#		xscript=doc.at_xpath("//script")
 		doc= Document.new input
-		ns={"ns"=>'http://www.daisy.org/ns/pipeline/data'}
-		xscript = XPath.first(doc,"//ns:script",ns)
+		xscript = XPath.first(doc,"//ns:script",Resource::NS)
 		script=Script.fromXmlElement(xscript)
 		return script
 	end
@@ -193,9 +181,11 @@ class XmlBuilder
 		@script=script
 	end
 	def xml
-		@doc=Nokogiri::XML::Document.new
-		@doc << @doc.create_element(E_JOB_REQUEST,{A_XMLNS=>NS})
-		@doc.root << @doc.create_element(E_SCRIPT,{A_HREF=>@script.uri})
+		@doc= Document.new
+		jobReqElem=Element.new E_JOB_REQUEST
+		jobReqElem.add_namespace(NS);
+		jobReqElem.add_element E_SCRIPT,{A_HREF=>@script.uri}
+		@doc << jobReqElem
 		addInputs
 		addOutputs
 		addOptions
@@ -206,10 +196,11 @@ class XmlBuilder
 		@script.opts.each{ |opt|
 			raise "missing required option #{opt[:name]}" if !(opt[:value]!=nil && !opt[:value].empty?) && opt[:required]==('true')
 			if (opt[:value]!=nil && !opt[:value].empty?)
-				n=@doc.create_element(E_OPTION,{A_NAME=>opt[:name]})
+				n=Element.new E_OPTION
+				n.attributes[A_NAME]=opt[:name];
 				value=opt[:value]
 				value = Helpers.path_to_uri(value,@script.local) if opt[:type]=="anyFileURI" || opt[:type] == "anyDirURI"
-				n.content=value
+				n.text=value
 				@doc.root << n
 			end
 		}
@@ -219,10 +210,10 @@ class XmlBuilder
 		@script.inputs.each{ |input|
 			raise "Input empty: #{input[:name]}" if !(input[:value]!=nil && !input[:value].empty?)
 			values=input[:value]
-			in_elem=@doc.create_element(E_INPUT,{A_NAME=>input[:name]})
-			
+			in_elem=Element.new E_INPUT
+			in_elem.attributes[A_NAME]=input[:name]
 			@doc.root << in_elem
-			values.each{|file| in_elem << @doc.create_element(E_FILE,{A_SRC=>Helpers.path_to_uri(file,@script.local)})} 
+			values.each{|file| in_elem.add_element E_FILE,{A_SRC=>Helpers.path_to_uri(file,@script.local)}} 
 		}
 	end
 	def addOutputs
@@ -242,15 +233,3 @@ class XmlBuilder
 end
 
 
-#def test
-#	scr=Script.new("http://google.com",nil,nil)
-#	scr.opts.push({})
-#	scr.inputs.push({})
-#	scr.opts[0][:required]='true'
-#	scr.opts[0][:name]='paco'
-#	scr.opts[0][:value]='ratata'
-#	scr.inputs[0][:name]='source'
-#	scr.inputs[0][:value]='file1.xom'
-#	puts XmlBuilder.new(scr).xml
-#	
-#end

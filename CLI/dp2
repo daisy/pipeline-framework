@@ -9,13 +9,13 @@ require 'cgi'
 require 'digest'
 require 'logger'
 require 'net/http'
-require 'nokogiri'
 require 'open3'
 require 'openssl'
 require 'optparse'
 require 'time'
 require 'uri'
 require 'yaml'
+require "rexml/document"
 require_rel './commands/command'
 require_rel './core/alive'
 require_rel './core/authentication'
@@ -37,6 +37,7 @@ require_rel './commands/help_command.rb'
 require_rel './commands/job_command'
 require_rel './commands/jobs_command'
 require_rel './commands/halt_command'
+include REXML
 def main
 	command=checkargs
 	if command == nil || command.empty?
