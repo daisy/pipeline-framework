@@ -20,9 +20,9 @@ module Helpers
 			uri="file:"+uri
 					
 		else
-			uri=path
+			uri=path.gsub(/\\/,'/')
 		end
 		Ctxt.logger.debug("uri: #{uri}")
-		return uri
+		return URI.escape(uri)
 	end
 end

@@ -8,7 +8,11 @@ require "open3"
 class Dp2
 	def initialize
 		Ctxt.logger.debug("initialising dp2 link")
-		@basePath=File::dirname(__FILE__)+File::SEPARATOR+".."+File::SEPARATOR
+		if ENV["OCRA_EXECUTABLE"]==nil
+			@basePath=File::dirname(__FILE__)+File::SEPARATOR+".."+File::SEPARATOR
+		else
+			@basePath=File.dirname(ENV["OCRA_EXECUTABLE"])
+		end
 		alive!
 		
 	end

@@ -3,7 +3,6 @@
 def require_rel(path)
 	require File.expand_path(path, File.dirname(__FILE__))
 end
-require 'rubygems'
 require 'base64'
 require 'cgi'
 require 'digest'
