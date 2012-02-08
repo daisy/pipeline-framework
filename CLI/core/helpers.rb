@@ -15,7 +15,7 @@ module Helpers
 	def path_to_uri(path,is_local)
 		Ctxt.logger.debug("transforming path uri")
 		if is_local	
-			uri=URI.escape(File.expand_path(path).gsub(/\\/,'/'))
+			uri=File.expand_path(path).gsub(/\\/,'/')
 			uri='/'+uri if uri[0]!='/'[0]
 			uri="file:"+uri
 					
