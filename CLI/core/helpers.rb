@@ -23,6 +23,6 @@ module Helpers
 			uri=path
 		end
 		Ctxt.logger.debug("uri: #{uri}")
-		return uri
+		return URI.escape(uri)
 	end
 end

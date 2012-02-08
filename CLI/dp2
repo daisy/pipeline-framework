@@ -53,7 +53,6 @@ def main
 	begin
 		dynCommands=DynamicCommands.get
 	rescue Exception=>e
-		puts e.backtrace
 		puts "[DP2] ERROR: #{e.message}"
 		exit -1
 	end

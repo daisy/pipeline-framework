@@ -15,6 +15,7 @@ class Conf
 	CLIENT_SECRET="client_secret"
 	AUTHENTICATE="authenticate"
 	TIMEOUT_SECONDS="timeout_seconds"
+	NULL="null"
 	@map=nil
 	def initialize(file)
 		@map=YAML.load_file file
@@ -22,9 +23,11 @@ class Conf
 		#HACK: the null redirects avoids win to get stuck creating the 
 		#child process 
 		if RUBY_PLATFORM =~ /mingw32/
-			@map[EXEC_LINE]=@map[EXEC_LINE_WIN] +" > NUL"
+			@map[EXEC_LINE]=@map[EXEC_LINE_WIN]
+			@map[NULL]=" > NUL" 
 		else
-			@map[EXEC_LINE]=@map[EXEC_LINE_NIX] +" &>/dev/null"
+			@map[EXEC_LINE]=@map[EXEC_LINE_NIX] 
+			@map[NULL]=" &> /dev/null" 
 		end
 		@map[BASE_URI]= @map[HOST]+":"+@map[PORT].to_s+"/"+@map[WS_PATH]
 	end

@@ -19,12 +19,14 @@ class Dp2
 			
 			if Ctxt.conf[Ctxt.conf.class::LOCAL] == true
 				execPath=File::expand_path(Ctxt.conf[Ctxt.conf.class::EXEC_LINE],@basePath)
-				#
-				ex=IO.popen(execPath ) 
-				pid=ex.pid
-				if RUBY_PLATFORM.downcase.include?("linux")
-					ex.close
+				Thread.new do
+					ex=IO.popen("\"#{execPath}\""){|line| line.read }
 				end
+
+				#pid=ex.pid
+#				if RUBY_PLATFORM.downcase.include?("linux")
+#					ex.close
+#				end
 				#system('start '+execPath)
 				#will throw execetion the command is not found
 				#pid =ex.pid

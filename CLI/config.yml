@@ -2,7 +2,7 @@
 host: http://localhost
 port: 8182
 ws_path: ws   
-ws_timeup: 60
+ws_timeup: 25 
 #DP2 launch config 
 
 exec_line_nix: ../Main/dp2ws_local.sh  
