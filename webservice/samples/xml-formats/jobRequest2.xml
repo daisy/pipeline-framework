@@ -45,14 +45,11 @@
                                     <li>increase the likelihood of re-use in both open source and commercial
                                         applications.</li>
                                 </list>
-                            </p>
-                            
+                            </p> 
                         </level1>
-                        
                     </bodymatter>
                 </book>
             </dtbook>
-            
         </docwrapper>
     </input>
     <!-- no options specified, so the script's default values will be used -->

@@ -94,4 +94,11 @@ module Resources
     success = Rest.delete_resource(uri)
     return success
 	end
+  
+  def halt(key)
+    uri = "#{Settings::BASEURI}/admin/halt/#{key}"
+    success = Rest.get_resource(uri)
+    puts success
+    return success
+  end
 end

@@ -35,6 +35,8 @@ def main
     put_client(Settings.instance.options[:id], Settings.instance.options[:request])	
 	elsif Settings.instance.command == "delete-client"
 		delete_client(Settings.instance.options[:id])
+  elsif Settings.instance.command == 'halt'
+    halt(Settings.instance.options[:id])
 	else
     puts "Command #{Settings.instance.command} not recognized"
   end
@@ -64,6 +66,7 @@ def checkargs
   delete-client Delete a client.
   new-client    Create a new client.
   update-client Provide new information for an existing client.
+  halt          Stop the web service
 
   Examples:
   Show all scripts:
@@ -344,6 +347,20 @@ def delete_client(id)
     puts "Error deleting client"
   end
 
+end
+
+def halt(id)
+  if id == ""
+    puts "ID required (find the value in the key.txt file generated when the WS started)"
+    return
+  end
+  
+  result = Resources.halt(id)
+  if result != nil
+    puts "Success"
+  else
+    puts "Failure"
+  end
 end
 
 # execution starts here
