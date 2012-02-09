@@ -96,7 +96,7 @@ module Resources
 	end
   
   def halt(key)
-    uri = "#{Settings::BASEURI}/admin/halt/#{key}"
+    uri = "#{Settings::BASEURI}/admin/halt?haltkey=#{key}"
     success = Rest.get_resource(uri)
     puts success
     return success

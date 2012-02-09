@@ -16,7 +16,7 @@ public class HaltResource extends AdminResource {
     	}
 		service = ((PipelineWebService) getApplication());
 		try {
-			key = Long.parseLong((String) getRequestAttributes().get("key"));
+			key = Long.parseLong(getQuery().getFirstValue("haltkey"));
 		}
 		catch(NumberFormatException e) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
