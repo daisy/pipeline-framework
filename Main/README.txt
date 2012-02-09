@@ -1,5 +1,5 @@
 ###############################################################################
-###            DAISY Pipeline 2 - 1.0.1 - October 11th, 2011                    ###
+###            DAISY Pipeline 2 - 1.1 - February 13th, 2011                 ###
 ###############################################################################
 
 
@@ -35,15 +35,18 @@ This package is the 1.0 version of the Pipeline 2 project.
 
 The package includes:
 
- - a modular runtime framework (based on OSGi) for the Pipeline 2
- modules, executable as a command line tool or via a REST web API.
+ - a modular runtime framework (based on OSGi) for the Pipeline 2 modules
+ - a command line interface to execute pipeline scripts, in the "cli" directory
+ - dedicated launchers for the Pipeline 2 Web Service, in the "fwk" directory
  - a set of processing modules providing the following conversions:
-   * dtbook-to-zedai - Convert DTBook XML to ZedAI XML
-   * upgrade-dtbook - DTBook utility for upgrading to DTBook 2005-3.
-   * merge-dtbook - DTBook utility for merging two or more files.
-   * zedai-to-epub3 - ZedAI to EPUB 3
-   * daisy202-to-epub3 - DAISY 2.02 to EPUB3
- - a set of sample documents to test the provided conversions
+   * daisy202-to-epub3 - Convert a DAISY 2.02 fileset to EPUB3
+   * dtbook-to-zedai - Convert a DTBook XML document to ZedAI XML
+   * dtbook-to-epub3 - Convert a DTBook XML document to EPUB 3
+   * upgrade-dtbook - DTBook utility for upgrading a DTBook XML document to DTBook 2005-3.
+   * merge-dtbook - DTBook utility for merging two or more DTBook XML documents.
+   * zedai-to-epub3 - Convert a ZedAI document to EPUB 3
+ - a set of sample documents to test the provided conversions, in the "samples"
+   directory
 
 
 
@@ -51,9 +54,7 @@ The package includes:
 -------------------------------------------------------------------------------
 
 Changes since the last release:
- * Fixed Issue 131: dtbook-to-zedai no longer references Calabash's remote libraries
- * Fixed Issue 133: EntityResolver is set to input sources to enable offline execution
- * Fixed Issue 134: launchers now work on Japanese Windows
+ * TBD
 
 The full list of changes can be found at:
  http://code.google.com/p/daisy-pipeline/w/ReleaseNotes
@@ -68,6 +69,13 @@ Java environment (Java SE 6 or later).
 
 To get the latest version of Java, go to http://www.java.com/
 
+The "bin" directory of the Java Runtime Environment installation must be on the
+system PATH. Refer to the documentation for more details on how to configure
+this on your operating system.
+
+On Mac and Linux, the command line tool requires a Ruby runtime environment
+(version 1.8 or above). A Ruby runtime is already bundled in the executable on
+Windows.
 
 
 5. Getting Started
@@ -75,46 +83,61 @@ To get the latest version of Java, go to http://www.java.com/
 
 A) Command line tool:
 
- 1. get the short help by running the launcher script 'dp2.sh' on
- Mac/Linux or 'dp2.bat' on Windows
- 2. run with option '-s' to get the list of scripts
- 3. run 'dp2.sh -h script-name' to get the detailed description of a script
- converter
- 4. execute a job with the '-s script-name -i list-of-sources -t list-of-options' options
+ 1. get the short help by running the launcher script 'dp2' on
+ Mac/Linux or 'dp2.exe' on Windows from the "cli" directory
+ 2. run 'dp2 help a-script-name' to get the detailed description of a script
+ 4. execute a job with the 'dp2 a-script-name' subcommand and specify the
+ required options (as given with the 'dp2 help a-script-name' command)
 
 For instance:
 
-> dp2.bat -s dtbook-to-zedai -i source=D:/path/to/dtbook.xml -t opt-output-dir=file:/path/to/out/zedai.xml
+> cli\dp2.exe dtbook-to-zedai --i-source samples\dtbook\hauy_valid.xml
+--x-opt-output-dir "C:\Users\John Doe\Desktop\out"
 
-will run the DTBook to ZedAI converter on Windows.
+will run the DTBook to ZedAI converter on Windows and will output the result in
+the "out" directory on the desktop of the user named "John Doe".
 
 
 B) RESTful Web Service:
 
- 1. start the web service by running './dp2ws.sh' on Mac/Linux or 'dp2ws.bat' on Windows
+ 1. start the web service by running 'cli/dp2ws.sh' on Mac/Linux or
+ 'cli/dp2ws.bat' on Windows
  2. the web service is available on http://localhost:8182/ws/
- 3. get the list of scripts by issuing a GET request on http://localhost:8182/ws/scripts
+ 3. For example, get the list of scripts by issuing a GET request on
+ http://localhost:8182/ws/scripts
+
 
 
 
 6. Documentation
 -------------------------------------------------------------------------------
 
-Command line usage:
+Usage: dp2 command [options]
 
-Option                                  Description                            
-------                                  -----------                            
--h [converter]                          show this help or the help for the     
-                                          given converter                      
--i <portName1=file1,...>                list of input ports                    
--l                                      list of available uris                 
--o <portName1=file1,...>                list of output ports                   
--p <port1=param1=value1,...>            list of parameters                     
--s [script name]                        list of available scripts or if a      
-                                          script name is present it will be    
-                                          executed                             
--t <opt1=value1,...>                    list of options                        
--x <XProc document>                     xproc file to execute
+help				Shows this message or the command help
+
+Script commands:
+
+daisy202-to-epub3	Transforms a DAISY 2.02 publication into an EPUB3
+					publication.
+upgrade-dtbook		Upgrade a DTBook document from version 1.1.0, 2005-1, or
+					2005-2 to version 2005-3.
+merge-dtbook		Merge 2 or more DTBook documents.
+dtbook-to-zedai		Transforms DTBook XML into ZedAI XML.
+dtbook-to-epub3		Converts multiple dtbooks to epub3 format
+zedai-to-epub3		Transforms a ZedAI (DAISY 4 XML) document into an EPUB 3
+					publication.
+
+Advanced commands:
+
+result				Gets the zip file containing the job results
+halt				Stops the WS
+delete				Deletes a job
+jobs				Shows the status for every job
+status				Shows the detailed status for a single job
+
+To get help for a command write:
+dp2 help COMMAND
 
 
 The Web service API is documented on the Pipeline 2 development wiki:
@@ -129,25 +152,8 @@ development wiki:
 7. Known limitations
 -------------------------------------------------------------------------------
 
-Framework:
- - the execution messages are only available in the debug log, and are
- not very user-friendly
- - no support for localization
-
-EPUB 3 production:
- - Supports only toc and page-list navigation
- - No support for font mangling
- - No support for encryption
-
-ZedAI to EPUB 3:
- - HTML5 chunking is only based on top-level sections
- - No support for ZedAI XInclude
- - No support for non-book ZedAI Profiles and additional features
- - No support for ZedAI containers
-
-... and other known (and unknown) issues, please refer to the issue tracker:
+Please refer to the issue tracker:
  http://code.google.com/p/daisy-pipeline/issues/list
-
 
 
 8. Contact 
