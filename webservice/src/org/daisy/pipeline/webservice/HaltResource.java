@@ -1,38 +1,43 @@
 package org.daisy.pipeline.webservice;
 
 import org.restlet.data.Status;
-import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 
-public class HaltResource extends AuthenticatedResource {
+public class HaltResource extends AdminResource {
 	private PipelineWebService service;
 	private long key;
 
 	@Override
 	public void doInit() {
 		super.doInit();
-		if (!isAuthenticated())
-			return;
-		service = ((PipelineWebService) this.getApplication());
-		key = Long.parseLong((String) getRequestAttributes().get("key"));
+		if (!isAuthorized()) {
+    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+    		return;
+    	}
+		service = ((PipelineWebService) getApplication());
+		try {
+			key = Long.parseLong((String) getRequestAttributes().get("key"));
+		}
+		catch(NumberFormatException e) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+            return;
+		}
 	}
 	@Get
-	public Representation getResource() {
-		if (!isAuthenticated()) {
-			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-			return null;
-		}
+	public void getResource() {
+		if (!isAuthorized()) {
+    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+    		return;
+    	}
 		try {
 			if (!service.shutDown(key)) {
 				setStatus(Status.CLIENT_ERROR_FORBIDDEN);
-				return null;
+				return;
 			}
 		} catch (Exception e) {
 			setStatus(Status.CONNECTOR_ERROR_INTERNAL);
-			return null;
+			return;
 		}
-		setStatus(Status.SUCCESS_OK);
-		return new StringRepresentation("bye!");
+		setStatus(Status.SUCCESS_NO_CONTENT);
 	}
 }

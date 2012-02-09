@@ -18,6 +18,8 @@ module Rest
       case response
         when Net::HTTPSuccess
           return response.body
+        when Net::HTTPNoContent
+          return "success"
         when Net::HTTPInternalServerError
           return nil
         else
