@@ -24,7 +24,7 @@ class Dp2
 			if Ctxt.conf[Ctxt.conf.class::LOCAL] == true
 				execPath=File::expand_path(Ctxt.conf[Ctxt.conf.class::EXEC_LINE],@basePath)
 				Thread.new do
-					ex=IO.popen("\"#{execPath}\""){|line| line.read }
+					ex=IO.popen("\"#{execPath}\""+Ctxt.conf[Ctxt.conf.class::NULL]){|line| line.read }
 				end
 
 				#pid=ex.pid

@@ -41,7 +41,15 @@ import org.w3c.dom.ls.LSSerializer;
 public class XmlFormatter {
 
 	/** The logger. */
-	private static Logger logger = LoggerFactory.getLogger(XmlFormatter.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(XmlFormatter.class
+			.getName());
+
+	private static HashSet<Level> MSG_LEVELS = new HashSet<Level>();
+	static {
+		MSG_LEVELS.add(Level.WARNING);
+		MSG_LEVELS.add(Level.INFO);
+		MSG_LEVELS.add(Level.ERROR);
+	}
 
 	/*
 	 * example output: daisy-pipeline/webservice/docs/sampleXml/job.xml
@@ -149,49 +157,56 @@ public class XmlFormatter {
 		return doc;
 	}
 
-	private static Element toXmlElm(XProcScript script, Document doc, boolean detail) {
+	private static Element toXmlElm(XProcScript script, Document doc,
+			boolean detail) {
 		Element rootElm = null;
 
 		if (doc.getDocumentElement().getNodeName().equals("script")) {
 			rootElm = doc.getDocumentElement();
 		} else {
-			rootElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "script");
+			rootElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA,
+					"script");
 		}
-		logger.debug("Script: "+script.getName());
-		logger.debug("Descriptor: "+script.getDescriptor());
-		String scriptHref = PipelineWebService.SCRIPT_ROUTE.replaceFirst("\\{id\\}", script.getDescriptor().getName());
+		logger.debug("Script: " + script.getName());
+		logger.debug("Descriptor: " + script.getDescriptor());
+		String scriptHref = PipelineWebService.SCRIPT_ROUTE.replaceFirst(
+				"\\{id\\}", script.getDescriptor().getName());
 
 		rootElm.setAttribute("id", script.getDescriptor().getName());
 		rootElm.setAttribute("href", scriptHref);
 		rootElm.setAttribute("script", script.getURI().toString());
 
-		Element nicenameElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "nicename");
+		Element nicenameElm = doc.createElementNS(
+				XmlFormatter.NS_PIPELINE_DATA, "nicename");
 		nicenameElm.setTextContent(script.getName());
 		rootElm.appendChild(nicenameElm);
 
-		Element descriptionElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "description");
+		Element descriptionElm = doc.createElementNS(
+				XmlFormatter.NS_PIPELINE_DATA, "description");
 		descriptionElm.setTextContent(script.getDescription());
 		rootElm.appendChild(descriptionElm);
 
 		if (detail) {
 			String homepage = script.getHomepage();
 			if (homepage != null && homepage.trim().length() > 0) {
-				Element homepageElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "homepage");
+				Element homepageElm = doc.createElementNS(
+						XmlFormatter.NS_PIPELINE_DATA, "homepage");
 				homepageElm.setTextContent(homepage);
 				rootElm.appendChild(homepageElm);
 			}
 
 			Iterator<XProcPortInfo> it_input = script.getXProcPipelineInfo()
 					.getInputPorts().iterator();
-			Iterator<XProcOptionInfo> it_options = script.getXProcPipelineInfo()
-					.getOptions().iterator();
+			Iterator<XProcOptionInfo> it_options = script
+					.getXProcPipelineInfo().getOptions().iterator();
 			Iterator<XProcPortInfo> it_output = script.getXProcPipelineInfo()
 					.getOutputPorts().iterator();
 
 			while (it_input.hasNext()) {
 				XProcPortInfo input = it_input.next();
 
-				Element inputElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "input");
+				Element inputElm = doc.createElementNS(
+						XmlFormatter.NS_PIPELINE_DATA, "input");
 				inputElm.setAttribute("name", input.getName());
 
 				if (input.isSequence() == true) {
@@ -200,7 +215,8 @@ public class XmlFormatter {
 					inputElm.setAttribute("sequence", "false");
 				}
 
-				XProcPortMetadata meta = script.getPortMetadata(input.getName());
+				XProcPortMetadata meta = script
+						.getPortMetadata(input.getName());
 				inputElm.setAttribute("mediaType", meta.getMediaType());
 				inputElm.setAttribute("desc", meta.getDescription());
 
@@ -210,7 +226,8 @@ public class XmlFormatter {
 			while (it_options.hasNext()) {
 				XProcOptionInfo option = it_options.next();
 
-				Element optionElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "option");
+				Element optionElm = doc.createElementNS(
+						XmlFormatter.NS_PIPELINE_DATA, "option");
 				optionElm.setAttribute("name", option.getName().toString());
 				if (option.isRequired()) {
 					optionElm.setAttribute("required", "true");
@@ -230,7 +247,8 @@ public class XmlFormatter {
 			while (it_output.hasNext()) {
 				XProcPortInfo output = it_output.next();
 
-				Element outputElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "output");
+				Element outputElm = doc.createElementNS(
+						XmlFormatter.NS_PIPELINE_DATA, "output");
 				outputElm.setAttribute("name", output.getName());
 
 				if (output.isSequence() == true) {
@@ -238,7 +256,8 @@ public class XmlFormatter {
 				} else {
 					outputElm.setAttribute("sequence", "false");
 				}
-				XProcPortMetadata meta = script.getPortMetadata(output.getName());
+				XProcPortMetadata meta = script.getPortMetadata(output
+						.getName());
 				outputElm.setAttribute("mediaType", meta.getMediaType());
 				outputElm.setAttribute("desc", meta.getDescription());
 
@@ -260,7 +279,8 @@ public class XmlFormatter {
 	 *            the server address
 	 * @return the element
 	 */
-	private static Element toXmlElm(Job job, Document doc, int msgSeq, boolean detail) {
+	private static Element toXmlElm(Job job, Document doc, int msgSeq,
+			boolean detail) {
 		Element rootElm = null;
 
 		if (doc.getDocumentElement().getNodeName().equals("job")) {
@@ -270,7 +290,8 @@ public class XmlFormatter {
 		}
 
 		Job.Status status = job.getStatus();
-		String jobHref = PipelineWebService.JOB_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+		String jobHref = PipelineWebService.JOB_ROUTE.replaceFirst("\\{id\\}",
+				job.getId().toString());
 
 		rootElm.setAttribute("id", job.getId().toString());
 		rootElm.setAttribute("href", jobHref);
@@ -280,41 +301,45 @@ public class XmlFormatter {
 			Element scriptElm = toXmlElm(job.getScript(), doc, false);
 			rootElm.appendChild(scriptElm);
 
-			Element messagesElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "messages");
-			//TODO wrap this in a static context
-			HashSet<Level> levels= new HashSet<Level>();
-			levels.add(Level.WARNING);
-			levels.add(Level.INFO);
-			levels.add(Level.ERROR);
-			Filter<List<Message>> seqFilt= new MessageAccessor.SequenceFilter(msgSeq);
-			Filter<List<Message>> levelFilt= new MessageAccessor.LevelFilter(levels);
-			//end of wrapping things
+			Element messagesElm = doc.createElementNS(
+					XmlFormatter.NS_PIPELINE_DATA, "messages");
 
-			try {
-				List<Message> msgs= job.getMonitor().getMessageAccessor().filtered(new Filter[]{seqFilt,levelFilt});
-				for (Message msg :msgs) {
-					Element singleMsgElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA,
-							"message");
-					singleMsgElm.setAttribute( "level",msg.getLevel().toString());
-					singleMsgElm.setAttribute( "sequence",msg.getSequence()+"");
+
+			Filter<List<Message>> seqFilt = new MessageAccessor.SequenceFilter(
+					msgSeq);
+			Filter<List<Message>> levelFilt = new MessageAccessor.LevelFilter(
+					MSG_LEVELS);
+			// end of wrapping things
+
+			if (job.getMonitor().getMessageAccessor() != null) {
+				List<Message> msgs = job.getMonitor().getMessageAccessor()
+						.filtered(new Filter[] { seqFilt, levelFilt });
+				for (Message msg : msgs) {
+					Element singleMsgElm = doc.createElementNS(
+							XmlFormatter.NS_PIPELINE_DATA, "message");
+					singleMsgElm.setAttribute("level", msg.getLevel()
+							.toString());
+					singleMsgElm.setAttribute("sequence", msg.getSequence()
+							+ "");
 					singleMsgElm.setTextContent(msg.getMsg());
 					messagesElm.appendChild(singleMsgElm);
 				}
 				if (msgs.size() > 0) {
 					rootElm.appendChild(messagesElm);
 				}
-			} catch (Exception e) {
-				System.out.println(e.getCause());
 			}
-
-			Element logElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "log");
-			String logHref = PipelineWebService.LOG_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+			Element logElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA,
+					"log");
+			String logHref = PipelineWebService.LOG_ROUTE.replaceFirst(
+					"\\{id\\}", job.getId().toString());
 			logElm.setAttribute("href", logHref);
 			rootElm.appendChild(logElm);
 
 			if (job.getStatus() == Job.Status.DONE) {
-				Element resultElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "result");
-				String resultHref = PipelineWebService.RESULT_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+				Element resultElm = doc.createElementNS(
+						XmlFormatter.NS_PIPELINE_DATA, "result");
+				String resultHref = PipelineWebService.RESULT_ROUTE
+						.replaceFirst("\\{id\\}", job.getId().toString());
 				resultElm.setAttribute("href", resultHref);
 				rootElm.appendChild(resultElm);
 			}
@@ -328,7 +353,8 @@ public class XmlFormatter {
 
 		// for debugging only
 		if (!Validator.validateXml(doc, Validator.clientSchema)) {
-			XmlFormatter.logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
+			XmlFormatter.logger.error("INVALID XML:\n"
+					+ XmlFormatter.DOMToString(doc));
 		}
 
 		return doc;
@@ -347,7 +373,8 @@ public class XmlFormatter {
 
 		// for debugging only
 		if (!Validator.validateXml(doc, Validator.clientsSchema)) {
-			XmlFormatter.logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
+			XmlFormatter.logger.error("INVALID XML:\n"
+					+ XmlFormatter.DOMToString(doc));
 		}
 
 		return doc;
@@ -359,10 +386,12 @@ public class XmlFormatter {
 		if (doc.getDocumentElement().getNodeName().equals("client")) {
 			rootElm = doc.getDocumentElement();
 		} else {
-			rootElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "client");
+			rootElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA,
+					"client");
 		}
 
-		String clientHref = PipelineWebService.CLIENT_ROUTE.replaceFirst("\\{id\\}", client.getId());
+		String clientHref = PipelineWebService.CLIENT_ROUTE.replaceFirst(
+				"\\{id\\}", client.getId());
 
 		rootElm.setAttribute("href", clientHref);
 		rootElm.setAttribute("id", client.getId());
@@ -417,7 +446,8 @@ public class XmlFormatter {
 	 */
 	public static String nodeToString(Node node) {
 		Document doc = node.getOwnerDocument();
-		DOMImplementationLS domImplLS = (DOMImplementationLS) doc.getImplementation();
+		DOMImplementationLS domImplLS = (DOMImplementationLS) doc
+				.getImplementation();
 		LSSerializer serializer = domImplLS.createLSSerializer();
 		serializer.getDomConfig().setParameter("xml-declaration", false);
 		String string = serializer.writeToString(node);
@@ -433,10 +463,13 @@ public class XmlFormatter {
 	 */
 	public static Document createDom(String documentElementName) {
 		try {
-			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder documentBuilder = documentBuilderFactory
+					.newDocumentBuilder();
 			DOMImplementation domImpl = documentBuilder.getDOMImplementation();
-			Document document = domImpl.createDocument(NS_PIPELINE_DATA, documentElementName, null);
+			Document document = domImpl.createDocument(NS_PIPELINE_DATA,
+					documentElementName, null);
 
 			return document;
 
