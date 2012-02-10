@@ -57,7 +57,8 @@ public class ClientResource extends AdminResource {
     	}
 
     	setStatus(Status.SUCCESS_OK);
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, org.daisy.pipeline.webservice.XmlFormatter.clientToXml(client));
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
+				org.daisy.pipeline.webservice.XmlFormatter.clientToXml(client, getRootRef().toString()));
 		return dom;
     }
 
@@ -152,7 +153,8 @@ public class ClientResource extends AdminResource {
 		DatabaseManager.getInstance().updateObject(client.getInternalId(), newClient);
 
 		setStatus(Status.SUCCESS_OK);
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.clientToXml(newClient));
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
+				XmlFormatter.clientToXml(newClient, getRootRef().toString()));
 		return dom;
 
     }

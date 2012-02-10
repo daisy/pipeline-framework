@@ -8,6 +8,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="data:script"/>
       </xs:sequence>
+      <xs:attribute name="href" use="required" type="xs:anyURI"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

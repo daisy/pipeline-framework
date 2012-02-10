@@ -3,7 +3,7 @@
     <xs:element name="client">
         <xs:complexType>
             <xs:attribute name="id" use="required" type="xs:string"/>
-            <xs:attribute name="href" use="required" type="xs:anyURI"/>
+            <xs:attribute name="href" use="optional" type="xs:anyURI"/>
             <xs:attribute name="secret" use="required" type="xs:string"/>
             <xs:attribute name="role" use="required" type="xs:string"/>
             <xs:attribute name="contact" use="required" type="xs:string"/>

@@ -171,12 +171,12 @@ def get_log(id)
     puts "ID required"
     return
   end
-  #status = Resources.get_job_status(id)
-  #if status != "DONE"
-  #  puts "Cannot get log until the job is done. Job status: #{status}."
-  #  # return
-  #end
-  #
+  status = Resources.get_job_status(id)
+  if status != "DONE"
+    puts "Cannot get log until the job is done. Job status: #{status}."
+    return
+  end
+  
   log = Resources.get_log(id)
   if log == ""
     puts "No data returned"
@@ -264,7 +264,7 @@ def post_job(job_request_filepath, job_data_filepath)
     puts "No data returned"
     return
   end
-  puts doc.to_xml(:indent => 2)
+  puts doc.to_xml(:indent => 2)  
 end
 
 def post_client(request_filepath)

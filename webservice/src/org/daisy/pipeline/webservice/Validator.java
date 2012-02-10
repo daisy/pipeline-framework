@@ -3,8 +3,6 @@ package org.daisy.pipeline.webservice;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -147,17 +145,16 @@ public class Validator {
 	private static boolean validateArguments(Document doc, PipelineWebService application) {
 
 		Element scriptElm = (Element)doc.getElementsByTagName("script").item(0);
-		URI scriptUri = null;
-		try {
-			scriptUri = new URI(scriptElm.getAttribute("href"));
-		}
-		catch (URISyntaxException e) {
-			logger.error(e.getMessage());
-			return false;
-		}
+		// get the ID from the href attr value
+				String scriptId = scriptElm.getAttribute("href");
+				if (scriptId.endsWith("/")) {
+				    scriptId = scriptId.substring(0, scriptId.length() - 1);
+				}
+				int idx = scriptId.lastIndexOf('/');
+				scriptId = scriptId.substring(idx+1);
 
 		ScriptRegistry scriptRegistry = application.getScriptRegistry();
-		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptUri);
+		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptId);
 
 		if (unfilteredScript == null) {
 			logger.error("Script not found");

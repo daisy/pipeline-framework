@@ -14,7 +14,6 @@
       </xs:sequence>
       <xs:attribute name="id" use="required" type="xs:string"/>
       <xs:attribute name="href" use="required" type="xs:anyURI"/>
-      <xs:attribute name="script" use="required" type="xs:anyURI"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="nicename" type="xs:string"/>

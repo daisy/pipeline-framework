@@ -3,8 +3,6 @@ package org.daisy.pipeline.webservice;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipFile;
@@ -75,7 +73,7 @@ public class JobsResource extends AuthenticatedResource {
     	}
 
 		JobManager jobMan = ((PipelineWebService)getApplication()).getJobManager();
-		Document doc = XmlFormatter.jobsToXml(jobMan.getJobs());
+		Document doc = XmlFormatter.jobsToXml(jobMan.getJobs(), getRootRef().toString());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
 		setStatus(Status.SUCCESS_OK);
 		return dom;
@@ -155,7 +153,7 @@ public class JobsResource extends AuthenticatedResource {
 			return null;
 		}
 
-		Document jobXml = XmlFormatter.jobToXml(job, 0);
+		Document jobXml = XmlFormatter.jobToXml(job, 0, getRootRef().toString());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
 		setStatus(Status.SUCCESS_CREATED);
 		return dom;
@@ -288,17 +286,17 @@ public class JobsResource extends AuthenticatedResource {
 
 		Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
 
-		URI scriptUri = null;
-		try {
-			scriptUri = new URI(scriptElm.getAttribute("href"));
-		} catch (URISyntaxException e) {
-			logger.error(e.getMessage());
-			return null;
+		// get the ID from the href attr value
+		String scriptId = scriptElm.getAttribute("href");
+		if (scriptId.endsWith("/")) {
+		    scriptId = scriptId.substring(0, scriptId.length() - 1);
 		}
+		int idx = scriptId.lastIndexOf('/');
+		scriptId = scriptId.substring(idx+1);
 
-		// get the script from the URI
+		// get the script from the ID
 		ScriptRegistry scriptRegistry = ((PipelineWebService)getApplication()).getScriptRegistry();
-		XProcScriptService scriptService = scriptRegistry.getScript(scriptUri);
+		XProcScriptService scriptService = scriptRegistry.getScript(scriptId);
 
 		if (scriptService == null) {
 			return null;

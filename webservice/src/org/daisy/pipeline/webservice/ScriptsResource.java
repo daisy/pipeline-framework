@@ -56,7 +56,7 @@ public class ScriptsResource extends AuthenticatedResource {
     	}
 
 		this.setStatus(Status.SUCCESS_OK);
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.xprocScriptsToXml(scripts));
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.xprocScriptsToXml(scripts, getRootRef().toString()));
 		return dom;
 
 	}

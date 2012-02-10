@@ -9,9 +9,7 @@ module Resources
   end
 
   def get_script(id)
-    # escape the ID for now since it's actually a URI
-    escaped_id = CGI.escape(id)
-    uri = "#{Settings::BASEURI}/scripts/#{escaped_id}"
+    uri = "#{Settings::BASEURI}/scripts/#{id}"
     doc = Rest.get_resource_as_xml(uri)
     return doc
   end
@@ -43,11 +41,11 @@ module Resources
   def post_job(request, data)
     uri = "#{Settings::BASEURI}/jobs"
     if data == nil
-      job_id = Rest.post_resource(uri, request);
+      doc = Rest.post_resource(uri, request);
     else
-      job_id = Rest.post_resource(uri, {"job-request"=> request, "job-data"=>data});
+      doc = Rest.post_resource(uri, {"job-request"=> request, "job-data"=>data});
     end
-    return job_id
+    return doc
   end
 
   def delete_job(id)

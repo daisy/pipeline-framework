@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
-    <script href='http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl'/>
+    <script href='http://localhost:8182/ws/scripts/dtbook-to-zedai'/>
     <input name='source'>
         <file src='./dtbook-basic.xml'/>
     </input>

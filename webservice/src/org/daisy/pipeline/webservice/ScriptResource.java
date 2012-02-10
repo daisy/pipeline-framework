@@ -31,12 +31,7 @@ public class ScriptResource extends AuthenticatedResource {
 			return;
 		}
 
-		// TODO refer to scripts by their IDs instead of URIs
-		// however, scripts don't have IDs yet so we have to wait
-		// introduced temporary parameter "scriptid" to avoid conflict with auth param, recently renamed to "id"
 		String scriptId = null;
-
-
 		scriptId = (String) getRequestAttributes().get("id");
 
 		logger.debug("Script with id :"+scriptId);
@@ -70,7 +65,7 @@ public class ScriptResource extends AuthenticatedResource {
 		setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(
 				MediaType.APPLICATION_XML,
-				XmlFormatter.xprocScriptToXml(script));
+				XmlFormatter.xprocScriptToXml(script, getRootRef().toString()));
 		return dom;
 	}
 }
