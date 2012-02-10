@@ -2,14 +2,11 @@ package org.daisy.pipeline.webservice;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.pipeline.database.BasicDatabaseObject;
 import org.daisy.pipeline.database.Client;
 import org.daisy.pipeline.database.DatabaseManager;
 import org.restlet.data.MediaType;
@@ -47,6 +44,8 @@ public class ClientsResource extends AdminResource {
     		return null;
     	}
 
+    	// TODO re-instate when using real DB backend
+    	/*
     	List<BasicDatabaseObject> objs = DatabaseManager.getInstance().runQuery("SELECT client FROM Client client");
 
     	List<Client> clients = new ArrayList<Client>();
@@ -56,6 +55,12 @@ public class ClientsResource extends AdminResource {
 
     	setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.clientsToXml(clients, getRootRef().toString()));
+		*/
+    	setStatus(Status.SUCCESS_OK);
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
+				XmlFormatter.clientsToXml(DatabaseManager.getInstance().getClients(),
+						getRootRef().toString()));
+
 		return dom;
     }
 

@@ -296,7 +296,7 @@ public class JobsResource extends AuthenticatedResource {
 
 		// get the script from the ID
 		ScriptRegistry scriptRegistry = ((PipelineWebService)getApplication()).getScriptRegistry();
-		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptUri);
+		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptId);
 		XProcScript script = null;
 
 		if (unfilteredScript != null) {
