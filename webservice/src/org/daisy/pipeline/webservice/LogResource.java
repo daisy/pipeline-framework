@@ -7,6 +7,7 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
+import org.daisy.pipeline.job.JobResult;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.FileRepresentation;

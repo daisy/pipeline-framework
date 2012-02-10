@@ -298,13 +298,20 @@ public class JobsResource extends AuthenticatedResource {
 
 		// get the script from the URI
 		ScriptRegistry scriptRegistry = ((PipelineWebService)getApplication()).getScriptRegistry();
-		XProcScriptService scriptService = scriptRegistry.getScript(scriptUri);
+		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptUri);
+		XProcScript script = null;
 
-		if (scriptService == null) {
+		if (unfilteredScript != null) {
+		/*	script = (((PipelineWebService) getApplication()).isLocal()) ?
+					unfilteredScript.load() : XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());\
+		*/
+			script = unfilteredScript.load();
+		}
+		else {
+			logger.error("Script not found");
 			return null;
 		}
 
-		XProcScript script = scriptService.load();
 		XProcInput.Builder builder = new XProcInput.Builder(script.getXProcPipelineInfo());
 
 		addInputsToJob(doc.getElementsByTagName("input"), script.getXProcPipelineInfo().getInputPorts(), builder);
