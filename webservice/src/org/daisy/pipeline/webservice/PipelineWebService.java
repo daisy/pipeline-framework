@@ -144,15 +144,13 @@ public class PipelineWebService extends Application {
 		String clientstorefile = System.getProperty(CLIENT_STORE_PROPERTY);
 		File file = new File(clientstorefile);
 		if (file.exists()) {
-			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(true);
 			DocumentBuilder documentBuilder;
 			try {
-				documentBuilder = documentBuilderFactory.newDocumentBuilder();
+				documentBuilder = factory.newDocumentBuilder();
 				Document doc = documentBuilder.parse(file);
-				//String s = XmlFormatter.DOMToString(doc);
-
-				// TODO fix validation error -- don't know the cause, as the file validates by itself, for ex. in oxygen
-				if (true) { //Validator.validateXml(doc, Validator.clientsSchema)) {
+				if (Validator.validateXml(doc, Validator.clientsSchema)) {
 					DatabaseManager.getInstance().loadData(doc);
 				}
 				else {

@@ -50,5 +50,5 @@
             </dtbook>
         </docwrapper>
     </input>
-    <option name='opt-output-dir'>file:/tmp</option>
+    <option name='opt-output-dir'>file:/tmp/dp2_jobs</option>
 </jobRequest>
