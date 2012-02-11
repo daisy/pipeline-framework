@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
-    <script href="http://localhost:8182/ws/scripts/dtbook-to-zedai">
+    <script href="http://localhost:8182/ws/scripts/dtbook-to-zedai"/>
     <input name='source'>
         <docwrapper>
             <dtbook xmlns='http://www.daisy.org/z3986/2005/dtbook/' version='2005-3' xml:lang='en-US'>
@@ -50,5 +50,5 @@
             </dtbook>
         </docwrapper>
     </input>
-    <option name='opt-output-dir'>/tmp</option>
+    <option name='opt-output-dir'>file:/tmp</option>
 </jobRequest>

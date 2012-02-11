@@ -31,8 +31,6 @@ import org.xml.sax.SAXException;
  */
 public class PipelineWebService extends Application {
 
-
-
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(PipelineWebService.class.getName());
 
@@ -107,7 +105,9 @@ public class PipelineWebService extends Application {
 	public void init(BundleContext ctxt) {
 		bundleCtxt=ctxt;
 		readOptions();
-		initClientStore();
+		if (isAuthenticationEnabled()) {
+			initClientStore();
+		}
 		logger.info(String.format("Starting webservice on port %d",
 				portNumber));
 		Component component = new Component();
@@ -149,7 +149,7 @@ public class PipelineWebService extends Application {
 			try {
 				documentBuilder = documentBuilderFactory.newDocumentBuilder();
 				Document doc = documentBuilder.parse(file);
-				String s = XmlFormatter.DOMToString(doc);
+				//String s = XmlFormatter.DOMToString(doc);
 
 				// TODO fix validation error -- don't know the cause, as the file validates by itself, for ex. in oxygen
 				if (true) { //Validator.validateXml(doc, Validator.clientsSchema)) {
