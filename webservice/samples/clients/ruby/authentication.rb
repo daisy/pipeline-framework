@@ -7,8 +7,8 @@ require 'cgi'
 module Authentication
   module_function
 
-  AUTH_ID = "admin"
-  SECRET = "terces"
+  AUTH_ID = "clientid"
+  SECRET = "supersecret"
 
   # the input URI includes all parameters except id, timestamp, and hash
   def prepare_authenticated_uri(uri)
