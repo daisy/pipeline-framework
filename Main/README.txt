@@ -31,8 +31,6 @@ For more information see:
 2. Contents of the package
 -------------------------------------------------------------------------------
 
-This package is the 1.0 version of the Pipeline 2 project.
-
 The package includes:
 
  - a modular runtime framework (based on OSGi) for the Pipeline 2 modules
@@ -53,6 +51,8 @@ The package includes:
 
 3. Release Notes
 -------------------------------------------------------------------------------
+
+The package includes the 1.1 version of the project.
 
 Changes since the last release:
 
