@@ -40,9 +40,6 @@ The package includes:
    * daisy202-to-epub3 - Convert a DAISY 2.02 fileset to EPUB3
    * dtbook-to-zedai - Convert a DTBook XML document to ZedAI XML
    * dtbook-to-epub3 - Convert a DTBook XML document to EPUB 3
-   * upgrade-dtbook - DTBook utility for upgrading a DTBook XML document to
-     DTBook 2005-3.
-   * merge-dtbook - DTBook utility for merging two or more DTBook XML documents.
    * zedai-to-epub3 - Convert a ZedAI document to EPUB 3
  - a set of sample documents to test the provided conversions, in the "samples"
    directory
@@ -79,6 +76,10 @@ Changes since the last release:
    * NEW: module containing a copy of commonly referenced DTDs and XML entities.
    * dtbook-to-zedai: refactored to allow calling the load/convert/store parts
      separately.
+   * upgrade-dtbook: temporarily removed from the script list until we decide how
+     we deal with output ports
+   * merge-dtbook: temporarily removed from the script list until we decide how
+     we deal with output ports
 
 The full list of changes can be found at:
  http://code.google.com/p/daisy-pipeline/w/ReleaseNotes
