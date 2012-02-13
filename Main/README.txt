@@ -42,7 +42,8 @@ The package includes:
    * daisy202-to-epub3 - Convert a DAISY 2.02 fileset to EPUB3
    * dtbook-to-zedai - Convert a DTBook XML document to ZedAI XML
    * dtbook-to-epub3 - Convert a DTBook XML document to EPUB 3
-   * upgrade-dtbook - DTBook utility for upgrading a DTBook XML document to DTBook 2005-3.
+   * upgrade-dtbook - DTBook utility for upgrading a DTBook XML document to
+     DTBook 2005-3.
    * merge-dtbook - DTBook utility for merging two or more DTBook XML documents.
    * zedai-to-epub3 - Convert a ZedAI document to EPUB 3
  - a set of sample documents to test the provided conversions, in the "samples"
@@ -54,7 +55,30 @@ The package includes:
 -------------------------------------------------------------------------------
 
 Changes since the last release:
- * TBD
+
+ * Command-line tool
+   * totally revamped the command-line tool.
+   * the new command-line interface is based on a sub-command system.
+   * the new command-line tool is implemented as a client application to the Web
+     Service API, developed in Ruby.
+ * Web Service
+   * revamped the schemas of the XML payloads.
+   * re-enabled support for running the Web Service in local mode.
+   * added nonce to authentication for further protection against replay attacks.
+   * added a "halt" command.
+   * added sample client code in C#, Ruby and PHP.
+ * Framework
+   * replaced the use of the EXPath Packaging format by the use of OASIS XML
+     Catalogs to declare a module's components.
+   * added support for filtering Job messages by level.
+ * Modules
+   * ALL: A updated all the modules to use the new catalog-based component
+     declaration.
+   * NEW: new dtbook-to-epub3 script based on the combination of existing
+     dtbook-to-zedai and zedai-to-epub3 functionality.
+   * NEW: module containing a copy of commonly referenced DTDs and XML entities.
+   * dtbook-to-zedai: refactored to allow calling the load/convert/store parts
+     separately.
 
 The full list of changes can be found at:
  http://code.google.com/p/daisy-pipeline/w/ReleaseNotes
