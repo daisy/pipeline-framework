@@ -107,7 +107,13 @@ public class PipelineWebService extends Application {
 			component.start();
 			generateStopKey();
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			logger.error("Shutting down the framework because of:"+e.getMessage());
+			try{
+				((Framework)bundleCtxt.getBundle(0)).stop();
+			}catch (Exception innerException) {
+				logger.error("Error shutting down:"+e.getMessage());
+			}
+
 		}
 	}
 
