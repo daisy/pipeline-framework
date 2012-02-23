@@ -93,7 +93,7 @@ end
 class Message
 	attr_accessor :msg,:level,:seq
 	def to_s
-			return "#{@level}(#{@seq}) - #{@msg[0..150]}"
+			return "#{@level}(#{@seq}) - #{@msg}"
 	end
 end
 class Job
@@ -114,6 +114,7 @@ class Job
 		XPath.each(element,"./ns:messages/ns:message",Resource::NS){|xmsg|
 			msg= Message.new 
 			msg.msg=xmsg.text
+			Ctxt.logger.debug("Inserting message #{msg.msg}")
 			msg.level=xmsg.attributes["level"]
 			msg.seq=xmsg.attributes["sequence"]
 			job.messages.push(msg)		
