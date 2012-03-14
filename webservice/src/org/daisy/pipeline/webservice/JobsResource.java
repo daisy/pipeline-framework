@@ -415,14 +415,12 @@ public class JobsResource extends AuthenticatedResource {
 			String optionName = opt.getName().toString();
 
 			// look for name
-			boolean found = false;
 			for (int i = 0; i< nodes.getLength(); i++) {
 				Element optionElm = (Element) nodes.item(i);
 				String name = optionElm.getAttribute("name");
 				if (name.equals(optionName)) {
 					String val = optionElm.getTextContent();
 					builder.withOption(new QName(name), val);
-					found = true;
 					break;
 				}
 			}
