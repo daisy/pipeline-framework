@@ -57,10 +57,11 @@ public class PipelineWebService extends Application {
 	public static final String CLIENTS_ROUTE = "/admin/clients";
 	public static final String CLIENT_ROUTE = "/admin/clients/{id}";
 
-
+	private static final int LOCAL_PORT_DEF=8181;
+	private static final int REMOTE_PORT_DEF=8182;
 	/* options and their default values */
 	private String path = "/ws";
-	private int portNumber = 8182;
+	private  int portNumber = 0;
 	private boolean usesAuthentication = true;
 	private long maxRequestTime = 600000; // 10 minutes in ms
 	private String tmpDir = "/tmp";
@@ -117,7 +118,13 @@ public class PipelineWebService extends Application {
 			component.start();
 			generateStopKey();
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			logger.error("Shutting down the framework because of:"+e.getMessage());
+			try{
+				((Framework)bundleCtxt.getBundle(0)).stop();
+			}catch (Exception innerException) {
+				logger.error("Error shutting down:"+e.getMessage());
+			}
+
 		}
 	}
 
@@ -184,6 +191,7 @@ public class PipelineWebService extends Application {
 	public boolean isLocal() {
 		return Boolean.valueOf(System.getProperty(LOCAL_MODE_PROPERTY));
 	}
+
 
 	public String getTmpDir() {
 		return tmpDir;
@@ -277,6 +285,12 @@ public class PipelineWebService extends Application {
 				logger.error(String.format(
 						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.",
 						PORT_PROPERTY, port, portNumber));
+			}
+		}else{
+			if (isLocal()){
+				portNumber=LOCAL_PORT_DEF;
+			}else{
+				portNumber=REMOTE_PORT_DEF;
 			}
 		}
 

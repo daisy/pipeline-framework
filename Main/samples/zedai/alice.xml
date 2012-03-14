@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?oxygen RNGSchema="../../../../../zednext/src/schema/z3986a-book.rng" type="xml"?>
-<document xmlns="http://www.daisy.org/ns/z3986/authoring/"
-    xmlns:z3986="http://www.daisy.org/z3986/2011/vocab/decl/#"
-    xmlns:dcterms="http://purl.org/dc/terms/" xml:lang="en">
+<?oxygen RNGSchema="../../../schemas/zedai/z3998-book-1.0/z3998-book.rng" type="xml"?>
+<document xmlns="http://www.daisy.org/ns/z3998/authoring/" xml:lang="en">
     <head>
-        <meta rel="z3986:profile" resource="http://www.daisy.org/z3986/2011/auth/profiles/book/0.6"/>
-        <meta property="dcterms:identifier" content="com.googlecode.zednext.alice"/>
-        <meta property="dcterms:publisher" content="CSU"/>
-        <meta property="dcterms:date" content="2010-03-27T13:50:05-02:00"/>
+        <meta rel="z3998:profile" resource="http://www.daisy.org/z3998/2012/auth/profiles/book/1.0/">
+            <meta property="z3998:name" content="book"/>
+            <meta property="z3998:version" content="1.0"/>
+        </meta>
+        <meta rel="z3998:rdfa-context" resource="http://www.daisy.org/z3998/2012/vocab/context/default/"/>
+        <meta property="dc:identifier" content="com.googlecode.zednext.alice"/>
+        <meta property="dc:publisher" content="CSU"/>
+        <meta property="dc:date" content="2010-03-27T15:50:05Z"/>
 
         <meta typeof="dramatis-personae">
             <meta xml:id="alice" about="#alice" property="persona">
@@ -33,10 +35,10 @@
                     <p>The King and Queen inspecting the tarts</p>
                 </object>
                 <pagebreak value="III"/>
-                <h property="dcterms:title">Alice's Adventures In Wonderland</h>
+                <h property="dc:title">Alice's Adventures In Wonderland</h>
                 <block>
                     <ln>By</ln>
-                    <name property="dcterms:creator">Lewis Carroll</name>. <ln>With Forty-Two
+                    <name property="dc:creator">Lewis Carroll</name>. <ln>With Forty-Two
                         Illustrations</ln>
                     <ln>By</ln>
                     <name>John Tenniel</name>. </block>
@@ -48,7 +50,7 @@
             <section>
                 <pagebreak value="IV"/>
                 <pagebreak value="V"/>
-                <separator/>
+                <transition/>
             </section>
             <section role="introduction">
                 <verse role="poem">
@@ -305,7 +307,7 @@
                     /> so <name>Alice</name> ventured to taste it, and finding it very nice, (it
                     had, in fact, a sort of mixed flavour of cherry-tart, custard, pine-apple, roast
                     turkey, toffee, and hot buttered toast,) she very soon finished it off.</p>
-                <separator/>
+                <transition/>
 
                 <p><d ref="alice">"What a curious feeling!"</d> said <name>Alice</name>, <d
                         ref="alice">"I must be shutting up like a telescope."</d></p>
@@ -351,7 +353,7 @@
                         xml:id="p14"/> way of expecting nothing but out-of-the-way things to happen,
                     that it seemed quite dull and stupid for life to go on in the common way.</p>
                 <p>So she set to work, and very soon finished off the cake.</p>
-                <separator/>
+                <transition/>
             </section>
             <section>
                 <pagebreak value="15" xml:id="p15"/>

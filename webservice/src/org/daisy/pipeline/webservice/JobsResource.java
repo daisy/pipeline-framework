@@ -432,16 +432,15 @@ public class JobsResource extends AuthenticatedResource {
 			}
 
 			// this is an option we are allowed to set. so, look for the option in the job request doc.
-			String value = "";
 			for (int i = 0; i< nodes.getLength(); i++) {
 				Element optionElm = (Element) nodes.item(i);
 				String name = optionElm.getAttribute("name");
 				if (name.equals(optionName)) {
-					value = optionElm.getTextContent();
+					String val = optionElm.getTextContent();
+					builder.withOption(new QName(name), val);
 					break;
 				}
 			}
-			builder.withOption(new QName(optionName), value);
 		}
 	}
 }

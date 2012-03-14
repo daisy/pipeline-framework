@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLResolver;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
@@ -26,19 +27,38 @@ import com.google.common.base.Predicates;
 
 ;
 
-
 /**
  * Stax based XmlCatalog parser implementation
  */
-public class StaxXmlCatalogParser implements XmlCatalogParser{
+public class StaxXmlCatalogParser implements XmlCatalogParser {
 
+	private static final String HTTP_WWW_OASIS_OPEN_ORG_COMMITTEES_ENTITY_RELEASE_1_0_CATALOG_DTD = "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd";
+	private static final String ORG_DAISY_PIPELINE_XMLCATALOG_RESOURCES_CATALOG_DTD = "org/daisy/pipeline/xmlcatalog/resources/catalog.dtd";
 	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory
 			.getLogger(StaxXmlCatalogParser.class);
 	/** The xmlinputfactory. */
 	private XMLInputFactory mFactory;
+	private final XMLResolver mResolver = new XMLResolver() {
 
-	/* (non-Javadoc)
+		@Override
+		public Object resolveEntity(String publicId, String systemId,
+				String arg2, String arg3) throws XMLStreamException {
+			if (systemId
+					.equals(HTTP_WWW_OASIS_OPEN_ORG_COMMITTEES_ENTITY_RELEASE_1_0_CATALOG_DTD)) {
+				return this.getClass().getClassLoader()
+						.getResourceAsStream(ORG_DAISY_PIPELINE_XMLCATALOG_RESOURCES_CATALOG_DTD);
+			} else {
+				return null;
+
+			}
+
+		}
+	};
+
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see org.daisy.pipeline.xmlcatalog.XmlCatalogParser#parse(java.net.URI)
 	 */
 	@Override
@@ -49,10 +69,12 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 	/**
 	 * Sets the {@link XMLInputFactory}
 	 *
-	 * @param factory the new factory
+	 * @param factory
+	 *            the new factory
 	 */
 	public void setFactory(XMLInputFactory factory) {
 		mFactory = factory;
+		mFactory.setXMLResolver(mResolver);
 	}
 
 	/**
@@ -76,7 +98,8 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 		/**
 		 * Parses the.
 		 *
-		 * @param uri the uri
+		 * @param uri
+		 *            the uri
 		 * @return the xml catalog
 		 */
 		public XmlCatalog parse(URI uri) {
@@ -92,6 +115,7 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 			try {
 
 				is = uri.toURL().openStream();
+
 				reader = mFactory.createXMLEventReader(is);
 
 				parseCatalog(reader);
@@ -102,6 +126,11 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 			} catch (IOException e) {
 				throw new RuntimeException(
 						"Couldn't access package descriptor: " + e.getMessage(),
+						e);
+
+			}catch (Exception e){
+				throw new RuntimeException(
+						"Error while parsing descriptor: " + e.getMessage(),
 						e);
 
 			} finally {
@@ -122,10 +151,13 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 		/**
 		 * Parses the catalog.
 		 *
-		 * @param reader the reader
-		 * @throws XMLStreamException the xML stream exception
+		 * @param reader
+		 *            the reader
+		 * @throws XMLStreamException
+		 *             the xML stream exception
 		 */
-		private void parseCatalog(XMLEventReader reader) throws XMLStreamException {
+		private void parseCatalog(XMLEventReader reader)
+				throws XMLStreamException {
 			@SuppressWarnings("unchecked")
 			Predicate<XMLEvent> pred = Predicates.or(
 					EventPredicates.isStartOrStopElement(Elements.E_CATALOG),
@@ -139,37 +171,45 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 						@Override
 						public void process(XMLEvent event)
 								throws XMLStreamException {
-							//catalog and group controlled for xml:base changes
-							if(event.isStartElement()&&(event.asStartElement().getName()
-									.equals(Elements.E_CATALOG)||event.asStartElement().getName()
-									.equals(Elements.E_GROUP))){
-								Attribute base= event.asStartElement().getAttributeByName(Attributes.A_XML_BASE);
-								if (base != null){
+							// catalog and group controlled for xml:base changes
+							if (event.isStartElement()
+									&& (event.asStartElement().getName()
+											.equals(Elements.E_CATALOG) || event
+											.asStartElement().getName()
+											.equals(Elements.E_GROUP))) {
+								Attribute base = event.asStartElement()
+										.getAttributeByName(
+												Attributes.A_XML_BASE);
+								if (base != null) {
 									mBase.push(URI.create(base.getValue()));
-								}else{
+								} else {
 									mBase.push(mBase.peek());
 								}
-							//xml:base pop
-							}else if(event.isEndElement()&&(event.asEndElement().getName()
-									.equals(Elements.E_CATALOG)||event.asEndElement().getName()
-									.equals(Elements.E_GROUP))){
+								// xml:base pop
+							} else if (event.isEndElement()
+									&& (event.asEndElement().getName()
+											.equals(Elements.E_CATALOG) || event
+											.asEndElement().getName()
+											.equals(Elements.E_GROUP))) {
 								mBase.pop();
-							//rest of interesting elements
-							}else if(event.isStartElement()&&event.asStartElement().getName()
-									.equals(Elements.E_PUBLIC)){
-									parsePublic(event);
-							}if(event.isStartElement()&&event.asStartElement().getName()
-									.equals(Elements.E_SYSTEM)){
-									parseSystem(event);
-							}if(event.isStartElement()&&event.asStartElement().getName()
-									.equals(Elements.E_URI)){
-									parseUri(event);
+								// rest of interesting elements
+							} else if (event.isStartElement()
+									&& event.asStartElement().getName()
+											.equals(Elements.E_PUBLIC)) {
+								parsePublic(event);
+							}
+							if (event.isStartElement()
+									&& event.asStartElement().getName()
+											.equals(Elements.E_SYSTEM)) {
+								parseSystem(event);
+							}
+							if (event.isStartElement()
+									&& event.asStartElement().getName()
+											.equals(Elements.E_URI)) {
+								parseUri(event);
 							}
 
 						}
-
-
-
 
 					});
 
@@ -178,21 +218,24 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 		/**
 		 * Parses the uri.
 		 *
-		 * @param event the event
+		 * @param event
+		 *            the event
 		 */
 		protected void parseUri(XMLEvent event) {
-			Attribute name= event.asStartElement().getAttributeByName(Attributes.A_NAME);
-			Attribute uri= event.asStartElement().getAttributeByName(Attributes.A_URI);
-			URI nameUri=null;
-			URI uriUri=null;
-			if(name!=null){
-				nameUri=URI.create(name.getValue());
-			}else{
+			Attribute name = event.asStartElement().getAttributeByName(
+					Attributes.A_NAME);
+			Attribute uri = event.asStartElement().getAttributeByName(
+					Attributes.A_URI);
+			URI nameUri = null;
+			URI uriUri = null;
+			if (name != null) {
+				nameUri = URI.create(name.getValue());
+			} else {
 				throw new IllegalStateException("name is null");
 			}
-			if(uri!=null){
-				uriUri=addBase(uri.getValue(),mBase.peek());
-			}else{
+			if (uri != null) {
+				uriUri = addBase(uri.getValue(), mBase.peek());
+			} else {
 				throw new IllegalStateException("uri is null");
 			}
 			mCatalogBuilder.withUriMapping(nameUri, uriUri);
@@ -201,21 +244,24 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 		/**
 		 * Parses the public.
 		 *
-		 * @param event the event
+		 * @param event
+		 *            the event
 		 */
 		private void parsePublic(XMLEvent event) {
-			Attribute publicId= event.asStartElement().getAttributeByName(Attributes.A_PUBLIC_ID);
-			Attribute uri= event.asStartElement().getAttributeByName(Attributes.A_URI);
-			String publicIdStr="";
-			URI uriUri=null;
-			if(publicId!=null){
-				publicIdStr=publicId.getValue();
-			}else{
+			Attribute publicId = event.asStartElement().getAttributeByName(
+					Attributes.A_PUBLIC_ID);
+			Attribute uri = event.asStartElement().getAttributeByName(
+					Attributes.A_URI);
+			String publicIdStr = "";
+			URI uriUri = null;
+			if (publicId != null) {
+				publicIdStr = publicId.getValue();
+			} else {
 				throw new IllegalStateException("public id is null");
 			}
-			if(uri!=null){
-				uriUri=addBase(uri.getValue(),mBase.peek());
-			}else{
+			if (uri != null) {
+				uriUri = addBase(uri.getValue(), mBase.peek());
+			} else {
 				throw new IllegalStateException("uri is null");
 			}
 
@@ -225,22 +271,25 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 		/**
 		 * Parses the system.
 		 *
-		 * @param event the event
+		 * @param event
+		 *            the event
 		 */
 		private void parseSystem(XMLEvent event) {
 
-			Attribute systemId= event.asStartElement().getAttributeByName(Attributes.A_SYSTEM_ID);
-			Attribute uri= event.asStartElement().getAttributeByName(Attributes.A_URI);
-			URI systemIdUri=null;
-			URI uriUri=null;
-			if(systemId!=null){
-				systemIdUri=URI.create(systemId.getValue());
-			}else{
+			Attribute systemId = event.asStartElement().getAttributeByName(
+					Attributes.A_SYSTEM_ID);
+			Attribute uri = event.asStartElement().getAttributeByName(
+					Attributes.A_URI);
+			URI systemIdUri = null;
+			URI uriUri = null;
+			if (systemId != null) {
+				systemIdUri = URI.create(systemId.getValue());
+			} else {
 				throw new IllegalStateException("system id is null");
 			}
-			if(uri!=null){
-				uriUri=addBase(uri.getValue(),mBase.peek());
-			}else{
+			if (uri != null) {
+				uriUri = addBase(uri.getValue(), mBase.peek());
+			} else {
 				throw new IllegalStateException("uri is null");
 			}
 			mCatalogBuilder.withSystemIdMapping(systemIdUri, uriUri);
@@ -250,18 +299,20 @@ public class StaxXmlCatalogParser implements XmlCatalogParser{
 	/**
 	 * Adds the base.
 	 *
-	 * @param uri the uri
-	 * @param base the base
+	 * @param uri
+	 *            the uri
+	 * @param base
+	 *            the base
 	 * @return the uRI
 	 */
-	private URI addBase(String uri,URI base){
-		if (base.toString().isEmpty()){
+	private URI addBase(String uri, URI base) {
+		if (base.toString().isEmpty()) {
 			return URI.create(uri);
-		}else{
-			if(base.toString().charAt(base.toString().length()-1)=='/'){
-				return URI.create(base.toString()+uri);
-			}else{
-				return URI.create(base.toString()+"/"+uri);
+		} else {
+			if (base.toString().charAt(base.toString().length() - 1) == '/') {
+				return URI.create(base.toString() + uri);
+			} else {
+				return URI.create(base.toString() + "/" + uri);
 			}
 		}
 	}

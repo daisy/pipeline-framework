@@ -1,7 +1,6 @@
 #!/bin/bash
 pushd "$(dirname "$0")" >/dev/null
 DP2_HOME=$(pwd)
-echo $PWD
 popd>/dev/null
 JAVA=java
 FELIX_CONF="file:$DP2_HOME/etc/config.properties"

@@ -9,6 +9,7 @@ import javax.xml.transform.Source;
 
 import org.daisy.common.base.Provider;
 
+import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -156,7 +157,7 @@ public final class XProcInput {
 					.put(key, ImmutableMap.copyOf(parameters.get(key)));
 		}
 		this.parameters = parametersBuilder.build();
-		this.options = ImmutableMap.copyOf(options);
+		this.options = ImmutableMap.copyOf(Maps.filterValues(options,Predicates.notNull()));
 	}
 
 	/**
