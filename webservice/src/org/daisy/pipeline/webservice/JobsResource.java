@@ -427,10 +427,6 @@ public class JobsResource extends AuthenticatedResource {
 				}
 			}
 
-			// if the name was not found, as would be the case for optional options or those filtered out
-			if (!found) {
-				builder.withOption(new QName(optionName), "");
-			}
 		}
 	}
 }
