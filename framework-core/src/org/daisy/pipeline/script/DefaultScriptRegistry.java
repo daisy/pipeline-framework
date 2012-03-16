@@ -100,9 +100,8 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	public XProcScriptService getScript(String name) {
 		URI uri = byNameDirectory.get(name);
 		if (uri==null){
-			String err="There is no script named as "+name;
-			logger.warn(err);
-			throw new IllegalArgumentException(err);
+			logger.warn("Script {} does not exist",name);
+			return null;
 		}
 		return descriptors.get(uri);
 	}
