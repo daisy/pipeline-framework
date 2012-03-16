@@ -1,6 +1,6 @@
 #WS CONFIGURATION
 host: http://localhost
-port: 8182
+port: 8181
 ws_path: ws   
 ws_timeup: 60
 #DP2 launch config 
