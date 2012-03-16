@@ -15,6 +15,7 @@ class Conf
 	CLIENT_SECRET="client_secret"
 	AUTHENTICATE="authenticate"
 	TIMEOUT_SECONDS="timeout_seconds"
+	DEBUG="debug"
 	NULL="null"
 	@map=nil
 	def initialize(file)
@@ -30,6 +31,9 @@ class Conf
 			@map[NULL]=" &> /dev/null" 
 		end
 		@map[BASE_URI]= @map[HOST]+":"+@map[PORT].to_s+"/"+@map[WS_PATH]
+		if @map[DEBUG]
+			Ctxt.logger.level=Logger::DEBUG
+		end
 	end
 
 	def [](key)
