@@ -1,5 +1,5 @@
 ###############################################################################
-###            DAISY Pipeline 2 - 1.1 - February 13th, 2011                 ###
+###            DAISY Pipeline 2 - 1.2 - March 16th, 2011                    ###
 ###############################################################################
 
 
@@ -49,37 +49,52 @@ The package includes:
 3. Release Notes
 -------------------------------------------------------------------------------
 
-The package includes the 1.1 version of the project.
+The package includes the 1.2 version of the project.
 
 Changes since the last release:
 
  * Command-line tool
-   * totally revamped the command-line tool.
-   * the new command-line interface is based on a sub-command system.
-   * the new command-line tool is implemented as a client application to the Web
-     Service API, developed in Ruby.
- * Web Service
-   * revamped the schemas of the XML payloads.
-   * re-enabled support for running the Web Service in local mode.
-   * added nonce to authentication for further protection against replay attacks.
-   * added a "halt" command.
-   * added sample client code in C#, Ruby and PHP.
+   * Fixed Issue 144: Added a -q|--quiet switch to disable logging of job
+     execution messages
+   * Fixed Issue 145: Added a setting in the CLI config file to enable debug
+     logging statements
+   * Fixed Issue 146: Local and remote modes now use two different ports (resp.
+     8181 and 8182 by default)
+   * Updated the "Alice in Wonderland" ZedAI sample to version 1.0 of the
+     Z39.98 Book Profile
+ * Web Service API
+   * Added the experimental Client Admin API (currently backed by a local XML
+     client store)
+   * Improved the format of XML payloads, with a more consistent use of IDs and
+     cross-resources links
+   * Fixed Issue 156: WS now returns HTTP status 404 for non-existing scipts
+   * Fixed an issue to prevent local-only options to be set in remote mode.
  * Framework
-   * replaced the use of the EXPath Packaging format by the use of OASIS XML
-     Catalogs to declare a module's components.
-   * added support for filtering Job messages by level.
+   * Fixed Issue 143: No longer set non-provided (optional) options to the
+     empty string
+   * Fixed Issue 152: Full-length error messages are now displayed
+   * Fixed Issue 153: Added required local catalog entries to no longer need an
+     internet connection at startup
+   * Fixed Issue 154: Make the the framework nicely shutdown if the port is
+     already bound
  * Modules
-   * ALL: A updated all the modules to use the new catalog-based component
-     declaration.
-   * NEW: new dtbook-to-epub3 script based on the combination of existing
-     dtbook-to-zedai and zedai-to-epub3 functionality.
-   * NEW: module containing a copy of commonly referenced DTDs and XML entities.
-   * dtbook-to-zedai: refactored to allow calling the load/convert/store parts
-     separately.
-   * upgrade-dtbook: temporarily removed from the script list until we decide how
-     we deal with output ports
-   * merge-dtbook: temporarily removed from the script list until we decide how
-     we deal with output ports
+   * [daisy202-to-epub3] Fixed Issue 103: Support parent-directory paths when
+     resolving SMILs to content in daisy202-to-epub3
+   * [daisy202-to-epub3] Fixed Issue 104: Resolving multiple adjacent links
+     no-longer produce unexpected results
+   * [daisy202-to-epub3] Fixed Issue 142: The output-dir option is now properly
+     tagged as of type anyDirURI
+   * [daisy202-to-epub3] Improved performance
+   * [daisy202-to-epub3] Improved error messages for invalid options
+   * [daisy202-to-epub3] Better XHTML 1.0 to XHTML5 upgrade based on a new
+     html-utils upgrader
+   * [dtbook-to-zedai] Fixed Issue 138: Now produces documents in the
+     Z39.98-2012 Book Profile version 1.0
+   * [dtbook-to-zedai] Removed the "opt-" prefix for script options
+   * [zedai-to-epub3] Fixed Issue 139: Now supports input documents in the
+     Z39.98-2012 Book Profile version 1.0
+   * [file-utils] Fixed Issue 124: Added pf:file-resolve-relative-uri to
+     file-utils
 
 The full list of changes can be found at:
  http://code.google.com/p/daisy-pipeline/w/ReleaseNotes
@@ -117,7 +132,7 @@ A) Command line tool:
 For instance:
 
 > cli\dp2.exe dtbook-to-zedai --i-source samples\dtbook\hauy_valid.xml
---x-opt-output-dir "C:\Users\John Doe\Desktop\out"
+--x-output-dir "C:\Users\John Doe\Desktop\out"
 
 will run the DTBook to ZedAI converter on Windows and will output the result in
 the "out" directory on the desktop of the user named "John Doe".
@@ -168,9 +183,8 @@ dp2 help COMMAND
 The Web service API is documented on the Pipeline 2 development wiki:
  http://code.google.com/p/daisy-pipeline/wiki/WebServiceAPI
 
-End-user and developer documentation drafts are available on the Pipeline 2
-development wiki:
- http://code.google.com/p/daisy-pipeline/w/list?q=Type%3DDoc
+A complete user guide is available on the Pipeline 2 development wiki:
+ http://code.google.com/p/daisy-pipeline/wiki/UserGuideIntro
 
 
 
@@ -189,4 +203,4 @@ free to join us on the developers discussion list hosted on Google Groups:
  http://groups.google.com/group/daisy-pipeline-dev
 
 or contact the project lead (Romain Deltour) via email at
- rdeltour(at)gmail(dot)com
+ rdeltour (at) gmail (dot) com
