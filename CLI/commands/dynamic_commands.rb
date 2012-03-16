@@ -22,6 +22,7 @@ class CommandScript < Command
 		@persistent=false
 		@data=nil
 		@outfile=nil
+		@quiet=false
 		
 		build_modifiers
 		build_parser
@@ -38,7 +39,7 @@ class CommandScript < Command
 			if @outfile!=nil && !@background
 				raise RuntimeError,"#{@outfile}: directory doesn't exists " if !File.exists?(File.dirname(File.expand_path(@outfile)))
 			end	
-			job=dp2ws.job(@script,@data,!@background)
+			job=dp2ws.job(@script,@data,!@background,@quiet)
 			if Ctxt.conf[Ctxt.conf.class::LOCAL]!=true && !@background
 				dp2ws.job_zip_result(job.id,@outfile)
 				puts "[DP2] Result stored at #{@outfile}"
@@ -120,7 +121,9 @@ class CommandScript < Command
 			opts.on("--persistent","-p","Forces to keep the job data in the server") do |v|
 				@persistent=true
 			end
-
+			opts.on("--quiet","-q","Doesn't show the job messages") do |v|
+				@quiet=true
+			end
 		end
 		
 		@parser.program_name="dp2 "+ @name

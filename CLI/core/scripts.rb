@@ -146,7 +146,7 @@ class ScriptResource < Resource
 		super("/scripts",{:href=>href},ScriptResultProcessor.new)
 	end	
 	def buildUri
-    		uri = "#{Ctxt.conf[Ctxt.conf.class::BASE_URI]}#{@params[:href]}"
+    		uri = @params[:href]
 		Ctxt.logger.debug("URI:"+uri)
 		uri
 	end
@@ -184,7 +184,7 @@ class XmlBuilder
 		@doc= Document.new
 		jobReqElem=Element.new E_JOB_REQUEST
 		jobReqElem.add_namespace(NS);
-		jobReqElem.add_element E_SCRIPT,{A_HREF=>@script.uri}
+		jobReqElem.add_element E_SCRIPT,{A_HREF=>@script.href}
 		@doc << jobReqElem
 		addInputs
 		addOutputs

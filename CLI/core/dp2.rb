@@ -67,7 +67,8 @@ class Dp2
 				begin
 					script=ScriptResource.new(val.href).getResource
 					map[script.nicename]=script
-				rescue 
+				rescue Exception=>e
+					Ctxt.logger.debug(e.message)
 					puts "[DP2] (Ignoring #{key})"
 				end
 			}
@@ -76,7 +77,8 @@ class Dp2
 		return nil
 	end
 
-	def job(script,data,wait)
+	def job(script,data,wait,quiet)
+		Ctxt.logger.debug("Quiet job:#{quiet}")
 		job=nil
 		msgIdx=0
 		#if alive?
@@ -85,8 +87,10 @@ class Dp2
 				begin
 					sleep 1.5 
 					job=job_status(job.id,msgIdx)
-					job.messages.each{|msg| puts "[WS] "+ msg.to_s}
-					if job.messages.size > 0
+					if not quiet
+						job.messages.each{|msg| puts "[WS] "+ msg.to_s} 
+					end
+					if job.messages.size > 0 
 						msgIdx=(Integer(job.messages[-1].seq)+1).to_s
 					end
 					Ctxt.logger.debug("msg idx #{msgIdx}")	
