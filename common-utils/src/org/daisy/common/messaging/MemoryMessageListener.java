@@ -21,7 +21,7 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 	/* TODO add a configuration item for message level */
 	/** The m messages. */
 	HashMultimap<Level, Message> mMessages = HashMultimap.create();
-	List<Message> mSeqList=new ArrayList<Message>();
+	List<MemoryMessage> mSeqList=new ArrayList<MemoryMessage>();
 	int mSequence = 0;
 
 	/**
@@ -32,7 +32,7 @@ public class MemoryMessageListener implements MessageListener,MessageAccessor {
 	 * @param thw the thw
 	 */
 	private void store(Level level,String str,Throwable thw){
-		Message msg= new Message.Builder().withLevel(level).withMessage(str).withThrowable(thw).withSequence(mSequence++).build();
+		MemoryMessage msg= new MemoryMessage.Builder().withLevel(level).withMessage(str).withThrowable(thw).withSequence(mSequence++).build();
 		mSeqList.add(msg);
 		mMessages.put(level, msg);
 	}

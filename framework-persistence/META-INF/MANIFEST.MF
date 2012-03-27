@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.daisy.pipeline.persistence
+Bundle-SymbolicName: framework-persistence
+Bundle-Version: 1.0.0.qualifier
+Import-Package: javax.persistence,
+ org.daisy.common.base,
+ org.daisy.pipeline.job,
+ com.google.common.collect,
+ org.osgi.framework
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+JPA-PersistenceUnits: daisy
+Require-Bundle: org.daisy.common-utils

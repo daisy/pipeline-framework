@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.daisy.common.base.Filter;
+import org.daisy.common.messaging.MemoryMessage;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor;
@@ -18,11 +19,11 @@ public class MessageAccessorTest {
 	@Before
 	public void setUp(){
 		l= new LinkedList<Message>();
-		l.add(new Message.Builder().withLevel(Level.INFO).withMessage("m0").withSequence(0).build());
-		l.add(new Message.Builder().withLevel(Level.DEBUG).withMessage("m1").withSequence(1).build());
-		l.add(new Message.Builder().withLevel(Level.WARNING).withMessage("m2").withSequence(2).build());
-		l.add(new Message.Builder().withLevel(Level.WARNING).withMessage("m3").withSequence(3).build());
-		l.add(new Message.Builder().withLevel(Level.DEBUG).withMessage("m4").withSequence(4).build());
+		l.add(new MemoryMessage.Builder().withLevel(Level.INFO).withMessage("m0").withSequence(0).build());
+		l.add(new MemoryMessage.Builder().withLevel(Level.DEBUG).withMessage("m1").withSequence(1).build());
+		l.add(new MemoryMessage.Builder().withLevel(Level.WARNING).withMessage("m2").withSequence(2).build());
+		l.add(new MemoryMessage.Builder().withLevel(Level.WARNING).withMessage("m3").withSequence(3).build());
+		l.add(new MemoryMessage.Builder().withLevel(Level.DEBUG).withMessage("m4").withSequence(4).build());
 	}
 	@Test
 	public void testFilterSequence() {
