@@ -119,6 +119,7 @@ public class IOHelper {
 			//but win does, anyway this piece is more elegant than before.
 			File fout=new File(URI.create(base+SLASH+path));
 			if(!path.endsWith(SLASH)){
+                fout.getParentFile().mkdirs();
 				FileOutputStream fos=new FileOutputStream(fout);
 				dump(is,fos);
 				fos.close();
