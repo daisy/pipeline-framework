@@ -1,11 +1,14 @@
-package org.daisy.pipeline.persistence.messaging.Message;
+package org.daisy.pipeline.persistence.messaging;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.FlushModeType;
+import javax.persistence.Persistence;
 
 import org.daisy.common.base.Filter;
 import org.daisy.common.messaging.Message;
@@ -13,6 +16,9 @@ import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.MessageListener;
 import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.persistence.DaisyEntityManagerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class receives message events and stores them in memory and gives access
@@ -22,13 +28,15 @@ import org.daisy.pipeline.job.JobId;
  */
 public class PersistentMessageListener implements MessageListener,
 		MessageAccessor {
+	private static final Logger logger = LoggerFactory
+			.getLogger(PersistentMessageListener.class);
 
 	int mSequence = 0;
 	JobId mJobId;
-	EntityManager mEm;
+	
 
-	PersistentMessageListener(JobId jId, EntityManager em) {
-		this.mEm = em;
+	public PersistentMessageListener(JobId jId) {
+			
 		this.mJobId = jId;
 	}
 
@@ -43,13 +51,20 @@ public class PersistentMessageListener implements MessageListener,
 	 *            the thw
 	 */
 	private void store(Level level, String str, Throwable thw) {
-		Message msg = new PersistentMessage.Builder().withLevel(level)
-				.withMessage(str).withThrowable(thw).withSequence(mSequence++)
-				.withJobId(mJobId).build();
-		EntityTransaction trans=mEm.getTransaction();
-		trans.begin();
-		mEm.persist(msg);
-		trans.commit();
+		
+			Message msg = new PersistentMessage.Builder().withLevel(level)
+					.withMessage(str).withThrowable(thw)
+					.withSequence(mSequence++).withJobId(mJobId).build();
+			EntityManager em=DaisyEntityManagerFactory.createEntityManager();
+			EntityTransaction trans=em.getTransaction();
+			trans.begin();
+			logger.debug("Thread - " + Thread.currentThread().getId());
+			em.persist(msg);
+			trans.commit();
+			em.close();
+			//em.flush();
+		
+
 	}
 
 	/*
@@ -81,8 +96,8 @@ public class PersistentMessageListener implements MessageListener,
 	 */
 	@Override
 	public void debug(String msg) {
-		// ignore for now
-		// store(Level.DEBUG, msg, null);
+		
+		 store(Level.DEBUG, msg, null);
 
 	}
 
@@ -94,7 +109,7 @@ public class PersistentMessageListener implements MessageListener,
 	 */
 	@Override
 	public void debug(String msg, Throwable throwable) {
-		// store(Level.DEBUG, msg, throwable);
+		 store(Level.DEBUG, msg, throwable);
 	}
 
 	/*
@@ -225,8 +240,8 @@ public class PersistentMessageListener implements MessageListener,
 	public List<Message> getMessages(Level... fromLevel) {
 		LinkedList<Level> set = new LinkedList<Level>();
 		set.addAll(Arrays.asList(fromLevel));
-		return PersistentMessage.getMessages(mEm, mJobId, 0, Arrays.asList(Level.values()));
-		
+		return PersistentMessage.getMessages( mJobId, 0,
+				Arrays.asList(Level.values()));
 
 	}
 
@@ -238,9 +253,9 @@ public class PersistentMessageListener implements MessageListener,
 	 * @return the messages from the level
 	 */
 	private List<Message> getMessagesFrom(Level level) {
-		
-		List<Level> levels=new LinkedList<Level>();
-		
+
+		List<Level> levels = new LinkedList<Level>();
+
 		for (Level iter : Level.values()) {
 			if (iter.compareTo(level) == 0) {
 				levels.add(iter);
@@ -248,8 +263,9 @@ public class PersistentMessageListener implements MessageListener,
 				break;
 			}
 		}
-		
-		return PersistentMessage.getMessages(mEm, mJobId, 0, Arrays.asList(Level.values()));
+
+		return PersistentMessage.getMessages( mJobId, 0,
+				Arrays.asList(Level.values()));
 	}
 
 	/*
@@ -264,7 +280,8 @@ public class PersistentMessageListener implements MessageListener,
 
 	@Override
 	public List<Message> getAll() {
-		return PersistentMessage.getMessages(mEm, mJobId, 0, Arrays.asList(Level.values()));
+		return PersistentMessage.getMessages( mJobId, 0,
+				Arrays.asList(Level.values()));
 	}
 
 	@Override

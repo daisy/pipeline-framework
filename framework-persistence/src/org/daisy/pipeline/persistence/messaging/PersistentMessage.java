@@ -1,4 +1,4 @@
-package org.daisy.pipeline.persistence.messaging.Message;
+package org.daisy.pipeline.persistence.messaging;
 
 import java.util.Date;
 import java.util.List;
@@ -6,13 +6,23 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobIdFactory;
+import org.daisy.pipeline.persistence.DaisyEntityManagerFactory;
 
 @Entity
-public class PersistentMessage implements org.daisy.common.messaging.Message{
+public class PersistentMessage implements Message{
 	@Column(name="throwable")
 	/** The m throwable. */
 	 Throwable throwable;
@@ -20,19 +30,22 @@ public class PersistentMessage implements org.daisy.common.messaging.Message{
 	/** The m msg. */
 	String msg;
 
-	@Column(name="level")
+	@Enumerated
 	/** The m level. */
 	Level level;
+	
 	@Column(name="timestamp")
-	/** The m time stamp. */
+	@Temporal(TemporalType.TIMESTAMP)
 	Date timeStamp;
+	@Id
 	@Column(name="sequence")
 	int sequence;
+	@Id
 	@Column(name="jobId")
-	JobId jobId;
+	String jobId;
 	
 	
-	
+	public PersistentMessage(){};
 	public PersistentMessage(Throwable throwable, String msg, Level level,
 			 int sequence, JobId jobId) {
 		super();
@@ -41,7 +54,7 @@ public class PersistentMessage implements org.daisy.common.messaging.Message{
 		this.level = level;
 		this.timeStamp = new Date();
 		this.sequence = sequence;
-		this.jobId = jobId;
+		this.jobId = jobId.toString();
 	}
 	public Throwable getThrowable() {
 		return throwable;
@@ -74,28 +87,37 @@ public class PersistentMessage implements org.daisy.common.messaging.Message{
 		this.sequence = sequence;
 	}
 	public JobId getJobId() {
-		return jobId;
+		return JobIdFactory.newIdFromString(jobId);
 	}
-	public void setJobId(JobId jobId) {
+	public void setJobId(String jobId) {
 		this.jobId = jobId;
-	}
+	}		
+	public void setJobId(JobId jobId) {
+		this.jobId = jobId.toString();
+	}	
 	
-	public static List<Message> getMessages(EntityManager em,JobId id,int from,List<Level> levels){
-		
-		StringBuilder sqlBuilder=new StringBuilder("select m from Message m where jobId='%s' and  sequence > %s and level in (");
-		
+	public static List<Message> getMessages(JobId id,int from,List<Level> levels){
+		EntityManager em = DaisyEntityManagerFactory.createEntityManager();
+		StringBuilder sqlBuilder=new StringBuilder("select m from PersistentMessage m where m.jobId='%s' and  m.sequence > %s and m.level in ( ");
+		int vCount=1;
 		for (Level l:levels){
-			sqlBuilder.append(String.format("'%s',", l));
+			sqlBuilder.append(" ?"+(vCount++) );
+			if(vCount!=levels.size()+1)
+				sqlBuilder.append(", ");
 		}
-		sqlBuilder.append(",'1') order by sequence");
+		sqlBuilder.append(") order by m.sequence");
 		String sql=String.format(sqlBuilder.toString(), id.toString(),from);
 		
-		Query q=em.createNativeQuery(sql);
+		Query q=em.createQuery(sql);
+		int i=1;
+		for (Level l:levels){
+			q.setParameter(i++, l);
+		}
 		@SuppressWarnings("unchecked") //just how persistence works
 		List<Message> result = q.getResultList();
+		em.close();
 		return result;
 	}
-	
 	
 	/**
 	 * Builder for creating new messages
