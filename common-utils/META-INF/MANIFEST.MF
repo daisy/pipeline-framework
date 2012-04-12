@@ -7,6 +7,7 @@ Bundle-Vendor: DAISY Consortium
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.daisy.common.base,
  org.daisy.common.messaging
-Import-Package: com.google.common.collect
+Import-Package: com.google.common.base,
+ com.google.common.collect
 Service-Component: OSGI-INF/messaging.xml
 

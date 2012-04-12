@@ -1,52 +1,63 @@
 package org.daisy.common.messaging;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.daisy.common.base.Filter;
 import org.daisy.common.messaging.Message.Level;
 
 
 /**
  * Gives access to the stored messages by level.
  */
-public interface MessageAccessor{
+public abstract class MessageAccessor{
 
 	/**
 	 * Gets the errors.
 	 *
 	 * @return the error messages
 	 */
-	public List<Message> getErrors();
+
+	public List<Message> getErrors() {
+		return getMessagesFrom(Level.ERROR);
+	}
 
 	/**
 	 * Gets the warnings.
 	 *
 	 * @return the warning messages
 	 */
-	public List<Message> getWarnings();
+	public List<Message> getWarnings(){
+		return getMessagesFrom(Level.WARNING);
+	}
 
 	/**
 	 * Gets the infos.
 	 *
 	 * @return the info messages
 	 */
-	public List<Message> getInfos();
+	public List<Message> getInfos(){
+		return getMessagesFrom(Level.INFO);
+	};
 
 	/**
 	 * Gets the debugs.
 	 *
 	 * @return the debug messages
 	 */
-	public List<Message> getDebugs();
+	public List<Message> getDebugs(){
+		return getMessagesFrom(Level.DEBUG);
+	}
+
+
 
 	/**
 	 * Gets the traces.
 	 *
 	 * @return the trace messages
 	 */
-	public List<Message> getTraces();
+	public List<Message> getTraces(){
+		return getMessagesFrom(Level.TRACE);
+	}
 
 	/**
 	 * Gets the messgages from a set of levels
@@ -54,40 +65,17 @@ public interface MessageAccessor{
 	 * @param fromLevels levels
 	 * @return the messages
 	 */
-	public List<Message> getMessages(Level... fromLevels);
 
-	public List<Message> getAll();
+	public abstract List<Message> getAll();
+	protected abstract List<Message> getMessagesFrom(Level level);
 
-	public List<Message> filtered(Filter<List<Message>>... filters);
-	public static class SequenceFilter implements Filter<List<Message>> {
-		int mFrom;
 
-		public SequenceFilter(int from){
-			mFrom=from;
 
-		}
-		@Override
-		public List<Message> filter(List<Message> in) {
-			return in.subList(mFrom,in.size());
-		}
+	public abstract MessageFilter createFilter();
 
-	}
-	public static class LevelFilter implements Filter<List<Message>> {
-		Set<Level> mLevels;
-
-		public LevelFilter(Set<Level> levels ){
-			mLevels=levels;
-		}
-		@Override
-		public List<Message> filter(List<Message> in) {
-			List<Message> filtered= new LinkedList<Message>();
-			for(Message msg:in){
-				if (mLevels.contains(msg.getLevel())){
-					filtered.add(msg);
-				}
-			}
-			return filtered;
-		}
-
+	public interface  MessageFilter{
+		public MessageFilter filterLevels(Set<Level> levels);
+		public MessageFilter fromSquence(int sequence);
+		public List<Message> getMessages();
 	}
 }

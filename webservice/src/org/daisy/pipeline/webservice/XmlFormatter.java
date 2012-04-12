@@ -14,10 +14,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.daisy.common.base.Filter;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
-import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.database.Client;
@@ -333,15 +331,9 @@ public class XmlFormatter {
 					XmlFormatter.NS_PIPELINE_DATA, "messages");
 
 
-			Filter<List<Message>> seqFilt = new MessageAccessor.SequenceFilter(
-					msgSeq);
-			Filter<List<Message>> levelFilt = new MessageAccessor.LevelFilter(
-					MSG_LEVELS);
-			// end of wrapping things
-
 			if (job.getMonitor().getMessageAccessor() != null) {
 				List<Message> msgs = job.getMonitor().getMessageAccessor()
-						.filtered(new Filter[] { seqFilt, levelFilt });
+						.createFilter().filterLevels(MSG_LEVELS).fromSquence(msgSeq).getMessages();
 				for (Message msg : msgs) {
 					Element singleMsgElm = doc.createElementNS(
 							XmlFormatter.NS_PIPELINE_DATA, "message");

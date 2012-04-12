@@ -3,14 +3,11 @@ package org.daisy.pipeline.persistence.messaging;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.FlushModeType;
-import javax.persistence.Persistence;
 
-import org.daisy.common.base.Filter;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor;
@@ -26,17 +23,16 @@ import org.slf4j.LoggerFactory;
  * processing a memoryMessage
  * 
  */
-public class PersistentMessageListener implements MessageListener,
-		MessageAccessor {
+public class PersistentMessageListener extends MessageAccessor implements
+		MessageListener {
 	private static final Logger logger = LoggerFactory
 			.getLogger(PersistentMessageListener.class);
 
 	int mSequence = 0;
 	JobId mJobId;
-	
 
 	public PersistentMessageListener(JobId jId) {
-			
+
 		this.mJobId = jId;
 	}
 
@@ -51,19 +47,18 @@ public class PersistentMessageListener implements MessageListener,
 	 *            the thw
 	 */
 	private void store(Level level, String str, Throwable thw) {
-		
-			Message msg = new PersistentMessage.Builder().withLevel(level)
-					.withMessage(str).withThrowable(thw)
-					.withSequence(mSequence++).withJobId(mJobId).build();
-			EntityManager em=DaisyEntityManagerFactory.createEntityManager();
-			EntityTransaction trans=em.getTransaction();
-			trans.begin();
-			logger.debug("Thread - " + Thread.currentThread().getId());
-			em.persist(msg);
-			trans.commit();
-			em.close();
-			//em.flush();
-		
+
+		Message msg = new PersistentMessage.Builder().withLevel(level)
+				.withMessage(str).withThrowable(thw).withSequence(mSequence++)
+				.withJobId(mJobId).build();
+		EntityManager em = DaisyEntityManagerFactory.createEntityManager();
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		logger.debug("Thread - " + Thread.currentThread().getId());
+		em.persist(msg);
+		trans.commit();
+		em.close();
+		// em.flush();
 
 	}
 
@@ -96,8 +91,8 @@ public class PersistentMessageListener implements MessageListener,
 	 */
 	@Override
 	public void debug(String msg) {
-		
-		 store(Level.DEBUG, msg, null);
+
+		store(Level.DEBUG, msg, null);
 
 	}
 
@@ -109,7 +104,7 @@ public class PersistentMessageListener implements MessageListener,
 	 */
 	@Override
 	public void debug(String msg, Throwable throwable) {
-		 store(Level.DEBUG, msg, throwable);
+		store(Level.DEBUG, msg, throwable);
 	}
 
 	/*
@@ -179,72 +174,6 @@ public class PersistentMessageListener implements MessageListener,
 		store(Level.ERROR, msg, throwable);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.daisy.common.messaging.MessageAccessor#getErrors()
-	 */
-	@Override
-	public List<Message> getErrors() {
-		return getMessagesFrom(Level.ERROR);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.daisy.common.messaging.MessageAccessor#getWarnings()
-	 */
-	@Override
-	public List<Message> getWarnings() {
-		return getMessagesFrom(Level.WARNING);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.daisy.common.messaging.MessageAccessor#getInfos()
-	 */
-	@Override
-	public List<Message> getInfos() {
-		return getMessagesFrom(Level.INFO);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.daisy.common.messaging.MessageAccessor#getDebugs()
-	 */
-	@Override
-	public List<Message> getDebugs() {
-		return getMessagesFrom(Level.DEBUG);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.daisy.common.messaging.MessageAccessor#getTraces()
-	 */
-	@Override
-	public List<Message> getTraces() {
-		return getMessagesFrom(Level.TRACE);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.daisy.common.messaging.MessageAccessor#getMessgages(org.daisy.common
-	 * .messaging.Message.Level[])
-	 */
-	@Override
-	public List<Message> getMessages(Level... fromLevel) {
-		LinkedList<Level> set = new LinkedList<Level>();
-		set.addAll(Arrays.asList(fromLevel));
-		return PersistentMessage.getMessages( mJobId, 0,
-				Arrays.asList(Level.values()));
-
-	}
-
 	/**
 	 * Gets the messages from the given level.
 	 * 
@@ -252,7 +181,7 @@ public class PersistentMessageListener implements MessageListener,
 	 *            the level
 	 * @return the messages from the level
 	 */
-	private List<Message> getMessagesFrom(Level level) {
+	protected List<Message> getMessagesFrom(Level level) {
 
 		List<Level> levels = new LinkedList<Level>();
 
@@ -264,7 +193,7 @@ public class PersistentMessageListener implements MessageListener,
 			}
 		}
 
-		return PersistentMessage.getMessages( mJobId, 0,
+		return PersistentMessage.getMessages(mJobId, 0,
 				Arrays.asList(Level.values()));
 	}
 
@@ -280,18 +209,38 @@ public class PersistentMessageListener implements MessageListener,
 
 	@Override
 	public List<Message> getAll() {
-		return PersistentMessage.getMessages( mJobId, 0,
+		return PersistentMessage.getMessages(mJobId, 0,
 				Arrays.asList(Level.values()));
 	}
 
 	@Override
-	public List<Message> filtered(Filter<List<Message>>... filters) {
-		List<Message> filtered = getAll();
-
-		for (Filter<List<Message>> filter : filters) {
-			filtered = filter.filter(filtered);
-		}
-		return filtered;
+	public MessageFilter createFilter() {
+		// TODO Auto-generated method stub
+		return new PersistentMessageListener.MessageFilter();
 	}
+	protected class MessageFilter implements MessageAccessor.MessageFilter {
+		List<Level> mLevels= Arrays.asList(Level.values());
+		int mSeq;
 
+		@Override
+		public MessageFilter filterLevels(final Set<Level> levels) {
+			mLevels = new LinkedList<Message.Level>(levels);
+
+			return this;
+		}
+
+		@Override
+		public MessageFilter fromSquence(int from) {
+			mSeq = from;
+			return this;
+		}
+
+		@Override
+		public List<Message> getMessages() {
+		
+			return PersistentMessage.getMessages(mJobId, mSeq, mLevels);
+
+		}
+
+	}
 }

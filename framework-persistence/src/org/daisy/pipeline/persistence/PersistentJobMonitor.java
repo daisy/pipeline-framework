@@ -7,7 +7,7 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobMonitor;
 import org.daisy.pipeline.persistence.messaging.PersistentMessageListener;
 
-public class PersistentJobMonitor extends JobMonitor{
+public class PersistentJobMonitor implements JobMonitor{
 	PersistentMessageListener mListener;
 	public PersistentJobMonitor(JobId id) {
 		mListener=new PersistentMessageListener(id);		

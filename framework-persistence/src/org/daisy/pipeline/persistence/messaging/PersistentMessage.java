@@ -99,16 +99,17 @@ public class PersistentMessage implements Message{
 	public static List<Message> getMessages(JobId id,int from,List<Level> levels){
 		EntityManager em = DaisyEntityManagerFactory.createEntityManager();
 		StringBuilder sqlBuilder=new StringBuilder("select m from PersistentMessage m where m.jobId='%s' and  m.sequence > %s and m.level in ( ");
-		int vCount=1;
-		for (Level l:levels){
-			sqlBuilder.append(" ?"+(vCount++) );
-			if(vCount!=levels.size()+1)
+		
+		for (int i=0;i<levels.size();i++){
+			sqlBuilder.append(" ?"+(i+1) );
+			if(i!=levels.size()-1)
 				sqlBuilder.append(", ");
 		}
-		sqlBuilder.append(") order by m.sequence");
+		sqlBuilder.append(") order by m.sequence ");
 		String sql=String.format(sqlBuilder.toString(), id.toString(),from);
 		
 		Query q=em.createQuery(sql);
+		
 		int i=1;
 		for (Level l:levels){
 			q.setParameter(i++, l);
