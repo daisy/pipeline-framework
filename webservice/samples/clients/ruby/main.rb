@@ -37,7 +37,7 @@ def main
 		delete_client(Settings.instance.options[:id])
   elsif Settings.instance.command == 'halt'
     halt(Settings.instance.options[:id])
-	else
+  else
     puts "Command #{Settings.instance.command} not recognized"
   end
 

@@ -15,7 +15,7 @@ namespace PipelineWSClient
 		
 		public static XmlDocument GetScript(string id)
 		{
-			string uri = String.Format("{0}/script?id={1}", baseUri, id);
+			string uri = String.Format("{0}/scripts/{1}", baseUri, id);
 			return Rest.GetResourceAsXml(uri);
 		}	
 		

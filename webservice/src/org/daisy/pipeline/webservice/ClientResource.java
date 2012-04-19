@@ -7,7 +7,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.pipeline.database.DatabaseManager;
 import org.daisy.pipeline.persistence.BasicDatabaseManager;
 import org.daisy.pipeline.persistence.Client;
 import org.restlet.data.MediaType;
@@ -79,7 +78,7 @@ public class ClientResource extends AdminResource {
     	}
 
 
-		if (DatabaseManager.getInstance().deleteObject(client)) {
+		if (new BasicDatabaseManager().deleteObject(client)) {
 			setStatus(Status.SUCCESS_NO_CONTENT);
 		}
 		else {

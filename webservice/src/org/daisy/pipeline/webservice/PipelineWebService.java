@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
-import org.daisy.pipeline.database.DatabaseManager;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.osgi.framework.BundleContext;
@@ -101,7 +100,7 @@ public class PipelineWebService extends Application {
 		bundleCtxt=ctxt;
 		readOptions();
 		if (isAuthenticationEnabled()) {
-			DatabaseManager.getInstance().addTestData();
+			DatabaseHelper.getInstance().addTestData();
 		}
 		logger.info(String.format("Starting webservice on port %d",
 				portNumber));

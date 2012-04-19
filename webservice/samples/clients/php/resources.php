@@ -10,7 +10,7 @@
 		}
 		
 		public static function get_script($id) {
-			$uri = Resources::$BASEURI . "/script?id=" . $id;
+			$uri = Resources::$BASEURI . "/scripts/" . $id;
 			return Rest::get_resource_as_xml($uri);
 		}
 		

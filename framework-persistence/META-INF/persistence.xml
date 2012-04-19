@@ -5,6 +5,7 @@
     <persistence-unit name="daisy" transaction-type="RESOURCE_LOCAL">
         <class>org.daisy.pipeline.persistence.messaging.PersistentMessage</class>
         <class>org.daisy.pipeline.persistence.Client</class>
+        <class>org.daisy.pipeline.persistence.WSRequestLogEntry</class>
         <properties>
         <!--
             <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:/tmp/persist.db"/>

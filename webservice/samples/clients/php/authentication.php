@@ -8,7 +8,7 @@
 			$uristring = "";
 			$timestamp = gmdate("Y-m-d\TH:i:s\Z");
 			$nonce = Authentication::generate_nonce();
-			$params = "id=" . Authentication::$CLIENT_ID . "&time=" . $timestamp . "&nonce=" . $nonce;
+			$params = "authid=" . Authentication::$CLIENT_ID . "&time=" . $timestamp . "&nonce=" . $nonce;
 			if (strpos($uri, "?") == false) {
 				$uristring = $uri . "?" . $params;
 			}

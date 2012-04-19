@@ -10,7 +10,9 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.daisy.pipeline.persistence.BasicDatabaseManager;
 import org.daisy.pipeline.persistence.Client;
+import org.daisy.pipeline.persistence.WSRequestLogEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,17 +84,17 @@ public class Authenticator {
 			return false;
 		}
 
-		//RequestLogEntry entry = new RequestLogEntry(client.getId(), nonce, timestamp);
+		WSRequestLogEntry entry = new WSRequestLogEntry(client.getId(), nonce, timestamp);
 
 		// if this nonce was already used with this timestamp, don't accept it again
-		//boolean isDuplicate = DatabaseManager.getInstance().isDuplicate(entry);
-		//if (isDuplicate) {
-		//	logger.warn("Duplicate nonce detected.");
-	//		return false;
-		//}
+		boolean isDuplicate = DatabaseHelper.getInstance().isDuplicate(entry);
+		if (isDuplicate) {
+			logger.warn("Duplicate nonce detected.");
+			return false;
+		}
 
 		// else, it is unique and therefore ok
-		//DatabaseManager.getInstance().addObject(entry);
+		new BasicDatabaseManager().addObject(entry);
 		return true;
 
 	}
