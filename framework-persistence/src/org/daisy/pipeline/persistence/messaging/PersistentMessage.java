@@ -6,12 +6,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,8 +16,11 @@ import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.persistence.DaisyEntityManagerFactory;
+import org.eclipse.persistence.annotations.DataFormatType;
+import org.eclipse.persistence.annotations.NoSql;
 
 @Entity
+@NoSql(dataFormat=DataFormatType.MAPPED)
 public class PersistentMessage implements Message{
 	@Column(name="throwable")
 	/** The m throwable. */
@@ -98,6 +97,7 @@ public class PersistentMessage implements Message{
 	
 	public static List<Message> getMessages(JobId id,int from,List<Level> levels){
 		EntityManager em = DaisyEntityManagerFactory.createEntityManager();
+		/*
 		StringBuilder sqlBuilder=new StringBuilder("select m from PersistentMessage m where m.jobId='%s' and  m.sequence > %s and m.level in ( ");
 		
 		for (int i=0;i<levels.size();i++){
@@ -107,13 +107,16 @@ public class PersistentMessage implements Message{
 		}
 		sqlBuilder.append(") order by m.sequence ");
 		String sql=String.format(sqlBuilder.toString(), id.toString(),from);
-		
+		*/
+		StringBuilder sqlBuilder=new StringBuilder("select m from PersistentMessage m where m.jobId='%s' and  m.sequence > %s");
+		String sql=String.format(sqlBuilder.toString(), id.toString(),from);
 		Query q=em.createQuery(sql);
-		
+		/*
 		int i=1;
 		for (Level l:levels){
 			q.setParameter(i++, l);
 		}
+		*/
 		@SuppressWarnings("unchecked") //just how persistence works
 		List<Message> result = q.getResultList();
 		em.close();
@@ -191,5 +194,7 @@ public class PersistentMessage implements Message{
 
 		
 	}
+
+	
 
 }

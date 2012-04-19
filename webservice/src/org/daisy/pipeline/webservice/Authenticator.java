@@ -10,9 +10,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-import org.daisy.pipeline.database.Client;
-import org.daisy.pipeline.database.DatabaseManager;
-import org.daisy.pipeline.database.RequestLogEntry;
+import org.daisy.pipeline.persistence.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +26,7 @@ public class Authenticator {
 
 		if (idx > 1) {
 			// make sure the client exists
-			if (DatabaseManager.getInstance().getClientById(authid) == null) {
+			if (Client.getClient(authid) == null) {
 				logger.error(String.format("Client with auth ID %s not found", authid));
 				return false;
 			}
@@ -78,30 +76,30 @@ public class Authenticator {
 	// nonces, along with timestamps, protect against replay attacks
 	private static boolean checkValidNonce(String authid, String nonce, String timestamp) {
 
-		Client client = DatabaseManager.getInstance().getClientById(authid);
+		Client client = Client.getClient(authid);
 		if (client == null) {
 			logger.warn(String.format("Client with auth ID %s not found", authid));
 			return false;
 		}
 
-		RequestLogEntry entry = new RequestLogEntry(client.getId(), nonce, timestamp);
+		//RequestLogEntry entry = new RequestLogEntry(client.getId(), nonce, timestamp);
 
 		// if this nonce was already used with this timestamp, don't accept it again
-		boolean isDuplicate = DatabaseManager.getInstance().isDuplicate(entry);
-		if (isDuplicate) {
-			logger.warn("Duplicate nonce detected.");
-			return false;
-		}
+		//boolean isDuplicate = DatabaseManager.getInstance().isDuplicate(entry);
+		//if (isDuplicate) {
+		//	logger.warn("Duplicate nonce detected.");
+	//		return false;
+		//}
 
 		// else, it is unique and therefore ok
-		DatabaseManager.getInstance().addObject(entry);
+		//DatabaseManager.getInstance().addObject(entry);
 		return true;
 
 	}
 
 	private static String getClientSecret(String authid) {
 
-		Client client = DatabaseManager.getInstance().getClientById(authid);
+		Client client = Client.getClient(authid);
 		if (client != null) {
 			return client.getSecret();
 		}

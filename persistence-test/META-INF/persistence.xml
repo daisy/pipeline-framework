@@ -6,9 +6,9 @@
         <class>persistence_test.Dogs</class>
         <properties>
         
-            <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:/home/javi/tmp/dogs.db"/>
-            <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
-        
+            <property name="javax.persistence.jdbc.url" value="jdbc:orient:local:test"/>
+            <property name="javax.persistence.jdbc.driver" value="com.orientechnologies.orient.jdbc.OrientJdbcDriver"/>
+<!--        
             <property name="eclipselink.ddl-generation" value="create-tables" />
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
             <property name="javax.persistence.jdbc.password" value=""/>
@@ -18,7 +18,8 @@
             <property name="eclipselink.logging.thread" value="false" />
             <property name="eclipselink.logging.session" value="false" />
             <property name="eclipselink.logging.exceptions" value="true" />
-            <property name="eclipselink.logging.timestamp" value="false"/>   
+            <property name="eclipselink.logging.timestamp" value="false"/>
+            -->   
         </properties>
     </persistence-unit>
 </persistence>

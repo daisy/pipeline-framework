@@ -7,8 +7,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.pipeline.database.Client;
 import org.daisy.pipeline.database.DatabaseManager;
+import org.daisy.pipeline.persistence.Client;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -58,7 +58,7 @@ public class ClientsResource extends AdminResource {
 		*/
     	setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
-				XmlFormatter.clientsToXml(DatabaseManager.getInstance().getClients(),
+				XmlFormatter.clientsToXml(Client.getAll(),
 						getRootRef().toString()));
 
 		return dom;

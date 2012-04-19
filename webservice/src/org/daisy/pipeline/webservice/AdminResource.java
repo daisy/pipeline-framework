@@ -1,7 +1,7 @@
 package org.daisy.pipeline.webservice;
 
-import org.daisy.pipeline.database.Client;
-import org.daisy.pipeline.database.DatabaseManager;
+import org.daisy.pipeline.persistence.Client;
+
 
 public class AdminResource extends AuthenticatedResource {
 	private boolean isAuthorized = false;
@@ -23,7 +23,7 @@ public class AdminResource extends AuthenticatedResource {
 
 		String id = getQuery().getFirstValue("authid");
 
-		Client client = DatabaseManager.getInstance().getClientById(id);
+		Client client = Client.getClient(id);
 		if (client == null) {
 			return false;
 		}

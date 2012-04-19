@@ -1,18 +1,20 @@
 package org.daisy.pipeline.database;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URI;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+import org.daisy.pipeline.persistence.BasicDatabaseManager;
+import org.daisy.pipeline.persistence.Client;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-// dummy class to mimic the eventual "real" persistence db version
-public class DatabaseManager {
+public class DatabaseManager extends BasicDatabaseManager {
 
-private static DatabaseManager instance;
+	private static final String persistenceUnit = "org.daisy.pipeline.database.persistenceUnit";
+	private static final String defaultDBName = "PipelineDB";
+	private static Logger logger = LoggerFactory
+			.getLogger(DatabaseManager.class.getName());
 
-	List<Client> clients;
+	private static DatabaseManager instance;
 
 	// singleton
 	public static DatabaseManager getInstance() {
@@ -22,60 +24,49 @@ private static DatabaseManager instance;
 		return instance;
 	}
 
-	private DatabaseManager() {
-		clients = new ArrayList<Client>();
-	}
-	public Client getClientById(String id) {
-		for (Client client : clients) {
-			if (client.getId().equals(id)) {
-				return client;
-			}
+	public boolean addClient(Client newClient) {
+
+		Client clientExists = Client.getClient(newClient.getId());
+		if (clientExists != null) {
+			logger.warn(String.format("ID %s is already in use.",
+					newClient.getId()));
+			return false;
 		}
-		return null;
-	}
-	public boolean addClient(Client client) {
-		clients.add(client);
-		return true;
-	}
-	// TODO temporary function in place of actual DB
-	public List<Client> getClients() {
-		return clients;
-	}
-	public boolean isDuplicate(RequestLogEntry entry) {
-		// TODO stub function in place of actual DB
-		return false;
-	}
 
-	public void addObject(Object obj) {
-		// TODO stub function in place of actual DB
-	}
-
-	public boolean deleteObject(Object obj) {
-		// TODO stub function in place of actual DB
+		addObject(newClient);
 		return true;
 	}
 
-	public void updateObject(String str, Object obj) {
-		// TODO stub function in place of actual DB
-		return;
+	/*
+	 * public boolean isDuplicate(RequestLogEntry entry) { String queryString =
+	 * String.format(
+	 * "SELECT requestentry FROM RequestLogEntry AS requestentry WHERE requestentry.clientId='%s' AND requestentry.nonce='%s' AND requestentry.timestamp='%s'"
+	 * , entry.getClientId(), entry.getNonce(), entry.getTimestamp());
+	 * //List<BasicDatabaseObject> list = runQuery(queryString); //if
+	 * (list.size() > 0) { // return true; //} return false; }
+	 */
+	private static String getDefaultDBPath() {
+		// TODO is there a better way to find the Pipeline's homedir?
+		// java.class.path gives me something like
+		// "/Users/marisa/Projects/pipeline2/daisy-pipeline/test/plugins/org.eclipse.equinox.launcher_1.1.0.v20100507.jar"
+		String classpath = System.getProperty("java.class.path");
+		URI cpuri = URI.create(classpath);
+		String relativeDBPath = "../../" + defaultDBName;
+		URI dburi = URI.create(relativeDBPath);
+
+		String retval = cpuri.resolve(dburi).toString();
+
+		return retval;
 	}
 
-	public List<BasicDatabaseObject> runQuery(String str) {
-		// TODO stub function in place of actual DB
-		return null;
-	}
+	// TESTING ONLY
+	public void addTestData() {
+		Client client = new Client();
+		client.setId("clientid");
+		client.setSecret("supersecret");
+		client.setContactInfo("me@example.org");
+		client.setRole(Client.Role.ADMIN);
 
-	public void loadData(Document doc) {
-		Element clientsElm = doc.getDocumentElement();
-		NodeList clientElms = clientsElm.getElementsByTagName("client");
-		for (int i = 0; i<clientElms.getLength(); i++) {
-			Element clientElm = (Element)clientElms.item(i);
-			Client client = new Client();
-			client.setId(clientElm.getAttribute("id"));
-			client.setRole(Client.Role.valueOf(clientElm.getAttribute("role")));
-			client.setContactInfo(clientElm.getAttribute("contact"));
-			client.setSecret(clientElm.getAttribute("secret"));
-			addClient(client);
-		}
+		DatabaseManager.getInstance().addClient(client);
 	}
 }

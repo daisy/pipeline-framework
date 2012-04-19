@@ -4,13 +4,22 @@
 	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
     <persistence-unit name="daisy" transaction-type="RESOURCE_LOCAL">
         <class>org.daisy.pipeline.persistence.messaging.PersistentMessage</class>
+        <class>org.daisy.pipeline.persistence.Client</class>
         <properties>
-        
+        <!--
             <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:/tmp/persist.db"/>
             <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
         
-            <property name="eclipselink.ddl-generation" value="create-tables" />
-            <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+        <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+        <property name="javax.persistence.jdbc.url" value="jdbc:derby:/tmp/derbyDb"/>
+         -->
+             
+            <property name="eclipselink.target-database" value="org.eclipse.persistence.nosql.adapters.mongo.MongoPlatform"/>
+            <property name="eclipselink.nosql.connection-spec" value="org.eclipse.persistence.nosql.adapters.mongo.MongoConnectionSpec"/>
+            <property name="eclipselink.nosql.property.mongo.port" value="27017"/>
+            <property name="eclipselink.nosql.property.mongo.host" value="localhost"/>
+            <property name="eclipselink.nosql.property.mongo.db" value="mydb"/>   
+          
             <property name="javax.persistence.jdbc.password" value=""/>
             <property name="javax.persistence.jdbc.user" value=""/>
 

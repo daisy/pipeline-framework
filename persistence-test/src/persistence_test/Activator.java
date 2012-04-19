@@ -23,7 +23,9 @@ public class Activator implements BundleActivator {
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
-		 
+
+				        
+
 		//Activator.context.getClass().getClassLoader().loadClass("org.sqlite.JDBC");
 		EntityManagerFactory factory =  Persistence.createEntityManagerFactory("test");
 		EntityManager em = factory.createEntityManager();

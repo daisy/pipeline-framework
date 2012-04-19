@@ -13,6 +13,7 @@ import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.MessageListener;
 import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.persistence.BasicDatabaseManager;
 import org.daisy.pipeline.persistence.DaisyEntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,13 +52,8 @@ public class PersistentMessageListener extends MessageAccessor implements
 		Message msg = new PersistentMessage.Builder().withLevel(level)
 				.withMessage(str).withThrowable(thw).withSequence(mSequence++)
 				.withJobId(mJobId).build();
-		EntityManager em = DaisyEntityManagerFactory.createEntityManager();
-		EntityTransaction trans = em.getTransaction();
-		trans.begin();
-		logger.debug("Thread - " + Thread.currentThread().getId());
-		em.persist(msg);
-		trans.commit();
-		em.close();
+		new BasicDatabaseManager().addObject(msg);
+		
 		// em.flush();
 
 	}

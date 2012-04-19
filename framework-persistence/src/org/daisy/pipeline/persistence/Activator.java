@@ -31,8 +31,12 @@ public class Activator implements BundleActivator {
 		entityManager.getTransaction().begin();
 		PersistentMessage m = new PersistentMessage(null, "hola", Level.DEBUG,
 				 1, JobIdFactory.newId());
+		Client c = new Client();
+		c.setContactInfo("my place");
+		c.setId("client-1");
 		
 		entityManager.persist(m);
+		entityManager.persist(c);
 		entityManager.getTransaction().commit();
 		entityManager.close();
 
