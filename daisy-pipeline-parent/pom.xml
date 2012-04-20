@@ -26,6 +26,7 @@
 	<module>../daisy.pipeline.frontend.site</module>
 	<module>../daisy.pipeline.site</module>
 	<module>../framework-core</module>
+	<module>../framework-persistence</module>
 	<module>../module-common</module>
 	<module>../module-registry</module>
 	<module>../module-uri-resolver</module>
