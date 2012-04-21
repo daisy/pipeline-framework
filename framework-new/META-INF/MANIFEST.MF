@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: DAISY Pipeline 2 Framework Core
+Bundle-SymbolicName: org.daisy.pipeline.framework
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: DAISY Consortium
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: 
+ com.google.common.base,
+ com.google.common.collect,
+ javax.xml.namespace,
+ javax.xml.transform,
+ org.daisy.common.base,
+ org.daisy.common.xproc,
+ org.daisy.common.messaging,
+ org.slf4j
+Export-Package: org.daisy.pipeline.job,
+ org.daisy.pipeline.script
+Service-Component: OSGI-INF/registry.xml, OSGI-INF/job-manager.xml, OSGI-INF/job-execution-service.xml
