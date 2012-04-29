@@ -9,7 +9,7 @@ import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.persistence.messaging.PersistentMessage;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-
+import org.apache.derby.jdbc.EmbeddedDriver;
 
 
 public class Activator implements BundleActivator {

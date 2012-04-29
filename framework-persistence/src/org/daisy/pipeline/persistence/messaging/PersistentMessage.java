@@ -16,11 +16,9 @@ import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.persistence.DaisyEntityManagerFactory;
-import org.eclipse.persistence.annotations.DataFormatType;
-import org.eclipse.persistence.annotations.NoSql;
 
 @Entity
-@NoSql(dataFormat=DataFormatType.MAPPED)
+//@NoSql(dataFormat=DataFormatType.MAPPED)
 public class PersistentMessage implements Message{
 	@Column(name="throwable")
 	/** The m throwable. */

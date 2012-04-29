@@ -4,14 +4,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.eclipse.persistence.annotations.DataFormatType;
-import org.eclipse.persistence.annotations.NoSql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 // Use this class to record request nonces and timestamps
 @Entity
-@NoSql(dataFormat=DataFormatType.MAPPED)
+//@NoSql(dataFormat=DataFormatType.MAPPED)
 public class WSRequestLogEntry {
 
 	/** The logger. */

@@ -5,30 +5,27 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NoResultException;
 
-import org.eclipse.persistence.annotations.DataFormatType;
-import org.eclipse.persistence.annotations.NoSql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 @Entity
-@NoSql(dataFormat=DataFormatType.MAPPED)
-public class Client  {
+// @NoSql(dataFormat=DataFormatType.MAPPED)
+public class Client {
 
 	/** The logger. */
-	private static Logger logger = LoggerFactory.getLogger(Client.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(Client.class
+			.getName());
 
 	@Id
 	@GeneratedValue
 	private String internalId;
-
 
 	public String getInternalId() {
 		return internalId;
 	}
 
 	public enum Role {
-	    ADMIN, CLIENTAPP
+		ADMIN, CLIENTAPP
 	}
 
 	// the fields for each client object
@@ -36,16 +33,14 @@ public class Client  {
 	private String secret;
 	private Role role = Role.CLIENTAPP;
 
-	// in the future, use a separate table to list contact information for client app maintainers
+	// in the future, use a separate table to list contact information for
+	// client app maintainers
 	// with a single field, we'll just store email info
 	private String contactInfo;
-
 
 	public Client() {
 	}
 
-	
-	
 	public Client(String id, String secret, Role role, String contactInfo) {
 		this.id = id;
 		this.secret = secret;
@@ -89,14 +84,15 @@ public class Client  {
 		String q = String.format("select c from Client as c");
 		return new BasicDatabaseManager().runQuery(q, Client.class);
 	}
-	public static Client getClient(String id){
-		String q = String.format("select c from Client as c where c.id='%s'",id);
-		try{
+
+	public static Client getClient(String id) {
+		String q = String.format("select c from Client as c where c.id='%s'",
+				id);
+		try {
 			return new BasicDatabaseManager().getFirst(q, Client.class);
-		}catch(NoResultException e) {
+		} catch (NoResultException e) {
 			return null;
 		}
 	}
-	
 
 }

@@ -51,7 +51,7 @@ public class DatabaseHelper {
 	// TESTING ONLY
 	public void addTestData() {
 
-		List<WSRequestLogEntry> l = new BasicDatabaseManager().runQuery("SELECT r from WSRequestLogEntry as r", WSRequestLogEntry.class);
+		//List<WSRequestLogEntry> l = new BasicDatabaseManager().runQuery("SELECT r from WSRequestLogEntry as r", WSRequestLogEntry.class);
 
 		Client client = new Client();
 		client.setId("clientid");
