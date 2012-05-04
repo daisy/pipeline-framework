@@ -1,6 +1,7 @@
 package org.daisy.common.xproc.calabash;
 
 import java.net.URI;
+import java.util.Properties;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
@@ -13,7 +14,6 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.base.Provider;
-import org.daisy.common.messaging.MessageListenerFactory;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOptionInfo;
@@ -21,6 +21,8 @@ import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcResult;
+import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.messaging.MessageBuliderFactory;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -56,7 +58,9 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	private final EntityResolver entityResolver;
 
 	/** The message listener factory. */
-	private final MessageListenerFactory messageListenerFactory;
+	private final EventBusProvider eventBusProvider;
+
+	private final MessageBuliderFactory messageBuilderFactory;
 
 	/**
 	 * The pipeline supplier returns a ready-to-go pipeline instance based on
@@ -135,6 +139,8 @@ public class CalabashXProcPipeline implements XProcPipeline {
 				}
 			});
 
+
+
 	/**
 	 * Instantiates a new calabash x proc pipeline.
 	 *
@@ -153,12 +159,13 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	public CalabashXProcPipeline(URI uri,
 			XProcConfigurationFactory configFactory, URIResolver uriResolver,
 			EntityResolver entityResolver,
-			MessageListenerFactory messageListenerFactory) {
+			EventBusProvider eventBusProvider,MessageBuliderFactory messageBuilderFactory) {
 		this.uri = uri;
 		this.configFactory = configFactory;
 		this.uriResolver = uriResolver;
 		this.entityResolver = entityResolver;
-		this.messageListenerFactory = messageListenerFactory;
+		this.eventBusProvider=eventBusProvider;
+		this.messageBuilderFactory=messageBuilderFactory;
 	}
 
 	/*
@@ -173,7 +180,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 
 	@Override
 	public XProcResult run(XProcInput data) {
-		return run(data, null);
+		return run(data, null,null);
 	}
 
 	/*
@@ -184,11 +191,11 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	 * )
 	 */
 	@Override
-	public XProcResult run(XProcInput data, XProcMonitor monitor) {
+	public XProcResult run(XProcInput data, XProcMonitor monitor,Properties props) {
 		PipelineInstance pipeline = pipelineSupplier.get();
 		// monitor.setMessageAccessor(pipeline.messageAccessor);
 		((XProcMessageListenerAggregator) pipeline.xpipe.getStep().getXProc()
-				.getMessageListener()).add(new MessageListenerWrapper(monitor.getMessageListener()));
+				.getMessageListener()).add(new EventBusMessageListener(eventBusProvider,messageBuilderFactory,props));
 		// bind inputs
 		for (String name : pipeline.xpipe.getInputs()) {
 			for (Provider<Source> sourceProvider : data.getInputs(name)) {

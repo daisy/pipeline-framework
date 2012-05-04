@@ -1,5 +1,7 @@
 package org.daisy.pipeline.job;
 
+import java.util.Properties;
+
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcMonitor;
@@ -123,8 +125,10 @@ public class Job {
 		status = Status.RUNNING;
 		// TODO use a pipeline cache
 		XProcPipeline pipeline = engine.load(script.getURI());
+		Properties props=new Properties();
+		props.setProperty("JOB_ID", id.toString());
 		try{
-			output = pipeline.run(input,monitor);
+			output = pipeline.run(input,monitor,props);
 			status=Status.DONE;
 		}catch(Exception e){
 			logger.error("job finished with error state",e);

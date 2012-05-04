@@ -1,5 +1,7 @@
 package org.daisy.common.xproc;
 
+import java.util.Properties;
+
 /**
  * The Interface XProcPipeline gives access to the pipeline info and allows to run a pipeline.
  */
@@ -28,7 +30,7 @@ public interface XProcPipeline {
 	 * @param monitor observer object to monitorise the execution
 	 * @return the x proc result
 	 */
-	XProcResult run(XProcInput data,XProcMonitor monitor);
+	XProcResult run(XProcInput data,XProcMonitor monitor,Properties props);
 
 
 

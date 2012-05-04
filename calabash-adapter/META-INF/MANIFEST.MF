@@ -6,6 +6,7 @@ Bundle-Version: 1.0.1.qualifier
 Bundle-Vendor: DAISY Consortium
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.google.common.base,
+ com.google.common.eventbus,
  com.xmlcalabash.core,
  com.xmlcalabash.io,
  com.xmlcalabash.model,
@@ -23,8 +24,9 @@ Import-Package: com.google.common.base,
  net.sf.saxon.s9api,
  net.sf.saxon.trans,
  org.daisy.common.base,
- org.daisy.common.messaging,
  org.daisy.common.xproc,
+ org.daisy.pipeline.event,
+ org.daisy.pipeline.messaging,
  org.daisy.pipeline.xpath,
  org.slf4j,
  org.xml.sax,

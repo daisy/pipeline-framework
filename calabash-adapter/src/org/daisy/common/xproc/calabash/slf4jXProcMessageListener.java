@@ -41,7 +41,7 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
             log = defaultLogger;
         }
 
-        log.error(XprocMessageHelper.message(step, node, message, code));
+        log.error(XprocMessageHelper.logLine(step, node, message, code));
     }
 
     /* (non-Javadoc)
@@ -51,7 +51,7 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
 	public void error(Throwable exception) {
 
 
-        log.error(XprocMessageHelper.errorMessage(exception));
+        log.error(XprocMessageHelper.errorLogline(exception));
     }
 
     /* (non-Javadoc)
@@ -64,7 +64,7 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
         } else {
             log = defaultLogger;
         }
-        log.warn(XprocMessageHelper.message(step, node, message));
+        log.warn(XprocMessageHelper.logLine(step, node, message));
     }
 
     /* (non-Javadoc)
@@ -77,7 +77,7 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
         } else {
             log = defaultLogger;
         }
-        log.info(XprocMessageHelper.message(step, node, message));
+        log.info(XprocMessageHelper.logLine(step, node, message));
     }
 
     /* (non-Javadoc)
@@ -90,7 +90,7 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
         } else {
             log = defaultLogger;
         }
-        log.debug(XprocMessageHelper.message(step, node, message));
+        log.debug(XprocMessageHelper.logLine(step, node, message));
     }
 
     /* (non-Javadoc)
@@ -103,7 +103,7 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
         } else {
             log = defaultLogger;
         }
-        log.debug(XprocMessageHelper.message(step, node, message));
+        log.debug(XprocMessageHelper.logLine(step, node, message));
     }
 
     /* (non-Javadoc)
@@ -116,7 +116,7 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
         } else {
             log = defaultLogger;
         }
-        log.info(XprocMessageHelper.message(step, node, message));
+        log.info(XprocMessageHelper.logLine(step, node, message));
     }
 
 	/* (non-Javadoc)
@@ -124,7 +124,7 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
 	 */
 	@Override
 	public void warning(Throwable exception) {
-		 log.error(XprocMessageHelper.errorMessage(exception));
+		 log.error(XprocMessageHelper.errorLogline(exception));
 
 	}
 

@@ -6,8 +6,6 @@ import java.util.List;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 
-import org.daisy.common.messaging.MessageAccessor;
-
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRunnable;
 
@@ -20,8 +18,6 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 	/** The m listeners. */
 	List<XProcMessageListener> mListeners = new LinkedList<XProcMessageListener>();
 
-	/** The m as accessor. */
-	MessageAccessor mAsAccessor;
 
 	/**
 	 * Adds a new listener
@@ -32,24 +28,8 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 		mListeners.add(listener);
 	}
 
-	/**
-	 * Adds the accessor to get the messages passed to this listener.
-	 *
-	 * @param listener the listener
-	 */
-	public void addAsAccessor(MessageListenerWrapper listener){
-		mListeners.add(listener);
-		mAsAccessor=listener.getAccessor();
-	}
 
-	/**
-	 * Gets the accessor
-	 *
-	 * @return the accessor
-	 */
-	public MessageAccessor getAccessor(){
-		return mAsAccessor;
-	}
+
 
 	/**
 	 * Removes the given listener
