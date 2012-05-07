@@ -46,7 +46,7 @@ public class JobFactory {
 			IOBridge bridge = new IOBridge(id);
 			XProcInput resolvedInput = bridge.resolve(script, input, context);
 			if(monitorFactory==null) {
-				monitorFactory=new JobMonitor.DefaultJobMonitorFactory();
+				throw new IllegalStateException("No monitor factory");
 			}
 			JobMonitor monitor=monitorFactory.newJobMonitor(id);
 			// TODO validate input

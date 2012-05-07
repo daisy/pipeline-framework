@@ -2,24 +2,19 @@ package org.daisy.pipeline.persistence;
 
 
 import org.daisy.common.messaging.MessageAccessor;
-import org.daisy.common.messaging.MessageListener;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobMonitor;
-import org.daisy.pipeline.persistence.messaging.PersistentMessageListener;
+import org.daisy.pipeline.persistence.messaging.PersistentMessageAccessor;
 
 public class PersistentJobMonitor implements JobMonitor{
-	PersistentMessageListener mListener;
+	PersistentMessageAccessor accessor;
 	public PersistentJobMonitor(JobId id) {
-		mListener=new PersistentMessageListener(id);		
+		accessor=new PersistentMessageAccessor(id);		
 	}
 	@Override
 	public MessageAccessor getMessageAccessor() {
-
-		return mListener;
+		return accessor;
 	}
-	@Override
-	public MessageListener getMessageListener() {
-		return mListener;
-	}
+	
 	
 }

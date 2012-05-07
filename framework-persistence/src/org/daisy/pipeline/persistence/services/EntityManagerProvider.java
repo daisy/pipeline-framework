@@ -1,13 +1,12 @@
 package org.daisy.pipeline.persistence.services;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 
 
-public class EntityManagerProvider implements Provider<EntityManager>{
+public class EntityManagerProvider implements Supplier<EntityManager>{
 
 	private static EntityManager mEm;
 	static{
@@ -17,7 +16,7 @@ public class EntityManagerProvider implements Provider<EntityManager>{
 	
 	
 	@Override
-	public EntityManager provide() {
+	public EntityManager get() {
 		return mEm;
 	}
 

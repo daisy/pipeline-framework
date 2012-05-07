@@ -14,18 +14,18 @@ import javax.persistence.TemporalType;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.persistence.DaisyEntityManagerFactory;
 
 @Entity
 //@NoSql(dataFormat=DataFormatType.MAPPED)
 public class PersistentMessage implements Message{
 	@Column(name="throwable")
-	/** The m throwable. */
+	
 	 Throwable throwable;
-	@Column(name="message")
-	/** The m msg. */
-	String msg;
+	
+	@Column(name="text")
+	
+	String text;
 
 	@Enumerated
 	/** The m level. */
@@ -34,36 +34,67 @@ public class PersistentMessage implements Message{
 	@Column(name="timestamp")
 	@Temporal(TemporalType.TIMESTAMP)
 	Date timeStamp;
+	
 	@Id
 	@Column(name="sequence")
 	int sequence;
+	
 	@Id
 	@Column(name="jobId")
 	String jobId;
 	
+	@Column(name="line")
+	private int line;
+	
+	@Column(name="column")
+	private int column;
+	
+	@Column(name="file")
+	private String file;
+	
 	
 	public PersistentMessage(){};
-	public PersistentMessage(Throwable throwable, String msg, Level level,
-			 int sequence, JobId jobId) {
+	
+	
+	public PersistentMessage(Throwable throwable, String text, Level level,
+			Date timeStamp, int sequence, String jobId, int line, int column,
+			String file) {
 		super();
 		this.throwable = throwable;
-		this.msg = msg;
+		this.text = text;
 		this.level = level;
-		this.timeStamp = new Date();
+		this.timeStamp = timeStamp;
 		this.sequence = sequence;
-		this.jobId = jobId.toString();
+		this.jobId = jobId;
+		this.line = line;
+		this.column = column;
+		this.file = file;
 	}
+	
+	public PersistentMessage(Message other){
+		this.throwable = other.getThrowable();
+		this.text = other.getText();
+		this.level = other.getLevel();
+		this.timeStamp = other.getTimeStamp();
+		this.sequence = other.getSequence();
+		this.jobId = other.getJobId();
+		this.line = other.getLine();
+		this.column = other.getColumn();
+		this.file = other.getFile();
+	}
+
+
 	public Throwable getThrowable() {
 		return throwable;
 	}
 	public void setThrowable(Throwable throwable) {
 		this.throwable = throwable;
 	}
-	public String getMsg() {
-		return msg;
+	public String getText() {
+		return text;
 	}
-	public void setMsg(String msg) {
-		this.msg = msg;
+	public void setText(String msg) {
+		this.text = msg;
 	}
 	public Level getLevel() {
 		return level;
@@ -83,8 +114,8 @@ public class PersistentMessage implements Message{
 	public void setSequence(int sequence) {
 		this.sequence = sequence;
 	}
-	public JobId getJobId() {
-		return JobIdFactory.newIdFromString(jobId);
+	public String getJobId() {
+		return jobId;
 	}
 	public void setJobId(String jobId) {
 		this.jobId = jobId;
@@ -92,6 +123,32 @@ public class PersistentMessage implements Message{
 	public void setJobId(JobId jobId) {
 		this.jobId = jobId.toString();
 	}	
+
+
+	@Override
+	public int getLine() {
+		return this.line;
+	}
+	public void setLine(int line) {
+		this.line=line;
+	}
+
+	@Override
+	public int getColumn() {
+		
+		return this.column;
+	}
+	public void setColumn(int column) {
+		this.column=column;
+	}
+
+	@Override
+	public String getFile() {
+		return this.file;
+	}
+	public void setFile(String file) {
+		this.file=file;
+	}
 	
 	public static List<Message> getMessages(JobId id,int from,List<Level> levels){
 		EntityManager em = DaisyEntityManagerFactory.createEntityManager();
@@ -121,77 +178,8 @@ public class PersistentMessage implements Message{
 		return result;
 	}
 	
-	/**
-	 * Builder for creating new messages
-	 */
-	public static final class Builder {
+	
 
-		/** The m throwable. */
-		Throwable mThrowable;
-
-		/** The m msg. */
-		String mMsg;
-
-		/** The m level. */
-		Level mLevel;
-
-		int mSequence;
-
-		JobId mJobId;
-		/**
-		 * With message.
-		 *
-		 * @param message
-		 *            the message
-		 * @return the builder
-		 */
-		public Builder withMessage(String message) {
-			mMsg = message;
-			return this;
-		}
-
-		/**
-		 * With level.
-		 *
-		 * @param level
-		 *            the level
-		 * @return the builder
-		 */
-		public Builder withLevel(Level level) {
-			mLevel = level;
-			return this;
-		}
-
-		/**
-		 * With throwable.
-		 *
-		 * @param throwable
-		 *            the throwable
-		 * @return the builder
-		 */
-		public Builder withThrowable(Throwable throwable) {
-			mThrowable = throwable;
-			return this;
-		}
-		public Builder withSequence(int i) {
-			mSequence=i;
-			return this;
-		}
-		public Builder withJobId(JobId id) {
-			mJobId=id;
-			return this;
-		}
-		/**
-		 * Builds the message based on the objects provided using the "with" methods.
-		 *
-		 * @return the message
-		 */
-		public PersistentMessage build() {
-			return new PersistentMessage(mThrowable, mMsg,mLevel,mSequence,mJobId);
-		}
-
-		
-	}
 
 	
 

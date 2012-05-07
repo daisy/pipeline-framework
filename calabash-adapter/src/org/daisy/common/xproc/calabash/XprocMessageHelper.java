@@ -10,7 +10,7 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
 
-import org.daisy.pipeline.messaging.Message.MessageBuilder;
+import org.daisy.common.messaging.Message.MessageBuilder;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRunnable;

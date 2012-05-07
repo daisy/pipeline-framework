@@ -17,6 +17,5 @@ Import-Package:
  org.slf4j
 Export-Package: org.daisy.pipeline.event,
  org.daisy.pipeline.job,
- org.daisy.pipeline.messaging,
  org.daisy.pipeline.script
 Service-Component: OSGI-INF/registry.xml, OSGI-INF/job-manager.xml, OSGI-INF/job-execution-service.xml,OSGI-INF/job-factory.xml

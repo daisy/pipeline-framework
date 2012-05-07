@@ -354,7 +354,7 @@ public class XmlFormatter {
 							.toString());
 					singleMsgElm.setAttribute("sequence", msg.getSequence()
 							+ "");
-					singleMsgElm.setTextContent(msg.getMsg());
+					singleMsgElm.setTextContent(msg.getText());
 					messagesElm.appendChild(singleMsgElm);
 				}
 				if (msgs.size() > 0) {

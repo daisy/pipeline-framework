@@ -6,15 +6,15 @@ import java.util.Properties;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.messaging.Message.Level;
+import org.daisy.common.messaging.Message.MessageBuilder;
+import org.daisy.common.messaging.MessageBuliderFactory;
 import org.daisy.pipeline.event.EventBusProvider;
-import org.daisy.pipeline.messaging.Message.Level;
-import org.daisy.pipeline.messaging.Message.MessageBuilder;
-import org.daisy.pipeline.messaging.MessageBuliderFactory;
 
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRunnable;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * Wrapps the org.daisy.common.messaging.MessageListener to a
  * XProcMessageListener to be plugged in calabash
@@ -28,10 +28,10 @@ public class EventBusMessageListener implements XProcMessageListener {
 	int sequence = 0;
 
 	public EventBusMessageListener(EventBusProvider eventBus,
-			MessageBuliderFactory messageBuilderFactory, Properties props) {
+			 Properties props) {
 		super();
 		this.eventBus = eventBus;
-		this.messageBuilderFactory = messageBuilderFactory;
+		messageBuilderFactory = new MessageBuliderFactory();
 		this.props = props;
 	}
 

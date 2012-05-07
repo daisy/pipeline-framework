@@ -1,5 +1,7 @@
 package org.daisy.pipeline.persistence;
 
+import java.util.Date;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -29,8 +31,7 @@ public class Activator implements BundleActivator {
 		EntityManagerFactory factory =  Persistence.createEntityManagerFactory("daisy");
 		entityManager = factory.createEntityManager();
 		entityManager.getTransaction().begin();
-		PersistentMessage m = new PersistentMessage(null, "hola", Level.DEBUG,
-				 1, JobIdFactory.newId());
+		PersistentMessage m = new PersistentMessage(null, "hola", Level.INFO, new Date(), 1, "fake-1", 0, 0, "path");
 		Client c = new Client();
 		c.setContactInfo("my place");
 		c.setId("client-1");
