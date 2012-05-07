@@ -36,7 +36,7 @@ public class EventBusMessageListener implements XProcMessageListener {
 	}
 
 	private void post(MessageBuilder builder) {
-		if (props.contains("JOB_ID")) {
+		if (props.getProperty("JOB_ID")!=null) {
 			builder.withJobId(props.getProperty("JOB_ID"));
 		}
 		builder.withSequence(sequence++);
@@ -86,7 +86,7 @@ public class EventBusMessageListener implements XProcMessageListener {
 		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
 				.withLevel(Level.DEBUG);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-		post(builder);
+//		post(builder);
 	}
 
 	/*
@@ -99,9 +99,9 @@ public class EventBusMessageListener implements XProcMessageListener {
 	@Override
 	public void finer(XProcRunnable step, XdmNode node, String message) {
 		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
-				.withLevel(Level.DEBUG);
+				.withLevel(Level.TRACE);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-		post(builder);
+		//post(builder);
 
 	}
 
@@ -115,9 +115,9 @@ public class EventBusMessageListener implements XProcMessageListener {
 	@Override
 	public void finest(XProcRunnable step, XdmNode node, String message) {
 		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
-				.withLevel(Level.DEBUG);
+				.withLevel(Level.TRACE);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-		post(builder);
+		//post(builder);
 
 	}
 

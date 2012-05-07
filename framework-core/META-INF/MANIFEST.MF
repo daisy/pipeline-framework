@@ -18,4 +18,4 @@ Import-Package:
 Export-Package: org.daisy.pipeline.event,
  org.daisy.pipeline.job,
  org.daisy.pipeline.script
-Service-Component: OSGI-INF/registry.xml, OSGI-INF/job-manager.xml, OSGI-INF/job-execution-service.xml,OSGI-INF/job-factory.xml
+Service-Component: OSGI-INF/registry.xml, OSGI-INF/job-manager.xml, OSGI-INF/job-execution-service.xml,OSGI-INF/job-factory.xml,OSGI-INF/event-provider.xml

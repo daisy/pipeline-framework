@@ -46,7 +46,7 @@ public class PersistentMessage implements Message{
 	@Column(name="line")
 	private int line;
 	
-	@Column(name="column")
+	@Column(name="col")
 	private int column;
 	
 	@Column(name="file")

@@ -154,9 +154,9 @@ public class XprocMessageHelper {
 			builder.withFile(node.getBaseURI().toASCIIString());
 			builder.withLine(node.getLineNumber());
 			builder.withColumn(node.getColumnNumber());
-			builder.withText(message);
-		}
 
+		}
+		builder.withText(message);
 		return builder;
 	}
 
