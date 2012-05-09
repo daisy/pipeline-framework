@@ -1,6 +1,6 @@
 package org.daisy.pipeline.webservice;
 
-import org.daisy.pipeline.persistence.Client;
+import org.daisy.pipeline.persistence.webservice.Client;
 
 
 public class AdminResource extends AuthenticatedResource {

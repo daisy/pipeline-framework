@@ -2,9 +2,9 @@ package org.daisy.pipeline.webservice;
 
 import java.util.List;
 
-import org.daisy.pipeline.persistence.BasicDatabaseManager;
-import org.daisy.pipeline.persistence.Client;
-import org.daisy.pipeline.persistence.WSRequestLogEntry;
+import org.daisy.pipeline.persistence.Database;
+import org.daisy.pipeline.persistence.webservice.Client;
+import org.daisy.pipeline.persistence.webservice.WSRequestLogEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +32,7 @@ public class DatabaseHelper {
 			return false;
 		}
 
-		new BasicDatabaseManager().addObject(newClient);
+		new Database().addObject(newClient);
 		return true;
 	}
 
@@ -42,7 +42,7 @@ public class DatabaseHelper {
 				 "SELECT requestentry FROM WSRequestLogEntry AS requestentry WHERE requestentry.clientId='%s' AND requestentry.nonce='%s' AND requestentry.timestamp='%s'",
 				 entry.getClientId(), entry.getNonce(), entry.getTimestamp());
 
-		 List<WSRequestLogEntry> list = new BasicDatabaseManager().runQuery(queryString, WSRequestLogEntry.class);
+		 List<WSRequestLogEntry> list = new Database().runQuery(queryString, WSRequestLogEntry.class);
 
 		 return list.size() > 0;
 	 }

@@ -10,9 +10,9 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-import org.daisy.pipeline.persistence.BasicDatabaseManager;
-import org.daisy.pipeline.persistence.Client;
-import org.daisy.pipeline.persistence.WSRequestLogEntry;
+import org.daisy.pipeline.persistence.Database;
+import org.daisy.pipeline.persistence.webservice.Client;
+import org.daisy.pipeline.persistence.webservice.WSRequestLogEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,7 +94,7 @@ public class Authenticator {
 		}
 
 		// else, it is unique and therefore ok
-		new BasicDatabaseManager().addObject(entry);
+		new Database().addObject(entry);
 		return true;
 
 	}

@@ -1,4 +1,4 @@
-package org.daisy.pipeline.persistence;
+package org.daisy.pipeline.persistence.webservice;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

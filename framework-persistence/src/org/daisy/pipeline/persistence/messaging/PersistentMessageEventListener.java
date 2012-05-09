@@ -2,7 +2,7 @@ package org.daisy.pipeline.persistence.messaging;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.event.EventBusProvider;
-import org.daisy.pipeline.persistence.BasicDatabaseManager;
+import org.daisy.pipeline.persistence.Database;
 
 import com.google.common.eventbus.Subscribe;
 
@@ -23,7 +23,7 @@ public class PersistentMessageEventListener{
 	}
 	@Subscribe
 	public void handleMessage(Message msg){
-		new BasicDatabaseManager().addObject(new PersistentMessage(msg));
+		new Database().addObject(new PersistentMessage(msg));
 	}
 	
 }

@@ -19,7 +19,7 @@ import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.persistence.Client;
+import org.daisy.pipeline.persistence.webservice.Client;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;

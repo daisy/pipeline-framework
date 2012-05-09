@@ -1,0 +1,24 @@
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+    <persistence-unit name="daisy-derby" transaction-type="RESOURCE_LOCAL">
+    	<jar-file>framework-persistence.jar</jar-file>
+    	<!--
+    	<class>org.daisy.pipeline.persistence.messaging.PersistentMessage</class>
+        <class>org.daisy.pipeline.persistence.webservice.Client</class>
+        <class>org.daisy.pipeline.persistence.webservice.WSRequestLogEntry</class>
+        -->
+       <properties>
+        	<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+        	<property name="javax.persistence.jdbc.url" value="jdbc:derby:/tmp/db;create=true"/>
+         	<property name="eclipselink.ddl-generation" value="create-tables"/>
+      		<property name="eclipselink.ddl-generation.output-mode" value="database"/>
+      		
+      		 <property name="eclipselink.logging.level" value="FINE" />
+            <property name="eclipselink.logging.thread" value="true" />
+            <property name="eclipselink.logging.session" value="false" />
+            <property name="eclipselink.logging.exceptions" value="true" />
+            <property name="eclipselink.logging.timestamp" value="false"/>
+        </properties>
+    </persistence-unit>
+</persistence>

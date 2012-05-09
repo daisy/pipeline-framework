@@ -8,13 +8,13 @@ import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BasicDatabaseManager {
+public class Database {
 
 	private EntityManager entityManager = null;
 
 	/** The logger. */
 	private static Logger logger = LoggerFactory
-			.getLogger(BasicDatabaseManager.class.getName());
+			.getLogger(Database.class.getName());
 
 	private void openDB() {
 

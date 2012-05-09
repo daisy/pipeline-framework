@@ -1,10 +1,11 @@
-package org.daisy.pipeline.persistence;
+package org.daisy.pipeline.persistence.webservice;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NoResultException;
 
+import org.daisy.pipeline.persistence.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,15 +83,15 @@ public class Client {
 
 	public static Iterable<Client> getAll() {
 		String q = String.format("select c from Client as c");
-		return new BasicDatabaseManager().runQuery(q, Client.class);
+		return new Database().runQuery(q, Client.class);
 	}
 
 	public static Client getClient(String id) {
 		String q = String.format("select c from Client as c where c.id='%s'",
 				id);
 		try {
-			return new BasicDatabaseManager().getFirst(q, Client.class);
-		} catch (NoResultException e) {
+			return new Database().getFirst(q, Client.class);
+		} catch (NoResultException e) { 
 			return null;
 		}
 	}

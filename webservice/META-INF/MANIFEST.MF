@@ -39,7 +39,7 @@ Import-Package: javax.crypto,
  org.xml.sax
 Require-Bundle: org.daisy.pipeline.framework,
  org.daisy.common-utils,
- framework-persistence;bundle-version="1.0.0"
+ framework-persistence
 Service-Component: OSGI-INF/webservice.xml
 JPA-PersistenceUnits: org.daisy.pipeline.database.persistenceUnit
 
