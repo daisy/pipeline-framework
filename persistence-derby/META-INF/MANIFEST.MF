@@ -10,6 +10,7 @@ Import-Package: com.google.common.base,
  org.slf4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Service-Component: OSGI-INF/daisy-derby-supplier.xml
+JPA-PersistenceUnits: daisy-derby
 Require-Bundle: framework-persistence,
  derby;bundle-version="10.8.2000002",
  javax.persistence;bundle-version="2.0.4"

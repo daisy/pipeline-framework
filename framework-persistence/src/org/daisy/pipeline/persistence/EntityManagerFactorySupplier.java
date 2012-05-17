@@ -2,6 +2,7 @@ package org.daisy.pipeline.persistence;
 
 import java.util.Map;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
@@ -17,25 +18,6 @@ import com.google.common.base.Supplier;
  *
  */
 public abstract class EntityManagerFactorySupplier implements Supplier<EntityManagerFactory>{
-	protected static Logger logger = LoggerFactory
-			.getLogger(EntityManagerFactorySupplier.class.getName());
-	private EntityManagerFactoryBuilder builder;
-
-	public abstract Map<String,String> getProperties();
-	
-	
-	
-	public EntityManagerFactoryBuilder getEntityManagerFactoryBuilder() {
-		return builder;
-	}
-
-	public void setEntityManagerFactoryBuilder(EntityManagerFactoryBuilder builder) {
-		logger.debug("Setting entity factory builder");
-		this.builder = builder;
-		//init
-		this.get().createEntityManager();
-	}
-	
 	
 	
 }

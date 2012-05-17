@@ -32,7 +32,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
 	}
 
 
-	private final ExecutorService executor = Executors.newCachedThreadPool();
+	private final ExecutorService executor = Executors.newFixedThreadPool(5);
 
 	/**
 	 * Activate (OSGI)
