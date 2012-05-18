@@ -14,14 +14,12 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.daisy.common.base.Filter;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
-import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
-import org.daisy.pipeline.database.Client;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.persistence.webservice.Client;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
@@ -327,35 +325,30 @@ public class XmlFormatter {
 
 		if (detail) {
 			Element scriptElm = toXmlElm(job.getScript(), doc, baseUri, false);
-			rootElm.appendChild(scriptElm);
+            rootElm.appendChild(scriptElm);
 
-			Element messagesElm = doc.createElementNS(
-					XmlFormatter.NS_PIPELINE_DATA, "messages");
+            Element messagesElm = doc.createElementNS(
+                            XmlFormatter.NS_PIPELINE_DATA, "messages");
 
+            if (job.getMonitor().getMessageAccessor() != null) {
+                List<Message> msgs = job.getMonitor().getMessageAccessor()
+                                .createFilter().filterLevels(MSG_LEVELS)
+                                .fromSquence(msgSeq).getMessages();
 
-			Filter<List<Message>> seqFilt = new MessageAccessor.SequenceFilter(
-					msgSeq);
-			Filter<List<Message>> levelFilt = new MessageAccessor.LevelFilter(
-					MSG_LEVELS);
-			// end of wrapping things
-
-			if (job.getMonitor().getMessageAccessor() != null) {
-				List<Message> msgs = job.getMonitor().getMessageAccessor()
-						.filtered(new Filter[] { seqFilt, levelFilt });
-				for (Message msg : msgs) {
-					Element singleMsgElm = doc.createElementNS(
-							XmlFormatter.NS_PIPELINE_DATA, "message");
-					singleMsgElm.setAttribute("level", msg.getLevel()
-							.toString());
-					singleMsgElm.setAttribute("sequence", msg.getSequence()
-							+ "");
-					singleMsgElm.setTextContent(msg.getMsg());
-					messagesElm.appendChild(singleMsgElm);
-				}
-				if (msgs.size() > 0) {
-					rootElm.appendChild(messagesElm);
-				}
-			}
+                for (Message msg : msgs) {
+                        Element singleMsgElm = doc.createElementNS(
+                                        XmlFormatter.NS_PIPELINE_DATA, "message");
+                        singleMsgElm.setAttribute("level", msg.getLevel()
+                                        .toString());
+                        singleMsgElm.setAttribute("sequence", msg.getSequence()
+                                        + "");
+                        singleMsgElm.setTextContent(msg.getText());
+                        messagesElm.appendChild(singleMsgElm);
+                }
+                if (msgs.size() > 0) {
+                        rootElm.appendChild(messagesElm);
+                }
+        }
 
 			if (job.getStatus() == Job.Status.DONE) {
 				Element logElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "log");
