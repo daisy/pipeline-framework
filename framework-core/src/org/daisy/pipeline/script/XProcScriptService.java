@@ -22,14 +22,15 @@ public final class XProcScriptService {
 	/** The Constant SCRIPT_DESCRIPTION. */
 	public static final String SCRIPT_DESCRIPTION = "script.description";
 
-	/** The Constant SCRIPT_NAME. */
-	public static final String SCRIPT_NAME = "script.name";
+	/** The Constant SCRIPT_ID. */
+	// TODO rename script.name to script.id here and in all script descriptor files (OSGI-INF/scriptname.xml)
+	public static final String SCRIPT_ID = "script.name";
 
 	/** The uri. */
 	private URI uri;
 
-	/** The name. */
-	private String name;
+	/** The id. */
+	private String id;
 
 	/** The description. */
 	private String description;
@@ -49,9 +50,9 @@ public final class XProcScriptService {
 	 * @param properties the properties
 	 */
 	public void activate(Map<?, ?> properties) {
-		if (properties.get(SCRIPT_NAME) == null
-				|| properties.get(SCRIPT_NAME).toString().isEmpty()) {
-			throw new IllegalArgumentException(SCRIPT_NAME
+		if (properties.get(SCRIPT_ID) == null
+				|| properties.get(SCRIPT_ID).toString().isEmpty()) {
+			throw new IllegalArgumentException(SCRIPT_ID
 					+ " property must not be empty");
 		}
 
@@ -71,7 +72,7 @@ public final class XProcScriptService {
 			throw new IllegalArgumentException(SCRIPT_URL
 					+ " property must not be a legal URI");
 		}
-		name = properties.get(SCRIPT_NAME).toString();
+		id = properties.get(SCRIPT_ID).toString();
 		description = properties.get(SCRIPT_DESCRIPTION).toString();
 	}
 
@@ -85,12 +86,12 @@ public final class XProcScriptService {
 	}
 
 	/**
-	 * Gets the script name.
+	 * Gets the script ID.
 	 *
-	 * @return the name
+	 * @return the id
 	 */
-	public String getName() {
-		return name;
+	public String getId() {
+		return id;
 	}
 
 	/**
@@ -140,7 +141,7 @@ public final class XProcScriptService {
 	@Override
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
-		buf.append("Name: " + name);
+		buf.append("Id: " + id);
 		buf.append(", desc: " + description);
 		buf.append(", uri: " + uri.toString());
 		return buf.toString();

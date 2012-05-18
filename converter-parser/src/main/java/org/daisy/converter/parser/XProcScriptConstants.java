@@ -25,6 +25,9 @@ public final class XProcScriptConstants {
 	/** XD namespace. */
 	public static String XD_NS = "http://www.daisy.org/ns/pipeline/doc";
 
+	/** XHTML namespace */
+	public static String XHTML_NS = "http://www.w3.org/1999/xhtml";
+
 	/**
 	 * Elements.
 	 */
@@ -69,6 +72,15 @@ public final class XProcScriptConstants {
 		/** homepage. */
 		public static QName XD_HOMEPAGE = new QName(XD_NS, "homepage");
 
+		/** h1 */
+		public static QName XHTML_H1 = new QName(XHTML_NS, "h1");
+
+		/** p */
+		public static QName XHTML_P = new QName(XHTML_NS, "p");
+
+		/** a */
+		public static QName XHTML_A = new QName(XHTML_NS, "a");
+
 		/**
 		 * Instantiates a new elements.
 		 */
@@ -112,6 +124,12 @@ public final class XProcScriptConstants {
 		/** The Constant PX_TYPE. */
 		public static final QName PX_TYPE = new QName(PX_NS, "type");
 
+		/** The Constant PX_ROLE */
+		public static final QName PX_ROLE = new QName(PX_NS, "role");
+
+		/** The Constant HREF */
+		public static final QName HREF = new QName("href");
+
 		/**
 		 * Instantiates a new attributes.
 		 */
@@ -130,6 +148,21 @@ public final class XProcScriptConstants {
 
 		/** The Constant TRUE. */
 		public static final String TRUE = "true";
+
+		/** The Constant NAME */
+		public static final String NAME = "name";
+
+		/** The Constant DESC */
+		public static final String DESC = "desc";
+
+		/** The Constant HOMEPAGE */
+		public static final String HOMEPAGE = "homepage";
+
+		/** The Constant AUTHOR */
+		public static final String AUTHOR = "author";
+
+		/** The Constant MAINTAINER */
+		public static final String MAINTAINER = "maintainer";
 
 		/**
 		 * Instantiates a new values.

@@ -20,7 +20,9 @@ import org.daisy.common.stax.EventProcessor;
 import org.daisy.common.stax.StaxEventHelper;
 import org.daisy.common.stax.StaxEventHelper.EventPredicates;
 import org.daisy.converter.parser.XProcScriptConstants;
+import org.daisy.converter.parser.XProcScriptConstants.Attributes;
 import org.daisy.converter.parser.XProcScriptConstants.Elements;
+import org.daisy.converter.parser.XProcScriptConstants.Values;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
@@ -199,9 +201,6 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		 * @throws XMLStreamException the xML stream exception
 		 */
 		public void parseStep(final XMLEventReader reader) throws XMLStreamException {
-
-
-
 			while (reader.hasNext()) {
 				XMLEvent event = readNext(reader);
 				if (event.isStartElement()
@@ -211,7 +210,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 					parseDocumentation(reader, dHolder);
 					if (isFirstChild()) {
 						scriptBuilder.withDescription(dHolder.mDetail);
-						scriptBuilder.withNiceName(dHolder.mShort);
+						scriptBuilder.withShortName(dHolder.mShort);
 						scriptBuilder.withHomepage(dHolder.mHomepage);
 					} else if (mAncestors.get(mAncestors.size() - 2)
 							.asStartElement().getName()
@@ -309,11 +308,12 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 				final XMLEventReader reader, final DocumentationHolder dHolder)
 				throws XMLStreamException {
 
-			Predicate<XMLEvent> pred = Predicates.or(EventPredicates
+			/*Predicate<XMLEvent> pred = Predicates.or(EventPredicates
 					.isStartOrStopElement(Elements.XD_SHORT), EventPredicates
 					.isStartOrStopElement(Elements.XD_DETAIL), EventPredicates
 					.isStartOrStopElement(Elements.P_DOCUMENTATION), EventPredicates
 					.isStartOrStopElement(Elements.XD_HOMEPAGE));
+
 			StaxEventHelper.loop(reader, pred,
 					EventPredicates.getChildOrSiblingPredicate(),
 					new EventProcessor() {
@@ -340,6 +340,108 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 								dHolder.mHomepage = reader.peek().asCharacters().getData();
 							}
 
+						}
+					});
+			return dHolder;
+		}
+
+			*/
+
+			// TODO
+			// be more liberal with element names as the @px:role value really determines
+			// what the contents mean. for now, handling <a>, <h1>, and <p> is a start.
+			//
+			// ex
+			/*
+			 <p:documentation xmlns="http://www.w3.org/1999/xhtml" xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+			    <h1 px:role="name">Human-readable short name</h1>
+			    <p px:role="desc">A few sentences about this module</p>
+			    <a px:role="homepage" href="http://wikipage">Homepage with end-user documentation</a>
+			    <div px:role="author">
+			        <p px:role="name">Marisa D.</p>
+			        <p px:role="contact">marisa.demeglio@gmail.com</p>
+			        <p px:role="organization">DAISY</p>
+			    </div>
+			</p:documentation>
+
+			This is fine because we don't bother with divs. Two comments:
+
+			1. If divs were used to describe the script, we would miss that info.
+
+			2. If we did process divs, then we would need to differentiate between the author's name and the script's name.
+
+			 In general, parsing this block with stax is a bit of a pain.
+
+			 */
+
+			/*Predicate<XMLEvent> pred = Predicates.or(EventPredicates
+					.isStartOrStopElement(Elements.XHTML_A), EventPredicates
+					.isStartOrStopElement(Elements.XHTML_H1), EventPredicates
+					.isStartOrStopElement(Elements.XHTML_P));
+			*/
+
+			// this whole thing would be easier if we could filter by attribute value instead of element name
+			// or if we used dom instead
+			Predicate<XMLEvent> pred = Predicates.or(EventPredicates.IS_START_ELEMENT,
+					EventPredicates.IS_END_ELEMENT);
+
+			StaxEventHelper.loop(reader, pred,
+					EventPredicates.getChildOrSiblingPredicate(),
+					new EventProcessor() {
+
+						boolean processChildren = true;
+						int count = 0;
+
+						@Override
+						public void process(XMLEvent event) throws XMLStreamException {
+
+							if (event.isStartElement()) {
+
+								// in cases where we need to ignore the child elements, just keep count of how many open
+								// elements we're seeing
+								if (processChildren == false && count > 0) {
+									count++;
+								}
+								else if (count == 0) {
+									// we got past the block we wanted to skip
+									processChildren = true;
+								}
+
+								if (processChildren) {
+									StartElement elm = event.asStartElement();
+									Attribute attr = elm.getAttributeByName(Attributes.PX_ROLE);
+									String role = (attr != null ? attr.getValue() : "");
+
+									// ignore blocks of author and maintainer data
+									if (role.equals(Values.AUTHOR) || role.equals(Values.MAINTAINER)) {
+										count++;
+										processChildren = false;
+										return;
+									}
+
+									else if (role.equals(Values.NAME)) {
+										reader.next();
+										dHolder.mShort = reader.peek().asCharacters().getData();
+									}
+
+									else if (role.equals(Values.DESC)) {
+										reader.next();
+										dHolder.mDetail = reader.peek().asCharacters().getData();
+									}
+									else if (role.equals(Values.HOMEPAGE)) {
+										reader.next();
+										//dHolder.mHomepage = reader.peek().asCharacters().getData();
+										dHolder.mHomepage = elm.getAttributeByName(Attributes.HREF).toString();
+									}
+
+								}
+							}
+							else if (event.isEndElement()) {
+
+								if (processChildren == false) {
+									count--;
+								}
+							}
 						}
 					});
 			return dHolder;

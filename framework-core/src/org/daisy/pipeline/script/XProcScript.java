@@ -29,7 +29,7 @@ public final class XProcScript {
 		private XProcPipelineInfo pipelineInfo;
 
 		/** The name. */
-		private String name;
+		private String shortName;
 
 		/** The description. */
 		private String description;
@@ -63,12 +63,12 @@ public final class XProcScript {
 		/**
 		 * With nice name.
 		 *
-		 * @param name the name
+		 * @param shortName the name
 		 * @return the builder
 		 */
-		public Builder withNiceName(String name){
-			if(name!=null) {
-				this.name=name;
+		public Builder withShortName(String shortName){
+			if(shortName!=null) {
+				this.shortName=shortName;
 			}
 			return this;
 		}
@@ -130,7 +130,7 @@ public final class XProcScript {
 		 */
 		public XProcScript build(){
 
-			return new XProcScript(pipelineInfo,name,description,homepage,portsMetadata,optionsMetadata,descriptor);
+			return new XProcScript(pipelineInfo,shortName,description,homepage,portsMetadata,optionsMetadata,descriptor);
 		}
 	}
 	private static Logger logger = LoggerFactory.getLogger(XProcScript.class);
@@ -246,7 +246,7 @@ public final class XProcScript {
 	/**
 	 * Gets the descriptor
 	 *
-	 * @param name the name
+	 * @param shortName the name
 	 * @return the option metadata
 	 */
 	public XProcScriptService getDescriptor() {

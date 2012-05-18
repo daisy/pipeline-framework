@@ -49,7 +49,7 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 		}
 		// TODO check
 		descriptors.put(script.getURI(), script);
-		byNameDirectory.put(script.getName(), script.getURI());
+		byNameDirectory.put(script.getId(), script.getURI());
 	}
 
 	/**
