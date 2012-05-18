@@ -129,7 +129,7 @@
          unpack="false"/>
 
    <plugin
-         id="persistence-mysql"
+         id="persistence-derby"
          download-size="0"
          install-size="0"
          version="0.0.0"

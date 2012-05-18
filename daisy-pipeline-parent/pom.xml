@@ -27,8 +27,8 @@
 	<module>../daisy.pipeline.site</module>
 	<module>../framework-core</module>
 	<module>../framework-persistence</module>
-	<!-- <module>../persistence-derby</module>-->
-	<module>../persistence-mysql</module>
+	<module>../persistence-derby</module>
+	<!-- <module>../persistence-mysql</module>-->
 	<module>../module-common</module>
 	<module>../module-registry</module>
 	<module>../module-uri-resolver</module>
