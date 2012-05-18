@@ -7,8 +7,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.pipeline.database.Client;
-import org.daisy.pipeline.database.DatabaseManager;
+import org.daisy.pipeline.persistence.webservice.Client;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -44,21 +43,9 @@ public class ClientsResource extends AdminResource {
     		return null;
     	}
 
-    	// TODO re-instate when using real DB backend
-    	/*
-    	List<BasicDatabaseObject> objs = DatabaseManager.getInstance().runQuery("SELECT client FROM Client client");
-
-    	List<Client> clients = new ArrayList<Client>();
-		for (BasicDatabaseObject obj : objs) {
-			clients.add((Client)obj);
-		}
-
-    	setStatus(Status.SUCCESS_OK);
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.clientsToXml(clients, getRootRef().toString()));
-		*/
     	setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
-				XmlFormatter.clientsToXml(DatabaseManager.getInstance().getClients(),
+				XmlFormatter.clientsToXml(Client.getAll(),
 						getRootRef().toString()));
 
 		return dom;
@@ -120,7 +107,7 @@ public class ClientsResource extends AdminResource {
 		newClient.setRole(Client.Role.valueOf(newrole));
 		newClient.setSecret(newsecret);
 
-		if (!DatabaseManager.getInstance().addClient(newClient)) {
+		if (!DatabaseHelper.getInstance().addClient(newClient)) {
 			// the client ID was probably not unique
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return null;

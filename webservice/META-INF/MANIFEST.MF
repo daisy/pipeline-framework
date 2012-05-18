@@ -22,6 +22,9 @@ Import-Package: javax.crypto,
  org.daisy.common.xproc,
  org.daisy.pipeline.job,
  org.daisy.pipeline.script,
+ org.eclipse.persistence;version="2.4.0",
+ org.osgi.framework,
+ org.osgi.framework.launch,
  org.restlet,
  org.restlet.data,
  org.restlet.ext.fileupload,
@@ -33,11 +36,10 @@ Import-Package: javax.crypto,
  org.slf4j,
  org.w3c.dom,
  org.w3c.dom.ls,
- org.xml.sax,
- org.osgi.framework,
- org.osgi.framework.launch
+ org.xml.sax
 Require-Bundle: org.daisy.pipeline.framework,
- org.daisy.common-utils
+ org.daisy.common-utils,
+ framework-persistence
 Service-Component: OSGI-INF/webservice.xml
 JPA-PersistenceUnits: org.daisy.pipeline.database.persistenceUnit
 

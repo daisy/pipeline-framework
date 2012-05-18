@@ -1,6 +1,5 @@
 package org.daisy.common.xproc.calabash;
 
-import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
 
@@ -20,7 +19,7 @@ public final class CalabashXProcResult implements XProcResult {
 	private final XProcConfiguration configuration;
 
 	/** The message accessor. */
-	private final MessageAccessor messageAccessor;
+
 
 	/**
 	 * creates a new XProcResult instance
@@ -30,8 +29,8 @@ public final class CalabashXProcResult implements XProcResult {
 	 * @param accessor Allows to access the messages produced during the pipeline execution;
 	 * @return the x proc result
 	 */
-	static XProcResult newInstance(XPipeline xpipeline,XProcConfiguration configuration,MessageAccessor accessor) {
-		return new CalabashXProcResult(xpipeline,configuration,accessor);
+	static XProcResult newInstance(XPipeline xpipeline,XProcConfiguration configuration) {
+		return new CalabashXProcResult(xpipeline,configuration);
 	}
 
 	/**
@@ -41,10 +40,10 @@ public final class CalabashXProcResult implements XProcResult {
 	 * @param configuration the configuration
 	 * @param accessor the accessor
 	 */
-	private CalabashXProcResult(XPipeline xpipeline,XProcConfiguration configuration,MessageAccessor accessor) {
+	private CalabashXProcResult(XPipeline xpipeline,XProcConfiguration configuration) {
 		this.xpipeline = xpipeline;
 		this.configuration = configuration;
-		messageAccessor=accessor;
+
 	}
 
 	/* (non-Javadoc)
@@ -106,9 +105,6 @@ public final class CalabashXProcResult implements XProcResult {
 	/* (non-Javadoc)
 	 * @see org.daisy.common.xproc.XProcResult#getMessages()
 	 */
-	@Override
-	public MessageAccessor getMessages() {
-		return messageAccessor;
-	}
+
 
 }

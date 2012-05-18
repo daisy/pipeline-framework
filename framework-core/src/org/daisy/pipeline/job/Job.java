@@ -1,8 +1,7 @@
 package org.daisy.pipeline.job;
 
-import java.io.IOException;
+import java.util.Properties;
 
-import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcMonitor;
@@ -34,43 +33,7 @@ public class Job {
 		ERROR
 	}
 
-	/**
-	 * Creates a new job.
-	 *
-	 * @param script the script to be executed
-	 * @param input the input
-	 * @return the job
-	 */
-	public static Job newJob(XProcScript script, XProcInput input) {
-		// TODO validate input
-		return new Job(JobIdFactory.newId(), script, input, null);
-	}
 
-	/**
-	 * Creates a new job attached to a context.
-	 *
-	 * @param script the script
-	 * @param input the input
-	 * @param context the context
-	 * @return the job
-	 */
-	public static Job newJob(XProcScript script, XProcInput input,
-			ResourceCollection context) {
-		// TODO check arguments
-		JobId id = JobIdFactory.newId();
-		// FIXME "common path"+id.toString
-
-		try {
-
-			IOBridge bridge = new IOBridge(id);
-			XProcInput resolvedInput = bridge.resolve(script, input, context);
-
-			// TODO validate input
-			return new Job(id, script, resolvedInput, bridge);
-		} catch (IOException e) {
-			throw new RuntimeException("Error resolving pipeline info", e);
-		}
-	}
 
 	/** The id. */
 	private final JobId id;
@@ -93,20 +56,7 @@ public class Job {
 	/** The status. */
 	private Status status = Status.IDLE;
 
-	private final XProcMonitor monitor= new XProcMonitor() {
-		MessageAccessor accessor = null;
-		@Override
-		public MessageAccessor getMessageAccessor() {
-
-			return accessor;
-		}
-
-		@Override
-		public void setMessageAccessor(MessageAccessor accessor) {
-			this.accessor=accessor;
-
-		}
-	};
+	private final XProcMonitor monitor;
 
 	/**
 	 * Instantiates a new job.
@@ -120,13 +70,14 @@ public class Job {
 	 * @param ioBridge
 	 *            the io bridge
 	 */
-	private Job(JobId id, XProcScript script, XProcInput input,
-			IOBridge ioBridge) {
+	Job(JobId id, XProcScript script, XProcInput input,
+			IOBridge ioBridge,JobMonitor monitor) {
 		// TODO check arguments
 		this.id = id;
 		this.script = script;
 		this.input = input;
 		this.ioBridge = ioBridge;
+		this.monitor=monitor;
 	}
 
 	/**
@@ -174,8 +125,10 @@ public class Job {
 		status = Status.RUNNING;
 		// TODO use a pipeline cache
 		XProcPipeline pipeline = engine.load(script.getURI());
+		Properties props=new Properties();
+		props.setProperty("JOB_ID", id.toString());
 		try{
-			output = pipeline.run(input,monitor);
+			output = pipeline.run(input,monitor,props);
 			status=Status.DONE;
 		}catch(Exception e){
 			logger.error("job finished with error state",e);
@@ -184,7 +137,7 @@ public class Job {
 
 
 		JobResult.Builder builder = new JobResult.Builder();
-		builder.withMessageAccessor(output.getMessages());
+		builder.withMessageAccessor(monitor.getMessageAccessor());
 		builder.withLogFile(ioBridge.getLogFile());
 		builder = (ioBridge != null) ? builder.withZipFile(ioBridge
 				.zipOutput()) : builder;

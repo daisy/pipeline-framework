@@ -22,7 +22,7 @@ public class DefaultJobManager implements JobManager {
 	@Override
 	public Job newJob(XProcScript script, XProcInput input,
 			ResourceCollection context) {
-		Job job = Job.newJob(script, input, context);
+		Job job = JobFactory.getInstance().newJob(script, input, context);
 		jobs.put(job.getId(), job);
 		return job;
 	}

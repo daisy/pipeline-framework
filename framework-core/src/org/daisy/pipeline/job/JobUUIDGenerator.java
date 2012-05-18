@@ -30,6 +30,10 @@ public class JobUUIDGenerator implements JobIdGenerator {
 	 */
 	private static class JobUUID implements JobId {
 
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = -379462775714828942L;
 		/** The m id. */
 		private final UUID mId;
 

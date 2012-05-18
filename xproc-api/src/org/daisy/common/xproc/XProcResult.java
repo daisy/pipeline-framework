@@ -1,5 +1,4 @@
 package org.daisy.common.xproc;
-import org.daisy.common.messaging.MessageAccessor;
 
 
 
@@ -21,5 +20,5 @@ public interface XProcResult {
 	 *
 	 * @return the messages
 	 */
-	MessageAccessor getMessages();
+	//MessageAccessor getMessages();
 }

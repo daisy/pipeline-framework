@@ -7,8 +7,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.pipeline.database.Client;
-import org.daisy.pipeline.database.DatabaseManager;
+import org.daisy.pipeline.persistence.Database;
+import org.daisy.pipeline.persistence.webservice.Client;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -36,7 +36,7 @@ public class ClientResource extends AdminResource {
 			return;
 		}
 		String idParam = (String) getRequestAttributes().get("id");
-		client = DatabaseManager.getInstance().getClientById(idParam);
+		client = Client.getClient(idParam);
 	}
 
     /**
@@ -78,7 +78,7 @@ public class ClientResource extends AdminResource {
     	}
 
 
-		if (DatabaseManager.getInstance().deleteObject(client)) {
+		if (new Database().deleteObject(client)) {
 			setStatus(Status.SUCCESS_NO_CONTENT);
 		}
 		else {
@@ -145,12 +145,12 @@ public class ClientResource extends AdminResource {
 		String newsecret = root.getAttribute("secret");
 		String newrole = root.getAttribute("role");
 
-		newClient.setId(newid);
-		newClient.setSecret(newsecret);
-		newClient.setRole(Client.Role.valueOf(newrole));
-		newClient.setContactInfo(newcontact);
+		client.setId(newid);
+		client.setSecret(newsecret);
+		client.setRole(Client.Role.valueOf(newrole));
+		client.setContactInfo(newcontact);
 
-		DatabaseManager.getInstance().updateObject(client.getInternalId(), newClient);
+		new Database().updateObject(client);
 
 		setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
