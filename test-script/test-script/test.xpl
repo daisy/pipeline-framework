@@ -13,14 +13,6 @@
     exclude-inline-prefixes="cx p c cxo px xd pxi z tmp">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <!--<xd:short>test-script</xd:short>
-        <xd:detail>detailed description</xd:detail>
-        <xd:author>
-            <xd:name>Romain Deltour</xd:name>
-            <xd:mailto>romain@example.com</xd:mailto>
-            <xd:organization>DAISY Consortium</xd:organization>
-        </xd:author>
-        <xd:maintainer>Romain Deltour</xd:maintainer>-->
         <h1 px:role="name">test script</h1>
         <p px:role="desc">Detailed description</p>
         <a px:role="homepage" href="http://daisy.org/pipeline/wiki/test-script">Module homepage</a>

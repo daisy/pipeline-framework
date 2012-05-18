@@ -308,89 +308,17 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 				final XMLEventReader reader, final DocumentationHolder dHolder)
 				throws XMLStreamException {
 
-			/*Predicate<XMLEvent> pred = Predicates.or(EventPredicates
-					.isStartOrStopElement(Elements.XD_SHORT), EventPredicates
-					.isStartOrStopElement(Elements.XD_DETAIL), EventPredicates
-					.isStartOrStopElement(Elements.P_DOCUMENTATION), EventPredicates
-					.isStartOrStopElement(Elements.XD_HOMEPAGE));
-
-			StaxEventHelper.loop(reader, pred,
-					EventPredicates.getChildOrSiblingPredicate(),
-					new EventProcessor() {
-
-						@Override
-						public void process(XMLEvent event)
-								throws XMLStreamException {
-							if (event.isStartElement()
-									&& event.asStartElement().getName()
-											.equals(Elements.XD_DETAIL)) {
-								reader.next();
-								dHolder.mDetail = reader.peek().asCharacters().getData();
-							} else if (event.isStartElement()
-									&& event.asStartElement().getName()
-											.equals(Elements.XD_SHORT) && dHolder.mShort==null) {
-								reader.next();
-								dHolder.mShort = reader.peek().asCharacters()
-										.getData();
-							}
-							else if (event.isStartElement()
-									&& event.asStartElement().getName()
-											.equals(Elements.XD_HOMEPAGE)) {
-								reader.next();
-								dHolder.mHomepage = reader.peek().asCharacters().getData();
-							}
-
-						}
-					});
-			return dHolder;
-		}
-
-			*/
-
-			// TODO
-			// be more liberal with element names as the @px:role value really determines
-			// what the contents mean. for now, handling <a>, <h1>, and <p> is a start.
-			//
-			// ex
-			/*
-			 <p:documentation xmlns="http://www.w3.org/1999/xhtml" xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
-			    <h1 px:role="name">Human-readable short name</h1>
-			    <p px:role="desc">A few sentences about this module</p>
-			    <a px:role="homepage" href="http://wikipage">Homepage with end-user documentation</a>
-			    <div px:role="author">
-			        <p px:role="name">Marisa D.</p>
-			        <p px:role="contact">marisa.demeglio@gmail.com</p>
-			        <p px:role="organization">DAISY</p>
-			    </div>
-			</p:documentation>
-
-			This is fine because we don't bother with divs. Two comments:
-
-			1. If divs were used to describe the script, we would miss that info.
-
-			2. If we did process divs, then we would need to differentiate between the author's name and the script's name.
-
-			 In general, parsing this block with stax is a bit of a pain.
-
-			 */
-
-			/*Predicate<XMLEvent> pred = Predicates.or(EventPredicates
-					.isStartOrStopElement(Elements.XHTML_A), EventPredicates
-					.isStartOrStopElement(Elements.XHTML_H1), EventPredicates
-					.isStartOrStopElement(Elements.XHTML_P));
-			*/
-
-			// this whole thing would be easier if we could filter by attribute value instead of element name
-			// or if we used dom instead
 			Predicate<XMLEvent> pred = Predicates.or(EventPredicates.IS_START_ELEMENT,
 					EventPredicates.IS_END_ELEMENT);
 
+			// the tricky thing here is that you have to ignore blocks of markup for px:role="author" and px:role="maintainer"
 			StaxEventHelper.loop(reader, pred,
 					EventPredicates.getChildOrSiblingPredicate(),
 					new EventProcessor() {
 
+						// keep track of when we enter and exit a block that we want to ignore with these vars
 						boolean processChildren = true;
-						int count = 0;
+						int elemsToIgnore = 0;
 
 						@Override
 						public void process(XMLEvent event) throws XMLStreamException {
@@ -398,12 +326,12 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 							if (event.isStartElement()) {
 
 								// in cases where we need to ignore the child elements, just keep count of how many open
-								// elements we're seeing
-								if (processChildren == false && count > 0) {
-									count++;
+								// elements we're seeing so that we can note when they have been closed
+								if (processChildren == false && elemsToIgnore > 0) {
+									elemsToIgnore++;
 								}
-								else if (count == 0) {
-									// we got past the block we wanted to skip
+								// we got past the block we wanted to skip
+								else if (elemsToIgnore == 0) {
 									processChildren = true;
 								}
 
@@ -414,7 +342,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 									// ignore blocks of author and maintainer data
 									if (role.equals(Values.AUTHOR) || role.equals(Values.MAINTAINER)) {
-										count++;
+										elemsToIgnore++;
 										processChildren = false;
 										return;
 									}
@@ -430,8 +358,14 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 									}
 									else if (role.equals(Values.HOMEPAGE)) {
 										reader.next();
-										//dHolder.mHomepage = reader.peek().asCharacters().getData();
-										dHolder.mHomepage = elm.getAttributeByName(Attributes.HREF).toString();
+										// if @href is present, use that
+										if (elm.getAttributeByName(Attributes.HREF) != null) {
+											dHolder.mHomepage = elm.getAttributeByName(Attributes.HREF).getValue();
+										}
+										// otherwise just use the text contents
+										else {
+											dHolder.mHomepage = reader.peek().asCharacters().getData();
+										}
 									}
 
 								}
@@ -439,7 +373,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 							else if (event.isEndElement()) {
 
 								if (processChildren == false) {
-									count--;
+									elemsToIgnore--;
 								}
 							}
 						}

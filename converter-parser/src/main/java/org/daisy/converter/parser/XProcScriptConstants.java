@@ -22,12 +22,6 @@ public final class XProcScriptConstants {
 	/** PX namespace. */
 	public static String PX_NS = "http://www.daisy.org/ns/pipeline/xproc";
 
-	/** XD namespace. */
-	public static String XD_NS = "http://www.daisy.org/ns/pipeline/doc";
-
-	/** XHTML namespace */
-	public static String XHTML_NS = "http://www.w3.org/1999/xhtml";
-
 	/**
 	 * Elements.
 	 */
@@ -50,36 +44,6 @@ public final class XProcScriptConstants {
 
 		/**  params. */
 		public static QName P_PARAMS = new QName(P_NS, "params");
-
-		/**  author. */
-		public static QName XD_AUTHOR = new QName(XD_NS, "author");
-
-		/** detail. */
-		public static QName XD_DETAIL = new QName(XD_NS, "detail");
-
-		/** mailto. */
-		public static QName XD_MAILTO = new QName(XD_NS, "mailto");
-
-		/**  name. */
-		public static QName XD_NAME = new QName(XD_NS, "name");
-
-		/**  organization. */
-		public static QName XD_ORGANIZATION = new QName(XD_NS, "organization");
-
-		/**  short. */
-		public static QName XD_SHORT = new QName(XD_NS, "short");
-
-		/** homepage. */
-		public static QName XD_HOMEPAGE = new QName(XD_NS, "homepage");
-
-		/** h1 */
-		public static QName XHTML_H1 = new QName(XHTML_NS, "h1");
-
-		/** p */
-		public static QName XHTML_P = new QName(XHTML_NS, "p");
-
-		/** a */
-		public static QName XHTML_A = new QName(XHTML_NS, "a");
 
 		/**
 		 * Instantiates a new elements.
