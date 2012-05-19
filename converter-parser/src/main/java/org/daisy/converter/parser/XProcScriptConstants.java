@@ -94,6 +94,18 @@ public final class XProcScriptConstants {
 		/** The Constant HREF */
 		public static final QName HREF = new QName("href");
 
+		/** The Constant PX_OUTPUT */
+		public static final QName PX_OUTPUT = new QName(PX_NS, "output");
+
+		/** The Constant PX_SEQUENCE */
+		public static final QName PX_SEQUENCE = new QName(PX_NS, "sequence");
+
+		/** The Constant PX_OUTPUT */
+		public static final QName PX_ORDERED = new QName(PX_NS, "ordered");
+
+		/** The Constant PX_SEPARATOR */
+		public static final QName PX_SEPARATOR = new QName(PX_NS, "separator");
+
 		/**
 		 * Instantiates a new attributes.
 		 */

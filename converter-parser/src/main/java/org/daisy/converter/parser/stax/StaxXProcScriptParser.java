@@ -280,20 +280,41 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 			Attribute type = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_TYPE);
-			Attribute dir = optionElement
+			/*Attribute dir = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_DIR);
+			*/
 			Attribute mediaType = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_MEDIA_TYPE);
+			Attribute output = optionElement
+					.getAttributeByName(XProcScriptConstants.Attributes.PX_OUTPUT);
+			Attribute sequence = optionElement
+					.getAttributeByName(XProcScriptConstants.Attributes.PX_SEQUENCE);
+			Attribute ordered = optionElement
+					.getAttributeByName(XProcScriptConstants.Attributes.PX_ORDERED);
+			Attribute separator = optionElement
+					.getAttributeByName(XProcScriptConstants.Attributes.PX_SEPARATOR);
+
 			if (mediaType != null) {
 				optionBuilder.withMediaType(mediaType.getValue());
 			}
 			if (type != null) {
 				optionBuilder.withType(type.getValue());
 			}
-			if (dir != null) {
+			/*if (dir != null) {
 				optionBuilder.withDirection(dir.getValue());
+			}*/
+			if (output != null) {
+				optionBuilder.withOutput(output.getValue());
 			}
-
+			if (sequence != null) {
+				optionBuilder.withSequence(sequence.getValue());
+			}
+			if (ordered != null) {
+				optionBuilder.withOrdered(ordered.getValue());
+			}
+			if (separator != null) {
+				optionBuilder.withSeparator(separator.getValue());
+			}
 		}
 
 		/**

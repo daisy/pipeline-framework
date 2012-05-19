@@ -13,7 +13,6 @@ import javax.xml.stream.XMLInputFactory;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.XProcOptionMetadata;
-import org.daisy.pipeline.script.XProcOptionMetadata.Direction;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.junit.Before;
@@ -145,7 +144,7 @@ public class XProcScriptParserTest {
 	public void testOption() {
 		XProcOptionMetadata opt = scp.getOptionMetadata(new QName("option1"));
 		assertEquals("anyDirURI", opt.getType());
-		assertEquals(Direction.OUTPUT, opt.getDirection());
+		//assertEquals(Direction.OUTPUT, opt.getDirection());
 		assertEquals("Option 1", opt.getNiceName());
 	}
 

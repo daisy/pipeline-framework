@@ -269,6 +269,19 @@ public class XmlFormatter {
 				optionElm.setAttribute("mediaType", meta.getMediaType());
 				optionElm.setAttribute("desc", meta.getDescription());
 
+				if (meta.isSequence()) {
+					optionElm.setAttribute("sequence", "true");
+
+					if (meta.isOrdered()) {
+						optionElm.setAttribute("ordered", "true");
+					}
+					else {
+						optionElm.setAttribute("ordered", "false");
+					}
+				}
+				else {
+					optionElm.setAttribute("sequence", "false");
+				}
 				rootElm.appendChild(optionElm);
 			}
 

@@ -11,15 +11,24 @@ public class XProcOptionMetadata {
 	/**
 	 * The Enum Direction.
 	 */
-	public enum Direction {
+//	public enum Direction {
+//
+//		/** The INPUT. */
+//		INPUT,
+//		/** The OUTPUT. */
+//		OUTPUT,
+//		/** The NA. */
+//		NA
+//	}
 
-		/** The INPUT. */
-		INPUT,
-		/** The OUTPUT. */
-		OUTPUT,
-		/** The NA. */
+	public enum Output {
+		RESULT,
+		TEMP,
 		NA
 	}
+
+	/** The Constant SEPARATOR_DEFAULT */
+	static final String SEPARATOR_DEFAULT = " ";
 
 	/** The nice name. */
 	final private String niceName;
@@ -34,7 +43,12 @@ public class XProcOptionMetadata {
 	final private String mediaType;
 
 	/** The direction. */
-	final private Direction direction;
+	//final private Direction direction;
+
+	final private Output output;
+	final private boolean isSequence;
+	final private boolean isOrdered;
+	final private String separator;
 
 	/**
 	 * Instantiates a new {@link XProcOptionMetadata} object.
@@ -51,13 +65,18 @@ public class XProcOptionMetadata {
 	 *            the direction
 	 */
 	private XProcOptionMetadata(String niceName, String description,
-			String type, String mediaType, Direction direction) {
+			String type, String mediaType, /*Direction direction,*/ Output output,
+			boolean sequence, boolean ordered, String separator) {
 		super();
 		this.niceName = niceName;
 		this.description = description;
 		this.type = type;
 		this.mediaType = mediaType;
-		this.direction = direction;
+		//this.direction = direction;
+		this.output = output;
+		isSequence = sequence;
+		isOrdered = ordered;
+		this.separator = separator;
 	}
 
 	/**
@@ -101,8 +120,24 @@ public class XProcOptionMetadata {
 	 *
 	 * @return the direction
 	 */
-	public Direction getDirection() {
+/*	public Direction getDirection() {
 		return direction;
+	}
+*/
+	public Output getOutput() {
+		return output;
+	}
+
+	public boolean isOrdered() {
+		return isOrdered;
+	}
+
+	public boolean isSequence() {
+		return isSequence;
+	}
+
+	public String getSeparator() {
+		return separator;
 	}
 
 	/**
@@ -123,7 +158,21 @@ public class XProcOptionMetadata {
 		private String mediaType;
 
 		/** The direction. */
-		private Direction direction;
+//        private Direction direction;
+
+		// specify some defaults for optional attributes
+
+		/** Indicates whether the order in a sequence matters */
+		private boolean ordered = true;
+
+		/** The nature of the output -- temp, result, or na (which means not output at all) */
+		private Output output = Output.NA;
+
+		/** Indicates whether this option takes a sequence */
+		private boolean sequence = false;
+
+		/** The separator for a sequence */
+		private String separator = SEPARATOR_DEFAULT;
 
 		/**
 		 * With description.
@@ -174,18 +223,54 @@ public class XProcOptionMetadata {
 		}
 
 		/**
-		 * With direction.
-		 *
-		 * @param direction
-		 *            the direction
-		 * @return the builder
-		 */
-		public Builder withDirection(String direction) {
-			if (direction.equalsIgnoreCase(Direction.OUTPUT.toString())) {
-				this.direction = Direction.OUTPUT;
-			} else {
-				this.direction = Direction.INPUT;
+         * With direction.
+         *
+         * @param direction
+         *            the direction
+         * @return the builder
+         */
+//        public Builder withDirection(String direction) {
+//                if (direction.equalsIgnoreCase(Direction.OUTPUT.toString())) {
+//                        this.direction = Direction.OUTPUT;
+//                } else {
+//                        this.direction = Direction.INPUT;
+//                }
+//                return this;
+//        }
+
+
+		public Builder withOutput(String value) {
+			if (value.equalsIgnoreCase(Output.RESULT.toString())) {
+				output = Output.RESULT;
 			}
+			else if (value.equalsIgnoreCase(Output.TEMP.toString())) {
+				output = Output.TEMP;
+			}
+			return this;
+		}
+
+		public Builder withSequence(String value) {
+			if (value.equalsIgnoreCase("true")) {
+				sequence = true;
+			}
+			else {
+				sequence = false;
+			}
+			return this;
+		}
+
+		public Builder withOrdered(String value) {
+			if (value.equalsIgnoreCase("true")) {
+				ordered = true;
+			}
+			else {
+				ordered = false;
+			}
+			return this;
+		}
+
+		public Builder withSeparator(String value) {
+			separator = value;
 			return this;
 		}
 
@@ -196,8 +281,10 @@ public class XProcOptionMetadata {
 		 */
 		public XProcOptionMetadata build() {
 			return new XProcOptionMetadata(niceName, description, type,
-					mediaType, direction);
+					mediaType, /*direction,*/ output, sequence, ordered, separator);
 		}
+
+
 	}
 
 }

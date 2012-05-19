@@ -26,6 +26,7 @@ import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.ResourceCollection;
 import org.daisy.pipeline.job.ZipResourceContext;
 import org.daisy.pipeline.script.ScriptRegistry;
+import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
 import org.restlet.Request;
@@ -294,6 +295,10 @@ public class JobsResource extends AuthenticatedResource {
 		int idx = scriptId.lastIndexOf('/');
 		scriptId = scriptId.substring(idx+1);
 
+		// append the namespace
+		// TODO use a QName and only resolve un-namespaced IDs to use our PX namespace
+		scriptId = "px:" + scriptId;
+
 		// get the script from the ID
 		ScriptRegistry scriptRegistry = ((PipelineWebService)getApplication()).getScriptRegistry();
 		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptId);
@@ -306,12 +311,12 @@ public class JobsResource extends AuthenticatedResource {
 
 		addInputsToJob(doc.getElementsByTagName("input"), script.getXProcPipelineInfo().getInputPorts(), builder);
 
-		Iterable<XProcOptionInfo> filteredOptions = null;
+		/*Iterable<XProcOptionInfo> filteredOptions = null;
 		if (!((PipelineWebService) getApplication()).isLocal()) {
 			filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
-		}
+		}*/
 
-		addOptionsToJob(doc.getElementsByTagName("option"), script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
+		addOptionsToJob(doc.getElementsByTagName("option"), script, builder);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
 
 		XProcInput input = builder.build();
 
@@ -345,12 +350,12 @@ public class JobsResource extends AuthenticatedResource {
 				Element inputElm = (Element) nodes.item(i);
 				String name = inputElm.getAttribute("name");
 				if (name.equals(inputName)) {
-					NodeList fileNodes = inputElm.getElementsByTagName("file");
+					NodeList fileNodes = inputElm.getElementsByTagName("item");
 					NodeList docwrapperNodes = inputElm.getElementsByTagName("docwrapper");
 
 					if (fileNodes.getLength() > 0) {
 						for (int j = 0; j < fileNodes.getLength(); j++) {
-							String src = ((Element)fileNodes.item(j)).getAttribute("src");
+							String src = ((Element)fileNodes.item(j)).getAttribute("value");
 							final SAXSource source = new SAXSource();
 				            source.setSystemId(src);
 				            Provider<Source> prov= new Provider<Source>(){
@@ -398,12 +403,16 @@ public class JobsResource extends AuthenticatedResource {
 
 	/**
 	 * Adds the options to job.
-	 *
-	 * @param nodes the nodes
-	 * @param allOptions the options
-	 * @param builder the builder
 	 */
-	private void addOptionsToJob(NodeList nodes, Iterable<XProcOptionInfo> allOptions, XProcInput.Builder builder, Iterable<XProcOptionInfo> filteredOptions) {
+	//private void addOptionsToJob(NodeList nodes, Iterable<XProcOptionInfo> allOptions, XProcInput.Builder builder, Iterable<XProcOptionInfo> filteredOptions) {
+	private void addOptionsToJob(NodeList nodes, XProcScript script, XProcInput.Builder builder) {
+
+		Iterable<XProcOptionInfo> allOptions = script.getXProcPipelineInfo().getOptions();
+
+		Iterable<XProcOptionInfo> filteredOptions = null;
+		if (!((PipelineWebService) getApplication()).isLocal()) {
+			filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
+		}
 
 		Iterator<XProcOptionInfo> it = allOptions.iterator();
 		while(it.hasNext()) {
@@ -436,9 +445,23 @@ public class JobsResource extends AuthenticatedResource {
 				Element optionElm = (Element) nodes.item(i);
 				String name = optionElm.getAttribute("name");
 				if (name.equals(optionName)) {
-					String val = optionElm.getTextContent();
-					builder.withOption(new QName(name), val);
-					break;
+					XProcOptionMetadata metadata = script.getOptionMetadata(new QName(name));
+					if (metadata.isSequence()) {
+						NodeList items = optionElm.getElementsByTagName("item");
+						// concat items
+						String val = ((Element)items.item(0)).getAttribute("value");
+						for (int j = 1; j<items.getLength(); j++) {
+							Element e = (Element)items.item(j);
+							val += metadata.getSeparator() + e.getAttribute("value");
+						}
+						builder.withOption(new QName(name), val);
+					}
+					else {
+						String val = optionElm.getTextContent();
+                        builder.withOption(new QName(name), val);
+						break;
+					}
+
 				}
 			}
 		}
