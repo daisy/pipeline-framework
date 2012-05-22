@@ -13,7 +13,6 @@ import javax.xml.stream.XMLInputFactory;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.XProcOptionMetadata;
-import org.daisy.pipeline.script.XProcOptionMetadata.Direction;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.junit.Before;
@@ -37,8 +36,7 @@ public class XProcScriptParserTest {
 	public void setUp() throws URISyntaxException {
 
 
-		this.getClass().getClassLoader()
-		.getResource("script.xpl").toURI();
+		this.getClass().getClassLoader().getResource("script.xpl").toURI();
 		StaxXProcScriptParser parser = new StaxXProcScriptParser();
 		parser.setFactory(XMLInputFactory.newInstance());
 		//scp = parser.parse(); Try to fix this using a service
@@ -53,9 +51,9 @@ public class XProcScriptParserTest {
 	 */
 	@Test
 	public void testDescription() throws URISyntaxException {
-		assertEquals("short description", scp.getName());
+		assertEquals("Unit Test Script", scp.getName());
 		assertEquals("detail description", scp.getDescription());
-		assertEquals("homepage", scp.getHomepage());
+		assertEquals("http://example.org/unit-test-script", scp.getHomepage());
 	}
 
 	/**
@@ -146,7 +144,7 @@ public class XProcScriptParserTest {
 	public void testOption() {
 		XProcOptionMetadata opt = scp.getOptionMetadata(new QName("option1"));
 		assertEquals("anyDirURI", opt.getType());
-		assertEquals(Direction.OUTPUT, opt.getDirection());
+		//assertEquals(Direction.OUTPUT, opt.getDirection());
 		assertEquals("Option 1", opt.getNiceName());
 	}
 

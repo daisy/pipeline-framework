@@ -14,7 +14,7 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcInput.Builder;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
-import org.daisy.pipeline.script.XProcOptionMetadata.Direction;
+import org.daisy.pipeline.script.XProcOptionMetadata.Output;
 import org.daisy.pipeline.script.XProcScript;
 
 
@@ -150,13 +150,13 @@ public class IOBridge {
 			if (OPTIONS_TO_TRANSLATE.contains(script.getOptionMetadata(
 					optionInfo.getName()).getType())) {
 				String subDir = script.getOptionMetadata(optionInfo.getName())
-						.getDirection() == Direction.INPUT ? mContextDir
+						.getOutput() == Output.NA ? mContextDir
 						.toURI().toString() : mOutputDir.toURI().toString();
 
 				String strUri = input.getOptions().get(optionInfo.getName());
 
 				if (script.getOptionMetadata(optionInfo.getName())
-						.getDirection() == Direction.OUTPUT) {
+						.getOutput() != Output.NA) {
 					if (strUri == null || strUri.isEmpty()) {
 
 						strUri = (optionInfo.getSelect() != null && !optionInfo

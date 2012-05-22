@@ -5,7 +5,7 @@ import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.XProcOptionMetadata;
-import org.daisy.pipeline.script.XProcOptionMetadata.Direction;
+import org.daisy.pipeline.script.XProcOptionMetadata.Output;
 import org.daisy.pipeline.script.XProcScript;
 
 // TODO: Auto-generated Javadoc
@@ -41,7 +41,7 @@ public final class XProcScriptFilter implements Filter<XProcScript> {
 		XProcPipelineInfo xproc = script.getXProcPipelineInfo();
 		// create the script builder
 		XProcScript.Builder scriptBuilder = new XProcScript.Builder()
-				.withNiceName(script.getName()).withDescription(
+				.withShortName(script.getName()).withDescription(
 						script.getDescription()).withHomepage(script.getHomepage()).withDescriptor(script.getDescriptor());
 		// create the filtered pipeline info
 		XProcPipelineInfo.Builder xprocBuilder = new XProcPipelineInfo.Builder();
@@ -65,7 +65,7 @@ public final class XProcScriptFilter implements Filter<XProcScript> {
 					.getName());
 			// filter-out options that are both OUTPUT options with type
 			// inheriting from anyURI
-			if (!(metadata.getDirection() == Direction.OUTPUT &&
+			if (!(metadata.getOutput() != Output.NA &&
 					(ANY_URI_TYPE.equals(metadata.getMediaType())
 					 ||
 					 ANY_FILE_URI_TYPE.equals(metadata.getType())

@@ -51,7 +51,7 @@ public final class CommandScriptHelp implements Command {
 	@Override
 	public void execute() throws IllegalArgumentException {
 		for (XProcScriptService scriptService : scriptRegistry.getScripts()) {
-			if (scriptService.getName().equals(scriptName)) {
+			if (scriptService.getId().equals(scriptName)) {
 				System.out.println(toString(scriptService.load()));
 				return;
 			}

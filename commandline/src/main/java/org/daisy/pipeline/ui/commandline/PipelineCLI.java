@@ -242,7 +242,7 @@ public class PipelineCLI {
 		} else {
 			String scriptName = oSet.valueOf("s").toString();
 			for (XProcScriptService scriptService : scriptRegistry.getScripts()) {
-				if (scriptService.getName().equals(scriptName)) {
+				if (scriptService.getId().equals(scriptName)) {
 					String inputs = "";
 					if (oSet.valueOf("i") != null) {
 						inputs = oSet.valueOf("i").toString();

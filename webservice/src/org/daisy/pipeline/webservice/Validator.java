@@ -389,7 +389,7 @@ public class Validator {
 	 * @return true, if successful
 	 */
 	private static boolean validateOptionType(String value, String mediaType) {
-		// TODO what are all the possibilities for mediaType?
+		// TODO validate XSD types
 		// for now, just check that the string is non-empty
 		return value.trim().length() > 0;
 	}

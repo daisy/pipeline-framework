@@ -20,7 +20,9 @@ import org.daisy.common.stax.EventProcessor;
 import org.daisy.common.stax.StaxEventHelper;
 import org.daisy.common.stax.StaxEventHelper.EventPredicates;
 import org.daisy.converter.parser.XProcScriptConstants;
+import org.daisy.converter.parser.XProcScriptConstants.Attributes;
 import org.daisy.converter.parser.XProcScriptConstants.Elements;
+import org.daisy.converter.parser.XProcScriptConstants.Values;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
@@ -199,9 +201,6 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		 * @throws XMLStreamException the xML stream exception
 		 */
 		public void parseStep(final XMLEventReader reader) throws XMLStreamException {
-
-
-
 			while (reader.hasNext()) {
 				XMLEvent event = readNext(reader);
 				if (event.isStartElement()
@@ -211,7 +210,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 					parseDocumentation(reader, dHolder);
 					if (isFirstChild()) {
 						scriptBuilder.withDescription(dHolder.mDetail);
-						scriptBuilder.withNiceName(dHolder.mShort);
+						scriptBuilder.withShortName(dHolder.mShort);
 						scriptBuilder.withHomepage(dHolder.mHomepage);
 					} else if (mAncestors.get(mAncestors.size() - 2)
 							.asStartElement().getName()
@@ -281,20 +280,41 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 			Attribute type = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_TYPE);
-			Attribute dir = optionElement
+			/*Attribute dir = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_DIR);
+			*/
 			Attribute mediaType = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_MEDIA_TYPE);
+			Attribute output = optionElement
+					.getAttributeByName(XProcScriptConstants.Attributes.PX_OUTPUT);
+			Attribute sequence = optionElement
+					.getAttributeByName(XProcScriptConstants.Attributes.PX_SEQUENCE);
+			Attribute ordered = optionElement
+					.getAttributeByName(XProcScriptConstants.Attributes.PX_ORDERED);
+			Attribute separator = optionElement
+					.getAttributeByName(XProcScriptConstants.Attributes.PX_SEPARATOR);
+
 			if (mediaType != null) {
 				optionBuilder.withMediaType(mediaType.getValue());
 			}
 			if (type != null) {
 				optionBuilder.withType(type.getValue());
 			}
-			if (dir != null) {
+			/*if (dir != null) {
 				optionBuilder.withDirection(dir.getValue());
+			}*/
+			if (output != null) {
+				optionBuilder.withOutput(output.getValue());
 			}
-
+			if (sequence != null) {
+				optionBuilder.withSequence(sequence.getValue());
+			}
+			if (ordered != null) {
+				optionBuilder.withOrdered(ordered.getValue());
+			}
+			if (separator != null) {
+				optionBuilder.withSeparator(separator.getValue());
+			}
 		}
 
 		/**
@@ -309,37 +329,74 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 				final XMLEventReader reader, final DocumentationHolder dHolder)
 				throws XMLStreamException {
 
-			Predicate<XMLEvent> pred = Predicates.or(EventPredicates
-					.isStartOrStopElement(Elements.XD_SHORT), EventPredicates
-					.isStartOrStopElement(Elements.XD_DETAIL), EventPredicates
-					.isStartOrStopElement(Elements.P_DOCUMENTATION), EventPredicates
-					.isStartOrStopElement(Elements.XD_HOMEPAGE));
+			Predicate<XMLEvent> pred = Predicates.or(EventPredicates.IS_START_ELEMENT,
+					EventPredicates.IS_END_ELEMENT);
+
+			// the tricky thing here is that you have to ignore blocks of markup for px:role="author" and px:role="maintainer"
 			StaxEventHelper.loop(reader, pred,
 					EventPredicates.getChildOrSiblingPredicate(),
 					new EventProcessor() {
 
-						@Override
-						public void process(XMLEvent event)
-								throws XMLStreamException {
-							if (event.isStartElement()
-									&& event.asStartElement().getName()
-											.equals(Elements.XD_DETAIL)) {
-								reader.next();
-								dHolder.mDetail = reader.peek().asCharacters().getData();
-							} else if (event.isStartElement()
-									&& event.asStartElement().getName()
-											.equals(Elements.XD_SHORT) && dHolder.mShort==null) {
-								reader.next();
-								dHolder.mShort = reader.peek().asCharacters()
-										.getData();
-							}
-							else if (event.isStartElement()
-									&& event.asStartElement().getName()
-											.equals(Elements.XD_HOMEPAGE)) {
-								reader.next();
-								dHolder.mHomepage = reader.peek().asCharacters().getData();
-							}
+						// keep track of when we enter and exit a block that we want to ignore with these vars
+						boolean processChildren = true;
+						int elemsToIgnore = 0;
 
+						@Override
+						public void process(XMLEvent event) throws XMLStreamException {
+
+							if (event.isStartElement()) {
+
+								// in cases where we need to ignore the child elements, just keep count of how many open
+								// elements we're seeing so that we can note when they have been closed
+								if (processChildren == false && elemsToIgnore > 0) {
+									elemsToIgnore++;
+								}
+								// we got past the block we wanted to skip
+								else if (elemsToIgnore == 0) {
+									processChildren = true;
+								}
+
+								if (processChildren) {
+									StartElement elm = event.asStartElement();
+									Attribute attr = elm.getAttributeByName(Attributes.PX_ROLE);
+									String role = (attr != null ? attr.getValue() : "");
+
+									// ignore blocks of author and maintainer data
+									if (role.equals(Values.AUTHOR) || role.equals(Values.MAINTAINER)) {
+										elemsToIgnore++;
+										processChildren = false;
+										return;
+									}
+
+									else if (role.equals(Values.NAME)) {
+										reader.next();
+										dHolder.mShort = reader.peek().asCharacters().getData();
+									}
+
+									else if (role.equals(Values.DESC)) {
+										reader.next();
+										dHolder.mDetail = reader.peek().asCharacters().getData();
+									}
+									else if (role.equals(Values.HOMEPAGE)) {
+										reader.next();
+										// if @href is present, use that
+										if (elm.getAttributeByName(Attributes.HREF) != null) {
+											dHolder.mHomepage = elm.getAttributeByName(Attributes.HREF).getValue();
+										}
+										// otherwise just use the text contents
+										else {
+											dHolder.mHomepage = reader.peek().asCharacters().getData();
+										}
+									}
+
+								}
+							}
+							else if (event.isEndElement()) {
+
+								if (processChildren == false) {
+									elemsToIgnore--;
+								}
+							}
 						}
 					});
 			return dHolder;

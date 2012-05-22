@@ -71,15 +71,24 @@ public class IOBridgeTest {
 				.withOption(optionInf).withOption(optionInf2).withOption(optionInf3).
 				withOption(optionInf4).withOption(optionInf5).build();
 		XProcOptionMetadata meta1 = new XProcOptionMetadata.Builder()
-				.withDirection("input").withType("anyFileURI").build();
+				.withType("anyFileURI").build();
+				//.withDirection("input").withType("anyFileURI").build();
 		XProcOptionMetadata meta2 = new XProcOptionMetadata.Builder()
-				.withDirection("output").withType("anyFileURI").build();
+				.withOutput("result").withType("anyFileURI").build();
+				//.withDirection("output").withType("anyFileURI").build();
+
 		XProcOptionMetadata meta3 = new XProcOptionMetadata.Builder()
-				.withDirection("output").withType("anyFileURI").build();
+				.withOutput("result").withType("anyFileURI").build();
+				//.withDirection("output").withType("anyFileURI").build();
+
 		XProcOptionMetadata meta4 = new XProcOptionMetadata.Builder()
-				.withDirection("output").withType("anyDirURI").build();
+				.withOutput("result").withType("anyDirURI").build();
+				//.withDirection("output").withType("anyDirURI").build();
+
 		XProcOptionMetadata meta5 = new XProcOptionMetadata.Builder()
-				.withDirection("output").withType("anyDirURI").build();
+				.withOutput("result").withType("anyDirURI").build();
+				//.withDirection("output").withType("anyDirURI").build();
+
 		HashMap<QName, XProcOptionMetadata> ometas = new HashMap<QName, XProcOptionMetadata>();
 		ometas.put(new QName("myinput"), meta1);
 		ometas.put(new QName("myopt"), meta2);

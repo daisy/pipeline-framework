@@ -38,7 +38,7 @@ public final class CommandListScripts implements Command {
 	@Override
 	public void execute() throws IllegalArgumentException {
 		for (XProcScriptService script : scriptRegistry.getScripts()) {
-			System.out.println(script.getName()+" - "+script.getDescription());
+			System.out.println(script.getId()+" - "+script.getDescription());
 		}
 	}
 

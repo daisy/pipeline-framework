@@ -22,9 +22,6 @@ public final class XProcScriptConstants {
 	/** PX namespace. */
 	public static String PX_NS = "http://www.daisy.org/ns/pipeline/xproc";
 
-	/** XD namespace. */
-	public static String XD_NS = "http://www.daisy.org/ns/pipeline/doc";
-
 	/**
 	 * Elements.
 	 */
@@ -47,27 +44,6 @@ public final class XProcScriptConstants {
 
 		/**  params. */
 		public static QName P_PARAMS = new QName(P_NS, "params");
-
-		/**  author. */
-		public static QName XD_AUTHOR = new QName(XD_NS, "author");
-
-		/** detail. */
-		public static QName XD_DETAIL = new QName(XD_NS, "detail");
-
-		/** mailto. */
-		public static QName XD_MAILTO = new QName(XD_NS, "mailto");
-
-		/**  name. */
-		public static QName XD_NAME = new QName(XD_NS, "name");
-
-		/**  organization. */
-		public static QName XD_ORGANIZATION = new QName(XD_NS, "organization");
-
-		/**  short. */
-		public static QName XD_SHORT = new QName(XD_NS, "short");
-
-		/** homepage. */
-		public static QName XD_HOMEPAGE = new QName(XD_NS, "homepage");
 
 		/**
 		 * Instantiates a new elements.
@@ -112,6 +88,24 @@ public final class XProcScriptConstants {
 		/** The Constant PX_TYPE. */
 		public static final QName PX_TYPE = new QName(PX_NS, "type");
 
+		/** The Constant PX_ROLE */
+		public static final QName PX_ROLE = new QName(PX_NS, "role");
+
+		/** The Constant HREF */
+		public static final QName HREF = new QName("href");
+
+		/** The Constant PX_OUTPUT */
+		public static final QName PX_OUTPUT = new QName(PX_NS, "output");
+
+		/** The Constant PX_SEQUENCE */
+		public static final QName PX_SEQUENCE = new QName(PX_NS, "sequence");
+
+		/** The Constant PX_OUTPUT */
+		public static final QName PX_ORDERED = new QName(PX_NS, "ordered");
+
+		/** The Constant PX_SEPARATOR */
+		public static final QName PX_SEPARATOR = new QName(PX_NS, "separator");
+
 		/**
 		 * Instantiates a new attributes.
 		 */
@@ -130,6 +124,21 @@ public final class XProcScriptConstants {
 
 		/** The Constant TRUE. */
 		public static final String TRUE = "true";
+
+		/** The Constant NAME */
+		public static final String NAME = "name";
+
+		/** The Constant DESC */
+		public static final String DESC = "desc";
+
+		/** The Constant HOMEPAGE */
+		public static final String HOMEPAGE = "homepage";
+
+		/** The Constant AUTHOR */
+		public static final String AUTHOR = "author";
+
+		/** The Constant MAINTAINER */
+		public static final String MAINTAINER = "maintainer";
 
 		/**
 		 * Instantiates a new values.
