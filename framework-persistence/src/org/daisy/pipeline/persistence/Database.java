@@ -3,6 +3,7 @@ package org.daisy.pipeline.persistence;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 import org.slf4j.Logger;
@@ -12,14 +13,15 @@ public class Database {
 
 	private EntityManager entityManager = null;
 
+	private EntityManagerFactory emf;
+
 	/** The logger. */
 	private static Logger logger = LoggerFactory
 			.getLogger(Database.class.getName());
 
 	private void openDB() {
-
 		try {
-			entityManager = DaisyEntityManagerFactory.createEntityManager();
+			entityManager = emf.createEntityManager();
 		} catch (Exception e) {
 			logger.error("Database exception " + e.getMessage());
 		}
@@ -94,5 +96,9 @@ public class Database {
 			closeDB();
 		}
 		return obj;
+	}
+	
+	public void setEntityManagerFactory(EntityManagerFactory emf){
+		this.emf=emf;
 	}
 }

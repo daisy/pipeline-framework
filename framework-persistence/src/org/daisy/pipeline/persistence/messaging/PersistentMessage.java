@@ -1,24 +1,47 @@
 package org.daisy.pipeline.persistence.messaging;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
-import javax.persistence.Query;
+import javax.persistence.IdClass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.persistence.DaisyEntityManagerFactory;
 
 @Entity
+@IdClass(PersistenceMessagePK.class)
 //@NoSql(dataFormat=DataFormatType.MAPPED)
 public class PersistentMessage implements Message{
+	public enum PersistentLevel {
+		/** The ERROR. */
+		ERROR,
+		/** The WARNING. */
+		WARNING,
+		/** The INFO. */
+		INFO,
+		/** The DEBUG. */
+		DEBUG,
+		/** The TRACE. */
+		TRACE;
+		public static PersistentLevel fromLevel(Level level){
+			return valueOf(level.name());
+		}
+		public static List<PersistentLevel> fromLevel(List<Level> levels) {
+			List<PersistentLevel> res = new ArrayList<PersistentMessage.PersistentLevel>(levels.size());
+			for (Level level : levels) {
+				res.add(fromLevel(level));
+			}
+			return res;
+		}
+	}
 	@Column(name="throwable")
 	
 	 Throwable throwable;
@@ -27,9 +50,10 @@ public class PersistentMessage implements Message{
 	
 	String text;
 
-	@Enumerated
 	/** The m level. */
-	Level level;
+	@Enumerated(EnumType.STRING)
+//	@Column(name="level")
+	PersistentLevel level;
 	
 	@Column(name="timestamp")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -56,7 +80,7 @@ public class PersistentMessage implements Message{
 	public PersistentMessage(){};
 	
 	
-	public PersistentMessage(Throwable throwable, String text, Level level,
+	public PersistentMessage(Throwable throwable, String text, PersistentLevel level,
 			Date timeStamp, int sequence, String jobId, int line, int column,
 			String file) {
 		super();
@@ -74,7 +98,7 @@ public class PersistentMessage implements Message{
 	public PersistentMessage(Message other){
 		this.throwable = other.getThrowable();
 		this.text = other.getText();
-		this.level = other.getLevel();
+		this.level = PersistentLevel.valueOf(other.getLevel().toString());
 		this.timeStamp = other.getTimeStamp();
 		this.sequence = other.getSequence();
 		this.jobId = other.getJobId();
@@ -96,10 +120,10 @@ public class PersistentMessage implements Message{
 	public void setText(String msg) {
 		this.text = msg;
 	}
-	public Level getLevel() {
-		return level;
+	public Message.Level getLevel() {
+		return Message.Level.valueOf(level.toString());
 	}
-	public void setLevel(Level level) {
+	public void setLevel(PersistentLevel level) {
 		this.level = level;
 	}
 	public Date getTimeStamp() {
@@ -150,37 +174,4 @@ public class PersistentMessage implements Message{
 		this.file=file;
 	}
 	
-	public static List<Message> getMessages(JobId id,int from,List<Level> levels){
-		EntityManager em = DaisyEntityManagerFactory.createEntityManager();
-		/*
-		StringBuilder sqlBuilder=new StringBuilder("select m from PersistentMessage m where m.jobId='%s' and  m.sequence > %s and m.level in ( ");
-		
-		for (int i=0;i<levels.size();i++){
-			sqlBuilder.append(" ?"+(i+1) );
-			if(i!=levels.size()-1)
-				sqlBuilder.append(", ");
-		}
-		sqlBuilder.append(") order by m.sequence ");
-		String sql=String.format(sqlBuilder.toString(), id.toString(),from);
-		*/
-		StringBuilder sqlBuilder=new StringBuilder("select m from PersistentMessage m where m.jobId='%s' and  m.sequence > %s");
-		String sql=String.format(sqlBuilder.toString(), id.toString(),from);
-		Query q=em.createQuery(sql);
-		/*
-		int i=1;
-		for (Level l:levels){
-			q.setParameter(i++, l);
-		}
-		*/
-		@SuppressWarnings("unchecked") //just how persistence works
-		List<Message> result = q.getResultList();
-		em.close();
-		return result;
-	}
-	
-	
-
-
-	
-
 }
