@@ -3,14 +3,12 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Persistence-mysql
 Bundle-SymbolicName: persistence-mysql
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.daisy.pipeline.persistence.mysql.Activator
 Import-Package: com.google.common.base,
  org.daisy.common.messaging,
  org.osgi.framework;version="1.3.0",
  org.slf4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Service-Component: OSGI-INF/daisy-mysql-supplier.xml
-JPA-PersistenceUnits: daisy-mysql
+Service-Component: OSGI-INF/daisy-mysql-emf.xml
 Require-Bundle: framework-persistence,
  javax.persistence;bundle-version="2.0.4",
  com.springsource.com.mysql.jdbc;bundle-version="5.1.6"

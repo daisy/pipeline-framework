@@ -41,5 +41,3 @@ Require-Bundle: org.daisy.pipeline.framework,
  org.daisy.common-utils,
  framework-persistence
 Service-Component: OSGI-INF/webservice.xml
-JPA-PersistenceUnits: org.daisy.pipeline.database.persistenceUnit
-

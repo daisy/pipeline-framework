@@ -18,4 +18,6 @@ Export-Package: org.daisy.pipeline.persistence,
  org.daisy.pipeline.persistence.messaging,
  org.daisy.pipeline.persistence.services,
  org.daisy.pipeline.persistence.webservice
-Service-Component: OSGI-INF/persistent-monitor.xml,OSGI-INF/event-bus-listener.xml,OSGI-INF/entity-factory.xml
+Service-Component: OSGI-INF/persistent-monitor.xml,OSGI-INF/event-bus-listener.xml,OSGI-INF/pipeline-persistence.xml
+Meta-Persistence: META-INF/persistence.xml
+
