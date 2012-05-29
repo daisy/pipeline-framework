@@ -3,7 +3,7 @@ package org.daisy.pipeline.persistence.derby;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.pipeline.persistence.ForwardingEntityManagerFactory;
+import org.daisy.common.persistence.ForwardingEntityManagerFactory;
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +27,11 @@ public class DerbyEntityManagerFactory extends  ForwardingEntityManagerFactory{
 	
 	public void setBuilder(EntityManagerFactoryBuilder builder){
 		setEntityManagerFactory(builder.createEntityManagerFactory(props));
+	}
+	
+	public void init() {
+		logger.debug("initialize the EMF");
+		createEntityManager();
 	}
 	
 }
