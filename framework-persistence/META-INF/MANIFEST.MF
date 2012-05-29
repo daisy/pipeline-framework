@@ -14,6 +14,7 @@ Import-Package: com.google.common.base,
  org.eclipse.persistence.annotations;version="2.4.0",
  org.osgi.framework;version="1.3.0",
  org.slf4j
+DynamicImport-Package: *
 Export-Package: org.daisy.pipeline.persistence,
  org.daisy.pipeline.persistence.messaging,
  org.daisy.pipeline.persistence.services,

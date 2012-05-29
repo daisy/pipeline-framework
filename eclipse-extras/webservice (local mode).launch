@@ -5,13 +5,14 @@
 <booleanAttribute key="automaticValidate" value="false"/>
 <stringAttribute key="bootstrap" value=""/>
 <stringAttribute key="checked" value="[NONE]"/>
-<booleanAttribute key="clearConfig" value="true"/>
+<booleanAttribute key="clearConfig" value="false"/>
 <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/webservice (local mode)"/>
 <booleanAttribute key="default" value="true"/>
 <booleanAttribute key="default_auto_start" value="true"/>
 <intAttribute key="default_start_level" value="4"/>
 <stringAttribute key="deselected_workspace_plugins" value="org.daisy.pipeline.cli,persistence-mysql"/>
 <booleanAttribute key="includeOptional" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog  -console"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.daisy.pipeline.mode=ws -Dorg.osgi.framework.system.packages=javax.xml,javax.naming,javax.naming.spi,javax.management,javax.management.loading,javax.management.modelmbean,javax.net,javax.net.ssl,javax.crypto,javax.crypto.interfaces,javax.crypto.spec,javax.security.auth,javax.security.auth.spi,javax.security.auth.callback,javax.security.auth.login,javax.security.cert,javax.xml.parsers,javax.transaction,javax.transaction.xa,javax.xml.xpath,javax.xml.transform.sax,javax.xml.transform.dom,javax.xml.namespace,javax.xml.transform,javax.xml.transform.stream,javax.xml.validation,org.xml.sax,org.xml.sax.helpers,org.xml.sax.ext,com.sun.org.apache.xalan.internal,com.sun.org.apache.xalan.internal.res,com.sun.org.apache.xml.internal.utils,com.sun.org.apache.xpath.internal,com.sun.org.apache.xpath.internal.jaxp,com.sun.org.apache.xpath.internal.objects,com.sun.org.apache.xml.internal,org.w3c.dom,org.w3c.dom.traversal,org.w3c.dom.ls,javax.sql,javax.transaction,sun.misc,javax.xml.stream,javax.xml.stream.events,javax.xml.stream.util,javax.annotation,org.apache.xerces.impl,org.apache.xerces.impl.validation,org.apache.xerces.impl.xpath.regex,org.apache.xerces.impl.xs,org.apache.xerces.parsers,org.apache.xerces.util,org.apache.xerces.xni,org.apache.xerces.xni.grammars,org.apache.xerces.xni.parser,javax.xml.datatype,javax.xml.parsers,javax.xml.transform,org.w3c.dom.events,org.w3c.dom.ranges,org.w3c.dom.xpath,org.w3c.dom.html,org.w3c.dom.views -Declipse.ignoreApp=true -Dosgi.noShutdown=true -Dorg.daisy.pipeline.mode=ws -Dorg.daisy.pipeline.iobase=/tmp/dp2  -Dorg.daisy.pipeline.logdir=&quot;${target_home}/../log/&quot; -Dorg.daisy.pipeline.xproc.configuration=&quot;${target_home}/../etc/conf_calabash.xml&quot; -Dorg.daisy.pipeline.ws.local=&quot;true&quot;  -Dorg.daisy.pipeline.ws.authentication=false -Dorg.daisy.pipeline.home=&quot;${target_home}/..&quot;"/>
