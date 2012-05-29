@@ -4,7 +4,7 @@
    <service>
       <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
    </service>
-   <property name="script.name" type="String" value="test-script"/>
+   <property name="script.id" type="String" value="test-script"/>
    <property name="script.description" type="String" value="script description"/>
    <property name="script.url" type="String" value="http://www.daisy.org/pipeline/modules/test-script/test.xpl"/>
 </scr:component>

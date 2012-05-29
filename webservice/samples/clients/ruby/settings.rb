@@ -1,6 +1,6 @@
 class Settings
   TIMEOUT_SECONDS = 100
-  BASEURI = "http://localhost:8181/ws"
+  BASEURI = "http://localhost:8182/ws"
   
   attr_accessor :options
   attr_accessor :command

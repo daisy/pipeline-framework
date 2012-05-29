@@ -362,7 +362,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 									String role = (attr != null ? attr.getValue() : "");
 
 									// ignore blocks of author and maintainer data
-									if (role.equals(Values.AUTHOR) || role.equals(Values.MAINTAINER)) {
+									if (role.contains(Values.AUTHOR) || role.contains(Values.MAINTAINER)) {
 										elemsToIgnore++;
 										processChildren = false;
 										return;

@@ -23,8 +23,7 @@ public final class XProcScriptService {
 	public static final String SCRIPT_DESCRIPTION = "script.description";
 
 	/** The Constant SCRIPT_ID. */
-	// TODO rename script.name to script.id here and in all script descriptor files (OSGI-INF/scriptname.xml)
-	public static final String SCRIPT_ID = "script.name";
+	public static final String SCRIPT_ID = "script.id";
 
 	/** The uri. */
 	private URI uri;
