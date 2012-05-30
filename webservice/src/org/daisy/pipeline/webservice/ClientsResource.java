@@ -88,7 +88,7 @@ public class ClientsResource extends AdminResource {
 			return null;
 		}
 
-		boolean isValid = Validator.validateXml(doc, Validator.clientSchema);
+		boolean isValid = Validator.validateXmlAgainstSchema(doc, Validator.CLIENT_SCHEMA_URL);
 
 		if (!isValid) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);

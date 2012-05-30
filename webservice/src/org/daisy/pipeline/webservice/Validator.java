@@ -29,34 +29,20 @@ import org.xml.sax.SAXException;
  */
 public class Validator {
 
-	// although in everyday practice, the function validateJobRequest will be the most-used,
-	// all the schema URLs are included here so that during testing, the web service can validate
-	// its own output by calling validateXml with the appropriate schema URL.
-	/** The Constant scriptSchema. */
-	public static final URL scriptSchema = Validator.class.getResource("resources/script.rnc");
-
-	/** The Constant scriptsSchema. */
-	public static final URL scriptsSchema = Validator.class.getResource("resources/scripts.rnc");
-
-	/** The Constant jobSchema. */
-	public static final URL jobSchema = Validator.class.getResource("resources/job.rnc");
-
-	/** The Constant jobRequestSchema. */
-	public static final URL jobRequestSchema = Validator.class.getResource("resources/jobRequest.rnc");
-
-	/** The Constant jobsSchema. */
-	public static final URL jobsSchema = Validator.class.getResource("resources/jobs.rnc");
-
-	public static final URL clientSchema = Validator.class.getResource("resources/client.rnc");
-
-	public static final URL clientsSchema = Validator.class.getResource("resources/clients.rnc");
+	public static final URL SCRIPT_SCHEMA_URL = Validator.class.getResource("resources/script.rnc");
+	public static final URL SCRIPTS_SCHEMA_URL = Validator.class.getResource("resources/scripts.rnc");
+	public static final URL JOB_SCHEMA_URL = Validator.class.getResource("resources/job.rnc");
+	public static final URL JOB_REQUEST_SCHEMA_URL = Validator.class.getResource("resources/jobRequest.rnc");
+	public static final URL JOBS_SCHEMA_URL = Validator.class.getResource("resources/jobs.rnc");
+	public static final URL CLIENT_SCHEMA_URL = Validator.class.getResource("resources/client.rnc");
+	public static final URL CLIENTS_SCHEMA_URL = Validator.class.getResource("resources/clients.rnc");
 
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(Validator.class.getName());
 
-	public static boolean validateXml(Document document, URL schemaUrl) {
+	public static boolean validateXmlAgainstSchema(Document document, URL schema) {
 		XmlValidator validator = new XmlValidator();
-		return validator.validate(document, schemaUrl);
+		return validator.validate(document, schema);
 	}
 
 	/**
@@ -69,12 +55,12 @@ public class Validator {
 	public static boolean validateJobRequest(Document doc, PipelineWebService application) {
 
 		// validate against the schema
-		boolean xmlValid = validateXml(doc, Validator.jobRequestSchema);
+		boolean xmlValid = validateXmlAgainstSchema(doc, Validator.JOB_REQUEST_SCHEMA_URL);
 		if (xmlValid == false) {
 			return false;
 		}
 
-		boolean argsValid = validateArguments(doc, application);
+		boolean argsValid = validateJobRequestArguments(doc, application);
 		return argsValid;
 	}
 
@@ -87,7 +73,7 @@ public class Validator {
 	 * @param application the application
 	 * @return true, if successful
 	 */
-	private static boolean validateArguments(Document doc, PipelineWebService application) {
+	private static boolean validateJobRequestArguments(Document doc, PipelineWebService application) {
 
 		Element scriptElm = (Element)doc.getElementsByTagName("script").item(0);
 		// get the ID from the href attr value
@@ -115,13 +101,13 @@ public class Validator {
 		}
 
 		// inputs
-		boolean hasAllRequiredInputs = validateInputPortData(script.getXProcPipelineInfo().getInputPorts(),
+		boolean hasAllRequiredInputs = validateJobRequestInputPortData(script.getXProcPipelineInfo().getInputPorts(),
 				doc.getElementsByTagName("input"), script);
 		// options
-		boolean hasAllRequiredOptions = validateOptionData(script.getXProcPipelineInfo().getOptions(),
+		boolean hasAllRequiredOptions = validateJobRequestOptionData(script.getXProcPipelineInfo().getOptions(),
 				doc.getElementsByTagName("option"), script);
 		// outputs (if run in local mode)
-		boolean hasAllRequiredOutputs = validateOutputPortData(script
+		boolean hasAllRequiredOutputs = validateJobRequestOutputPortData(script
 				.getXProcPipelineInfo().getOutputPorts(),
 				doc.getElementsByTagName("output"), script);
 
@@ -141,7 +127,7 @@ public class Validator {
 	 * @param script the script
 	 * @return true, if successful
 	 */
-	private static boolean validateOptionData(Iterable<XProcOptionInfo> options, NodeList nodes, XProcScript script) {
+	private static boolean validateJobRequestOptionData(Iterable<XProcOptionInfo> options, NodeList nodes, XProcScript script) {
 		Iterator<XProcOptionInfo>it = options.iterator();
 		boolean hasAllRequiredArgs = true;
 
@@ -178,7 +164,7 @@ public class Validator {
 	 * @param script the script
 	 * @return true, if successful
 	 */
-	private static boolean validateInputPortData(Iterable<XProcPortInfo> ports, NodeList nodes, XProcScript script) {
+	private static boolean validateJobRequestInputPortData(Iterable<XProcPortInfo> ports, NodeList nodes, XProcScript script) {
 
 		Iterator<XProcPortInfo>it = ports.iterator();
 		boolean hasAllRequiredArgs = true;
@@ -241,9 +227,7 @@ public class Validator {
 	 * @param script the script
 	 * @return true, if successful
 	 */
-	private static boolean validateOutputPortData(Iterable<XProcPortInfo> ports, NodeList nodes, XProcScript script) {
-
-
+	private static boolean validateJobRequestOutputPortData(Iterable<XProcPortInfo> ports, NodeList nodes, XProcScript script) {
 		Iterator<XProcPortInfo>it = ports.iterator();
 		boolean hasAllRequiredArgs = true;
 
@@ -370,4 +354,5 @@ public class Validator {
 		}
 		return true;
 	}
+
 }

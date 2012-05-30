@@ -66,7 +66,7 @@ public class XmlFormatter {
 		toXmlElm(job, doc, msgSeq, baseUri, true);
 
 		// for debugging only
-		if (!Validator.validateXml(doc, Validator.jobSchema)) {
+		if (!Validator.validateXmlAgainstSchema(doc, Validator.JOB_SCHEMA_URL)) {
 			logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
 		}
 
@@ -98,7 +98,7 @@ public class XmlFormatter {
 		}
 
 		// for debugging only
-		if (!Validator.validateXml(doc, Validator.jobsSchema)) {
+		if (!Validator.validateXmlAgainstSchema(doc, Validator.JOBS_SCHEMA_URL)) {
 			logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
 		}
 
@@ -120,7 +120,7 @@ public class XmlFormatter {
 		toXmlElm(script, doc, baseUri, true);
 
 		// for debugging only
-		if (!Validator.validateXml(doc, Validator.scriptSchema)) {
+		if (!Validator.validateXmlAgainstSchema(doc, Validator.SCRIPT_SCHEMA_URL)) {
 			logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
 		}
 
@@ -149,7 +149,7 @@ public class XmlFormatter {
 		}
 
 		// for debugging only
-		if (!Validator.validateXml(doc, Validator.scriptsSchema)) {
+		if (!Validator.validateXmlAgainstSchema(doc, Validator.SCRIPTS_SCHEMA_URL)) {
 			logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
 		}
 
@@ -161,7 +161,7 @@ public class XmlFormatter {
 		XmlFormatter.toXmlElm(client, doc, baseUri);
 
 		// for debugging only
-		if (!Validator.validateXml(doc, Validator.clientSchema)) {
+		if (!Validator.validateXmlAgainstSchema(doc, Validator.CLIENT_SCHEMA_URL)) {
 			XmlFormatter.logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
 		}
 
@@ -180,7 +180,7 @@ public class XmlFormatter {
 		}
 
 		// for debugging only
-		if (!Validator.validateXml(doc, Validator.clientsSchema)) {
+		if (!Validator.validateXmlAgainstSchema(doc, Validator.CLIENTS_SCHEMA_URL)) {
 			XmlFormatter.logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
 		}
 
