@@ -1,6 +1,8 @@
 package org.daisy.pipeline.webservice;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -9,6 +11,12 @@ import java.net.URL;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,17 +50,15 @@ public class XmlValidator {
 
 		// validator is not thread-safe
 		// http://www.thaiopensource.com/relaxng/api/jing/com/thaiopensource/validate/Validator.html
-		com.thaiopensource.validate.Validator validator = createValidator(schemaUrl);
+		com.thaiopensource.validate.Validator validator = createValidator(schemaUrl, handler);
 
 		ContentHandler contentHandler = validator.getContentHandler();
 		handler.setContentHandler(contentHandler);
 
-		InputSource is = new InputSource(schemaUrl.toString());
-
-		SAXParser parser = null;
 		try {
-			parser = createParser();
-			parser.parse(is, handler);
+			InputSource documentInput = DOMtoInputSource(document);
+			SAXParser parser = createParser();
+			parser.parse(documentInput, handler);
 		} catch (ParserConfigurationException e) {
 			logger.error(e.getMessage());
 			return false;
@@ -62,11 +68,30 @@ public class XmlValidator {
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 			return false;
+		} catch (TransformerConfigurationException e) {
+			logger.error(e.getMessage());
+			return false;
+		} catch (TransformerException e) {
+			logger.error(e.getMessage());
+			return false;
+		} catch (TransformerFactoryConfigurationError e) {
+			logger.error(e.getMessage());
+			return false;
 		}
 
-		return handler.hasErrors();
+		return !handler.hasErrors();
 	}
 
+	// create an input source from a DOM document
+	private InputSource DOMtoInputSource(Document doc) throws TransformerConfigurationException, TransformerException, TransformerFactoryConfigurationError {
+		DOMSource source = new DOMSource(doc);
+		StringWriter xmlAsWriter = new StringWriter();
+		StreamResult result = new StreamResult(xmlAsWriter);
+		TransformerFactory.newInstance().newTransformer().transform(source, result);
+		StringReader xmlReader = new StringReader(xmlAsWriter.toString());
+		InputSource is = new InputSource(xmlReader);
+		return is;
+	}
 	private SAXParser createParser() throws ParserConfigurationException, SAXException {
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		factory.setNamespaceAware(true);
@@ -74,21 +99,21 @@ public class XmlValidator {
 		return parser;
 	}
 
-	private com.thaiopensource.validate.Validator createValidator(URL schemaUrl) {
+	private com.thaiopensource.validate.Validator createValidator(URL schemaUrl, HandlerImpl handler) {
 		try {
+			// make the Schema object
 			InputSource schemaSource = new InputSource(schemaUrl.toString());
-			PropertyMapBuilder mapBuilder = new PropertyMapBuilder();
-			mapBuilder.put(ValidateProperty.RESOLVER, BasicResolver.getInstance());
-			mapBuilder.put(ValidateProperty.ERROR_HANDLER, new DraconianErrorHandler());
-
+			PropertyMapBuilder schemaMapBuilder = new PropertyMapBuilder();
+			schemaMapBuilder.put(ValidateProperty.RESOLVER, BasicResolver.getInstance());
+			schemaMapBuilder.put(ValidateProperty.ERROR_HANDLER, new DraconianErrorHandler());
 			SchemaReader schemaReader = CompactSchemaReader.getInstance();
+			com.thaiopensource.validate.Schema schema = schemaReader.createSchema(schemaSource, schemaMapBuilder.toPropertyMap());
 
-			com.thaiopensource.validate.Schema schema = schemaReader.createSchema(schemaSource, mapBuilder.toPropertyMap());
-
-			mapBuilder = new PropertyMapBuilder();
-			mapBuilder.put(ValidateProperty.ERROR_HANDLER, new DraconianErrorHandler());
-			com.thaiopensource.validate.Validator validator = schema.createValidator(mapBuilder.toPropertyMap());
-
+			// make the Validator
+			PropertyMapBuilder validatorMapBuilder = new PropertyMapBuilder();
+			// send validation errors to our ErrorHandler overrides
+			validatorMapBuilder.put(ValidateProperty.ERROR_HANDLER, handler);
+			com.thaiopensource.validate.Validator validator = schema.createValidator(validatorMapBuilder.toPropertyMap());
 			return validator;
 		} catch (RuntimeException e) {
 			logger.error(e.getMessage());

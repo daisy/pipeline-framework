@@ -287,17 +287,14 @@ public class JobsResource extends AuthenticatedResource {
 
 		Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
 
-		// get the ID from the href attr value
+		// TODO eventually we might want to have an href-script ID lookup table
+		// but for now, we'll get the script ID from the last part of the URL
 		String scriptId = scriptElm.getAttribute("href");
 		if (scriptId.endsWith("/")) {
 		    scriptId = scriptId.substring(0, scriptId.length() - 1);
 		}
 		int idx = scriptId.lastIndexOf('/');
 		scriptId = scriptId.substring(idx+1);
-
-		// append the namespace
-		// TODO use a QName and only resolve un-namespaced IDs to use our PX namespace
-		scriptId = "px:" + scriptId;
 
 		// get the script from the ID
 		ScriptRegistry scriptRegistry = ((PipelineWebService)getApplication()).getScriptRegistry();

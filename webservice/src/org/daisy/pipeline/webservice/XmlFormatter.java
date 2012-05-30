@@ -243,6 +243,7 @@ public class XmlFormatter {
 					inputElm.setAttribute("sequence", "false");
 				}
 
+
 				XProcPortMetadata meta = script
 						.getPortMetadata(input.getName());
 				inputElm.setAttribute("mediaType", meta.getMediaType());
@@ -254,34 +255,43 @@ public class XmlFormatter {
 			while (it_options.hasNext()) {
 				XProcOptionInfo option = it_options.next();
 
-				Element optionElm = doc.createElementNS(
-						XmlFormatter.NS_PIPELINE_DATA, "option");
+				Element optionElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "option");
 				optionElm.setAttribute("name", option.getName().toString());
+
 				if (option.isRequired()) {
 					optionElm.setAttribute("required", "true");
-				} else {
+				}
+				else {
 					optionElm.setAttribute("required", "false");
 				}
 
-				XProcOptionMetadata meta = script.getOptionMetadata(option
-						.getName());
+				XProcOptionMetadata meta = script.getOptionMetadata(option.getName());
 				optionElm.setAttribute("type", meta.getType());
 				optionElm.setAttribute("mediaType", meta.getMediaType());
 				optionElm.setAttribute("desc", meta.getDescription());
 
+
+				if (meta.isOrdered()) {
+					optionElm.setAttribute("ordered", "true");
+				}
+				else {
+					optionElm.setAttribute("ordered", "false");
+				}
+
 				if (meta.isSequence()) {
 					optionElm.setAttribute("sequence", "true");
-
-					if (meta.isOrdered()) {
-						optionElm.setAttribute("ordered", "true");
-					}
-					else {
-						optionElm.setAttribute("ordered", "false");
-					}
 				}
 				else {
 					optionElm.setAttribute("sequence", "false");
 				}
+
+				if (meta.isOrdered()) {
+					optionElm.setAttribute("ordered", "true");
+				}
+				else {
+					optionElm.setAttribute("ordered", "false");
+				}
+
 				rootElm.appendChild(optionElm);
 			}
 
@@ -294,7 +304,8 @@ public class XmlFormatter {
 
 				if (output.isSequence() == true) {
 					outputElm.setAttribute("sequence", "true");
-				} else {
+				}
+				else {
 					outputElm.setAttribute("sequence", "false");
 				}
 				XProcPortMetadata meta = script.getPortMetadata(output
