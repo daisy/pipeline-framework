@@ -7,11 +7,11 @@
     <homepage>http://code.google.com/p/daisy-pipeline/wiki/DTBookToZedAI</homepage>
     <input
         desc="One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed."
-        mediaType="application/x-dtbook+xml" name="source" sequenceAllowed="true"/>
+        mediaType="application/x-dtbook+xml" name="source" sequence="true"/>
     <option desc="Filename for the generated MODS file" mediaType="" name="opt-mods-filename"
-        required="false" type="string"/>
+        required="false" type="string" ordered="false" sequence="false"/>
     <option desc="Filename for the generated CSS file" mediaType="" name="opt-css-filename"
-        required="false" type="string"/>
+        required="false" type="string" ordered="false" sequence="false"/>
     <option desc="Filename for the generated ZedAI file" mediaType="" name="opt-zedai-filename"
-        required="false" type="string"/>
+        required="false" type="string" ordered="false" sequence="false"/>
 </script>

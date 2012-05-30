@@ -3,7 +3,7 @@
     <script href='http://example.org/ws/scripts/dtbook-to-zedai'/>
     <input name='source'>
         <!-- file @src is referring to a file inside a separate folder or archive -->
-        <file src='./dtbook-basic.xml'/>
+        <item value='./dtbook-basic.xml'/>
     </input>
     <option name='opt-mods-filename'>the-mods-file.xml</option>
     <option name='opt-css-filename'>the-css-file.css</option>

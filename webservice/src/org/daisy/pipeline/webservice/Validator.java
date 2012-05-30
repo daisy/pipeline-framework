@@ -6,15 +6,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Iterator;
 
-import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
@@ -29,7 +23,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class Validator.
@@ -40,78 +33,30 @@ public class Validator {
 	// all the schema URLs are included here so that during testing, the web service can validate
 	// its own output by calling validateXml with the appropriate schema URL.
 	/** The Constant scriptSchema. */
-	public static final URL scriptSchema = Validator.class.getResource("resources/script.xsd");
+	public static final URL scriptSchema = Validator.class.getResource("resources/script.rnc");
 
 	/** The Constant scriptsSchema. */
-	public static final URL scriptsSchema = Validator.class.getResource("resources/scripts.xsd");
+	public static final URL scriptsSchema = Validator.class.getResource("resources/scripts.rnc");
 
 	/** The Constant jobSchema. */
-	public static final URL jobSchema = Validator.class.getResource("resources/job.xsd");
+	public static final URL jobSchema = Validator.class.getResource("resources/job.rnc");
 
 	/** The Constant jobRequestSchema. */
-	public static final URL jobRequestSchema = Validator.class.getResource("resources/jobRequest.xsd");
+	public static final URL jobRequestSchema = Validator.class.getResource("resources/jobRequest.rnc");
 
 	/** The Constant jobsSchema. */
-	public static final URL jobsSchema = Validator.class.getResource("resources/jobs.xsd");
+	public static final URL jobsSchema = Validator.class.getResource("resources/jobs.rnc");
 
-	/** The Constant logSchema. */
-	public static final URL logSchema = Validator.class.getResource("resources/log.xsd");
+	public static final URL clientSchema = Validator.class.getResource("resources/client.rnc");
 
-	public static final URL clientSchema = Validator.class.getResource("resources/client.xsd");
-
-	public static final URL clientsSchema = Validator.class.getResource("resources/clients.xsd");
+	public static final URL clientsSchema = Validator.class.getResource("resources/clients.rnc");
 
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(Validator.class.getName());
 
-	// If the Document isn't namespace-aware, this will likely fail
-	/**
-	 * Validate xml.
-	 *
-	 * @param document the document
-	 * @param schemaUrl the schema url
-	 * @return true, if successful
-	 */
 	public static boolean validateXml(Document document, URL schemaUrl) {
-
-		if (document == null) {
-			logger.error("Could not validate null document");
-			return false;
-		}
-
-		if (schemaUrl == null) {
-			logger.error("Could not validate -- no schema given.");
-			return false;
-		}
-
-		XmlResourceResolver resolver = new XmlResourceResolver();
-		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		factory.setResourceResolver(resolver);
-	    Source schemaFile;
-	    InputStream is = null;
-	    try {
-			is = schemaUrl.openStream();
-			schemaFile = new StreamSource(is);
-		    Schema schema = factory.newSchema(schemaFile);
-
-		    javax.xml.validation.Validator validator = schema.newValidator();
-		    validator.validate(new DOMSource(document));
-		    is.close();
-		    return true;
-
-		} catch (IOException e3) {
-			logger.error(e3.getMessage());
-		} catch (SAXException e) {
-			logger.error(e.getMessage());
-		} finally {
-			try {
-				is.close();
-			} catch (IOException e) {
-				logger.error(e.getMessage());
-			}
-		}
-
-		return false;
+		XmlValidator validator = new XmlValidator();
+		return validator.validate(document, schemaUrl);
 	}
 
 	/**

@@ -4,7 +4,13 @@ Bundle-Name: Webservice
 Bundle-SymbolicName: org.daisy.pipeline.webservice;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: javax.crypto,
+Import-Package: com.thaiopensource.resolver;version="1.0.0",
+ com.thaiopensource.util;version="1.0.0",
+ com.thaiopensource.validate,
+ com.thaiopensource.validate.auto;version="1.0.0",
+ com.thaiopensource.validate.rng;version="1.0.0",
+ com.thaiopensource.xml.sax;version="1.0.0",
+ javax.crypto,
  javax.crypto.spec,
  javax.servlet.http,
  javax.xml,
