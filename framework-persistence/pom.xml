@@ -27,4 +27,19 @@
     </dependency>
   </dependencies>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Service-Component>OSGI-INF/event-bus-listener.xml, OSGI-INF/persistent-monitor.xml, OSGI-INF/pipeline-persistence.xml</Service-Component>
+            <Meta-Persistence>META-INF/persistence.xml</Meta-Persistence>
+            <DynamicImport-Package>*</DynamicImport-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
