@@ -6,24 +6,34 @@ import org.daisy.pipeline.persistence.Database;
 
 import com.google.common.eventbus.Subscribe;
 
-
 /**
  * This class receives message events and stores them in memory and gives access
  * to them via the accessor interface. The class that is interested in
  * processing a memoryMessage
  * 
  */
-public class PersistentMessageEventListener{
-	
+public class PersistentMessageEventListener {
+
 	EventBusProvider eventBusProvider;
-	
-	public void setEventBusProvider(EventBusProvider eventBusProvider){
-		this.eventBusProvider=eventBusProvider;
+	Database datbase;
+
+	public void setEventBusProvider(EventBusProvider eventBusProvider) {
+		this.eventBusProvider = eventBusProvider;
 		this.eventBusProvider.get().register(this);
 	}
-	@Subscribe
-	public void handleMessage(Message msg){
-		new Database().addObject(new PersistentMessage(msg));
+
+	public synchronized void setDatabase(Database database) {
+		this.datbase = database;
 	}
-	
+	public synchronized void unsetDatabase() {
+		this.datbase = null;
+	}
+
+	@Subscribe
+	public synchronized void handleMessage(Message msg) {
+		if (datbase != null) {
+			datbase.addObject(new PersistentMessage(msg));
+		}
+	}
+
 }

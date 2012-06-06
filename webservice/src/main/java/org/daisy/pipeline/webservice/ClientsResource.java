@@ -7,7 +7,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.pipeline.persistence.webservice.Client;
+import org.daisy.pipeline.webservice.clients.Client;
+import org.daisy.pipeline.webservice.clients.SimpleClient;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -45,7 +46,7 @@ public class ClientsResource extends AdminResource {
 
     	setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
-				XmlFormatter.clientsToXml(Client.getAll(),
+				XmlFormatter.clientsToXml(webservice().getClientStore().getAll(),
 						getRootRef().toString()));
 
 		return dom;
@@ -96,18 +97,11 @@ public class ClientsResource extends AdminResource {
 		}
 
 		Element root = doc.getDocumentElement();
-		String newid = root.getAttribute("id");
-		String newcontact = root.getAttribute("contact");
-		String newsecret = root.getAttribute("secret");
-		String newrole = root.getAttribute("role");
+		Client newClient = new SimpleClient(root.getAttribute("id"),
+				root.getAttribute("secret"), Client.Role.valueOf(root
+						.getAttribute("role")), root.getAttribute("contact"));
 
-		Client newClient = new Client();
-		newClient.setContactInfo(newcontact);
-		newClient.setId(newid);
-		newClient.setRole(Client.Role.valueOf(newrole));
-		newClient.setSecret(newsecret);
-
-		if (!DatabaseHelper.getInstance().addClient(newClient)) {
+		if (!webservice().getClientStore().add(newClient)) {
 			// the client ID was probably not unique
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return null;

@@ -7,8 +7,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.pipeline.persistence.Database;
-import org.daisy.pipeline.persistence.webservice.Client;
+import org.daisy.pipeline.webservice.clients.Client;
+import org.daisy.pipeline.webservice.clients.SimpleClient;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -36,7 +36,7 @@ public class ClientResource extends AdminResource {
 			return;
 		}
 		String idParam = (String) getRequestAttributes().get("id");
-		client = Client.getClient(idParam);
+		client = webservice().getClientStore().get(idParam);
 	}
 
     /**
@@ -78,7 +78,7 @@ public class ClientResource extends AdminResource {
     	}
 
 
-		if (new Database().deleteObject(client)) {
+		if (webservice().getClientStore().delete(client)) {
 			setStatus(Status.SUCCESS_NO_CONTENT);
 		}
 		else {
@@ -138,19 +138,10 @@ public class ClientResource extends AdminResource {
 			return null;
 		}
 
-		Client newClient = new Client();
 		Element root = doc.getDocumentElement();
-		String newid = root.getAttribute("id");
-		String newcontact = root.getAttribute("contact");
-		String newsecret = root.getAttribute("secret");
-		String newrole = root.getAttribute("role");
-
-		client.setId(newid);
-		client.setSecret(newsecret);
-		client.setRole(Client.Role.valueOf(newrole));
-		client.setContactInfo(newcontact);
-
-		new Database().updateObject(client);
+		// TODO add setters to the Client interface instead ?
+		Client newClient = new SimpleClient(root.getAttribute("id"),root.getAttribute("secret"),Client.Role.valueOf(root.getAttribute("role")),root.getAttribute("contact"));
+		webservice().getClientStore().update(newClient);
 
 		setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,

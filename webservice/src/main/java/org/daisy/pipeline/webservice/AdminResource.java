@@ -1,6 +1,7 @@
 package org.daisy.pipeline.webservice;
 
-import org.daisy.pipeline.persistence.webservice.Client;
+import org.daisy.pipeline.webservice.clients.Client;
+
 
 
 public class AdminResource extends AuthenticatedResource {
@@ -9,28 +10,14 @@ public class AdminResource extends AuthenticatedResource {
 	@Override
 	public void doInit() {
 		super.doInit();
-		if (((PipelineWebService)getApplication()).isAuthenticationEnabled() == false) {
-			// if authentication is not enabled, then all requests can be considered automatically authorized
-			isAuthorized = true;
-		}
-		else {
-
-			isAuthorized = super.isAuthenticated() && authorizeAsAdmin();
-		}
+		// Note: if authentication is not enabled, then all requests can be considered automatically authorized
+		isAuthorized = (!webservice().isAuthenticationEnabled()) || (super.isAuthenticated() && authorizeAsAdmin());
 	}
 
 	private boolean authorizeAsAdmin() {
-
 		String id = getQuery().getFirstValue("authid");
-
-		Client client = Client.getClient(id);
-		if (client == null) {
-			return false;
-		}
-		if (client.getRole() == Client.Role.ADMIN) {
-			return true;
-		}
-		return false;
+		Client client = webservice().getClientStore().get(id);
+		return client!=null && Client.Role.ADMIN.equals(client.getRole());
 	}
 
 	public boolean isAuthorized() {

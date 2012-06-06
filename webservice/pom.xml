@@ -63,10 +63,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-persistence</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
       <artifactId>xproc-api</artifactId>
     </dependency>
   </dependencies>

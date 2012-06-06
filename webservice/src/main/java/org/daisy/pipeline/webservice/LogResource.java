@@ -37,7 +37,7 @@ public class LogResource extends AuthenticatedResource {
 			return;
 		}
 
-		JobManager jobMan = ((PipelineWebService)getApplication()).getJobManager();
+		JobManager jobMan = webservice().getJobManager();
         String idParam = (String) getRequestAttributes().get("id");
 
         try {

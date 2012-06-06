@@ -3,8 +3,8 @@
 	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
     <persistence-unit name="pipeline-pu" transaction-type="RESOURCE_LOCAL">
     	<class>org.daisy.pipeline.persistence.messaging.PersistentMessage</class>
-        <class>org.daisy.pipeline.persistence.webservice.Client</class>
-        <class>org.daisy.pipeline.persistence.webservice.WSRequestLogEntry</class>
+        <class>org.daisy.pipeline.persistence.webservice.PersistentClient</class>
+        <class>org.daisy.pipeline.persistence.webservice.PersistentRequestLogEntry</class>
         
        <properties>
          	<property name="eclipselink.ddl-generation" value="create-tables"/>

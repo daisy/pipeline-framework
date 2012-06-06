@@ -4,18 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.daisy.pipeline.webservice.requestlog.RequestLogEntry;
 
 // Use this class to record request nonces and timestamps
 @Entity
 //@NoSql(dataFormat=DataFormatType.MAPPED)
-public class WSRequestLogEntry {
+public class PersistentRequestLogEntry {
 
-	/** The logger. */
-	private static Logger logger = LoggerFactory
-			.getLogger(WSRequestLogEntry.class.getName());
-
+	//FIXME id should depend on the other fields
 	@Id
 	@GeneratedValue
 	private String internalId;
@@ -29,13 +25,13 @@ public class WSRequestLogEntry {
 	private String nonce;
 	private String timestamp;
 
-	public WSRequestLogEntry() {
+	public PersistentRequestLogEntry() {
 	}
 
-	public WSRequestLogEntry(String clientId, String nonce, String timestamp) {
-		this.clientId = clientId;
-		this.nonce = nonce;
-		this.timestamp = timestamp;
+	public PersistentRequestLogEntry(RequestLogEntry entry) {
+		this.clientId = entry.getClientId();
+		this.nonce = entry.getNonce();
+		this.timestamp = entry.getTimestamp();
 	}
 
 	public String getClientId() {

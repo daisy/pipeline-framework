@@ -14,7 +14,7 @@ public class Database {
 	private EntityManager entityManager = null;
 
 	private EntityManagerFactory emf;
-
+	
 	/** The logger. */
 	private static Logger logger = LoggerFactory
 			.getLogger(Database.class.getName());

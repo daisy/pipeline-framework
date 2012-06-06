@@ -29,14 +29,14 @@ public class ScriptsResource extends AuthenticatedResource {
 		if (!isAuthenticated()) {
 			return;
 		}
-		ScriptRegistry scriptRegistry = ((PipelineWebService)getApplication()).getScriptRegistry();
+		ScriptRegistry scriptRegistry = webservice().getScriptRegistry();
 		Iterable<XProcScriptService> unfilteredScripts = scriptRegistry.getScripts();
 		Iterator<XProcScriptService> it = unfilteredScripts.iterator();
 		scripts = new ArrayList<XProcScript>();
 
 		while (it.hasNext()) {
 			XProcScriptService unfilteredScript = it.next();
-			XProcScript script = (((PipelineWebService) getApplication()).isLocal()) ? unfilteredScript
+			XProcScript script = (webservice().isLocal()) ? unfilteredScript
 					.load() : XProcScriptFilter.INSTANCE
 					.filter(unfilteredScript.load());
 					scripts.add(script);

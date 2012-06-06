@@ -73,7 +73,7 @@ public class JobsResource extends AuthenticatedResource {
     		return null;
     	}
 
-		JobManager jobMan = ((PipelineWebService)getApplication()).getJobManager();
+		JobManager jobMan = webservice().getJobManager();
 		Document doc = XmlFormatter.jobsToXml(jobMan.getJobs(), getRootRef().toString());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
 		setStatus(Status.SUCCESS_OK);
@@ -140,7 +140,7 @@ public class JobsResource extends AuthenticatedResource {
 			}
         }
 
-		boolean isValid = Validator.validateJobRequest(doc, (PipelineWebService)getApplication());
+		boolean isValid = Validator.validateJobRequest(doc, webservice());
 
 		if (!isValid) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
@@ -173,7 +173,7 @@ public class JobsResource extends AuthenticatedResource {
 	 */
 	private MultipartRequestData processMultipart(Request request) {
 
-		String tmpdir = ((PipelineWebService) getApplication()).getTmpDir();
+		String tmpdir = webservice().getTmpDir();
 
 		// 1/ Create a factory for disk-based file items
         DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
@@ -297,7 +297,7 @@ public class JobsResource extends AuthenticatedResource {
 		scriptId = scriptId.substring(idx+1);
 
 		// get the script from the ID
-		ScriptRegistry scriptRegistry = ((PipelineWebService)getApplication()).getScriptRegistry();
+		ScriptRegistry scriptRegistry = webservice().getScriptRegistry();
 		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptId);
 		if (unfilteredScript == null) {
 			logger.error("Script not found");
@@ -317,7 +317,7 @@ public class JobsResource extends AuthenticatedResource {
 
 		XProcInput input = builder.build();
 
-		JobManager jobMan = ((PipelineWebService)getApplication()).getJobManager();
+		JobManager jobMan = webservice().getJobManager();
 		Job job = null;
 		if (zip != null){
 			ResourceCollection resourceCollection = new ZipResourceContext(zip);
@@ -407,7 +407,7 @@ public class JobsResource extends AuthenticatedResource {
 		Iterable<XProcOptionInfo> allOptions = script.getXProcPipelineInfo().getOptions();
 
 		Iterable<XProcOptionInfo> filteredOptions = null;
-		if (!((PipelineWebService) getApplication()).isLocal()) {
+		if (!webservice().isLocal()) {
 			filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
 		}
 

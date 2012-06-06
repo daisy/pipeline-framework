@@ -4,7 +4,6 @@ import org.restlet.data.Status;
 import org.restlet.resource.Get;
 
 public class HaltResource extends AdminResource {
-	private PipelineWebService service;
 	private long key;
 
 	@Override
@@ -14,7 +13,6 @@ public class HaltResource extends AdminResource {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return;
     	}
-		service = ((PipelineWebService) getApplication());
 		try {
 			key = Long.parseLong(getQuery().getFirstValue("haltkey"));
 		}
@@ -30,7 +28,7 @@ public class HaltResource extends AdminResource {
     		return;
     	}
 		try {
-			if (!service.shutDown(key)) {
+			if (!webservice().shutDown(key)) {
 				setStatus(Status.CLIENT_ERROR_FORBIDDEN);
 				return;
 			}

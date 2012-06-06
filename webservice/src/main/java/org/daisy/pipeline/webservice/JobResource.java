@@ -34,7 +34,7 @@ public class JobResource extends AuthenticatedResource {
 		if (!isAuthenticated()) {
 			return;
 		}
-		JobManager jobMan = ((PipelineWebService)getApplication()).getJobManager();
+		JobManager jobMan = webservice().getJobManager();
         String idParam = (String) getRequestAttributes().get("id");
         String msgSeqParam = getQuery().getFirstValue("msgSeq");
 
@@ -86,7 +86,7 @@ public class JobResource extends AuthenticatedResource {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 		}
 
-		JobManager jobMan = ((PipelineWebService)getApplication()).getJobManager();
+		JobManager jobMan = webservice().getJobManager();
 		if (jobMan.deleteJob(job.getId())!=null) {
 			setStatus(Status.SUCCESS_NO_CONTENT);
 		}

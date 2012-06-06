@@ -10,9 +10,10 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-import org.daisy.pipeline.persistence.Database;
-import org.daisy.pipeline.persistence.webservice.Client;
-import org.daisy.pipeline.persistence.webservice.WSRequestLogEntry;
+import org.daisy.pipeline.webservice.clients.Client;
+import org.daisy.pipeline.webservice.requestlog.RequestLog;
+import org.daisy.pipeline.webservice.requestlog.RequestLogEntry;
+import org.daisy.pipeline.webservice.requestlog.SimpleRequestLogEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,20 +21,21 @@ public class Authenticator {
 
 	private static Logger logger = LoggerFactory.getLogger(Authenticator.class.getName());
 
-	public static boolean authenticate(String authid, String hash, String timestamp, String nonce, String URI, long maxRequestTime) {
+	public static boolean authenticate(PipelineWebService webservice, String authid, String hash, String timestamp, String nonce, String URI, long maxRequestTime) {
 		// rules for hashing: use the whole URL string, minus the hash part (&sign=<some value>)
 		// important!  put the sign param last so we can easily strip it out
 
 		int idx = URI.indexOf("&sign=", 0);
 
 		if (idx > 1) {
+			Client client = webservice.getClientStore().get(authid);
 			// make sure the client exists
-			if (Client.getClient(authid) == null) {
+			if (client==null) {
 				logger.error(String.format("Client with auth ID %s not found", authid));
 				return false;
 			}
 			String hashuri = URI.substring(0, idx);
-			String clientSecret = getClientSecret(authid);
+			String clientSecret = getClientSecret(client,authid);
 			String serverHash = "";
 			try {
 				serverHash = calculateRFC2104HMAC(hashuri, clientSecret);
@@ -58,7 +60,7 @@ public class Authenticator {
 					logger.error("Request expired");
 					return false;
 				}
-				if (!checkValidNonce(authid, nonce, timestamp)) {
+				if (!checkValidNonce(webservice.getRequestLog(), client, nonce, timestamp)) {
 					logger.error("Invalid nonce");
 					return false;
 				}
@@ -76,37 +78,29 @@ public class Authenticator {
 
 
 	// nonces, along with timestamps, protect against replay attacks
-	private static boolean checkValidNonce(String authid, String nonce, String timestamp) {
-
-		Client client = Client.getClient(authid);
+	private static boolean checkValidNonce(RequestLog requestLog, Client client, String nonce, String timestamp) {
 		if (client == null) {
-			logger.warn(String.format("Client with auth ID %s not found", authid));
-			return false;
+			throw new IllegalArgumentException("Client is null");
 		}
 
-		WSRequestLogEntry entry = new WSRequestLogEntry(client.getId(), nonce, timestamp);
+		RequestLogEntry entry = new SimpleRequestLogEntry(client.getId(), nonce, timestamp);
 
 		// if this nonce was already used with this timestamp, don't accept it again
-		boolean isDuplicate = DatabaseHelper.getInstance().isDuplicate(entry);
-		if (isDuplicate) {
+		if (requestLog.contains(entry)) {
 			logger.warn("Duplicate nonce detected.");
 			return false;
+		} else {
+			// else, it is unique and therefore ok
+			requestLog.add(entry);
+			return true;
 		}
-
-		// else, it is unique and therefore ok
-		new Database().addObject(entry);
-		return true;
-
 	}
 
-	private static String getClientSecret(String authid) {
-
-		Client client = Client.getClient(authid);
+	private static String getClientSecret(Client client, String authid) {
 		if (client != null) {
 			return client.getSecret();
 		}
 		return "";
-
 	}
 
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";

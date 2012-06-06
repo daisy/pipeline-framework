@@ -7,6 +7,8 @@ import java.util.Random;
 
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.script.ScriptRegistry;
+import org.daisy.pipeline.webservice.clients.ClientStore;
+import org.daisy.pipeline.webservice.requestlog.RequestLog;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
@@ -68,6 +70,12 @@ public class PipelineWebService extends Application {
 	/** The script registry. */
 	private ScriptRegistry scriptRegistry;
 
+    /** The Client Store **/
+	private ClientStore clientStore;
+
+	/** The Request Log **/
+	private RequestLog requestLog;
+
 	private long shutDownKey=0L;
 
 	private BundleContext bundleCtxt;
@@ -100,7 +108,11 @@ public class PipelineWebService extends Application {
 		bundleCtxt=ctxt;
 		readOptions();
 		if (isAuthenticationEnabled()) {
-			DatabaseHelper.getInstance().addTestData();
+			// TODO populate some test client
+			// client.setId("clientid");
+			// client.setSecret("supersecret");
+			// client.setContactInfo("me@example.org");
+			// client.setRole(PersistentClient.Role.ADMIN);
 		}
 		logger.info(String.format("Starting webservice on port %d",
 				portNumber));
@@ -233,6 +245,38 @@ public class PipelineWebService extends Application {
 	 */
 	public void setScriptRegistry(ScriptRegistry scriptRegistry) {
 		this.scriptRegistry = scriptRegistry;
+	}
+
+	/**
+	 * Gets the client store
+	 *
+	 * @return the client store
+	 */
+	public ClientStore getClientStore() {
+		return clientStore;
+	}
+
+	/**
+	 * Sets the client store
+	 *
+	 * @param clientStore the new client store
+	 */
+	public void setClientStore(ClientStore clientStore) {
+		this.clientStore = clientStore;
+	}
+
+	/**
+	 * @return the requests log
+	 */
+	public RequestLog getRequestLog() {
+		return requestLog;
+	}
+
+	/**
+	 * @param requestLog the requests log to set
+	 */
+	public void setRequestLog(RequestLog requestLog) {
+		this.requestLog = requestLog;
 	}
 
 	private void readOptions() {

@@ -31,7 +31,7 @@ public class ResultResource extends AuthenticatedResource {
 		if (!isAuthenticated()) {
 			return;
 		}
-		JobManager jobMan = ((PipelineWebService)getApplication()).getJobManager();
+		JobManager jobMan = webservice().getJobManager();
         String idParam = (String) getRequestAttributes().get("id");
         JobId id = JobIdFactory.newIdFromString(idParam);
         job = jobMan.getJob(id);

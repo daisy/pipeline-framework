@@ -3,19 +3,13 @@ package org.daisy.pipeline.persistence.webservice;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.NoResultException;
 
-import org.daisy.pipeline.persistence.Database;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.daisy.pipeline.webservice.clients.Client;
+import org.daisy.pipeline.webservice.clients.Client.Role;
 
 @Entity
 // @NoSql(dataFormat=DataFormatType.MAPPED)
-public class Client {
-
-	/** The logger. */
-	private static Logger logger = LoggerFactory.getLogger(Client.class
-			.getName());
+public class PersistentClient {
 
 	@Id
 	@GeneratedValue
@@ -25,28 +19,28 @@ public class Client {
 		return internalId;
 	}
 
-	public enum Role {
+	public enum PersistentRole {
 		ADMIN, CLIENTAPP
 	}
 
 	// the fields for each client object
 	private String id;
 	private String secret;
-	private Role role = Role.CLIENTAPP;
+	private PersistentRole role = PersistentRole.CLIENTAPP;
 
 	// in the future, use a separate table to list contact information for
 	// client app maintainers
 	// with a single field, we'll just store email info
 	private String contactInfo;
 
-	public Client() {
+	public PersistentClient() {
 	}
 
-	public Client(String id, String secret, Role role, String contactInfo) {
-		this.id = id;
-		this.secret = secret;
-		this.role = role;
-		this.contactInfo = contactInfo;
+	public PersistentClient(Client client) {
+		this.id = client.getId();
+		this.secret = client.getSecret();
+		this.role = PersistentRole.valueOf(client.getRole().name());
+		this.contactInfo = client.getContactInfo();
 	}
 
 	public String getId() {
@@ -66,11 +60,11 @@ public class Client {
 	}
 
 	public Role getRole() {
-		return role;
+		return Role.valueOf(role.name());
 	}
 
 	public void setRole(Role role) {
-		this.role = role;
+		this.role = PersistentRole.valueOf(role.name());
 	}
 
 	public String getContactInfo() {
@@ -79,21 +73,6 @@ public class Client {
 
 	public void setContactInfo(String contactInfo) {
 		this.contactInfo = contactInfo;
-	}
-
-	public static Iterable<Client> getAll() {
-		String q = String.format("select c from Client as c");
-		return new Database().runQuery(q, Client.class);
-	}
-
-	public static Client getClient(String id) {
-		String q = String.format("select c from Client as c where c.id='%s'",
-				id);
-		try {
-			return new Database().getFirst(q, Client.class);
-		} catch (NoResultException e) { 
-			return null;
-		}
 	}
 
 }

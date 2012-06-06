@@ -79,22 +79,6 @@ public class PersistentMessage implements Message{
 	
 	public PersistentMessage(){};
 	
-	
-	public PersistentMessage(Throwable throwable, String text, PersistentLevel level,
-			Date timeStamp, int sequence, String jobId, int line, int column,
-			String file) {
-		super();
-		this.throwable = throwable;
-		this.text = text;
-		this.level = level;
-		this.timeStamp = timeStamp;
-		this.sequence = sequence;
-		this.jobId = jobId;
-		this.line = line;
-		this.column = column;
-		this.file = file;
-	}
-	
 	public PersistentMessage(Message other){
 		this.throwable = other.getThrowable();
 		this.text = other.getText();
