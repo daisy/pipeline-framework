@@ -191,7 +191,7 @@ goto CLASSPATH_END
 : APPEND_TO_CLASSPATH
 set filename=%~1
 set suffix=%filename:~-4%
-if %suffix% equ .jar set CLASSPATH=%CLASSPATH%;%PIPELINE2_HOME%\system\bootsrap\%filename%
+if %suffix% equ .jar set CLASSPATH=%CLASSPATH%;%PIPELINE2_HOME%\system\bootstrap\%filename%
 goto :EOF
 
 :CLASSPATH_END

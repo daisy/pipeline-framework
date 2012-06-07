@@ -269,7 +269,7 @@ setupDefaults() {
     fi
 
     # Add the jars in the lib dir
-    for file in "$PIPELINE2_HOME"/system/boostrap/*.jar
+    for file in "$PIPELINE2_HOME"/system/bootstrap/*.jar
     do
         if [ -z "$CLASSPATH" ]; then
             CLASSPATH="$file"
@@ -320,7 +320,7 @@ init() {
 }
 
 run() {
-    # OPTS="-Dkaraf.startLocalConsole=true -Dkaraf.startRemoteShell=true"
+    OPTS="-Dorg.daisy.pipeline.ws.local=true -Dorg.daisy.pipeline.ws.authentication=false"
     MAIN=org.apache.felix.main.Main
     case "$1" in
         # 'stop')
@@ -331,7 +331,7 @@ run() {
         #     shift
         #     ;;
         'remote')
-            # OPTS="-Dkaraf.startLocalConsole=false -Dkaraf.startRemoteShell=true"
+            OPTS="-Dorg.daisy.pipeline.ws.local=false -Dorg.daisy.pipeline.ws.authentication=true"
             shift
             ;;
         'local')
