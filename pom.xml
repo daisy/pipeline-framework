@@ -469,6 +469,11 @@
       https://github.com/restlet/restlet-framework-java/issues/481
      -->
     <repository>
+      <id>central</id>
+      <name>Maven Central</name>
+      <url>http://repo.maven.apache.org/maven2/</url>
+    </repository>
+    <repository>
       <id>restlet-repo</id>
       <name>Public online Restlet repository</name>
       <url>http://maven.restlet.org</url>
