@@ -173,7 +173,7 @@ public class Validator {
 			boolean validArg = false;
 			// input elements should be of one of two forms:
 			// <input name="in1">
-			//   <file src="./path/to/file/book.xml/>
+			//   <item value="./path/to/file/book.xml/>
 			//   ...
 			// </input>
 			//
@@ -191,16 +191,16 @@ public class Validator {
 
 				// find the <input> XML element that matches this input arg name
 				if (elm.getAttribute("name").equals(arg.getName())) {
-					// <input> elements will have either <file> element children or <docwrapper> element children
-					NodeList fileNodes = elm.getElementsByTagName("file");
+					// <input> elements will have either <item> element children or <docwrapper> element children
+					NodeList itemNodes = elm.getElementsByTagName("item");
 					NodeList docwrapperNodes = elm.getElementsByTagName("docwrapper");
 
-					if (fileNodes.getLength() == 0 && docwrapperNodes.getLength() == 0) {
+					if (itemNodes.getLength() == 0 && docwrapperNodes.getLength() == 0) {
 						validArg = false;
 					}
 					else {
-						if (fileNodes.getLength() > 0) {
-							validArg = validateFileElements(fileNodes);
+						if (itemNodes.getLength() > 0) {
+							validArg = validateItemElements(itemNodes);
 						}
 						else {
 							validArg = validateDocwrapperElements(docwrapperNodes, script.getPortMetadata(arg.getName()).getMediaType());
@@ -237,14 +237,14 @@ public class Validator {
 			for (int i=0; i<nodes.getLength(); i++) {
 				Element elm = (Element)nodes.item(i);
 				if (elm.getAttribute("name").equals(arg.getName())) {
-					NodeList fileNodes = elm.getElementsByTagName("file");
+					NodeList itemNodes = elm.getElementsByTagName("item");
 
-					if (fileNodes.getLength() == 0) {
+					if (itemNodes.getLength() == 0) {
 						validArg = false;
 					}
 					else {
-						if (fileNodes.getLength() > 0) {
-							validArg = validateFileElements(fileNodes);
+						if (itemNodes.getLength() > 0) {
+							validArg = validateItemElements(itemNodes);
 						}
 					}
 					break;
@@ -291,21 +291,21 @@ public class Validator {
 		return isValid;
 	}
 
-	// make sure these @src attributes are non-empty
+	// make sure these @value attributes are non-empty
 	// nodes must contain at least one item
-	// all nodes must be <file> elements
+	// all nodes must be <item> elements
 	/**
-	 * Validate file elements.
+	 * Validate item elements.
 	 *
 	 * @param nodes the nodes
 	 * @return true, if successful
 	 */
-	private static boolean validateFileElements(NodeList nodes) {
+	private static boolean validateItemElements(NodeList nodes) {
 		boolean isValid = true;
 
 		for (int i = 0; i<nodes.getLength(); i++) {
 			Element elm = (Element)nodes.item(i);
-			isValid &= elm.getAttribute("src").trim().length() > 0;
+			isValid &= elm.getAttribute("value").trim().length() > 0;
 		}
 		return isValid;
 	}

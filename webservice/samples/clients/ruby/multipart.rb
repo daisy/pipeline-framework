@@ -40,7 +40,7 @@ module Multipart
     def to_multipart
       #return "Content-Disposition: form-data; name=\"#{CGI::escape(k)}\"; filename=\"#{filename}\"\r\n" + "Content-Transfer-Encoding: binary\r\n" + "Content-Type: #{MIME::Types.type_for(@filename)}\r\n\r\n" + content + "\r\n "
       # Don't escape mine
-      return "Content-Disposition: form-data; name=\"#{k}\"; filename=\"#{filename}\"\r\n" + "Content-Transfer-Encoding: binary\r\n" + "Content-Type: #{MIME::Types.type_for(@filename)}\r\n\r\n" + content + "\r\n"
+      return "Content-Disposition: form-data; name=\"#{k}\"; filename=\"#{filename}\"\r\n" + "Content-Transfer-Encoding: binary\r\n" + "Content-Type: #{MIME::Types.type_for(@filename)[0]}\r\n\r\n" + content + "\r\n"
     end
   end
 
@@ -58,6 +58,11 @@ module Multipart
         end
       }
       query = fp.collect {|p| "--" + BOUNDARY + "\r\n" + p.to_multipart }.join("") + "--" + BOUNDARY + "--"
+      path = "/tmp/trb"
+      open(path, "w") { |file|
+        file.write(query)
+      }
+      
       return query, HEADER
     end
   end

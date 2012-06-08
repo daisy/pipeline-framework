@@ -7,4 +7,5 @@
     <option name='mods-filename'>the-mods-file.xml</option>
     <option name='css-filename'>the-css-file.css</option>
     <option name='zedai-filename'>the-zedai-file.xml</option>
+    <option name='output-dir'>file:/tmp/dp2_jobs</option>
 </jobRequest>
