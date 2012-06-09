@@ -156,7 +156,7 @@
     <commons.fileupload.version>1.2.2</commons.fileupload.version>
     <commons.io.version>2.3</commons.io.version>
     <guava.version>11.0.1</guava.version>
-    <javax.persistence.version>2.0.3</javax.persistence.version>
+    <javax.persistence.version>2.0.0</javax.persistence.version>
     <javax.servlet-api.version>2.5</javax.servlet-api.version>
     <jing.version>20091111</jing.version>
     <junit.version>4.10</junit.version>
@@ -478,16 +478,5 @@
       <name>Public online Restlet repository</name>
       <url>http://maven.restlet.org</url>
     </repository>
-    <repository>
-      <id>eclipse-sonatype-repo</id>
-      <name>Eclipse Sonatype Maven repository</name>
-      <url>http://maven.eclipse.org/nexus/content/repositories/Sonatype</url>
-    </repository>
-  <repository>
-    <id>eclipse-gemini-repo</id>
-    <name>Eclipse Gemini Maven repository</name>
-    <url>http://download.eclipse.org/gemini/mvn/</url>
-    <!-- <url>http://download.eclipse.org/gemini/updates/jpa/1.0.0</url> -->
-  </repository>
   </repositories>
 </project>
