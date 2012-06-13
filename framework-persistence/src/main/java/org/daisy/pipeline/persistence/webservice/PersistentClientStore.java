@@ -10,7 +10,8 @@ import org.daisy.pipeline.webservice.clients.ClientStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PersistentClientStore implements ClientStore {
+//public class PersistentClientStore implements ClientStore {
+	public class PersistentClientStore implements ClientStore<PersistentClient> {
 	
 	private static Logger logger = LoggerFactory.getLogger(PersistentClientStore.class);
 	
@@ -24,14 +25,17 @@ public class PersistentClientStore implements ClientStore {
 		this.database = database;
 	}
 
-	public List<Client> getAll() {
-		String q = String.format("select c from Client as c");
-		//TODO check if no DB is present
-		//FIXME check type safety
-		return database.runQuery(q, Client.class);
+	@Override
+//	public Iterable<Client> getAll() {
+		public List<PersistentClient> getAll() {
+//		public <T extends Client> List<T> getAll() {
+//		List<Client> clients = database.runQuery("select c from Client as c", PersistentClient.class);
+		return database.runQuery("select c from Client as c", PersistentClient.class);
 	}
 
-	public PersistentClient getClient(String id) {
+
+	@Override
+	public PersistentClient get(String id) {
 		String q = String.format("select c from Client as c where c.id='%s'",
 				id);
 		try {
@@ -40,12 +44,6 @@ public class PersistentClientStore implements ClientStore {
 		} catch (NoResultException e) { 
 			return null;
 		}
-	}
-
-	@Override
-	public Client get(String id) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -72,5 +70,6 @@ public class PersistentClientStore implements ClientStore {
 		database.addObject(client);
 		return true;
 	}
+
 
 }

@@ -71,7 +71,7 @@ public class PipelineWebService extends Application {
 	private ScriptRegistry scriptRegistry;
 
     /** The Client Store **/
-	private ClientStore clientStore;
+	private ClientStore<?> clientStore;
 
 	/** The Request Log **/
 	private RequestLog requestLog;
@@ -252,7 +252,8 @@ public class PipelineWebService extends Application {
 	 *
 	 * @return the client store
 	 */
-	public ClientStore getClientStore() {
+	public  ClientStore<?> getClientStore() {
+//		public  <T extends Client>  ClientStore<T> getClientStore() {
 		return clientStore;
 	}
 
@@ -261,7 +262,7 @@ public class PipelineWebService extends Application {
 	 *
 	 * @param clientStore the new client store
 	 */
-	public void setClientStore(ClientStore clientStore) {
+	public void setClientStore(ClientStore<?> clientStore) {
 		this.clientStore = clientStore;
 	}
 

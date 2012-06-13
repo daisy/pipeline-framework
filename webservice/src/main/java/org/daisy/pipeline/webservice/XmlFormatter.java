@@ -168,17 +168,14 @@ public class XmlFormatter {
 		return doc;
 	}
 
-	public static Document clientsToXml(Iterable<Client> clients, String baseUri) {
+	public static Document clientsToXml(List<? extends Client> clients, String baseUri) {
 		Document doc = XmlFormatter.createDom("clients");
 		Element clientsElm = doc.getDocumentElement();
 		clientsElm.setAttribute("href", baseUri + PipelineWebService.CLIENTS_ROUTE);
-		Iterator<Client> it = clients.iterator();
-		while (it.hasNext()) {
-			Client client = it.next();
+		for (Client client : clients) {
 			Element clientElm = XmlFormatter.toXmlElm(client, doc, baseUri);
 			clientsElm.appendChild(clientElm);
 		}
-
 		// for debugging only
 		if (!Validator.validateXml(doc, Validator.clientsSchema)) {
 			XmlFormatter.logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));

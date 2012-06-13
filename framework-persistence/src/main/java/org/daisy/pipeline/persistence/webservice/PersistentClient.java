@@ -5,11 +5,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import org.daisy.pipeline.webservice.clients.Client;
-import org.daisy.pipeline.webservice.clients.Client.Role;
 
 @Entity
 // @NoSql(dataFormat=DataFormatType.MAPPED)
-public class PersistentClient {
+public class PersistentClient implements Client {
 
 	@Id
 	@GeneratedValue
