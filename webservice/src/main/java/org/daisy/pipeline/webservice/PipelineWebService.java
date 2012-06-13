@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.daisy.pipeline.job.JobManager;
+import org.daisy.pipeline.push.CallbackRegistry;
 import org.daisy.pipeline.script.ScriptRegistry;
+import org.daisy.pipeline.webservice.clients.Client;
 import org.daisy.pipeline.webservice.clients.ClientStore;
+import org.daisy.pipeline.webservice.clients.SimpleClient;
 import org.daisy.pipeline.webservice.requestlog.RequestLog;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -76,6 +79,8 @@ public class PipelineWebService extends Application {
 	/** The Request Log **/
 	private RequestLog requestLog;
 
+	private CallbackRegistry callbackRegistry;
+
 	private long shutDownKey=0L;
 
 	private BundleContext bundleCtxt;
@@ -107,13 +112,6 @@ public class PipelineWebService extends Application {
 	public void init(BundleContext ctxt) {
 		bundleCtxt=ctxt;
 		readOptions();
-		if (isAuthenticationEnabled()) {
-			// TODO populate some test client
-			// client.setId("clientid");
-			// client.setSecret("supersecret");
-			// client.setContactInfo("me@example.org");
-			// client.setRole(PersistentClient.Role.ADMIN);
-		}
 		logger.info(String.format("Starting webservice on port %d",
 				portNumber));
 		Component component = new Component();
@@ -247,6 +245,14 @@ public class PipelineWebService extends Application {
 		this.scriptRegistry = scriptRegistry;
 	}
 
+	public void setCallbackRegistry(CallbackRegistry callbackRegistry) {
+		this.callbackRegistry = callbackRegistry;
+	}
+
+	public CallbackRegistry getCallbackRegistry() {
+		return callbackRegistry;
+	}
+
 	/**
 	 * Gets the client store
 	 *
@@ -264,6 +270,13 @@ public class PipelineWebService extends Application {
 	 */
 	public void setClientStore(ClientStore<?> clientStore) {
 		this.clientStore = clientStore;
+
+		// TODO for testing only
+		if (isAuthenticationEnabled()) {
+			Client client = new SimpleClient("clientid", "supersecret", Client.Role.ADMIN, "me@example.org");
+			clientStore.add(client);
+		}
+
 	}
 
 	/**

@@ -5,7 +5,7 @@
         <!-- file @src is referring to a file inside a separate folder or archive -->
         <item value='./dtbook-basic.xml'/>
     </input>
-    <option name='opt-mods-filename'>the-mods-file.xml</option>
-    <option name='opt-css-filename'>the-css-file.css</option>
-    <option name='opt-zedai-filename'>the-zedai-file.xml</option>
+    <option name='mods-filename'>the-mods-file.xml</option>
+    <option name='css-filename'>the-css-file.css</option>
+    <option name='zedai-filename'>the-zedai-file.xml</option>
 </jobRequest>

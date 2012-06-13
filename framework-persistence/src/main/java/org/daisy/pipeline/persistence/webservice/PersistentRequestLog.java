@@ -17,9 +17,10 @@ public class PersistentRequestLog implements RequestLog {
 	@Override
 	public boolean contains(RequestLogEntry entry) {
 		String queryString = String
-				.format("SELECT requestentry FROM WSRequestLogEntry AS requestentry WHERE requestentry.clientId='%s' AND requestentry.nonce='%s' AND requestentry.timestamp='%s'",
-						entry.getClientId(), entry.getNonce(),
-						entry.getTimestamp());
+				.format(
+				"SELECT req FROM PersistentRequestLogEntry AS req WHERE req.clientId='%s' AND req.nonce='%s' AND req.timestamp='%s'",
+				entry.getClientId(), entry.getNonce(),
+				entry.getTimestamp());
 
 		//TODO check type safety
 		List<RequestLogEntry> list = database.runQuery(queryString,

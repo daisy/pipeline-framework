@@ -3,6 +3,8 @@ package org.daisy.pipeline.webservice;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipFile;
@@ -25,6 +27,8 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.ResourceCollection;
 import org.daisy.pipeline.job.ZipResourceContext;
+import org.daisy.pipeline.push.Callback;
+import org.daisy.pipeline.push.Callback.CallbackType;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
@@ -327,7 +331,30 @@ public class JobsResource extends AuthenticatedResource {
 			job = jobMan.newJob(script, input);
 		}
 
-		return  job;
+		NodeList callbacks = doc.getElementsByTagName("callback");
+		for (int i = 0; i<callbacks.getLength(); i++) {
+			Element elm = (Element)callbacks.item(i);
+			String href = elm.getAttribute("href");
+			CallbackType type = CallbackType.valueOf(elm.getAttribute("type"));
+			String frequency = elm.getAttribute("frequency");
+			Callback callback = null;
+			try {
+				if (frequency.length() > 0) {
+					callback = new Callback(job.getId(), new URI(href), type, Integer.parseInt(frequency));
+				}
+				else {
+					callback = new Callback(job.getId(), new URI(href), type);
+				}
+			} catch (NumberFormatException e) {
+				logger.warn("Cannot create callback: " + e.getMessage());
+			} catch (URISyntaxException e) {
+				logger.warn("Cannot create callback: " + e.getMessage());
+			}
+			if (callback != null) {
+				webservice().getCallbackRegistry().addCallback(callback);
+			}
+		}
+		return job;
 	}
 
 	/**

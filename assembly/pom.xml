@@ -326,6 +326,10 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>push-notifier</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
                   <artifactId>webservice</artifactId>
                 </artifactItem>
                 <artifactItem>

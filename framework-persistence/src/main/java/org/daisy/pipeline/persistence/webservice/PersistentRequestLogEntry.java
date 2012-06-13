@@ -9,7 +9,7 @@ import org.daisy.pipeline.webservice.requestlog.RequestLogEntry;
 // Use this class to record request nonces and timestamps
 @Entity
 //@NoSql(dataFormat=DataFormatType.MAPPED)
-public class PersistentRequestLogEntry {
+public class PersistentRequestLogEntry implements RequestLogEntry{
 
 	//FIXME id should depend on the other fields
 	@Id

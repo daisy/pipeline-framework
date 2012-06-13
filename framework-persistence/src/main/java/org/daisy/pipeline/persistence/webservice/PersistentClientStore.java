@@ -30,13 +30,13 @@ import org.slf4j.LoggerFactory;
 		public List<PersistentClient> getAll() {
 //		public <T extends Client> List<T> getAll() {
 //		List<Client> clients = database.runQuery("select c from Client as c", PersistentClient.class);
-		return database.runQuery("select c from Client as c", PersistentClient.class);
+		return database.runQuery("select c from PersistentClient as c", PersistentClient.class);
 	}
 
 
 	@Override
 	public PersistentClient get(String id) {
-		String q = String.format("select c from Client as c where c.id='%s'",
+		String q = String.format("select c from PersistentClient as c where c.id='%s'",
 				id);
 		try {
 			//TODO check if no DB is present
@@ -48,14 +48,25 @@ import org.slf4j.LoggerFactory;
 
 	@Override
 	public boolean delete(Client client) {
-		// TODO Auto-generated method stub
-		return false;
+		PersistentClient clientInDb = get(client.getId());
+		if (clientInDb == null) {
+			return false;
+		}
+		//TODO check if no DB is present
+		return database.deleteObject(clientInDb);
 	}
 
 	@Override
 	public void update(Client client) {
-		// TODO Auto-generated method stub
-		
+		PersistentClient clientInDb = get(client.getId());
+		if (clientInDb == null) {
+			return;
+		}
+		clientInDb.setContactInfo(client.getContactInfo());
+		clientInDb.setRole(client.getRole());
+		clientInDb.setSecret(client.getSecret());
+		//TODO check if no DB is present
+		database.updateObject(clientInDb);		
 	}
 
 	@Override
@@ -66,8 +77,8 @@ import org.slf4j.LoggerFactory;
 					client.getId()));
 			return false;
 		}
-
-		database.addObject(client);
+		//TODO check if no DB is present
+		database.addObject(new PersistentClient(client));
 		return true;
 	}
 

@@ -111,6 +111,7 @@
     <module>modules-registry</module>
     <module>persistence-derby</module>
     <module>persistence-mysql</module>
+    <module>push-notifier</module>
     <module>webservice</module>
     <module>woodstox-osgi-adapter</module>
     <module>xmlcatalog</module>
@@ -144,6 +145,7 @@
     <daisy.modules-registry.version>1.0-SNAPSHOT</daisy.modules-registry.version>
     <daisy.persistence-derby.version>1.0-SNAPSHOT</daisy.persistence-derby.version>
     <daisy.persistence-mysql.version>1.0-SNAPSHOT</daisy.persistence-mysql.version>
+    <daisy.push-notifier.version>1.0-SNAPSHOT</daisy.push-notifier.version>
     <daisy.webservice.version>1.0-SNAPSHOT</daisy.webservice.version>
     <daisy.woodstox-osgi-adapter.version>1.0-SNAPSHOT</daisy.woodstox-osgi-adapter.version>
     <daisy.xmlcatalog.version>1.0-SNAPSHOT</daisy.xmlcatalog.version>
@@ -226,6 +228,11 @@
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>persistence-mysql</artifactId>
         <version>${daisy.persistence-mysql.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>push-notifier</artifactId>
+        <version>${daisy.push-notifier.version}</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
