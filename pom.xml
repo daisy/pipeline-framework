@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>1</version>
+  </parent>
+
+  <groupId>org.daisy.pipeline</groupId>
+  <artifactId>framework-parent</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>DAISY Pipeline 2 :: Framework Parent POM</name>
+  <description>The DAISY Pipeline 2 is an open source framework for the automated processing of various digital formats efficiently and economically. It intends to facilitate the production and maintenance of accessible content for people with print disabilities.</description>
+  <url>http://www.daisy.org/pipeline2</url>
+  <inceptionYear>2010</inceptionYear>
+  <organization>
+    <name>The DAISY Consortium</name>
+    <url>http://www.daisy.org/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License, Version 3</name>
+      <url>http://www.gnu.org/copyleft/lesser.html</url>
+      <distribution>manual</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>rdeltour</id>
+      <name>Romain Deltour</name>
+      <email>rdeltour@gmail.com</email>
+      <organization>DAISY Consortium</organization>
+      <organizationUrl>http://www.daisy.org/</organizationUrl>
+      <roles>
+        <role>Project Lead</role>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC+01:00</timezone>
+    </developer>
+    <developer>
+      <id>marisa.demeglio</id>
+      <name>Marisa DeMeglio</name>
+      <email>marisa.demeglio@gmail.com</email>
+      <organization>DAISY Consortium</organization>
+      <organizationUrl>http://www.daisy.org/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC-08:00</timezone>
+    </developer>
+    <developer>
+      <id>capitan.cambio</id>
+      <name>Javier Asensio Cubero</name>
+      <email>capitan.cambio@gmail.com</email>
+      <organization>DAISY Consortium</organization>
+      <organizationUrl>http://www.daisy.org/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC</timezone>
+    </developer>
+    <developer>
+      <id>josteinaj</id>
+      <name>Jostein Austvik Jacobsen</name>
+      <email>josteinaj@gmail.com</email>
+      <organization>Norwegian Library of Talking Books and Braille</organization>
+      <organizationUrl>http://www.nlb.no/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC+01:00</timezone>
+    </developer>
+    <developer>
+      <id>bertfrees</id>
+      <name>Bert Frees</name>
+      <email>bertfrees@gmail.com</email>
+      <organization>SBS - Schweizerische Bibliothek für Blinde, Seh- und Lesebehinderte</organization>
+      <organizationUrl>http://sbs.ch/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC+01:00</timezone>
+    </developer>
+  </developers>
+
+  <mailingLists>
+    <mailingList>
+      <name>DAISY Pipeline Developers</name>
+      <subscribe>http://groups.google.com/group/daisy-pipeline-dev/subscribe</subscribe>
+      <unsubscribe>daisy-pipeline-dev+unsubscribe@googlegroups.com</unsubscribe>
+      <post>daisy-pipeline-dev@googlegroups.com</post>
+      <archive>http://groups.google.com/group/daisy-pipeline-dev</archive>
+    </mailingList>
+  </mailingLists>
+
+  <modules>
+    <module>calabash-adapter</module>
+    <module>calabash-custom-steps</module>
+    <module>common-stax</module>
+    <module>common-utils</module>
+    <module>framework-core</module>
+    <module>framework-persistence</module>
+    <module>logging-activator</module>
+    <module>modules-api</module>
+    <module>modules-registry</module>
+    <module>persistence-derby</module>
+    <module>persistence-mysql</module>
+    <module>webservice</module>
+    <module>woodstox-osgi-adapter</module>
+    <module>xmlcatalog</module>
+    <module>xpath-registry</module>
+    <module>xproc-api</module>
+  </modules>
+
+  <scm>
+    <connection>scm:hg:https://code.google.com/p/daisy-pipeline/</connection>
+    <developerConnection>scm:hg:https://code.google.com/p/daisy-pipeline/</developerConnection>
+    <url>https://code.google.com/p/daisy-pipeline/source/browse/</url>
+  </scm>
+  <issueManagement>
+    <system>Google Code Issue Tracker</system>
+    <url>http://code.google.com/p/daisy-pipeline/issues/list</url>
+  </issueManagement>
+
+  <properties>
+    <!-- Targeted Java Version -->
+    <java.version>1.6</java.version>
+
+    <!-- Modules Versions -->    
+    <daisy.calabash-adapter.version>1.0-SNAPSHOT</daisy.calabash-adapter.version>
+    <daisy.calabash-custom-steps.version>1.0-SNAPSHOT</daisy.calabash-custom-steps.version>
+    <daisy.common-stax.version>1.0-SNAPSHOT</daisy.common-stax.version>
+    <daisy.common-utils.version>1.0-SNAPSHOT</daisy.common-utils.version>
+    <daisy.framework-core.version>1.0-SNAPSHOT</daisy.framework-core.version>
+    <daisy.framework-persistence.version>1.0-SNAPSHOT</daisy.framework-persistence.version>
+    <daisy.logging-activator.version>1.0-SNAPSHOT</daisy.logging-activator.version>
+    <daisy.modules-api.version>1.0-SNAPSHOT</daisy.modules-api.version>
+    <daisy.modules-registry.version>1.0-SNAPSHOT</daisy.modules-registry.version>
+    <daisy.persistence-derby.version>1.0-SNAPSHOT</daisy.persistence-derby.version>
+    <daisy.persistence-mysql.version>1.0-SNAPSHOT</daisy.persistence-mysql.version>
+    <daisy.webservice.version>1.0-SNAPSHOT</daisy.webservice.version>
+    <daisy.woodstox-osgi-adapter.version>1.0-SNAPSHOT</daisy.woodstox-osgi-adapter.version>
+    <daisy.xmlcatalog.version>1.0-SNAPSHOT</daisy.xmlcatalog.version>
+    <daisy.xpath-registry.version>1.0-SNAPSHOT</daisy.xpath-registry.version>
+    <daisy.xproc-api.version>1.0-SNAPSHOT</daisy.xproc-api.version>
+
+    <!-- Dependencies Versions -->
+    <calabash.version>1.0.2-94</calabash.version>
+    <commons.codec.version>1.6</commons.codec.version>
+    <commons.fileupload.version>1.2.2</commons.fileupload.version>
+    <commons.io.version>2.3</commons.io.version>
+    <guava.version>11.0.1</guava.version>
+    <javax.persistence.version>2.0.0</javax.persistence.version>
+    <javax.servlet-api.version>2.5</javax.servlet-api.version>
+    <jing.version>20091111</jing.version>
+    <junit.version>4.10</junit.version>
+    <osgi.version>4.2.0</osgi.version>
+    <restlet.version>2.1-RC3</restlet.version>
+    <saxon-he.version>9.4</saxon-he.version>
+    <slf4j.version>1.6.4</slf4j.version>
+    <woodstox.core.version>4.1.2</woodstox.core.version>
+    <woodstox.stax2-api.version>3.1.1</woodstox.stax2-api.version>
+
+  </properties>
+
+  <dependencyManagement>
+    <!-- Framework Modules -->
+    <dependencies>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>calabash-adapter</artifactId>
+        <version>${daisy.calabash-adapter.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>calabash-custom-steps</artifactId>
+        <version>${daisy.calabash-custom-steps.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>common-stax</artifactId>
+        <version>${daisy.common-stax.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>common-utils</artifactId>
+        <version>${daisy.common-utils.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>framework-core</artifactId>
+        <version>${daisy.framework-core.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>framework-persistence</artifactId>
+        <version>${daisy.framework-persistence.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>logging-activator</artifactId>
+        <version>${daisy.logging-activator.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>modules-api</artifactId>
+        <version>${daisy.modules-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>modules-registry</artifactId>
+        <version>${daisy.modules-registry.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>persistence-derby</artifactId>
+        <version>${daisy.persistence-derby.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>persistence-mysql</artifactId>
+        <version>${daisy.persistence-mysql.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>webservice</artifactId>
+        <version>${daisy.webservice.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>woodstox-osgi-adapter</artifactId>
+        <version>${daisy.woodstox-osgi-adapter.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>xmlcatalog</artifactId>
+        <version>${daisy.xmlcatalog.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>xpath-registry</artifactId>
+        <version>${daisy.xpath-registry.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>xproc-api</artifactId>
+        <version>${daisy.xproc-api.version}</version>
+      </dependency>
+
+
+      <!-- Third-Party Libraries -->
+      <dependency>
+        <groupId>com.googlecode.guava-osgi</groupId>
+        <artifactId>guava-osgi</artifactId>
+        <version>${guava.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.thaiopensource</groupId>
+        <artifactId>jing</artifactId>
+        <version>${jing.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>saxon</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>com.xmlcalabash</groupId>
+        <artifactId>com.xmlcalabash</artifactId>
+        <version>${calabash.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>${commons.codec.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-fileupload</groupId>
+        <artifactId>commons-fileupload</artifactId>
+        <version>${commons.fileupload.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>${commons.io.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>${javax.servlet-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.sf.saxon</groupId>
+        <artifactId>Saxon-HE</artifactId>
+        <version>${saxon-he.version}</version>
+        <!-- TODO remove when the fix to issue 1501 is pushed to Maven Central
+             see http://dev.saxonica.com/community/issues/1501 -->
+        <exclusions>
+          <exclusion>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>xom</groupId>
+            <artifactId>xom</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.woodstox</groupId>
+        <artifactId>stax2-api</artifactId>
+        <version>${woodstox.stax2-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.woodstox</groupId>
+        <artifactId>woodstox-core-lgpl</artifactId>
+        <version>${woodstox.core.version}</version>
+        <exclusions>
+          <!--  StAX is included in Java 1.6 -->
+          <exclusion>
+            <groupId>javax.xml.stream</groupId>
+            <artifactId>stax-api</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.persistence</groupId>
+        <artifactId>javax.persistence</artifactId>
+        <version>${javax.persistence.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.core</artifactId>
+        <version>${osgi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.compendium</artifactId>
+        <version>${osgi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.enterprise</artifactId>
+        <version>${osgi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.restlet.osgi</groupId>
+        <artifactId>org.restlet</artifactId>
+        <version>${restlet.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.restlet.osgi</groupId>
+        <artifactId>org.restlet.ext.fileupload</artifactId>
+        <version>${restlet.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.restlet.osgi</groupId>
+        <artifactId>org.restlet.ext.xml</artifactId>
+        <version>${restlet.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jul-to-slf4j</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+      <version>${slf4j.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>log4j-over-slf4j</artifactId>
+      <version>${slf4j.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>${slf4j.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+          <id>enforce-logging-api</id>
+          <goals>
+            <goal>enforce</goal>
+          </goals>
+          <configuration>
+            <rules>
+            <bannedDependencies>
+              <excludes>
+                <exclude>commons-logging:commons-logging</exclude>
+                <exclude>log4j:log4j</exclude>
+              </excludes>
+            </bannedDependencies>
+            </rules>
+          </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+    <!-- 
+      Restlet is not on Maven Central
+      https://github.com/restlet/restlet-framework-java/issues/481
+     -->
+    <repository>
+      <id>central</id>
+      <name>Maven Central</name>
+      <url>http://repo.maven.apache.org/maven2/</url>
+    </repository>
+    <repository>
+      <id>restlet-repo</id>
+      <name>Public online Restlet repository</name>
+      <url>http://maven.restlet.org</url>
+    </repository>
+  </repositories>
+</project>

@@ -1,18 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
-	<parent>
-			<groupId>org.daisy.pipeline</groupId>
-			<artifactId>daisy-pipeline-framework-parent</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<relativePath>../daisy-pipeline-parent</relativePath>
-	 </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline</groupId>
+    <artifactId>framework-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
   <groupId>org.daisy.pipeline</groupId>
-  <artifactId>framework-persistance</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <packaging>eclipse-plugin</packaging>
- 
+  <artifactId>framework-persistence</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>Framework-persistence</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>webservice</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>javax.persistence</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Service-Component>OSGI-INF/client-store.xml, OSGI-INF/event-bus-listener.xml, OSGI-INF/persistent-monitor.xml, OSGI-INF/pipeline-persistence.xml, OSGI-INF/request-log.xml</Service-Component>
+            <Meta-Persistence>META-INF/persistence.xml</Meta-Persistence>
+            <DynamicImport-Package>*</DynamicImport-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

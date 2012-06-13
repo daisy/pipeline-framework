@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="client-store">
+   <implementation class="org.daisy.pipeline.persistence.webservice.PersistentClientStore"/>
+   <service>
+      <provide interface="org.daisy.pipeline.webservice.clients.ClientStore"/>
+   </service>
+   <reference name="database" interface="org.daisy.pipeline.persistence.Database"  bind="setDatabase" cardinality="1..1" policy="static"/>
+   
+</scr:component>

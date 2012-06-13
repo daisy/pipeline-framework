@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: test-script
-Bundle-SymbolicName: org.daisy.pipeline.modules.test-script
-Bundle-Version: 1.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Service-Component: OSGI-INF/test.xml
-Import-Package: com.google.common.base;version="9.0.0",
- org.daisy.pipeline.script

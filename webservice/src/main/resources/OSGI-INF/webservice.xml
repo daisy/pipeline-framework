@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" activate="init" deactivate="close" name="org.daisy.pipeline.webservice">
+   <implementation class="org.daisy.pipeline.webservice.PipelineWebService"/>
+   <reference name="script-registry" interface="org.daisy.pipeline.script.ScriptRegistry" cardinality="1..1" policy="static" bind="setScriptRegistry"/>
+   <reference name="job-manager" interface="org.daisy.pipeline.job.JobManager" cardinality="1..1" policy="static" bind="setJobManager"/>
+   <reference name="client-store" interface="org.daisy.pipeline.webservice.clients.ClientStore" cardinality="1..1" policy="static" bind="setClientStore"/>
+   <reference name="request-log" interface="org.daisy.pipeline.webservice.requestlog.RequestLog" cardinality="1..1" policy="static" bind="setRequestLog"/>
+</scr:component>
