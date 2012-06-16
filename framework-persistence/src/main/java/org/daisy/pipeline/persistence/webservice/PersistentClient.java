@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.daisy.pipeline.webservice.clients.Client;
+import org.daisy.pipeline.webserviceutils.clients.Client;
 
 @Entity
 // @NoSql(dataFormat=DataFormatType.MAPPED)

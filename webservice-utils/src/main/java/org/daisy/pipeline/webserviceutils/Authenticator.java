@@ -1,41 +1,51 @@
-package org.daisy.pipeline.webservice;
+package org.daisy.pipeline.webserviceutils;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.SignatureException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.TimeZone;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-import org.daisy.pipeline.webservice.clients.Client;
-import org.daisy.pipeline.webservice.requestlog.RequestLog;
-import org.daisy.pipeline.webservice.requestlog.RequestLogEntry;
-import org.daisy.pipeline.webservice.requestlog.SimpleRequestLogEntry;
+import org.daisy.pipeline.webserviceutils.clients.Client;
+import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
+import org.daisy.pipeline.webserviceutils.requestlog.RequestLogEntry;
+import org.daisy.pipeline.webserviceutils.requestlog.SimpleRequestLogEntry;
+import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Authenticator {
 
 	private static Logger logger = LoggerFactory.getLogger(Authenticator.class.getName());
+	private RequestLog requestLog;
+	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
-	public static boolean authenticate(PipelineWebService webservice, String authid, String hash, String timestamp, String nonce, String URI, long maxRequestTime) {
+	public void init(BundleContext context) {
+	}
+
+	public void close() {
+	}
+	
+	public void setRequestLog(RequestLog requestLog) {
+		this.requestLog = requestLog;
+	}
+
+	public boolean authenticate(Client client, String hash, String timestamp, String nonce, String URI, long maxRequestTime) {
 		// rules for hashing: use the whole URL string, minus the hash part (&sign=<some value>)
 		// important!  put the sign param last so we can easily strip it out
 
 		int idx = URI.indexOf("&sign=", 0);
 
 		if (idx > 1) {
-			Client client = webservice.getClientStore().get(authid);
-			// make sure the client exists
-			if (client==null) {
-				logger.error(String.format("Client with auth ID %s not found", authid));
-				return false;
-			}
 			String hashuri = URI.substring(0, idx);
-			String clientSecret = getClientSecret(client,authid);
+			String clientSecret = client.getSecret();
 			String serverHash = "";
 			try {
 				serverHash = calculateRFC2104HMAC(hashuri, clientSecret);
@@ -60,7 +70,7 @@ public class Authenticator {
 					logger.error("Request expired");
 					return false;
 				}
-				if (!checkValidNonce(webservice.getRequestLog(), client, nonce, timestamp)) {
+				if (!checkValidNonce(client, nonce, timestamp)) {
 					logger.error("Invalid nonce");
 					return false;
 				}
@@ -76,9 +86,38 @@ public class Authenticator {
 		}
 	}
 
+	//  The uri param includes all parameters except id, timestamp, and hash"""
+	public static URI createUriWithCredentials(String uri, Client client) {
+		String uristring = "";
+		String timestamp = ""; // TODO time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+		String nonce = generateNonce();
+		String params = "authid=%s&time=%s&nonce=%s";
+		params = String.format(params, client.getId(), timestamp, nonce);
+		if (uri.indexOf("?") == -1) {
+			uristring = uri + "?" + params;
+		}
+		else {
+			uristring = uri + "&" + params;
+		}
+
+		String hash;
+		URI newUri =  null;
+		try {
+			hash = calculateRFC2104HMAC(uristring, client.getSecret());
+			String authUri = uristring + "&sign=" + hash;
+			newUri = new URI(authUri);
+		} catch (SignatureException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return newUri;
+	}
 
 	// nonces, along with timestamps, protect against replay attacks
-	private static boolean checkValidNonce(RequestLog requestLog, Client client, String nonce, String timestamp) {
+	private boolean checkValidNonce(Client client, String nonce, String timestamp) {
 		if (client == null) {
 			throw new IllegalArgumentException("Client is null");
 		}
@@ -95,16 +134,6 @@ public class Authenticator {
 			return true;
 		}
 	}
-
-	private static String getClientSecret(Client client, String authid) {
-		if (client != null) {
-			return client.getSecret();
-		}
-		return "";
-	}
-
-	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
-
 
 	// adapted slightly from
 	// http://docs.amazonwebservices.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/index.html?AuthJavaSampleHMACSignature.html
@@ -139,6 +168,13 @@ public class Authenticator {
 				throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
 		}
 		return result;
+	}
+
+	private static String generateNonce() {
+		long range = (long) Math.pow(10, 30);
+		long num = (long)(new Random().nextDouble() * range);
+		String nonce = String.format("%-30d", Long.toString(num)).replace(' ', '0');
+		return nonce;
 	}
 
 

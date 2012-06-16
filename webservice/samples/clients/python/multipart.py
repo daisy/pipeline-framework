@@ -1,5 +1,6 @@
 import mimetypes
 import os
+import string
 
 class Param:
     """A simple key/value pair"""
@@ -10,7 +11,7 @@ class Param:
         
     def to_multipart(self):
         """A string representing the key/value pair as a multipart request"""
-        return """Content-Disposition: form-data; name="%s"\r\n\r\n%s\r\n""" % (self.key, self.val)
+        return """Content-Disposition: form-data; name="{0}"\r\n\r\n{1}\r\n""".format(self.key, self.val)
 
 class FileParam:
     """A key/file pair"""
@@ -22,22 +23,21 @@ class FileParam:
     
     def to_multipart(self):
         """A string representing the key/file pair as a multipart request"""
-        return """Content-Disposition: form-data; name="%(k)s"; filename="%(filename)s"\r\n""" \
+        return """Content-Disposition: form-data; name="{0}"; filename="{1}"\r\n""" \
         "Content-Transfer-Encoding: binary\r\n" \
-        "Content-Type: %(mime)s\r\n\r\n%(content)s" \
-        "\r\n" % {"k": self.key, "filename": self.filename, "content": self.content, "mime": mimetypes.guess_type(self.filename)[0]}
+        "Content-Type: {2}\r\n\r\n{3}" \
+        "\r\n".format(self.key, self.filename, self.content, mimetypes.guess_type(self.filename)[0])
 
 class MultipartPost:
     """Formats key/value or key/filename pairs into a multipart request"""
     BOUNDARY = 'pipeline-rules0000'
     HEADER = {"Content-type": "multipart/form-data; boundary=" + BOUNDARY + " "}
-    FORMAT = "--%(boundary)s\r\n%(param)s"
+    FORMAT = "--{0}\r\n{1}"
     
     def prepare_query(self, data):
         """Format as multipart"""
         params = []
         for key, val in data.items():
-            print "Processing %s" % key
             param = None
             if os.path.exists(val):
                 fin = open(val, "rb")
@@ -51,10 +51,7 @@ class MultipartPost:
                 params.append(param)
         param_strings = []
         for param in params:
-            param_strings.append(self.FORMAT % {"boundary": self.BOUNDARY, "param": param.to_multipart()})
+            param_strings.append(FORMAT.format(self.BOUNDARY, param.to_multipart()))
             #print param_strings[-1]
-        query = str.join("", param_strings) + ("--%s--" % self.BOUNDARY)
-        fout = open("/tmp/tpy", "w")
-        fout.write(query)
-        fout.close()
+        query = str.join("", param_strings) + ("--{0}--".format(self.BOUNDARY))
         return query, self.HEADER

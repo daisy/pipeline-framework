@@ -2,6 +2,7 @@
 import web
 from lxml import etree
 import settings
+import string
 
 class jobmessage:        
     def POST(self):
@@ -10,16 +11,16 @@ class jobmessage:
         self.print_update(doc)
 
     def print_update(self, doc):
-        xpath_expr = "//%sjob" % "{%s}" % settings.PX_NS
+        xpath_expr = "//{{{0}}}job".format(settings.PX_NS)
         xpath_fn = etree.ETXPath(xpath_expr)
         results = xpath_fn(doc)
         jobid = results[0].attrib['id']
-        xpath_expr = "//%sjob/messages/message" % "{%s}" % settings.PX_NS
+        xpath_expr = "//{{{0}}}job/messages/message".format(settings.PX_NS)
         xpath_fn = etree.ETXPath(xpath_expr)
         results = xpath_fn(doc)
-        print "JOB UPDATE\n\tID %(id)s\n\tMessage(s):"
+        print "JOB UPDATE\n\tID {0}\n\tMessage(s):".format(jobid)
         for m in results:
-            print "\n\t%(level)s - %(message)s" % {"level": m.attrib['level'], "message": m.text}
+            print "\n\t{0} - {1}".format(m.attrib['level'], m.text)
         print ""
 
 class jobstatus:
@@ -29,10 +30,10 @@ class jobstatus:
         self.print_update(doc)
     
     def print_update(self, doc):
-        xpath_expr = "//%sjob" % "{%s}" % settings.PX_NS
+        xpath_expr = "//{{{0}}}job".format(settings.PX_NS)
         xpath_fn = etree.ETXPath(xpath_expr)
         results = xpath_fn(doc)
-        print "JOB UPDATE\n\tID %(id)s\n\tStatus:\n\t%(status)s\n" % {"id": jobid, "status": jobstatus}
+        print "JOB UPDATE\n\tID {0}\n\tStatus:\n\t{1}\n".format(jobid, jobstatus)
 
 class miniws:
     def __init__(self):

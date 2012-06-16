@@ -1,8 +1,13 @@
 package org.daisy.pipeline.webservice;
 
+import org.daisy.pipeline.webserviceutils.clients.Client;
+import org.daisy.pipeline.webserviceutils.Authenticator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public abstract class AuthenticatedResource extends GenericResource {
-
+	private static Logger logger = LoggerFactory.getLogger(Authenticator.class.getName());
 	private boolean isAuthenticated = false;
 
 	@Override
@@ -20,7 +25,14 @@ public abstract class AuthenticatedResource extends GenericResource {
 	private boolean authenticate() {
 
 		long maxRequestTime = webservice().getMaxRequestTime();
-		return Authenticator.authenticate(webservice(),getQuery().getFirstValue("authid"), getQuery().getFirstValue("sign"),
+		String authid = getQuery().getFirstValue("authid");
+		Client client = webservice().getClientStore().get(authid);
+		// make sure the client exists
+		if (client == null) {
+			logger.error(String.format("Client with auth ID %s not found", authid));
+			return false;
+		}
+		return new Authenticator().authenticate(client, getQuery().getFirstValue("sign"),
 				getQuery().getFirstValue("time"), getQuery().getFirstValue("nonce"), getReference().toString(),
 				maxRequestTime);
 	}

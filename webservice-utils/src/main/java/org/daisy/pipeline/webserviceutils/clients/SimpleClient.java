@@ -1,4 +1,4 @@
-package org.daisy.pipeline.webservice.clients;
+package org.daisy.pipeline.webserviceutils.clients;
 
 public final class SimpleClient implements Client {
 

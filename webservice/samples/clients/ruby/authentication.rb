@@ -19,7 +19,7 @@ module Authentication
     if uri.index("?") == nil
       uristring = "#{uri}?#{params}"
     else
-      uristring += "#{uri}&#{params}"
+      uristring = "#{uri}&#{params}"
     end
     hash = generate_hash(uristring)
 

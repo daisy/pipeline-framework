@@ -22,7 +22,7 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
-import org.daisy.pipeline.webservice.clients.Client;
+import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMImplementation;
@@ -35,6 +35,9 @@ import org.w3c.dom.ls.LSSerializer;
 // TODO: Auto-generated Javadoc
 /**
  * The Class XmlFormatter.
+ *
+ * Formats data as XML.  Examples here:
+ *  daisy-pipeline/webservice/samples/xml-formats
  */
 public class XmlFormatter {
 
@@ -49,9 +52,6 @@ public class XmlFormatter {
 		MSG_LEVELS.add(Level.ERROR);
 	}
 
-	/*
-	 * example output: daisy-pipeline/webservice/docs/sampleXml/job.xml
-	 */
 	/**
 	 * Job to xml.
 	 *
@@ -61,9 +61,9 @@ public class XmlFormatter {
 	 *            the server address
 	 * @return the document
 	 */
-	public static Document jobToXml(Job job, int msgSeq, String baseUri) {
+	public static Document jobToXml(Job job, int msgSeq, String baseUri, boolean detail, boolean includeScriptDetail) {
 		Document doc = XmlFormatter.createDom("job");
-		toXmlElm(job, doc, msgSeq, baseUri, true);
+		toXmlElm(job, doc, msgSeq, baseUri, detail, includeScriptDetail);
 
 		// for debugging only
 		if (!Validator.validateXmlAgainstSchema(doc, Validator.JOB_SCHEMA_URL)) {
@@ -73,9 +73,6 @@ public class XmlFormatter {
 		return doc;
 	}
 
-	/*
-	 * example output: daisy-pipeline/webservice/docs/sampleXml/jobs.xml
-	 */
 	/**
 	 * Jobs to xml.
 	 *
@@ -93,7 +90,7 @@ public class XmlFormatter {
 		Iterator<Job> it = jobs.iterator();
 		while (it.hasNext()) {
 			Job job = it.next();
-			Element jobElm = toXmlElm(job, doc, 0, baseUri, false);
+			Element jobElm = toXmlElm(job, doc, 0, baseUri, false, false);
 			jobsElm.appendChild(jobElm);
 		}
 
@@ -105,9 +102,6 @@ public class XmlFormatter {
 		return doc;
 	}
 
-	/*
-	 * example output: daisy-pipeline/webservice/docs/sampleXml/script.xml
-	 */
 	/**
 	 * Xproc script to xml.
 	 *
@@ -127,9 +121,6 @@ public class XmlFormatter {
 		return doc;
 	}
 
-	/*
-	 * example output: daisy-pipeline/webservice/docs/sampleXml/scripts.xml
-	 */
 	/**
 	 * Xproc scripts to xml.
 	 *
@@ -328,7 +319,8 @@ public class XmlFormatter {
 	 *            the server address
 	 * @return the element
 	 */
-	private static Element toXmlElm(Job job, Document doc, int msgSeq, String baseUri, boolean detail) {
+	private static Element toXmlElm(Job job, Document doc, int msgSeq, String baseUri, boolean includeJobDetail,
+			boolean includeScriptDetail) {
 		Element rootElm = null;
 
 		if (doc.getDocumentElement().getNodeName().equals("job")) {
@@ -344,10 +336,11 @@ public class XmlFormatter {
 		rootElm.setAttribute("href", jobHref);
 		rootElm.setAttribute("status", status.toString());
 
-		if (detail) {
-			Element scriptElm = toXmlElm(job.getScript(), doc, baseUri, false);
-            rootElm.appendChild(scriptElm);
-
+		if (includeJobDetail) {
+			if (includeScriptDetail) {
+				Element scriptElm = toXmlElm(job.getScript(), doc, baseUri, false);
+	            rootElm.appendChild(scriptElm);
+			}
             Element messagesElm = doc.createElementNS(
                             XmlFormatter.NS_PIPELINE_DATA, "messages");
 

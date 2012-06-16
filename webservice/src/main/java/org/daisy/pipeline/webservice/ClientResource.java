@@ -7,8 +7,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.pipeline.webservice.clients.Client;
-import org.daisy.pipeline.webservice.clients.SimpleClient;
+import org.daisy.pipeline.webserviceutils.clients.Client;
+import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;

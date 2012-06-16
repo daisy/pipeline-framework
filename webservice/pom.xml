@@ -67,7 +67,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>push-notifier</artifactId>
+      <artifactId>webservice-utils</artifactId>
     </dependency>
   </dependencies>
 

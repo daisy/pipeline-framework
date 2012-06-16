@@ -1,8 +1,9 @@
-package org.daisy.pipeline.push;
+package org.daisy.pipeline.webserviceutils.callback;
 
 import java.net.URI;
 
 import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.webserviceutils.clients.Client;
 
 public class Callback {
 	public enum CallbackType {STATUS, MESSAGES}
@@ -11,17 +12,13 @@ public class Callback {
 	private final CallbackType type;
 	private final JobId jobId;
 	private int frequency = 1;
+	private final Client client;
 
-	public Callback(JobId jobId, URI href, CallbackType type) {
+	public Callback(JobId jobId, Client client, URI href, CallbackType type, int frequency) {
 		this.href = href;
 		this.type = type;
 		this.jobId = jobId;
-	}
-
-	public Callback(JobId jobId, URI href, CallbackType type, int frequency) {
-		this.href = href;
-		this.type = type;
-		this.jobId = jobId;
+		this.client = client;
 		this.frequency = frequency;
 	}
 	public JobId getJobId() {
@@ -38,5 +35,9 @@ public class Callback {
 
 	public int getFrequency() {
 		return frequency;
+	}
+
+	public Client getClient() {
+		return client;
 	}
 }

@@ -1,4 +1,4 @@
-package org.daisy.pipeline.push;
+package org.daisy.pipeline.webserviceutils.callback;
 
 import java.util.ArrayList;
 import java.util.List;

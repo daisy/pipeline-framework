@@ -4,6 +4,7 @@ import base64
 import random
 import time
 import urllib
+import string
 
 AUTH_ID = "clientid"
 SECRET = "supersecret"
@@ -15,14 +16,14 @@ def prepare_authenticated_uri(uri):
     uristring = ""
     timestamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     nonce = generate_nonce()
-    params = "authid=%(authid)s&time=%(timestamp)s&nonce=%(nonce)s" % {"authid": AUTH_ID, "timestamp": timestamp, "nonce": nonce}
+    params = "authid={0}&time={1}&nonce={2}".format(AUTH_ID, timestamp, nonce)
     if uri.find("?") == -1:
-        uristring = "%(uri)s?%(params)s" % {"uri": uri, "params": params}
+        uristring = "{0}?{1}".format(uri, params)
     else:
-        uristring += "%(uri)s&%(params)s" % {"uri": uri, "params": params}
+        uristring = "{0}&{1}".format(uri, params)
     
     hashed_string = generate_hash(uristring)
-    auth_uri = "%(uristring)s&sign=%(hash)s" % {"uristring": uristring, "hash": hashed_string}
+    auth_uri = "{0}&sign={1}".format(uristring, hashed_string)
     print auth_uri
     return auth_uri
 
@@ -36,7 +37,7 @@ def generate_hash(data):
 def generate_nonce():
     """Generate a random number 30 digits long"""
     randomnum = random.randrange(10**30)
-    rjust_str = '{:<30}'.format(str(randomnum))
+    rjust_str = '{:0<30}'.format(str(randomnum))
     return rjust_str
 
 

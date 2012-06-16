@@ -5,8 +5,8 @@ import java.util.List;
 import javax.persistence.NoResultException;
 
 import org.daisy.pipeline.persistence.Database;
-import org.daisy.pipeline.webservice.clients.Client;
-import org.daisy.pipeline.webservice.clients.ClientStore;
+import org.daisy.pipeline.webserviceutils.clients.Client;
+import org.daisy.pipeline.webserviceutils.clients.ClientStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

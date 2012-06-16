@@ -6,12 +6,11 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.daisy.pipeline.job.JobManager;
-import org.daisy.pipeline.push.CallbackRegistry;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.webservice.clients.Client;
-import org.daisy.pipeline.webservice.clients.ClientStore;
-import org.daisy.pipeline.webservice.clients.SimpleClient;
-import org.daisy.pipeline.webservice.requestlog.RequestLog;
+import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
+import org.daisy.pipeline.webserviceutils.clients.Client;
+import org.daisy.pipeline.webserviceutils.clients.ClientStore;
+import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
@@ -39,7 +38,6 @@ public class PipelineWebService extends Application {
 	public static final String TMPDIR_PROPERTY = "org.daisy.pipeline.ws.tmpdir";
 	public static final String AUTHENTICATION_PROPERTY = "org.daisy.pipeline.ws.authentication";
 	public static final String LOCAL_MODE_PROPERTY = "org.daisy.pipeline.ws.local";
-	public static final String CLIENT_STORE_PROPERTY = "org.daisy.pipeline.ws.clientstore";
 	public static final String JAVA_IO_TMPDIR_PROPERTY = "java.io.tmpdir";
 
 	public static final String KEY_FILE_NAME="dp2key.txt";
@@ -75,9 +73,6 @@ public class PipelineWebService extends Application {
 
     /** The Client Store **/
 	private ClientStore<?> clientStore;
-
-	/** The Request Log **/
-	private RequestLog requestLog;
 
 	private CallbackRegistry callbackRegistry;
 
@@ -149,36 +144,6 @@ public class PipelineWebService extends Application {
 		return false;
 
 	}
-	/*
-	private void initClientStore() {
-		String clientstorefile = System.getProperty(CLIENT_STORE_PROPERTY);
-		File file = new File(clientstorefile);
-		if (file.exists()) {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			factory.setNamespaceAware(true);
-			DocumentBuilder documentBuilder;
-			try {
-				documentBuilder = factory.newDocumentBuilder();
-				Document doc = documentBuilder.parse(file);
-				if (Validator.validateXml(doc, Validator.clientsSchema)) {
-					//DatabaseManager.getInstance().loadData(doc);
-				}
-				else {
-					logger.error(String.format("Could not validate client store file %s", clientstorefile));
-				}
-			} catch (ParserConfigurationException e) {
-				logger.error(e.getMessage());
-			} catch (SAXException e) {
-				logger.error(e.getMessage());
-			} catch (IOException e) {
-				logger.error(e.getMessage());
-			}
-		}
-		else {
-			logger.error(String.format("Client store file %s not found.", clientstorefile));
-		}
-	}
-	*/
 	/**
 	 * Close.
 	 * @throws Exception
@@ -277,20 +242,6 @@ public class PipelineWebService extends Application {
 			clientStore.add(client);
 		}
 
-	}
-
-	/**
-	 * @return the requests log
-	 */
-	public RequestLog getRequestLog() {
-		return requestLog;
-	}
-
-	/**
-	 * @param requestLog the requests log to set
-	 */
-	public void setRequestLog(RequestLog requestLog) {
-		this.requestLog = requestLog;
 	}
 
 	private void readOptions() {

@@ -4,9 +4,8 @@
 Comes with a companion web service that must be started separately:
 
 1. run ws/miniws.py
-2. create a job with the '--notify' option
-3. check for job updates at localhost:8080/ws/jobs
-
+2. include <callback> element(s) in the job request
+3. check for job updates in the terminal window where miniws.py is running
 
 """
 
@@ -47,15 +46,14 @@ def main():
   Create a job:
       main.py new-job --request=../testdata/job2.request.xml --job-data=../testdata/job2.data.zip
   Get notifications of job updates:
-      main.py new-job --request=../testdata/job2.request.xml --job-data=../testdata/job2.data.zip --notify
+      main.py new-job --request=../testdata/job2.request.xml --job-data=../testdata/job2.data.zip
   """
     parser = argparse.ArgumentParser(usage = usage, description = "Sample pipeline2 webservice client written in python")    
     parser.add_argument('command', metavar='command', help='an integer for the accumulator')
     parser.add_argument("--id", dest="id", help="job or script ID")
     parser.add_argument("--request", dest="request", help="XML file representing the job request")
     parser.add_argument("--job-data", dest="jobdata", help="Zipfile with job data")
-    parser.add_argument("--notify", dest="notify", help="")
-    
+        
     args = parser.parse_args()
     if args.command == None:
         print usage

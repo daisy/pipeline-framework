@@ -1,7 +1,7 @@
 /*
  *
  */
-package org.daisy.pipeline.push;
+package org.daisy.pipeline.webserviceutils.callback;
 
 import org.daisy.pipeline.job.JobId;
 

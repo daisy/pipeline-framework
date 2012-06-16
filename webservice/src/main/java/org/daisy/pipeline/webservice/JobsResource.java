@@ -27,12 +27,13 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.ResourceCollection;
 import org.daisy.pipeline.job.ZipResourceContext;
-import org.daisy.pipeline.push.Callback;
-import org.daisy.pipeline.push.Callback.CallbackType;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.webserviceutils.callback.Callback;
+import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
+import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -98,6 +99,11 @@ public class JobsResource extends AuthenticatedResource {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
     	}
+		Client client = null;
+		if (webservice().isAuthenticationEnabled()) {
+			String clientId = getQuery().getFirstValue("authid");
+			client = webservice().getClientStore().get(clientId);
+		}
 
         if (representation == null) {
         	// POST request with no entity.
@@ -151,14 +157,14 @@ public class JobsResource extends AuthenticatedResource {
 			return null;
 		}
 
-		Job job = createJob(doc, zipfile);
+		Job job = createJob(doc, zipfile, client);
 
 		if (job == null) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return null;
 		}
 
-		Document jobXml = XmlFormatter.jobToXml(job, 0, getRootRef().toString());
+		Document jobXml = XmlFormatter.jobToXml(job, 0, getRootRef().toString(), true, true);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
 		setStatus(Status.SUCCESS_CREATED);
 		return dom;
@@ -287,7 +293,7 @@ public class JobsResource extends AuthenticatedResource {
 	 * @param zip the zip
 	 * @return the job
 	 */
-	private Job createJob(Document doc, ZipFile zip) {
+	private Job createJob(Document doc, ZipFile zip, Client client) {
 
 		Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
 
@@ -338,18 +344,17 @@ public class JobsResource extends AuthenticatedResource {
 			CallbackType type = CallbackType.valueOf(elm.getAttribute("type"));
 			String frequency = elm.getAttribute("frequency");
 			Callback callback = null;
+			int freq = 0;
+			if (frequency.length() > 0) {
+				freq = Integer.parseInt(frequency);
+			}
+
 			try {
-				if (frequency.length() > 0) {
-					callback = new Callback(job.getId(), new URI(href), type, Integer.parseInt(frequency));
-				}
-				else {
-					callback = new Callback(job.getId(), new URI(href), type);
-				}
-			} catch (NumberFormatException e) {
-				logger.warn("Cannot create callback: " + e.getMessage());
+				callback = new Callback(job.getId(), client, new URI(href), type, freq);
 			} catch (URISyntaxException e) {
 				logger.warn("Cannot create callback: " + e.getMessage());
 			}
+
 			if (callback != null) {
 				webservice().getCallbackRegistry().addCallback(callback);
 			}

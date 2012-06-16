@@ -40,3 +40,6 @@ syntax: regexp
 # Pipeline transient files
 (^|/)Main/log
 (^|/)Main/data
+
+# bin
+(^|/)bin/

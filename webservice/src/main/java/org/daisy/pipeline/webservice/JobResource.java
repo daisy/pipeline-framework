@@ -68,7 +68,8 @@ public class JobResource extends AuthenticatedResource {
     	}
 
     	setStatus(Status.SUCCESS_OK);
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.jobToXml(job, msgSeq, getRootRef().toString()));
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
+				XmlFormatter.jobToXml(job, msgSeq, getRootRef().toString(), true, true));
 		return dom;
     }
 

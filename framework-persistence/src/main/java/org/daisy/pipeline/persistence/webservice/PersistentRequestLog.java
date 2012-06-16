@@ -3,8 +3,8 @@ package org.daisy.pipeline.persistence.webservice;
 import java.util.List;
 
 import org.daisy.pipeline.persistence.Database;
-import org.daisy.pipeline.webservice.requestlog.RequestLog;
-import org.daisy.pipeline.webservice.requestlog.RequestLogEntry;
+import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
+import org.daisy.pipeline.webserviceutils.requestlog.RequestLogEntry;
 
 public class PersistentRequestLog implements RequestLog {
 
