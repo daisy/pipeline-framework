@@ -4,6 +4,7 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
+import org.daisy.pipeline.webserviceutils.XmlFormatter;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -23,7 +24,7 @@ public class JobResource extends AuthenticatedResource {
 	private int msgSeq = 0;
 
 	/** The logger. */
-	private static Logger logger = LoggerFactory.getLogger(XmlFormatter.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(JobResource.class.getName());
 
 	/* (non-Javadoc)
 	 * @see org.restlet.resource.Resource#doInit()

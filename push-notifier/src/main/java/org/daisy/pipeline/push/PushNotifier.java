@@ -14,6 +14,8 @@ import org.osgi.framework.BundleContext;
 import com.google.common.eventbus.Subscribe;
 
 // notify clients whenever there are new messages or a change in status
+// this class could evolve into a general notification utility
+// e.g. it could also trigger email notifications
 // TODO: be sure to only do this N times per second
 public class PushNotifier {
 	CallbackRegistry callbackRegistry;

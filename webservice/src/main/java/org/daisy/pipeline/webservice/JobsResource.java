@@ -31,6 +31,7 @@ import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.webserviceutils.XmlFormatter;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
 import org.daisy.pipeline.webserviceutils.clients.Client;
@@ -64,7 +65,7 @@ public class JobsResource extends AuthenticatedResource {
 	private final String JOB_REQUEST_FIELD = "job-request";
 
 	/** The logger. */
-	private static Logger logger = LoggerFactory.getLogger(XmlFormatter.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(JobsResource.class.getName());
 
 	/**
 	 * Gets the resource.

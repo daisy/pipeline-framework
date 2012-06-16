@@ -7,6 +7,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.daisy.pipeline.webserviceutils.XmlFormatter;
+import org.daisy.pipeline.webserviceutils.XmlValidator;
 import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
 import org.restlet.data.MediaType;
@@ -25,7 +27,7 @@ import org.xml.sax.SAXException;
 public class ClientsResource extends AdminResource {
 
 	/** The logger. */
-	private static Logger logger = LoggerFactory.getLogger(XmlFormatter.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(ClientsResource.class.getName());
 
 	@Override
     public void doInit() {
@@ -89,7 +91,7 @@ public class ClientsResource extends AdminResource {
 			return null;
 		}
 
-		boolean isValid = Validator.validateXmlAgainstSchema(doc, Validator.CLIENT_SCHEMA_URL);
+		boolean isValid = XmlValidator.validate(doc, XmlValidator.CLIENT_SCHEMA_URL);
 
 		if (!isValid) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);

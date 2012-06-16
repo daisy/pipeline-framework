@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.script.ScriptRegistry;
+import org.daisy.pipeline.webserviceutils.Routes;
 import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
 import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.clients.ClientStore;
@@ -17,6 +18,7 @@ import org.osgi.framework.launch.Framework;
 import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Restlet;
+import org.restlet.Server;
 import org.restlet.data.Protocol;
 import org.restlet.routing.Router;
 import org.slf4j.Logger;
@@ -41,17 +43,6 @@ public class PipelineWebService extends Application {
 	public static final String JAVA_IO_TMPDIR_PROPERTY = "java.io.tmpdir";
 
 	public static final String KEY_FILE_NAME="dp2key.txt";
-
-
-	public static final String SCRIPTS_ROUTE = "/scripts";
-	public static final String SCRIPT_ROUTE = "/scripts/{id}";
-	public static final String JOBS_ROUTE = "/jobs";
-	public static final String JOB_ROUTE = "/jobs/{id}";
-	public static final String LOG_ROUTE = "/jobs/{id}/log";
-	public static final String RESULT_ROUTE = "/jobs/{id}/result";
-	public static final String HALT_ROUTE = "/admin/halt";
-	public static final String CLIENTS_ROUTE = "/admin/clients";
-	public static final String CLIENT_ROUTE = "/admin/clients/{id}";
 
 	private static final int LOCAL_PORT_DEF=8181;
 	private static final int REMOTE_PORT_DEF=8182;
@@ -85,18 +76,17 @@ public class PipelineWebService extends Application {
 	@Override
 	public Restlet createInboundRoot() {
 		Router router = new Router(getContext());
-		router.attach(SCRIPTS_ROUTE, ScriptsResource.class);
-		router.attach(SCRIPT_ROUTE, ScriptResource.class);
-		router.attach(JOBS_ROUTE, JobsResource.class);
-		router.attach(JOB_ROUTE, JobResource.class);
-		router.attach(LOG_ROUTE, LogResource.class);
-		router.attach(RESULT_ROUTE, ResultResource.class);
-
+		router.attach(Routes.SCRIPTS_ROUTE, ScriptsResource.class);
+		router.attach(Routes.SCRIPT_ROUTE, ScriptResource.class);
+		router.attach(Routes.JOBS_ROUTE, JobsResource.class);
+		router.attach(Routes.JOB_ROUTE, JobResource.class);
+		router.attach(Routes.LOG_ROUTE, LogResource.class);
+		router.attach(Routes.RESULT_ROUTE, ResultResource.class);
 
 		// init the administrative paths
-		router.attach(CLIENTS_ROUTE, ClientsResource.class);
-		router.attach(CLIENT_ROUTE, ClientResource.class);
-		router.attach(HALT_ROUTE, HaltResource.class);
+		router.attach(Routes.CLIENTS_ROUTE, ClientsResource.class);
+		router.attach(Routes.CLIENT_ROUTE, ClientResource.class);
+		router.attach(Routes.HALT_ROUTE, HaltResource.class);
 
 		return router;
 	}
@@ -110,8 +100,9 @@ public class PipelineWebService extends Application {
 		logger.info(String.format("Starting webservice on port %d",
 				portNumber));
 		Component component = new Component();
-		component.getServers().add(Protocol.HTTP, portNumber);
+		Server theServer = component.getServers().add(Protocol.HTTP, portNumber);
 		component.getDefaultHost().attach(path, this);
+
 		try {
 			component.start();
 			generateStopKey();

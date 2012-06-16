@@ -6,6 +6,7 @@ import java.util.Iterator;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.webserviceutils.XmlFormatter;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -56,7 +57,8 @@ public class ScriptsResource extends AuthenticatedResource {
     	}
 
 		this.setStatus(Status.SUCCESS_OK);
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.xprocScriptsToXml(scripts, getRootRef().toString()));
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
+				XmlFormatter.xprocScriptsToXml(scripts, getRootRef().toString()));
 		return dom;
 
 	}

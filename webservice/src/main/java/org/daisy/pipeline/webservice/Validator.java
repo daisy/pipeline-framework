@@ -15,6 +15,8 @@ import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.webserviceutils.XmlFormatter;
+import org.daisy.pipeline.webserviceutils.XmlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -28,14 +30,6 @@ import org.xml.sax.SAXException;
  * The Class Validator.
  */
 public class Validator {
-
-	public static final URL SCRIPT_SCHEMA_URL = Validator.class.getResource("resources/script.rnc");
-	public static final URL SCRIPTS_SCHEMA_URL = Validator.class.getResource("resources/scripts.rnc");
-	public static final URL JOB_SCHEMA_URL = Validator.class.getResource("resources/job.rnc");
-	public static final URL JOB_REQUEST_SCHEMA_URL = Validator.class.getResource("resources/jobRequest.rnc");
-	public static final URL JOBS_SCHEMA_URL = Validator.class.getResource("resources/jobs.rnc");
-	public static final URL CLIENT_SCHEMA_URL = Validator.class.getResource("resources/client.rnc");
-	public static final URL CLIENTS_SCHEMA_URL = Validator.class.getResource("resources/clients.rnc");
 
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(Validator.class.getName());
@@ -55,7 +49,7 @@ public class Validator {
 	public static boolean validateJobRequest(Document doc, PipelineWebService application) {
 
 		// validate against the schema
-		boolean xmlValid = validateXmlAgainstSchema(doc, Validator.JOB_REQUEST_SCHEMA_URL);
+		boolean xmlValid = validateXmlAgainstSchema(doc, XmlValidator.JOB_REQUEST_SCHEMA_URL);
 		if (xmlValid == false) {
 			return false;
 		}

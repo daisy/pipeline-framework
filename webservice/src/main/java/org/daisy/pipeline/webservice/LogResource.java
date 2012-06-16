@@ -25,7 +25,7 @@ public class LogResource extends AuthenticatedResource {
 	/** The job. */
 	private Job job;
 	/** The logger. */
-	private static Logger logger = LoggerFactory.getLogger(XmlFormatter.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(LogResource.class.getName());
 
 	/* (non-Javadoc)
 	 * @see org.restlet.resource.Resource#doInit()

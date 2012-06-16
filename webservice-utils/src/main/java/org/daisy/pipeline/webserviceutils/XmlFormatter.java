@@ -1,4 +1,4 @@
-package org.daisy.pipeline.webservice;
+package org.daisy.pipeline.webserviceutils;
 
 import java.io.StringWriter;
 import java.util.HashSet;
@@ -66,7 +66,7 @@ public class XmlFormatter {
 		toXmlElm(job, doc, msgSeq, baseUri, detail, includeScriptDetail);
 
 		// for debugging only
-		if (!Validator.validateXmlAgainstSchema(doc, Validator.JOB_SCHEMA_URL)) {
+		if (!XmlValidator.validate(doc, XmlValidator.JOB_SCHEMA_URL)) {
 			logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
 		}
 
@@ -85,7 +85,7 @@ public class XmlFormatter {
 	public static Document jobsToXml(Iterable<Job> jobs, String baseUri) {
 		Document doc = XmlFormatter.createDom("jobs");
 		Element jobsElm = doc.getDocumentElement();
-		jobsElm.setAttribute("href", baseUri + PipelineWebService.JOBS_ROUTE);
+		jobsElm.setAttribute("href", baseUri + Routes.JOBS_ROUTE);
 
 		Iterator<Job> it = jobs.iterator();
 		while (it.hasNext()) {
@@ -95,7 +95,7 @@ public class XmlFormatter {
 		}
 
 		// for debugging only
-		if (!Validator.validateXmlAgainstSchema(doc, Validator.JOBS_SCHEMA_URL)) {
+		if (!XmlValidator.validate(doc, XmlValidator.JOBS_SCHEMA_URL)) {
 			logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
 		}
 
@@ -114,7 +114,7 @@ public class XmlFormatter {
 		toXmlElm(script, doc, baseUri, true);
 
 		// for debugging only
-		if (!Validator.validateXmlAgainstSchema(doc, Validator.SCRIPT_SCHEMA_URL)) {
+		if (!XmlValidator.validate(doc, XmlValidator.SCRIPT_SCHEMA_URL)) {
 			logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
 		}
 
@@ -131,7 +131,7 @@ public class XmlFormatter {
 	public static Document xprocScriptsToXml(Iterable<XProcScript> scripts, String baseUri) {
 		Document doc = XmlFormatter.createDom("scripts");
 		Element scriptsElm = doc.getDocumentElement();
-		scriptsElm.setAttribute("href", baseUri + PipelineWebService.SCRIPTS_ROUTE);
+		scriptsElm.setAttribute("href", baseUri + Routes.SCRIPTS_ROUTE);
 		Iterator<XProcScript> it = scripts.iterator();
 		while (it.hasNext()) {
 			XProcScript script = it.next();
@@ -140,7 +140,7 @@ public class XmlFormatter {
 		}
 
 		// for debugging only
-		if (!Validator.validateXmlAgainstSchema(doc, Validator.SCRIPTS_SCHEMA_URL)) {
+		if (!XmlValidator.validate(doc, XmlValidator.SCRIPTS_SCHEMA_URL)) {
 			logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
 		}
 
@@ -152,7 +152,7 @@ public class XmlFormatter {
 		XmlFormatter.toXmlElm(client, doc, baseUri);
 
 		// for debugging only
-		if (!Validator.validateXmlAgainstSchema(doc, Validator.CLIENT_SCHEMA_URL)) {
+		if (!XmlValidator.validate(doc, XmlValidator.CLIENT_SCHEMA_URL)) {
 			XmlFormatter.logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
 		}
 
@@ -162,13 +162,13 @@ public class XmlFormatter {
 	public static Document clientsToXml(List<? extends Client> clients, String baseUri) {
 		Document doc = XmlFormatter.createDom("clients");
 		Element clientsElm = doc.getDocumentElement();
-		clientsElm.setAttribute("href", baseUri + PipelineWebService.CLIENTS_ROUTE);
+		clientsElm.setAttribute("href", baseUri + Routes.CLIENTS_ROUTE);
 		for (Client client : clients) {
 			Element clientElm = XmlFormatter.toXmlElm(client, doc, baseUri);
 			clientsElm.appendChild(clientElm);
 		}
 		// for debugging only
-		if (!Validator.validateXmlAgainstSchema(doc, Validator.CLIENTS_SCHEMA_URL)) {
+		if (!XmlValidator.validate(doc, XmlValidator.CLIENTS_SCHEMA_URL)) {
 			XmlFormatter.logger.error("INVALID XML:\n" + XmlFormatter.DOMToString(doc));
 		}
 
@@ -187,7 +187,7 @@ public class XmlFormatter {
 		}
 		logger.debug("Script: "+script.getName());
 		logger.debug("Descriptor: "+script.getDescriptor());
-		String scriptHref = baseUri + PipelineWebService.SCRIPT_ROUTE.replaceFirst("\\{id\\}", script.getDescriptor().getId());
+		String scriptHref = baseUri + Routes.SCRIPT_ROUTE.replaceFirst("\\{id\\}", script.getDescriptor().getId());
 
 		rootElm.setAttribute("id", script.getDescriptor().getId());
 		rootElm.setAttribute("href", scriptHref);
@@ -330,7 +330,7 @@ public class XmlFormatter {
 		}
 
 		Job.Status status = job.getStatus();
-		String jobHref = baseUri + PipelineWebService.JOB_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+		String jobHref = baseUri + Routes.JOB_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
 
 		rootElm.setAttribute("id", job.getId().toString());
 		rootElm.setAttribute("href", jobHref);
@@ -366,12 +366,12 @@ public class XmlFormatter {
 
 			if (job.getStatus() == Job.Status.DONE) {
 				Element logElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "log");
-				String logHref = baseUri + PipelineWebService.LOG_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+				String logHref = baseUri + Routes.LOG_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
 				logElm.setAttribute("href", logHref);
 				rootElm.appendChild(logElm);
 
 				Element resultElm = doc.createElementNS(XmlFormatter.NS_PIPELINE_DATA, "result");
-				String resultHref = baseUri + PipelineWebService.RESULT_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+				String resultHref = baseUri + Routes.RESULT_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
 				resultElm.setAttribute("href", resultHref);
 				rootElm.appendChild(resultElm);
 			}
@@ -389,7 +389,7 @@ public class XmlFormatter {
 					"client");
 		}
 
-		String clientHref = baseUri + PipelineWebService.CLIENT_ROUTE.replaceFirst("\\{id\\}", client.getId());
+		String clientHref = baseUri + Routes.CLIENT_ROUTE.replaceFirst("\\{id\\}", client.getId());
 
 		rootElm.setAttribute("id", client.getId());
 		rootElm.setAttribute("href", clientHref);

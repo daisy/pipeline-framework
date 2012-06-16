@@ -1,4 +1,4 @@
-package org.daisy.pipeline.webservice;
+package org.daisy.pipeline.webserviceutils;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -37,9 +37,17 @@ import com.thaiopensource.validate.rng.CompactSchemaReader;
 public class XmlValidator {
 
 	/** The logger. */
-	private static Logger logger = LoggerFactory.getLogger(Validator.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(XmlValidator.class.getName());
 
-	public boolean validate(Document document, URL schemaUrl) {
+	public static final URL SCRIPT_SCHEMA_URL = XmlValidator.class.getResource("resources/script.rnc");
+	public static final URL SCRIPTS_SCHEMA_URL = XmlValidator.class.getResource("resources/scripts.rnc");
+	public static final URL JOB_SCHEMA_URL = XmlValidator.class.getResource("resources/job.rnc");
+	public static final URL JOB_REQUEST_SCHEMA_URL = XmlValidator.class.getResource("resources/jobRequest.rnc");
+	public static final URL JOBS_SCHEMA_URL = XmlValidator.class.getResource("resources/jobs.rnc");
+	public static final URL CLIENT_SCHEMA_URL = XmlValidator.class.getResource("resources/client.rnc");
+	public static final URL CLIENTS_SCHEMA_URL = XmlValidator.class.getResource("resources/clients.rnc");
+	
+	public static boolean validate(Document document, URL schemaUrl) {
 		ErrorHandlerImpl errorHandler = new ErrorHandlerImpl();
 
         PropertyMapBuilder properties = new PropertyMapBuilder();
@@ -80,9 +88,8 @@ public class XmlValidator {
         return !errorHandler.hasErrors();
 	}
 
-
 	// create an input source from a DOM document
-	private InputSource DOMtoInputSource(Document doc) throws TransformerConfigurationException, TransformerException, TransformerFactoryConfigurationError {
+	private static InputSource DOMtoInputSource(Document doc) throws TransformerConfigurationException, TransformerException, TransformerFactoryConfigurationError {
 		DOMSource source = new DOMSource(doc);
 		StringWriter xmlAsWriter = new StringWriter();
 		StreamResult result = new StreamResult(xmlAsWriter);
@@ -92,7 +99,7 @@ public class XmlValidator {
 		return is;
 	}
 
-	public class ErrorHandlerImpl implements ErrorHandler {
+	static public class ErrorHandlerImpl implements ErrorHandler {
 		List<SAXParseException> errors = new ArrayList<SAXParseException>();
 
 		public boolean hasErrors() {
