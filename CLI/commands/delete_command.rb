@@ -1,6 +1,6 @@
-require_rel "./commands/command"
+require_rel "./commands/id_based_command"
 
-class DeleteCommand < Command
+class DeleteCommand < IdBasedCommand 
 
 	def initialize
 		super("delete")
@@ -10,10 +10,7 @@ class DeleteCommand < Command
 	def execute(str_args)
 			
 		begin
-			@parser.parse(str_args)
-			if @id == nil
-				raise RuntimeError,"Missing id"
-			end
+			getId!(str_args)	
 			res=Dp2.new.delete_job(@id)
 			str="The job wasn't deleted"
 			if res 
@@ -37,10 +34,8 @@ class DeleteCommand < Command
 	def build_parser
 
 		@parser=OptionParser.new do |opts|
-			opts.on("--id JOB","job's id") do |v|
-				@id=v
-			end
+			addLastId(opts)
 		end
-		@parser.program_name="dp2 "+ @name
+		@parser.banner="dp2 "+ @name + " JOBID"
 	end
 end

@@ -169,12 +169,12 @@ class XmlBuilder
 	E_JOB_REQUEST='jobRequest'
 	E_SCRIPT='script'
 	E_INPUT='input'
-	E_FILE='file'
+	E_ITEM='item'
 	E_OPTION='option'
 	A_HREF='href'
 	A_NAME='name'
 	A_XMLNS='xmlns'
-	A_SRC='src'
+	A_VALUE='value'
 
 		
 	def initialize(script)
@@ -213,7 +213,7 @@ class XmlBuilder
 			in_elem=Element.new E_INPUT
 			in_elem.attributes[A_NAME]=input[:name]
 			@doc.root << in_elem
-			values.each{|file| in_elem.add_element E_FILE,{A_SRC=>Helpers.path_to_uri(file,@script.local)}} 
+			values.each{|file| in_elem.add_element E_ITEM,{A_VALUE=>Helpers.path_to_uri(file,@script.local)}} 
 		}
 	end
 	def addOutputs
@@ -227,7 +227,7 @@ class XmlBuilder
 #			in_elem=@doc.create_element(E_INPUT,{A_NAME=>output[:name]})
 #			
 #			@doc.root << in_elem
-#			values.each{|file| in_elem << @doc.create_element(E_FILE,{A_SRC=>file})} 
+#			values.each{|file| in_elem << @doc.create_element(E_ITEM,{A_VALUE=>file})} 
 #		}
 	end
 end

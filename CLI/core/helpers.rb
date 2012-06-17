@@ -25,4 +25,19 @@ module Helpers
 		Ctxt.logger.debug("uri: #{uri}")
 		return URI.escape(uri)
 	end
+	def last_id_store(job)
+		path=File.dirname(__FILE__)+"/../.lastid"
+		File.open(path, 'w') {|f| f.write(job.id) }
+	end
+	def last_id_read
+		
+		path=File.dirname(__FILE__)+"/../.lastid"
+		id=nil
+		if File.exists?(path)
+			f=File.open(path, 'r') 
+			id=f.gets() 
+			f.close
+		end
+		return id
+	end
 end

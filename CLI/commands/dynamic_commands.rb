@@ -1,4 +1,5 @@
 require_rel "./core/dp2"
+require_rel "./core/helpers"
 class DynamicCommands
 
 	def self.get
@@ -40,6 +41,8 @@ class CommandScript < Command
 				raise RuntimeError,"#{@outfile}: directory doesn't exists " if !File.exists?(File.dirname(File.expand_path(@outfile)))
 			end	
 			job=dp2ws.job(@script,@data,!@background,@quiet)
+			#store the id of the current job
+			Helpers.last_id_store(job)
 			if Ctxt.conf[Ctxt.conf.class::LOCAL]!=true && !@background
 				dp2ws.job_zip_result(job.id,@outfile)
 				puts "[DP2] Result stored at #{@outfile}"
