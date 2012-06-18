@@ -36,6 +36,7 @@ require_rel './commands/help_command.rb'
 require_rel './commands/job_command'
 require_rel './commands/jobs_command'
 require_rel './commands/halt_command'
+require_rel './commands/version_command'
 include REXML
 def main
 	command=checkargs
@@ -66,10 +67,11 @@ def main
 	if Ctxt.conf[Ctxt.conf.class::LOCAL]==true
 		s_cmds=load(HaltCommand.new,s_cmds)
 	end
-	
+	ver_cmd=VersionCommand.new
 	#scripts	
 	dynCommands.each{|cmd| d_cmds[cmd.name]=cmd}
-	s_cmds["help"]=HelpCommand.new(s_cmds,d_cmds)
+	s_cmds["help"]=HelpCommand.new(s_cmds,d_cmds,ver_cmd)
+	s_cmds[ver_cmd.name]=ver_cmd
 	error=""
 	hasErr=false
 	cmds={}
