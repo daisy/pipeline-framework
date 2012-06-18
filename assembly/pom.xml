@@ -44,9 +44,24 @@
   </dependencyManagement>
   <build>
     <extensions>
+      <!-- 
+           Version 2.2 has issues with Maven 3.0.3:
+           java.lang.NoSuchMethodError: org.apache.maven.wagon.shared.http4.AbstractHttpClientWagon.getReadTimeout()I
+           Tweak taken from:  http://code.google.com/p/phloc-parent-pom/source/browse/trunk/pom.xml?r=47
+      -->
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>2.1</version>
+      </extension>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-http</artifactId>
+        <version>2.1</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-file</artifactId>
         <version>2.1</version>
       </extension>
     </extensions>
