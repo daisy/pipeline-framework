@@ -18,7 +18,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.xmlcalabash</groupId>
+      <groupId>org.daisy.libs</groupId>
       <artifactId>com.xmlcalabash</artifactId>
     </dependency>
     <dependency>

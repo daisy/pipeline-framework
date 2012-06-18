@@ -22,7 +22,7 @@
       <artifactId>guava-osgi</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.xmlcalabash</groupId>
+      <groupId>org.daisy.libs</groupId>
       <artifactId>com.xmlcalabash</artifactId>
     </dependency>
     <dependency>
@@ -33,10 +33,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-    <!-- <dependency>
-      <groupId>xml-apis</groupId>
-      <artifactId>xml-apis</artifactId>
-    </dependency> -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>

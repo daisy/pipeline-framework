@@ -155,7 +155,7 @@
     <daisy.xproc-api.version>1.0-SNAPSHOT</daisy.xproc-api.version>
 
     <!-- Dependencies Versions -->
-    <calabash.version>1.0.2-94</calabash.version>
+    <calabash.version>1.0.4-SNAPSHOT</calabash.version>
     <commons.codec.version>1.6</commons.codec.version>
     <commons.fileupload.version>1.2.2</commons.fileupload.version>
     <commons.io.version>2.3</commons.io.version>
@@ -290,7 +290,7 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>com.xmlcalabash</groupId>
+        <groupId>org.daisy.libs</groupId>
         <artifactId>com.xmlcalabash</artifactId>
         <version>${calabash.version}</version>
         <exclusions>
