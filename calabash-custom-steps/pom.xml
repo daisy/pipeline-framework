@@ -14,7 +14,7 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
-  <name>Calabash-custom-steps</name>
+  <name>DAISY Pipeline 2 :: Calabash Custom Steps</name>
 
   <dependencies>
     <dependency>

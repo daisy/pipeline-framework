@@ -14,7 +14,7 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
-  <name>Xproc API</name>
+  <name>DAISY Pipeline 2 :: XProc API</name>
 
   <dependencies>
     <dependency>

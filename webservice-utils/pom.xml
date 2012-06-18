@@ -14,7 +14,7 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
-  <name>Webservice Utils</name>
+  <name>DAISY Pipeline 2 :: Web Service Utils</name>
 
   <dependencies>
     <dependency>

@@ -14,7 +14,7 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
-  <name>DAISY Pipeline 2 Module Registry</name>
+  <name>DAISY Pipeline 2 :: Module Registry</name>
 
   <dependencies>
       <dependency>
