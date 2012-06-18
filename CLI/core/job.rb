@@ -53,6 +53,9 @@ class JobStatusResultProcessor < ResultProcessor
 		Ctxt.logger.debug(job.to_s)
 		return  job
 	end
+	def notFound(err,resource)
+		raise RuntimeError,"Job #{resource.params[:id]} not found"
+	end
 end
 
 class JobZipResultProcessor < ResultProcessor
@@ -64,6 +67,9 @@ class JobZipResultProcessor < ResultProcessor
 		f.write(input)
 		f.close
 		return @path
+	end
+	def notFound(err,resource)
+		raise RuntimeError,"Job #{resource.params[:id]} not found"
 	end
 end
 class JobsStatusResultProcessor < ResultProcessor
@@ -88,6 +94,9 @@ end
 class DeleteJobResultProcessor < ResultProcessor
 	def process(bool)
 		return bool
+	end
+	def notFound(err,resource)
+		raise RuntimeError,"Job #{resource.params[:id]} not found"
 	end
 end
 class Message

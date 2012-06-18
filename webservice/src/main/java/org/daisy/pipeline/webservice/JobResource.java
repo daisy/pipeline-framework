@@ -14,7 +14,6 @@ import org.restlet.resource.Get;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * The Class JobResource.
  */
@@ -24,55 +23,58 @@ public class JobResource extends AuthenticatedResource {
 	private int msgSeq = 0;
 
 	/** The logger. */
-	private static Logger logger = LoggerFactory.getLogger(JobResource.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(JobResource.class
+			.getName());
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see org.restlet.resource.Resource#doInit()
 	 */
 	@Override
-    public void doInit() {
+	public void doInit() {
 		super.doInit();
 		if (!isAuthenticated()) {
 			return;
 		}
 		JobManager jobMan = webservice().getJobManager();
-        String idParam = (String) getRequestAttributes().get("id");
-        String msgSeqParam = getQuery().getFirstValue("msgSeq");
+		String idParam = (String) getRequestAttributes().get("id");
+		String msgSeqParam = getQuery().getFirstValue("msgSeq");
 
-        if (msgSeqParam!=null){
-        	msgSeq = Integer.parseInt(msgSeqParam);
-        }
-        try {
-        	JobId id = JobIdFactory.newIdFromString(idParam);
-        	job = jobMan.getJob(id);
-        }
-        catch(Exception e) {
-        	logger.error(e.getMessage());
-        	job = null;
-        }
-    }
+		if (msgSeqParam != null) {
+			msgSeq = Integer.parseInt(msgSeqParam);
+		}
+		try {
+			JobId id = JobIdFactory.newIdFromString(idParam);
+			job = jobMan.getJob(id);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			job = null;
+		}
+	}
 
-    /**
-     * Gets the resource.
-     *
-     * @return the resource
-     */
-    @Get("xml")
-    public Representation getResource() {
-    	if (!isAuthenticated()) {
-    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-    		return null;
-    	}
-    	if (job == null) {
-    		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+	/**
+	 * Gets the resource.
+	 *
+	 * @return the resource
+	 */
+	@Get("xml")
+	public Representation getResource() {
+		if (!isAuthenticated()) {
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
-    	}
+		}
+		if (job == null) {
+			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			return null;
+		}
 
-    	setStatus(Status.SUCCESS_OK);
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
-				XmlFormatter.jobToXml(job, msgSeq, getRootRef().toString(), true, true));
+		setStatus(Status.SUCCESS_OK);
+		DomRepresentation dom = new DomRepresentation(
+				MediaType.APPLICATION_XML, XmlFormatter.jobToXml(job, msgSeq,
+						getRootRef().toString(), true, true));
 		return dom;
-    }
+	}
 
 	/**
 	 * Delete resource.
@@ -80,20 +82,21 @@ public class JobResource extends AuthenticatedResource {
 	@Delete
 	public void deleteResource() {
 		if (!isAuthenticated()) {
-    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-    		return;
-    	}
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+			return;
+		}
 
 		if (job == null) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-		}
 
-		JobManager jobMan = webservice().getJobManager();
-		if (jobMan.deleteJob(job.getId())!=null) {
-			setStatus(Status.SUCCESS_NO_CONTENT);
-		}
-		else {
-			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+		} else {
+
+			JobManager jobMan = webservice().getJobManager();
+			if (jobMan.deleteJob(job.getId()) != null) {
+				setStatus(Status.SUCCESS_NO_CONTENT);
+			} else {
+				setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			}
 		}
 	}
 
