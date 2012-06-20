@@ -14,6 +14,8 @@ import org.restlet.data.Status;
 import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class ResultResource.
@@ -21,21 +23,30 @@ import org.restlet.resource.Get;
 public class ResultResource extends AuthenticatedResource {
 	/** The job. */
 	private Job job;
+	private static Logger logger = LoggerFactory.getLogger(ResultResource.class
+			.getName());
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see org.restlet.resource.Resource#doInit()
 	 */
 	@Override
-    public void doInit() {
+	public void doInit() {
 		super.doInit();
 		if (!isAuthenticated()) {
 			return;
 		}
 		JobManager jobMan = webservice().getJobManager();
-        String idParam = (String) getRequestAttributes().get("id");
-        JobId id = JobIdFactory.newIdFromString(idParam);
-        job = jobMan.getJob(id);
-    }
+		String idParam = (String) getRequestAttributes().get("id");
+		try {
+			JobId id = JobIdFactory.newIdFromString(idParam);
+			job = jobMan.getJob(id);
+		} catch (Exception e) {
+			logger.debug("Job Id malformed - Job not found: " + idParam);
+			job = null;
+		}
+	}
 
 	/**
 	 * Gets the resource.
@@ -43,37 +54,39 @@ public class ResultResource extends AuthenticatedResource {
 	 * @return the resource
 	 */
 	@Get
-    public Representation getResource() {
+	public Representation getResource() {
 		if (!isAuthenticated()) {
-    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-    		return null;
-    	}
-
-    	if (job == null) {
-    		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
-    	}
+		}
+
+		if (job == null) {
+			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			return null;
+		}
 
 		if (!job.getStatus().equals(Job.Status.DONE)) {
-    		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-    		return null;
-    	}
+			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			return null;
+		}
 
 		JobResult result = job.getResult();
 		URI zip = result.getZip();
 		// TODO check for errors instead of looking at null-ness of zip
-		// although, does the presence of errors indicate that the result is not available?
+		// although, does the presence of errors indicate that the result is not
+		// available?
 		if (zip == null) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-    		return null;
+			return null;
 		}
 
 		File zipFile = new File(zip);
-		Representation rep = new FileRepresentation(zipFile,MediaType.APPLICATION_ZIP);
+		Representation rep = new FileRepresentation(zipFile,
+				MediaType.APPLICATION_ZIP);
 		Disposition disposition = new Disposition();
 		disposition.setFilename(job.getId().toString() + ".zip");
 		disposition.setType(Disposition.TYPE_ATTACHMENT);
 		rep.setDisposition(disposition);
 		return rep;
-    }
+	}
 }

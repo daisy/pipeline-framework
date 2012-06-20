@@ -11,9 +11,9 @@ class IdBasedCommand < Command
 		if @lastid 
 			@id=Helpers.last_id_read()
 		end
-		if @id==nil
-			raise RuntimeError "No job id"
-		end
+		#if @id==nil
+			#raise RuntimeError "No job id"
+		#end
 
 	end
 

@@ -2,7 +2,7 @@ require_rel "./commands/command"
 
 class HelpCommand < Command
 	
-	def initialize(static_commands,dynamic_commands)
+	def initialize(static_commands,dynamic_commands,version)
 		super("help")
 		@s_commands=static_commands
 		@s_commands[@name]=self
@@ -10,6 +10,9 @@ class HelpCommand < Command
 		@commands={}
 	        @commands.merge!(@s_commands)
 		@commands.merge!(@d_commands)	
+		@version=version
+		@commands[@version.name]=@version
+	
 	end
 	def execute(str_args)
 		if str_args.size==0
@@ -33,6 +36,7 @@ class HelpCommand < Command
 	def help
 		s="Usage: dp2 command [options]\n\n"
 		s+="#{self.to_s}\n"
+		s+="#{@version.to_s}\n"
 		s+="\nScript commands:\n\n"
 		@d_commands.each{|name,cmd| s+="#{cmd.to_s}\n"}
 		s+="\nAdvanced commands:\n\n"

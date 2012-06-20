@@ -18,17 +18,28 @@ class Resource
 	def getResource
 		
 		@result=Rest.get_resource(buildUri())
-		return @resultProcessor.process(@result)
+		return preProcess(@result)
 	end
 	def postResource(contents,data)
 		@result=Rest.post_resource(buildUri(),contents,data)
-		return @resultProcessor.process(@result)
-		#return @resultProcessor.process(@result)
+		return preProcess(@result)
 	end
 	def deleteResource
 		@result=Rest.delete_resource(buildUri())
-		return @resultProcessor.process(@result)
+		return preProcess(@result)
 	end	
+	def preProcess(result)
+		if result.is_a? RestError
+			case result.err 
+				when Net::HTTPNotFound
+					return @resultProcessor.notFound(result,self)
+				else
+					return @resultProcessor.internalError(result,self)
+			end
+		else
+			return @resultProcessor.process(result)
+		end
+	end
 end
 
 

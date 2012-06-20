@@ -17,7 +17,6 @@ import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLogEntry;
 import org.daisy.pipeline.webserviceutils.requestlog.SimpleRequestLogEntry;
-import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,16 +26,10 @@ public class Authenticator {
 	private RequestLog requestLog;
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
-	public void init(BundleContext context) {
-	}
-
-	public void close() {
-	}
-	
-	public void setRequestLog(RequestLog requestLog) {
+	public Authenticator(RequestLog requestLog) {
 		this.requestLog = requestLog;
 	}
-
+	
 	public boolean authenticate(Client client, String hash, String timestamp, String nonce, String URI, long maxRequestTime) {
 		// rules for hashing: use the whole URL string, minus the hash part (&sign=<some value>)
 		// important!  put the sign param last so we can easily strip it out
