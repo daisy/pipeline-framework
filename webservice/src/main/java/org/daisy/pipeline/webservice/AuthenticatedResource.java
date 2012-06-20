@@ -1,7 +1,8 @@
 package org.daisy.pipeline.webservice;
 
-import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.Authenticator;
+import org.daisy.pipeline.webserviceutils.clients.Client;
+import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,8 @@ public abstract class AuthenticatedResource extends GenericResource {
 			logger.error(String.format("Client with auth ID %s not found", authid));
 			return false;
 		}
-		return new Authenticator().authenticate(client, getQuery().getFirstValue("sign"),
+		RequestLog requestLog = webservice().getRequestLog();
+		return new Authenticator(requestLog).authenticate(client, getQuery().getFirstValue("sign"),
 				getQuery().getFirstValue("time"), getQuery().getFirstValue("nonce"), getReference().toString(),
 				maxRequestTime);
 	}

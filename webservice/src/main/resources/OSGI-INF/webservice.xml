@@ -5,4 +5,5 @@
    <reference name="job-manager" interface="org.daisy.pipeline.job.JobManager" cardinality="1..1" policy="static" bind="setJobManager"/>
    <reference name="client-store" interface="org.daisy.pipeline.webserviceutils.clients.ClientStore" cardinality="1..1" policy="static" bind="setClientStore"/>
    <reference name="callback-registry" interface="org.daisy.pipeline.webserviceutils.callback.CallbackRegistry" cardinality="1..1" policy="static" bind="setCallbackRegistry"/>
+   <reference name="request-log" interface="org.daisy.pipeline.webserviceutils.requestlog.RequestLog" cardinality="1..1" policy="static" bind="setRequestLog"/>
 </scr:component>

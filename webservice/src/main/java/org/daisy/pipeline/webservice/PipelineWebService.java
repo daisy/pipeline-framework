@@ -12,6 +12,7 @@ import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
 import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.clients.ClientStore;
 import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
+import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
@@ -70,6 +71,8 @@ public class PipelineWebService extends Application {
 	private long shutDownKey=0L;
 
 	private BundleContext bundleCtxt;
+
+	private RequestLog requestLog;
 	/* (non-Javadoc)
 	 * @see org.restlet.Application#createInboundRoot()
 	 */
@@ -207,6 +210,14 @@ public class PipelineWebService extends Application {
 
 	public CallbackRegistry getCallbackRegistry() {
 		return callbackRegistry;
+	}
+
+	public void setRequestLog(RequestLog requestLog) {
+		this.requestLog = requestLog;
+	}
+
+	public RequestLog getRequestLog() {
+		return requestLog;
 	}
 
 	/**
