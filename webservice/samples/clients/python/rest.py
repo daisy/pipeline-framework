@@ -50,9 +50,9 @@ def post_resource(uri, data):
         if isinstance(data, dict) == True:
             multipart = MultipartPost()
             query, headers = multipart.prepare_query(data)
-            connection.request("POST", authuri.path, query, headers)
+            connection.request("POST", authuri.path + "?" + authuri.query, query, headers)
         else:
-            connection.request("POST", authuri.path, data)
+            connection.request("POST", authuri.path + "?" + authuri.query, data)
     
         response = connection.getresponse()
         print "Response was %s" % response.reason
@@ -74,7 +74,7 @@ def delete_resource(uri):
     authuri = urlparse(authentication.prepare_authenticated_uri(uri))
     connection = httplib.HTTPConnection(authuri.netloc)
     try:
-        connection.request("DELETE", authuri.path)
+        connection.request("DELETE", authuri.path + "?" + authuri.query)
         response = connection.getresponse()
     
         if response.status == httplib.NO_CONTENT:

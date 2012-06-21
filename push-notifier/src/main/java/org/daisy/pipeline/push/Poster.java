@@ -1,5 +1,10 @@
 package org.daisy.pipeline.push;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.ProtocolException;
 import java.net.URI;
 
 import org.daisy.pipeline.job.Job;
@@ -7,7 +12,6 @@ import org.daisy.pipeline.webserviceutils.Authenticator;
 import org.daisy.pipeline.webserviceutils.XmlFormatter;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.clients.Client;
-import org.restlet.resource.ClientResource;
 import org.w3c.dom.Document;
 
 public class Poster {
@@ -36,8 +40,67 @@ public class Poster {
 		if (client != null) {
 			requestUri = Authenticator.createUriWithCredentials(url.toString(), client);
 		}
-		// use restlet ClientResource with the callback URI
-		ClientResource resource = new ClientResource(requestUri.toString());
-		resource.post(doc);
+
+		// from http://code.geek.sh/2009/10/simple-post-in-java/
+		HttpURLConnection connection = null;
+        try {
+            connection = (HttpURLConnection) requestUri.toURL().openConnection();
+        } catch (IOException e) {
+        	// TODO Auto-generated catch block
+			e.printStackTrace();
+        }
+
+        connection.setDoInput (true);
+        connection.setDoOutput (true); // TODO do we need this one too?
+        connection.setUseCaches (false);
+
+        try {
+            connection.setRequestMethod("POST");
+        } catch (ProtocolException e) {
+        	// TODO Auto-generated catch block
+			e.printStackTrace();
+        }
+
+        try {
+            connection.connect();
+        } catch (IOException e) {
+        	// TODO Auto-generated catch block
+			e.printStackTrace();
+        }
+
+        DataOutputStream output = null;
+        DataInputStream input = null;
+
+        try {
+            output = new DataOutputStream(connection.getOutputStream());
+        } catch (IOException e) {
+        	// TODO Auto-generated catch block
+			e.printStackTrace();
+        }
+
+        // Send the request data.
+        try {
+            output.writeBytes(XmlFormatter.DOMToString(doc));
+            output.flush();
+            output.close();
+        } catch (IOException e) {
+        	// TODO Auto-generated catch block
+			e.printStackTrace();
+        }
+
+        // Get response data.
+        String str = null;
+        try {
+            input = new DataInputStream (connection.getInputStream());
+            while (null != ((str = input.readLine()))) {
+            //    System.out.println(str);
+            }
+            input.close ();
+        } catch (IOException e) {
+        	// TODO Auto-generated catch block
+			e.printStackTrace();
+        }
 	}
+
+
 }

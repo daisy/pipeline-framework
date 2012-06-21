@@ -342,7 +342,7 @@ public class JobsResource extends AuthenticatedResource {
 		for (int i = 0; i<callbacks.getLength(); i++) {
 			Element elm = (Element)callbacks.item(i);
 			String href = elm.getAttribute("href");
-			CallbackType type = CallbackType.valueOf(elm.getAttribute("type"));
+			CallbackType type = CallbackType.valueOf(elm.getAttribute("type").toUpperCase());
 			String frequency = elm.getAttribute("frequency");
 			Callback callback = null;
 			int freq = 0;
