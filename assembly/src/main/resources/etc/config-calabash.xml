@@ -7,6 +7,7 @@
 <implementation type="px:delete" class-name="com.xmlcalabash.extensions.fileutils.Delete"/>
 <implementation type="px:info" class-name="com.xmlcalabash.extensions.fileutils.Info"/>
 <implementation type="px:mkdir" class-name="com.xmlcalabash.extensions.fileutils.Mkdir"/>
+<implementation type="px:tempfile" class-name="com.xmlcalabash.extensions.fileutils.Tempfile"/>
 <implementation type="px:zip" class-name="com.xmlcalabash.extensions.Zip"/>
 
 </xproc-config>
