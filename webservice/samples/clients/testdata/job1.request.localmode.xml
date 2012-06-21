@@ -51,4 +51,7 @@
         </docwrapper>
     </input>
     <option name='output-dir'>file:/tmp/dp2_jobs</option>
+    <callback type='messages' href='http://localhost:8080/ws/jobmessage' frequency='10'/>
+    <callback type='status' href='http://localhost:8080/ws/jobstatus' frequency='10'/>
+    
 </jobRequest>

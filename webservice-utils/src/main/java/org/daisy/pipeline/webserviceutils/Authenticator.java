@@ -3,6 +3,7 @@ package org.daisy.pipeline.webserviceutils;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.SignatureException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -82,7 +83,7 @@ public class Authenticator {
 	//  The uri param includes all parameters except id, timestamp, and hash"""
 	public static URI createUriWithCredentials(String uri, Client client) {
 		String uristring = "";
-		String timestamp = ""; // TODO time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+		String timestamp = getCurrentTimestamp();
 		String nonce = generateNonce();
 		String params = "authid=%s&time=%s&nonce=%s";
 		params = String.format(params, client.getId(), timestamp, nonce);
@@ -166,8 +167,15 @@ public class Authenticator {
 	private static String generateNonce() {
 		long range = (long) Math.pow(10, 30);
 		long num = (long)(new Random().nextDouble() * range);
-		String nonce = String.format("%-30d", Long.toString(num)).replace(' ', '0');
+		String nonce = String.format("%-30d", num).replace(' ', '0');
 		return nonce;
+	}
+	
+	private static String getCurrentTimestamp() {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String now = dateFormat.format(new Date()) + 'Z';
+        return now;
 	}
 
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """The local webservice set up to receive callbacks about job progress"""
 import web
 from lxml import etree
@@ -11,6 +13,9 @@ class jobmessage:
         self.print_update(doc)
 
     def print_update(self, doc):
+        print etree.tostring(doc, pretty_print = True);
+        return
+        
         xpath_expr = "//{{{0}}}job".format(settings.PX_NS)
         xpath_fn = etree.ETXPath(xpath_expr)
         results = xpath_fn(doc)
