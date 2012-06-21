@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<assembly>
+  <id>main</id>
+  <formats>
+    <format>dir</format>
+  </formats>
+  <baseDirectory>.</baseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>src/main/resources/etc</directory>
+      <excludes>
+        <exclude>config.properties</exclude>
+        <exclude>org.apache.felix.fileinstall-*.cfg</exclude>
+      </excludes>
+      <outputDirectory>/etc</outputDirectory>
+      <filtered>false</filtered>
+    </fileSet>
+    <fileSet>
+      <directory>src/main/resources/etc</directory>
+      <includes>
+        <include>config.properties</include>
+        <include>org.apache.felix.fileinstall-*.cfg</include>
+      </includes>
+      <outputDirectory>/etc</outputDirectory>
+      <filtered>true</filtered>
+    </fileSet>
+  </fileSets>
+</assembly>

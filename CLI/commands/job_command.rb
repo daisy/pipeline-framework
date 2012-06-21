@@ -1,17 +1,16 @@
-require_rel "./commands/command"
+require_rel "./commands/id_based_command"
 
-class JobCommand < Command
+class JobCommand < IdBasedCommand
 
 	def initialize
 		super("status")
 		@showMsgs=false
 		build_parser
 	end
-
 	def execute(str_args)
 			
 		begin
-			@parser.parse(str_args)
+			getId!(str_args)	
 			job=Dp2.new.job_status(@id,0)
 			str="No such job"
 			if job != nil 
@@ -40,13 +39,11 @@ class JobCommand < Command
 	def build_parser
 
 		@parser=OptionParser.new do |opts|
-			opts.on("--id JOB","job's id") do |v|
-				@id=v
-			end
 			opts.on("-v","Shows the job's log messages") do |v|
 				@showMsgs=true
 			end
+			addLastId(opts)
 		end
-		@parser.program_name="dp2 "+ @name
+		@parser.banner="dp2 "+ @name + " [options] JOBID"
 	end
 end
