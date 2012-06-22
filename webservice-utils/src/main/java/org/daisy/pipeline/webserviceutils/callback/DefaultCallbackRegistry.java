@@ -25,7 +25,7 @@ public class DefaultCallbackRegistry implements CallbackRegistry {
 	public Iterable<Callback> getCallbacks(JobId id) {
 		List<Callback> filteredList = new ArrayList<Callback>();
 		for (Callback callback : callbacks) {
-			if (callback.getJobId() == id) {
+			if (callback.getJobId().toString().equals(id.toString())) {
 				filteredList.add(callback);
 			}
 		}

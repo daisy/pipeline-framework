@@ -12,9 +12,14 @@ import org.daisy.pipeline.webserviceutils.Authenticator;
 import org.daisy.pipeline.webserviceutils.XmlFormatter;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.clients.Client;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 public class Poster {
+
+	/** The logger. */
+	private static Logger logger = LoggerFactory.getLogger(Poster.class.getName());
 
 	// TODO how to get the base URI ahead of time?  It would be good to have it available in webserviceutils.
 	// However, WebService itself may not know what it is until a Resource is requested.
@@ -25,7 +30,6 @@ public class Poster {
 		// TODO use the right base URI
 		Document doc = XmlFormatter.jobToXml(job, msgSeq, "http://localhost:8181", true, false);
 		postXml(doc, url, callback.getClient());
-
 	}
 
 	public static void postStatusUpdate(Job job, Callback callback) {
@@ -46,26 +50,26 @@ public class Poster {
         try {
             connection = (HttpURLConnection) requestUri.toURL().openConnection();
         } catch (IOException e) {
-        	// TODO Auto-generated catch block
-			e.printStackTrace();
+        	logger.error(e.getMessage());
+			return;
         }
 
         connection.setDoInput (true);
-        connection.setDoOutput (true); // TODO do we need this one too?
+        connection.setDoOutput (true);
         connection.setUseCaches (false);
 
         try {
             connection.setRequestMethod("POST");
         } catch (ProtocolException e) {
-        	// TODO Auto-generated catch block
-			e.printStackTrace();
+        	logger.error(e.getMessage());
+        	return;
         }
 
         try {
             connection.connect();
         } catch (IOException e) {
-        	// TODO Auto-generated catch block
-			e.printStackTrace();
+        	logger.error(e.getMessage());
+        	return;
         }
 
         DataOutputStream output = null;
@@ -74,8 +78,8 @@ public class Poster {
         try {
             output = new DataOutputStream(connection.getOutputStream());
         } catch (IOException e) {
-        	// TODO Auto-generated catch block
-			e.printStackTrace();
+        	logger.error(e.getMessage());
+        	return;
         }
 
         // Send the request data.
@@ -84,21 +88,16 @@ public class Poster {
             output.flush();
             output.close();
         } catch (IOException e) {
-        	// TODO Auto-generated catch block
-			e.printStackTrace();
+        	logger.error(e.getMessage());
+        	return;
         }
 
-        // Get response data.
-        String str = null;
+        // Get response data. We're not doing anything with it but if we don't retrieve it, the callback doesn't appear to work.
         try {
             input = new DataInputStream (connection.getInputStream());
-            while (null != ((str = input.readLine()))) {
-            //    System.out.println(str);
-            }
             input.close ();
         } catch (IOException e) {
-        	// TODO Auto-generated catch block
-			e.printStackTrace();
+        	logger.warn(e.getMessage());
         }
 	}
 
