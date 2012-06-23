@@ -33,18 +33,28 @@ public class PushNotifier {
 	// TODO something similar for status
 	MessageSeq messages;
 
-	Timer timer;
+	Timer timer = null;
 
 	public PushNotifier() {
 	}
 
 	public void init(BundleContext context) {
 		messages = new MessageSeq();
-		timer = new Timer();
 	}
 
 	public void close() {
-		timer.cancel();
+		cancelTimer();
+	}
+
+	public synchronized void startTimer() {
+		timer = new Timer();
+		timer.schedule(new MessageTask(), 0, PUSH_INTERVAL);
+	}
+	public synchronized void cancelTimer() {
+		if (timer != null) {
+			timer.cancel();
+			timer = null;
+		}
 	}
 
 	public void setEventBusProvider(EventBusProvider eventBusProvider) {
@@ -64,7 +74,7 @@ public class PushNotifier {
 	public synchronized void handleMessage(Message msg) {
 		// if this is our first message, start the timer.
 		if (messages.isEmpty()) {
-			timer.schedule(new MessageTask(), 0, PUSH_INTERVAL);
+			startTimer();
 		}
 
 		JobUUIDGenerator gen = new JobUUIDGenerator();
@@ -73,7 +83,6 @@ public class PushNotifier {
 			// track the starting point in the messages sequence
 			messages.setMessageSeq(jobId, msg.getSequence());
 		}
-
 	}
 
 	//TODO @Subscribe
@@ -92,6 +101,7 @@ public class PushNotifier {
 		}
 
 		public synchronized void setMessageSeq(JobId jobId, int idx) {
+			System.out.println("Adding message #" + idx);
 			messages.put(jobId, idx);
 		}
 
@@ -119,7 +129,7 @@ public class PushNotifier {
             postMessages();
         }
 
-        private void postMessages() {
+        private synchronized void postMessages() {
     		for (JobId jobId : messages.getJobs()) {
     			Iterable<Callback> callbacks = callbackRegistry.getCallbacks(jobId);
     			Job job = jobManager.getJob(jobId);
@@ -131,12 +141,14 @@ public class PushNotifier {
     					Poster.postMessage(job, idx, callback);
     				}
     			}
-    			if (messages.isEmpty()) {
-    				// TODO no need to keep the timer going if there are no messages
-    				// but this doesn't work
-    				// timer.cancel();
-    			}
     		}
+
+    		// no need to keep the timer going if there are no more messages
+    		// however, this doesn't really work. TODO fix it.
+			/*if (messages.isEmpty()) {
+				System.out.println("Cancelling timer");
+				cancelTimer();
+			}*/
 
     	}
 
