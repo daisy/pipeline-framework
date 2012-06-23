@@ -34,6 +34,7 @@ public class PushNotifier {
 	MessageSeq messages;
 
 	Timer timer = null;
+	boolean started = false;
 
 	public PushNotifier() {
 	}
@@ -73,14 +74,20 @@ public class PushNotifier {
 	@Subscribe
 	public synchronized void handleMessage(Message msg) {
 		// if this is our first message, start the timer.
-		if (messages.isEmpty()) {
+		/*if (messages.isEmpty()) {
+			startTimer();
+		}*/
+		if (started == false) {
+			started = true;
 			startTimer();
 		}
-
+		//System.out.println("Got message #" + msg.getSequence());
 		JobUUIDGenerator gen = new JobUUIDGenerator();
 		JobId jobId = gen.generateIdFromString(msg.getJobId());
 		if (!messages.containsJob(jobId)) {
 			// track the starting point in the messages sequence
+			// the output that we post to the callback comes from XmlFormatter
+			// which can list job messages starting with a position and ending with the most recent message
 			messages.setMessageSeq(jobId, msg.getSequence());
 		}
 	}
@@ -101,7 +108,7 @@ public class PushNotifier {
 		}
 
 		public synchronized void setMessageSeq(JobId jobId, int idx) {
-			System.out.println("Adding message #" + idx);
+			System.out.println("Setting seq start: " + idx);
 			messages.put(jobId, idx);
 		}
 
@@ -125,7 +132,7 @@ public class PushNotifier {
 	class MessageTask extends TimerTask {
         @Override
 		public synchronized void run() {
-        	System.out.println("Timer running");
+        	//System.out.println("Timer running");
             postMessages();
         }
 

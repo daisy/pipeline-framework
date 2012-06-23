@@ -61,7 +61,8 @@ public class XmlFormatter {
 	 *            the server address
 	 * @return the document
 	 */
-	public static Document jobToXml(Job job, int msgSeq, String baseUri, boolean detail, boolean includeScriptDetail) {
+	public static Document jobToXml(Job job, int msgSeq, boolean detail, boolean includeScriptDetail) {
+		String baseUri = new Routes().getBaseUri();
 		Document doc = XmlFormatter.createDom("job");
 		toXmlElm(job, doc, msgSeq, baseUri, detail, includeScriptDetail);
 
@@ -82,7 +83,8 @@ public class XmlFormatter {
 	 *            the server address
 	 * @return the document
 	 */
-	public static Document jobsToXml(Iterable<Job> jobs, String baseUri) {
+	public static Document jobsToXml(Iterable<Job> jobs) {
+		String baseUri = new Routes().getBaseUri();
 		Document doc = XmlFormatter.createDom("jobs");
 		Element jobsElm = doc.getDocumentElement();
 		jobsElm.setAttribute("href", baseUri + Routes.JOBS_ROUTE);
@@ -109,7 +111,8 @@ public class XmlFormatter {
 	 *            the script
 	 * @return the document
 	 */
-	public static Document xprocScriptToXml(XProcScript script, String baseUri) {
+	public static Document xprocScriptToXml(XProcScript script) {
+		String baseUri = new Routes().getBaseUri();
 		Document doc = XmlFormatter.createDom("script");
 		toXmlElm(script, doc, baseUri, true);
 
@@ -128,7 +131,8 @@ public class XmlFormatter {
 	 *            the scripts
 	 * @return the document
 	 */
-	public static Document xprocScriptsToXml(Iterable<XProcScript> scripts, String baseUri) {
+	public static Document xprocScriptsToXml(Iterable<XProcScript> scripts) {
+		String baseUri = new Routes().getBaseUri();
 		Document doc = XmlFormatter.createDom("scripts");
 		Element scriptsElm = doc.getDocumentElement();
 		scriptsElm.setAttribute("href", baseUri + Routes.SCRIPTS_ROUTE);
@@ -147,7 +151,8 @@ public class XmlFormatter {
 		return doc;
 	}
 
-	public static Document clientToXml(Client client, String baseUri) {
+	public static Document clientToXml(Client client) {
+		String baseUri = new Routes().getBaseUri();
 		Document doc = XmlFormatter.createDom("client");
 		XmlFormatter.toXmlElm(client, doc, baseUri);
 
@@ -159,7 +164,8 @@ public class XmlFormatter {
 		return doc;
 	}
 
-	public static Document clientsToXml(List<? extends Client> clients, String baseUri) {
+	public static Document clientsToXml(List<? extends Client> clients) {
+		String baseUri = new Routes().getBaseUri();
 		Document doc = XmlFormatter.createDom("clients");
 		Element clientsElm = doc.getDocumentElement();
 		clientsElm.setAttribute("href", baseUri + Routes.CLIENTS_ROUTE);

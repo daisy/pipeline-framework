@@ -80,7 +80,7 @@ public class JobsResource extends AuthenticatedResource {
     	}
 
 		JobManager jobMan = webservice().getJobManager();
-		Document doc = XmlFormatter.jobsToXml(jobMan.getJobs(), getRootRef().toString());
+		Document doc = XmlFormatter.jobsToXml(jobMan.getJobs());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
 		setStatus(Status.SUCCESS_OK);
 		return dom;
@@ -165,7 +165,7 @@ public class JobsResource extends AuthenticatedResource {
 			return null;
 		}
 
-		Document jobXml = XmlFormatter.jobToXml(job, 0, getRootRef().toString(), true, true);
+		Document jobXml = XmlFormatter.jobToXml(job, 0, true, true);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
 		setStatus(Status.SUCCESS_CREATED);
 		return dom;

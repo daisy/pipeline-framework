@@ -48,8 +48,7 @@ public class ClientsResource extends AdminResource {
 
     	setStatus(Status.SUCCESS_OK);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
-				XmlFormatter.clientsToXml(webservice().getClientStore().getAll(),
-						getRootRef().toString()));
+				XmlFormatter.clientsToXml(webservice().getClientStore().getAll()));
 
 		return dom;
     }
@@ -110,7 +109,7 @@ public class ClientsResource extends AdminResource {
 		}
 
 		setStatus(Status.SUCCESS_CREATED);
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.clientToXml(newClient, getRootRef().toString()));
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, XmlFormatter.clientToXml(newClient));
 		return dom;
     }
 }

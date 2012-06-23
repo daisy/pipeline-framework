@@ -35,28 +35,18 @@ public class PipelineWebService extends Application {
 	private static Logger logger = LoggerFactory.getLogger(PipelineWebService.class.getName());
 
 	/* other runtime-configurable property names */
-	public static final String PORT_PROPERTY = "org.daisy.pipeline.ws.port";
-	public static final String PATH_PROPERTY = "org.daisy.pipeline.ws.path";
 	public static final String MAX_REQUEST_TIME_PROPERTY = "org.daisy.pipeline.ws.maxrequesttime";
 	public static final String TMPDIR_PROPERTY = "org.daisy.pipeline.ws.tmpdir";
 	public static final String AUTHENTICATION_PROPERTY = "org.daisy.pipeline.ws.authentication";
 	public static final String LOCAL_MODE_PROPERTY = "org.daisy.pipeline.ws.local";
 	public static final String JAVA_IO_TMPDIR_PROPERTY = "java.io.tmpdir";
-
+	
 	public static final String KEY_FILE_NAME="dp2key.txt";
 
-	private static final int LOCAL_PORT_DEF=8181;
-	private static final int REMOTE_PORT_DEF=8182;
-	/* options and their default values */
-	private String path = "/ws";
-	private  int portNumber = 0;
 	private boolean usesAuthentication = true;
 	private long maxRequestTime = 600000; // 10 minutes in ms
 	private String tmpDir = "/tmp";
-
-	/** The Constant WS. */
-	//private static final String WS = "ws";
-
+	
 	/** The job manager. */
 	private JobManager jobManager;
 
@@ -100,11 +90,13 @@ public class PipelineWebService extends Application {
 	public void init(BundleContext ctxt) {
 		bundleCtxt=ctxt;
 		readOptions();
+		Routes routes = new Routes();
+		
 		logger.info(String.format("Starting webservice on port %d",
-				portNumber));
+				routes.getPort()));
 		Component component = new Component();
-		Server theServer = component.getServers().add(Protocol.HTTP, portNumber);
-		component.getDefaultHost().attach(path, this);
+		Server theServer = component.getServers().add(Protocol.HTTP, routes.getPort());
+		component.getDefaultHost().attach(routes.getPath(), this);
 
 		try {
 			component.start();
@@ -159,6 +151,7 @@ public class PipelineWebService extends Application {
 		return tmpDir;
 	}
 
+	
 	public boolean isAuthenticationEnabled() {
 		return usesAuthentication;
 	}
@@ -247,15 +240,7 @@ public class PipelineWebService extends Application {
 	}
 
 	private void readOptions() {
-
-		String path = System.getProperty(PATH_PROPERTY);
-		if (path != null) {
-			if (!path.startsWith("/")) {
-				path = "/" + path;
-			}
-			this.path = path;
-		}
-
+		
 		String authentication = System.getProperty(AUTHENTICATION_PROPERTY);
 
 		if (authentication != null) {
@@ -270,31 +255,6 @@ public class PipelineWebService extends Application {
 				logger.error(String.format(
 						"Value specified in option %s (%s) is not valid. Using default value of %s.",
 						AUTHENTICATION_PROPERTY, authentication, usesAuthentication));
-			}
-		}
-
-		String port = System.getProperty(PORT_PROPERTY);
-		if (port != null) {
-			try {
-				int portnum = Integer.parseInt(port);
-				if (portnum >= 0 && portnum <= 65535) {
-					portNumber = portnum;
-				}
-				else {
-					logger.error(String.format(
-							"Value specified in option %s (%d) is not valid. Using default value of %d.",
-							PORT_PROPERTY, portnum, portNumber));
-				}
-			} catch (NumberFormatException e) {
-				logger.error(String.format(
-						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.",
-						PORT_PROPERTY, port, portNumber));
-			}
-		}else{
-			if (isLocal()){
-				portNumber=LOCAL_PORT_DEF;
-			}else{
-				portNumber=REMOTE_PORT_DEF;
 			}
 		}
 
