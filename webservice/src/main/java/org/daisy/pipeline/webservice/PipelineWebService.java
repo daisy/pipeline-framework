@@ -97,7 +97,7 @@ public class PipelineWebService extends Application {
 		Component component = new Component();
 		Server theServer = component.getServers().add(Protocol.HTTP, routes.getPort());
 		component.getDefaultHost().attach(routes.getPath(), this);
-
+		this.setStatusService(new PipelineStatusService());
 		try {
 			component.start();
 			generateStopKey();

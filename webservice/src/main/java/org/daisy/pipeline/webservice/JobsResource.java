@@ -78,7 +78,7 @@ public class JobsResource extends AuthenticatedResource {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
     	}
-
+		
 		JobManager jobMan = webservice().getJobManager();
 		Document doc = XmlFormatter.jobsToXml(jobMan.getJobs());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);

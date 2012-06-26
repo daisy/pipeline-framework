@@ -24,7 +24,8 @@ class Rest
 			when Net::HTTPSuccess
 				return response.body
 			else
-				return RestError.new(response,nil)
+				Ctxt.logger.debug("error from WS: #{response.body}")
+				return RestError.new(response,response.body)
 			end
 		rescue Exception=>e
 			puts e
@@ -107,7 +108,7 @@ class Rest
 
 end
 class RestError
-	attr :err,:text
+	attr_accessor :err,:text
 	def initialize(err,text)
 		@err=err
 		@text=text
