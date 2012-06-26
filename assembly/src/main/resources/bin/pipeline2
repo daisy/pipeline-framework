@@ -269,7 +269,7 @@ setupDefaults() {
     fi
 
     # Add the jars in the lib dir
-    for file in "$PIPELINE2_HOME"/system/bootstrap/*.jar
+    for file in "$PIPELINE2_HOME"/${bundles.bootstrap}/*.jar
     do
         if [ -z "$CLASSPATH" ]; then
             CLASSPATH="$file"

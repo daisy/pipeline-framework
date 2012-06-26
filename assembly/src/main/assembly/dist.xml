@@ -39,6 +39,7 @@
       </includes>
       <outputDirectory>/</outputDirectory>
       <fileMode>0755</fileMode>
+      <filtered>true</filtered>
     </fileSet>
     <fileSet>
       <directory>target/bundles/bootstrap</directory>

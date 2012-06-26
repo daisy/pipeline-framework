@@ -24,5 +24,14 @@
       <outputDirectory>/etc</outputDirectory>
       <filtered>true</filtered>
     </fileSet>
+    <fileSet>
+      <directory>src/main/resources</directory>
+      <includes>
+        <include>bin/**</include>
+      </includes>
+      <outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
+      <fileMode>0755</fileMode>
+    </fileSet>
   </fileSets>
 </assembly>

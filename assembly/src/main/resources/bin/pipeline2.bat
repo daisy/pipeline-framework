@@ -181,9 +181,9 @@ if "%PIPELINE2_PROFILER%" == "" goto :PIPELINE2_PROFILER_END
     call :warn Missing configuration for profiler '%PIPELINE2_PROFILER%': %PIPELINE2_PROFILER_SCRIPT%
     goto END
 :PIPELINE2_PROFILER_END
-
+set BOOTSTRAP="${bundles.bootstrap}"
 rem Setup the classpath
-pushd "%PIPELINE2_HOME%\system\bootstrap"
+pushd "%PIPELINE2_HOME%\%BOOTSTRAP:/=\%"
 for %%G in (*.jar) do call:APPEND_TO_CLASSPATH %%G
 popd
 goto CLASSPATH_END
@@ -191,7 +191,7 @@ goto CLASSPATH_END
 : APPEND_TO_CLASSPATH
 set filename=%~1
 set suffix=%filename:~-4%
-if %suffix% equ .jar set CLASSPATH=%CLASSPATH%;%PIPELINE2_HOME%\system\bootstrap\%filename%
+if %suffix% equ .jar set CLASSPATH=%CLASSPATH%;%PIPELINE2_HOME%\%BOOTSTRAP:/=\%\%filename%
 goto :EOF
 
 :CLASSPATH_END
