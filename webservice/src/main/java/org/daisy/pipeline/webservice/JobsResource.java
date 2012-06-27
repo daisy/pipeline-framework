@@ -81,7 +81,7 @@ public class JobsResource extends AuthenticatedResource {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
     	}
-
+		
 		JobManager jobMan = webservice().getJobManager();
 		JobsXmlWriter writer = XmlWriterFactory.createXmlWriter(jobMan.getJobs());
 		Document doc = writer.getXmlDocument();
