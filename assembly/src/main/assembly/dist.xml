@@ -71,5 +71,29 @@
       <directory>target/bundles/modules</directory>
       <outputDirectory>/modules</outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory>target/cli</directory>
+      <outputDirectory>cli</outputDirectory>
+      <excludes>
+        <exclude>config.yml</exclude>
+        <exclude>dp2*</exclude>
+      </excludes>
+    </fileSet>
+    <fileSet>
+      <directory>target/cli</directory>
+      <outputDirectory>cli</outputDirectory>
+      <filtered>true</filtered>
+      <includes>
+        <include>config.yml</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>target/cli</directory>
+      <outputDirectory>cli</outputDirectory>
+      <includes>
+        <include>dp2*</include>
+      </includes>
+      <fileMode>0755</fileMode>
+    </fileSet>
   </fileSets>
 </assembly>
