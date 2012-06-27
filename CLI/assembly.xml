@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<assembly>
+  <id>main</id>
+  <formats>
+    <format>zip</format>
+    <!-- <format>dir</format> -->
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <includes>
+        <include>commands/**</include>
+        <include>core/**</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <includes>
+        <include>dp2</include>
+        <include>dp2.exe</include>
+      </includes>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>0755</fileMode>
+    </fileSet>
+  </fileSets>
+  <files>
+    <file>
+      <source>config_dist.yml</source>
+      <destName>config.yml</destName>
+    </file>
+  </files>
+</assembly>

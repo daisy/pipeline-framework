@@ -1,17 +1,17 @@
 #WS CONFIGURATION
-host: http://localhost
-port: 8181
-ws_path: ws   
-ws_timeup: 60
+host: ${pipeline.ws.host}
+port: ${pipeline.ws.port}
+ws_path: ${pipeline.ws.path}
+ws_timeup: ${pipeline.ws.timeout}
 #DP2 launch config 
-exec_line_nix: ../fwk/dp2ws_local.sh  
-exec_line_win: ..\fwk\dp2ws_local.bat  
-local: true
-authenticate: false
+exec_line_nix: ${pipeline.ws.cmd.unix}
+exec_line_win: ${pipeline.ws.cmd.win}  
+local: ${pipeline.ws.local}
+authenticate: ${pipeline.ws.authenticate}
 # ROBOT CONF
-client_key: clientkey
-client_secret: supersecret
+client_key: ${pipeline.ws.clientkey}
+client_secret: ${pipeline.ws.clientsecret}
 #connection settings
-timeout_seconds: 100
+timeout_seconds: ${pipeline.cli.timeout}
 #debug
-debug: false
+debug: ${pipeline.cli.debug}

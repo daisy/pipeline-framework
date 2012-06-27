@@ -1,13 +1,9 @@
 #WS CONFIGURATION
 host: http://localhost
-#REMOTE PORT (def)
-#port: 8182
-#LOCAL PORT (def)
 port: 8181
 ws_path: ws   
 ws_timeup: 25 
 #DP2 launch config 
-
 exec_line_nix: ../Main/dp2ws_local.sh  
 exec_line_win: ..\Main\dp2ws_local.bat  
 local: true 
