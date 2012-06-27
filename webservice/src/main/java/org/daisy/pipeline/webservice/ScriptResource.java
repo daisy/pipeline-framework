@@ -3,7 +3,8 @@ package org.daisy.pipeline.webservice;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
-import org.daisy.pipeline.webserviceutils.XmlFormatter;
+import org.daisy.pipeline.webserviceutils.xml.ScriptXmlWriter;
+import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -64,9 +65,10 @@ public class ScriptResource extends AuthenticatedResource {
 			return null;
 		}
 		setStatus(Status.SUCCESS_OK);
+		ScriptXmlWriter writer = XmlWriterFactory.createXmlWriter(script);
 		DomRepresentation dom = new DomRepresentation(
 				MediaType.APPLICATION_XML,
-				XmlFormatter.xprocScriptToXml(script));
+				writer.withDetails().getXmlDocument());
 		return dom;
 	}
 }

@@ -15,8 +15,8 @@ import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
-import org.daisy.pipeline.webserviceutils.XmlFormatter;
-import org.daisy.pipeline.webserviceutils.XmlValidator;
+import org.daisy.pipeline.webserviceutils.xml.XmlUtils;
+import org.daisy.pipeline.webserviceutils.xml.XmlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -35,8 +35,7 @@ public class Validator {
 	private static Logger logger = LoggerFactory.getLogger(Validator.class.getName());
 
 	public static boolean validateXmlAgainstSchema(Document document, URL schema) {
-		XmlValidator validator = new XmlValidator();
-		return validator.validate(document, schema);
+		return XmlValidator.validate(document, schema);
 	}
 
 	/**
@@ -278,7 +277,7 @@ public class Validator {
 					break;
 				}
 			}
-			String xml = XmlFormatter.nodeToString(content);
+			String xml = XmlUtils.nodeToString(content);
 			isValid &= validateWellFormedXml(xml);
 		}
 

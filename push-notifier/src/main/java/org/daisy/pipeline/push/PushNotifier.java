@@ -14,6 +14,8 @@ import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
 import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.eventbus.Subscribe;
 
@@ -25,6 +27,8 @@ public class PushNotifier {
 	private CallbackRegistry callbackRegistry;
 	private EventBusProvider eventBusProvider;
 	private JobManager jobManager;
+	/** The logger. */
+	private static Logger logger = LoggerFactory.getLogger(Poster.class.getName());
 
 	// for now: push notifications every second. TODO: support different frequencies.
 	final int PUSH_INTERVAL = 1000;
@@ -73,22 +77,17 @@ public class PushNotifier {
 
 	@Subscribe
 	public synchronized void handleMessage(Message msg) {
-		// if this is our first message, start the timer.
-		/*if (messages.isEmpty()) {
-			startTimer();
-		}*/
 		if (started == false) {
 			started = true;
 			startTimer();
 		}
-		//System.out.println("Got message #" + msg.getSequence());
 		JobUUIDGenerator gen = new JobUUIDGenerator();
 		JobId jobId = gen.generateIdFromString(msg.getJobId());
 		if (!messages.containsJob(jobId)) {
-			// track the starting point in the messages sequence
-			// the output that we post to the callback comes from XmlFormatter
-			// which can list job messages starting with a position and ending with the most recent message
-			messages.setMessageSeq(jobId, msg.getSequence());
+			messages.setMessageRangeStart(jobId, msg.getSequence());
+		}
+		else {
+			messages.setMessageRangeEnd(jobId, msg.getSequence());
 		}
 	}
 
@@ -97,19 +96,33 @@ public class PushNotifier {
 		// TODO handle similarly to messages
 	}
 
+	class MessageRange {
+		public int start;
+		public int end;
+	}
+
 	class MessageSeq {
-		HashMap<JobId, Integer> messages;
+		HashMap<JobId, MessageRange> messages;
 
 		public MessageSeq() {
-			messages = new HashMap<JobId, Integer>();
+			messages = new HashMap<JobId, MessageRange>();
 		}
-		public synchronized int getMessageSeq(JobId jobId) {
+		public synchronized MessageRange getMessageRange(JobId jobId) {
 			return messages.get(jobId);
 		}
 
-		public synchronized void setMessageSeq(JobId jobId, int idx) {
-			System.out.println("Setting seq start: " + idx);
-			messages.put(jobId, idx);
+		public synchronized void setMessageRangeStart(JobId jobId, int idx) {
+			MessageRange range = new MessageRange();
+			range.start = idx;
+			range.end = idx;
+			messages.put(jobId, range);
+		}
+		public synchronized void setMessageRangeEnd(JobId jobId, int idx) {
+			MessageRange range = messages.get(jobId);
+			if (range == null) { // this shouldn't ever happen
+				return;
+			}
+			range.end = idx;
 		}
 
 		public synchronized Iterable<JobId> getJobs() {
@@ -143,9 +156,9 @@ public class PushNotifier {
     			for (Callback callback : callbacks) {
     				if (callback.getType() == CallbackType.MESSAGES) {
     					// send messages for the job starting with the given message sequence index
-    					int idx = messages.getMessageSeq(jobId);
+    					MessageRange range = messages.getMessageRange(jobId);
     					messages.removeJob(jobId);
-    					Poster.postMessage(job, idx, callback);
+    					Poster.postMessage(job, range.start, range.end, callback);
     				}
     			}
     		}

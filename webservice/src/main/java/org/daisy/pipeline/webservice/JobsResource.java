@@ -31,10 +31,13 @@ import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
-import org.daisy.pipeline.webserviceutils.XmlFormatter;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
 import org.daisy.pipeline.webserviceutils.clients.Client;
+import org.daisy.pipeline.webserviceutils.xml.JobXmlWriter;
+import org.daisy.pipeline.webserviceutils.xml.JobsXmlWriter;
+import org.daisy.pipeline.webserviceutils.xml.XmlUtils;
+import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -80,7 +83,8 @@ public class JobsResource extends AuthenticatedResource {
     	}
 
 		JobManager jobMan = webservice().getJobManager();
-		Document doc = XmlFormatter.jobsToXml(jobMan.getJobs());
+		JobsXmlWriter writer = XmlWriterFactory.createXmlWriter(jobMan.getJobs());
+		Document doc = writer.getXmlDocument();
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
 		setStatus(Status.SUCCESS_OK);
 		return dom;
@@ -165,7 +169,8 @@ public class JobsResource extends AuthenticatedResource {
 			return null;
 		}
 
-		Document jobXml = XmlFormatter.jobToXml(job, 0, true, true);
+		JobXmlWriter writer = XmlWriterFactory.createXmlWriter(job);
+		Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
 		setStatus(Status.SUCCESS_CREATED);
 		return dom;
@@ -413,7 +418,7 @@ public class JobsResource extends AuthenticatedResource {
 							final SAXSource source = new SAXSource();
 
 							// TODO any way to get Source directly from a node?
-							String xml = XmlFormatter.nodeToString(content);
+							String xml = XmlUtils.nodeToString(content);
 				            InputSource is = new org.xml.sax.InputSource(new java.io.StringReader(xml));
 							source.setInputSource(is);
 				            Provider<Source> prov= new Provider<Source>(){

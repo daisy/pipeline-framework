@@ -75,7 +75,8 @@ public abstract class MessageAccessor{
 
 	public interface  MessageFilter{
 		public MessageFilter filterLevels(Set<Level> levels);
-		public MessageFilter fromSquence(int sequence);
+		public MessageFilter greaterThan(int sequence);
+		public MessageFilter inRange(int start, int end);
 		public List<Message> getMessages();
 	}
 }

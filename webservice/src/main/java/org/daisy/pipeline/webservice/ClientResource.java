@@ -7,10 +7,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.pipeline.webserviceutils.XmlFormatter;
-import org.daisy.pipeline.webserviceutils.XmlValidator;
+import org.daisy.pipeline.webserviceutils.xml.XmlValidator;
 import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
+import org.daisy.pipeline.webserviceutils.xml.ClientXmlWriter;
+import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -59,8 +60,9 @@ public class ClientResource extends AdminResource {
     	}
 
     	setStatus(Status.SUCCESS_OK);
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
-				XmlFormatter.clientToXml(client));
+    	ClientXmlWriter writer = XmlWriterFactory.createXmlWriter(client);
+    	DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
+				writer.getXmlDocument());
 		return dom;
     }
 
@@ -146,8 +148,9 @@ public class ClientResource extends AdminResource {
 		webservice().getClientStore().update(newClient);
 
 		setStatus(Status.SUCCESS_OK);
+		ClientXmlWriter writer = XmlWriterFactory.createXmlWriter(newClient);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
-				XmlFormatter.clientToXml(newClient));
+				writer.getXmlDocument());
 		return dom;
 
     }

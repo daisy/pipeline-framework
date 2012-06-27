@@ -19,7 +19,6 @@ import org.osgi.framework.launch.Framework;
 import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Restlet;
-import org.restlet.Server;
 import org.restlet.data.Protocol;
 import org.restlet.routing.Router;
 import org.slf4j.Logger;
@@ -95,7 +94,7 @@ public class PipelineWebService extends Application {
 		logger.info(String.format("Starting webservice on port %d",
 				routes.getPort()));
 		Component component = new Component();
-		Server theServer = component.getServers().add(Protocol.HTTP, routes.getPort());
+		component.getServers().add(Protocol.HTTP, routes.getPort());
 		component.getDefaultHost().attach(routes.getPath(), this);
 
 		try {

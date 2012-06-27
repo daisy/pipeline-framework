@@ -4,7 +4,8 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
-import org.daisy.pipeline.webserviceutils.XmlFormatter;
+import org.daisy.pipeline.webserviceutils.xml.JobXmlWriter;
+import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -13,6 +14,7 @@ import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
 
 /**
  * The Class JobResource.
@@ -20,7 +22,7 @@ import org.slf4j.LoggerFactory;
 public class JobResource extends AuthenticatedResource {
 	/** The job. */
 	private Job job;
-	private int msgSeq = 0;
+	private int msgSeq = -1;
 
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(JobResource.class
@@ -70,8 +72,17 @@ public class JobResource extends AuthenticatedResource {
 		}
 
 		setStatus(Status.SUCCESS_OK);
-		DomRepresentation dom = new DomRepresentation(
-				MediaType.APPLICATION_XML, XmlFormatter.jobToXml(job, msgSeq, true, true));
+		JobXmlWriter writer = XmlWriterFactory.createXmlWriter(job);
+		
+		if (msgSeq == -1) {
+			writer = writer.withAllMessages();
+		}
+		else {
+			writer = writer.withNewMessages(msgSeq);
+		}
+		Document doc = writer.withScriptDetails().getXmlDocument();
+		
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
 		return dom;
 	}
 

@@ -9,9 +9,11 @@ import java.net.URI;
 
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.webserviceutils.Authenticator;
-import org.daisy.pipeline.webserviceutils.XmlFormatter;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.clients.Client;
+import org.daisy.pipeline.webserviceutils.xml.JobXmlWriter;
+import org.daisy.pipeline.webserviceutils.xml.XmlUtils;
+import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -21,15 +23,18 @@ public class Poster {
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(Poster.class.getName());
 
-	public static void postMessage(Job job, int msgSeq, Callback callback) {
+	public static void postMessage(Job job, int msgStart, int msgEnd, Callback callback) {
 		URI url = callback.getHref();
-		Document doc = XmlFormatter.jobToXml(job, msgSeq, true, false);
+		JobXmlWriter writer = XmlWriterFactory.createXmlWriter(job);
+		writer.withMessageRange(msgStart, msgEnd);
+		Document doc = writer.getXmlDocument();
 		postXml(doc, url, callback.getClient());
 	}
 
 	public static void postStatusUpdate(Job job, Callback callback) {
 		URI url = callback.getHref();
-		Document doc = XmlFormatter.jobToXml(job, 0, false, false);
+		JobXmlWriter writer = XmlWriterFactory.createXmlWriter(job);
+		Document doc = writer.getXmlDocument();
 		postXml(doc, url, callback.getClient());
 	}
 
@@ -78,7 +83,7 @@ public class Poster {
 
         // Send the request data.
         try {
-            output.writeBytes(XmlFormatter.DOMToString(doc));
+            output.writeBytes(XmlUtils.DOMToString(doc));
             output.flush();
             output.close();
         } catch (IOException e) {
