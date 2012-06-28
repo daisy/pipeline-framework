@@ -16,6 +16,7 @@ require 'uri'
 require 'yaml'
 require "rexml/document"
 require_rel './commands/command'
+require_rel './commands/conf_parser'
 require_rel './core/alive'
 require_rel './core/authentication'
 require_rel './core/conf'
@@ -41,6 +42,7 @@ include REXML
 def main
 	command=checkargs
 	if command == nil || command.empty?
+	
 		puts "Usage: dp2 command [options]\n"
 		puts "type dp2 help for more info\n"
 		exit -1	
@@ -50,6 +52,8 @@ def main
 	else
 		Ctxt.conf(File.expand_path("config.yml",File.dirname(ENV["OCRA_EXECUTABLE"])))
 	end
+	cnfParser= ConfParser.new
+	cnfParser.parse(ARGV)
 	begin
 		dynCommands=DynamicCommands.get
 	rescue Exception=>e
@@ -70,7 +74,7 @@ def main
 	ver_cmd=VersionCommand.new
 	#scripts	
 	dynCommands.each{|cmd| d_cmds[cmd.name]=cmd}
-	s_cmds["help"]=HelpCommand.new(s_cmds,d_cmds,ver_cmd)
+	s_cmds["help"]=HelpCommand.new(s_cmds,d_cmds,ver_cmd,cnfParser)
 	s_cmds[ver_cmd.name]=ver_cmd
 	error=""
 	hasErr=false

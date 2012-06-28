@@ -2,7 +2,7 @@ require_rel "./commands/command"
 
 class HelpCommand < Command
 	
-	def initialize(static_commands,dynamic_commands,version)
+	def initialize(static_commands,dynamic_commands,version,config_parser)
 		super("help")
 		@s_commands=static_commands
 		@s_commands[@name]=self
@@ -12,6 +12,7 @@ class HelpCommand < Command
 		@commands.merge!(@d_commands)	
 		@version=version
 		@commands[@version.name]=@version
+		@cnf_parser=config_parser
 	
 	end
 	def execute(str_args)
@@ -42,6 +43,9 @@ class HelpCommand < Command
 		s+="\nAdvanced commands:\n\n"
 		
 		@s_commands.each{|name,cmd| s+="#{cmd.to_s}\n" if name!="help"}
+
+		s+="\nCLI configuration:\n\n"
+		s+= @cnf_parser.help
 		s+="\nTo get help for a command write:\ndp2 help COMMAND"
 		
 		return s
