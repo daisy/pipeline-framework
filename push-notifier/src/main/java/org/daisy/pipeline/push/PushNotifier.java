@@ -1,6 +1,8 @@
 package org.daisy.pipeline.push;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,7 +37,7 @@ public class PushNotifier {
 
 	// track the starting point in the message sequence for every timed push
 	// TODO something similar for status
-	MessageSeq messages;
+	MessageList messages;
 
 	Timer timer = null;
 	boolean started = false;
@@ -44,7 +46,7 @@ public class PushNotifier {
 	}
 
 	public void init(BundleContext context) {
-		messages = new MessageSeq();
+		messages = new MessageList();
 	}
 
 	public void close() {
@@ -53,7 +55,7 @@ public class PushNotifier {
 
 	public synchronized void startTimer() {
 		timer = new Timer();
-		timer.schedule(new MessageTask(), 0, PUSH_INTERVAL);
+		timer.schedule(new NotifyTask(), 0, PUSH_INTERVAL);
 	}
 	public synchronized void cancelTimer() {
 		if (timer != null) {
@@ -77,17 +79,25 @@ public class PushNotifier {
 
 	@Subscribe
 	public synchronized void handleMessage(Message msg) {
+		//System.out.println("Received msg #" + msg.getSequence() + " for job #" + msg.getJobId());
 		if (started == false) {
 			started = true;
 			startTimer();
 		}
 		JobUUIDGenerator gen = new JobUUIDGenerator();
 		JobId jobId = gen.generateIdFromString(msg.getJobId());
-		if (!messages.containsJob(jobId)) {
+		// if there is no entry for this job OR if the entry contains a start value greater than this sequence value
+		if (!messages.containsJob(jobId) || messages.getMessageRange(jobId).start > msg.getSequence()) {
+			System.out.println("*******Start seq with msg #" + msg.getSequence() + " for job #" + msg.getJobId());
 			messages.setMessageRangeStart(jobId, msg.getSequence());
 		}
 		else {
-			messages.setMessageRangeEnd(jobId, msg.getSequence());
+			System.out.println("*******End   seq with msg #" + msg.getSequence() + " for job #" + msg.getJobId());
+			// every now and then, we get a message out of order, e.g. #30 before #29, so we need to be sure not to lose it.
+			if (msg.getSequence() > messages.getMessageRange(jobId).end) {
+				messages.setMessageRangeEnd(jobId, msg.getSequence());
+			}
+
 		}
 	}
 
@@ -96,53 +106,12 @@ public class PushNotifier {
 		// TODO handle similarly to messages
 	}
 
-	class MessageRange {
-		public int start;
-		public int end;
-	}
 
-	class MessageSeq {
-		HashMap<JobId, MessageRange> messages;
-
-		public MessageSeq() {
-			messages = new HashMap<JobId, MessageRange>();
-		}
-		public synchronized MessageRange getMessageRange(JobId jobId) {
-			return messages.get(jobId);
+	class NotifyTask extends TimerTask {
+		public NotifyTask() {
+			super();
 		}
 
-		public synchronized void setMessageRangeStart(JobId jobId, int idx) {
-			MessageRange range = new MessageRange();
-			range.start = idx;
-			range.end = idx;
-			messages.put(jobId, range);
-		}
-		public synchronized void setMessageRangeEnd(JobId jobId, int idx) {
-			MessageRange range = messages.get(jobId);
-			if (range == null) { // this shouldn't ever happen
-				return;
-			}
-			range.end = idx;
-		}
-
-		public synchronized Iterable<JobId> getJobs() {
-			return messages.keySet();
-		}
-
-		public synchronized void removeJob(JobId jobId) {
-			messages.remove(jobId);
-		}
-
-		public synchronized boolean containsJob(JobId jobId) {
-			return messages.containsKey(jobId);
-		}
-
-		public synchronized boolean isEmpty() {
-			return messages.isEmpty();
-		}
-	}
-
-	class MessageTask extends TimerTask {
         @Override
 		public synchronized void run() {
         	//System.out.println("Timer running");
@@ -150,14 +119,22 @@ public class PushNotifier {
         }
 
         private synchronized void postMessages() {
-    		for (JobId jobId : messages.getJobs()) {
+        	// make a copy of the jobIds
+        	// they will not remain static because we are removing them as we go
+        	// TODO maybe there's a more java-ish way to do this? it feels a bit ugly.
+        	List<JobId> jobIds = new ArrayList<JobId>();
+        	for (JobId jobId : messages.getJobs()) {
+        		jobIds.add(jobId);
+        	}
+
+    		for (JobId jobId : jobIds) {
     			Iterable<Callback> callbacks = callbackRegistry.getCallbacks(jobId);
     			Job job = jobManager.getJob(jobId);
     			for (Callback callback : callbacks) {
     				if (callback.getType() == CallbackType.MESSAGES) {
-    					// send messages for the job starting with the given message sequence index
     					MessageRange range = messages.getMessageRange(jobId);
     					messages.removeJob(jobId);
+    					System.out.println("*******Pushing from #" + range.start + " to #" + range.end + " for job " + jobId.toString());
     					Poster.postMessage(job, range.start, range.end, callback);
     				}
     			}
@@ -173,5 +150,51 @@ public class PushNotifier {
     	}
 
     }
+
+	class MessageRange {
+		public int start;
+		public int end;
+	}
+
+	class MessageList {
+		HashMap<JobId, MessageRange> messages;
+
+		public MessageList() {
+			messages = new HashMap<JobId, MessageRange>();
+		}
+		public MessageRange getMessageRange(JobId jobId) {
+			return messages.get(jobId);
+		}
+
+		public void setMessageRangeStart(JobId jobId, int idx) {
+			MessageRange range = new MessageRange();
+			range.start = idx;
+			range.end = idx;
+			messages.put(jobId, range);
+		}
+		public void setMessageRangeEnd(JobId jobId, int idx) {
+			MessageRange range = messages.get(jobId);
+			if (range == null) { // this shouldn't ever happen
+				return;
+			}
+			range.end = idx;
+		}
+
+		public Iterable<JobId> getJobs() {
+			return messages.keySet();
+		}
+
+		public void removeJob(JobId jobId) {
+			messages.remove(jobId);
+		}
+
+		public boolean containsJob(JobId jobId) {
+			return messages.containsKey(jobId);
+		}
+
+		public boolean isEmpty() {
+			return messages.isEmpty();
+		}
+	}
 
 }

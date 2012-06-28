@@ -38,7 +38,7 @@ public class Poster {
 		postXml(doc, url, callback.getClient());
 	}
 
-	private static synchronized void postXml(Document doc, URI url, Client client) {
+	private static void postXml(Document doc, URI url, Client client) {
 		URI requestUri = url;
 		if (client != null) {
 			requestUri = Authenticator.createUriWithCredentials(url.toString(), client);
