@@ -13,8 +13,6 @@ import org.restlet.service.StatusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.thaiopensource.validate.StringOption;
-
 public class PipelineStatusService extends StatusService{
 	private static Logger logger= LoggerFactory.getLogger(PipelineStatusService.class);
 

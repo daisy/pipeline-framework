@@ -10,4 +10,5 @@ class Command
 	def help
 		raise NotImplementedError
 	end	
+	
 end
