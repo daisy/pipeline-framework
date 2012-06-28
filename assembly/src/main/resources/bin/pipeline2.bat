@@ -71,7 +71,7 @@ if "%PIPELINE2_DATA%" == "" (
 )        
 
 set LOCAL_CLASSPATH=%CLASSPATH%
-set DEFAULT_JAVA_OPTS=-server -Xmx512M -Dcom.sun.management.jmxremote
+set DEFAULT_JAVA_OPTS=-Xmx512M -Dcom.sun.management.jmxremote
 set CLASSPATH=%LOCAL_CLASSPATH%;%PIPELINE2_BASE%\conf
 set DEFAULT_JAVA_DEBUG_OPTS=-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
 
@@ -181,7 +181,7 @@ if "%PIPELINE2_PROFILER%" == "" goto :PIPELINE2_PROFILER_END
     call :warn Missing configuration for profiler '%PIPELINE2_PROFILER%': %PIPELINE2_PROFILER_SCRIPT%
     goto END
 :PIPELINE2_PROFILER_END
-set BOOTSTRAP="${bundles.bootstrap}"
+set BOOTSTRAP=${bundles.bootstrap}
 rem Setup the classpath
 pushd "%PIPELINE2_HOME%\%BOOTSTRAP:/=\%"
 for %%G in (*.jar) do call:APPEND_TO_CLASSPATH %%G
@@ -203,35 +203,24 @@ if "%PIPELINE2_PROFILER%" == "" goto :RUN
     call %PIPELINE2_PROFILER_SCRIPT%
 
 :RUN
-    rem SET OPTS=-Dkaraf.startLocalConsole=true -Dkaraf.startRemoteShell=true
+    SET OPTS=-Dorg.daisy.pipeline.ws.local=true -Dorg.daisy.pipeline.ws.authentication=false
     SET MAIN=org.apache.felix.main.Main
     SET SHIFT=false
 
 :RUN_LOOP
-    rem if "%1" == "stop" goto :EXECUTE_STOP
-    rem if "%1" == "console" goto :EXECUTE_CONSOLE
     if "%1" == "remote" goto :EXECUTE_REMOTE
     if "%1" == "local" goto :EXECUTE_LOCAL
     if "%1" == "clean" goto :EXECUTE_CLEAN
     if "%1" == "debug" goto :EXECUTE_DEBUG
     goto :EXECUTE
 
-:EXECUTE_STOP
-    SET MAIN=org.apache.karaf.main.Stop
-    shift
-    goto :RUN_LOOP
-
-:EXECUTE_CONSOLE
-    shift
-    goto :RUN_LOOP
-
 :EXECUTE_REMOTE
-    rem SET OPTS=-Dkaraf.startLocalConsole=false -Dkaraf.startRemoteShell=true
+    SET OPTS=-Dorg.daisy.pipeline.ws.local=false -Dorg.daisy.pipeline.ws.authentication=true
     shift
     goto :RUN_LOOP
 
 :EXECUTE_LOCAL
-    rem SET OPTS=-Dkaraf.startLocalConsole=true -Dkaraf.startRemoteShell=false
+    SET OPTS=-Dorg.daisy.pipeline.ws.local=true -Dorg.daisy.pipeline.ws.authentication=false
     shift
     goto :RUN_LOOP
 
