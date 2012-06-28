@@ -40,8 +40,7 @@ require_rel './commands/halt_command'
 require_rel './commands/version_command'
 include REXML
 def main
-	command=checkargs
-	if command == nil || command.empty?
+	if ARGV.empty?
 	
 		puts "Usage: dp2 command [options]\n"
 		puts "type dp2 help for more info\n"
@@ -53,7 +52,9 @@ def main
 		Ctxt.conf(File.expand_path("config.yml",File.dirname(ENV["OCRA_EXECUTABLE"])))
 	end
 	cnfParser= ConfParser.new
-	cnfParser.parse(ARGV)
+	args=cnfParser.parse(ARGV)
+	command=checkargs(args)
+
 	begin
 		dynCommands=DynamicCommands.get
 	rescue Exception=>e
@@ -68,7 +69,7 @@ def main
 	s_cmds=load(JobCommand.new,s_cmds)
 	s_cmds=load(DeleteCommand.new,s_cmds)
 	s_cmds=load(ResultCommand.new,s_cmds)
-	if Ctxt.conf[Ctxt.conf.class::LOCAL]==true
+	if Ctxt.conf[Ctxt.conf.class::LOCAL].to_s=="true"
 		s_cmds=load(HaltCommand.new,s_cmds)
 	end
 	ver_cmd=VersionCommand.new
@@ -82,7 +83,8 @@ def main
 	cmds=cmds.merge(s_cmds).merge(d_cmds)
 	if command!=nil && cmds.has_key?(command)
 		begin
-			cmds[command].execute(ARGV[1..-1])
+
+			cmds[command].execute(args[1..-1])
 		rescue Exception=>e
 			error=e.message
 			hasErr=true	
@@ -97,9 +99,9 @@ def main
 	end
 end
 
-def checkargs
+def checkargs(args)
   cmd=nil
-  ARGV.each do |a|
+  args.each do |a|
     cmd = a
     break
   end

@@ -8,7 +8,21 @@ class ConfParser
 	end
 
 	def parse(args)
-		@parser.parse(args)
+		unknown=[]
+		nonopt=nil
+		begin
+			@parser.order!(args) do |nop|
+				nonopt=nop
+			end
+		rescue OptionParser::InvalidOption => e
+			
+			e.recover args	
+			unknown << args.shift
+			unknown << args.shift if args!=nil and args.size>0 and args.first[0..0]!='-'
+			retry
+		end
+		unknown.unshift(nonopt) if nonopt!=nil
+		return unknown
 	end	
 
 	def build_parser

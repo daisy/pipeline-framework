@@ -19,10 +19,11 @@ class Conf
 			 "debug"=>"If true debug messages are printed on the terminal",
 			 "null"=> " "}
 
-	CONST_FILTER=["null","exec_line_nix","exec_line_win"]
+	CONST_FILTER=["null","exec_line_nix","exec_line_win","base_uri"]
 
 	def initialize(file)
 		__init_constants__
+		
 		@map=YAML.load_file file
 		Ctxt.logger.debug(@map)
 		#HACK: the null redirects avoids win to get stuck creating the 
@@ -42,6 +43,12 @@ class Conf
 		end	
 	end
 	def update_vals
+		if @map[DEBUG]==true||@map[DEBUG]=='true'
+
+			Ctxt.logger.level=Logger::DEBUG
+		else
+			Ctxt.logger.level=Logger::INFO
+		end
 
 		if RUBY_PLATFORM =~ /mingw32/
 			@map[EXEC_LINE]=@map[EXEC_LINE_WIN]
@@ -51,9 +58,6 @@ class Conf
 			@map[NULL]=" &> /dev/null" 
 		end
 		@map[BASE_URI]= @map[HOST]+":"+@map[PORT].to_s+"/"+@map[WS_PATH]
-		if @map[DEBUG]
-			Ctxt.logger.level=Logger::DEBUG
-		end
 	end
 
 end	
