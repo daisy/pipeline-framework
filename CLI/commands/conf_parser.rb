@@ -11,6 +11,7 @@ class ConfParser
 	def parse(args)
 		unknown=[]
 		nonopts=[]
+		#This parses only the subset of args related to the global configuration items
 		begin
 			@parser.order!(args) do |nop|
 				Ctxt.logger.debug("no option yieled #{nop}")

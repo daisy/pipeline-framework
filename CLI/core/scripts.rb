@@ -9,7 +9,7 @@ require_rel "./core/helpers"
 # ScriptsResultProcessor
 
 class Script
-	attr_accessor :href,:nicename,:desc,:opts,:inputs,:outputs,:local,:uri
+	attr_accessor :href,:nicename,:desc,:opts,:inputs,:outputs,:local,:uri,:id
 
 	def initialize(href,nicename,desc,id,uri)
 		@href=href
@@ -63,7 +63,7 @@ class Script
 	end
 
 	def self.fromXmlElement(node)
-			script=Script.new(node.attributes["href"],Helpers.normalise_name(XPath.first(node,"./ns:nicename",Resource::NS).text),XPath.first(node,"./ns:description",Resource::NS).text,node.attributes["id"],node.attributes["script"])
+			script=Script.new(node.attributes["href"],XPath.first(node,"./ns:nicename",Resource::NS).text,XPath.first(node,"./ns:description",Resource::NS).text,node.attributes["id"],node.attributes["script"])
 			#options	
 			XPath.each(node,"./ns:option",Resource::NS){|option|
 				opt={:name=>option.attributes["name"],

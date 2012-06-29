@@ -14,7 +14,7 @@ end
 class CommandScript < Command
 	attr_accessor :script,:opt_modifiers,:input_modifiers,:output_modifiers
 	def initialize(script)
-		super(script.nicename)
+		super(script.id)
 		@script=script.clone
 		@opt_modifiers={}
 		@input_modifiers={}
@@ -67,7 +67,7 @@ class CommandScript < Command
 	end
 
 	def to_s
-		s="#{@script.nicename}\t\t\t#{@script.desc}"
+		s="#{@script.id}\t\t\t#{@script.desc}"
 		return s
 	end
 
