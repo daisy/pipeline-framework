@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URI;
+import java.util.List;
 
+import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.webserviceutils.Authenticator;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
@@ -23,10 +25,11 @@ public class Poster {
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(Poster.class.getName());
 
-	public static void postMessage(Job job, int msgStart, int msgEnd, Callback callback) {
+	public static void postMessage(Job job, List<Message> messages, Callback callback) {
 		URI url = callback.getHref();
 		JobXmlWriter writer = XmlWriterFactory.createXmlWriter(job);
-		writer.withMessageRange(msgStart, msgEnd);
+		//writer.withMessageRange(msgStart, msgEnd);
+		writer.withMessages(messages);
 		Document doc = writer.getXmlDocument();
 		postXml(doc, url, callback.getClient());
 	}
@@ -39,6 +42,8 @@ public class Poster {
 	}
 
 	private static void postXml(Document doc, URI url, Client client) {
+		//System.out.println(XmlUtils.DOMToString(doc));
+
 		URI requestUri = url;
 		if (client != null) {
 			requestUri = Authenticator.createUriWithCredentials(url.toString(), client);

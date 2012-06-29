@@ -79,26 +79,13 @@ public class PushNotifier {
 
 	@Subscribe
 	public synchronized void handleMessage(Message msg) {
-		//System.out.println("Received msg #" + msg.getSequence() + " for job #" + msg.getJobId());
 		if (started == false) {
 			started = true;
 			startTimer();
 		}
 		JobUUIDGenerator gen = new JobUUIDGenerator();
 		JobId jobId = gen.generateIdFromString(msg.getJobId());
-		// if there is no entry for this job OR if the entry contains a start value greater than this sequence value
-		if (!messages.containsJob(jobId) || messages.getMessageRange(jobId).start > msg.getSequence()) {
-			System.out.println("*******Start seq with msg #" + msg.getSequence() + " for job #" + msg.getJobId());
-			messages.setMessageRangeStart(jobId, msg.getSequence());
-		}
-		else {
-			System.out.println("*******End   seq with msg #" + msg.getSequence() + " for job #" + msg.getJobId());
-			// every now and then, we get a message out of order, e.g. #30 before #29, so we need to be sure not to lose it.
-			if (msg.getSequence() > messages.getMessageRange(jobId).end) {
-				messages.setMessageRangeEnd(jobId, msg.getSequence());
-			}
-
-		}
+		messages.addMessage(jobId, msg);
 	}
 
 	//TODO @Subscribe
@@ -117,8 +104,7 @@ public class PushNotifier {
         	//System.out.println("Timer running");
             postMessages();
         }
-
-        private synchronized void postMessages() {
+	    private synchronized void postMessages() {
         	// make a copy of the jobIds
         	// they will not remain static because we are removing them as we go
         	// TODO maybe there's a more java-ish way to do this? it feels a bit ugly.
@@ -132,13 +118,18 @@ public class PushNotifier {
     			Job job = jobManager.getJob(jobId);
     			for (Callback callback : callbacks) {
     				if (callback.getType() == CallbackType.MESSAGES) {
-    					MessageRange range = messages.getMessageRange(jobId);
+    					// make a copy: JobXmlWriter isn't synchronized
+    					List<Message> msgs = new ArrayList<Message>();
+    					Iterable<Message> srcMsgs = messages.getMessages(jobId);
+    					for (Message msg : srcMsgs) {
+    						msgs.add(msg);
+    					}
     					messages.removeJob(jobId);
-    					System.out.println("*******Pushing from #" + range.start + " to #" + range.end + " for job " + jobId.toString());
-    					Poster.postMessage(job, range.start, range.end, callback);
+    					Poster.postMessage(job, msgs, callback);
     				}
     			}
     		}
+
 
     		// no need to keep the timer going if there are no more messages
     		// however, this doesn't really work. TODO fix it.
@@ -146,54 +137,51 @@ public class PushNotifier {
 				System.out.println("Cancelling timer");
 				cancelTimer();
 			}*/
-
-    	}
-
-    }
-
-	class MessageRange {
-		public int start;
-		public int end;
+	    }
 	}
 
 	class MessageList {
-		HashMap<JobId, MessageRange> messages;
+		HashMap<JobId, List<Message>> messages;
 
 		public MessageList() {
-			messages = new HashMap<JobId, MessageRange>();
+			messages = new HashMap<JobId, List<Message>>();
 		}
-		public MessageRange getMessageRange(JobId jobId) {
+		public synchronized Iterable<Message> getMessages(JobId jobId) {
 			return messages.get(jobId);
 		}
 
-		public void setMessageRangeStart(JobId jobId, int idx) {
-			MessageRange range = new MessageRange();
-			range.start = idx;
-			range.end = idx;
-			messages.put(jobId, range);
-		}
-		public void setMessageRangeEnd(JobId jobId, int idx) {
-			MessageRange range = messages.get(jobId);
-			if (range == null) { // this shouldn't ever happen
-				return;
+		public synchronized void addMessage(JobId jobId, Message msg) {
+			List<Message> list;
+			if (containsJob(jobId)) {
+				list = messages.get(jobId);
 			}
-			range.end = idx;
+			else {
+				list = new ArrayList<Message>();
+				messages.put(jobId, list);
+			}
+			list.add(msg);
 		}
-
-		public Iterable<JobId> getJobs() {
+		public synchronized Iterable<JobId> getJobs() {
 			return messages.keySet();
 		}
 
-		public void removeJob(JobId jobId) {
+		public synchronized void removeJob(JobId jobId) {
 			messages.remove(jobId);
 		}
 
-		public boolean containsJob(JobId jobId) {
+		public synchronized boolean containsJob(JobId jobId) {
 			return messages.containsKey(jobId);
 		}
 
-		public boolean isEmpty() {
+		public synchronized boolean isEmpty() {
 			return messages.isEmpty();
+		}
+
+		// for debugging
+		public synchronized void printList(JobId jobId) {
+			for (Message msg : messages.get(jobId)) {
+				System.out.println("#" + msg.getSequence() + ", job #" + msg.getJobId());
+			}
 		}
 	}
 

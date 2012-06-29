@@ -78,6 +78,11 @@ public class JobXmlWriter {
 		return this;
 	}
 	
+	public JobXmlWriter withMessages(List<Message> messages) {
+		this.messages = messages;
+		return this;
+	}
+	
 	private Document jobToXmlDocument() {
 		Document doc = XmlUtils.createDom("job");
 		Element jobElm = doc.getDocumentElement();

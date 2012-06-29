@@ -13,19 +13,16 @@ class jobmessage:
         self.print_update(doc)
 
     def print_update(self, doc):
-        print etree.tostring(doc, pretty_print = True);
-        return
-        
         xpath_expr = "//{{{0}}}job".format(settings.PX_NS)
         xpath_fn = etree.ETXPath(xpath_expr)
         results = xpath_fn(doc)
         jobid = results[0].attrib['id']
-        xpath_expr = "//{{{0}}}job/messages/message".format(settings.PX_NS)
+        xpath_expr = "//{{{0}}}job/{{{0}}}messages/{{{0}}}message".format(settings.PX_NS)
         xpath_fn = etree.ETXPath(xpath_expr)
         results = xpath_fn(doc)
-        print "JOB UPDATE\n\tID {0}\n\tMessage(s):".format(jobid)
+        print "JOB UPDATE\n\tID {0}\n\n\tMessage(s):".format(jobid)
         for m in results:
-            print "\n\t{0} - {1}".format(m.attrib['level'], m.text)
+            print "\t#{0}. {1} - {2}".format(m.attrib['sequence'], m.attrib['level'], m.text)
         print ""
 
 class jobstatus:
