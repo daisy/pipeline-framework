@@ -4,6 +4,8 @@ class HelpCommand < Command
 	
 	def initialize(static_commands,dynamic_commands,version,config_parser)
 		super("help")
+		@parser=nil
+		@global=false
 		@s_commands=static_commands
 		@s_commands[@name]=self
 		@d_commands=dynamic_commands
@@ -13,45 +15,60 @@ class HelpCommand < Command
 		@version=version
 		@commands[@version.name]=@version
 		@cnf_parser=config_parser
+		build_parser
 	
 	end
-	def execute(str_args)
-		if str_args.size==0
-			puts help	
-		else
-			cmd=str_args[0]
-				
-			if cmd=="pipeliners"
-				showpipeliners!	
-			elsif  cmd=="COMMAND"
-				raise "with COMMAND I meant an available command name like '#{@commands.keys.shuffle[0]}'"
-			else
-				if @commands.has_key?(cmd)
-					puts @commands[cmd].help 
-				else
-					raise "#{@name}: command not found #{cmd}"
-				end
+	def build_parser
+		
+		@parser=OptionParser.new do |opts|
+			opts.on("-g","shows global options") do |v|
+				@global=true
 			end
-		end		
+		end
+		
+	end
+	def execute(str_args)
+		cmd=@parser.permute! str_args	
+		cmd=cmd.to_s
+			
+		if cmd=="pipeliners"
+			showpipeliners!	
+		elsif  cmd=="COMMAND"
+			raise "with COMMAND I meant an available command name like '#{@commands.keys.shuffle[0]}'"
+		elsif cmd==nil || cmd.size==0
+			if @global
+				puts @cnf_parser.help
+			else
+				puts help
+			end
+				
+		else
+			if @commands.has_key?(cmd)
+				puts @commands[cmd].help 
+			else
+				raise "#{@name}: command not found #{cmd}"
+			end
+			puts "\n"+@cnf_parser.help if @global
+		end
+
 	end
 	def help
 		s="Usage: dp2 command [options]\n\n"
-		s+="#{self.to_s}\n"
-		s+="#{@version.to_s}\n"
 		s+="\nScript commands:\n\n"
 		@d_commands.each{|name,cmd| s+="#{cmd.to_s}\n"}
-		s+="\nAdvanced commands:\n\n"
+		s+="\nGeneral commands:\n\n"
 		
-		@s_commands.each{|name,cmd| s+="#{cmd.to_s}\n" if name!="help"}
+		@s_commands.each{|name,cmd| s+="#{cmd.to_s}\n" if name!="help" && name!="version"}
 
-		s+="\nCLI configuration:\n\n"
-		s+= @cnf_parser.help
+		s+="#{self.to_s}\n"
+		s+="#{@version.to_s}\n"
+
 		s+="\nTo get help for a command write:\ndp2 help COMMAND"
 		
 		return s
 	end
 	def to_s
-		s="help\t\t\t\tShows this message or the command help"  
+		s="help\t\t\t\tShows this message or the command help (-g for global options)"  
 	end	
 	def showpipeliners!
 		puts "The pipeliners!\n"

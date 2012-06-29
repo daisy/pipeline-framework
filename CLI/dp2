@@ -53,8 +53,9 @@ def main
 	end
 	cnfParser= ConfParser.new
 	args=cnfParser.parse(ARGV)
+	Ctxt.logger.debug("args after conf parsing #{args}")
 	command=checkargs(args)
-
+	
 	begin
 		dynCommands=DynamicCommands.get
 	rescue Exception=>e
@@ -83,7 +84,7 @@ def main
 	cmds=cmds.merge(s_cmds).merge(d_cmds)
 	if command!=nil && cmds.has_key?(command)
 		begin
-
+			Ctxt.logger.debug("command #{command}")
 			cmds[command].execute(args[1..-1])
 		rescue Exception=>e
 			error=e.message

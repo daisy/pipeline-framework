@@ -4,15 +4,17 @@ class ConfParser
 	end
 
 	def help
+
 		return @parser.help
 	end
 
 	def parse(args)
 		unknown=[]
-		nonopt=nil
+		nonopts=[]
 		begin
 			@parser.order!(args) do |nop|
-				nonopt=nop
+				Ctxt.logger.debug("no option yieled #{nop}")
+				nonopts << nop
 			end
 		rescue OptionParser::InvalidOption => e
 			
@@ -21,7 +23,7 @@ class ConfParser
 			unknown << args.shift if args!=nil and args.size>0 and args.first[0..0]!='-'
 			retry
 		end
-		unknown.unshift(nonopt) if nonopt!=nil
+		nonopts.reverse.each { |nonopt| unknown.unshift(nonopt)}
 		return unknown
 	end	
 
@@ -36,6 +38,6 @@ class ConfParser
 				end
 			end
 		end
-		@parser.banner=""
+		@parser.banner="Global CLI switches:"
 	end
 end
