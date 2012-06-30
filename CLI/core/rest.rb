@@ -65,7 +65,7 @@ class Rest
 				when Net::HTTPCreated
 					return response.body
 				else
-					return RestError.new(response,nil)
+					return RestError.new(response,response.body)
 			end
 		rescue Exception => e
 			#puts e.backtrace	
@@ -88,7 +88,7 @@ class Rest
 			when Net::HTTPNoContent
 				return true
 			else
-				return RestError.new(response,nil)
+				return RestError.new(response,response.body)
 			end
 		rescue
 			#puts "Error: DELETE #{uri.to_s} failed."
@@ -108,11 +108,23 @@ class Rest
 
 end
 class RestError
-	attr_accessor :err,:text
+	attr_accessor :err,:uri,:trace,:desc
 	def initialize(err,text)
 		@err=err
-		@text=text
+		@uri=nil
+		@trace=nil
+		@desc=nil
+		fromXml(text) if text!=nil 
 	end
 
-
+	def fromXml(str)
+		begin
+			doc=Document.new str
+			xerr = XPath.first(doc,"//ns:error",Resource::NS)
+			@uri=xerr.attributes["query"]
+			@desc=XPath.first(doc,"//ns:description",Resource::NS).text
+			@trace=XPath.first(doc,"//ns:trace",Resource::NS).text
+		rescue
+		end
+	end
 end

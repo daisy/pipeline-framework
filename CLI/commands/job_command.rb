@@ -27,7 +27,8 @@ class JobCommand < IdBasedCommand
 			 
 			Ctxt.logger.debug(e)
 			puts "\n[DP2] ERROR: #{e.message}\n\n"
-			puts help
+
+			puts to_s 
 		end
 	end
 	def help
