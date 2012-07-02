@@ -62,13 +62,13 @@ class HelpCommand < Command
 
 		s+="#{self.to_s}\n"
 		s+="#{@version.to_s}\n"
-
-		s+="\nTo get help for a command write:\ndp2 help COMMAND"
-		
+		s+="\nTo list the global options type:  \tdp2 help -g" 	
+		s+="\nTo get help for a command type:  \tdp2 help COMMAND"
+			
 		return s
 	end
 	def to_s
-		s="help\t\t\t\tShows this message or the command help (-g for global options)"  
+		s="help\t\t\t\tShows this message or the command help "  
 	end	
 	def showpipeliners!
 		puts "The pipeliners!\n"

@@ -28,7 +28,6 @@ class Rest
 				return RestError.new(response,response.body)
 			end
 		rescue Exception=>e
-			puts e
 			return nil
 		end
 		##response = Net::HTTP.get_response(authUri)
