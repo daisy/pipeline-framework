@@ -5,6 +5,9 @@ class VersionCommand < Command
 	end
 
 	def execute(str_args)
+		puts "Daisy Pipeline 2"
+		puts "Version: 1.3-beta"
+		puts ""
 		puts "Daisy Pipeline 2 Command Line Interface "
 		puts "Version: #{VERSION}"
 		puts ""
