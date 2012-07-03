@@ -1,4 +1,5 @@
 require_rel "./core/dp2"
+require_rel "./core/helpers"
 class DynamicCommands
 
 	def self.get
@@ -13,7 +14,7 @@ end
 class CommandScript < Command
 	attr_accessor :script,:opt_modifiers,:input_modifiers,:output_modifiers
 	def initialize(script)
-		super(script.nicename)
+		super(script.id)
 		@script=script.clone
 		@opt_modifiers={}
 		@input_modifiers={}
@@ -40,6 +41,8 @@ class CommandScript < Command
 				raise RuntimeError,"#{@outfile}: directory doesn't exists " if !File.exists?(File.dirname(File.expand_path(@outfile)))
 			end	
 			job=dp2ws.job(@script,@data,!@background,@quiet)
+			#store the id of the current job
+			Helpers.last_id_store(job)
 			if Ctxt.conf[Ctxt.conf.class::LOCAL]!=true && !@background
 				dp2ws.job_zip_result(job.id,@outfile)
 				puts "[DP2] Result stored at #{@outfile}"
@@ -64,7 +67,7 @@ class CommandScript < Command
 	end
 
 	def to_s
-		s="#{@script.nicename}\t\t\t#{@script.desc}"
+		s="#{@script.id}\t\t\t#{@script.desc}"
 		return s
 	end
 

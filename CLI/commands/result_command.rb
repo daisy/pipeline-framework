@@ -1,6 +1,6 @@
-require_rel "./commands/command"
+require_rel "./commands/id_based_command"
 
-class ResultCommand < Command
+class ResultCommand < IdBasedCommand 
 
 	def initialize
 		super("result")
@@ -12,8 +12,7 @@ class ResultCommand < Command
 	def execute(str_args)
 			
 		begin
-			@parser.parse(str_args)
-			raise RuntimeError,"no job id provided" if @id==nil
+			getId!(str_args)
 			raise RuntimeError,"no output file provided" if @output==nil
 			res=Dp2.new.job_zip_result(@id,@output)
 			puts "[DP2] Job #{@id} stored at #{res}\n"
@@ -33,13 +32,11 @@ class ResultCommand < Command
 	def build_parser
 
 		@parser=OptionParser.new do |opts|
-			opts.on("--id JOB","job's id") do |v|
-				@id=v
-			end
 			opts.on("--file PATH","where to store the job's result") do |v|
 				@output=v
 			end
+			addLastId(opts)
 		end
-		@parser.program_name="dp2 "+ @name
+		@parser.banner="dp2 "+ @name + " [options] JOBID"
 	end
 end

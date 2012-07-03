@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
-	<parent>
-			<groupId>org.daisy.pipeline</groupId>
-			<artifactId>daisy-pipeline-framework-parent</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<relativePath>../daisy-pipeline-parent</relativePath>
-	 </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline</groupId>
+    <artifactId>framework-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>common-stax</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <packaging>eclipse-plugin</packaging>
- 
+  <version>1.0-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>DAISY Pipeline 2 :: Common StAX Utils</name>
+
+  <dependencies>
+      <dependency>
+        <groupId>com.googlecode.guava-osgi</groupId>
+        <artifactId>guava-osgi</artifactId>
+      </dependency>
+  </dependencies>
+
 </project>

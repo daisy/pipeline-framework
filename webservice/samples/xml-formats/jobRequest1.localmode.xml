@@ -3,11 +3,16 @@
     <script href='http://example.org/ws/scripts/dtbook-to-zedai'/>
     <input name='source'>
         <!-- file @src is referring to a file inside a separate folder or archive -->
-        <file src='./dtbook-basic.xml'/>
+        <item value='./dtbook-basic.xml'/>
     </input>
-    <option name='opt-mods-filename'>the-mods-file.xml</option>
-    <option name='opt-css-filename'>the-css-file.css</option>
-    <option name='opt-zedai-filename'>the-zedai-file.xml</option>
+    <option name='mods-filename'>the-mods-file.xml</option>
+    <option name='css-filename'>the-css-file.css</option>
+    <option name='zedai-filename'>the-zedai-file.xml</option>
     <!-- in local mode, there is an additional option to specify -->
-    <option name='opt-output-dir'>/tmp</option>
+    <option name='output-dir'>/tmp</option>
+    
+    <!-- provide callback hooks to receive progress updates -->
+    <callback type='messages' href='http://localhost:8080/ws/jobmessages' frequency='10'/>
+    <callback type='status' href='http://localhost:8080/ws/jobstatus' frequency='10'/>
+    
 </jobRequest>

@@ -2,9 +2,9 @@
 <jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
     <script href='http://localhost:8182/ws/scripts/dtbook-to-zedai'/>
     <input name='source'>
-        <file src='./dtbook-basic.xml'/>
+        <item value='./dtbook-basic.xml'/>
     </input>
-    <option name='opt-mods-filename'>the-mods-file.xml</option>
-    <option name='opt-css-filename'>the-css-file.css</option>
-    <option name='opt-zedai-filename'>the-zedai-file.xml</option>
+    <option name='mods-filename'>the-mods-file.xml</option>
+    <option name='css-filename'>the-css-file.css</option>
+    <option name='zedai-filename'>the-zedai-file.xml</option>
 </jobRequest>
