@@ -1,6 +1,6 @@
-###############################################################################
-###            DAISY Pipeline 2 - 1.2 - March 16th, 2011                    ###
-###############################################################################
+
+              DAISY Pipeline 2 - 1.3-beta - July 3, 2012
+===============================================================================
 
 
  1. What is the DAISY Pipeline 2 ?
@@ -23,6 +23,7 @@ print disabilities. It is the follow-up and total redesign of the original
 DAISY Pipeline 1 project.
 
 For more information see:
+
  - the project page: http://www.daisy.org/pipeline2
  - the development site: http://code.google.com/p/daisy-pipeline/
 
@@ -49,52 +50,54 @@ The package includes:
 3. Release Notes
 -------------------------------------------------------------------------------
 
-The package includes the 1.2 version of the project.
+The package includes the 1.3-beta version of the project.
 
 Changes since the last release:
 
  * Command-line tool
-   * Fixed Issue 144: Added a -q|--quiet switch to disable logging of job
-     execution messages
-   * Fixed Issue 145: Added a setting in the CLI config file to enable debug
-     logging statements
-   * Fixed Issue 146: Local and remote modes now use two different ports (resp.
-     8181 and 8182 by default)
-   * Updated the "Alice in Wonderland" ZedAI sample to version 1.0 of the
-     Z39.98 Book Profile
+   * Updated the CLI to the new Web Service XML formats
+   * Added global switches to override the configuration properties
+   * Closed Issue 147: simplified the syntax of Job management subcommands
+   * Fixed Issue 179: the CLI uses the script ID as the command name
  * Web Service API
-   * Added the experimental Client Admin API (currently backed by a local XML
-     client store)
-   * Improved the format of XML payloads, with a more consistent use of IDs and
-     cross-resources links
-   * Fixed Issue 156: WS now returns HTTP status 404 for non-existing scipts
-   * Fixed an issue to prevent local-only options to be set in remote mode.
+   * Script are now identified with their @id attribute
+   * Updated the XML payload grammars
+   * XML payloads are now validated with RelaxNG
+   * HTTP 500 errors are now sent along with a complete XML description in
+     the answer body.
+   * Added a callback mechanism to allow clients to be notifed of new messages
+     and status changes. See:
+     http://code.google.com/p/daisy-pipeline/wiki/WebServicePush#Status
  * Framework
-   * Fixed Issue 143: No longer set non-provided (optional) options to the
-     empty string
-   * Fixed Issue 152: Full-length error messages are now displayed
-   * Fixed Issue 153: Added required local catalog entries to no longer need an
-     internet connection at startup
-   * Fixed Issue 154: Make the the framework nicely shutdown if the port is
-     already bound
+   * Closed Issue 68: Added XML Catalog resolver to the classpath
+   * Closed Issue 159: Updated Calabash to the latest version 1.0.3-94
+   * Cleaned the metadata used to describe Pipeline scripts in XProc
+   * Added a persistence layer to back-up requests and jobs in a database
+   * Messages and status changes are now dispatched to listeners with an
+     Event Bus
+   * Introduced a new Maven-based build system. OSGi manifests are now
+     generated with the maven-bundle-plugin.
+   * various internal code refactoring
  * Modules
-   * [daisy202-to-epub3] Fixed Issue 103: Support parent-directory paths when
-     resolving SMILs to content in daisy202-to-epub3
-   * [daisy202-to-epub3] Fixed Issue 104: Resolving multiple adjacent links
-     no-longer produce unexpected results
-   * [daisy202-to-epub3] Fixed Issue 142: The output-dir option is now properly
-     tagged as of type anyDirURI
-   * [daisy202-to-epub3] Improved performance
-   * [daisy202-to-epub3] Improved error messages for invalid options
-   * [daisy202-to-epub3] Better XHTML 1.0 to XHTML5 upgrade based on a new
-     html-utils upgrader
-   * [dtbook-to-zedai] Fixed Issue 138: Now produces documents in the
-     Z39.98-2012 Book Profile version 1.0
-   * [dtbook-to-zedai] Removed the "opt-" prefix for script options
-   * [zedai-to-epub3] Fixed Issue 139: Now supports input documents in the
-     Z39.98-2012 Book Profile version 1.0
-   * [file-utils] Fixed Issue 124: Added pf:file-resolve-relative-uri to
-     file-utils
+   * [dtbook-to-zedai] Fixed Issue 54: More testing - Language attribute now
+     supported
+   * [dtbook-to-zedai] Fixed Issue 59: Various internal improvements
+   * [dtbook-to-zedai] Fixed Issue 61: removed tmp namespace from final output
+   * [dtbook-to-zedai] Fixed Issue 157: better support images inlined in a
+      paragraph
+   * [dtbook-to-zedai] Fixed Issue 158: support DBTook with no front matter
+   * [dtbook-to-zedai] Fixed Issue 162: support the `@cite` attribute on
+     `blockquote` and `q` elements.
+   * [dtbook-to-zedai] Fixed Issue 163: better convert `@alt` and `@longdesc`
+     image attributes
+   * [dtbook-to-zedai] Fixed Issue 176: "More than one document in context for
+     parameter 'base'"
+   * [dtbook-to-zedai] Fixed Issue 178: support mulitple `dc:publisher`
+     metadata values
+   * [html-utils] Fixed Issue 165: h1-h6 are no longer removed by the HTML5
+     upgrader
+   * [epub3-utils] Fixed Issue 169: better annotations of Media Overlays in the
+     package manifest
 
 The full list of changes can be found at:
  http://code.google.com/p/daisy-pipeline/w/ReleaseNotes
@@ -121,7 +124,7 @@ Windows.
 5. Getting Started
 -------------------------------------------------------------------------------
 
-A) Command line tool:
+### Command line tool ###
 
  1. get the short help by running the launcher script 'dp2' on
  Mac/Linux or 'dp2.exe' on Windows from the "cli" directory
@@ -131,20 +134,21 @@ A) Command line tool:
 
 For instance:
 
-> cli\dp2.exe dtbook-to-zedai --i-source samples\dtbook\hauy_valid.xml
---x-output-dir "C:\Users\John Doe\Desktop\out"
+	> cli\dp2.exe dtbook-to-zedai --i-source samples\dtbook\hauy_valid.xml
+	--x-output-dir "C:\Users\John Doe\Desktop\out"
+
 
 will run the DTBook to ZedAI converter on Windows and will output the result in
 the "out" directory on the desktop of the user named "John Doe".
 
 
-B) RESTful Web Service:
+### RESTful Web Service ###
 
- 1. start the web service by running 'cli/dp2ws.sh' on Mac/Linux or
- 'cli/dp2ws.bat' on Windows
- 2. the web service is available on http://localhost:8182/ws/
+ 1. start the web service by running 'bin/pipeline' on Mac/Linux or
+ 'bin/pipeline.bat' on Windows
+ 2. the web service is available on http://localhost:8181/ws/
  3. For example, get the list of scripts by issuing a GET request on
- http://localhost:8182/ws/scripts
+ http://localhost:8181/ws/scripts
 
 
 
@@ -152,32 +156,29 @@ B) RESTful Web Service:
 6. Documentation
 -------------------------------------------------------------------------------
 
-Usage: dp2 command [options]
-
-help				Shows this message or the command help
-
-Script commands:
-
-daisy202-to-epub3	Transforms a DAISY 2.02 publication into an EPUB3
-					publication.
-upgrade-dtbook		Upgrade a DTBook document from version 1.1.0, 2005-1, or
-					2005-2 to version 2005-3.
-merge-dtbook		Merge 2 or more DTBook documents.
-dtbook-to-zedai		Transforms DTBook XML into ZedAI XML.
-dtbook-to-epub3		Converts multiple dtbooks to epub3 format
-zedai-to-epub3		Transforms a ZedAI (DAISY 4 XML) document into an EPUB 3
-					publication.
-
-Advanced commands:
-
-result				Gets the zip file containing the job results
-halt				Stops the WS
-delete				Deletes a job
-jobs				Shows the status for every job
-status				Shows the detailed status for a single job
-
-To get help for a command write:
-dp2 help COMMAND
+	Usage: dp2 command [options]
+	
+	Script commands:
+	
+	dtbook-to-zedai			Transforms DTBook XML into ZedAI XML.
+	zedai-to-epub3			Transforms a ZedAI (DAISY 4 XML) document into an
+							EPUB 3 publication.
+	daisy202-to-epub3		Transforms a DAISY 2.02 publication into an EPUB3
+							publication.
+	dtbook-to-epub3			Converts multiple dtbooks to epub3 format
+	
+	General commands:
+	
+	halt				Stops the WS
+	delete				Deletes a job
+	result				Gets the zip file containing the job results
+	jobs				Shows the status for every job
+	status				Shows the detailed status for a single job
+	help				Shows this message or the command help 
+	version				Shows version and exits
+	
+	To list the global options type:  	dp2 help -g
+	To get help for a command type:  	dp2 help COMMAND
 
 
 The Web service API is documented on the Pipeline 2 development wiki:
@@ -203,4 +204,4 @@ free to join us on the developers discussion list hosted on Google Groups:
  http://groups.google.com/group/daisy-pipeline-dev
 
 or contact the project lead (Romain Deltour) via email at
- rdeltour (at) gmail (dot) com
+ `rdeltour (at) gmail (dot) com`
