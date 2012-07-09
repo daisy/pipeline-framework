@@ -232,8 +232,8 @@ public class PipelineWebService extends Application {
 
 		// TODO for testing only
 		if (isAuthenticationEnabled()) {
-			Client client = new SimpleClient("clientid", "supersecret", Client.Role.ADMIN, "me@example.org");
-			clientStore.add(client);
+			//Client client = new SimpleClient("clientid", "supersecret", Client.Role.ADMIN, "me@example.org");
+			//clientStore.add(client);
 		}
 
 	}
