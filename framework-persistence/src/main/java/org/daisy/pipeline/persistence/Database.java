@@ -11,54 +11,64 @@ import org.slf4j.LoggerFactory;
 
 public class Database {
 
-	private EntityManager entityManager = null;
-
+	//private this.getEntityManager() this.getEntityManager() = null;
+	private EntityManagerFactory emf=null;
 	private static Logger logger = LoggerFactory.getLogger(Database.class
 			.getName());
 
 	public void addObject(Object obj) {
-		entityManager.getTransaction().begin();
-		entityManager.persist(obj);
-		entityManager.getTransaction().commit();
+		EntityManager em=this.getEntityManager();
+		em.getTransaction().begin();
+		em.persist(obj);
+		em.getTransaction().commit();
+		em.close();
 	}
 
 	public boolean deleteObject(Object obj) {
 		if (obj != null) {
-			entityManager.getTransaction().begin();
-			entityManager.remove(obj);
-			entityManager.getTransaction().commit();
+			EntityManager em=this.getEntityManager();
+			em.getTransaction().begin();
+			em.remove(obj);
+			em.getTransaction().commit();
+			em.close();
 			return true;
 		}
 		return false;
 	}
 
 	public void updateObject(Object obj) {
-		entityManager.getTransaction().begin();
-		entityManager.merge(obj);
-		entityManager.getTransaction().commit();
+		EntityManager em=this.getEntityManager();
+		em.getTransaction().begin();
+		em.merge(obj);
+		em.getTransaction().commit();
+		em.close();
 	}
 
 	public <T> List<T> runQuery(String queryString, Class<T> clazz) {
-		TypedQuery<T> q = entityManager.createQuery(queryString, clazz);
-		return q.getResultList();
+		EntityManager em= emf.createEntityManager();
+		TypedQuery<T> q = em.createQuery(queryString, clazz);
+		List<T> res= q.getResultList();
+		em.close();
+		return res;
 	}
 
 	public <T> T getFirst(String queryString, Class<T> clazz) {
-		TypedQuery<T> q = entityManager.createQuery(queryString, clazz);
-		return q.getSingleResult();
+		EntityManager em= emf.createEntityManager();
+		TypedQuery<T> q = em.createQuery(queryString, clazz);
+		T res=q.getSingleResult();
+		em.close();
+		return res;
 	}
 
+	public EntityManager getEntityManager(){
+		if (emf!=null)
+			return emf.createEntityManager();
+		else
+			throw new IllegalStateException("entity manager factory was null");
+	}
 	public void setEntityManagerFactory(EntityManagerFactory emf) {
-		try {
-			entityManager = emf.createEntityManager();
-		} catch (Exception e) {
-			logger.error("Database exception " + e.getMessage());
-		}
+		this.emf=emf;
 	}
 
-	public void deactivate() {
-		if (entityManager != null) {
-			entityManager.close();
-		}
-	}
+	
 }
