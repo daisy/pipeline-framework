@@ -3,6 +3,7 @@ package org.daisy.pipeline.webserviceutils.xml;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.XProcOptionMetadata;
+import org.daisy.pipeline.script.XProcOptionMetadata.Output;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.webserviceutils.Routes;
@@ -120,6 +121,9 @@ public class ScriptXmlWriter {
 			optionElm.setAttribute("ordered", Boolean.toString(meta.isOrdered()));
 			optionElm.setAttribute("sequence", Boolean.toString(meta.isSequence()));
 			
+			if (meta.getOutput() != Output.NA) {
+				optionElm.setAttribute("outputType", meta.getOutput().toString().toLowerCase());
+			}
 			parent.appendChild(optionElm);
 		}
 	}
