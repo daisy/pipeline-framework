@@ -14,7 +14,7 @@ script =
         
         & element input {
             port.attrs 
-            & mediatype.attr
+            & mediatype.attr?
         }*
         
         & element option {
@@ -27,7 +27,7 @@ script =
         
         & element output {
             port.attrs
-            & mediatype.attr
+            & mediatype.attr?
         }*  
     }
     

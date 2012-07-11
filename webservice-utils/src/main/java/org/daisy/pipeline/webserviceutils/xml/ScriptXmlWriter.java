@@ -94,8 +94,9 @@ public class ScriptXmlWriter {
 			Element inputElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "input");
 			inputElm.setAttribute("name", input.getName());
 			inputElm.setAttribute("sequence", Boolean.toString(input.isSequence()));
-
-			inputElm.setAttribute("mediaType", meta.getMediaType());
+			if (meta.getMediaType() != null && !meta.getMediaType().isEmpty()) {
+				inputElm.setAttribute("mediaType", meta.getMediaType());
+			}
 			inputElm.setAttribute("desc", meta.getDescription());
 
 			parent.appendChild(inputElm);
@@ -112,7 +113,9 @@ public class ScriptXmlWriter {
 			optionElm.setAttribute("required", Boolean.toString(option.isRequired()));
 			
 			optionElm.setAttribute("type", meta.getType());
-			optionElm.setAttribute("mediaType", meta.getMediaType());
+			if (meta.getMediaType() != null && !meta.getMediaType().isEmpty()) {
+				optionElm.setAttribute("mediaType", meta.getMediaType());
+			}
 			optionElm.setAttribute("desc", meta.getDescription());
 			optionElm.setAttribute("ordered", Boolean.toString(meta.isOrdered()));
 			optionElm.setAttribute("sequence", Boolean.toString(meta.isSequence()));
@@ -128,9 +131,11 @@ public class ScriptXmlWriter {
 			Element outputElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "output");
 			outputElm.setAttribute("name", output.getName());
 			outputElm.setAttribute("sequence", Boolean.toString(output.isSequence()));
-			outputElm.setAttribute("mediaType", meta.getMediaType());
+			if (meta.getMediaType() != null && !meta.getMediaType().isEmpty()) {
+				outputElm.setAttribute("mediaType", meta.getMediaType());
+			}
 			outputElm.setAttribute("desc", meta.getDescription());
-
+			
 			parent.appendChild(outputElm);
 		}
 	}
