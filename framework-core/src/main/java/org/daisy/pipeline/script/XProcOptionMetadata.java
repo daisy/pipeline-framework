@@ -246,6 +246,9 @@ public class XProcOptionMetadata {
 			else if (value.equalsIgnoreCase(Output.TEMP.toString())) {
 				output = Output.TEMP;
 			}
+			else {
+				output = Output.NA;
+			}
 			return this;
 		}
 
