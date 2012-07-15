@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <error query="http://localhost:8181/ws/jobs" xmlns="http://www.daisy.org/ns/pipeline/data">
-    <description>trolororolololo</description>
+    <description>Error while acquiring jobs</description>
     <trace>
-        java.lang.RuntimeException: trolororolololo
+        java.lang.RuntimeException: Error while acquiring jobs
         at org.daisy.pipeline.webservice.JobsResource.getResource(JobsResource.java:84)
         at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
         at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)

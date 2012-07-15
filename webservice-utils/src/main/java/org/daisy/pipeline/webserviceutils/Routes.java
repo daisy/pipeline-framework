@@ -13,15 +13,13 @@ public class Routes {
 	public static final String JOBS_ROUTE = "/jobs";
 	public static final String JOB_ROUTE = "/jobs/{id}";
 	public static final String LOG_ROUTE = "/jobs/{id}/log";
+	public static final String ALIVE_ROUTE = "/alive";
 	public static final String RESULT_ROUTE = "/jobs/{id}/result";
 	public static final String HALT_ROUTE = "/admin/halt";
 	public static final String CLIENTS_ROUTE = "/admin/clients";
 	public static final String CLIENT_ROUTE = "/admin/clients/{id}";
 	
-	public static final String PORT_PROPERTY = "org.daisy.pipeline.ws.port";
-	public static final String PATH_PROPERTY = "org.daisy.pipeline.ws.path";
-	public static final String HOST_PROPERTY = "org.daisy.pipeline.ws.host";
-	public static final String LOCAL_MODE_PROPERTY = "org.daisy.pipeline.ws.local";
+	
 	
 	private String path = "/ws";
 	private static final int LOCAL_PORT_DEF=8181;
@@ -47,7 +45,7 @@ public class Routes {
 	}
 	
 	private void readOptions() {
-		String path = System.getProperty(PATH_PROPERTY);
+		String path = System.getProperty(Properties.PATH_PROPERTY);
 		if (path != null) {
 			if (!path.startsWith("/")) {
 				path = "/" + path;
@@ -55,12 +53,12 @@ public class Routes {
 			this.path = path;
 		}
 		
-		String hostname = System.getProperty(HOST_PROPERTY);
+		String hostname = System.getProperty(Properties.HOST_PROPERTY);
 		if (hostname != null) {
 			host = hostname;
 		}
 		
-		String port = System.getProperty(PORT_PROPERTY);
+		String port = System.getProperty(Properties.PORT_PROPERTY);
 		if (port != null) {
 			try {
 				int portnum = Integer.parseInt(port);
@@ -70,12 +68,12 @@ public class Routes {
 				else {
 					logger.error(String.format(
 							"Value specified in option %s (%d) is not valid. Using default value of %d.",
-							PORT_PROPERTY, portnum, portNumber));
+							Properties.PORT_PROPERTY, portnum, portNumber));
 				}
 			} catch (NumberFormatException e) {
 				logger.error(String.format(
 						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.",
-						PORT_PROPERTY, port, portNumber));
+						Properties.PORT_PROPERTY, port, portNumber));
 			}
 		} else {
 			portNumber = isLocal() ? LOCAL_PORT_DEF : REMOTE_PORT_DEF;
@@ -84,7 +82,7 @@ public class Routes {
 	}
 	
 	public boolean isLocal() {
-		return Boolean.valueOf(System.getProperty(LOCAL_MODE_PROPERTY));
+		return Boolean.valueOf(System.getProperty(Properties.LOCAL_MODE_PROPERTY));
 	}	
 	
 }

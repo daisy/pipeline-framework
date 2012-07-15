@@ -1,0 +1,7 @@
+datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
+start= 
+    element alive{
+        attribute local {xsd:string}
+        & attribute authentication {xsd:string}
+        & attribute version {xsd:string}
+    }

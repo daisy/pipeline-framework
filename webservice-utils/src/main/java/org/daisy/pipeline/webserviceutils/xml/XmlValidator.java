@@ -47,6 +47,7 @@ public class XmlValidator {
 	public static final URL CLIENT_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/client.rnc");
 	public static final URL CLIENTS_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/clients.rnc");
 	public static final URL ERROR_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/error.rnc");
+	public static final URL ALIVE_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/alive.rnc");;
 	
 	public static boolean validate(Document document, URL schemaUrl) {
 		ErrorHandlerImpl errorHandler = new ErrorHandlerImpl();

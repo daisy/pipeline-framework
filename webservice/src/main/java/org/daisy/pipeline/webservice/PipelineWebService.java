@@ -7,11 +7,10 @@ import java.util.Random;
 
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.script.ScriptRegistry;
+import org.daisy.pipeline.webserviceutils.Properties;
 import org.daisy.pipeline.webserviceutils.Routes;
 import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
-import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.clients.ClientStore;
-import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -34,11 +33,7 @@ public class PipelineWebService extends Application {
 	private static Logger logger = LoggerFactory.getLogger(PipelineWebService.class.getName());
 
 	/* other runtime-configurable property names */
-	public static final String MAX_REQUEST_TIME_PROPERTY = "org.daisy.pipeline.ws.maxrequesttime";
-	public static final String TMPDIR_PROPERTY = "org.daisy.pipeline.ws.tmpdir";
-	public static final String AUTHENTICATION_PROPERTY = "org.daisy.pipeline.ws.authentication";
-	public static final String LOCAL_MODE_PROPERTY = "org.daisy.pipeline.ws.local";
-	public static final String JAVA_IO_TMPDIR_PROPERTY = "java.io.tmpdir";
+	
 	
 	public static final String KEY_FILE_NAME="dp2key.txt";
 
@@ -74,6 +69,7 @@ public class PipelineWebService extends Application {
 		router.attach(Routes.JOB_ROUTE, JobResource.class);
 		router.attach(Routes.LOG_ROUTE, LogResource.class);
 		router.attach(Routes.RESULT_ROUTE, ResultResource.class);
+		router.attach(Routes.ALIVE_ROUTE,AliveResource.class);
 
 		// init the administrative paths
 		router.attach(Routes.CLIENTS_ROUTE, ClientsResource.class);
@@ -113,11 +109,11 @@ public class PipelineWebService extends Application {
 
 	private void generateStopKey() throws IOException {
 		shutDownKey = new Random().nextLong();
-		File fout = new File(System.getProperty(JAVA_IO_TMPDIR_PROPERTY)+File.separator+KEY_FILE_NAME);
+		File fout = new File(System.getProperty(Properties.JAVA_IO_TMPDIR_PROPERTY)+File.separator+KEY_FILE_NAME);
 		FileOutputStream fos= new FileOutputStream(fout);
 		fos.write((shutDownKey+"").getBytes());
 		fos.close();
-		logger.info("Shutdown key stored to: "+System.getProperty(JAVA_IO_TMPDIR_PROPERTY)+File.separator+KEY_FILE_NAME);
+		logger.info("Shutdown key stored to: "+System.getProperty(Properties.JAVA_IO_TMPDIR_PROPERTY)+File.separator+KEY_FILE_NAME);
 	}
 
 	public boolean shutDown(long key) throws BundleException{
@@ -142,7 +138,7 @@ public class PipelineWebService extends Application {
 
 
 	public boolean isLocal() {
-		return Boolean.valueOf(System.getProperty(LOCAL_MODE_PROPERTY));
+		return Boolean.valueOf(System.getProperty(Properties.LOCAL_MODE_PROPERTY));
 	}
 
 
@@ -240,7 +236,7 @@ public class PipelineWebService extends Application {
 
 	private void readOptions() {
 		
-		String authentication = System.getProperty(AUTHENTICATION_PROPERTY);
+		String authentication = System.getProperty(Properties.AUTHENTICATION_PROPERTY);
 
 		if (authentication != null) {
 			if (authentication.equalsIgnoreCase("true")) {
@@ -253,11 +249,11 @@ public class PipelineWebService extends Application {
 			else {
 				logger.error(String.format(
 						"Value specified in option %s (%s) is not valid. Using default value of %s.",
-						AUTHENTICATION_PROPERTY, authentication, usesAuthentication));
+						Properties.AUTHENTICATION_PROPERTY, authentication, usesAuthentication));
 			}
 		}
 
-		String tmp = System.getProperty(TMPDIR_PROPERTY);
+		String tmp = System.getProperty(Properties.TMPDIR_PROPERTY);
 		if (tmp != null) {
 			File f = new File(tmp);
 			if (f.exists()) {
@@ -266,11 +262,11 @@ public class PipelineWebService extends Application {
 			else {
 				logger.error(String.format(
 						"Value specified in option %s (%s) is not valid. Using default value of %s.",
-						TMPDIR_PROPERTY, tmp, tmpDir));
+						Properties.TMPDIR_PROPERTY, tmp, tmpDir));
 			}
 		}
 
-		String maxrequesttime = System.getProperty(MAX_REQUEST_TIME_PROPERTY);
+		String maxrequesttime = System.getProperty(Properties.MAX_REQUEST_TIME_PROPERTY);
 		if (maxrequesttime != null) {
 			try {
 				long ms = Long.parseLong(maxrequesttime);
@@ -278,7 +274,7 @@ public class PipelineWebService extends Application {
 			} catch(NumberFormatException e) {
 				logger.error(String.format(
 						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.",
-						MAX_REQUEST_TIME_PROPERTY, maxrequesttime, maxRequestTime));
+						Properties.MAX_REQUEST_TIME_PROPERTY, maxrequesttime, maxRequestTime));
 			}
 		}
 	}

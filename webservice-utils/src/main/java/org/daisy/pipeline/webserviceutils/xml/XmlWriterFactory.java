@@ -32,5 +32,8 @@ public class XmlWriterFactory {
 	public static ClientsXmlWriter createXmlWriter(List<? extends Client> clients) {
 		return new ClientsXmlWriter(clients);
 	}
+	public static AliveXmlWriter createXmlWriter() {
+		return new AliveXmlWriter();
+	}
 	
  }
