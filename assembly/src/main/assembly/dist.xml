@@ -17,6 +17,7 @@
       </includes>
       <excludes>
         <exclude>etc/config.properties</exclude>
+        <exclude>etc/system.properties</exclude>
         <exclude>etc/org.apache.felix.fileinstall-*.cfg</exclude>
       </excludes>
       <outputDirectory>/</outputDirectory>
@@ -25,6 +26,7 @@
       <directory>src/main/resources</directory>
       <includes>
         <include>etc/config.properties</include>
+        <include>etc/system.properties</include>
         <include>etc/org.apache.felix.fileinstall-framework.cfg</include>
         <include>etc/org.apache.felix.fileinstall-frontend.cfg</include>
         <include>etc/org.apache.felix.fileinstall-modules.cfg</include>
