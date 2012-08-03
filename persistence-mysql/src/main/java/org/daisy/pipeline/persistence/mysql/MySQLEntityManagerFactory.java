@@ -9,9 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 public class MySQLEntityManagerFactory extends  ForwardingEntityManagerFactory{
 
-	private static final String ORG_DAISY_PERSISTENCE_PASSWORD = "org.daisy.persistence.password";
-	private static final String ORG_DAISY_PERSISTENCE_USER = "org.daisy.persistence.user";
-	private static final String ORG_DAISY_PERSISTENCE_URL = "org.daisy.persistence.url";
+	private static final String ORG_DAISY_PERSISTENCE_PASSWORD = "org.daisy.pipeline.persistence.password";
+	private static final String ORG_DAISY_PERSISTENCE_USER = "org.daisy.pipeline.persistence.user";
+	private static final String ORG_DAISY_PERSISTENCE_URL = "org.daisy.pipeline.persistence.url";
 	private static final String COM_MYSQL_JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	
 	protected static Logger logger = LoggerFactory
@@ -31,6 +31,10 @@ public class MySQLEntityManagerFactory extends  ForwardingEntityManagerFactory{
 	
 	public void setBuilder(EntityManagerFactoryBuilder builder){
 		setEntityManagerFactory(builder.createEntityManagerFactory(props));
+	}
+	public void init() {
+		logger.debug("initialize the mysql EMF");
+		createEntityManager();
 	}
 	
 }

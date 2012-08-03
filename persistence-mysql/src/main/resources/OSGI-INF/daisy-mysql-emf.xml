@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="daisy-derby-emf">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" activate="init" name="daisy-mysql-emf">
    <implementation class="org.daisy.pipeline.persistence.mysql.MySQLEntityManagerFactory"/>
    <service>
       <provide interface="javax.persistence.EntityManagerFactory"/>

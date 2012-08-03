@@ -283,6 +283,11 @@
                   <groupId>org.codehaus.woodstox</groupId>
                   <artifactId>stax2-api</artifactId>
                 </artifactItem>
+                <artifactItem>
+		   <groupId>com.mysql.jdbc</groupId>
+		   <artifactId>com.springsource.com.mysql.jdbc</artifactId>
+      		   <version>5.1.6</version>
+                </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
@@ -590,6 +595,16 @@
       <id>eclipse-gemini-repo</id>
       <name>Eclipse Gemini Maven repository</name>
       <url>http://download.eclipse.org/gemini/mvn/</url>
+    </repository>
+    <repository>
+      <id>com.springsource.repository.bundles.release</id>
+      <name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
+      <url>http://repository.springsource.com/maven/bundles/release</url>
+    </repository>
+    <repository>
+      <id>com.springsource.repository.bundles.external</id>
+      <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
+      <url>http://repository.springsource.com/maven/bundles/external</url>
     </repository>
   </repositories>
 </project>

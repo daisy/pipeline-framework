@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
     <version>2</version>
   </parent>
-
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-parent</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-
   <name>DAISY Pipeline 2 :: Framework Parent POM</name>
   <description>The DAISY Pipeline 2 is an open source framework for the automated processing of various digital formats efficiently and economically. It intends to facilitate the production and maintenance of accessible content for people with print disabilities.</description>
   <url>http://www.daisy.org/pipeline2</url>
@@ -29,7 +25,6 @@
       <distribution>manual</distribution>
     </license>
   </licenses>
-
   <developers>
     <developer>
       <id>rdeltour</id>
@@ -88,7 +83,6 @@
       <timezone>UTC+01:00</timezone>
     </developer>
   </developers>
-
   <mailingLists>
     <mailingList>
       <name>DAISY Pipeline Developers</name>
@@ -98,7 +92,6 @@
       <archive>http://groups.google.com/group/daisy-pipeline-dev</archive>
     </mailingList>
   </mailingLists>
-
   <modules>
     <module>calabash-adapter</module>
     <module>calabash-custom-steps</module>
@@ -119,7 +112,6 @@
     <module>xpath-registry</module>
     <module>xproc-api</module>
   </modules>
-
   <scm>
     <connection>scm:hg:https://code.google.com/p/daisy-pipeline/</connection>
     <developerConnection>scm:hg:https://code.google.com/p/daisy-pipeline/</developerConnection>
@@ -129,12 +121,10 @@
     <system>Google Code Issue Tracker</system>
     <url>http://code.google.com/p/daisy-pipeline/issues/list</url>
   </issueManagement>
-
   <properties>
     <!-- Targeted Java Version -->
     <java.version>1.6</java.version>
-
-    <!-- Modules Versions -->    
+    <!-- Modules Versions -->
     <daisy.calabash-adapter.version>1.0-SNAPSHOT</daisy.calabash-adapter.version>
     <daisy.calabash-custom-steps.version>1.0-SNAPSHOT</daisy.calabash-custom-steps.version>
     <daisy.common-stax.version>1.0-SNAPSHOT</daisy.common-stax.version>
@@ -153,7 +143,6 @@
     <daisy.xmlcatalog.version>1.0-SNAPSHOT</daisy.xmlcatalog.version>
     <daisy.xpath-registry.version>1.0-SNAPSHOT</daisy.xpath-registry.version>
     <daisy.xproc-api.version>1.0-SNAPSHOT</daisy.xproc-api.version>
-
     <!-- Dependencies Versions -->
     <calabash.version>1.0.3</calabash.version>
     <commons.codec.version>1.6</commons.codec.version>
@@ -170,9 +159,7 @@
     <slf4j.version>1.6.4</slf4j.version>
     <woodstox.core.version>4.1.2</woodstox.core.version>
     <woodstox.stax2-api.version>3.1.1</woodstox.stax2-api.version>
-
   </properties>
-
   <dependencyManagement>
     <!-- Framework Modules -->
     <dependencies>
@@ -266,8 +253,6 @@
         <artifactId>xproc-api</artifactId>
         <version>${daisy.xproc-api.version}</version>
       </dependency>
-
-
       <!-- Third-Party Libraries -->
       <dependency>
         <groupId>com.googlecode.guava-osgi</groupId>
@@ -436,8 +421,6 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
-
-
   <build>
     <plugins>
       <plugin>
@@ -457,20 +440,20 @@
         <artifactId>maven-enforcer-plugin</artifactId>
         <executions>
           <execution>
-          <id>enforce-logging-api</id>
-          <goals>
-            <goal>enforce</goal>
-          </goals>
-          <configuration>
-            <rules>
-            <bannedDependencies>
-              <excludes>
-                <exclude>commons-logging:commons-logging</exclude>
-                <exclude>log4j:log4j</exclude>
-              </excludes>
-            </bannedDependencies>
-            </rules>
-          </configuration>
+            <id>enforce-logging-api</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <bannedDependencies>
+                  <excludes>
+                    <exclude>commons-logging:commons-logging</exclude>
+                    <exclude>log4j:log4j</exclude>
+                  </excludes>
+                </bannedDependencies>
+              </rules>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -505,7 +488,6 @@
       </plugins>
     </pluginManagement>
   </build>
-
   <repositories>
     <!-- 
       Restlet is not on Maven Central
@@ -520,6 +502,16 @@
       <id>restlet-repo</id>
       <name>Public online Restlet repository</name>
       <url>http://maven.restlet.org</url>
+    </repository>
+    <repository>
+      <id>com.springsource.repository.bundles.release</id>
+      <name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
+      <url>http://repository.springsource.com/maven/bundles/release</url>
+    </repository>
+    <repository>
+      <id>com.springsource.repository.bundles.external</id>
+      <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
+      <url>http://repository.springsource.com/maven/bundles/external</url>
     </repository>
   </repositories>
 </project>
