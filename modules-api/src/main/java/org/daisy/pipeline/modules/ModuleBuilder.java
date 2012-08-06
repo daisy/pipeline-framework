@@ -16,11 +16,6 @@ public interface ModuleBuilder {
 
 	ModuleBuilder withTitle(String title);
 
-	ModuleBuilder withDependencies(
-			Map<? extends String, ? extends String> dependencies);
-
-	ModuleBuilder withDependency(String name, String version);
-
 	ModuleBuilder withComponents(
 			Collection<? extends Component> components);
 	ModuleBuilder withEntities(
