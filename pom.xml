@@ -379,6 +379,16 @@
         <version>${restlet.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.restlet.osgi</groupId>
+        <artifactId>org.restlet.ext.jetty</artifactId>
+        <version>${restlet.version}</version>
+      </dependency>
+      <dependency>
+	  <groupId>org.eclipse.jetty</groupId>
+	  <artifactId>jetty-ajp</artifactId>
+	  <version>7.4.2.v20110526</version>
+      </dependency>
+      <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j.version}</version>

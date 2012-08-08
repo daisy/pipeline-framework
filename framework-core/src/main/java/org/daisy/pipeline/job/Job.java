@@ -38,9 +38,7 @@ public class Job {
 	/** The id. */
 	private final JobId id;
 
-	/** The input. */
-	private final XProcInput input;
-
+	private final JobContext ctxt;
 	/** The script. */
 	private final XProcScript script;
 
@@ -50,13 +48,10 @@ public class Job {
 	/** The results. */
 	private JobResult results;
 
-	/** The io bridge. */
-	private final IOBridge ioBridge;
-
 	/** The status. */
 	private Status status = Status.IDLE;
 
-	private final XProcMonitor monitor;
+	
 
 	/**
 	 * Instantiates a new job.
@@ -70,14 +65,11 @@ public class Job {
 	 * @param ioBridge
 	 *            the io bridge
 	 */
-	Job(JobId id, XProcScript script, XProcInput input,
-			IOBridge ioBridge,JobMonitor monitor) {
-		// TODO check arguments
+	Job(JobId id, XProcScript script, JobContext ctxt) {
+		
 		this.id = id;
 		this.script = script;
-		this.input = input;
-		this.ioBridge = ioBridge;
-		this.monitor=monitor;
+		this.ctxt=ctxt;
 	}
 
 	/**
@@ -128,7 +120,7 @@ public class Job {
 		Properties props=new Properties();
 		props.setProperty("JOB_ID", id.toString());
 		try{
-			output = pipeline.run(input,monitor,props);
+			//output = pipeline.run(input,monitor,props);
 			status=Status.DONE;
 		}catch(Exception e){
 			logger.error("job finished with error state",e);
@@ -137,10 +129,10 @@ public class Job {
 
 
 		JobResult.Builder builder = new JobResult.Builder();
-		builder.withMessageAccessor(monitor.getMessageAccessor());
-		builder.withLogFile(ioBridge.getLogFile());
-		builder = (ioBridge != null) ? builder.withZipFile(ioBridge
-				.zipOutput()) : builder;
+//		builder.withMessageAccessor(monitor.getMessageAccessor());
+//		builder.withLogFile(ioBridge.getLogFile());
+//		builder = (ioBridge != null) ? builder.withZipFile(ioBridge
+//				.zipOutput()) : builder;
 		results = builder.build();
 
 	}
@@ -155,7 +147,8 @@ public class Job {
 	}
 
 	public XProcMonitor getMonitor(){
-		return monitor;
+		//return monitor;
+		return null;
 	}
 
 }

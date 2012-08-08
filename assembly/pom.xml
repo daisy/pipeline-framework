@@ -276,6 +276,19 @@
                   <artifactId>org.restlet.ext.xml</artifactId>
                 </artifactItem>
                 <artifactItem>
+                  <groupId>org.restlet.osgi</groupId>
+                  <artifactId>org.restlet.ext.jetty</artifactId>
+                </artifactItem>
+		<!-- Jetty dependencies -->
+	        <artifactItem>
+		  <groupId>org.eclipse.jetty</groupId>
+		  <artifactId>jetty-ajp</artifactId>
+		  <version>7.4.2.v20110526</version>
+		</artifactItem>
+
+
+		<!-- / Jetty dependencies -->
+                <artifactItem>
                   <groupId>org.codehaus.woodstox</groupId>
                   <artifactId>woodstox-core-lgpl</artifactId>
                 </artifactItem>

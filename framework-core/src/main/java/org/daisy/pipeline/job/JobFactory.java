@@ -50,7 +50,8 @@ public class JobFactory {
 			}
 			JobMonitor monitor=monitorFactory.newJobMonitor(id);
 			// TODO validate input
-			return new Job(id, script, resolvedInput, bridge,monitor);
+			//return new Job(id, script, resolvedInput, bridge,monitor);
+			return null;
 		} catch (IOException e) {
 			throw new RuntimeException("Error resolving pipeline info", e);
 		}
