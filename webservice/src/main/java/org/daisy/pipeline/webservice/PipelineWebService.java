@@ -16,9 +16,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
 import org.restlet.Application;
+import org.restlet.Server;
 import org.restlet.Component;
 import org.restlet.Restlet;
 import org.restlet.data.Protocol;
+import org.restlet.ext.jetty.JettyServerHelper;
 import org.restlet.routing.Router;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,11 +92,19 @@ public class PipelineWebService extends Application {
 		logger.info(String.format("Starting webservice on port %d",
 				routes.getPort()));
 		Component component = new Component();
-		component.getServers().add(Protocol.HTTP, routes.getPort());
+	//	component.getServers().add(Protocol.HTTP, routes.getPort());
+		Server server = component.getServers().add(Protocol.HTTPS, routes.getPort());
+		server.getContext().getParameters().add("keystorePath", "/home/javi/tmp/keystore");
+		server.getContext().getParameters().add("keystorePassword", "password");
+		server.getContext().getParameters().add("keyPassword", "password");
+		
+		
 		component.getDefaultHost().attach(routes.getPath(), this);
 		this.setStatusService(new PipelineStatusService());
 		try {
+
 			component.start();
+			logger.debug("component started");
 			generateStopKey();
 		} catch (Exception e) {
 			logger.error("Shutting down the framework because of:"+e.getMessage());
