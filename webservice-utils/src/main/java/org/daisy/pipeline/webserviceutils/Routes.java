@@ -45,7 +45,7 @@ public class Routes {
 	}
 	
 	private void readOptions() {
-		String path = System.getProperty(Properties.PATH_PROPERTY);
+		String path = System.getProperty(Properties.PATH);
 		if (path != null) {
 			if (!path.startsWith("/")) {
 				path = "/" + path;
@@ -53,12 +53,12 @@ public class Routes {
 			this.path = path;
 		}
 		
-		String hostname = System.getProperty(Properties.HOST_PROPERTY);
+		String hostname = System.getProperty(Properties.HOST);
 		if (hostname != null) {
 			host = hostname;
 		}
 		
-		String port = System.getProperty(Properties.PORT_PROPERTY);
+		String port = System.getProperty(Properties.PORT);
 		if (port != null) {
 			try {
 				int portnum = Integer.parseInt(port);
@@ -68,12 +68,12 @@ public class Routes {
 				else {
 					logger.error(String.format(
 							"Value specified in option %s (%d) is not valid. Using default value of %d.",
-							Properties.PORT_PROPERTY, portnum, portNumber));
+							Properties.PORT, portnum, portNumber));
 				}
 			} catch (NumberFormatException e) {
 				logger.error(String.format(
 						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.",
-						Properties.PORT_PROPERTY, port, portNumber));
+						Properties.PORT, port, portNumber));
 			}
 		} else {
 			portNumber = isLocal() ? LOCAL_PORT_DEF : REMOTE_PORT_DEF;
@@ -82,7 +82,7 @@ public class Routes {
 	}
 	
 	public boolean isLocal() {
-		return Boolean.valueOf(System.getProperty(Properties.LOCAL_MODE_PROPERTY));
+		return Boolean.valueOf(System.getProperty(Properties.LOCAL_MODE));
 	}	
 	
 }
