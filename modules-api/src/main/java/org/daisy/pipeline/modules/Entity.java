@@ -77,7 +77,7 @@ public class Entity {
 	public URI getResource() {
 try {
 
-			mLogger.debug("getting resource from entity:"+mPath);
+			mLogger.trace("getting resource from entity:"+mPath);
 			URL url= mLoader.loadResource(mPath);
 			if(url!=null) {
 				return url.toURI();

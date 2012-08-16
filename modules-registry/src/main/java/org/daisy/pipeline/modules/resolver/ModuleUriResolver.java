@@ -58,12 +58,12 @@ public class ModuleUriResolver implements URIResolver, EntityResolver {
 		Module mod = mRegistry.getModuleByComponent(uhref);
 
 		if (mod == null) {
-			mLogger.debug("No module found for uri:" + href);
+			mLogger.trace("No module found for uri:" + href);
 			return null;
 		}
 		URI resource = mod.getComponent(uhref).getResource();
 		if (resource == null) {
-			mLogger.debug("No resource found in module " + mod.getName()
+			mLogger.trace("No resource found in module " + mod.getName()
 					+ " for uri :" + href);
 			return null;
 		}
@@ -89,13 +89,13 @@ public class ModuleUriResolver implements URIResolver, EntityResolver {
 
 		}else{
 			//by systemId
-			mLogger.debug("No module found for publicId:" + publicId);
+			mLogger.trace("No module found for publicId:" + publicId);
 			URI uriSystem=URI.create(systemId);
 			mod = mRegistry.getModuleByComponent(uriSystem);
 			if (mod != null) {
 				src=new InputSource(mod.getComponent(uriSystem).getResource().toString());
 			}else{
-				mLogger.debug("No module found for uri:" + systemId);
+				mLogger.trace("No module found for uri:" + systemId);
 			}
 		}
 		return src;

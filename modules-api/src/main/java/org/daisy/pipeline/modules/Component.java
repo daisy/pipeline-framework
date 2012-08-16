@@ -86,7 +86,7 @@ public class Component {
 	public URI getResource() {
 		try {
 
-			mLogger.debug("getting resource from component:"+path);
+			mLogger.trace("getting resource from component:"+path);
 			URL url= loader.loadResource(path);
 			if(url!=null) {
 				return url.toURI();
