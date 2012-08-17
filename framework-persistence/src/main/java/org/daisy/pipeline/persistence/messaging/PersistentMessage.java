@@ -20,6 +20,8 @@ import org.daisy.pipeline.job.JobId;
 @IdClass(PersistenceMessagePK.class)
 //@NoSql(dataFormat=DataFormatType.MAPPED)
 public class PersistentMessage implements Message{
+	private static final int TEXT_LEN=1024;
+	private static final int FILE_LEN=512;
 	public enum PersistentLevel {
 		/** The ERROR. */
 		ERROR,
@@ -46,8 +48,7 @@ public class PersistentMessage implements Message{
 	
 	 Throwable throwable;
 	
-	@Column(name="text")
-	
+	@Column(name="text",length=TEXT_LEN)
 	String text;
 
 	/** The m level. */
@@ -73,7 +74,7 @@ public class PersistentMessage implements Message{
 	@Column(name="col")
 	private int column;
 	
-	@Column(name="file")
+	@Column(name="file",length=FILE_LEN)
 	private String file;
 	
 	
@@ -81,16 +82,21 @@ public class PersistentMessage implements Message{
 	
 	public PersistentMessage(Message other){
 		this.throwable = other.getThrowable();
-		this.text = other.getText();
+		this.text = trim(other.getText(),TEXT_LEN-1);
 		this.level = PersistentLevel.valueOf(other.getLevel().toString());
 		this.timeStamp = other.getTimeStamp();
 		this.sequence = other.getSequence();
 		this.jobId = other.getJobId();
 		this.line = other.getLine();
 		this.column = other.getColumn();
-		this.file = other.getFile();
+		this.file =trim( other.getFile(),FILE_LEN-1);
 	}
-
+	private static String trim(String str,int len){
+		if(str.length()>len){
+			str=str.substring(0,len);
+		}
+		return str;
+	}
 
 	public Throwable getThrowable() {
 		return throwable;
@@ -102,7 +108,7 @@ public class PersistentMessage implements Message{
 		return text;
 	}
 	public void setText(String msg) {
-		this.text = msg;
+		this.text = trim(msg,TEXT_LEN-1);
 	}
 	public Message.Level getLevel() {
 		return Message.Level.valueOf(level.toString());
@@ -155,7 +161,7 @@ public class PersistentMessage implements Message{
 		return this.file;
 	}
 	public void setFile(String file) {
-		this.file=file;
+		this.file=trim(file,FILE_LEN-1);
 	}
 	
 }
