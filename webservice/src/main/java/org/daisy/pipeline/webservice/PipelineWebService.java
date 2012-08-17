@@ -16,9 +16,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
 import org.restlet.Application;
+import org.restlet.Server;
 import org.restlet.Component;
 import org.restlet.Restlet;
 import org.restlet.data.Protocol;
+import org.restlet.ext.jetty.JettyServerHelper;
 import org.restlet.routing.Router;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +42,10 @@ public class PipelineWebService extends Application {
 	private boolean usesAuthentication = true;
 	private long maxRequestTime = 600000; // 10 minutes in ms
 	private String tmpDir = "/tmp";
+	private boolean ssl=false;
+	private String sslKeystore="";
+	private String sslKeystorePassword="";
+	private String sslKeyPassword="";
 	
 	/** The job manager. */
 	private JobManager jobManager;
@@ -90,11 +96,25 @@ public class PipelineWebService extends Application {
 		logger.info(String.format("Starting webservice on port %d",
 				routes.getPort()));
 		Component component = new Component();
-		component.getServers().add(Protocol.HTTP, routes.getPort());
+		
+		if (!ssl){
+			component.getServers().add(Protocol.HTTP, routes.getPort());
+			logger.debug("Using HTTP");
+		}else{
+			Server server = component.getServers().add(Protocol.HTTPS, routes.getPort());
+			server.getContext().getParameters().add("keystorePath",sslKeystore); 
+			server.getContext().getParameters().add("keystorePassword",sslKeystorePassword);
+			server.getContext().getParameters().add("keyPassword",sslKeyPassword);
+			logger.debug("Using HTTPS");
+		}
+		
+		
 		component.getDefaultHost().attach(routes.getPath(), this);
 		this.setStatusService(new PipelineStatusService());
 		try {
+
 			component.start();
+			logger.debug("component started");
 			generateStopKey();
 		} catch (Exception e) {
 			logger.error("Shutting down the framework because of:"+e.getMessage());
@@ -109,11 +129,11 @@ public class PipelineWebService extends Application {
 
 	private void generateStopKey() throws IOException {
 		shutDownKey = new Random().nextLong();
-		File fout = new File(System.getProperty(Properties.JAVA_IO_TMPDIR_PROPERTY)+File.separator+KEY_FILE_NAME);
+		File fout = new File(System.getProperty(Properties.JAVA_IO_TMPDIR)+File.separator+KEY_FILE_NAME);
 		FileOutputStream fos= new FileOutputStream(fout);
 		fos.write((shutDownKey+"").getBytes());
 		fos.close();
-		logger.info("Shutdown key stored to: "+System.getProperty(Properties.JAVA_IO_TMPDIR_PROPERTY)+File.separator+KEY_FILE_NAME);
+		logger.info("Shutdown key stored to: "+System.getProperty(Properties.JAVA_IO_TMPDIR)+File.separator+KEY_FILE_NAME);
 	}
 
 	public boolean shutDown(long key) throws BundleException{
@@ -138,7 +158,7 @@ public class PipelineWebService extends Application {
 
 
 	public boolean isLocal() {
-		return Boolean.valueOf(System.getProperty(Properties.LOCAL_MODE_PROPERTY));
+		return Boolean.valueOf(System.getProperty(Properties.LOCAL_MODE));
 	}
 
 
@@ -236,7 +256,7 @@ public class PipelineWebService extends Application {
 
 	private void readOptions() {
 		
-		String authentication = System.getProperty(Properties.AUTHENTICATION_PROPERTY);
+		String authentication = System.getProperty(Properties.AUTHENTICATION);
 
 		if (authentication != null) {
 			if (authentication.equalsIgnoreCase("true")) {
@@ -249,11 +269,11 @@ public class PipelineWebService extends Application {
 			else {
 				logger.error(String.format(
 						"Value specified in option %s (%s) is not valid. Using default value of %s.",
-						Properties.AUTHENTICATION_PROPERTY, authentication, usesAuthentication));
+						Properties.AUTHENTICATION, authentication, usesAuthentication));
 			}
 		}
 
-		String tmp = System.getProperty(Properties.TMPDIR_PROPERTY);
+		String tmp = System.getProperty(Properties.TMPDIR);
 		if (tmp != null) {
 			File f = new File(tmp);
 			if (f.exists()) {
@@ -262,11 +282,11 @@ public class PipelineWebService extends Application {
 			else {
 				logger.error(String.format(
 						"Value specified in option %s (%s) is not valid. Using default value of %s.",
-						Properties.TMPDIR_PROPERTY, tmp, tmpDir));
+						Properties.TMPDIR, tmp, tmpDir));
 			}
 		}
 
-		String maxrequesttime = System.getProperty(Properties.MAX_REQUEST_TIME_PROPERTY);
+		String maxrequesttime = System.getProperty(Properties.MAX_REQUEST_TIME);
 		if (maxrequesttime != null) {
 			try {
 				long ms = Long.parseLong(maxrequesttime);
@@ -274,8 +294,13 @@ public class PipelineWebService extends Application {
 			} catch(NumberFormatException e) {
 				logger.error(String.format(
 						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.",
-						Properties.MAX_REQUEST_TIME_PROPERTY, maxrequesttime, maxRequestTime));
+						Properties.MAX_REQUEST_TIME, maxrequesttime, maxRequestTime));
 			}
 		}
+		ssl=System.getProperty(Properties.SSL)!=null&&System.getProperty(Properties.SSL).equalsIgnoreCase("true");
+		sslKeystore=System.getProperty(Properties.SSL_KEYSTORE);
+		sslKeystorePassword=System.getProperty(Properties.SSL_KEYSTOREPASSWORD);
+		sslKeyPassword=System.getProperty(Properties.SSL_KEYPASSWORD);
+
 	}
 }

@@ -11,8 +11,8 @@ public class AliveXmlWriter {
 	public Document getXmlDocument() {
 		Document doc = XmlUtils.createDom("alive");
 		Element aliveElm = doc.getDocumentElement();
-		aliveElm.setAttribute("local", System.getProperty(Properties.LOCAL_MODE_PROPERTY));
-		aliveElm.setAttribute("authentication", System.getProperty(Properties.AUTHENTICATION_PROPERTY));
+		aliveElm.setAttribute("local", System.getProperty(Properties.LOCAL_MODE));
+		aliveElm.setAttribute("authentication", System.getProperty(Properties.AUTHENTICATION));
 		aliveElm.setAttribute("version", System.getProperty(Properties.FRAMEWORK_VERSION));
 		if (!XmlValidator.validate(doc, XmlValidator.ALIVE_SCHEMA_URL)) {
 			logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));

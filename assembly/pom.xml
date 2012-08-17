@@ -276,6 +276,42 @@
                   <artifactId>org.restlet.ext.xml</artifactId>
                 </artifactItem>
                 <artifactItem>
+                  <groupId>org.restlet.osgi</groupId>
+                  <artifactId>org.restlet.ext.jetty</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.restlet.osgi</groupId>
+                  <artifactId>org.restlet.ext.ssl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.jsslutils</groupId>
+                  <artifactId>jsslutils</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-server</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-ajp</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-util</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-http</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-io</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-continuation</artifactId>
+                </artifactItem>
+                <artifactItem>
                   <groupId>org.codehaus.woodstox</groupId>
                   <artifactId>woodstox-core-lgpl</artifactId>
                 </artifactItem>
@@ -284,9 +320,9 @@
                   <artifactId>stax2-api</artifactId>
                 </artifactItem>
                 <artifactItem>
-		   <groupId>com.mysql.jdbc</groupId>
-		   <artifactId>com.springsource.com.mysql.jdbc</artifactId>
-      		   <version>5.1.6</version>
+                  <groupId>com.mysql.jdbc</groupId>
+                  <artifactId>com.springsource.com.mysql.jdbc</artifactId>
+                  <version>5.1.6</version>
                 </artifactItem>
               </artifactItems>
             </configuration>

@@ -46,6 +46,10 @@
       <artifactId>org.restlet.ext.xml</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.restlet.osgi</groupId>
+      <artifactId>org.restlet.ext.jetty</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>

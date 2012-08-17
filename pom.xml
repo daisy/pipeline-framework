@@ -152,9 +152,10 @@
     <javax.persistence.version>2.0.0</javax.persistence.version>
     <javax.servlet-api.version>2.5</javax.servlet-api.version>
     <jing.version>20091111</jing.version>
+    <jetty.version>7.4.0.v20110414</jetty.version>
     <junit.version>4.10</junit.version>
     <osgi.version>4.2.0</osgi.version>
-    <restlet.version>2.1-RC3</restlet.version>
+    <restlet.version>2.1-RC5</restlet.version>
     <saxon-he.version>9.4</saxon-he.version>
     <slf4j.version>1.6.4</slf4j.version>
     <woodstox.core.version>4.1.2</woodstox.core.version>
@@ -377,6 +378,57 @@
         <groupId>org.restlet.osgi</groupId>
         <artifactId>org.restlet.ext.xml</artifactId>
         <version>${restlet.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.restlet.osgi</groupId>
+        <artifactId>org.restlet.ext.jetty</artifactId>
+        <version>${restlet.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.restlet.osgi</groupId>
+        <artifactId>org.restlet.ext.ssl</artifactId>
+        <version>2.1-SNAPSHOT</version>
+      </dependency>
+      <!-- Jetty stuff -->
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-server</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-ajp</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-util</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-http</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-io</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-continuation</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-ssl</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>jsslutils</artifactId>
+        <version>1.0.7</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
