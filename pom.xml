@@ -550,16 +550,13 @@
       <name>Maven Central</name>
       <url>http://repo.maven.apache.org/maven2/</url>
     </repository>
+    <!-- Restlet maven repository -->
     <repository>
       <id>restlet-repo</id>
       <name>Public online Restlet repository</name>
       <url>http://maven.restlet.org</url>
     </repository>
-    <repository>
-      <id>com.springsource.repository.bundles.release</id>
-      <name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
-      <url>http://repository.springsource.com/maven/bundles/release</url>
-    </repository>
+    <!-- springsource used for the osgi version of mysql -->
     <repository>
       <id>com.springsource.repository.bundles.external</id>
       <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
