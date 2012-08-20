@@ -78,6 +78,7 @@ public class Job {
 		this.input = input;
 		this.ioBridge = ioBridge;
 		this.monitor=monitor;
+		this.results=new JobResult.Builder().withMessageAccessor(monitor.getMessageAccessor()).withZipFile(null).withLogFile(null).build();
 	}
 
 	/**
@@ -129,22 +130,23 @@ public class Job {
 		props.setProperty("JOB_ID", id.toString());
 		try{
 			output = pipeline.run(input,monitor,props);
+			buildResults();
 			status=Status.DONE;
 		}catch(Exception e){
 			logger.error("job finished with error state",e);
+			buildResults();
 			status=Status.ERROR;
 		}
 
-
+	}
+	private void buildResults() {
 		JobResult.Builder builder = new JobResult.Builder();
 		builder.withMessageAccessor(monitor.getMessageAccessor());
 		builder.withLogFile(ioBridge.getLogFile());
 		builder = (ioBridge != null) ? builder.withZipFile(ioBridge
 				.zipOutput()) : builder;
 		results = builder.build();
-
 	}
-
 	/**
 	 * Gets the result.
 	 *
