@@ -92,7 +92,7 @@ public class PersistentMessage implements Message{
 		this.file =trim( other.getFile(),FILE_LEN-1);
 	}
 	private static String trim(String str,int len){
-		if(str.length()>len){
+		if(str!=null && str.length()>len){
 			str=str.substring(0,len);
 		}
 		return str;
