@@ -1,6 +1,7 @@
 package org.daisy.pipeline.job;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -24,6 +25,9 @@ public class DefaultJobExecutionService implements JobExecutionService {
 	/** The xproc engine. */
 	private XProcEngine xprocEngine;
 
+	private  ExecutorService executor=Executors.newFixedThreadPool(2);
+
+
 	/**
 	 * Sets the x proc engine.
 	 * 
@@ -35,21 +39,12 @@ public class DefaultJobExecutionService implements JobExecutionService {
 		this.xprocEngine = xprocEngine;
 	}
 
-	private  ExecutorService executor;
-
+	
 	/**
 	 * Activate (OSGI)
 	 */
 	public void activate() {
 		logger.trace("Activating job execution service");
-		executor = new ThreadPoolExecutor(2, 2,0L, TimeUnit.MILLISECONDS,
-		new LinkedBlockingQueue<Runnable>(), new ThreadFactory() {
-			
-			@Override
-			public Thread newThread(Runnable r) {
-				return new Thread(r);
-			}
-		});
 	}
 
 	/*
@@ -61,7 +56,8 @@ public class DefaultJobExecutionService implements JobExecutionService {
 	 */
 	@Override
 	public void submit(final Job job) {
-		executor.submit(new Runnable() {
+		logger.info("Submitting job");
+		executor.submit(new ThreadWrapper(new Runnable() {
 
 			@Override
 			public void run() {
@@ -72,12 +68,45 @@ public class DefaultJobExecutionService implements JobExecutionService {
 					MDC.put("jobid", job.getId().toString());
 					job.run(xprocEngine);
 					MDC.remove("jobid");
-					logger.info("Stopping to log to job's log file");
+					logger.info("Stopping logging to job's log file");
 				} catch (Exception e) {
 					throw new RuntimeException(e.getCause());
 				}
 
 			}
-		});
+		}));
+	}
+	/**
+	 * This class offers a solution to avoid memory leaks due to 
+	 * the missuse of ThreadLocal variables. 
+	 * The actual run implementation may be a little bit naive regarding the interrupt handling
+	 * 
+	 */
+	private static class ThreadWrapper implements Runnable{
+
+			private static final Logger logger = LoggerFactory
+			.getLogger(ThreadWrapper.class);
+			private Runnable runnable;
+
+		/**
+		 * Constructs a new instance.
+		 *
+		 * @param runnable The runnable for this instance.
+		 */
+		public ThreadWrapper(Runnable runnable) {
+			this.runnable = runnable;
+		}
+
+		public void run() {
+			logger.info("Starting wrappedThread :"+ Thread.currentThread().getName());	
+			Thread t = new Thread(this.runnable);
+			t.start();
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				logger.warn("ThreadWrapper was interrupted...");
+			}
+		}
+		
 	}
 }
