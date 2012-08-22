@@ -44,8 +44,7 @@ public class Job {
 	/** The script. */
 	private final XProcScript script;
 
-	/** The output. */
-	private XProcResult output;
+	//private XProcResult output;
 
 	/** The results. */
 	private JobResult results;
@@ -129,7 +128,7 @@ public class Job {
 		Properties props=new Properties();
 		props.setProperty("JOB_ID", id.toString());
 		try{
-			output = pipeline.run(input,monitor,props);
+			pipeline.run(input,monitor,props);
 			buildResults();
 			status=Status.DONE;
 		}catch(Exception e){
