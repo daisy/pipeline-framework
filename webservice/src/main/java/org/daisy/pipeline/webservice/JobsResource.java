@@ -20,6 +20,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.daisy.common.base.Provider;
+import org.daisy.common.transform.LazySaxSourceProvider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
@@ -499,43 +500,6 @@ public class JobsResource extends AuthenticatedResource {
 
 				}
 			}
-		}
-	}
-	/**
-	 *
-	 *  Supplies SaxSource objects without keeping a reference to them allowing the memory to be freed.
-	 *  proxifies setSystemId so provider.get().setSystemId(str) will work
-	 *
-	 */
-	class LazySaxSourceProvider implements Provider<Source>{
-		
-		private String systemId;
-
-
-		/**
-		 * Constructs a new instance.
-		 *
-		 * @param systemId The systemId for this instance.
-		 */
-		public LazySaxSourceProvider(String systemId) {
-			this.systemId=systemId;
-		}
-
-
-		@Override
-		public Source provide() {
-			SAXSource src=new ProxiedSAXSource();
-			src.setSystemId(this.systemId);
-			return src;
-		}
-		private class ProxiedSAXSource extends SAXSource{
-
-			@Override
-			public void setSystemId(String systemId) {
-				super.setSystemId(systemId);
-				LazySaxSourceProvider.this.systemId=systemId;
-			}
-			
 		}
 	}
 }

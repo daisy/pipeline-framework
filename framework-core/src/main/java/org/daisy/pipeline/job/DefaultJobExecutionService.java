@@ -25,7 +25,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
 	/** The xproc engine. */
 	private XProcEngine xprocEngine;
 
-	private  ExecutorService executor=Executors.newFixedThreadPool(2);
+	private  ExecutorService executor=Executors.newFixedThreadPool(5);
 
 
 	/**
