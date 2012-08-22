@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -114,12 +115,17 @@ public class IOHelper {
 	 * @param path the path
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public static void dump(InputStream is,String base,String path) throws IOException{
+	public static void dump(InputStream is,URI base,String path) throws IOException{
 			//linux & mac doesnt create empty files out of outstreams where nothing was written
 			//but win does, anyway this piece is more elegant than before.
-			File fout=new File(URI.create(base+SLASH+path));
+			File fout;
+			try {
+				fout = new File(new URI(base.getScheme(),base.getPath()+SLASH+path,null));
+			} catch (URISyntaxException e) {
+				throw new RuntimeException(e);
+			}
 			if(!path.endsWith(SLASH)){
-                fout.getParentFile().mkdirs();
+				fout.getParentFile().mkdirs();
 				FileOutputStream fos=new FileOutputStream(fout);
 				dump(is,fos);
 				fos.close();

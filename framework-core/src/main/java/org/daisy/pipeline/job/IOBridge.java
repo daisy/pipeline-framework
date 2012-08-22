@@ -210,7 +210,7 @@ public class IOBridge {
 			throws IOException {
 		for (String path : context.getNames()) {
 			IOHelper.dump(context.getResource(path).provide(), mContextDir
-					.toURI().toString(), path.replace("\\", "/"));
+					.toURI(), path.replace("\\", "/"));
 		}
 	}
 
