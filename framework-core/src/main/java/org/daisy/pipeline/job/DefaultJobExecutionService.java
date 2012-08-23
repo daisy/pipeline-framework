@@ -2,10 +2,6 @@ package org.daisy.pipeline.job;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.daisy.common.xproc.XProcEngine;
 import org.slf4j.Logger;
@@ -25,7 +21,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
 	/** The xproc engine. */
 	private XProcEngine xprocEngine;
 
-	private  ExecutorService executor=Executors.newFixedThreadPool(5);
+	private  ExecutorService executor=Executors.newFixedThreadPool(2);
 
 
 	/**
