@@ -105,7 +105,7 @@ public class JobsResource extends AuthenticatedResource {
 		return null;
 	}
 		Client client = null;
-		if (webservice().isAuthenticationEnabled()) {
+		if (webservice().getConfiguration().isAuthenticationEnabled()) {
 			String clientId = getQuery().getFirstValue("authid");
 			client = webservice().getClientStore().get(clientId);
 		}
@@ -190,7 +190,7 @@ public class JobsResource extends AuthenticatedResource {
 	 */
 	private MultipartRequestData processMultipart(Request request) {
 
-		String tmpdir = webservice().getTmpDir();
+		String tmpdir = webservice().getConfiguration().getTmpDir();
 
 		// 1/ Create a factory for disk-based file items
         DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
@@ -446,7 +446,7 @@ public class JobsResource extends AuthenticatedResource {
 		Iterable<XProcOptionInfo> allOptions = script.getXProcPipelineInfo().getOptions();
 
 		Iterable<XProcOptionInfo> filteredOptions = null;
-		if (!webservice().isLocal()) {
+		if (!webservice().getConfiguration().isLocal()) {
 			filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
 		}
 

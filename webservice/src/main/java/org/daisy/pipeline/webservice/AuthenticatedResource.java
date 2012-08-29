@@ -14,7 +14,7 @@ public abstract class AuthenticatedResource extends GenericResource {
 	@Override
 	public void doInit() {
 		super.doInit();
-		if (webservice().isAuthenticationEnabled() == false) {
+		if (webservice().getConfiguration().isAuthenticationEnabled() == false) {
 			// if authentication is not enabled, then all requests can be considered automatically authenticated
 			isAuthenticated = true;
 		}
@@ -25,7 +25,7 @@ public abstract class AuthenticatedResource extends GenericResource {
 
 	private boolean authenticate() {
 
-		long maxRequestTime = webservice().getMaxRequestTime();
+		long maxRequestTime = webservice().getConfiguration().getMaxRequestTime();
 		String authid = getQuery().getFirstValue("authid");
 		Client client = webservice().getClientStore().get(authid);
 		// make sure the client exists

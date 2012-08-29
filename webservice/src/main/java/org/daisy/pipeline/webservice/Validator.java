@@ -86,7 +86,7 @@ public class Validator {
 		}
 
 		XProcScript script;
-		if (application.isLocal()) {
+		if (application.getConfiguration().isLocal()) {
 			script = unfilteredScript.load();
 		}
 		else {
@@ -104,7 +104,7 @@ public class Validator {
 				.getXProcPipelineInfo().getOutputPorts(),
 				doc.getElementsByTagName("output"), script);
 
-		if (application.isLocal()) {
+		if (application.getConfiguration().isLocal()) {
 			return hasAllRequiredInputs & hasAllRequiredOutputs & hasAllRequiredOptions;
 		}
 		else {

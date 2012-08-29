@@ -11,7 +11,7 @@ public class AdminResource extends AuthenticatedResource {
 	public void doInit() {
 		super.doInit();
 		// Note: if authentication is not enabled, then all requests can be considered automatically authorized
-		isAuthorized = (!webservice().isAuthenticationEnabled()) || (super.isAuthenticated() && authorizeAsAdmin());
+		isAuthorized = (!webservice().getConfiguration().isAuthenticationEnabled()) || (super.isAuthenticated() && authorizeAsAdmin());
 	}
 
 	private boolean authorizeAsAdmin() {
