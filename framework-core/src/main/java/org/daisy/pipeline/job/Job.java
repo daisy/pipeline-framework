@@ -133,7 +133,7 @@ public class Job {
 			status=Status.DONE;
 		}catch(Exception e){
 			logger.error("job finished with error state",e);
-			buildResults();
+			//buildResults();
 			status=Status.ERROR;
 		}
 
