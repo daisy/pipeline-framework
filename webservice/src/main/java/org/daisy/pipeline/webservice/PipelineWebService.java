@@ -81,7 +81,15 @@ public class PipelineWebService extends Application {
 	 */
 	public void init(BundleContext ctxt) {
 		bundleCtxt=ctxt;
-		checkAuthenticationSanity();
+		if (!checkAuthenticationSanity()){
+
+			try {
+				this.halt();
+			} catch (BundleException e) {
+				logger.error("Error shutting down:"+e.getMessage());
+			}
+			return;
+		}
 		Routes routes = new Routes();
 		
 		logger.info(String.format("Starting webservice on port %d",
@@ -110,7 +118,7 @@ public class PipelineWebService extends Application {
 		} catch (Exception e) {
 			logger.error("Shutting down the framework because of:"+e.getMessage());
 			try{
-				((Framework)bundleCtxt.getBundle(0)).stop();
+				this.halt();
 			}catch (Exception innerException) {
 				logger.error("Error shutting down:"+e.getMessage());
 			}
@@ -118,7 +126,7 @@ public class PipelineWebService extends Application {
 		}
 	}
 
-	private void checkAuthenticationSanity() {
+	private boolean checkAuthenticationSanity() {
 		if (this.conf.isAuthenticationEnabled()) {
 			//if the clientStore is empty close the 
 			//WS
@@ -126,13 +134,7 @@ public class PipelineWebService extends Application {
 				//no properties supplied
 				if (conf.getClientKey()==null || conf.getClientSecret()==null || conf.getClientKey().isEmpty()|| conf.getClientSecret().isEmpty()){
 					logger.error("WS mode authenticated but the client store is empty, exiting");
-					try {
-						this.halt();
-						return;
-					} catch (BundleException e) {
-						logger.error("Error while closing the WS",e);
-						throw new RuntimeException("Error while closing the WS",e);
-					}
+						return false;
 				}else{
 					//new admin client via configuration properties
 					logger.debug("Inserting new client: "+conf.getClientKey());
@@ -142,6 +144,7 @@ public class PipelineWebService extends Application {
 
 			}
 		}
+		return true;
 
 	}
 		
