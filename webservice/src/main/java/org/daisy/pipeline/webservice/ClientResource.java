@@ -72,20 +72,21 @@ public class ClientResource extends AdminResource {
 	@Delete
 	public void deleteResource() {
 		if (!isAuthorized()) {
-    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-    		return;
-    	}
-
-    	if (client == null) {
-    		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return;
-    	}
+		}
+
+		if (client == null) {
+			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			return;
+		}
 
 
 		if (webservice().getClientStore().delete(client)) {
 			setStatus(Status.SUCCESS_NO_CONTENT);
 		}
 		else {
+		
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 		}
 	}
