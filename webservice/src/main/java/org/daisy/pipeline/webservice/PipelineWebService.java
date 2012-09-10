@@ -54,6 +54,7 @@ public class PipelineWebService extends Application {
 	private BundleContext bundleCtxt;
 
 	private RequestLog requestLog;
+	private Component component;
 	/* (non-Javadoc)
 	 * @see org.restlet.Application#createInboundRoot()
 	 */
@@ -94,7 +95,7 @@ public class PipelineWebService extends Application {
 		
 		logger.info(String.format("Starting webservice on port %d",
 				routes.getPort()));
-		Component component = new Component();
+		component = new Component();
 		
 		if (!conf.isSsl()){
 			component.getServers().add(Protocol.HTTP, routes.getPort());
@@ -175,8 +176,10 @@ public class PipelineWebService extends Application {
 	 * @throws Throwable
 	 */
 	public void close() throws Exception {
+		if (this.component!=null)
+			this.component.stop();
+		this.stop();
 		logger.info("Webservice stopped.");
-		stop();
 
 	}
 
