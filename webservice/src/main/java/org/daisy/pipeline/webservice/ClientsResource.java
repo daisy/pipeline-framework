@@ -7,6 +7,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.daisy.pipeline.webserviceutils.xml.ErrorWriter;
 import org.daisy.pipeline.webserviceutils.xml.XmlValidator;
 import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
@@ -58,62 +59,65 @@ public class ClientsResource extends AdminResource {
 
     @Post
     public Representation createResource(Representation representation) {
-    	if (!isAuthorized()) {
-    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-    		return null;
-    	}
+	    if (!isAuthorized()) {
+		    setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+		    return null;
+	    }
 
-        if (representation == null) {
-        	// POST request with no entity.
-            setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-            return null;
-        }
+	    if (representation == null) {
+		    // POST request with no entity.
+		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+		    return null;
+	    }
 
-        Document doc = null;
+	    Document doc = null;
 
-        String s;
-		try {
-			s = representation.getText();
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            InputSource is = new InputSource(new StringReader(s));
-            doc = builder.parse(is);
-		} catch (IOException e) {
-			logger.error(e.getMessage());
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return null;
-		} catch (ParserConfigurationException e) {
-			logger.error(e.getMessage());
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return null;
-		} catch (SAXException e) {
-			logger.error(e.getMessage());
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return null;
-		}
+	    String s;
+	    try {
+		    s = representation.getText();
+		    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		    factory.setNamespaceAware(true);
+		    DocumentBuilder builder = factory.newDocumentBuilder();
+		    InputSource is = new InputSource(new StringReader(s));
+		    doc = builder.parse(is);
+	    } catch (IOException e) {
+		    logger.error(e.getMessage());
+		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+		    return null;
+	    } catch (ParserConfigurationException e) {
+		    logger.error(e.getMessage());
+		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+		    return null;
+	    } catch (SAXException e) {
+		    logger.error(e.getMessage());
+		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+		    return null;
+	    }
 
-		boolean isValid = XmlValidator.validate(doc, XmlValidator.CLIENT_SCHEMA_URL);
+	    boolean isValid = XmlValidator.validate(doc, XmlValidator.CLIENT_SCHEMA_URL);
 
-		if (!isValid) {
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return null;
-		}
+	    if (!isValid) {
+		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+		    return null;
+	    }
 
-		Element root = doc.getDocumentElement();
-		Client newClient = new SimpleClient(root.getAttribute("id"),
-				root.getAttribute("secret"), Client.Role.valueOf(root
-						.getAttribute("role")), root.getAttribute("contact"));
+	    Element root = doc.getDocumentElement();
+	    Client newClient = new SimpleClient(root.getAttribute("id"),
+			    root.getAttribute("secret"), Client.Role.valueOf(root
+				    .getAttribute("role")), root.getAttribute("contact"));
 
-		if (!webservice().getClientStore().add(newClient)) {
-			// the client ID was probably not unique
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return null;
-		}
+	    if (!webservice().getClientStore().add(newClient)) {
+		    // the client ID was probably not unique
+		    logger.debug("Client id not unique");
+		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+		    ErrorWriter.ErrorWriterBuilder builder=new ErrorWriter.ErrorWriterBuilder().withError(new Throwable("Client id already exists")).withUri(this.getStatus().getUri());
+		    return new DomRepresentation(MediaType.APPLICATION_XML,
+				    builder.build().getXmlDocument());
+	    }
 
-		setStatus(Status.SUCCESS_CREATED);
-		ClientXmlWriter writer = XmlWriterFactory.createXmlWriter(newClient);
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
-		return dom;
+	    setStatus(Status.SUCCESS_CREATED);
+	    ClientXmlWriter writer = XmlWriterFactory.createXmlWriter(newClient);
+	    DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
+	    return dom;
     }
 }
