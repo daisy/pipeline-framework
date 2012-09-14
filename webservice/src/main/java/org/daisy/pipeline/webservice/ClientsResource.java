@@ -83,15 +83,21 @@ public class ClientsResource extends AdminResource {
 	    } catch (IOException e) {
 		    logger.error(e.getMessage());
 		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    return null;
+		    ErrorWriter.ErrorWriterBuilder builder=new ErrorWriter.ErrorWriterBuilder().withError(e).withUri(this.getStatus().getUri());
+		    return new DomRepresentation(MediaType.APPLICATION_XML,
+				    builder.build().getXmlDocument());
 	    } catch (ParserConfigurationException e) {
 		    logger.error(e.getMessage());
 		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    return null;
+		    ErrorWriter.ErrorWriterBuilder builder=new ErrorWriter.ErrorWriterBuilder().withError(e).withUri(this.getStatus().getUri());
+		    return new DomRepresentation(MediaType.APPLICATION_XML,
+				    builder.build().getXmlDocument());
 	    } catch (SAXException e) {
 		    logger.error(e.getMessage());
 		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    return null;
+		    ErrorWriter.ErrorWriterBuilder builder=new ErrorWriter.ErrorWriterBuilder().withError(e).withUri(this.getStatus().getUri());
+		    return new DomRepresentation(MediaType.APPLICATION_XML,
+				    builder.build().getXmlDocument());
 	    }
 
 	    boolean isValid = XmlValidator.validate(doc, XmlValidator.CLIENT_SCHEMA_URL);
