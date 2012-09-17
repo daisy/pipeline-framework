@@ -230,7 +230,8 @@ public class Validator {
 			for (int i=0; i<nodes.getLength(); i++) {
 				Element elm = (Element)nodes.item(i);
 				if (elm.getAttribute("name").equals(arg.getName())) {
-					NodeList itemNodes = elm.getElementsByTagName("item");
+					// this didn't match what the schema specified for <output> elements
+					/*NodeList itemNodes = elm.getElementsByTagName("item");
 
 					if (itemNodes.getLength() == 0) {
 						validArg = false;
@@ -239,7 +240,8 @@ public class Validator {
 						if (itemNodes.getLength() > 0) {
 							validArg = validateItemElements(itemNodes);
 						}
-					}
+					}*/
+					validArg = true;
 					break;
 				}
 			}
