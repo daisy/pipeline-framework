@@ -289,4 +289,8 @@ public class IOBridge {
 	private boolean isLocal(){
 		return System.getProperty(ORG_DAISY_PIPELINE_LOCAL)!=null&&System.getProperty(ORG_DAISY_PIPELINE_LOCAL).equalsIgnoreCase("true");
 	}
+
+	public boolean cleanUp(){
+		return IOHelper.deleteDir(this.mBaseDir);
+	}
 }

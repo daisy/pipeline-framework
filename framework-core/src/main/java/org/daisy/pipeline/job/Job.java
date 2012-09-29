@@ -1,5 +1,7 @@
 package org.daisy.pipeline.job;
 
+import java.io.IOException;
+
 import java.util.Properties;
 
 import org.daisy.common.xproc.XProcEngine;
@@ -157,6 +159,10 @@ public class Job {
 
 	public XProcMonitor getMonitor(){
 		return monitor;
+	}
+
+	public boolean cleanUp(){
+		return	this.ioBridge.cleanUp();
 	}
 
 }

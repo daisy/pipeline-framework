@@ -48,6 +48,7 @@ public class DefaultJobManager implements JobManager {
 	 */
 	@Override
 	public Job deleteJob(JobId id) {
+		jobs.get(id).cleanUp();
 		return jobs.remove(id);
 	}
 
