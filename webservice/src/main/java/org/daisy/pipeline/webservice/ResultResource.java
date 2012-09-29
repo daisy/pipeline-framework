@@ -8,9 +8,13 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobResult;
+
+import org.daisy.pipeline.webserviceutils.xml.ErrorWriter;
 import org.restlet.data.Disposition;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
+
+import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
@@ -77,9 +81,11 @@ public class ResultResource extends AuthenticatedResource {
 		// available?
 		if (zip == null) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-			return null;
+			ErrorWriter.ErrorWriterBuilder builder=new ErrorWriter.ErrorWriterBuilder().withError(new Throwable("No zip file")).withUri(this.getStatus().getUri());
+			return new DomRepresentation(MediaType.APPLICATION_XML,
+					    builder.build().getXmlDocument());
 		}
-
+		logger.debug("Zip file :"+zip);
 		File zipFile = new File(zip);
 		Representation rep = new FileRepresentation(zipFile,
 				MediaType.APPLICATION_ZIP);
