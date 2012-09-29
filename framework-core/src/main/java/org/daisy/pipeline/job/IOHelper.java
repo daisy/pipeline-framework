@@ -14,6 +14,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class IOHelper offers some utilities to the {@link IOBridge} class.
@@ -44,6 +46,8 @@ public class IOHelper {
 	/** The m output file preffix. */
 	private String mOutputFilePreffix;
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(IOHelper.class);
 	/**
 	 * Instantiates a new iO helper.
 	 */
@@ -210,5 +214,16 @@ public class IOHelper {
 		}
 		zipOs.close();
 		return output.toURI();
+	}
+
+	public static boolean deleteDir(File parent){
+		logger.debug("Deleting directory:"+parent);
+		for( File f: parent.listFiles()){
+			if (f.isDirectory()){
+				IOHelper.deleteDir(f);
+			}
+			f.delete();
+		}
+		return parent.delete();
 	}
 }
