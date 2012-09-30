@@ -68,7 +68,7 @@ public abstract class MessageAccessor{
 
 	public abstract List<Message> getAll();
 	protected abstract List<Message> getMessagesFrom(Level level);
-
+	public abstract boolean delete();
 
 
 	public abstract MessageFilter createFilter();

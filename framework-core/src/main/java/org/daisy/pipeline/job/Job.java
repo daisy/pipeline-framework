@@ -162,7 +162,9 @@ public class Job {
 	}
 
 	public boolean cleanUp(){
-		return	this.ioBridge.cleanUp();
+		boolean clean=true;
+		clean&=this.getMonitor().getMessageAccessor().delete();	
+		return	clean&this.ioBridge.cleanUp();
 	}
 
 }

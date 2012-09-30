@@ -51,6 +51,19 @@ public class PersistentMessageAccessor extends MessageAccessor {
 	public MessageFilter createFilter() {
 		return new PersistentMessageAccessor.MessageFilter();
 	}
+	@Override
+	public boolean delete(){
+		EntityManager em = emf.createEntityManager();
+
+		StringBuilder sqlBuilder=new StringBuilder("delete from PersistentMessage where jobId='%s' ");
+		String sql=String.format(sqlBuilder.toString(), jobId.toString());
+		Query q=em.createQuery(sql);
+		em.getTransaction().begin();
+		int res=q.executeUpdate();
+		em.getTransaction().commit();
+		em.close();
+		return res>0;
+	}
 
 	protected class MessageFilter implements MessageAccessor.MessageFilter {
 		List<Level> mLevels = Arrays.asList(Level.values());
@@ -77,7 +90,7 @@ public class PersistentMessageAccessor extends MessageAccessor {
 			getRange = true;
 			return this;
 		}
-		
+			
 		@Override
 		public List<Message> getMessages() {
 			if (getRange) {
