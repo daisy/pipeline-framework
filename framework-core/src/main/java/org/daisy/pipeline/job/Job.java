@@ -11,7 +11,6 @@ import org.daisy.pipeline.script.XProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 //TODO check thread safety
 /**
  * The Class Job defines the execution unit.
@@ -30,6 +29,7 @@ public class Job {
 		RUNNING,
 		/** The DONE. */
 		DONE,
+		/** The ERROR*/
 		ERROR
 	}
 
@@ -65,9 +65,9 @@ public class Job {
 	 * @param ioBridge
 	 *            the io bridge
 	 */
-	Job(JobId id, XProcScript script, JobContext ctxt) {
+	Job(XProcScript script, JobContext ctxt) {
 		
-		this.id = id;
+		this.id = ctxt.getId();
 		this.script = script;
 		this.ctxt=ctxt;
 	}

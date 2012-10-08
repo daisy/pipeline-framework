@@ -10,7 +10,8 @@ syntax: glob
 
 # Temporary files used by the vim editor.
 .*.swp
-
+#Tags
+tags
 # Log files
 *.log
 
