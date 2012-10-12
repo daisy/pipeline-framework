@@ -87,6 +87,11 @@ public class XmlValidator {
 			return false;
 		};
 
+		if (errorHandler.hasErrors()) {
+			for (SAXParseException e : errorHandler.errors) {
+				logger.error(e.getMessage() + "(" + e.getLineNumber() + ", " + e.getColumnNumber() + ")");
+			}
+		}
         return !errorHandler.hasErrors();
 	}
 

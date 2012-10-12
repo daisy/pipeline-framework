@@ -23,6 +23,7 @@ script =
             & attribute required { xsd:boolean } 
             & attribute type { text } # XSD type
             & mediatype.attr? # use if option references a file
+            & attribute outputType { output.type }?
         }*
         
         & element output {
@@ -38,4 +39,6 @@ script =
 
 mediatype.attr = 
     attribute mediaType { text }
+
+output.type = "result" | "temp"
     
