@@ -15,10 +15,12 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobUUIDGenerator;
+import org.daisy.pipeline.job.StatusMessage;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
 import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
 import org.osgi.framework.BundleContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,12 +31,14 @@ import com.google.common.eventbus.Subscribe;
 // e.g. it could also trigger email notifications
 // TODO: be sure to only do this N times per second
 public class PushNotifier {
+
+
 	private CallbackRegistry callbackRegistry;
 	private EventBusProvider eventBusProvider;
 	private JobManager jobManager;
 	/** The logger. */
 	private Logger logger;// = LoggerFactory.getLogger(Poster.class.getName());
-
+               
 	// for now: push notifications every second. TODO: support different frequencies.
 	final int PUSH_INTERVAL = 1000;
 
@@ -93,9 +97,9 @@ public class PushNotifier {
 		messages.addMessage(jobId, msg);
 	}
 
-	//TODO @Subscribe
-	public synchronized void handleStatus(Job job) {
-		// TODO handle similarly to messages
+	@Subscribe
+	public synchronized void handleStatus(StatusMessage message) {
+		logger.debug(String.format("Status changed %s->%s",message.getJobId(),message.getStatus()));
 	}
 
 

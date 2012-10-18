@@ -3,6 +3,8 @@ package org.daisy.pipeline.job;
 import java.io.IOException;
 
 import org.daisy.common.xproc.XProcInput;
+
+import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.script.XProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +13,8 @@ public class JobFactory {
 	//singleton
 	private static JobFactory instance=null;
 	private JobMonitorFactory monitorFactory;
+	private EventBusProvider eventbusProvider;
+
 	private static final Logger logger = LoggerFactory.getLogger(JobFactory.class);
 	public JobFactory(){
 		if (instance==null) {
@@ -25,6 +29,10 @@ public class JobFactory {
 	public void setJobMonitorFactory(JobMonitorFactory monitorFactory){
 		logger.debug("setting monitor factory");
 		this.monitorFactory=monitorFactory;
+	}
+	public void setEventBusProvider(EventBusProvider eventbusProvider){
+		logger.debug("setting even bus factory");
+		this.eventbusProvider=eventbusProvider;
 	}
 
 	/**
@@ -50,7 +58,7 @@ public class JobFactory {
 			}
 			JobMonitor monitor=monitorFactory.newJobMonitor(id);
 			// TODO validate input
-			return new Job(id, script, resolvedInput, bridge,monitor);
+			return new Job(id, script, resolvedInput, bridge,monitor,eventbusProvider.get());
 		} catch (IOException e) {
 			throw new RuntimeException("Error resolving pipeline info", e);
 		}

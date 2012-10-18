@@ -9,9 +9,15 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
+
+import org.daisy.pipeline.job.StatusMessage;
+import org.daisy.pipeline.job.StatusMessage;
+import org.daisy.pipeline.job.StatusMessage;
 import org.daisy.pipeline.script.XProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.eventbus.EventBus;
 
 // TODO: Auto-generated Javadoc
 //TODO check thread safety
@@ -36,7 +42,7 @@ public class Job {
 	}
 
 
-
+	private EventBus eventBus;
 	/** The id. */
 	private final JobId id;
 
@@ -72,14 +78,16 @@ public class Job {
 	 *            the io bridge
 	 */
 	Job(JobId id, XProcScript script, XProcInput input,
-			IOBridge ioBridge,JobMonitor monitor) {
+			IOBridge ioBridge,JobMonitor monitor,EventBus eventBus) {
 		// TODO check arguments
 		this.id = id;
 		this.script = script;
 		this.input = input;
 		this.ioBridge = ioBridge;
 		this.monitor=monitor;
+		this.eventBus=eventBus;
 		this.results=new JobResult.Builder().withMessageAccessor(monitor.getMessageAccessor()).withZipFile(null).withLogFile(null).build();
+		this.postStatus();
 	}
 
 	/**
@@ -117,7 +125,9 @@ public class Job {
 	XProcResult getXProcOutput() {
 		return null;
 	}
-
+	private void postStatus(){
+		this.eventBus.post(new StatusMessage.Builder().withJobId(this.id).withStatus(this.status).build());
+	}
 	/**
 	 * Runs the job using the XProcEngine as script loader.
 	 *
@@ -125,6 +135,7 @@ public class Job {
 	 */
 	public void run(XProcEngine engine) {
 		status = Status.RUNNING;
+		this.postStatus();
 		// TODO use a pipeline cache
 		XProcPipeline pipeline = engine.load(script.getURI());
 		Properties props=new Properties();
@@ -133,10 +144,12 @@ public class Job {
 			pipeline.run(input,monitor,props);
 			buildResults();
 			status=Status.DONE;
+			this.postStatus();
 		}catch(Exception e){
 			logger.error("job finished with error state",e);
 			//buildResults();
 			status=Status.ERROR;
+			this.postStatus();
 		}
 
 	}
