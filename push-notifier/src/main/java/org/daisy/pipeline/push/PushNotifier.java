@@ -2,7 +2,10 @@ package org.daisy.pipeline.push;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,7 +33,7 @@ public class PushNotifier {
 	private EventBusProvider eventBusProvider;
 	private JobManager jobManager;
 	/** The logger. */
-	private static Logger logger = LoggerFactory.getLogger(Poster.class.getName());
+	private Logger logger;// = LoggerFactory.getLogger(Poster.class.getName());
 
 	// for now: push notifications every second. TODO: support different frequencies.
 	final int PUSH_INTERVAL = 1000;
@@ -47,6 +50,8 @@ public class PushNotifier {
 
 	public void init(BundleContext context) {
 		messages = new MessageList();
+		logger = LoggerFactory.getLogger(Poster.class.getName());
+
 	}
 
 	public void close() {
@@ -99,45 +104,34 @@ public class PushNotifier {
 			super();
 		}
 
-        @Override
+		@Override
 		public synchronized void run() {
-        	//System.out.println("Timer running");
-            postMessages();
-        }
-	    private synchronized void postMessages() {
-        	// make a copy of the jobIds
-        	// they will not remain static because we are removing them as we go
-        	// TODO maybe there's a more java-ish way to do this? it feels a bit ugly.
-        	List<JobId> jobIds = new ArrayList<JobId>();
-        	for (JobId jobId : messages.getJobs()) {
-        		jobIds.add(jobId);
-        	}
+			//System.out.println("Timer running");
+			postMessages();
+		}
+		private synchronized void postMessages() {
+			synchronized(PushNotifier.this){
+			//logger.debug("Posting messages");
+			//logger.debug("Jobs cnt: "+messages.getJobs().size());
+				for (JobId jobId : messages.getJobs()) {
+					Job job = jobManager.getJob(jobId);
+					for (Callback callback : callbackRegistry.getCallbacks(jobId)) {
+						if (callback.getType() == CallbackType.MESSAGES) {
+							Poster.postMessage(job, new LinkedList<Message>(messages.getMessages(jobId)), callback);
+						}
+					}
+					//I don't mind noone listening for the messages they will be discarded anyway...
+					messages.removeJob(jobId);
+				}
+			}
 
-    		for (JobId jobId : jobIds) {
-    			Iterable<Callback> callbacks = callbackRegistry.getCallbacks(jobId);
-    			Job job = jobManager.getJob(jobId);
-    			for (Callback callback : callbacks) {
-    				if (callback.getType() == CallbackType.MESSAGES) {
-    					// make a copy: JobXmlWriter isn't synchronized
-    					List<Message> msgs = new ArrayList<Message>();
-    					Iterable<Message> srcMsgs = messages.getMessages(jobId);
-    					for (Message msg : srcMsgs) {
-    						msgs.add(msg);
-    					}
-    					messages.removeJob(jobId);
-    					Poster.postMessage(job, msgs, callback);
-    				}
-    			}
-    		}
-
-
-    		// no need to keep the timer going if there are no more messages
-    		// however, this doesn't really work. TODO fix it.
+			// no need to keep the timer going if there are no more messages
+			// however, this doesn't really work. TODO fix it.
 			/*if (messages.isEmpty()) {
-				System.out.println("Cancelling timer");
-				cancelTimer();
-			}*/
-	    }
+			  System.out.println("Cancelling timer");
+			  cancelTimer();
+			  }*/
+		}
 	}
 
 	class MessageList {
@@ -146,8 +140,15 @@ public class PushNotifier {
 		public MessageList() {
 			messages = new HashMap<JobId, List<Message>>();
 		}
-		public synchronized Iterable<Message> getMessages(JobId jobId) {
+		public synchronized List<Message> getMessages(JobId jobId) {
 			return messages.get(jobId);
+		}
+		public synchronized MessageList copy(){
+			MessageList copy=new MessageList();	
+			for (Map.Entry<JobId,List<Message>> entry:this.messages.entrySet()){
+				copy.messages.put(entry.getKey(),new LinkedList<Message>(entry.getValue()));	
+			}
+			return copy;
 		}
 
 		public synchronized void addMessage(JobId jobId, Message msg) {
@@ -161,7 +162,7 @@ public class PushNotifier {
 			}
 			list.add(msg);
 		}
-		public synchronized Iterable<JobId> getJobs() {
+		public synchronized Set<JobId> getJobs() {
 			return messages.keySet();
 		}
 
