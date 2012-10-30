@@ -68,7 +68,7 @@ public class JobResource extends AuthenticatedResource {
 		}
 		if (job == null) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-			return null;
+			return this.getErrorRepresentation("Job not found");
 		}
 
 		setStatus(Status.SUCCESS_OK);

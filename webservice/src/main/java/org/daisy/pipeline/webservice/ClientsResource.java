@@ -7,23 +7,30 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.pipeline.webserviceutils.xml.ErrorWriter;
-import org.daisy.pipeline.webserviceutils.xml.XmlValidator;
 import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
+
 import org.daisy.pipeline.webserviceutils.xml.ClientXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.ClientsXmlWriter;
+import org.daisy.pipeline.webserviceutils.xml.XmlValidator;
 import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
+
 import org.restlet.ext.xml.DomRepresentation;
+
 import org.restlet.representation.Representation;
+
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -67,7 +74,7 @@ public class ClientsResource extends AdminResource {
 	    if (representation == null) {
 		    // POST request with no entity.
 		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    return null;
+		    return this.getErrorRepresentation("Post request with no entity");
 	    }
 
 	    Document doc = null;
@@ -83,28 +90,22 @@ public class ClientsResource extends AdminResource {
 	    } catch (IOException e) {
 		    logger.error(e.getMessage());
 		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    ErrorWriter.ErrorWriterBuilder builder=new ErrorWriter.ErrorWriterBuilder().withError(e).withUri(this.getStatus().getUri());
-		    return new DomRepresentation(MediaType.APPLICATION_XML,
-				    builder.build().getXmlDocument());
+		    this.getErrorRepresentation(e);
 	    } catch (ParserConfigurationException e) {
 		    logger.error(e.getMessage());
 		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    ErrorWriter.ErrorWriterBuilder builder=new ErrorWriter.ErrorWriterBuilder().withError(e).withUri(this.getStatus().getUri());
-		    return new DomRepresentation(MediaType.APPLICATION_XML,
-				    builder.build().getXmlDocument());
+		    this.getErrorRepresentation(e);
 	    } catch (SAXException e) {
 		    logger.error(e.getMessage());
 		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    ErrorWriter.ErrorWriterBuilder builder=new ErrorWriter.ErrorWriterBuilder().withError(e).withUri(this.getStatus().getUri());
-		    return new DomRepresentation(MediaType.APPLICATION_XML,
-				    builder.build().getXmlDocument());
+		    this.getErrorRepresentation(e);
 	    }
 
 	    boolean isValid = XmlValidator.validate(doc, XmlValidator.CLIENT_SCHEMA_URL);
 
 	    if (!isValid) {
 		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    return null;
+		    return this.getErrorRepresentation("Response XML not valid");
 	    }
 
 	    Element root = doc.getDocumentElement();
@@ -116,9 +117,7 @@ public class ClientsResource extends AdminResource {
 		    // the client ID was probably not unique
 		    logger.debug("Client id not unique");
 		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    ErrorWriter.ErrorWriterBuilder builder=new ErrorWriter.ErrorWriterBuilder().withError(new Throwable("Client id already exists")).withUri(this.getStatus().getUri());
-		    return new DomRepresentation(MediaType.APPLICATION_XML,
-				    builder.build().getXmlDocument());
+		    return this.getErrorRepresentation("Client id not unique");
 	    }
 
 	    setStatus(Status.SUCCESS_CREATED);

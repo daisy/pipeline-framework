@@ -62,7 +62,7 @@ public class ScriptResource extends AuthenticatedResource {
 
 		if (script == null) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-			return null;
+			return this.getErrorRepresentation("Script not found");
 		}
 		setStatus(Status.SUCCESS_OK);
 		ScriptXmlWriter writer = XmlWriterFactory.createXmlWriter(script);

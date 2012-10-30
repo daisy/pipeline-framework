@@ -55,6 +55,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class JobsResource.
@@ -113,7 +114,7 @@ public class JobsResource extends AuthenticatedResource {
 		if (representation == null) {
 			// POST request with no entity.
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return null;
+			return this.getErrorRepresentation("POST request with no entity");
 		}
 
 
@@ -126,7 +127,7 @@ public class JobsResource extends AuthenticatedResource {
 			MultipartRequestData data = processMultipart(request);
 			if (data == null) {
 				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return null;
+				return this.getErrorRepresentation("Multipart data is empty");
 			}
 			doc = data.getXml();
 			zipfile = data.getZipFile();
@@ -144,15 +145,15 @@ public class JobsResource extends AuthenticatedResource {
 			} catch (IOException e) {
 				logger.error(e.getMessage());
 				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return null;
+				this.getErrorRepresentation(e);
 			} catch (ParserConfigurationException e) {
 				logger.error(e.getMessage());
 				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return null;
+				this.getErrorRepresentation(e);
 			} catch (SAXException e) {
 				logger.error(e.getMessage());
 				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return null;
+				this.getErrorRepresentation(e);
 			}
 		}
 
@@ -160,14 +161,14 @@ public class JobsResource extends AuthenticatedResource {
 
 		if (!isValid) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return null;
+			return this.getErrorRepresentation("Response XML is not valid");
 		}
 
 		Job job = createJob(doc, zipfile, client);
 
 		if (job == null) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return null;
+			return this.getErrorRepresentation("Could not create job (job was null)");
 		}
 
 		JobXmlWriter writer = XmlWriterFactory.createXmlWriter(job);

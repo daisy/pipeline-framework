@@ -33,7 +33,7 @@ public class ClientResource extends AdminResource {
 	private static Logger logger = LoggerFactory.getLogger(ClientResource.class.getName());
 
 	@Override
-    public void doInit() {
+	public void doInit() {
 		super.doInit();
 		if (!isAuthorized()) {
 			return;
@@ -42,29 +42,29 @@ public class ClientResource extends AdminResource {
 		client = webservice().getClientStore().get(idParam);
 	}
 
-    /**
-     * Gets the resource.
-     *
-     * @return the resource
-     */
-    @Get("xml")
-    public Representation getResource() {
-    	if (!isAuthorized()) {
-    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-    		return null;
-    	}
-
-    	if (client == null) {
-    		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+	/**
+	 * Gets the resource.
+	 *
+	 * @return the resource
+	 */
+	@Get("xml")
+	public Representation getResource() {
+		if (!isAuthorized()) {
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
-    	}
+		}
 
-    	setStatus(Status.SUCCESS_OK);
-    	ClientXmlWriter writer = XmlWriterFactory.createXmlWriter(client);
-    	DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
+		if (client == null) {
+			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			return this.getErrorRepresentation("Client not found");	
+		}
+
+		setStatus(Status.SUCCESS_OK);
+		ClientXmlWriter writer = XmlWriterFactory.createXmlWriter(client);
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
 		return dom;
-    }
+	}
 
 	/**
 	 * Delete resource.
@@ -86,7 +86,7 @@ public class ClientResource extends AdminResource {
 			setStatus(Status.SUCCESS_NO_CONTENT);
 		}
 		else {
-		
+
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 		}
 	}
@@ -95,44 +95,46 @@ public class ClientResource extends AdminResource {
 	public Representation putResource(Representation representation) {
 
 		if (!isAuthorized()) {
-    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-    		return null;
-    	}
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+			return null;
+		}
 
-    	// our PUT method won't create a client, just replace information for an existing client
-    	if (client == null) {
-    		setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-            return null;
-    	}
+		// our PUT method won't create a client, just replace information for an existing client
+		if (client == null) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return this.getErrorRepresentation("Client not found, put method won't create a new client, it will just update an exisiting one");
+		}
 
-        if (representation == null) {
-        	// PUT request with no entity.
-            setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-            return null;
-        }
+		if (representation == null) {
+			// PUT request with no entity.
+			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			return this.getErrorRepresentation("PUT request with no data");
+		}
 
-        Document doc = null;
+		Document doc = null;
 
-        String s;
+		String s;
 		try {
 			s = representation.getText();
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            InputSource is = new InputSource(new StringReader(s));
-            doc = builder.parse(is);
+			factory.setNamespaceAware(true);
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			InputSource is = new InputSource(new StringReader(s));
+			doc = builder.parse(is);
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return null;
+			return this.getErrorRepresentation(e);
+
 		} catch (ParserConfigurationException e) {
 			logger.error(e.getMessage());
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return null;
+			return this.getErrorRepresentation(e);
+
 		} catch (SAXException e) {
 			logger.error(e.getMessage());
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return null;
+			return this.getErrorRepresentation(e);
 		}
 
 
@@ -140,7 +142,8 @@ public class ClientResource extends AdminResource {
 
 		if (!isValid) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return null;
+			return this.getErrorRepresentation("Response xml not valid");
+			
 		}
 
 		Element root = doc.getDocumentElement();
@@ -154,5 +157,5 @@ public class ClientResource extends AdminResource {
 				writer.getXmlDocument());
 		return dom;
 
-    }
+	}
 }

@@ -18,7 +18,7 @@ public class HaltResource extends AdminResource {
 		}
 		catch(NumberFormatException e) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-            return;
+			    return;
 		}
 	}
 	@Get

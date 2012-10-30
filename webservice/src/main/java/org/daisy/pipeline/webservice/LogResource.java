@@ -31,25 +31,25 @@ public class LogResource extends AuthenticatedResource {
 	 * @see org.restlet.resource.Resource#doInit()
 	 */
 	@Override
-    public void doInit() {
+	public void doInit() {
 		super.doInit();
 		if (!isAuthenticated()) {
 			return;
 		}
 
 		JobManager jobMan = webservice().getJobManager();
-        String idParam = (String) getRequestAttributes().get("id");
+		String idParam = (String) getRequestAttributes().get("id");
 
-        try {
-        	JobId id = JobIdFactory.newIdFromString(idParam);
-        	job = jobMan.getJob(id);
-        }
-        catch(Exception e) {
-        	logger.error(e.getMessage());
-        	job = null;
-        }
+		try {
+			JobId id = JobIdFactory.newIdFromString(idParam);
+			job = jobMan.getJob(id);
+		}
+		catch(Exception e) {
+			logger.error(e.getMessage());
+			job = null;
+		}
 
-    }
+	}
 
 	/*
 	 * example output: daisy-pipeline/webservice/docs/sampleXml/log.xml
@@ -67,23 +67,23 @@ public class LogResource extends AuthenticatedResource {
 		}
 
 		if (job == null) {
-    		setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-			return null;
-    	}
+			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			return this.getErrorRepresentation("Job not found");
+		}
 
-    	setStatus(Status.SUCCESS_OK);
+		setStatus(Status.SUCCESS_OK);
 
-    	FileRepresentation logfile;
-    	JobResult result = job.getResult();
-    	if (result == null){
-    		return null;
-    	}
-    	URI logfileUri = result.getLogFile();
-    	if (logfileUri != null) {
-    		logfile = new FileRepresentation(new File(logfileUri), MediaType.TEXT_PLAIN);
-    		return logfile;
-    	} else {
-			return null;
+		FileRepresentation logfile;
+		JobResult result = job.getResult();
+		if (result == null){
+			return this.getErrorRepresentation("Job result was empty");
+		}
+		URI logfileUri = result.getLogFile();
+		if (logfileUri != null) {
+			logfile = new FileRepresentation(new File(logfileUri), MediaType.TEXT_PLAIN);
+			return logfile;
+		} else {
+			return this.getErrorRepresentation("Log file was not present");
 		}
 	}
 }
