@@ -145,15 +145,15 @@ public class JobsResource extends AuthenticatedResource {
 			} catch (IOException e) {
 				logger.error(e.getMessage());
 				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				this.getErrorRepresentation(e);
+				return this.getErrorRepresentation(e);
 			} catch (ParserConfigurationException e) {
 				logger.error(e.getMessage());
 				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				this.getErrorRepresentation(e);
+				return this.getErrorRepresentation(e);
 			} catch (SAXException e) {
 				logger.error(e.getMessage());
 				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				this.getErrorRepresentation(e);
+				return this.getErrorRepresentation(e);
 			}
 		}
 
