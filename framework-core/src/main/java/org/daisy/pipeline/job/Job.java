@@ -136,11 +136,16 @@ public class Job {
 	public void run(XProcEngine engine) {
 		status = Status.RUNNING;
 		this.postStatus();
-		// TODO use a pipeline cache
-		XProcPipeline pipeline = engine.load(script.getURI());
-		Properties props=new Properties();
-		props.setProperty("JOB_ID", id.toString());
+		XProcPipeline pipeline = null;
 		try{
+		pipeline = engine.load(script.getURI());
+		}catch (Exception e){
+			logger.error("Error while loading the script:"+this.script.getName());
+			throw new RuntimeException(e);
+		}
+		try{
+			Properties props=new Properties();
+			props.setProperty("JOB_ID", id.toString());
 			pipeline.run(input,monitor,props);
 			buildResults();
 			status=Status.DONE;
