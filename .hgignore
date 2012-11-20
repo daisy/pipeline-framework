@@ -14,6 +14,9 @@ syntax: glob
 # Log files
 *.log
 
+# ctags files
+tags
+
 # A hidden file created by the Mac OS X Finder.
 .DS_Store
 
