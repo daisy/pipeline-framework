@@ -124,7 +124,13 @@ public class JobsResource extends AuthenticatedResource {
 		if (MediaType.MULTIPART_FORM_DATA.equals(representation.getMediaType(), true)) {
 			Request request = getRequest();
 			// sort through the multipart request
-			MultipartRequestData data = processMultipart(request);
+			MultipartRequestData data = null;
+			try{
+				data = processMultipart(request);
+			}catch(Exception e){
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				return this.getErrorRepresentation(e);
+			}
 			if (data == null) {
 				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 				return this.getErrorRepresentation("Multipart data is empty");
@@ -189,10 +195,10 @@ public class JobsResource extends AuthenticatedResource {
 	 * @param request the request
 	 * @return the multipart request data
 	 */
-	private MultipartRequestData processMultipart(Request request) {
+	private MultipartRequestData processMultipart(Request request) throws Exception {
 
 		String tmpdir = webservice().getConfiguration().getTmpDir();
-
+		logger.debug("Tmpdir: "+tmpdir);
 		// 1/ Create a factory for disk-based file items
 		DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
 		fileItemFactory.setSizeThreshold(1000240);
@@ -205,7 +211,6 @@ public class JobsResource extends AuthenticatedResource {
 
 		ZipFile zip = null;
 		String xml = "";
-		try {
 			items = upload.parseRequest(request);
 			Iterator<FileItem> it = items.iterator();
 			while (it.hasNext()) {
@@ -237,13 +242,6 @@ public class JobsResource extends AuthenticatedResource {
 			MultipartRequestData data = new MultipartRequestData(zip, doc);
 			return data;
 
-		} catch (FileUploadException e) {
-			logger.error(e.getMessage());
-			return null;
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			return null;
-		}
 	}
 
 	// just a convenience class for representing the parts of a multipart request

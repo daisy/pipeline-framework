@@ -12,7 +12,7 @@ public class PipelineWebServiceConfiguration {
 	
 	private boolean usesAuthentication = true;
 	private long maxRequestTime = 600000; // 10 minutes in ms
-	private String tmpDir = "/tmp";
+	private String tmpDir=System.getProperty("java.io.tmpdir","/tmp");
 	private boolean ssl=false;
 
 	private String sslKeystore="";
@@ -60,6 +60,8 @@ public class PipelineWebServiceConfiguration {
 						Properties.TMPDIR, tmp, tmpDir));
 			}
 		}
+			
+		
 
 		//Max req time
 		String maxrequesttime = System.getProperty(Properties.MAX_REQUEST_TIME);
