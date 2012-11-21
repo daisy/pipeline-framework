@@ -4,6 +4,9 @@ import java.net.URI;
 
 import javax.xml.transform.URIResolver;
 
+import org.daisy.common.properties.PropertyPublisher;
+import org.daisy.common.properties.PropertyPublisherFactory;
+
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipeline;
@@ -13,7 +16,6 @@ import org.daisy.pipeline.event.EventBusProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.EntityResolver;
-
 
 //TODO check thread safety
 /**
@@ -38,7 +40,7 @@ public final class CalabashXProcEngine implements XProcEngine {
 	/** The event bus provider. */
 	private EventBusProvider eventBusProvider;
 
-
+	private PropertyPublisher propertyPublisher;
 
 
 
@@ -119,6 +121,15 @@ public final class CalabashXProcEngine implements XProcEngine {
 	 */
 	public void setEventBusProvider(EventBusProvider eventBusProvider){
 		this.eventBusProvider=eventBusProvider;
+	}
+	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
+		this.propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
+		//the property publishing step goes here
+		this.propertyPublisher.publish("org.daisy.pipeline.xproc.configuration" ,System.getProperty("org.daisy.pipeline.xproc.configuration" ),this.getClass());
+		this.propertyPublisher.publish("com.xmlcalabash.config.jar" ,System.getProperty("com.xmlcalabash.config.jar","true" ),this.getClass());
+		this.propertyPublisher.publish("com.xmlcalabash.config.home" ,System.getProperty("com.xmlcalabash.config.home","true" ),this.getClass());
+		this.propertyPublisher.publish("com.xmlcalabash.config.cwd" ,System.getProperty("com.xmlcalabash.config.cwd","true" ),this.getClass());
+
 	}
 
 }
