@@ -61,7 +61,7 @@ public class PropertyTracker {
 		}	
 		this.propertiesIndex.get(prop.getPropertyName()).put(prop.getBundleName(),prop);
 		this.properties.add(prop);
-		logger.debug("Property inserted: %s",prop.toString());
+		logger.debug(String.format("property tracked: %s",prop.toString()));
 	}
 
 	public void deleteProperty (Property prop){

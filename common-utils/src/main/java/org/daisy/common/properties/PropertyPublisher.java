@@ -1,5 +1,8 @@
 package org.daisy.common.properties;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +27,19 @@ public class PropertyPublisher {
 			logger.warn("Trying to publish a property but the tracker is not set");
 		}
 	}
-
+	/**
+	 * Mainly to give some indepence from OSGI to classes that do not require
+	 * OSGI api explicitily. This method resolves the BundleName + and id
+	 */
+	public void publish(String propertyName,String value,@SuppressWarnings("rawtypes") Class origin){
+		Bundle bundle=FrameworkUtil.getBundle(origin);	
+		if(bundle==null){
+			throw new IllegalStateException("Bundle not found for "+origin.getCanonicalName());
+		}
+		Property prop = new Property.Builder().withPropertyName(propertyName).withValue(value).withBundleId(bundle.getBundleId()).withBundleName(bundle.getSymbolicName()).build();
+		this.publish(prop);
+			
+	}
 	public void unpublish(Property property){
 		if(this.tracker!=null){
 			this.tracker.deleteProperty(property);
