@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>common-utils</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
-
   <name>DAISY Pipeline 2 :: Common Utilities</name>
-
   <dependencies>
-      <dependency>
-        <groupId>com.googlecode.guava-osgi</groupId>
-        <artifactId>guava-osgi</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.persistence</groupId>
-        <artifactId>javax.persistence</artifactId>
-      </dependency>
+    <dependency>
+      <groupId>com.googlecode.guava-osgi</groupId>
+      <artifactId>guava-osgi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>javax.persistence</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -34,11 +32,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Service-Component>OSGI-INF/messaging.xml</Service-Component>
+		  <Service-Component>OSGI-INF/messaging.xml, OSGI-INF/property-tracker.xml, OSGI-INF/propery-publisher-factory.xml</Service-Component>
           </instructions>
         </configuration>
       </plugin>
     </plugins>
   </build>
-
 </project>
