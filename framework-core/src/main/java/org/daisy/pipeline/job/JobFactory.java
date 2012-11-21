@@ -2,6 +2,9 @@ package org.daisy.pipeline.job;
 
 import java.io.IOException;
 
+import org.daisy.common.properties.PropertyPublisher;
+import org.daisy.common.properties.PropertyPublisherFactory;
+
 import org.daisy.common.xproc.XProcInput;
 
 import org.daisy.pipeline.event.EventBusProvider;
@@ -14,6 +17,7 @@ public class JobFactory {
 	private static JobFactory instance=null;
 	private JobMonitorFactory monitorFactory;
 	private EventBusProvider eventbusProvider;
+	private PropertyPublisher propertyPublisher;
 
 	private static final Logger logger = LoggerFactory.getLogger(JobFactory.class);
 	public JobFactory(){
@@ -33,6 +37,14 @@ public class JobFactory {
 	public void setEventBusProvider(EventBusProvider eventbusProvider){
 		logger.debug("setting even bus factory");
 		this.eventbusProvider=eventbusProvider;
+	}
+
+	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
+		this.propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
+		//the property publishing step goes here
+		this.propertyPublisher.publish("org.daisy.pipeline.iobase" ,System.getProperty("org.daisy.pipeline.iobase","" ),this.getClass());
+		this.propertyPublisher.publish("org.daisy.pipeline.home" ,System.getProperty("org.daisy.pipeline.home","" ),this.getClass());
+		this.propertyPublisher.publish("org.daisy.pipeline.logdir",System.getProperty("org.daisy.pipeline.logdir","" ),this.getClass());
 	}
 
 	/**
