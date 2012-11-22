@@ -5,6 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
+import org.daisy.common.properties.PropertyPublisher;
+import org.daisy.common.properties.PropertyPublisherFactory;
+
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.webserviceutils.Properties;
@@ -49,6 +52,7 @@ public class PipelineWebService extends Application {
 
 	private CallbackRegistry callbackRegistry;
 
+	private PropertyPublisher propertyPublisher;
 	private long shutDownKey=0L;
 
 	private BundleContext bundleCtxt;
@@ -82,6 +86,7 @@ public class PipelineWebService extends Application {
 	 */
 	public void init(BundleContext ctxt) {
 		bundleCtxt=ctxt;
+		this.conf.publishConfiguration(this.propertyPublisher);
 		if (!checkAuthenticationSanity()){
 
 			try {
@@ -240,6 +245,9 @@ public class PipelineWebService extends Application {
 		return requestLog;
 	}
 
+	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
+		this.propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
+	}
 	/**
 	 * Gets the client store
 	 *

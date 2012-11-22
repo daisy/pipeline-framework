@@ -2,6 +2,8 @@ package org.daisy.pipeline.webservice;
 
 import java.io.File;
 
+import org.daisy.common.properties.PropertyPublisher;
+
 import org.daisy.pipeline.webserviceutils.Properties;
 
 import org.slf4j.Logger;
@@ -77,9 +79,9 @@ public class PipelineWebServiceConfiguration {
 		}
 		//ssl related stuff
 		ssl=System.getProperty(Properties.SSL)!=null&&System.getProperty(Properties.SSL).equalsIgnoreCase("true");
-		sslKeystore=System.getProperty(Properties.SSL_KEYSTORE);
-		sslKeystorePassword=System.getProperty(Properties.SSL_KEYSTOREPASSWORD);
-		sslKeyPassword=System.getProperty(Properties.SSL_KEYPASSWORD);
+		sslKeystore=System.getProperty(Properties.SSL_KEYSTORE,"");
+		sslKeystorePassword=System.getProperty(Properties.SSL_KEYSTOREPASSWORD,"");
+		sslKeyPassword=System.getProperty(Properties.SSL_KEYPASSWORD,"");
 
 
 		clientKey=System.getProperty(Properties.CLIENT_KEY);
@@ -87,6 +89,24 @@ public class PipelineWebServiceConfiguration {
 
 	}
 
+	public void publishConfiguration(PropertyPublisher propPublisher){
+		//mode
+		propPublisher.publish(Properties.LOCAL_MODE,System.getProperty(Properties.LOCAL_MODE,"true"),this.getClass());	
+		//ssl related properties
+		propPublisher.publish(Properties.SSL,System.getProperty(Properties.SSL,"false"),this.getClass());	
+		propPublisher.publish(Properties.SSL_KEYSTORE,!System.getProperty(Properties.SSL_KEYSTORE,"").isEmpty()+"",this.getClass());	
+		propPublisher.publish(Properties.SSL_KEYSTOREPASSWORD,!System.getProperty(Properties.SSL_KEYSTOREPASSWORD,"").isEmpty()+"",this.getClass());	
+		propPublisher.publish(Properties.SSL_KEYPASSWORD,!System.getProperty(Properties.SSL_KEYPASSWORD,"").isEmpty()+"",this.getClass());	
+		//client keys and secret
+		propPublisher.publish(Properties.CLIENT_KEY,System.getProperty(Properties.CLIENT_KEY,""),this.getClass());	
+		propPublisher.publish(Properties.CLIENT_SECRET,!System.getProperty(Properties.CLIENT_SECRET,"").isEmpty()+"",this.getClass());	
+		//request
+		propPublisher.publish(Properties.MAX_REQUEST_TIME,this.getMaxRequestTime()+"",this.getClass());	
+		//tmp dir
+		propPublisher.publish(Properties.TMPDIR,this.getTmpDir(),this.getClass());	
+		propPublisher.publish(Properties.AUTHENTICATION,this.isAuthenticationEnabled()+"",this.getClass());	
+
+	}
 	public String getTmpDir() {
 		return tmpDir;
 	}
@@ -158,5 +178,6 @@ public class PipelineWebServiceConfiguration {
 	public long getMaxRequestTime() {
 		return maxRequestTime;
 	}
+
 }
 
