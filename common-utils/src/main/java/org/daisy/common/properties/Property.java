@@ -1,6 +1,6 @@
 package org.daisy.common.properties;
 
-class Property {
+public class Property {
 	private String bundleName;
 	private long bundleId;
 	private String propertyName;
