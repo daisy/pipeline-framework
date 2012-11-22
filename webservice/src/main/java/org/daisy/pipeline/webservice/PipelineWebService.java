@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
+import org.daisy.common.properties.PropertyTracker;
 
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -77,6 +78,7 @@ public class PipelineWebService extends Application {
 		router.attach(Routes.CLIENTS_ROUTE, ClientsResource.class);
 		router.attach(Routes.CLIENT_ROUTE, ClientResource.class);
 		router.attach(Routes.HALT_ROUTE, HaltResource.class);
+		router.attach(Routes.PROPERTIES_ROUTE, PropertiesResource.class  );
 
 		return router;
 	}
@@ -266,6 +268,10 @@ public class PipelineWebService extends Application {
 	public void setClientStore(ClientStore<?> clientStore) {
 		this.clientStore = clientStore;
 
+	}
+
+	public PropertyTracker getPropertyTracker(){
+		return this.propertyPublisher.getTracker();
 	}
 
 }
