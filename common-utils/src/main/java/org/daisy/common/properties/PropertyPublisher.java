@@ -56,4 +56,13 @@ public class PropertyPublisher {
 		this.tracker = tracker;
 	}
 
+	/**
+	 * Gets the tracker for this instance.
+	 *
+	 * @return The tracker.
+	 */
+	public PropertyTracker getTracker() {
+		return this.tracker;
+	}
+
 }
