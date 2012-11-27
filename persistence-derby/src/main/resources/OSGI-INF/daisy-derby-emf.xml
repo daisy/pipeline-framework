@@ -5,7 +5,7 @@
       <provide interface="javax.persistence.EntityManagerFactory"/>
    </service>
    <reference bind="setBuilder" cardinality="1..1" interface="org.osgi.service.jpa.EntityManagerFactoryBuilder" name="EntityManagerFactoryBuilder" policy="static" target="(osgi.unit.name=pipeline-pu)"/>
-   <reference bind="setPropertyPublisherFactory" cardinality="0..1" interface="org.daisy.common.properties.PropertyPublisherFactory" name="PropertyPublisherFactory" policy="dynamic" />
+   <reference bind="setPropertyPublisherFactory" unbind="unsetPropertyPublisherFactory" cardinality="0..1" interface="org.daisy.common.properties.PropertyPublisherFactory" name="PropertyPublisherFactory" policy="dynamic" />
    <property name="osgi.unit.name" type="String" value="pipeline-pu"/>
     
 </scr:component>

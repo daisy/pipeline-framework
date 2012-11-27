@@ -20,7 +20,6 @@ public class DerbyEntityManagerFactory extends  ForwardingEntityManagerFactory{
 			.getLogger(DerbyEntityManagerFactory.class.getName());
 	
 	private static  final Map<String,Object> props=new HashMap<String, Object>();
-	private PropertyPublisher propertyPublisher;
 	static{
 
 		props.put(JAVAX_PERSISTENCE_JDBC_DRIVER,
@@ -34,15 +33,20 @@ public class DerbyEntityManagerFactory extends  ForwardingEntityManagerFactory{
 		setEntityManagerFactory(builder.createEntityManagerFactory(props));
 	}
 	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
-		this.propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
+		PropertyPublisher propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
 		//the property publishing step goes here
-		this.propertyPublisher.publish(JAVAX_PERSISTENCE_JDBC_DRIVER,
-				DERBY_JDBC_DRIVER,this.getClass());
-		this.propertyPublisher.publish(JAVAX_PERSISTENCE_JDBC_URL,
-				DERBY_DB_URL,this.getClass());
+		propertyPublisher.publish(JAVAX_PERSISTENCE_JDBC_DRIVER, DERBY_JDBC_DRIVER,this.getClass());
+		propertyPublisher.publish(JAVAX_PERSISTENCE_JDBC_URL, DERBY_DB_URL,this.getClass());
 
 	}
 
+	public void unsetPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
+		PropertyPublisher propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
+		//the property unpublishing step goes here
+		propertyPublisher.unpublish(JAVAX_PERSISTENCE_JDBC_DRIVER ,  this.getClass());
+		propertyPublisher.unpublish(JAVAX_PERSISTENCE_JDBC_URL    ,  this.getClass());
+
+	}
 	public void init() {
 		logger.debug("initialize the EMF");
 		createEntityManager();
