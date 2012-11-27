@@ -76,6 +76,7 @@ public class PropertyTracker {
 					this.propertiesIndex.remove(propName);
 				}
 				this.properties.remove(prop);	
+				logger.debug("Property untracked "+prop);
 			}else{
 				logger.warn(String.format( "Trying to delete a property (%s) from a non-existent bundle name %s",propName,bundle));
 			}

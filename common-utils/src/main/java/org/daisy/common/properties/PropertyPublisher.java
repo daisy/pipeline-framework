@@ -40,6 +40,31 @@ public class PropertyPublisher {
 		this.publish(prop);
 			
 	}
+	/**
+	 * Mainly to give some indepence from OSGI to classes that do not require
+	 * OSGI api explicitily. This method resolves the BundleName + and id
+	 */
+	public void unpublish(String propertyName,@SuppressWarnings("rawtypes") Class origin){
+		if (this.tracker==null){
+			logger.warn("Trying to unpublish a property but the tracker is not set");
+			return;
+		}
+
+		Bundle bundle=FrameworkUtil.getBundle(origin);	
+
+		if(bundle==null){
+			throw new IllegalStateException("Bundle not found for "+origin.getCanonicalName());
+		}
+
+		Property prop=this.tracker.getProperty(propertyName,bundle.getSymbolicName());
+
+		if(prop==null){
+			throw new IllegalStateException("Property not found for name:"+propertyName+" bundle "+bundle.getSymbolicName());
+		}
+
+		this.unpublish(prop);
+			
+	}
 	public void unpublish(Property property){
 		if(this.tracker!=null){
 			this.tracker.deleteProperty(property);
