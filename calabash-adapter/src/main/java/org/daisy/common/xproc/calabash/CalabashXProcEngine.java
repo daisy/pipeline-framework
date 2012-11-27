@@ -40,7 +40,6 @@ public final class CalabashXProcEngine implements XProcEngine {
 	/** The event bus provider. */
 	private EventBusProvider eventBusProvider;
 
-	private PropertyPublisher propertyPublisher;
 
 
 
@@ -123,12 +122,22 @@ public final class CalabashXProcEngine implements XProcEngine {
 		this.eventBusProvider=eventBusProvider;
 	}
 	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
-		this.propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
+		PropertyPublisher propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
 		//the property publishing step goes here
-		this.propertyPublisher.publish("org.daisy.pipeline.xproc.configuration" ,System.getProperty("org.daisy.pipeline.xproc.configuration" ),this.getClass());
-		this.propertyPublisher.publish("com.xmlcalabash.config.jar" ,System.getProperty("com.xmlcalabash.config.jar","true" ),this.getClass());
-		this.propertyPublisher.publish("com.xmlcalabash.config.home" ,System.getProperty("com.xmlcalabash.config.home","true" ),this.getClass());
-		this.propertyPublisher.publish("com.xmlcalabash.config.cwd" ,System.getProperty("com.xmlcalabash.config.cwd","true" ),this.getClass());
+		propertyPublisher.publish("org.daisy.pipeline.xproc.configuration" ,System.getProperty("org.daisy.pipeline.xproc.configuration" ),this.getClass());
+		propertyPublisher.publish("com.xmlcalabash.config.jar" ,System.getProperty("com.xmlcalabash.config.jar","true" ),this.getClass());
+		propertyPublisher.publish("com.xmlcalabash.config.home" ,System.getProperty("com.xmlcalabash.config.home","true" ),this.getClass());
+		propertyPublisher.publish("com.xmlcalabash.config.cwd" ,System.getProperty("com.xmlcalabash.config.cwd","true" ),this.getClass());
+
+	}
+	public void unsetPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
+		logger.debug("entering");
+		PropertyPublisher propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
+		//the property unpublishing step goes here
+		propertyPublisher.unpublish("org.daisy.pipeline.xproc.configuration" , this.getClass());
+		propertyPublisher.unpublish("com.xmlcalabash.config.jar"             , this.getClass());
+		propertyPublisher.unpublish("com.xmlcalabash.config.home"            , this.getClass());
+		propertyPublisher.unpublish("com.xmlcalabash.config.cwd"             , this.getClass());
 
 	}
 
