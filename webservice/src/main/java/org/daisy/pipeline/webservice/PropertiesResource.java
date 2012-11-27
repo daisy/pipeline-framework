@@ -34,6 +34,12 @@ public class PropertiesResource extends AdminResource {
 			return null;
 		}
 		PropertyTracker tracker = webservice().getPropertyTracker();
+		if (tracker==null){
+			setStatus(Status.SERVER_ERROR_INTERNAL);
+			return this.getErrorRepresentation("Property tracker is null");
+		}
+
+		
 		LinkedList<Property> l = new LinkedList<Property>(tracker.getProperties());
 		PropertiesXmlWriter writer = XmlWriterFactory.createXmlWriter(l);	
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
