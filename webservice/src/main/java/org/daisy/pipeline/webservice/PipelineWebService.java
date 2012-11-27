@@ -250,6 +250,12 @@ public class PipelineWebService extends Application {
 	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
 		this.propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
 	}
+
+	public void unsetPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
+		this.propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
+		this.conf.unpublishConfiguration(this.propertyPublisher);
+		this.propertyPublisher=null;
+	}
 	/**
 	 * Gets the client store
 	 *
@@ -271,6 +277,8 @@ public class PipelineWebService extends Application {
 	}
 
 	public PropertyTracker getPropertyTracker(){
+		if(this.propertyPublisher == null)
+			return null;
 		return this.propertyPublisher.getTracker();
 	}
 

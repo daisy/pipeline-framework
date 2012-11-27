@@ -107,6 +107,25 @@ public class PipelineWebServiceConfiguration {
 		propPublisher.publish(Properties.AUTHENTICATION,this.isAuthenticationEnabled()+"",this.getClass());	
 
 	}
+
+	public void unpublishConfiguration(PropertyPublisher propPublisher){
+		//mode
+		propPublisher.unpublish(Properties.LOCAL_MODE           , this.getClass());
+		//ssl related properties
+		propPublisher.unpublish(Properties.SSL                  , this.getClass());
+		propPublisher.unpublish(Properties.SSL_KEYSTORE         , this.getClass());
+		propPublisher.unpublish(Properties.SSL_KEYSTOREPASSWORD , this.getClass());
+		propPublisher.unpublish(Properties.SSL_KEYPASSWORD      , this.getClass());
+		//client keys and secret
+		propPublisher.unpublish(Properties.CLIENT_KEY           , this.getClass());
+		propPublisher.unpublish(Properties.CLIENT_SECRET        , this.getClass());
+		//request
+		propPublisher.unpublish(Properties.MAX_REQUEST_TIME     , this.getClass());
+		//tmp dir
+		propPublisher.unpublish(Properties.TMPDIR               , this.getClass());
+		propPublisher.unpublish(Properties.AUTHENTICATION       , this.getClass());
+
+	}
 	public String getTmpDir() {
 		return tmpDir;
 	}
