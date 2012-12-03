@@ -18,6 +18,7 @@ public class Routes {
 	public static final String HALT_ROUTE = "/admin/halt";
 	public static final String CLIENTS_ROUTE = "/admin/clients";
 	public static final String CLIENT_ROUTE = "/admin/clients/{id}";
+	public static final String PROPERTIES_ROUTE = "/admin/properties";
 	
 	
 	

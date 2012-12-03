@@ -5,6 +5,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
+import org.daisy.common.properties.PropertyPublisher;
+import org.daisy.common.properties.PropertyPublisherFactory;
+import org.daisy.common.properties.PropertyTracker;
+
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.webserviceutils.Properties;
@@ -49,6 +53,7 @@ public class PipelineWebService extends Application {
 
 	private CallbackRegistry callbackRegistry;
 
+	private PropertyPublisher propertyPublisher;
 	private long shutDownKey=0L;
 
 	private BundleContext bundleCtxt;
@@ -73,6 +78,7 @@ public class PipelineWebService extends Application {
 		router.attach(Routes.CLIENTS_ROUTE, ClientsResource.class);
 		router.attach(Routes.CLIENT_ROUTE, ClientResource.class);
 		router.attach(Routes.HALT_ROUTE, HaltResource.class);
+		router.attach(Routes.PROPERTIES_ROUTE, PropertiesResource.class  );
 
 		return router;
 	}
@@ -82,6 +88,7 @@ public class PipelineWebService extends Application {
 	 */
 	public void init(BundleContext ctxt) {
 		bundleCtxt=ctxt;
+		this.conf.publishConfiguration(this.propertyPublisher);
 		if (!checkAuthenticationSanity()){
 
 			try {
@@ -240,6 +247,15 @@ public class PipelineWebService extends Application {
 		return requestLog;
 	}
 
+	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
+		this.propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
+	}
+
+	public void unsetPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
+		this.propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
+		this.conf.unpublishConfiguration(this.propertyPublisher);
+		this.propertyPublisher=null;
+	}
 	/**
 	 * Gets the client store
 	 *
@@ -258,6 +274,12 @@ public class PipelineWebService extends Application {
 	public void setClientStore(ClientStore<?> clientStore) {
 		this.clientStore = clientStore;
 
+	}
+
+	public PropertyTracker getPropertyTracker(){
+		if(this.propertyPublisher == null)
+			return null;
+		return this.propertyPublisher.getTracker();
 	}
 
 }

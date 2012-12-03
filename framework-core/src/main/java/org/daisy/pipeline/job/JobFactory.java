@@ -2,6 +2,9 @@ package org.daisy.pipeline.job;
 
 import java.io.IOException;
 
+import org.daisy.common.properties.PropertyPublisher;
+import org.daisy.common.properties.PropertyPublisherFactory;
+
 import org.daisy.common.xproc.XProcInput;
 
 import org.daisy.pipeline.event.EventBusProvider;
@@ -35,6 +38,22 @@ public class JobFactory {
 		this.eventbusProvider=eventbusProvider;
 	}
 
+	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
+		PropertyPublisher propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
+		//the property publishing step goes here
+		propertyPublisher.publish("org.daisy.pipeline.iobase" ,System.getProperty("org.daisy.pipeline.iobase","" ),this.getClass());
+		propertyPublisher.publish("org.daisy.pipeline.home" ,System.getProperty("org.daisy.pipeline.home","" ),this.getClass());
+		propertyPublisher.publish("org.daisy.pipeline.logdir",System.getProperty("org.daisy.pipeline.logdir","" ),this.getClass());
+	}
+
+	public void unsetPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
+		PropertyPublisher propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
+		//the property unpublishing step goes here
+		propertyPublisher.unpublish("org.daisy.pipeline.iobase" ,  this.getClass());
+		propertyPublisher.unpublish("org.daisy.pipeline.home"   ,  this.getClass());
+		propertyPublisher.unpublish("org.daisy.pipeline.logdir" ,  this.getClass());
+
+	}
 	/**
 	 * Creates a new job attached to a context.
 	 *

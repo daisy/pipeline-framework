@@ -2,6 +2,8 @@ package org.daisy.pipeline.webserviceutils.xml;
 
 import java.util.List;
 
+import org.daisy.common.properties.Property;
+
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.webserviceutils.clients.Client;
@@ -29,6 +31,14 @@ public class XmlWriterFactory {
 		return new ClientXmlWriter(client);
 	}
 	
+	public static PropertyXmlWriter createXmlWriter(Property property) {
+		return new PropertyXmlWriter(property);
+	}
+
+	public static PropertiesXmlWriter createXmlWriter(List<? extends Property> properties) {
+		return new PropertiesXmlWriter(properties);
+	}
+
 	public static ClientsXmlWriter createXmlWriter(List<? extends Client> clients) {
 		return new ClientsXmlWriter(clients);
 	}

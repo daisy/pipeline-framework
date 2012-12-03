@@ -11,7 +11,7 @@ import org.w3c.dom.Element;
 public class ClientXmlWriter {
 	
 	private Client client = null;
-	private static Logger logger = LoggerFactory.getLogger(ClientXmlWriter.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(ClientXmlWriter.class);
 
 	public ClientXmlWriter(Client client) {
 		this.client = client;
