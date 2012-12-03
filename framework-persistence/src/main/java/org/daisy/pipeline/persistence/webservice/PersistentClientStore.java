@@ -16,6 +16,10 @@ import org.slf4j.LoggerFactory;
 	private static Logger logger = LoggerFactory.getLogger(PersistentClientStore.class);
 	
 	private Database database;
+
+	public void activate() {
+		logger.debug("activated!");
+	}
 	
 	public PersistentClientStore(){
 		logger.debug("created");

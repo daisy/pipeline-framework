@@ -39,8 +39,7 @@ public class PipelineWebService extends Application {
 	private static Logger logger = LoggerFactory.getLogger(PipelineWebService.class.getName());
 	
 	public static final String KEY_FILE_NAME="dp2key.txt";
-	PipelineWebServiceConfiguration conf= new PipelineWebServiceConfiguration();
-	
+	PipelineWebServiceConfiguration conf = new PipelineWebServiceConfiguration();
 	
 	/** The job manager. */
 	private JobManager jobManager;

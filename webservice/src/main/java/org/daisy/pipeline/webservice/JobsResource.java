@@ -167,7 +167,7 @@ public class JobsResource extends AuthenticatedResource {
 
 		if (!isValid) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return this.getErrorRepresentation("Response XML is not valid");
+			return this.getErrorRepresentation("Job Request XML is not valid");
 		}
 
 		Job job = createJob(doc, zipfile, client);

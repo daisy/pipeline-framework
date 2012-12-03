@@ -14,6 +14,10 @@ public class DefaultCallbackRegistry implements CallbackRegistry {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultCallbackRegistry.class);
 	private List<Callback> callbacks;
 
+	public void activate() {
+		logger.debug("activated!");
+	}
+	
 	public void init(BundleContext context) {
 		callbacks = new ArrayList<Callback>();
 	}

@@ -22,7 +22,7 @@ public class ExecutingJobManager extends DefaultJobManager {
 	 * Activate (OSGI)
 	 */
 	public void activate(){
-		logger.trace("Activating job manager");
+		logger.debug("Activating job manager");
 	}
 
 	/* (non-Javadoc)

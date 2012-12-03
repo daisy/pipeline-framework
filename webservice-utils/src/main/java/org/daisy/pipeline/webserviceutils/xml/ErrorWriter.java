@@ -55,9 +55,10 @@ public class ErrorWriter {
 			root.appendChild(trace);
 			trace.setTextContent(os.toString());
 		}
-		if (!XmlValidator.validate(doc, XmlValidator.CLIENT_SCHEMA_URL)) {
+		/* TODO use the right schema for this document type
+        if (!XmlValidator.validate(doc, XmlValidator.CLIENT_SCHEMA_URL)) {
 			logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
-		}
+		}*/
 		return doc;
 	}
 }

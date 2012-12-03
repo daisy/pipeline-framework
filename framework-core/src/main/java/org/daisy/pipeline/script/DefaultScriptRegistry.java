@@ -34,7 +34,7 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	 * Activate (OSGI).
 	 */
 	public void activate(){
-		logger.trace("Activating script registry");
+		logger.debug("Activating script registry");
 	}
 
 	/**
