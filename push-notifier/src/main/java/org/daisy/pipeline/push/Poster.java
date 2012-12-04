@@ -27,7 +27,7 @@ public class Poster {
 
 	public static void postMessage(Job job, List<Message> messages, Callback callback) {
 		URI url = callback.getHref();
-		JobXmlWriter writer = XmlWriterFactory.createXmlWriter(job);
+		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
 		//writer.withMessageRange(msgStart, msgEnd);
 		writer.withMessages(messages);
 		Document doc = writer.getXmlDocument();
@@ -36,7 +36,7 @@ public class Poster {
 
 	public static void postStatusUpdate(Job job, Callback callback) {
 		URI url = callback.getHref();
-		JobXmlWriter writer = XmlWriterFactory.createXmlWriter(job);
+		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
 		Document doc = writer.getXmlDocument();
 		postXml(doc, url, callback.getClient());
 	}

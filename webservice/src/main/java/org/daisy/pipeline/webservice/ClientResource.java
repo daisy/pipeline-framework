@@ -60,7 +60,7 @@ public class ClientResource extends AdminResource {
 		}
 
 		setStatus(Status.SUCCESS_OK);
-		ClientXmlWriter writer = XmlWriterFactory.createXmlWriter(client);
+		ClientXmlWriter writer = XmlWriterFactory.createXmlWriterForClient(client);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
 		return dom;
@@ -152,7 +152,7 @@ public class ClientResource extends AdminResource {
 		webservice().getClientStore().update(newClient);
 
 		setStatus(Status.SUCCESS_OK);
-		ClientXmlWriter writer = XmlWriterFactory.createXmlWriter(newClient);
+		ClientXmlWriter writer = XmlWriterFactory.createXmlWriterForClient(newClient);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
 		return dom;

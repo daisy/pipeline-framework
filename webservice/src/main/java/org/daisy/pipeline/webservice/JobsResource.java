@@ -84,7 +84,7 @@ public class JobsResource extends AuthenticatedResource {
 			return null;
 		}
 		JobManager jobMan = webservice().getJobManager();
-		JobsXmlWriter writer = XmlWriterFactory.createXmlWriter(jobMan.getJobs());
+		JobsXmlWriter writer = XmlWriterFactory.createXmlWriterForJobs(jobMan.getJobs());
 		Document doc = writer.getXmlDocument();
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
 		setStatus(Status.SUCCESS_OK);
@@ -177,7 +177,7 @@ public class JobsResource extends AuthenticatedResource {
 			return this.getErrorRepresentation("Could not create job (job was null)");
 		}
 
-		JobXmlWriter writer = XmlWriterFactory.createXmlWriter(job);
+		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
 		Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
 		setStatus(Status.SUCCESS_CREATED);

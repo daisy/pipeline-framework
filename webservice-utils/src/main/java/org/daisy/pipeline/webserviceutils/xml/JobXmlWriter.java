@@ -107,7 +107,7 @@ public class JobXmlWriter {
 		element.setAttribute("status", status.toString());
 
 		if (scriptDetails) {
-			ScriptXmlWriter writer = XmlWriterFactory.createXmlWriter(job.getScript());
+			ScriptXmlWriter writer = XmlWriterFactory.createXmlWriterForScript(job.getScript());
 			writer.addAsElementChild(element);
 		}
 		

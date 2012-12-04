@@ -10,38 +10,40 @@ import org.daisy.pipeline.webserviceutils.clients.Client;
 
 public class XmlWriterFactory {
 	
-	public static JobXmlWriter createXmlWriter(Job job) {
+	// TODO: use Iterable<..> or List<? extends ..>, but not both
+	
+	public static JobXmlWriter createXmlWriterForJob(Job job) {
 		return new JobXmlWriter(job);
 	}
 	
-	public static JobsXmlWriter createXmlWriter(Iterable<Job> jobs) {
+	public static JobsXmlWriter createXmlWriterForJobs(Iterable<Job> jobs) {
 		return new JobsXmlWriter(jobs);
 	}
 	
-	public static ScriptXmlWriter createXmlWriter(XProcScript script) {
+	public static ScriptXmlWriter createXmlWriterForScript(XProcScript script) {
 		return new ScriptXmlWriter(script);
 	}
 	
-	// TODO ugly but otherwise get erasure error
 	public static ScriptsXmlWriter createXmlWriterForScripts(Iterable<XProcScript> scripts) {
 		return new ScriptsXmlWriter(scripts);
 	}
 	
-	public static ClientXmlWriter createXmlWriter(Client client) {
+	public static ClientXmlWriter createXmlWriterForClient(Client client) {
 		return new ClientXmlWriter(client);
 	}
 	
-	public static PropertyXmlWriter createXmlWriter(Property property) {
+	public static ClientsXmlWriter createXmlWriterForClients(List<? extends Client> clients) {
+		return new ClientsXmlWriter(clients);
+	}
+	
+	public static PropertyXmlWriter createXmlWriterForProperty(Property property) {
 		return new PropertyXmlWriter(property);
 	}
 
-	public static PropertiesXmlWriter createXmlWriter(List<? extends Property> properties) {
+	public static PropertiesXmlWriter createXmlWriterForProperties(List<? extends Property> properties) {
 		return new PropertiesXmlWriter(properties);
 	}
 
-	public static ClientsXmlWriter createXmlWriter(List<? extends Client> clients) {
-		return new ClientsXmlWriter(clients);
-	}
 	public static AliveXmlWriter createXmlWriter() {
 		return new AliveXmlWriter();
 	}

@@ -72,7 +72,7 @@ public class JobResource extends AuthenticatedResource {
 		}
 
 		setStatus(Status.SUCCESS_OK);
-		JobXmlWriter writer = XmlWriterFactory.createXmlWriter(job);
+		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
 		
 		if (msgSeq == -1) {
 			writer = writer.withAllMessages();

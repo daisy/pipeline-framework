@@ -41,7 +41,7 @@ public class PropertiesResource extends AdminResource {
 
 		
 		LinkedList<Property> l = new LinkedList<Property>(tracker.getProperties());
-		PropertiesXmlWriter writer = XmlWriterFactory.createXmlWriter(l);	
+		PropertiesXmlWriter writer = XmlWriterFactory.createXmlWriterForProperties(l);	
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
 		return dom;

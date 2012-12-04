@@ -29,7 +29,7 @@ public class PropertiesXmlWriter {
 		Element propsElm = doc.getDocumentElement();
 		propsElm.setAttribute("href", baseUri + Routes.PROPERTIES_ROUTE);
 		for (Property prop: this.properties) {
-			PropertyXmlWriter writer = XmlWriterFactory.createXmlWriter(prop);
+			PropertyXmlWriter writer = XmlWriterFactory.createXmlWriterForProperty(prop);
 			writer.addAsElementChild(propsElm);
 		}
 		// for debugging only
