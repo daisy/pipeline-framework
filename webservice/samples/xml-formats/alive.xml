@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<alive mode="local" authentication="false" version="1.0.0"/>
+<alive xmlns="http://www.daisy.org/ns/pipeline/data" mode="local" authentication="false" version="1.0.0"/>
