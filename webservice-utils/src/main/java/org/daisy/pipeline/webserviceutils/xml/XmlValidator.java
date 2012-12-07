@@ -52,19 +52,19 @@ public class XmlValidator {
 	public static boolean validate(Document document, URL schemaUrl) {
 		ErrorHandlerImpl errorHandler = new ErrorHandlerImpl();
 
-        PropertyMapBuilder properties = new PropertyMapBuilder();
-        properties.put(ValidateProperty.ERROR_HANDLER, errorHandler);
-        properties.put(ValidateProperty.RESOLVER, BasicResolver.getInstance());
+		PropertyMapBuilder properties = new PropertyMapBuilder();
+		properties.put(ValidateProperty.ERROR_HANDLER, errorHandler);
+		properties.put(ValidateProperty.RESOLVER, BasicResolver.getInstance());
 
 		try {
 			InputSource documentInputSource = DOMtoInputSource(document);
 			InputSource schemaInputSource = new InputSource(schemaUrl.toURI().toString());
 
-	        ValidationDriver driver = new ValidationDriver(properties.toPropertyMap(), CompactSchemaReader.getInstance());
-	        if (!driver.loadSchema(schemaInputSource)) {
-	        	logger.error("Could not load schema " + schemaUrl.toString());
-	        	return false;
-	        }
+			ValidationDriver driver = new ValidationDriver(properties.toPropertyMap(), CompactSchemaReader.getInstance());
+			if (!driver.loadSchema(schemaInputSource)) {
+				logger.error("Could not load schema " + schemaUrl.toString());
+				return false;
+			}
 			driver.validate(documentInputSource);
 
 		} catch (TransformerConfigurationException e) {
@@ -92,7 +92,7 @@ public class XmlValidator {
 				logger.error(e.getMessage() + "(" + e.getLineNumber() + ", " + e.getColumnNumber() + ")");
 			}
 		}
-        return !errorHandler.hasErrors();
+		return !errorHandler.hasErrors();
 	}
 
 	// create an input source from a DOM document
