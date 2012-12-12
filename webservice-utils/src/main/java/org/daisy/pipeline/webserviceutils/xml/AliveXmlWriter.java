@@ -11,7 +11,7 @@ public class AliveXmlWriter {
 	public Document getXmlDocument() {
 		Document doc = XmlUtils.createDom("alive");
 		Element aliveElm = doc.getDocumentElement();
-		aliveElm.setAttribute("mode", System.getProperty(Properties.LOCAL_MODE,"").equalsIgnoreCase("local")+"");
+		aliveElm.setAttribute("mode", "true".equals(System.getProperty(Properties.LOCAL_MODE)) ? "local" : "remote");
 		aliveElm.setAttribute("authentication", System.getProperty(Properties.AUTHENTICATION));
 		aliveElm.setAttribute("version", System.getProperty(Properties.FRAMEWORK_VERSION));
 		if (!XmlValidator.validate(doc, XmlValidator.ALIVE_SCHEMA_URL)) {
