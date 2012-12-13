@@ -14,7 +14,7 @@ public class HaltResource extends AdminResource {
     		return;
     	}
 		try {
-			key = Long.parseLong(getQuery().getFirstValue("haltkey"));
+			key =  Long.parseLong((String) getRequestAttributes().get("key"));
 		}
 		catch(NumberFormatException e) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
