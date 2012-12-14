@@ -101,17 +101,22 @@ public class Validator {
 		// options
 		boolean hasAllRequiredOptions = validateJobRequestOptionData(script.getXProcPipelineInfo().getOptions(),
 				doc.getElementsByTagName("option"), script);
+		
+		// at the moment (dec 2012), we never require outputs to be specified
+		
 		// outputs (if run in local mode)
-		boolean hasAllRequiredOutputs = validateJobRequestOutputPortData(script
+		/*boolean hasAllRequiredOutputs = validateJobRequestOutputPortData(script
 				.getXProcPipelineInfo().getOutputPorts(),
 				doc.getElementsByTagName("output"), script);
-
-		if (application.getConfiguration().isLocal()) {
+		*/
+		/*if (application.getConfiguration().isLocal()) {
 			return hasAllRequiredInputs & hasAllRequiredOutputs & hasAllRequiredOptions;
 		}
 		else {
 			return hasAllRequiredInputs & hasAllRequiredOptions;
-		}
+		}*/
+		
+		return hasAllRequiredInputs & hasAllRequiredOptions;
 	}
 
 	/**
@@ -240,6 +245,7 @@ public class Validator {
 	 * @param script the script
 	 * @return true, if successful
 	 */
+	// TODO: this function can probably be removed
 	private static boolean validateJobRequestOutputPortData(Iterable<XProcPortInfo> ports, NodeList nodes, XProcScript script) {
 		Iterator<XProcPortInfo>it = ports.iterator();
 		boolean hasAllRequiredArgs = true;
@@ -281,10 +287,7 @@ public class Validator {
 			
 			logger.error("Required jobRequest output port arg(s) missing: " + missingArgsStr);
 		}
-		// TODO: at the moment, we don't really support XProc output ports, so we shouldn't require them in jobRequest documents
-		// However, if/when this changes, we should uncomment the line below
-		//return hasAllRequiredArgs;
-		return true;
+		return hasAllRequiredArgs;
 	}
 
 	// make sure these nodes contain well-formed XML
