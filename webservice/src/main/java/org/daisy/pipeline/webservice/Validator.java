@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -67,7 +69,7 @@ public class Validator {
 	 * @return true, if successful
 	 */
 	private static boolean validateJobRequestArguments(Document doc, PipelineWebService application) {
-
+		
 		Element scriptElm = (Element)doc.getElementsByTagName("script").item(0);
 		// get the ID from the href attr value
 				String scriptId = scriptElm.getAttribute("href");
@@ -123,7 +125,8 @@ public class Validator {
 	private static boolean validateJobRequestOptionData(Iterable<XProcOptionInfo> options, NodeList nodes, XProcScript script) {
 		Iterator<XProcOptionInfo>it = options.iterator();
 		boolean hasAllRequiredArgs = true;
-
+		List<String> missingArgs = new ArrayList<String>();
+		
 		while (it.hasNext()) {
 			XProcOptionInfo arg = it.next();
 			// skip optional arguments
@@ -140,11 +143,19 @@ public class Validator {
 				}
 			}
 			hasAllRequiredArgs &= validArg;
+			
+			if (!validArg) {
+				missingArgs.add(arg.getName().toString());
+			}
 		}
 
 		if (hasAllRequiredArgs == false) {
 			// TODO: be more specific
-			logger.error("Required args missing");
+			String missingArgsStr = "";
+			for (String s : missingArgs){
+			    missingArgsStr += s + ",";
+			}
+			logger.error("Required JobRequest option(s) missing: " + missingArgsStr);
 		}
 		return hasAllRequiredArgs;
 	}
@@ -161,6 +172,8 @@ public class Validator {
 
 		Iterator<XProcPortInfo>it = ports.iterator();
 		boolean hasAllRequiredArgs = true;
+		List<String> missingArgs = new ArrayList<String>();
+		
 		while (it.hasNext()) {
 			XProcPortInfo arg = it.next();
 			boolean validArg = false;
@@ -203,11 +216,18 @@ public class Validator {
 				}
 			}
 			hasAllRequiredArgs &= validArg;
+			
+			if (!validArg) {
+				missingArgs.add(arg.getName());
+			}
 		}
 
 		if (hasAllRequiredArgs == false) {
-			// TODO: be more specific
-			logger.error("Required args missing");
+			String missingArgsStr = "";
+			for (String s : missingArgs){
+			    missingArgsStr += s + ",";
+			}
+			logger.error("Required jobRequest input port arg(s) missing: " + missingArgsStr);
 		}
 		return hasAllRequiredArgs;
 	}
@@ -223,7 +243,8 @@ public class Validator {
 	private static boolean validateJobRequestOutputPortData(Iterable<XProcPortInfo> ports, NodeList nodes, XProcScript script) {
 		Iterator<XProcPortInfo>it = ports.iterator();
 		boolean hasAllRequiredArgs = true;
-
+		List<String> missingArgs = new ArrayList<String>();
+		
 		while (it.hasNext()) {
 			XProcPortInfo arg = it.next();
 			boolean validArg = false;
@@ -246,13 +267,24 @@ public class Validator {
 				}
 			}
 			hasAllRequiredArgs &= validArg;
+			
+			if (!validArg) {
+				missingArgs.add(arg.getName());
+			}
 		}
 
 		if (hasAllRequiredArgs == false) {
-			// TODO: be more specific
-			System.out.println("ERROR: Required args missing");
+			String missingArgsStr = "";
+			for (String s : missingArgs){
+			    missingArgsStr += s + ",";
+			}
+			
+			logger.error("Required jobRequest output port arg(s) missing: " + missingArgsStr);
 		}
-		return hasAllRequiredArgs;
+		// TODO: at the moment, we don't really support XProc output ports, so we shouldn't require them in jobRequest documents
+		// However, if/when this changes, we should uncomment the line below
+		//return hasAllRequiredArgs;
+		return true;
 	}
 
 	// make sure these nodes contain well-formed XML
