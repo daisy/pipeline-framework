@@ -15,7 +15,7 @@ public class Routes {
 	public static final String LOG_ROUTE = "/jobs/{id}/log";
 	public static final String ALIVE_ROUTE = "/alive";
 	public static final String RESULT_ROUTE = "/jobs/{id}/result";
-	public static final String HALT_ROUTE = "/admin/halt";
+	public static final String HALT_ROUTE = "/admin/halt/{key}";
 	public static final String CLIENTS_ROUTE = "/admin/clients";
 	public static final String CLIENT_ROUTE = "/admin/clients/{id}";
 	public static final String PROPERTIES_ROUTE = "/admin/properties";
