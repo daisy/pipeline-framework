@@ -140,7 +140,17 @@ public class PipelineWebService extends Application {
 			if (clientStore.getAll().size()==0){
 				//no properties supplied
 				if (conf.getClientKey()==null || conf.getClientSecret()==null || conf.getClientKey().isEmpty()|| conf.getClientSecret().isEmpty()){
-					logger.error("WS mode authenticated but the client store is empty, exiting");
+					//Making the error more eye catchy	
+					logger.error("\n"
+					+"\n"
+					+"************************************************************\n"
+					+"WS mode authenticated but the client store is empty, exiting\n"
+					+"please provide values for the following properties in etc/system.properties: \n"
+					+"-org.daisy.pipeline.ws.authentication.key    \n"
+                                        +"-org.daisy.pipeline.ws.authentication.secret \n"
+					+"************************************************************\n"
+					+"\n"
+					+"\n");
 						return false;
 				}else{
 					//new admin client via configuration properties
