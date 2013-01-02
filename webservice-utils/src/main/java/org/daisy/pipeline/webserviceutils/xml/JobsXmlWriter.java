@@ -9,10 +9,10 @@ import org.w3c.dom.Element;
 
 public class JobsXmlWriter {
 	
-	Iterable<Job> jobs = null;
+	Iterable<? extends Job> jobs = null;
 	private static Logger logger = LoggerFactory.getLogger(JobsXmlWriter.class.getName());
 	
-	public JobsXmlWriter(Iterable<Job> jobs) {
+	public JobsXmlWriter(Iterable<? extends Job> jobs) {
 		this.jobs = jobs;
 	}
 	
@@ -24,7 +24,7 @@ public class JobsXmlWriter {
 		return jobsToXml(jobs);
 	}
 	
-	private static Document jobsToXml(Iterable<Job> jobs) {
+	private static Document jobsToXml(Iterable<? extends Job> jobs) {
 		String baseUri = new Routes().getBaseUri();
 		Document doc = XmlUtils.createDom("jobs");
 		Element jobsElm = doc.getDocumentElement();

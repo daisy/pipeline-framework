@@ -16,7 +16,7 @@ public class XmlWriterFactory {
 		return new JobXmlWriter(job);
 	}
 	
-	public static JobsXmlWriter createXmlWriterForJobs(Iterable<Job> jobs) {
+	public static JobsXmlWriter createXmlWriterForJobs(Iterable<? extends Job> jobs) {
 		return new JobsXmlWriter(jobs);
 	}
 	
