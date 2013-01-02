@@ -24,14 +24,13 @@ public class OSGIModuleBuilder implements ModuleBuilder {
 	private String name;
 	private String version;
 	private String title;
-	private final Map<String, String> dependencies = new HashMap<String, String>();
 	private final List<Component> components = new ArrayList<Component>();
 	private final List<Entity> entities = new ArrayList<Entity>();
 	private final Logger mLogger = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public Module build() {
-		return new Module(name, version, title, dependencies, components,entities);
+		return new Module(name, version, title, components,entities);
 	}
 
 	@Override
@@ -58,18 +57,7 @@ public class OSGIModuleBuilder implements ModuleBuilder {
 		return this;
 	}
 
-	@Override
-	public ModuleBuilder withDependencies(
-			Map<? extends String, ? extends String> dependencies) {
-		this.dependencies.putAll(dependencies);
-		return this;
-	}
-
-	@Override
-	public ModuleBuilder withDependency(String name, String version) {
-		dependencies.put(name, version);
-		return this;
-	}
+	
 
 	@Override
 	public ModuleBuilder withComponents(
