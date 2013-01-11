@@ -1,10 +1,13 @@
 <persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+<persistence-unit name="cosa" transaction-type="RESOURCE_LOCAL"/>
     <persistence-unit name="pipeline-pu" transaction-type="RESOURCE_LOCAL">
     	<class>org.daisy.pipeline.persistence.messaging.PersistentMessage</class>
         <class>org.daisy.pipeline.persistence.webservice.PersistentClient</class>
         <class>org.daisy.pipeline.persistence.webservice.PersistentRequestLogEntry</class>
+
+    	<class>org.daisy.pipeline.persistence.jobs.PersistentSource</class>
         
        <properties>
          	<property name="eclipselink.ddl-generation" value="create-tables"/>

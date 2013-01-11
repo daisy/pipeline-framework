@@ -45,11 +45,6 @@ public class IOBridgeTest {
 		bridge = new IOBridge(new JobId() {
 
 			@Override
-			public int compareTo(JobId o) {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			@Override
 			public String toString(){
 				return "";
 			}

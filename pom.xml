@@ -255,6 +255,16 @@
         <version>${daisy.xproc-api.version}</version>
       </dependency>
       <!-- Third-Party Libraries -->
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>javax.persistence</artifactId>
+      <version>10.5.3.0</version>
+    </dependency>
+   <dependency>
+	<groupId>org.apache.derby</groupId>
+	<artifactId>derby</artifactId>
+	<version>10.9.1.0</version>
+</dependency> 
       <dependency>
         <groupId>com.googlecode.guava-osgi</groupId>
         <artifactId>guava-osgi</artifactId>
