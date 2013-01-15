@@ -18,28 +18,36 @@ import com.google.common.eventbus.EventBus;
  */
 public abstract class JobContext {
 	/** The input. */
-	private final XProcInput input;
-	/** monitor */
-	private final XProcMonitor monitor;
+	protected XProcInput input;
 	/**Script details*/
-	private final XProcScript script;
+	protected XProcScript script;
 
-	private final JobId id;
+	protected JobId id;
+	/** bus */
+	protected EventBus bus;
 
-	private final EventBus bus=null;
+	/** monitor */
+	protected XProcMonitor monitor;
 
-	
+	protected URI logFile;
+		
 	public JobContext(JobId id,XProcInput input,XProcScript script){
 		this.input=input;
-		this.monitor=null;
 		this.id=id;
 		this.script=script;
 		
 	}
-	public XProcInput getInputs(){return null;};
+
+	/**
+	 * Constructs a new instance.
+	 */
+	public JobContext() {
+	}
+
+	public XProcInput getInputs(){return this.input;};
 	public void writeXProcResult(){};
 	public Set<URI> getFiles(){return null;};	 
-	public URI getLogFile(){return null;}
+	public URI getLogFile(){return this.logFile;}
 	public URI getZip(){return null;}
 	public URI toZip(URI ...files){ return null;}
 	public XProcMonitor getMonitor() {return null;}
@@ -50,17 +58,13 @@ public abstract class JobContext {
 	 *
 	 * @return The script.
 	 */
-	public XProcScript getScript() {
-		return this.script;
-	}
+	public XProcScript getScript() { return this.script; }
 
 	/**
 	 * Gets the id for this instance.
 	 *
 	 * @return The id.
 	 */
-	public JobId getId() {
-		return this.id;
-	}
+	public JobId getId() { return this.id; }
 
 }
