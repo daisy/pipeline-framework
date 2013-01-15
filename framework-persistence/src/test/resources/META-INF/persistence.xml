@@ -7,6 +7,8 @@
     <class>org.daisy.pipeline.persistence.jobs.PersistentInputPort</class>
     <class>org.daisy.pipeline.persistence.jobs.PersistentOption</class>
     <class>org.daisy.pipeline.persistence.jobs.PersistentParameter</class>
+    <class>org.daisy.pipeline.persistence.jobs.PersistentJobContext</class>
+    <class>org.daisy.pipeline.persistence.jobs.PersistentJob</class>
     <properties>
     <property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:myDB;create=true"/>
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
