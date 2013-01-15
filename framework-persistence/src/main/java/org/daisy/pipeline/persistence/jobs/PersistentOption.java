@@ -93,6 +93,7 @@ public class PersistentOption  implements Serializable {
 	public static class PK  implements Serializable {
 		
 		public static final long serialVersionUID=1L;
+		@Column(name="job_id")
 		String jobId;
 		//qnames can be quite long
 		@Column(name="name",length=512)

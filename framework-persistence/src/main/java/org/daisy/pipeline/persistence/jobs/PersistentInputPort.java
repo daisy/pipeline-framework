@@ -100,6 +100,7 @@ public class PersistentInputPort implements Serializable{
 		public static final long serialVersionUID=1L;
 		@Column(name="job_id")
 		String jobId;	
+
 		@Column(name="name")
 		String name;
 
