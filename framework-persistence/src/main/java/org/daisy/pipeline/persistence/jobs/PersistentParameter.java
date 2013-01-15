@@ -2,6 +2,7 @@ package org.daisy.pipeline.persistence.jobs;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -103,6 +104,7 @@ class PersistentParameter  implements Serializable {
 	@Embeddable
 	public static class PK implements Serializable {
 		public static final long serialVersionUID=1L;
+		@Column(name="job_id")
 		String jobId;
 		String qname;
 		String port;
