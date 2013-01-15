@@ -14,7 +14,7 @@ import com.google.common.base.Suppliers;
 /**
  * The Class XProcScriptService defines the script basic attributes loaded from the OSGI bundle.
  */
-public final class XProcScriptService {
+public class XProcScriptService {
 
 	/** The Constant SCRIPT_URL. */
 	public static final String SCRIPT_URL = "script.url";
