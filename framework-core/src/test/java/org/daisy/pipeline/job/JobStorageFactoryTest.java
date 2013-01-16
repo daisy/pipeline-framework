@@ -1,7 +1,5 @@
 package org.daisy.pipeline.job;
 
-import java.util.Collections;
-import java.util.Map;
 
 import org.daisy.common.base.Provider;
 
@@ -23,8 +21,7 @@ public class JobStorageFactoryTest   {
 	@Test
 	public void defaultStorageAdd(){
 		JobStorage def=JobStorageFactory.getDefaultStorage();
-		Job job= new Job(new JobContext(id1,null,null){
-		});
+		Job job= new Job(Mock.mockContext(id1));
 		def.add(job);
 		
 		for(JobId id: def){
@@ -36,10 +33,8 @@ public class JobStorageFactoryTest   {
 
 	public void defaultStorageGet(){
 		JobStorage def=JobStorageFactory.getDefaultStorage();
-		Job job1= new Job(new JobContext(id1,null,null){
-		});
-		Job job2= new Job(new JobContext(id2,null,null){
-		});
+		Job job1= new Job(Mock.mockContext(id1));
+		Job job2= new Job(Mock.mockContext(id2));
 		def.add(job1);
 		def.add(job2);
 
@@ -53,10 +48,8 @@ public class JobStorageFactoryTest   {
 	@Test
 	public void defaultStorageDel(){
 		JobStorage def=JobStorageFactory.getDefaultStorage();
-		Job job1= new Job(new JobContext(id1,null,null){
-		});
-		Job job2= new Job(new JobContext(id2,null,null){
-		});
+		Job job1= new Job(Mock.mockContext(id1));
+		Job job2= new Job(Mock.mockContext(id2));
 		def.add(job1);
 		def.add(job2);
 
