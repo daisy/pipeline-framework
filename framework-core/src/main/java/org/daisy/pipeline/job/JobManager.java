@@ -35,7 +35,7 @@ public interface JobManager {
 	 *
 	 * @return the jobs
 	 */
-	public Iterable<Job> getJobs();
+	public Iterable<JobId> getJobIds();
 
 	/**
 	 * Deletes a job.

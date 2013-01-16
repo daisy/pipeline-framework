@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Job manager + executing service
  */
-public class ExecutingJobManager extends DefaultJobManager {
+public class ExecutingJobManager extends AbstractJobManager {
 
 	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory.getLogger(ExecutingJobManager.class);
