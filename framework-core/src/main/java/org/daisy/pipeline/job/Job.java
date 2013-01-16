@@ -90,6 +90,7 @@ public class Job {
 
 	private void changeStatus(Status to){
 		this.status=to;
+		//TODO clean this
 		if (this.ctxt!=null&&this.ctxt.getEventBus()!=null)
 			this.ctxt.getEventBus().post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
 		else
@@ -139,14 +140,6 @@ public class Job {
 	 */
 	public JobResult getResult() {
 		return results;
-	}
-
-
-	public boolean cleanUp(){
-		//TODO:manage default deletion
-		//clean&=this.getMonitor().getMessageAccessor().delete();	
-		//return	clean&this.ioBridge.cleanUp();
-		return false;
 	}
 
 }
