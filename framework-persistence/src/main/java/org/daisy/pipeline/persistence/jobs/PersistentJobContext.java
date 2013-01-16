@@ -6,17 +6,16 @@ import java.net.URI;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
-import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -29,17 +28,23 @@ import org.daisy.common.base.Provider;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPortInfo;
+import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobContext;
+import org.daisy.pipeline.job.JobFactory;
 import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobMonitorFactory;
+
 import javax.persistence.Entity;
 
 import org.daisy.pipeline.job.JobIdFactory;
+import org.daisy.pipeline.job.RuntimeConfigurable;
 
 import org.daisy.pipeline.script.XProcScript;
 
 @Entity
 @Table(name="job_contexts")
-public class PersistentJobContext extends JobContext implements Serializable{
+public class PersistentJobContext extends AbstractJobContext implements Serializable,RuntimeConfigurable{
 	public static final long serialVersionUID=1L;
 	@Id
 	@Column(name="job_id")
@@ -129,6 +134,8 @@ public class PersistentJobContext extends JobContext implements Serializable{
 			builder.withParameter(param.getPort(),param.getName(),param.getValue());
 		}
 		this.input=builder.build();
+		//runtime configuration
+		JobFactory.getInstance().configure(this);
 	}
 
 
@@ -137,6 +144,7 @@ public class PersistentJobContext extends JobContext implements Serializable{
 	public void setScript(XProcScript script){
 		this.script=script;
 	}
+
 	/**
 	 * Gets the id for this instance.
 	 *
@@ -207,6 +215,40 @@ public class PersistentJobContext extends JobContext implements Serializable{
 	 */
 	public void setInput(XProcInput input) {
 		this.input = input;
+	}
+
+	@Override
+	public void setEventBusProvider(EventBusProvider eventBusProvider) {
+		this.bus=eventBusProvider.get();	
+	}
+
+	@Override
+	public void setMonitorFactory(JobMonitorFactory factory) {
+		this.monitor=factory.newJobMonitor(this.getId());	
+	}
+
+	@Override
+	public void writeXProcResult() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Set<URI> getFiles() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public URI getZip() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public URI toZip(URI... files) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 		
 }

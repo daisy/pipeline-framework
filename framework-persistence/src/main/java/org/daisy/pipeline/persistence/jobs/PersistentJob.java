@@ -2,6 +2,9 @@ package org.daisy.pipeline.persistence.jobs;
 
 import java.io.Serializable;
 
+import java.util.Iterator;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +21,15 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobContext;
+import org.daisy.pipeline.job.AbstractJobContext;
+import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobIdFactory;
+
+import org.daisy.pipeline.persistence.Database;
+
+import com.google.common.base.Function;
+
+import com.google.common.collect.Collections2;
 
 @Entity
 @Table(name="jobs")
@@ -52,7 +63,7 @@ public class PersistentJob  extends Job implements Serializable {
 		super(job.getContext());
 		this.status=job.getStatus();
 	}
-	public PersistentJob(JobContext ctxt) {
+	public PersistentJob(AbstractJobContext ctxt) {
 		super(new PersistentJobContext(ctxt));
 	}
 	public PersistentJob(PersistentJobContext ctxt) {
@@ -67,7 +78,7 @@ public class PersistentJob  extends Job implements Serializable {
 		super(null);
 	}
 
-	public void setContext(JobContext ctxt){
+	public void setContext(AbstractJobContext ctxt){
 		this.ctxt=new PersistentJobContext(ctxt);
 	}
 	public void setContext(PersistentJobContext ctxt){
@@ -104,5 +115,16 @@ public class PersistentJob  extends Job implements Serializable {
 	public void postCallback(){
 		this.status=this.currentStatus;
 		this.ctxt=this.pCtxt;
+	}
+
+	public static Iterable<JobId> getAllJobIds(Database db){
+		List<String> ids=db.runQuery("select distinct job_id from jobs",String.class);
+		return Collections2.transform(ids,new Function<String,JobId>(){
+			@Override
+			public JobId apply(String sId) {
+				return JobIdFactory.newIdFromString(sId);
+			}
+		});
+
 	}
 }

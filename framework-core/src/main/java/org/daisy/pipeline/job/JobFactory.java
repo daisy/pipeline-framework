@@ -82,4 +82,12 @@ public class JobFactory {
 			throw new RuntimeException("Error resolving pipeline info", e);
 		}
 	}
+
+	public void configure(RuntimeConfigurable runtimeObj){
+		if (this.eventbusProvider!=null)
+			runtimeObj.setEventBusProvider(this.eventbusProvider);
+		
+		if(this.monitorFactory!=null)
+			runtimeObj.setMonitorFactory(this.monitorFactory);
+	}
 }

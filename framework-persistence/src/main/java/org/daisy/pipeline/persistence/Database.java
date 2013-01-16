@@ -28,8 +28,7 @@ public class Database {
 		if (obj != null) {
 			EntityManager em=this.getEntityManager();
 			em.getTransaction().begin();
-			obj=em.merge(obj);
-			em.remove(obj);
+			em.remove(em.merge(obj));
 			em.getTransaction().commit();
 			em.close();
 			return true;

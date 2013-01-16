@@ -2,6 +2,7 @@ package org.daisy.pipeline.persistence.jobs;
 
 
 import java.net.URI;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 
@@ -13,7 +14,7 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 
-import org.daisy.pipeline.job.JobContext;
+import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 
@@ -99,7 +100,7 @@ public class Mocks   {
 		}
 	}
 
-	public static JobContext buildContext(){  
+	public static AbstractJobContext buildContext(){  
 
 		XProcScript script;
 		XProcPortInfo pinfo= XProcPortInfo.newInputPort("source",true,true);
@@ -111,10 +112,30 @@ public class Mocks   {
 		XProcInput input= new XProcInput.Builder().withInput("source",new Mocks.SimpleSourceProvider(file1)).withInput("source", new Mocks.SimpleSourceProvider(file2)).withOption(opt1Qname,value1).withOption(opt2Qname,value2).withParameter(paramPort,new QName(qparam),paramVal).build();
 		
 		JobId id = JobIdFactory.newId();
-		JobContext base= new JobContext(id,input,script){ 
+		AbstractJobContext base= new AbstractJobContext(id,input,script){ 
 				
 			public URI getLogFile(){
 				return URI.create(testLogFile);
+			}
+
+			@Override
+			public void writeXProcResult() {
+				
+			}
+
+			@Override
+			public Set<URI> getFiles() {
+				return null;
+			}
+
+			@Override
+			public URI getZip() {
+				return null;
+			}
+
+			@Override
+			public URI toZip(URI... files) {
+				return null;
 			}
 		};
 		return base;
