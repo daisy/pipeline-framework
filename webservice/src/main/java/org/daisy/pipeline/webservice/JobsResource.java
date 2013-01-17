@@ -79,16 +79,18 @@ public class JobsResource extends AuthenticatedResource {
 	 */
 	@Get("xml")
 	public Representation getResource() {
-		if (!isAuthenticated()) {
-			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-			return null;
-		}
-		JobManager jobMan = webservice().getJobManager();
-		JobsXmlWriter writer = XmlWriterFactory.createXmlWriterForJobs(jobMan.getJobs());
-		Document doc = writer.getXmlDocument();
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
-		setStatus(Status.SUCCESS_OK);
-		return dom;
+		//TODO: update this when the whole thing is refactored
+		//if (!isAuthenticated()) {
+			//setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+			//return null;
+		//}
+		//JobManager jobMan = webservice().getJobManager();
+		//JobsXmlWriter writer = XmlWriterFactory.createXmlWriterForJobs(Collections2.jobMan.getJobIds());
+		//Document doc = writer.getXmlDocument();
+		//DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
+		//setStatus(Status.SUCCESS_OK);
+		//return dom;
+		return null;
 	}
 
 
