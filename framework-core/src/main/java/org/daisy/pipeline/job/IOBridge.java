@@ -24,6 +24,10 @@ import org.daisy.pipeline.script.XProcScript;
  */
 public class IOBridge {
 
+	static String IO_DATA_SUBDIR = "context";
+
+	/** The I o_ outpu t_ subdir. */
+	static String IO_OUTPUT_SUBDIR = "output";
 	/** The Constant ORG_DAISY_PIPELINE_IOBASE. */
 	public static final String ORG_DAISY_PIPELINE_IOBASE = "org.daisy.pipeline.iobase";
 
@@ -78,14 +82,14 @@ public class IOBridge {
 		mBaseDir.mkdirs();
 
 		mContextDir = new File(mBaseDir + File.separator
-				+ IOConstants.IO_DATA_SUBDIR);
+				+ IO_DATA_SUBDIR);
 		if (!mContextDir.exists() && !mContextDir.mkdirs()) {
 			throw new IOException("Could not create context dir:"
 					+ mContextDir.getAbsolutePath());
 		}
 		;
 		mOutputDir = new File(mBaseDir + File.separator
-				+ IOConstants.IO_OUTPUT_SUBDIR);
+				+ IO_OUTPUT_SUBDIR);
 		if (!mOutputDir.exists() && !mOutputDir.mkdirs()) {
 			throw new IOException("Could not create context dir:"
 					+ mOutputDir.getAbsolutePath());

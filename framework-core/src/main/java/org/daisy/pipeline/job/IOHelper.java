@@ -139,6 +139,20 @@ public class IOHelper {
 			}
 	}
 
+
+	/**
+	 * Dump
+	 *
+	 * @param context the context
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	static void dump(ResourceCollection resources,File contextDir) throws IOException {
+		for (String path : resources.getNames()) {
+			IOHelper.dump(resources.getResource(path).provide(), contextDir
+					.toURI(), path.replace("\\", "/"));
+		}
+	}
+
 	/**
 	 * Dumps the given input stream into the output stream
 	 *
@@ -164,7 +178,7 @@ public class IOHelper {
 	 * @return the string
 	 */
 	public static String generateOutput(String name, String type, String mediaType) {
-		if(type.equals(IOBridge.ANY_DIR_URI)){
+		if(type.equals(RemoteURITranslator.ANY_DIR_URI)){
 			return name+SLASH;
 		}else{
 			//TODO try to generate the extension using the media type
