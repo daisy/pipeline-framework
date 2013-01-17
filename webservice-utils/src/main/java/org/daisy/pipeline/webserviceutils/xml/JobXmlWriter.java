@@ -52,8 +52,8 @@ public class JobXmlWriter {
 	}
 	
 	public JobXmlWriter withAllMessages() {
-		if (job.getMonitor().getMessageAccessor() != null) {	
-			messages = job.getMonitor().getMessageAccessor()
+		if (job.getContext().getMonitor().getMessageAccessor() != null) {	
+			messages = job.getContext().getMonitor().getMessageAccessor()
 					.createFilter().filterLevels(MSG_LEVELS)
 					.getMessages();
 		}
@@ -61,8 +61,8 @@ public class JobXmlWriter {
 	}
 	
 	public JobXmlWriter withMessageRange(int start, int end) {
-		if (job.getMonitor().getMessageAccessor() != null) {	
-			messages = job.getMonitor().getMessageAccessor()
+		if (job.getContext().getMonitor().getMessageAccessor() != null) {	
+			messages = job.getContext().getMonitor().getMessageAccessor()
 					.createFilter().filterLevels(MSG_LEVELS)
 					.inRange(start, end).getMessages();
 		}
@@ -70,8 +70,8 @@ public class JobXmlWriter {
 	}
 	
 	public JobXmlWriter withNewMessages(int newerThan) {
-		if (job.getMonitor().getMessageAccessor() != null) {	
-			messages = job.getMonitor().getMessageAccessor()
+		if (job.getContext().getMonitor().getMessageAccessor() != null) {	
+			messages = job.getContext().getMonitor().getMessageAccessor()
 					.createFilter().filterLevels(MSG_LEVELS)
 					.greaterThan(newerThan).getMessages();
 		}
@@ -107,7 +107,7 @@ public class JobXmlWriter {
 		element.setAttribute("status", status.toString());
 
 		if (scriptDetails) {
-			ScriptXmlWriter writer = XmlWriterFactory.createXmlWriterForScript(job.getScript());
+			ScriptXmlWriter writer = XmlWriterFactory.createXmlWriterForScript(job.getContext().getScript());
 			writer.addAsElementChild(element);
 		}
 		
