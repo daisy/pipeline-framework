@@ -34,65 +34,6 @@ import org.junit.Test;
 		//tmpDir.delete();
 	//}
 
-	//@Before
-	//public void setUp() throws IOException {
-		//tmpDir = File.createTempFile("dp2", "");
-		//String name = tmpDir.getAbsolutePath();
-		//tmpDir.delete();
-		//tmpDir = new File(name);
-		//tmpDir.mkdir();
-		//System.setProperty(IOBridge.ORG_DAISY_PIPELINE_IOBASE, tmpDir.getAbsolutePath());
-		//bridge = new IOBridge(new JobId() {
-
-			//@Override
-			//public String toString(){
-				//return "";
-			//}
-		//});
-		//XProcPortInfo portInf = XProcPortInfo.newInputPort("source", false,
-				//true);
-		//XProcOptionInfo optionInf = XProcOptionInfo.newOption(new QName(
-				//"myinput"), false, "");
-		//XProcOptionInfo optionInf2 = XProcOptionInfo.newOption(new QName(
-				//"myopt"), false, "");
-		//XProcOptionInfo optionInf3 = XProcOptionInfo.newOption(
-				//new QName("out1"), false, "");
-		//XProcOptionInfo optionInf4 = XProcOptionInfo.newOption(
-				//new QName("out2"), false, "");
-		//XProcOptionInfo optionInf5 = XProcOptionInfo.newOption(
-				//new QName("out3"), false, "cosa");
-		//XProcPipelineInfo info = new XProcPipelineInfo.Builder()
-				//.withPort(portInf).withURI(URI.create(""))
-				//.withOption(optionInf).withOption(optionInf2).withOption(optionInf3).
-				//withOption(optionInf4).withOption(optionInf5).build();
-		//XProcOptionMetadata meta1 = new XProcOptionMetadata.Builder()
-				//.withType("anyFileURI").build();
-				////.withDirection("input").withType("anyFileURI").build();
-		//XProcOptionMetadata meta2 = new XProcOptionMetadata.Builder()
-				//.withOutput("result").withType("anyFileURI").build();
-				////.withDirection("output").withType("anyFileURI").build();
-
-		//XProcOptionMetadata meta3 = new XProcOptionMetadata.Builder()
-				//.withOutput("result").withType("anyFileURI").build();
-				////.withDirection("output").withType("anyFileURI").build();
-
-		//XProcOptionMetadata meta4 = new XProcOptionMetadata.Builder()
-				//.withOutput("result").withType("anyDirURI").build();
-				////.withDirection("output").withType("anyDirURI").build();
-
-		//XProcOptionMetadata meta5 = new XProcOptionMetadata.Builder()
-				//.withOutput("result").withType("anyDirURI").build();
-				////.withDirection("output").withType("anyDirURI").build();
-
-		//HashMap<QName, XProcOptionMetadata> ometas = new HashMap<QName, XProcOptionMetadata>();
-		//ometas.put(new QName("myinput"), meta1);
-		//ometas.put(new QName("myopt"), meta2);
-		//ometas.put(new QName("out1"), meta3);
-		//ometas.put(new QName("out2"), meta4);
-		//ometas.put(new QName("out3"), meta5);
-		//script = new XProcScript(info, null, null, null, null, ometas,null);
-
-	//}
 
 	//@Test
 	//public void testStoreContext() throws Exception {

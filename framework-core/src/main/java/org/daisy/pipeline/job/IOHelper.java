@@ -69,7 +69,6 @@ public class IOHelper {
 	}
 
 
-
 	/**
 	 * Gets a new output folder
 	 *
@@ -178,7 +177,7 @@ public class IOHelper {
 	 * @return the string
 	 */
 	public static String generateOutput(String name, String type, String mediaType) {
-		if(type.equals(RemoteURITranslator.ANY_DIR_URI)){
+		if(type.equals(RemoteURITranslator.TranslatableOption.ANY_DIR_URI.getName())){
 			return name+SLASH;
 		}else{
 			//TODO try to generate the extension using the media type

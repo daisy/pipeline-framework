@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import java.net.URI;
 
+import java.util.Collection;
 import java.util.HashSet;
 
 import javax.xml.transform.Source;
@@ -16,28 +17,22 @@ import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 
-import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 class RemoteURITranslator  implements URITranslator {
+	
 	static String IO_DATA_SUBDIR = "context";
-
 	/** The I o_ outpu t_ subdir. */
 	static String IO_OUTPUT_SUBDIR = "output";
-	/** The Constant ANY_FILE_URI. */
-	public static final String ANY_FILE_URI = "anyFileURI";
-
-	/** The Constant ANY_DIR_URI. */
-	public static final String ANY_DIR_URI = "anyDirURI";
 
 	/** The Constant ORG_DAISY_PIPELINE_IOBASE. */
 	public static final String ORG_DAISY_PIPELINE_IOBASE = "org.daisy.pipeline.iobase";
@@ -53,13 +48,31 @@ class RemoteURITranslator  implements URITranslator {
 	/** The m base dir. */
 	private File baseDir;
 
-	static HashSet<String> OPTIONS_TO_TRANSLATE = Sets.newHashSet();
+	XProcScript script;
 
 	/** The m generated outputs. */
 	HashSet<String> generatedOutputs = Sets.newHashSet();
-	static {
-		OPTIONS_TO_TRANSLATE.add(ANY_DIR_URI);
-		OPTIONS_TO_TRANSLATE.add(ANY_FILE_URI);
+	
+	enum TranslatableOption{
+		ANY_DIR_URI("anyDirURI"),
+		ANY_FILE_URI("anyFileURI");
+		private final String name;
+		TranslatableOption(String name){
+			this.name=name;
+		}
+
+		public String getName() {
+			return this.name;
+		}
+
+		public static boolean contains(String optionType){
+			//creating a map for just too elements is not going to make that much difference.
+			for(TranslatableOption opt:TranslatableOption.values()){
+				if(opt.getName().equals(optionType))
+					return true;	
+			}
+			return false;
+		}
 	}
 
 	/**
@@ -67,17 +80,17 @@ class RemoteURITranslator  implements URITranslator {
 	 *
 	 * @param contextDir The contextDir for this instance.
 	 */
-	private RemoteURITranslator(File baseDir,File contextDir,File outputDir) {
+	private RemoteURITranslator(File contextDir,File outputDir,XProcScript script) {
 		this.contextDir = contextDir;
-		this.baseDir= baseDir;
 		this.outputDir= outputDir;
+		this.script=script;
 	}
 
-	public static RemoteURITranslator from(JobId id) throws IOException {
-		return RemoteURITranslator.from(id,null);
+	public static RemoteURITranslator from(JobId id,XProcScript script) throws IOException {
+		return RemoteURITranslator.from(id,script,null);
 	}
 
-	public static RemoteURITranslator from(JobId id,ResourceCollection resources) throws IOException {
+	public static RemoteURITranslator from(JobId id,XProcScript script,ResourceCollection resources) throws IOException {
 		if (System.getProperty(ORG_DAISY_PIPELINE_IOBASE) == null) {
 			throw new IllegalStateException("The property "
 					+ ORG_DAISY_PIPELINE_IOBASE + " is not set");
@@ -104,12 +117,12 @@ class RemoteURITranslator  implements URITranslator {
 		if (resources != null) {
 			IOHelper.dump(resources,contextDir);
 		}
-		return new RemoteURITranslator(baseDir,contextDir,outputDir);
+		return new RemoteURITranslator(contextDir,outputDir,script);
 	}
 
 
 	@Override
-	public XProcInput translateInputs(XProcScript script,XProcInput input) {
+	public XProcInput translateInputs(XProcInput input) {
 		XProcInput.Builder translated = new XProcInput.Builder();
 		try{
 			translateInputPorts(script.getXProcPipelineInfo(), input, translated);
@@ -127,18 +140,13 @@ class RemoteURITranslator  implements URITranslator {
 	 * @param builder the builder
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	protected void translateInputPorts(final XProcPipelineInfo info,final  XProcInput input,
+	void translateInputPorts(final XProcPipelineInfo info,final  XProcInput input,
 			XProcInput.Builder builder) throws IOException {
 
 		Iterable<XProcPortInfo> inputInfos =info.getInputPorts();
 		//filter those ports which are null
-		Predicate<XProcPortInfo> isNotNull = new Predicate<XProcPortInfo>(){
-			public boolean apply(XProcPortInfo portInfo){
-				return input.getInputs(portInfo.getName()) != null;
-			}
-		};
 
-		for (XProcPortInfo portInfo : Collections2.filter(Lists.newLinkedList(inputInfos),isNotNull)) {
+		for (XProcPortInfo portInfo : Collections2.filter(Lists.newLinkedList(inputInfos),URITranslatorHelper.getNullPortFilter(input))) {
 			//number of inputs for this port
 			int inputCnt = 0;
 			for (Provider<Source> prov : input.getInputs(portInfo.getName())) {
@@ -172,69 +180,70 @@ class RemoteURITranslator  implements URITranslator {
 	 * @param input the input
 	 * @param resolvedInput the resolved input
 	 */
-	private void tranlateOptions(final XProcScript script , final XProcInput input,
+	private void translateOptions(final XProcScript script , final XProcInput input,
 			XProcInput.Builder resolvedInput) {
-		Iterable<XProcOptionInfo> optionInfos = script.getXProcPipelineInfo().getOptions();
 
-		//Filter those otions which we have to translate 
-		final Predicate<XProcOptionInfo> haveTo= new Predicate<XProcOptionInfo>(){
-			public boolean apply(XProcOptionInfo optionInfo){
-				return OPTIONS_TO_TRANSLATE.contains(script.getOptionMetadata(
-					optionInfo.getName()).getType());
+		Collection<XProcOptionInfo> optionInfos = Lists.newLinkedList(script.getXProcPipelineInfo().getOptions());
+
+		//options which are translatable and outputs	
+		Collection<XProcOptionInfo> outputs= Collections2.filter(optionInfos,Predicates.and(URITranslatorHelper.getTranslatableOptionFilter(script),
+					URITranslatorHelper.getOutputOptionFilter(script)));
+
+		this.translateOutputOptions(outputs,input,resolvedInput);
+		//options which are translatable and inputs 
+		Collection<XProcOptionInfo> inputs= Collections2.filter(optionInfos,Predicates.and(URITranslatorHelper.getTranslatableOptionFilter(script),
+					Predicates.not(URITranslatorHelper.getOutputOptionFilter(script))));
+		this.translateInputOptions(inputs,input,resolvedInput);
+
+		//options that are to be verbatim copied 
+		Collection<XProcOptionInfo> verbatims= Collections2.filter(optionInfos,Predicates.not(URITranslatorHelper.getTranslatableOptionFilter(script)));
+		this.copyOptions(verbatims,input,resolvedInput);
+
+
+	}
+
+	void copyOptions(Collection<XProcOptionInfo> options,XProcInput input,XProcInput.Builder builder){
+			for(XProcOptionInfo option: options){
+				builder.withOption(option.getName(),input.getOptions().get(option.getName()));
 			}
-		};
-		//those which I dont have to 
-		final Predicate<XProcOptionInfo> donthaveTo= new Predicate<XProcOptionInfo>(){
-			public boolean apply(XProcOptionInfo optionInfo){
-				return !haveTo.apply(optionInfo);
-			}
-		};
-		//verbatim copy of those that I dont have to process	
-		for (XProcOptionInfo optionInfo : Collections2.filter(Lists.newLinkedList(optionInfos),donthaveTo)) {
-				resolvedInput.withOption(optionInfo.getName(), input
-						.getOptions().get(optionInfo.getName()));
-		}
+	}
 
-		//translate input/output uris
-		for (XProcOptionInfo optionInfo : Collections2.filter(Lists.newLinkedList(optionInfos),haveTo)) {
-			//output dir for outputs 
-			//context dir for intputs 
-			String subDir = !URITranslatorHelper.isOutput(script,optionInfo)? contextDir
-				.toURI().toString() : outputDir.toURI().toString();
-
-			String strUri = input.getOptions().get(optionInfo.getName());
-			//output's names can be generated and create conflicts take care of that
-			if (URITranslatorHelper.isOutput(script,optionInfo)) {
-				if (!URITranslatorHelper.notEmpty(strUri)) {
-					//get default value or generate a new one
-					strUri = (URITranslatorHelper.notEmpty(optionInfo.getSelect()))? 
-						optionInfo.getSelect() : 
-						IOHelper.generateOutput(
-								optionInfo.getName().toString(),
-								script.getOptionMetadata(optionInfo.getName())
-								.getType(),
-								script.getOptionMetadata(optionInfo.getName())
-								.getMediaType());
+	void translateInputOptions(Collection<XProcOptionInfo> options,XProcInput input,XProcInput.Builder builder){
+			for(XProcOptionInfo option: options){
+				String relative = input.getOptions().get(option.getName());
+				if(URITranslatorHelper.notEmpty(relative)){
+					try{
+						URI uri=contextDir.toURI().resolve(URI.create(relative));
+						builder.withOption(option.getName(), uri.toString());
+					}catch(IllegalArgumentException e){
+						throw new RuntimeException(String.format("Error parsing uri (%s) for option %s",relative,option.getName()));
+					}
 				}
-				if (generatedOutputs.contains(strUri)) {
-					throw new IllegalArgumentException(
-							"Conflict when generating uri's a default value and option name have the same name:"
-							+ strUri);
+
+			}
+	}
+
+	void translateOutputOptions(Collection<XProcOptionInfo> options,XProcInput input,XProcInput.Builder builder){
+			for(XProcOptionInfo option: options){
+				String relative = input.getOptions().get(option.getName());
+				if(!URITranslatorHelper.notEmpty(relative)){
+					relative=URITranslatorHelper.notEmpty(option.getSelect()) ? option.getSelect() : 
+						URITranslatorHelper.generateOptionOutput(option,script); 
+					//maybe it should be better to check all the outputs at the end?
+					if (generatedOutputs.contains(relative)) {
+						throw new IllegalArgumentException(
+								String.format("Conflict when generating uri's a default value and option name have are equal: %s",relative));
+					}
+					generatedOutputs.add(relative);
 				}
-				generatedOutputs.add(strUri);
-			}
-			URI relUri = null;
-			try {
-				relUri = URI.create(strUri);
 
-			} catch (Exception e) {
-				throw new RuntimeException(
-						"Error parsing uri for option:"
-						+ optionInfo.getName(), e);
-			}
-			URI uri=IOHelper.map(subDir, relUri.toString());
-			resolvedInput.withOption(optionInfo.getName(), uri.toString());
-		}
+				try{
+					URI uri=outputDir.toURI().resolve(URI.create(relative));
+					builder.withOption(option.getName(), uri.toString());
+				}catch(IllegalArgumentException e){
+					throw new RuntimeException(String.format("Error parsing uri (%s) for option %s",relative,option.getName()),e);
+				}
 
+			}
 	}
 }
