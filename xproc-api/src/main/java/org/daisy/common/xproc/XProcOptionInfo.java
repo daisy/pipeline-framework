@@ -69,4 +69,9 @@ public final class XProcOptionInfo {
 	public String getSelect() {
 		return select;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("XProcOptionInfo (%s) [select=%s,required=%s]",this.name,this.select,this.isRequired);
+	}
 }
