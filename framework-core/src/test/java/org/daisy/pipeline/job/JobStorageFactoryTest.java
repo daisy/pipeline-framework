@@ -1,7 +1,6 @@
 package org.daisy.pipeline.job;
 
 
-import org.daisy.common.base.Provider;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,11 +22,9 @@ public class JobStorageFactoryTest   {
 		JobStorage def=JobStorageFactory.getDefaultStorage();
 		Job job= new Job(Mock.mockContext(id1));
 		def.add(job);
-		
-		for(JobId id: def){
-			Assert.assertEquals(id,id1);
+		for(Job j:  def){
+			Assert.assertEquals(j.getContext().getId(),id1);
 		}
-
 	}
 
 
@@ -69,7 +66,7 @@ public class JobStorageFactoryTest   {
 
 	@Test
 	public void addProvider(){
-		Provider<JobStorage> p1 = new Provider<JobStorage>(){
+		JobStorageProvider p1 = new JobStorageProvider(){
 			public JobStorage provide(){
 				accessed=true;
 				return JobStorageFactory.getDefaultStorage();
@@ -81,13 +78,13 @@ public class JobStorageFactoryTest   {
 	}
 	@Test
 	public void checkLastProvider(){
-		Provider<JobStorage> p1 = new Provider<JobStorage>(){
+		JobStorageProvider p1 = new JobStorageProvider(){
 			public JobStorage provide(){
 				accessed=false;
 				return JobStorageFactory.getDefaultStorage();
 			}
 		};
-		Provider<JobStorage> p2 = new Provider<JobStorage>(){
+		JobStorageProvider p2 = new JobStorageProvider(){
 			public JobStorage provide(){
 				accessed=true;
 				return JobStorageFactory.getDefaultStorage();
@@ -100,14 +97,14 @@ public class JobStorageFactoryTest   {
 	}
 	@Test
 	public void remove(){
-		Provider<JobStorage> p1 = new Provider<JobStorage>(){
+		JobStorageProvider p1 = new JobStorageProvider(){
 			public JobStorage provide(){
 				accessed=true;
 				return JobStorageFactory.getDefaultStorage();
 			}
 		};
 
-		Provider<JobStorage> p2 = new Provider<JobStorage>(){
+		JobStorageProvider p2 = new JobStorageProvider(){
 			public JobStorage provide(){
 			accessed=false;
 				return JobStorageFactory.getDefaultStorage();
