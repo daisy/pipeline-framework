@@ -15,7 +15,7 @@
 
       <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
       <property name="eclipselink.ddl-generation.output-mode" value="database"/>
-      <property name="eclipselink.logging.level" value="FINE"/>
+      <property name="eclipselink.logging.level" value="WARNING"/>
       <property name="eclipselink.logging.thread" value="true"/>
       <property name="eclipselink.logging.session" value="false"/>
       <property name="eclipselink.logging.exceptions" value="true"/>
