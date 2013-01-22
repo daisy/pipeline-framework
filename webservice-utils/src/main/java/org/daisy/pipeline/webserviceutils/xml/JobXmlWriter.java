@@ -105,11 +105,11 @@ public class JobXmlWriter {
 		element.setAttribute("id", job.getId().toString());
 		element.setAttribute("href", jobHref);
 		element.setAttribute("status", status.toString());
-
-		if (scriptDetails) {
-			ScriptXmlWriter writer = XmlWriterFactory.createXmlWriterForScript(job.getContext().getScript());
-			writer.addAsElementChild(element);
-		}
+		//FIXME: fix the lazy script loading
+		//if (scriptDetails) {
+			//ScriptXmlWriter writer = XmlWriterFactory.createXmlWriterForScript(job.getContext().getScript());
+			//writer.addAsElementChild(element);
+		//}
 		
 		if (messages != null && messages.size() > 0) {
 		    Element messagesElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "messages");
