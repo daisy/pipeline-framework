@@ -47,3 +47,6 @@ syntax: regexp
 
 # bin
 (^|/)bin/
+
+#coverage files
+(^|/)coverage.ec
