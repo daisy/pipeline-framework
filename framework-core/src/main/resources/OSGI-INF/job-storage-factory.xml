@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="job-storage-factory">
+   <implementation class="org.daisy.pipeline.job.JobStorageFactory"/>
+   <service>
+      <provide interface="org.daisy.pipeline.job.JobStorageFactory"/>
+   </service>
+   <reference  name="storage-provider" interface="org.daisy.pipeline.job.JobStorageProvider" bind="add" cardinality="1..1" policy="static"/> 
+</scr:component>
