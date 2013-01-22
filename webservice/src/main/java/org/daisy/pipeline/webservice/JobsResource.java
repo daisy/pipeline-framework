@@ -25,6 +25,7 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.ResourceCollection;
 import org.daisy.pipeline.job.ZipResourceContext;
@@ -79,18 +80,16 @@ public class JobsResource extends AuthenticatedResource {
 	 */
 	@Get("xml")
 	public Representation getResource() {
-		//TODO: update this when the whole thing is refactored
-		//if (!isAuthenticated()) {
-			//setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-			//return null;
-		//}
-		//JobManager jobMan = webservice().getJobManager();
-		//JobsXmlWriter writer = XmlWriterFactory.createXmlWriterForJobs(Collections2.jobMan.getJobIds());
-		//Document doc = writer.getXmlDocument();
-		//DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
-		//setStatus(Status.SUCCESS_OK);
-		//return dom;
-		return null;
+		if (!isAuthenticated()) {
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+			return null;
+		}
+		JobManager jobMan = webservice().getJobManager();
+		JobsXmlWriter writer = XmlWriterFactory.createXmlWriterForJobs(jobMan.getJobs());
+		Document doc = writer.getXmlDocument();
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
+		setStatus(Status.SUCCESS_OK);
+		return dom;
 	}
 
 
@@ -336,14 +335,17 @@ public class JobsResource extends AuthenticatedResource {
 		XProcInput input = builder.build();
 
 		JobManager jobMan = webservice().getJobManager();
-		Job job = null;
+		JobContext ctxt=null;
+		ResourceCollection resourceCollection=null;
 		if (zip != null){
-			ResourceCollection resourceCollection = new ZipResourceContext(zip);
-			job = jobMan.newJob(script, input, resourceCollection);
+			resourceCollection = new ZipResourceContext(zip);
 		}
-		else {
-			job = jobMan.newJob(script, input);
+		if(webservice().getConfiguration().isLocal()){
+			ctxt=webservice().getJobContextFactory().newJobContext(input,script);	
+		}else{
+			ctxt=webservice().getJobContextFactory().newMappingJobContext(input,script,resourceCollection);
 		}
+		Job job = jobMan.newJob(ctxt);
 
 		NodeList callbacks = doc.getElementsByTagName("callback");
 		for (int i = 0; i<callbacks.getLength(); i++) {

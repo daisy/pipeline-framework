@@ -9,6 +9,7 @@ import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.common.properties.PropertyTracker;
 
+import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.webserviceutils.Properties;
@@ -44,6 +45,7 @@ public class PipelineWebService extends Application {
 	/** The job manager. */
 	private JobManager jobManager;
 
+	private JobContextFactory ctxtFactory;
 	/** The script registry. */
 	private ScriptRegistry scriptRegistry;
 
@@ -218,8 +220,25 @@ public class PipelineWebService extends Application {
 		this.jobManager = jobManager;
 	}
 
+	/**
+	 * Sets the job context factory.
+	 *
+	 * @param  ctxtFactory the JobContextFactory
+	 */
+	public void setJobContextFactory(JobContextFactory ctxtFactory){
+		this.ctxtFactory= ctxtFactory;
+	}
 	public PipelineWebServiceConfiguration getConfiguration(){
 		return this.conf;	
+	}
+
+	/**
+	 * Gets the ctxtFactory for this instance.
+	 *
+	 * @return The job context factory.
+	 */
+	public JobContextFactory getJobContextFactory() {
+		return this.ctxtFactory;
 	}
 
 	/**
