@@ -1,5 +1,7 @@
 package org.daisy.pipeline.job;
 
+import java.io.IOException;
+
 import java.net.URI;
 import java.util.Set;
 
@@ -7,10 +9,20 @@ import org.daisy.common.xproc.XProcInput;
 
 import org.daisy.pipeline.script.XProcScript;
 
-class RemoteJobContext extends AbstractJobContext{
+class MappingJobContext extends AbstractJobContext {
 
-	public RemoteJobContext(JobId id, XProcInput input,XProcScript script) {
+	URITranslator translator;
+	public MappingJobContext(JobId id, XProcInput input,XProcScript script,ResourceCollection collection) {
 		super(id, input, script);
+		try{
+			translator=MappingURITranslator.from(id,script,collection);
+			setInput(translator.translateInputs(input));
+
+		}catch(IOException ex){
+			throw new RuntimeException("Error while initialising the context",ex);
+		}
+
+
 	}
 
 	@Override

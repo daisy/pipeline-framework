@@ -8,6 +8,7 @@ import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 
 final class URITranslatorHelper   {
 
@@ -23,11 +24,12 @@ final class URITranslatorHelper   {
 			}
 		};
 	}
-
+	/** Tranlatable options are those marked as anyFileURI or anyDirURI 
+	 */
 	public static final Predicate<XProcOptionInfo> getTranslatableOptionFilter(final XProcScript script){
 		return  new Predicate<XProcOptionInfo>(){
 			public boolean apply(XProcOptionInfo optionInfo){
-				return (RemoteURITranslator.TranslatableOption.contains(script.getOptionMetadata(
+				return (MappingURITranslator.TranslatableOption.contains(script.getOptionMetadata(
 					optionInfo.getName()).getType()));
 			}
 		};
@@ -42,6 +44,17 @@ final class URITranslatorHelper   {
 		};
 	}
 
+	public static final Predicate<XProcOptionInfo> getTranslatableOutputOptionsFilter(final XProcScript script){
+		return Predicates.and(URITranslatorHelper.getTranslatableOptionFilter(script),
+					URITranslatorHelper.getOutputOptionFilter(script));
+
+	}
+
+	public static final Predicate<XProcOptionInfo> getTranslatableInputOptionsFilter(final XProcScript script){
+		return Predicates.and(URITranslatorHelper.getTranslatableOptionFilter(script),
+				Predicates.not(URITranslatorHelper.getOutputOptionFilter(script)));
+
+	}
 	public static final String generateOptionOutput(XProcOptionInfo option,XProcScript script){
 		return IOHelper.generateOutput(
 					option.getName().toString(),
@@ -50,4 +63,5 @@ final class URITranslatorHelper   {
 					script.getOptionMetadata(option.getName())
 					.getMediaType());
 	}
+	
 }

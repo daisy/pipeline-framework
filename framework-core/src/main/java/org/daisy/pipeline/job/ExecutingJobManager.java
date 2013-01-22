@@ -1,7 +1,5 @@
 package org.daisy.pipeline.job;
 
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.pipeline.script.XProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,12 +27,11 @@ public class ExecutingJobManager extends AbstractJobManager {
 	 * @see org.daisy.pipeline.job.DefaultJobManager#newJob(org.daisy.pipeline.script.XProcScript, org.daisy.common.xproc.XProcInput, org.daisy.pipeline.job.ResourceCollection)
 	 */
 	@Override
-	public Job newJob(XProcScript script, XProcInput input,
-			ResourceCollection context) {
+	public Job newJob(JobContext ctxt) {
 		if (executor == null) {
 			throw new IllegalStateException("Execution service unavailable");
 		}
-		Job job = super.newJob(script, input, context);
+		Job job = super.newJob(ctxt);
 		executor.submit(job);
 		return job;
 	}
@@ -44,7 +41,6 @@ public class ExecutingJobManager extends AbstractJobManager {
 	 */
 	@Override
 	public Job deleteJob(JobId id) {
-		// TODO cancel job when deleting
 		return super.deleteJob(id);
 	}
 

@@ -14,7 +14,6 @@ import org.daisy.common.base.Provider;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
-import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 
 import org.daisy.pipeline.script.XProcScript;
@@ -28,7 +27,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-class RemoteURITranslator  implements URITranslator {
+class MappingURITranslator  implements URITranslator {
 	
 	static String IO_DATA_SUBDIR = "context";
 	/** The I o_ outpu t_ subdir. */
@@ -37,7 +36,7 @@ class RemoteURITranslator  implements URITranslator {
 	/** The Constant ORG_DAISY_PIPELINE_IOBASE. */
 	public static final String ORG_DAISY_PIPELINE_IOBASE = "org.daisy.pipeline.iobase";
 
-	private static final Logger logger = LoggerFactory.getLogger(RemoteURITranslator.class);
+	private static final Logger logger = LoggerFactory.getLogger(MappingURITranslator.class);
 
 	/** The m context dir. */
 	private File contextDir;
@@ -46,7 +45,6 @@ class RemoteURITranslator  implements URITranslator {
 	private File outputDir;
 
 	/** The m base dir. */
-	private File baseDir;
 
 	XProcScript script;
 
@@ -64,7 +62,10 @@ class RemoteURITranslator  implements URITranslator {
 		public String getName() {
 			return this.name;
 		}
-
+		@Override
+		public String toString(){
+			return this.name;
+		}
 		public static boolean contains(String optionType){
 			//creating a map for just too elements is not going to make that much difference.
 			for(TranslatableOption opt:TranslatableOption.values()){
@@ -80,17 +81,17 @@ class RemoteURITranslator  implements URITranslator {
 	 *
 	 * @param contextDir The contextDir for this instance.
 	 */
-	private RemoteURITranslator(File contextDir,File outputDir,XProcScript script) {
+	private MappingURITranslator(File contextDir,File outputDir,XProcScript script) {
 		this.contextDir = contextDir;
 		this.outputDir= outputDir;
 		this.script=script;
 	}
 
-	public static RemoteURITranslator from(JobId id,XProcScript script) throws IOException {
-		return RemoteURITranslator.from(id,script,null);
+	public static MappingURITranslator from(JobId id,XProcScript script) throws IOException {
+		return MappingURITranslator.from(id,script,null);
 	}
 
-	public static RemoteURITranslator from(JobId id,XProcScript script,ResourceCollection resources) throws IOException {
+	public static MappingURITranslator from(JobId id,XProcScript script,ResourceCollection resources) throws IOException {
 		if (System.getProperty(ORG_DAISY_PIPELINE_IOBASE) == null) {
 			throw new IllegalStateException("The property "
 					+ ORG_DAISY_PIPELINE_IOBASE + " is not set");
@@ -117,7 +118,7 @@ class RemoteURITranslator  implements URITranslator {
 		if (resources != null) {
 			IOHelper.dump(resources,contextDir);
 		}
-		return new RemoteURITranslator(contextDir,outputDir,script);
+		return new MappingURITranslator(contextDir,outputDir,script);
 	}
 
 
@@ -125,7 +126,8 @@ class RemoteURITranslator  implements URITranslator {
 	public XProcInput translateInputs(XProcInput input) {
 		XProcInput.Builder translated = new XProcInput.Builder();
 		try{
-			translateInputPorts(script.getXProcPipelineInfo(), input, translated);
+			translateInputPorts(script, input, translated);
+			translateOptions(script, input, translated);
 		}catch(IOException ex){
 			throw new RuntimeException("Error translating inputs",ex);
 		}
@@ -140,13 +142,15 @@ class RemoteURITranslator  implements URITranslator {
 	 * @param builder the builder
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	void translateInputPorts(final XProcPipelineInfo info,final  XProcInput input,
+	void translateInputPorts(final XProcScript script,final  XProcInput input,
 			XProcInput.Builder builder) throws IOException {
 
-		Iterable<XProcPortInfo> inputInfos =info.getInputPorts();
+		Iterable<XProcPortInfo> inputInfos =script.getXProcPipelineInfo().getInputPorts();
 		//filter those ports which are null
 
-		for (XProcPortInfo portInfo : Collections2.filter(Lists.newLinkedList(inputInfos),URITranslatorHelper.getNullPortFilter(input))) {
+		//for (XProcPortInfo portInfo : Collections2.filter(Lists.newLinkedList(inputInfos),URITranslatorHelper.getNullPortFilter(input))) {
+		//There shouldnt be any input port because of how the XProcPipelineInfo works
+		for (XProcPortInfo portInfo : inputInfos){
 			//number of inputs for this port
 			int inputCnt = 0;
 			for (Provider<Source> prov : input.getInputs(portInfo.getName())) {
@@ -180,19 +184,17 @@ class RemoteURITranslator  implements URITranslator {
 	 * @param input the input
 	 * @param resolvedInput the resolved input
 	 */
-	private void translateOptions(final XProcScript script , final XProcInput input,
+	void translateOptions(final XProcScript script , final XProcInput input,
 			XProcInput.Builder resolvedInput) {
 
 		Collection<XProcOptionInfo> optionInfos = Lists.newLinkedList(script.getXProcPipelineInfo().getOptions());
 
 		//options which are translatable and outputs	
-		Collection<XProcOptionInfo> outputs= Collections2.filter(optionInfos,Predicates.and(URITranslatorHelper.getTranslatableOptionFilter(script),
-					URITranslatorHelper.getOutputOptionFilter(script)));
+		Collection<XProcOptionInfo> outputs= Collections2.filter(optionInfos,URITranslatorHelper.getTranslatableOutputOptionsFilter(script));
 
 		this.translateOutputOptions(outputs,input,resolvedInput);
 		//options which are translatable and inputs 
-		Collection<XProcOptionInfo> inputs= Collections2.filter(optionInfos,Predicates.and(URITranslatorHelper.getTranslatableOptionFilter(script),
-					Predicates.not(URITranslatorHelper.getOutputOptionFilter(script))));
+		Collection<XProcOptionInfo> inputs= Collections2.filter(optionInfos,URITranslatorHelper.getTranslatableInputOptionsFilter(script));
 		this.translateInputOptions(inputs,input,resolvedInput);
 
 		//options that are to be verbatim copied 

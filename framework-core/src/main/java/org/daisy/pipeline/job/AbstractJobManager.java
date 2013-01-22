@@ -1,11 +1,5 @@
 package org.daisy.pipeline.job;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.pipeline.script.XProcScript;
 
 
 /**
@@ -14,33 +8,25 @@ import org.daisy.pipeline.script.XProcScript;
 public abstract class AbstractJobManager implements JobManager {
 
 	/** The jobs. */
-	private final JobStorage jobs= JobStorageFactory.getInstance().getJobStorage(); 
 
 	/* (non-Javadoc)
 	 * @see org.daisy.pipeline.job.JobManager#newJob(org.daisy.pipeline.script.XProcScript, org.daisy.common.xproc.XProcInput, org.daisy.pipeline.job.ResourceCollection)
 	 */
 	@Override
-	public Job newJob(XProcScript script, XProcInput input,
-			ResourceCollection context) {
-		Job job = JobFactory.getInstance().newJob(script, input, context);
-		jobs.add(job);
+	public Job newJob(JobContext ctxt) {
+		if(this.getJob(ctxt.getId())!=null)
+				throw new IllegalArgumentException(String.format("Job with id %s already exists in this manager",ctxt.getId()));
+		Job job = JobStorageFactory.getJobStorage().add(Job.newJob(ctxt));
 		return job;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.daisy.pipeline.job.JobManager#newJob(org.daisy.pipeline.script.XProcScript, org.daisy.common.xproc.XProcInput)
-	 */
-	@Override
-	public Job newJob(XProcScript script, XProcInput input) {
-		return newJob(script, input, null);
-	}
 
 	/* (non-Javadoc)
 	 * @see org.daisy.pipeline.job.JobManager#getJobIds()
 	 */
 	@Override
-	public Iterable<JobId> getJobIds() {
-		return jobs;
+	public Iterable<Job> getJobs() {
+		return JobStorageFactory.getJobStorage();
 	}
 
 	/* (non-Javadoc)
@@ -49,7 +35,7 @@ public abstract class AbstractJobManager implements JobManager {
 	@Override
 	public Job deleteJob(JobId id) {
 		//jobs.get(id).cleanUp();
-		return jobs.remove(id);
+		return JobStorageFactory.getJobStorage().remove(id); 
 	}
 
 	/* (non-Javadoc)
@@ -57,6 +43,6 @@ public abstract class AbstractJobManager implements JobManager {
 	 */
 	@Override
 	public Job getJob(JobId id) {
-		return jobs.get(id);
+		return JobStorageFactory.getJobStorage().get(id);
 	}
 }
