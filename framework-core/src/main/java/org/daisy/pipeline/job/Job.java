@@ -49,7 +49,9 @@ public class Job {
 		//this.results=new JobResult.Builder().withMessageAccessor(this.ctxt.getMonitor().getMessageAccessor()).withZipFile(null).withLogFile(null).build();
 		changeStatus(Status.IDLE);
 	}
-
+	public static Job newJob(JobContext ctxt){
+		return new Job(ctxt);
+	}
 	/**
 	 * Gets the id.
 	 *
@@ -88,13 +90,13 @@ public class Job {
 		return null;
 	}
 
-	private void changeStatus(Status to){
+	protected void changeStatus(Status to){
 		this.status=to;
 		//TODO clean this
 		if (this.ctxt!=null&&this.ctxt.getEventBus()!=null)
 			this.ctxt.getEventBus().post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
-		else
-			logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? "the context": " event bus") + "is null");
+		//else
+		//	logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? " the context ": " event bus ") + "is null");
 	}
 	/**
 	 * Runs the job using the XProcEngine as script loader.

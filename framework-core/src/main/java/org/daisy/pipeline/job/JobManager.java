@@ -1,10 +1,7 @@
 package org.daisy.pipeline.job;
 
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.pipeline.script.XProcScript;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface JobManager offers a simple way of managing jobs.
  */
@@ -13,29 +10,19 @@ public interface JobManager {
 	/**
 	 * creates a job attached to the resource collection that will be used as context to the job.
 	 *
-	 * @param script the script
-	 * @param input the input
-	 * @param context the context
+	 * @param context the context for the new job
 	 * @return the job
+	 * @throws IllegalArgumentException if the jobId inside the context already exists in the manager
 	 */
-	public Job newJob(XProcScript script, XProcInput input,
-			ResourceCollection context);
+	public Job newJob(JobContext ctxt);
 
-	/**
-	 * Creates a job without resource collection.
-	 *
-	 * @param script the script
-	 * @param input the input
-	 * @return the job
-	 */
-	public Job newJob(XProcScript script, XProcInput input);
 
 	/**
 	 * Gets the jobs.
 	 *
 	 * @return the jobs
 	 */
-	public Iterable<JobId> getJobIds();
+	public Iterable<Job> getJobs();
 
 	/**
 	 * Deletes a job.

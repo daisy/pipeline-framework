@@ -64,9 +64,7 @@ public class JobFactory {
 	 */
 	public Job newJob(XProcScript script, XProcInput input,
 			ResourceCollection context) {
-		// TODO check arguments
 		JobId id = JobIdFactory.newId();
-		// FIXME "common path"+id.toString
 
 		try {
 
