@@ -2,17 +2,18 @@ package org.daisy.pipeline.persistence.jobs;
 
 import java.util.Iterator;
 
-import org.daisy.common.base.Provider;
 
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
+import org.daisy.pipeline.job.JobStorageProvider;
 import org.daisy.pipeline.persistence.Database;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PersistentJobStorage  implements JobStorage,Provider<JobStorage>{ 
+public class PersistentJobStorage  implements JobStorage,JobStorageProvider{ 
 
 	private static final Logger logger = LoggerFactory.getLogger(PersistentJobStorage.class);
 
@@ -30,9 +31,9 @@ public class PersistentJobStorage  implements JobStorage,Provider<JobStorage>{
 	}
 
 	@Override
-	public Iterator<JobId> iterator() {
+	public Iterator<Job> iterator() {
 		checkDatabase();
-		return PersistentJob.getAllJobIds(this.db).iterator();
+		return PersistentJob.getAllJobs(this.db).iterator();
 	}
 
 	@Override
@@ -41,10 +42,14 @@ public class PersistentJobStorage  implements JobStorage,Provider<JobStorage>{
 	}
 
 	@Override
-	public void add(Job job) {
+	public Job add(Job job) {
 		checkDatabase();
 		logger.debug("Adding job to db:"+job.getContext().getId());
-		db.addObject(new PersistentJob(job));	
+		PersistentJob pjob=new PersistentJob(job,db);
+		JobContextFactory.getInstance().configure((PersistentJobContext)pjob.getContext());
+		db.addObject(pjob);	
+
+		return pjob;
 	}
 
 	@Override
@@ -61,7 +66,12 @@ public class PersistentJobStorage  implements JobStorage,Provider<JobStorage>{
 	@Override
 	public Job get(JobId id) {
 		checkDatabase();
-		return db.getEntityManager().find(PersistentJob.class,id.toString());
+		PersistentJob job =db.getEntityManager().find(PersistentJob.class,id.toString());
+		if(job!=null){
+			job.setDatabase(db);
+			JobContextFactory.getInstance().configure((PersistentJobContext)job.getContext());
+		}
+		return job; 
 	}
 	
 }
