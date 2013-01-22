@@ -31,6 +31,7 @@ import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobContext;
+import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobFactory;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobMonitorFactory;
@@ -134,8 +135,9 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 			builder.withParameter(param.getPort(),param.getName(),param.getValue());
 		}
 		this.input=builder.build();
-		//runtime configuration
-		JobFactory.getInstance().configure(this);
+		//FIXME!!: this should not be like this 
+		//the service should be set to an element of this bundle and then accessed
+		JobContextFactory.getInstance().configure(this);
 	}
 
 

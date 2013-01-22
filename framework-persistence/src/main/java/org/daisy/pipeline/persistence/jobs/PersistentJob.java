@@ -2,7 +2,6 @@ package org.daisy.pipeline.persistence.jobs;
 
 import java.io.Serializable;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -19,17 +18,13 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobIdFactory;
+import org.daisy.pipeline.job.JobContext;
 
 import org.daisy.pipeline.persistence.Database;
-
-import com.google.common.base.Function;
-
-import com.google.common.collect.Collections2;
 
 @Entity
 @Table(name="jobs")
@@ -54,21 +49,19 @@ public class PersistentJob  extends Job implements Serializable {
 	@OneToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
 	@MapsId("job_id")
 	PersistentJobContext pCtxt;
-
-	public PersistentJob(Job job) {
+	//the status changed will be watched by changeStatus
+	//and this very object is in charge of updating itself
+	@Transient
+	Database db=null;
+	public PersistentJob(Job job,Database db) {
 		super(new PersistentJobContext(job.getContext()));
 		this.status=job.getStatus();
+		this.db=db;
 	}
-	public PersistentJob(PersistentJob job) {
+	public PersistentJob(PersistentJob job,Database db) {
 		super(job.getContext());
 		this.status=job.getStatus();
-	}
-	public PersistentJob(AbstractJobContext ctxt) {
-		super(new PersistentJobContext(ctxt));
-	}
-	public PersistentJob(PersistentJobContext ctxt) {
-		super(ctxt);
-
+		this.db=db;
 	}
 
 	/**
@@ -78,12 +71,13 @@ public class PersistentJob  extends Job implements Serializable {
 		super(null);
 	}
 
-	public void setContext(AbstractJobContext ctxt){
+	public void setContext(JobContext ctxt){
 		this.ctxt=new PersistentJobContext(ctxt);
 	}
 	public void setContext(PersistentJobContext ctxt){
 		this.ctxt=ctxt;
 	}
+
 
 	/**
 	 * Gets the currentStatus for this instance.
@@ -107,24 +101,46 @@ public class PersistentJob  extends Job implements Serializable {
 	@PreRemove
 	@PreUpdate
 	public void preCallback(){
-		this.currentStatus=this.status;
-		this.pCtxt=(PersistentJobContext)this.ctxt;
-		this.sJobId=this.getContext().getId().toString();
+			//this.currentStatus=this.status;
+			this.pCtxt=(PersistentJobContext)this.ctxt;
+			this.sJobId=this.getContext().getId().toString();
+		
 	}
 	@PostLoad
 	public void postCallback(){
-		this.status=this.currentStatus;
 		this.ctxt=this.pCtxt;
+		this.status=this.currentStatus;
 	}
 
-	public static Iterable<JobId> getAllJobIds(Database db){
-		List<String> ids=db.runQuery("select distinct job_id from jobs",String.class);
-		return Collections2.transform(ids,new Function<String,JobId>(){
-			@Override
-			public JobId apply(String sId) {
-				return JobIdFactory.newIdFromString(sId);
-			}
-		});
+	//public static Iterable<JobId> getAllJobIds(Database db){
+		//List<String> ids=db.runQuery("select distinct j.job_id from PersistentJob j",String.class);
+		//return Collections2.transform(ids,new Function<String,JobId>(){
+			//@Override
+			//public JobId apply(String sId) {
+				//return JobIdFactory.newIdFromString(sId);
+			//}
+		//});
+
+	//}
+	public static List<Job> getAllJobs(Database db){
+		List<Job> jobs=db.runQuery("select j from PersistentJob j",Job.class);
+		return jobs;
+		
 
 	}
+	//this will watch for changes in the status and update the db
+	@Override
+	protected void changeStatus(Job.Status to) {
+		Job.Status oldStatus = this.status;
+		super.changeStatus(to);
+		this.setCurrentStatus(to);
+		if(this.db!=null)
+			db.updateObject(this);
+		
+	}
+
+	protected void setDatabase(Database db){
+		this.db=db;
+	}
+
 }
