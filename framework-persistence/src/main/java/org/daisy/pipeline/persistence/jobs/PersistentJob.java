@@ -58,6 +58,7 @@ public class PersistentJob  extends Job implements Serializable {
 		this.status=job.getStatus();
 		this.db=db;
 	}
+
 	public PersistentJob(PersistentJob job,Database db) {
 		super(job.getContext());
 		this.status=job.getStatus();
@@ -71,31 +72,7 @@ public class PersistentJob  extends Job implements Serializable {
 		super(null);
 	}
 
-	public void setContext(JobContext ctxt){
-		this.ctxt=new PersistentJobContext(ctxt);
-	}
-	public void setContext(PersistentJobContext ctxt){
-		this.ctxt=ctxt;
-	}
 
-
-	/**
-	 * Gets the currentStatus for this instance.
-	 *
-	 * @return The currentStatus.
-	 */
-	public Status getCurrentStatus() {
-		return this.currentStatus;
-	}
-
-	/**
-	 * Sets the currentStatus for this instance.
-	 *
-	 * @param currentStatus The currentStatus.
-	 */
-	public void setCurrentStatus(Status currentStatus) {
-		this.currentStatus = currentStatus;
-	}
 
 	@PrePersist
 	@PreRemove
@@ -130,10 +107,8 @@ public class PersistentJob  extends Job implements Serializable {
 	}
 	//this will watch for changes in the status and update the db
 	@Override
-	protected void changeStatus(Job.Status to) {
-		Job.Status oldStatus = this.status;
-		super.changeStatus(to);
-		this.setCurrentStatus(to);
+	protected void onStatusChanged(Job.Status to) {
+		this.currentStatus=to;
 		if(this.db!=null)
 			db.updateObject(this);
 		
@@ -141,6 +116,10 @@ public class PersistentJob  extends Job implements Serializable {
 
 	protected void setDatabase(Database db){
 		this.db=db;
+	}
+
+	final void setStatus(Status st){
+		super.changeStatus(st);
 	}
 
 }

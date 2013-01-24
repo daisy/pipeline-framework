@@ -1,7 +1,5 @@
 package org.daisy.pipeline.job;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Properties;
 
 import org.daisy.common.xproc.XProcEngine;
@@ -39,7 +37,7 @@ public class Job {
 	private JobResult results;
 
 	/** The status. */
-	protected Status status = Status.IDLE;
+	private volatile Status status = Status.IDLE;
 
 	
 	protected JobContext ctxt;
@@ -47,17 +45,19 @@ public class Job {
 	protected Job(JobContext ctxt) {
 		this.ctxt=ctxt;
 		//this.results=new JobResult.Builder().withMessageAccessor(this.ctxt.getMonitor().getMessageAccessor()).withZipFile(null).withLogFile(null).build();
-		changeStatus(Status.IDLE);
 	}
+
 	public static Job newJob(JobContext ctxt){
-		return new Job(ctxt);
+		Job job=new Job(ctxt);
+		job.changeStatus(Status.IDLE);
+		return job;
 	}
 	/**
 	 * Gets the id.
 	 *
 	 * @return the id
 	 */
-	public JobId getId() {
+	public final JobId getId() {
 		return this.ctxt.getId();
 	}
 
@@ -66,18 +66,18 @@ public class Job {
 	 *
 	 * @return the status
 	 */
-	public Status getStatus() {
+	public final Status getStatus() {
 		return status;
 	}
 
-
+	
 
 	/**
 	 * Gets the ctxt for this instance.
 	 *
 	 * @return The ctxt.
 	 */
-	public JobContext getContext() {
+	public final JobContext getContext() {
 		return this.ctxt;
 	}
 
@@ -86,24 +86,25 @@ public class Job {
 	 *
 	 * @return the x proc output
 	 */
-	XProcResult getXProcOutput() {
+	final XProcResult getXProcOutput() {
 		return null;
 	}
 
-	protected void changeStatus(Status to){
+	protected synchronized final void changeStatus(Status to){
 		this.status=to;
-		//TODO clean this
 		if (this.ctxt!=null&&this.ctxt.getEventBus()!=null)
 			this.ctxt.getEventBus().post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
-		//else
-		//	logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? " the context ": " event bus ") + "is null");
+		else
+			logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? " the context ": " event bus ") + "is null");
+		this.onStatusChanged(to);
 	}
+
 	/**
 	 * Runs the job using the XProcEngine as script loader.
 	 *
 	 * @param engine the engine
 	 */
-	public void run(XProcEngine engine) {
+	public final void run(XProcEngine engine) {
 		changeStatus(Status.RUNNING);
 		XProcPipeline pipeline = null;
 		try{
@@ -140,8 +141,12 @@ public class Job {
 	 *
 	 * @return the result
 	 */
-	public JobResult getResult() {
+	public final JobResult getResult() {
 		return results;
+	}
+
+	protected void onStatusChanged(Status newStatus){
+		//for subclasses
 	}
 
 }

@@ -1,9 +1,7 @@
 package org.daisy.pipeline.persistence.jobs;
 
-import java.util.Collection;
 import java.util.List;
 
-import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 
@@ -13,8 +11,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.google.common.collect.Lists;
 
 public class PersistentJobTest   {
 
@@ -45,11 +41,9 @@ public class PersistentJobTest   {
 	public void changeStatusTest(){
 		PersistentJob pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
 		pjob.setDatabase(db);
-		pjob.changeStatus(Job.Status.DONE);
-		//System.out.println("pre udpate");
-		db.updateObject(pjob);
-	
-		//System.out.println("status post update"+pjob.getStatus());
+
+		pjob.setStatus(Job.Status.DONE);
+
 		pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
 		Assert.assertEquals(pjob.getStatus(),Job.Status.DONE);
 
