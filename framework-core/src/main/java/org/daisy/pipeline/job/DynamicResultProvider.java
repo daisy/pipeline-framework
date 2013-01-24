@@ -4,7 +4,8 @@ import org.daisy.common.base.Provider;
 import javax.xml.transform.Result;
 
 /**
- * This class is not thread-safe
+ * This class is not thread-safe if several threads are generating results at the same time.
+ * not that likely use case
  */
 public class DynamicResultProvider implements Provider<Result>{
 
@@ -58,6 +59,5 @@ public class DynamicResultProvider implements Provider<Result>{
 		
 
 	}
-
 	
 }
