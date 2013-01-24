@@ -191,7 +191,7 @@ public class IOBridge {
 				URI uri = null;
 				//absolute means  mapping
 				if(relUri.getScheme()==null) {
-					uri=IOHelper.map(subDir, relUri.toString());
+					//uri=IOHelper.map(subDir, relUri.toString());
 				} else {
 					uri= relUri;
 				}
@@ -213,8 +213,8 @@ public class IOBridge {
 	protected void storeResources(ResourceCollection context)
 			throws IOException {
 		for (String path : context.getNames()) {
-			IOHelper.dump(context.getResource(path).provide(), mContextDir
-					.toURI(), path.replace("\\", "/"));
+			//IOHelper.dump(context.getResource(path).provide(), mContextDir
+					//.toURI(), path.replace("\\", "/"));
 		}
 	}
 
@@ -250,10 +250,10 @@ public class IOBridge {
 					// if uri == null -> I presume there is something inside
 					// if the uri is not relative I wont map it
 					if (relUri.getScheme() == null) {
-						URI uri = IOHelper.map(mContextDir.toURI().toString(),
-								relUri.toString());
-						prov.provide().setSystemId(uri.toString());
-						builder.withInput(info.getName(), prov);
+						//URI uri = IOHelper.map(mContextDir.toURI().toString(),
+								//relUri.toString());
+						//prov.provide().setSystemId(uri.toString());
+						//builder.withInput(info.getName(), prov);
 					} else {
 						builder.withInput(info.getName(), prov);
 					}
