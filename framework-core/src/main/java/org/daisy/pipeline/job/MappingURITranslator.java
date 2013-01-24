@@ -29,9 +29,9 @@ import com.google.common.collect.Sets;
 
 class MappingURITranslator  implements URITranslator {
 	
-	static String IO_DATA_SUBDIR = "context";
+	final static String IO_DATA_SUBDIR = "context";
 	/** The I o_ outpu t_ subdir. */
-	static String IO_OUTPUT_SUBDIR = "output";
+	final static String IO_OUTPUT_SUBDIR = "output";
 
 	/** The Constant ORG_DAISY_PIPELINE_IOBASE. */
 	public static final String ORG_DAISY_PIPELINE_IOBASE = "org.daisy.pipeline.iobase";
@@ -39,17 +39,17 @@ class MappingURITranslator  implements URITranslator {
 	private static final Logger logger = LoggerFactory.getLogger(MappingURITranslator.class);
 
 	/** The m context dir. */
-	private File contextDir;
+	private final File contextDir;
 
 	/** The m output dir. */
-	private File outputDir;
+	private final File outputDir;
 
 	/** The m base dir. */
 
-	XProcScript script;
+	private final XProcScript script;
 
 	/** The m generated outputs. */
-	HashSet<String> generatedOutputs = Sets.newHashSet();
+	private final HashSet<String> generatedOutputs = Sets.newHashSet();
 	
 	enum TranslatableOption{
 		ANY_DIR_URI("anyDirURI"),
@@ -97,25 +97,14 @@ class MappingURITranslator  implements URITranslator {
 					+ ORG_DAISY_PIPELINE_IOBASE + " is not set");
 		}
 		//Base based on the the id
-		File ioBase = new File(System.getProperty(ORG_DAISY_PIPELINE_IOBASE));
-		ioBase.mkdir();
-		File baseDir = new File(ioBase, id.toString());
-		baseDir.mkdirs();
+		File ioBase=IOHelper.makeDirs(System.getProperty(ORG_DAISY_PIPELINE_IOBASE));
+		File baseDir = IOHelper.makeDirs(new File(ioBase, id.toString()));
 
-		File contextDir = new File(baseDir + File.separator + IO_DATA_SUBDIR);
-		if (!contextDir.exists() && !contextDir.mkdirs()) {
-			throw new IOException("Could not create context dir:"
-					+ contextDir.getAbsolutePath());
-		}
-		;
-		File outputDir = new File(baseDir + File.separator + IO_OUTPUT_SUBDIR);
-		if (!outputDir.exists() && !outputDir.mkdirs()) {
-			throw new IOException("Could not create context dir:"
-					+ outputDir.getAbsolutePath());
-		}
-		;
+		File contextDir = IOHelper.makeDirs(new File(baseDir, IO_DATA_SUBDIR));
+		File outputDir = IOHelper.makeDirs(new File(baseDir, IO_OUTPUT_SUBDIR));
 
 		if (resources != null) {
+			logger.debug("Storing the resource collection");
 			IOHelper.dump(resources,contextDir);
 		}
 		return new MappingURITranslator(contextDir,outputDir,script);
@@ -124,6 +113,7 @@ class MappingURITranslator  implements URITranslator {
 
 	@Override
 	public XProcInput translateInputs(XProcInput input) {
+		logger.debug(String.format("Translating inputs for script :%s",script));
 		XProcInput.Builder translated = new XProcInput.Builder();
 		try{
 			translateInputPorts(script, input, translated);
@@ -149,7 +139,7 @@ class MappingURITranslator  implements URITranslator {
 		//filter those ports which are null
 
 		//for (XProcPortInfo portInfo : Collections2.filter(Lists.newLinkedList(inputInfos),URITranslatorHelper.getNullPortFilter(input))) {
-		//There shouldnt be any input port because of how the XProcPipelineInfo works
+		//There shouldnt be any null input port because of how the XProcPipelineInfo works
 		for (XProcPortInfo portInfo : inputInfos){
 			//number of inputs for this port
 			int inputCnt = 0;
@@ -169,7 +159,7 @@ class MappingURITranslator  implements URITranslator {
 					relUri = URI.create(portInfo.getName() + '-' + inputCnt
 							+ ".xml");
 				}
-				URI uri = IOHelper.map(contextDir.toURI().toString(),relUri.toString());
+				URI uri = contextDir.toURI().resolve(relUri);
 				prov.provide().setSystemId(uri.toString());
 				builder.withInput(portInfo.getName(), prov);
 				inputCnt++;

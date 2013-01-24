@@ -28,88 +28,28 @@ public class IOHelper {
 	/** The Constant BLOCK_SIZE. */
 	private static final int BLOCK_SIZE = 1024;
 
-	/** The Constant DEFAULT_OUTPUT_FOLDER. */
-	private static final String DEFAULT_OUTPUT_FOLDER="output";
 
-	/** The Constant DEFAULT_OUTPUT_FILE. */
-	private static final String DEFAULT_OUTPUT_FILE="file";
-
-	/** The m folder outs. */
-	private int mFolderOuts;
-
-	/** The m file outs. */
-	private int mFileOuts;
-
-	/** The m output folder preffix. */
-	private String mOutputFolderPreffix;
-
-	/** The m output file preffix. */
-	private String mOutputFilePreffix;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(IOHelper.class);
-	/**
-	 * Instantiates a new iO helper.
-	 */
-	public IOHelper() {
-		mOutputFolderPreffix=DEFAULT_OUTPUT_FOLDER;
-		mOutputFilePreffix=DEFAULT_OUTPUT_FILE;
+
+	public static File makeDirs(String ...pathParts) throws IOException{
+		StringBuilder builder = new StringBuilder();
+		for (String part:pathParts){
+			builder.append(part);
+			builder.append(File.separator);
+		}
+		return IOHelper.makeDirs(new File(builder.toString()));
+
 	}
 
-	/**
-	 * Maps relative uris to the base
-	 *
-	 * @param base the base
-	 * @param uri the uri
-	 * @return the uRI
-	 */
-	public static URI map(String base,String uri){
-		String furi= base+uri;
-		return URI.create(furi);
+	public static File makeDirs(File dir) throws IOException{
+		if (!dir.exists() && !dir.mkdirs()) {
+			throw new IOException("Could not create dir:"
+					+ dir.getAbsolutePath());
+		}
+		return dir;
 	}
-
-
-	/**
-	 * Gets a new output folder
-	 *
-	 * @param base the base
-	 * @return the new output folder
-	 */
-	public URI getNewOutputFolder(String base){
-		String fUri=base+SLASH+mOutputFolderPreffix+"_"+(++mFolderOuts)+SLASH;
-		return URI.create(fUri);
-	}
-
-	/**
-	 * Gets a new output file.
-	 *
-	 * @param base the base
-	 * @param suffix the suffix
-	 * @return the new output file
-	 */
-	public URI getNewOutputFile(String base,String suffix){
-		String fUri=base+SLASH+mOutputFilePreffix+"_"+(++mFileOuts)+suffix;
-		return URI.create(fUri);
-	}
-
-	/**
-	 * Sets the folder output preffix.
-	 *
-	 * @param outputPreffix the new folder output preffix
-	 */
-	public void setFolderOutputPreffix(String outputPreffix) {
-		mOutputFolderPreffix = outputPreffix;
-	}
-
-	/**
-	 * Sets the file output preffix.
-	 *
-	 * @param outputPreffix the new file output preffix
-	 */
-	public void setFileOutputPreffix(String outputPreffix) {
-		mOutputFilePreffix = outputPreffix;
-	}
-
 	/**
 	 * Dumps the content of the IS to the given path.
 	 *
@@ -118,16 +58,11 @@ public class IOHelper {
 	 * @param path the path
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public static void dump(InputStream is,URI base,String path) throws IOException{
+	public static void dump(InputStream is,URI base,URI path) throws IOException{
 			//linux & mac doesnt create empty files out of outstreams where nothing was written
 			//but win does, anyway this piece is more elegant than before.
-			File fout;
-			try {
-				fout = new File(new URI(base.getScheme(),base.getPath()+SLASH+path,null));
-			} catch (URISyntaxException e) {
-				throw new RuntimeException(e);
-			}
-			if(!path.endsWith(SLASH)){
+			File fout = new File(base.resolve(path));
+			if(!fout.toURI().toString().endsWith(SLASH)){
 				fout.getParentFile().mkdirs();
 				FileOutputStream fos=new FileOutputStream(fout);
 				dump(is,fos);
@@ -148,7 +83,7 @@ public class IOHelper {
 	static void dump(ResourceCollection resources,File contextDir) throws IOException {
 		for (String path : resources.getNames()) {
 			IOHelper.dump(resources.getResource(path).provide(), contextDir
-					.toURI(), path.replace("\\", "/"));
+					.toURI(), URI.create(path.replace("\\", "/")));
 		}
 	}
 
@@ -180,7 +115,6 @@ public class IOHelper {
 		if(type.equals(MappingURITranslator.TranslatableOption.ANY_DIR_URI.getName())){
 			return name+SLASH;
 		}else{
-			//TODO try to generate the extension using the media type
 			return name+".xml";
 		}
 
