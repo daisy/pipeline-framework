@@ -9,7 +9,7 @@ import java.util.Set;
 import javax.xml.namespace.QName;
 
 import javax.xml.transform.Source;
-import javax.xml.transform.Source;
+import javax.xml.transform.Result;
 
 import org.daisy.common.base.Provider;
 
@@ -18,6 +18,7 @@ import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 
 import org.daisy.pipeline.script.XProcOptionMetadata;
+import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScript;
 
@@ -75,8 +76,40 @@ class Mock   {
 		}
 	}
 
+	public static class MockResult implements Result,Provider<Result>{
+		String sId;
+
+		/**
+		 * Constructs a new instance.
+		 *
+		 * @param sId The sId for this instance.
+		 */
+		public MockResult(String sId) {
+			this.sId = sId;
+		}
+
+		@Override
+		public String getSystemId() {
+			return sId;
+		}
+
+		@Override
+		public void setSystemId(String systemId) {
+			sId=systemId;
+			
+		}
+
+		@Override
+		public Result provide() {
+			return this;
+		}
+	}
 	public static Provider<Source> getSourceProvider(String systemId){
 		return new MockSource(systemId);
+
+	}
+	public static Provider<Result> getResultProvider(String systemId){
+		return new MockResult(systemId);
 
 	}
 	//generates a script with the asked fetures
@@ -104,6 +137,7 @@ class Mock   {
 			int optionInputs;
 			int optionOther;
 			int optionOutputsNA;
+			int outputPorts;
 
 			/**
 			 * Sets the inputs for this instance.
@@ -156,7 +190,7 @@ class Mock   {
 			}
 
 			public ScriptGenerator build(){
-				return new ScriptGenerator( inputs, optionOutputsFile, optionOutputsDir, optionInputs, optionOther,optionOutputsNA);
+				return new ScriptGenerator( inputs, optionOutputsFile, optionOutputsDir, optionInputs, optionOther,optionOutputsNA,outputPorts);
 			}
 
 			/**
@@ -169,6 +203,11 @@ class Mock   {
 				return this;
 			}
 
+			public Builder withOutputPorts(int outputPorts) {
+				this.outputPorts= outputPorts;
+				return this;
+			}
+
 		}
 
 		int inputs;
@@ -177,6 +216,7 @@ class Mock   {
 		int optionInputs;
 		int optionOther;
 		int optionOutputsNA;
+		int outputPorts;
 
 		/**
 		 * Constructs a new instance.
@@ -190,25 +230,31 @@ class Mock   {
 		 */
 		public ScriptGenerator(int inputs, int optionOutputsFile,
 				int optionOutputsDir, int optionInputs,
-				 int optionOther,int optionsOutputNA) {
+				 int optionOther,int optionsOutputNA,int outputPorts) {
 			this.inputs = inputs;
 			this.optionOutputsFile = optionOutputsFile;
 			this.optionOutputsDir = optionOutputsDir;
 			this.optionInputs= optionInputs;
 			this.optionOther = optionOther;
 			this.optionOutputsNA= optionsOutputNA;
+			this.outputPorts=outputPorts;
 		}
 
 
 		public XProcScript generate(){
 			Set<XProcPortInfo> inputSet= new HashSet<XProcPortInfo>(); 
+			Set<XProcPortInfo> outputSet= new HashSet<XProcPortInfo>(); 
 			Set<XProcOptionInfo> optionsSet= new HashSet<XProcOptionInfo>(); 
 			HashMap<QName,XProcOptionMetadata> optionMetadatas= new HashMap<QName,XProcOptionMetadata>(); 
+			HashMap<String,XProcPortMetadata> portMetadatas= new HashMap<String,XProcPortMetadata>(); 
 			//inputs
 			for (int i=0;i<this.inputs;i++){
 				inputSet.add(XProcPortInfo.newInputPort(getInputName(i),false, true));
 			}
 
+			for (int i=0;i<this.outputPorts;i++){
+				outputSet.add(XProcPortInfo.newOutputPort(getOutputName(i),false, true));
+			}
 			//options inputs
 			for (int i=0;i<this.optionInputs;i++){
 				QName name=getOptionInputName(i);
@@ -253,12 +299,19 @@ class Mock   {
 			for(XProcPortInfo port:inputSet){
 				pipelineBuilder.withPort(port);
 			}
-			return new XProcScript(pipelineBuilder.build(), null, null, null, null, optionMetadatas,null);
+			for(XProcPortInfo port:outputSet){
+				pipelineBuilder.withPort(port);
+				portMetadatas.put(port.getName(), new XProcPortMetadata.Builder().build());
+			}
+			return new XProcScript(pipelineBuilder.build(), null, null, null, portMetadatas, optionMetadatas,null);
 
 		}
 
 		public static String getInputName(int num){
 				return (String.format("%s-%d",INPUT,num));
+		}
+		public static String getOutputName(int num){
+				return (String.format("%s-%d",OUTPUT,num));
 		}
 		public static QName getOptionInputName(int num){
 				return new QName(String.format("%s-%s-%d",OPTION,INPUT,num));

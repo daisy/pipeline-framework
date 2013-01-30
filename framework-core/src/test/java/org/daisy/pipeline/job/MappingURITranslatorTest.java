@@ -11,11 +11,13 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import javax.xml.transform.Source;
+import javax.xml.transform.Result;
 
 import org.daisy.common.base.Provider;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
+import org.daisy.common.xproc.XProcOutput;
 
 import org.daisy.pipeline.script.XProcScript;
 
@@ -326,6 +328,141 @@ public class MappingURITranslatorTest   {
 		Assert.assertEquals(iTrans.getOptions().get(optOutDir),tmpdir.toURI().toString()+id.toString()+"/"+MappingURITranslator.IO_OUTPUT_SUBDIR+"/"+"outs");
 		Assert.assertEquals(iTrans.getOptions().get(optReg),"value");
 
+	}
+
+	@Test 
+	public void ouputPortFile() throws Exception{
+		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
+		String outName = Mock.ScriptGenerator.getOutputName(0);
+		JobId id=JobIdFactory.newId();
+
+		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("dir/file.xml")).build();
+		MappingURITranslator trans=MappingURITranslator.from(id,script,null);
+		XProcOutput translated=trans.translateOutput(outs);
+		
+		Provider<Result> res=translated.getResultProvider(outName);
+		String expected=(tmpdir.toString()+'/'+id.toString()+'/'+MappingURITranslator.IO_OUTPUT_SUBDIR+"/dir/file.xml");
+		
+		Assert.assertEquals(expected.toString(),res.provide().getSystemId());
+
+
+	}
+
+	@Test 
+	public void ouputSeqPortFiles() throws Exception{
+		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
+		String outName = Mock.ScriptGenerator.getOutputName(0);
+		JobId id=JobIdFactory.newId();
+
+		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("dir/file.xml")).build();
+		MappingURITranslator trans=MappingURITranslator.from(id,script,null);
+		XProcOutput translated=trans.translateOutput(outs);
+		
+		Provider<Result> res=translated.getResultProvider(outName);
+		String expected2=(tmpdir.toString()+'/'+id.toString()+"/"+MappingURITranslator.IO_OUTPUT_SUBDIR+"/dir/file-1.xml");
+		
+		//Assert.assertEquals(expected.toString(),res.provide().getSystemId());
+		//discard one
+		res.provide();
+		Assert.assertEquals(expected2.toString(),res.provide().getSystemId());
+
+	}
+
+	@Test 
+	public void ouputPortDir() throws Exception{
+		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
+		String outName = Mock.ScriptGenerator.getOutputName(0);
+		JobId id=JobIdFactory.newId();
+
+		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("dir/")).build();
+		MappingURITranslator trans=MappingURITranslator.from(id,script,null);
+		XProcOutput translated=trans.translateOutput(outs);
+		
+		Provider<Result> res=translated.getResultProvider(outName);
+		String expected=(tmpdir.toString()+'/'+id.toString()+"/"+MappingURITranslator.IO_OUTPUT_SUBDIR+"/dir/"+outName+".xml");
+		
+		Assert.assertEquals(expected.toString(),res.provide().getSystemId());
+	}
+
+	@Test 
+	public void ouputSeqPortDir() throws Exception{
+		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
+		String outName = Mock.ScriptGenerator.getOutputName(0);
+		JobId id=JobIdFactory.newId();
+
+		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("dir/")).build();
+		MappingURITranslator trans=MappingURITranslator.from(id,script,null);
+		XProcOutput translated=trans.translateOutput(outs);
+		
+		Provider<Result> res=translated.getResultProvider(outName);
+		String expected=(tmpdir.toString()+'/'+id.toString()+"/"+MappingURITranslator.IO_OUTPUT_SUBDIR+"/dir/"+outName+"-1.xml");
+		//discard first
+		res.provide();
+		Assert.assertEquals(expected.toString(),res.provide().getSystemId());
+	}
+
+	@Test 
+	public void ouputPortEmptyString() throws Exception{
+		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
+		String outName = Mock.ScriptGenerator.getOutputName(0);
+		JobId id=JobIdFactory.newId();
+
+		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("")).build();
+		MappingURITranslator trans=MappingURITranslator.from(id,script,null);
+		XProcOutput translated=trans.translateOutput(outs);
+		
+		Provider<Result> res=translated.getResultProvider(outName);
+		String expected=(tmpdir.toString()+'/'+id.toString()+"/"+MappingURITranslator.IO_OUTPUT_SUBDIR+"/"+outName+"/"+outName+".xml");
+		
+		Assert.assertEquals(expected.toString(),res.provide().getSystemId());
+	}
+
+	@Test 
+	public void ouputPortEmptyNull() throws Exception{
+		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
+		String outName = Mock.ScriptGenerator.getOutputName(0);
+		JobId id=JobIdFactory.newId();
+
+		XProcOutput outs = new XProcOutput.Builder().build();
+		MappingURITranslator trans=MappingURITranslator.from(id,script,null);
+		XProcOutput translated=trans.translateOutput(outs);
+		
+		Provider<Result> res=translated.getResultProvider(outName);
+		String expected=(tmpdir.toString()+'/'+id.toString()+"/"+MappingURITranslator.IO_OUTPUT_SUBDIR+"/"+outName+"/"+outName+".xml");
+		
+		Assert.assertEquals(expected.toString(),res.provide().getSystemId());
+	}
+
+	@Test 
+	public void ouputSeqPortEmptyNull() throws Exception{
+		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
+		String outName = Mock.ScriptGenerator.getOutputName(0);
+		JobId id=JobIdFactory.newId();
+
+		XProcOutput outs = new XProcOutput.Builder().build();
+		MappingURITranslator trans=MappingURITranslator.from(id,script,null);
+		XProcOutput translated=trans.translateOutput(outs);
+		
+		Provider<Result> res=translated.getResultProvider(outName);
+		String expected=(tmpdir.toString()+'/'+id.toString()+"/"+MappingURITranslator.IO_OUTPUT_SUBDIR+"/"+outName+"/"+outName+"-1.xml");
+		res.provide();	
+		Assert.assertEquals(expected.toString(),res.provide().getSystemId());
+	}
+
+	@Test 
+	public void ouputPortSeqEmptyString() throws Exception{
+		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
+		String outName = Mock.ScriptGenerator.getOutputName(0);
+		JobId id=JobIdFactory.newId();
+
+		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("")).build();
+		MappingURITranslator trans=MappingURITranslator.from(id,script,null);
+		XProcOutput translated=trans.translateOutput(outs);
+		
+		Provider<Result> res=translated.getResultProvider(outName);
+		String expected=(tmpdir.toString()+'/'+id.toString()+"/"+MappingURITranslator.IO_OUTPUT_SUBDIR+"/"+outName+"/"+outName+"-1.xml");
+		res.provide();	
+		Assert.assertEquals(expected.toString(),res.provide().getSystemId());
 	}
 
 }

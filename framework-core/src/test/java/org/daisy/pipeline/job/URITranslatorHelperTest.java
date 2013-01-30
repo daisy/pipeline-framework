@@ -138,5 +138,64 @@ public class URITranslatorHelperTest   {
 		Assert.assertEquals(Lists.newArrayList(filtered).get(1).getName(),optOutNA);
 
 	}
+	
+	@Test 
+	public void getDynamicResultProviderPartsNullProvider() throws Exception{
 
+		String outName = Mock.ScriptGenerator.getOutputName(0);
+		String[] parts= URITranslatorHelper.getDynamicResultProviderParts(outName,null,"");
+		Assert.assertEquals(outName+"/"+outName,parts[0]);
+		Assert.assertEquals(".xml",parts[1]);
+		
+	}
+	@Test 
+	public void getDynamicResultProviderPartsEmpty() throws Exception{
+
+		String outName = Mock.ScriptGenerator.getOutputName(0);
+		String[] parts= URITranslatorHelper.getDynamicResultProviderParts(outName,Mock.getResultProvider(""),"");
+		Assert.assertEquals(outName+"/"+outName,parts[0]);
+		Assert.assertEquals(".xml",parts[1]);
+		
+	}
+		
+	@Test 
+	public void getDynamicResultProviderPartsFile() throws Exception{
+
+		String outName = Mock.ScriptGenerator.getOutputName(0);
+		String[] parts= URITranslatorHelper.getDynamicResultProviderParts(outName,Mock.getResultProvider("dir/file.opf"),"");
+		Assert.assertEquals("dir/file",parts[0]);
+		Assert.assertEquals(".opf",parts[1]);
+		
+	}
+
+	@Test 
+	public void getDynamicResultProviderPartsFileNoExtension() throws Exception{
+
+		String outName = Mock.ScriptGenerator.getOutputName(0);
+		String[] parts= URITranslatorHelper.getDynamicResultProviderParts(outName,Mock.getResultProvider("dir/file"),"");
+		Assert.assertEquals("dir/file",parts[0]);
+		Assert.assertEquals("",parts[1]);
+		
+	}
+
+	@Test 
+	public void getDynamicResultProviderPartsFileNoExtensionAndDotsInPath() throws Exception{
+
+		String outName = Mock.ScriptGenerator.getOutputName(0);
+		String[] parts= URITranslatorHelper.getDynamicResultProviderParts(outName,Mock.getResultProvider("di.r/file"),"");
+		Assert.assertEquals("di.r/file",parts[0]);
+		Assert.assertEquals("",parts[1]);
+		
+	}
+
+	@Test 
+	public void getDynamicResultProviderPartsDir() throws Exception{
+
+		String outName = Mock.ScriptGenerator.getOutputName(0);
+		String[] parts= URITranslatorHelper.getDynamicResultProviderParts(outName,Mock.getResultProvider("dir/"),"");
+		Assert.assertEquals("dir/"+outName,parts[0]);
+		Assert.assertEquals(".xml",parts[1]);
+		
+	}
+	
 }

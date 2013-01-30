@@ -9,11 +9,13 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import javax.xml.transform.Source;
+import javax.xml.transform.Result;
 
 import org.daisy.common.base.Provider;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
+import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
 
 import org.daisy.pipeline.script.XProcScript;
@@ -125,6 +127,28 @@ class MappingURITranslator  implements URITranslator {
 	}
 
 	/**
+	*Output port 'result' use cases:
+	*1. relative uri ./myoutput/file.xml is allowed and resolved to ../data/../outputs/myoutput/file.xml (file-1.xml if more)
+	* in case there is no extension (myoutput/file) the outputs will be named as myoutput/file-1
+	*2. ~/myscript/ this will be resolved to ../data/../outputs/myscript/result.xml  (result-1.xml if more)
+	*3. No output provided will resolve to ../data/../outputs/result/result.xml → if more documents ../data/../outputs/result/result-1.xml
+	 */
+	@Override
+	public XProcOutput translateOutput(XProcOutput output) {
+		logger.debug(String.format("Translating outputs for script :%s",script));
+		//just make sure that any generated output gets a proper  	
+		//place to be stored, map those ports which an uri has been provided
+		//and generate a uri for those without. 
+		XProcOutput.Builder builder = new XProcOutput.Builder();
+		Iterable<XProcPortInfo> outputInfos=script.getXProcPipelineInfo().getOutputPorts();
+		for(XProcPortInfo info:outputInfos){
+			String parts[] = URITranslatorHelper.getDynamicResultProviderParts(info.getName(),output.getResultProvider(info.getName()),script.getPortMetadata(info.getName()).getMediaType());
+			String prefix = String.format("%s/%s",outputDir,parts[0]);
+			builder.withOutput(info.getName(),new DynamicResultProvider(prefix,parts[1]));
+		}
+		return builder.build();
+	}
+	/**
 	 * Resolve input ports.
 	 *
 	 * @param script the script
@@ -138,7 +162,6 @@ class MappingURITranslator  implements URITranslator {
 		Iterable<XProcPortInfo> inputInfos =script.getXProcPipelineInfo().getInputPorts();
 		//filter those ports which are null
 
-		//for (XProcPortInfo portInfo : Collections2.filter(Lists.newLinkedList(inputInfos),URITranslatorHelper.getNullPortFilter(input))) {
 		//There shouldnt be any null input port because of how the XProcPipelineInfo works
 		for (XProcPortInfo portInfo : inputInfos){
 			//number of inputs for this port
@@ -219,6 +242,7 @@ class MappingURITranslator  implements URITranslator {
 			for(XProcOptionInfo option: options){
 				String relative = input.getOptions().get(option.getName());
 				if(!URITranslatorHelper.notEmpty(relative)){
+					//get the uri from select if possible otherwise generate
 					relative=URITranslatorHelper.notEmpty(option.getSelect()) ? option.getSelect() : 
 						URITranslatorHelper.generateOptionOutput(option,script); 
 					//maybe it should be better to check all the outputs at the end?
