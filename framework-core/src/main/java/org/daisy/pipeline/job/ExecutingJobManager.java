@@ -27,13 +27,11 @@ public class ExecutingJobManager extends AbstractJobManager {
 	 * @see org.daisy.pipeline.job.DefaultJobManager#newJob(org.daisy.pipeline.script.XProcScript, org.daisy.common.xproc.XProcInput, org.daisy.pipeline.job.ResourceCollection)
 	 */
 	@Override
-	public Job newJob(JobContext ctxt) {
+	protected void onNewJob(Job job) {
 		if (executor == null) {
 			throw new IllegalStateException("Execution service unavailable");
 		}
-		Job job = super.newJob(ctxt);
 		executor.submit(job);
-		return job;
 	}
 
 	/* (non-Javadoc)
@@ -41,6 +39,7 @@ public class ExecutingJobManager extends AbstractJobManager {
 	 */
 	@Override
 	public Job deleteJob(JobId id) {
+		//FIXME: executor should be able to stop tasks
 		return super.deleteJob(id);
 	}
 

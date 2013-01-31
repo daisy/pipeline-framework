@@ -4,13 +4,22 @@ import java.net.URI;
 import java.util.Set;
 
 import org.daisy.common.xproc.XProcInput;
+import org.daisy.common.xproc.XProcOutput;
 
 import org.daisy.pipeline.script.XProcScript;
 
-public class SimpleJobContext extends AbstractJobContext{
+final class SimpleJobContext extends AbstractJobContext{
 
-	public SimpleJobContext(JobId id, XProcInput input,XProcScript script) {
-		super(id, input, script);
+	public SimpleJobContext(JobId id,XProcScript script,XProcInput input,XProcOutput output) {
+		super(id, script,input,output);
+		try{
+			translator=SimpleURITranslator.from(script);
+			setInput(translator.translateInputs(input));
+			setOutput(translator.translateOutput(output));
+
+		}catch(Exception ex){
+			throw new RuntimeException("Error while initialising the mapping context",ex);
+		}
 	}
 
 	@Override

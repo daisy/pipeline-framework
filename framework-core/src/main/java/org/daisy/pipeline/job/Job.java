@@ -44,9 +44,12 @@ public class Job {
 
 	protected Job(JobContext ctxt) {
 		this.ctxt=ctxt;
-		//this.results=new JobResult.Builder().withMessageAccessor(this.ctxt.getMonitor().getMessageAccessor()).withZipFile(null).withLogFile(null).build();
 	}
 
+	protected Job(JobContext ctxt,Status status) {
+		this.ctxt=ctxt;
+		this.status=status;
+	}
 	public static Job newJob(JobContext ctxt){
 		Job job=new Job(ctxt);
 		job.changeStatus(Status.IDLE);
@@ -70,8 +73,11 @@ public class Job {
 		return status;
 	}
 
-	
-
+	protected void setStatus(Status status){
+		synchronized(this.status){
+			this.status=status;
+		}
+	}
 	/**
 	 * Gets the ctxt for this instance.
 	 *

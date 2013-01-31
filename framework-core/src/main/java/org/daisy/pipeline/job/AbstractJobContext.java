@@ -7,6 +7,7 @@ import java.net.URI;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcMonitor;
+import org.daisy.common.xproc.XProcOutput;
 
 import org.daisy.pipeline.event.EventBusProvider;
 
@@ -26,6 +27,10 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	private static final Logger logger = LoggerFactory.getLogger(AbstractJobContext.class);
 	/** The input. */
 	protected XProcInput input;
+
+	/** The output. */
+	protected XProcOutput output;
+
 	/**Script details*/
 	protected XProcScript script;
 
@@ -40,10 +45,11 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 		
 	protected URITranslator translator; 
 
-	public AbstractJobContext(JobId id,XProcInput input,XProcScript script){
+	public AbstractJobContext(JobId id,XProcScript script,XProcInput input,XProcOutput output){
 		this.input=input;
 		this.id=id;
 		this.script=script;
+		this.output=output;
 		
 	}
 
@@ -56,6 +62,11 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	@Override
 	public XProcInput getInputs() {
 		return this.input;
+	}
+
+	@Override
+	public XProcOutput getOutputs() {
+		return this.output;
 	}
 
 	@Override
@@ -89,6 +100,16 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	 */
 	protected void setInput(XProcInput input) {
 		this.input = input;
+	}
+
+	/**
+	 * Sets the output for this instance.
+	 *
+	 * @param output The output.
+	 */
+	protected void setOutput(XProcOutput output)
+	{
+		this.output = output;
 	}
 
 	@Override

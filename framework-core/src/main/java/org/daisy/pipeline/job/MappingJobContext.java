@@ -6,23 +6,23 @@ import java.net.URI;
 import java.util.Set;
 
 import org.daisy.common.xproc.XProcInput;
+import org.daisy.common.xproc.XProcOutput;
 
 import org.daisy.pipeline.script.XProcScript;
 
-class MappingJobContext extends AbstractJobContext {
+final class MappingJobContext extends AbstractJobContext {
 
 	URITranslator translator;
-	public MappingJobContext(JobId id, XProcInput input,XProcScript script,ResourceCollection collection) {
-		super(id, input, script);
+	public MappingJobContext(JobId id, XProcScript script,XProcInput input,XProcOutput output,ResourceCollection collection) {
+		super(id, script,input,output);
 		try{
 			translator=MappingURITranslator.from(id,script,collection);
 			setInput(translator.translateInputs(input));
+			setOutput(translator.translateOutput(output));
 
 		}catch(IOException ex){
-			throw new RuntimeException("Error while initialising the context",ex);
+			throw new RuntimeException("Error while initialising the mapping context",ex);
 		}
-
-
 	}
 
 	@Override

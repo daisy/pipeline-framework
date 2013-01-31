@@ -4,6 +4,7 @@ import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
 
 import org.daisy.common.xproc.XProcInput;
+import org.daisy.common.xproc.XProcOutput;
 
 import org.daisy.pipeline.event.EventBusProvider;
 
@@ -24,6 +25,8 @@ import org.slf4j.LoggerFactory;
  * using the public constructor but all the changes will be performed over the 
  * static instance
  *
+ * 
+ *
  */
 public final class JobContextFactory {
 	private static final Logger logger = LoggerFactory.getLogger(JobContextFactory.class);
@@ -40,35 +43,45 @@ public final class JobContextFactory {
 	public static JobContextFactory getInstance(){
 		return INSTANCE;
 	}
-	public static JobContext newMappingJobContext(XProcInput input,XProcScript script,ResourceCollection collection){
+	public static JobContext newMappingJobContext(XProcScript script,XProcInput input,XProcOutput output,ResourceCollection collection){
 		JobId id = JobIdFactory.newId();
-		AbstractJobContext ctxt=new MappingJobContext(id,input,script,collection);
-		INSTANCE.configure(ctxt);
+		AbstractJobContext ctxt=new MappingJobContext(id,script,input,output,collection);
+		synchronized(INSTANCE){
+			INSTANCE.configure(ctxt);
+		}
 		return ctxt;
 
 	}
 
-	public static JobContext newMappingJobContext(XProcInput input,XProcScript script){
+	public static JobContext newMappingJobContext(XProcScript script,XProcInput input,XProcOutput output){
 		JobId id = JobIdFactory.newId();
-		AbstractJobContext ctxt=new MappingJobContext(id,input,script,null);
-		INSTANCE.configure(ctxt);
+		AbstractJobContext ctxt=new MappingJobContext(id,script,input,output,null);
+		synchronized(INSTANCE){
+			INSTANCE.configure(ctxt);
+		}
 		return ctxt;
 
 	}
-	public static JobContext newJobContext(XProcInput input,XProcScript script){
+	public static JobContext newJobContext(XProcScript script,XProcInput input,XProcOutput output){
 		JobId id = JobIdFactory.newId();
-		AbstractJobContext ctxt=new SimpleJobContext(id,input,script);
-		INSTANCE.configure(ctxt);
+		AbstractJobContext ctxt=new SimpleJobContext(id,script,input,output);
+		synchronized(INSTANCE){
+			INSTANCE.configure(ctxt);
+		}
 		return ctxt;
 
 	}
 	public void setJobMonitorFactory(JobMonitorFactory monitorFactory){
-		logger.debug("setting monitor factory");
-		INSTANCE.monitorFactory=monitorFactory;
+		synchronized(INSTANCE){
+			logger.debug("setting monitor factory");
+			INSTANCE.monitorFactory=monitorFactory;
+		}
 	}
 	public void setEventBusProvider(EventBusProvider eventbusProvider){
-		logger.debug("setting even bus factory");
-		INSTANCE.eventbusProvider=eventbusProvider;
+		synchronized(INSTANCE){
+			logger.debug("setting even bus factory");
+			INSTANCE.eventbusProvider=eventbusProvider;
+		}
 	}
 
 	//FIXME: probably move these two methods somewhere else, maybe a dummy class for the framework just tu publish this.
@@ -94,10 +107,13 @@ public final class JobContextFactory {
 		logger.debug(String.format("configuring object %s",runtimeObj));
 		logger.debug(String.format("configuring with bus factory %s",INSTANCE.eventbusProvider));
 		logger.debug(String.format("configuring with monitor factory %s",INSTANCE.monitorFactory));
-		if (INSTANCE.eventbusProvider!=null)
-			runtimeObj.setEventBusProvider(INSTANCE.eventbusProvider);
-		
-		if(INSTANCE.monitorFactory!=null)
-			runtimeObj.setMonitorFactory(INSTANCE.monitorFactory);
+		synchronized(INSTANCE){
+			if (INSTANCE.eventbusProvider!=null)
+				runtimeObj.setEventBusProvider(INSTANCE.eventbusProvider);
+
+			if(INSTANCE.monitorFactory!=null)
+				runtimeObj.setMonitorFactory(INSTANCE.monitorFactory);
+		}
+
 	}
 }
