@@ -57,7 +57,7 @@ public final class JobContextFactory {
 	}
 	public static JobContext newJobContext(XProcInput input,XProcScript script){
 		JobId id = JobIdFactory.newId();
-		AbstractJobContext ctxt=new LocalJobContext(id,input,script);
+		AbstractJobContext ctxt=new SimpleJobContext(id,input,script);
 		INSTANCE.configure(ctxt);
 		return ctxt;
 

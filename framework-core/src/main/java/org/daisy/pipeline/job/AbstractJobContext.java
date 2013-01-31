@@ -39,6 +39,7 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	protected URI logFile;
 		
 	protected URITranslator translator; 
+
 	public AbstractJobContext(JobId id,XProcInput input,XProcScript script){
 		this.input=input;
 		this.id=id;
