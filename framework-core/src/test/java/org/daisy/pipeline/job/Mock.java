@@ -20,11 +20,10 @@ import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
-import org.daisy.pipeline.script.XProcScript;
 
 class Mock   {
 	public static JobContext mockContext(JobId id){
-		return new AbstractJobContext(id,null,null){
+		return new AbstractJobContext(id,null,null,null){
 			@Override
 			public void writeXProcResult() {
 			}

@@ -75,7 +75,7 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 	List<PersistentParameter> parameters= new ArrayList<PersistentParameter>();
 
 	public PersistentJobContext(JobContext ctxt) {
-		super(ctxt.getId(),ctxt.getInputs(),ctxt.getScript());
+		super(ctxt.getId(),ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs());
 		this.sId=ctxt.getId().toString();
 
 		if (ctxt.getLogFile()==null)
@@ -91,7 +91,7 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 	 * Constructs a new instance.
 	 */
 	public PersistentJobContext() {
-		super(null,null,null);
+		super(null,null,null,null);
 	}
 
 	@PrePersist

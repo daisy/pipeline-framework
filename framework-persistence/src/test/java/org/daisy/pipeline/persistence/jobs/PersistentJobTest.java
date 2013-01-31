@@ -42,7 +42,7 @@ public class PersistentJobTest   {
 		PersistentJob pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
 		pjob.setDatabase(db);
 
-		pjob.setStatus(Job.Status.DONE);
+		pjob.onStatusChanged(Job.Status.DONE);
 
 		pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
 		Assert.assertEquals(pjob.getStatus(),Job.Status.DONE);

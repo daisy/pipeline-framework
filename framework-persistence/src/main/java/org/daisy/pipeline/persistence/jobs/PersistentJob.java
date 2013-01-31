@@ -21,8 +21,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.JobContext;
 
 import org.daisy.pipeline.persistence.Database;
 
@@ -54,14 +52,12 @@ public class PersistentJob  extends Job implements Serializable {
 	@Transient
 	Database db=null;
 	public PersistentJob(Job job,Database db) {
-		super(new PersistentJobContext(job.getContext()));
-		this.status=job.getStatus();
+		super(new PersistentJobContext(job.getContext()),job.getStatus());
 		this.db=db;
 	}
 
 	public PersistentJob(PersistentJob job,Database db) {
-		super(job.getContext());
-		this.status=job.getStatus();
+		super(job.getContext(),job.getStatus());
 		this.db=db;
 	}
 
@@ -86,7 +82,7 @@ public class PersistentJob  extends Job implements Serializable {
 	@PostLoad
 	public void postCallback(){
 		this.ctxt=this.pCtxt;
-		this.status=this.currentStatus;
+		this.setStatus(this.currentStatus);
 	}
 
 	//public static Iterable<JobId> getAllJobIds(Database db){
@@ -107,7 +103,7 @@ public class PersistentJob  extends Job implements Serializable {
 	}
 	//this will watch for changes in the status and update the db
 	@Override
-	protected void onStatusChanged(Job.Status to) {
+	protected synchronized void onStatusChanged(Job.Status to) {
 		this.currentStatus=to;
 		if(this.db!=null)
 			db.updateObject(this);
@@ -118,8 +114,5 @@ public class PersistentJob  extends Job implements Serializable {
 		this.db=db;
 	}
 
-	final void setStatus(Status st){
-		super.changeStatus(st);
-	}
 
 }

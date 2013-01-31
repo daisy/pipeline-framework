@@ -112,7 +112,7 @@ public class Mocks   {
 		XProcInput input= new XProcInput.Builder().withInput("source",new Mocks.SimpleSourceProvider(file1)).withInput("source", new Mocks.SimpleSourceProvider(file2)).withOption(opt1Qname,value1).withOption(opt2Qname,value2).withParameter(paramPort,new QName(qparam),paramVal).build();
 		
 		JobId id = JobIdFactory.newId();
-		AbstractJobContext base= new AbstractJobContext(id,input,script){ 
+		AbstractJobContext base= new AbstractJobContext(id,script,input,null){ 
 				
 			public URI getLogFile(){
 				return URI.create(testLogFile);
