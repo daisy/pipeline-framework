@@ -50,3 +50,7 @@ syntax: regexp
 
 #coverage files
 (^|/)coverage.ec
+
+#vim local configuration
+.vimrc
+
