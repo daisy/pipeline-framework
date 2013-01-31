@@ -23,6 +23,7 @@ import org.daisy.common.base.Provider;
 import org.daisy.common.transform.LazySaxSourceProvider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
+import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;
@@ -321,18 +322,20 @@ public class JobsResource extends AuthenticatedResource {
 			return null;
 		}
 		XProcScript script = unfilteredScript.load();
-		XProcInput.Builder builder = new XProcInput.Builder(script.getXProcPipelineInfo());
+		XProcInput.Builder inBuilder = new XProcInput.Builder();
+		XProcOutput.Builder outBuilder = new XProcOutput.Builder();
 
-		addInputsToJob(doc.getElementsByTagName("input"), script.getXProcPipelineInfo().getInputPorts(), builder);
+		addInputsToJob(doc.getElementsByTagName("input"), script.getXProcPipelineInfo().getInputPorts(), inBuilder);
 
 		/*Iterable<XProcOptionInfo> filteredOptions = null;
 		  if (!((PipelineWebService) getApplication()).isLocal()) {
 		  filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
 		  }*/
 
-		addOptionsToJob(doc.getElementsByTagName("option"), script, builder);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
+		addOptionsToJob(doc.getElementsByTagName("option"), script, inBuilder);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
 
-		XProcInput input = builder.build();
+		XProcInput input = inBuilder.build();
+		XProcOutput output = outBuilder.build();
 
 		JobManager jobMan = webservice().getJobManager();
 		JobContext ctxt=null;
@@ -341,9 +344,10 @@ public class JobsResource extends AuthenticatedResource {
 			resourceCollection = new ZipResourceContext(zip);
 		}
 		if(webservice().getConfiguration().isLocal()){
-			ctxt=webservice().getJobContextFactory().newJobContext(input,script);	
+			ctxt=webservice().getJobContextFactory().newJobContext(script,input,output);	
+
 		}else{
-			ctxt=webservice().getJobContextFactory().newMappingJobContext(input,script,resourceCollection);
+			ctxt=webservice().getJobContextFactory().newMappingJobContext(script,input,output,resourceCollection);
 		}
 		Job job = jobMan.newJob(ctxt);
 
