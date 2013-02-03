@@ -122,7 +122,7 @@ public class Job {
 		try{
 			Properties props=new Properties();
 			props.setProperty("JOB_ID", this.ctxt.getId().toString());
-			pipeline.run(this.ctxt.getInputs(),this.ctxt.getMonitor(),props);
+			XProcResult results = pipeline.run(this.ctxt.getInputs(),this.ctxt.getMonitor(),props);
 			buildResults();
 			changeStatus( Status.DONE );
 		}catch(Exception e){

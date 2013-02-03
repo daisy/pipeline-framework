@@ -1,17 +1,24 @@
 package org.daisy.pipeline.job;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import org.daisy.common.base.Provider;
 import javax.xml.transform.Result;
+
+import com.google.common.collect.Lists;
 
 /**
  * This class is not thread-safe if several threads are generating results at the same time.
  * not that likely use case
  */
-public class DynamicResultProvider implements Provider<Result>{
+public final class DynamicResultProvider implements Provider<Result>{
 
 	private final String prefix;
 	private final String suffix;
 	private int count=0;
+	private final List<Result> providedResults= Lists.newLinkedList();
 
 	public DynamicResultProvider(String prefix,String suffix){
 		this.prefix=prefix;
@@ -30,8 +37,14 @@ public class DynamicResultProvider implements Provider<Result>{
 			sysId=String.format("%s-%d%s",prefix,count,suffix);
 		}
 		count++;
-		return new DynamicResult(sysId);
+		DynamicResult res= new DynamicResult(sysId);
+		this.providedResults.add(res);
+		return res;
 			
+	}
+
+	public Collection<Result> providedResults(){
+		return Collections.unmodifiableCollection(this.providedResults);	
 	}
 
 	private static class DynamicResult implements Result{

@@ -1,6 +1,5 @@
 package org.daisy.pipeline.job;
 
-import java.net.URI;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,25 +22,8 @@ import org.daisy.pipeline.script.XProcScript;
 
 class Mock   {
 	public static JobContext mockContext(JobId id){
-		return new AbstractJobContext(id,null,null,null){
-			@Override
-			public void writeXProcResult() {
-			}
+		return new AbstractJobContext(id,null,null,null,null){
 
-			@Override
-			public Set<URI> getFiles() {
-				return null;
-			}
-
-			@Override
-			public URI getZip() {
-				return null;
-			}
-
-			@Override
-			public URI toZip(URI... files) {
-				return null;
-			}
 
 		};
 	}
@@ -259,14 +241,14 @@ class Mock   {
 				QName name=getOptionInputName(i);
 				optionsSet.add( XProcOptionInfo.newOption(name, false, ""));
 				optionMetadatas.put(name,new XProcOptionMetadata.Builder()
-				.withType(MappingURITranslator.TranslatableOption.ANY_FILE_URI.toString()).build());
+				.withType(XProcDecorator.TranslatableOption.ANY_FILE_URI.toString()).build());
 			}
 			//options output file
 			for (int i=0;i<this.optionOutputsFile;i++){
 				QName name= getOptionOutputFileName(i);
 				optionsSet.add( XProcOptionInfo.newOption(name, false, ""));
 				optionMetadatas.put(name,new XProcOptionMetadata.Builder()
-				.withType(MappingURITranslator.TranslatableOption.ANY_FILE_URI.toString()).withOutput("result").build());
+				.withType(XProcDecorator.TranslatableOption.ANY_FILE_URI.toString()).withOutput("result").build());
 			}
 
 			//options output file
@@ -274,7 +256,7 @@ class Mock   {
 				QName name= getOptionOutputDirName(i);
 				optionsSet.add( XProcOptionInfo.newOption(name, false, ""));
 				optionMetadatas.put(name,new XProcOptionMetadata.Builder()
-				.withType(MappingURITranslator.TranslatableOption.ANY_DIR_URI.toString()).withOutput("result").build());
+				.withType(XProcDecorator.TranslatableOption.ANY_DIR_URI.toString()).withOutput("result").build());
 			}
 
 			//options output file
@@ -282,7 +264,7 @@ class Mock   {
 				QName name= getOptionOutputNAName(i);
 				optionsSet.add( XProcOptionInfo.newOption(name, false, ""));
 				optionMetadatas.put(name,new XProcOptionMetadata.Builder()
-				.withType(MappingURITranslator.TranslatableOption.ANY_DIR_URI.toString()).withOutput("NA").build());
+				.withType(XProcDecorator.TranslatableOption.ANY_DIR_URI.toString()).withOutput("NA").build());
 			}
 			//regular options 
 			for (int i=0;i<this.optionOther;i++){

@@ -32,7 +32,7 @@ final class URITranslatorHelper   {
 	public static final Predicate<XProcOptionInfo> getTranslatableOptionFilter(final XProcScript script){
 		return  new Predicate<XProcOptionInfo>(){
 			public boolean apply(XProcOptionInfo optionInfo){
-				return (MappingURITranslator.TranslatableOption.contains(script.getOptionMetadata(
+				return (XProcDecorator.TranslatableOption.contains(script.getOptionMetadata(
 					optionInfo.getName()).getType()));
 			}
 		};

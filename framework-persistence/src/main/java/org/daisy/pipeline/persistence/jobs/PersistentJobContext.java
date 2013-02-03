@@ -229,11 +229,6 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 		this.monitor=factory.newJobMonitor(this.getId());	
 	}
 
-	@Override
-	public void writeXProcResult() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public Set<URI> getFiles() {

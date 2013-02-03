@@ -80,10 +80,10 @@ public class IOHelper {
 	 * @param context the context
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	static void dump(ResourceCollection resources,File contextDir) throws IOException {
+	static void dump(ResourceCollection resources,URIMapper mapper) throws IOException {
 		for (String path : resources.getNames()) {
-			IOHelper.dump(resources.getResource(path).provide(), contextDir
-					.toURI(), URI.create(path.replace("\\", "/")));
+			IOHelper.dump(resources.getResource(path).provide(),mapper.getInputBase() 
+					, URI.create(path.replace("\\", "/")));
 		}
 	}
 
@@ -112,7 +112,7 @@ public class IOHelper {
 	 * @return the string
 	 */
 	public static String generateOutput(String name, String type, String mediaType) {
-		if(type.equals(MappingURITranslator.TranslatableOption.ANY_DIR_URI.getName())){
+		if(type.equals(XProcDecorator.TranslatableOption.ANY_DIR_URI.getName())){
 			return name+SLASH;
 		}else{
 			return name+".xml";

@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 public class Results extends Result {
 	//Composite children
-	private LinkedList< Result> children;
+	private LinkedList<Result> children;
 
 	public Results(String name, String idx,String mimeType) {
 		super(name,idx,mimeType);
@@ -26,7 +26,6 @@ public class Results extends Result {
 
 	@Override
 	public InputStream getInputStream() {
-		//TODO: Build zipfile with all the entries
 		return null;
 	}
 }

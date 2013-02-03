@@ -8,6 +8,7 @@ import java.net.URI;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOutput;
+import org.daisy.common.xproc.XProcResult;
 
 import org.daisy.pipeline.event.EventBusProvider;
 
@@ -26,30 +27,34 @@ import com.google.common.eventbus.EventBus;
 public abstract class AbstractJobContext implements JobContext,RuntimeConfigurable{
 	private static final Logger logger = LoggerFactory.getLogger(AbstractJobContext.class);
 	/** The input. */
-	protected XProcInput input;
+	private XProcInput input;
 
 	/** The output. */
-	protected XProcOutput output;
+	private XProcOutput output;
 
 	/**Script details*/
-	protected XProcScript script;
+	private XProcScript script;
 
-	protected JobId id;
+	private JobId id;
 	/** bus */
-	protected EventBus bus;
+	private EventBus bus;
 
 	/** monitor */
-	protected XProcMonitor monitor;
+	private XProcMonitor monitor;
 
-	protected URI logFile;
+	private URI logFile;
+
+	private URIMapper mapper;  
+
+	private ResultSet results;
 		
-	protected URITranslator translator; 
 
-	public AbstractJobContext(JobId id,XProcScript script,XProcInput input,XProcOutput output){
+	public AbstractJobContext(JobId id,XProcScript script,XProcInput input,XProcOutput output,URIMapper mapper){
 		this.input=input;
 		this.id=id;
 		this.script=script;
 		this.output=output;
+		this.mapper=mapper;
 		
 	}
 
@@ -69,9 +74,30 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 		return this.output;
 	}
 
+
 	@Override
 	public URI getLogFile() {
 		return this.logFile;
+	}
+
+
+
+	/**
+	 * Gets the mapper for this instance.
+	 *
+	 * @return The mapper.
+	 */
+	protected URIMapper getMapper() {
+		return this.mapper;
+	}
+
+	/**
+	 * Sets the mapper for this instance.
+	 *
+	 * @param mapper The mapper.
+	 */
+	protected void setMapper(URIMapper mapper) {
+		this.mapper = mapper;
 	}
 
 	/**
@@ -132,6 +158,11 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	}
 
 	@Override
+	public ResultSet getResults() {
+		return this.results;
+	}
+
+	@Override
 	public void setEventBusProvider(EventBusProvider eventBusProvider) {
 		this.bus=eventBusProvider.get();
 	}
@@ -141,5 +172,12 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 		this.monitor=monitor.newJobMonitor(this.id);
 		logger.debug(String.format("New monitor set to %s for %s",this.monitor,this));
 	}
+
+	@Override
+	public void writeXProcResult(XProcResult result) {
+		this.results=ResultSetFactory.newResultSet(result,this,this.mapper);
+				
+	}
+
 
 }
