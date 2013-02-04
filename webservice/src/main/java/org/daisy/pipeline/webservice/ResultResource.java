@@ -3,17 +3,21 @@ package org.daisy.pipeline.webservice;
 import java.io.File;
 import java.net.URI;
 
+import java.util.Collection;
+
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobResult;
+import org.daisy.pipeline.job.ResultSet;
 
 import org.restlet.data.Disposition;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 
 import org.restlet.representation.FileRepresentation;
+import org.restlet.representation.InputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.slf4j.Logger;
@@ -72,23 +76,22 @@ public class ResultResource extends AuthenticatedResource {
 			return this.getErrorRepresentation("Job status differnt to DONE");
 		}
 
-		JobResult result = job.getResult();
-		URI zip = result.getZip();
-		// TODO check for errors instead of looking at null-ness of zip
-		// although, does the presence of errors indicate that the result is not
-		// available?
-		if (zip == null) {
+		Collection<JobResult> results = job.getContext().getResults().getResults();
+		if (results.size() == 0) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-			return this.getErrorRepresentation("Zip file not found");
+			return this.getErrorRepresentation("No results available");
 		}
-		logger.debug("Zip file :"+zip);
-		File zipFile = new File(zip);
-		Representation rep = new FileRepresentation(zipFile,
-				MediaType.APPLICATION_ZIP);
-		Disposition disposition = new Disposition();
-		disposition.setFilename(job.getId().toString() + ".zip");
-		disposition.setType(Disposition.TYPE_ATTACHMENT);
-		rep.setDisposition(disposition);
-		return rep;
+		try{
+			Representation rep = new InputRepresentation(ResultSet.asZip(results),
+					MediaType.APPLICATION_ZIP);
+			Disposition disposition = new Disposition();
+			disposition.setFilename(job.getId().toString() + ".zip");
+			disposition.setType(Disposition.TYPE_ATTACHMENT);
+			rep.setDisposition(disposition);
+			return rep;
+		}catch(Exception e){
+				setStatus(Status.SERVER_ERROR_INTERNAL);
+				return this.getErrorRepresentation(e);
+		}
 	}
 }
