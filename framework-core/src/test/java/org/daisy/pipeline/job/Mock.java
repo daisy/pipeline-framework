@@ -1,5 +1,9 @@
 package org.daisy.pipeline.job;
 
+import java.io.File;
+import java.io.IOException;
+
+import java.net.URI;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -312,6 +316,15 @@ class Mock   {
 		public static QName getOptionOutputNAName(int num){
 				return new QName(String.format("%s-na-%d",OPTION,num));
 		}
+	}
+
+	public static void populateDir(String dir) throws IOException{
+		File fdir= new File(URI.create(dir));
+		fdir.mkdirs();
+		assert(fdir.isDirectory());
+		(new File(fdir,"uno.xml")).createNewFile();
+		(new File(fdir,"dos.xml")).createNewFile();
+		(new File(fdir,"tres.xml")).createNewFile();
 	}
 
 
