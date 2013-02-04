@@ -74,8 +74,8 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 	//@JoinColumn(name="job_id",referencedColumnName="job_id")
 	List<PersistentParameter> parameters= new ArrayList<PersistentParameter>();
 
-	public PersistentJobContext(JobContext ctxt) {
-		super(ctxt.getId(),ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs());
+	public PersistentJobContext(AbstractJobContext ctxt) {
+		super(ctxt.getId(),ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs(),ctxt.getMapper());
 		this.sId=ctxt.getId().toString();
 
 		if (ctxt.getLogFile()==null)
@@ -91,7 +91,7 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 	 * Constructs a new instance.
 	 */
 	public PersistentJobContext() {
-		super(null,null,null,null);
+		super(null,null,null,null,null);
 	}
 
 	@PrePersist
@@ -143,9 +143,6 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 
 // Getters and setters
 
-	public void setScript(XProcScript script){
-		this.script=script;
-	}
 
 	/**
 	 * Gets the id for this instance.
@@ -219,33 +216,5 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 		this.input = input;
 	}
 
-	@Override
-	public void setEventBusProvider(EventBusProvider eventBusProvider) {
-		this.bus=eventBusProvider.get();	
-	}
-
-	@Override
-	public void setMonitorFactory(JobMonitorFactory factory) {
-		this.monitor=factory.newJobMonitor(this.getId());	
-	}
-
-
-	@Override
-	public Set<URI> getFiles() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public URI getZip() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public URI toZip(URI... files) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 		
 }

@@ -112,31 +112,12 @@ public class Mocks   {
 		XProcInput input= new XProcInput.Builder().withInput("source",new Mocks.SimpleSourceProvider(file1)).withInput("source", new Mocks.SimpleSourceProvider(file2)).withOption(opt1Qname,value1).withOption(opt2Qname,value2).withParameter(paramPort,new QName(qparam),paramVal).build();
 		
 		JobId id = JobIdFactory.newId();
-		AbstractJobContext base= new AbstractJobContext(id,script,input,null){ 
+		AbstractJobContext base= new AbstractJobContext(id,script,input,null,null){ 
 				
 			public URI getLogFile(){
 				return URI.create(testLogFile);
 			}
 
-			@Override
-			public void writeXProcResult() {
-				
-			}
-
-			@Override
-			public Set<URI> getFiles() {
-				return null;
-			}
-
-			@Override
-			public URI getZip() {
-				return null;
-			}
-
-			@Override
-			public URI toZip(URI... files) {
-				return null;
-			}
 		};
 		return base;
 	}

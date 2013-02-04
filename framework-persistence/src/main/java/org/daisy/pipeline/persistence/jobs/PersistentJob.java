@@ -20,6 +20,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
 
 import org.daisy.pipeline.persistence.Database;
@@ -52,7 +53,7 @@ public class PersistentJob  extends Job implements Serializable {
 	@Transient
 	Database db=null;
 	public PersistentJob(Job job,Database db) {
-		super(new PersistentJobContext(job.getContext()),job.getStatus());
+		super(new PersistentJobContext((AbstractJobContext)job.getContext()),job.getStatus());
 		this.db=db;
 	}
 
