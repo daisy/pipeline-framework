@@ -55,6 +55,7 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 		this.script=script;
 		this.output=output;
 		this.mapper=mapper;
+		this.results=new ResultSet.Builder().build();
 		
 	}
 
@@ -87,7 +88,7 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	 *
 	 * @return The mapper.
 	 */
-	protected URIMapper getMapper() {
+	public URIMapper getMapper() {
 		return this.mapper;
 	}
 
@@ -96,8 +97,17 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	 *
 	 * @param mapper The mapper.
 	 */
-	protected void setMapper(URIMapper mapper) {
+	public void setMapper(URIMapper mapper) {
 		this.mapper = mapper;
+	}
+
+	/**
+	 * Sets the results for this instance.
+	 *
+	 * @param results The results.
+	 */
+	public void setResults(ResultSet results) {
+		this.results = results;
 	}
 
 	/**
@@ -174,8 +184,9 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	}
 
 	@Override
-	public void writeXProcResult(XProcResult result) {
-		this.results=ResultSetFactory.newResultSet(result,this,this.mapper);
+	public void writeResult(XProcResult result) {
+		result.writeTo(this.output);
+		this.results=ResultSetFactory.newResultSet(this,this.mapper);
 				
 	}
 

@@ -1,12 +1,31 @@
 package org.daisy.common.xproc.calabash;
 
+import java.io.File;
+import java.io.IOException;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
+
+import javax.xml.transform.Result;
+
+import javax.xml.transform.stream.StreamResult;
+
+import org.daisy.common.base.Provider;
+
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
 
 import com.xmlcalabash.core.XProcConfiguration;
+
+import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.runtime.XPipeline;
 
-// TODO: Auto-generated Javadoc
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.Serializer;
+
 /**
  * Implementation of the XProcResult interface
  */
@@ -51,8 +70,6 @@ public final class CalabashXProcResult implements XProcResult {
 	 */
 	@Override
 	public void writeTo(XProcOutput output) {
-		throw new IllegalStateException("Not supported");
-		/**
 		for (String port : xpipeline.getOutputs()) {
 
 			Provider<Result> resultProvider = output.getResultProvider(port);
@@ -70,8 +87,7 @@ public final class CalabashXProcResult implements XProcResult {
 					try {
 						uri = new URI(result.getSystemId());
 					} catch (URISyntaxException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						throw new RuntimeException(String.format("Malformed uri while writing results: %s",result.getSystemId()),e);
 					}
 					if ("file".equals(uri.getScheme())) {
 						serializer.setOutputFile(new File(uri));
@@ -83,28 +99,21 @@ public final class CalabashXProcResult implements XProcResult {
 							conn.setDoOutput(true);
 							serializer.setOutputStream(conn.getOutputStream());
 						} catch (MalformedURLException e) {
-							// TODO add utils with RuntimException
-							e.printStackTrace();
+							throw new RuntimeException(String.format("Malformed url while writing results: %s",uri),e);
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							throw new RuntimeException("IOError caught when writing results",e);
 						}
 					}
 				}
 				try {
 					serializer.serializeNode(rpipe.read());
 				} catch (SaxonApiException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					throw new RuntimeException("Error caught when writing results",e);
 				}
 			}
 		}
-		*/
 	}
 
-	/* (non-Javadoc)
-	 * @see org.daisy.common.xproc.XProcResult#getMessages()
-	 */
 
 
 }

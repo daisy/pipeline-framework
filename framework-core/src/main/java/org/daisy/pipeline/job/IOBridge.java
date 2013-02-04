@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashSet;
-import java.util.List;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
@@ -268,18 +267,18 @@ public class IOBridge {
 	 *
 	 * @return the uRI
 	 */
-	public URI zipOutput(){
-		if (isLocal()) {
-			return mOutputDir.toURI();
-		}
-		List<File> files = IOHelper.treeFileList(mOutputDir);
-		try {
-			URI zipFile = IOHelper.zipFromEntries(files,new File(mBaseDir,"results.zip"),mOutputDir.getAbsolutePath()+File.separator);
-			return zipFile;
-		} catch (Exception e) {
-			throw new RuntimeException("Error while building zip file with the results:"+e.getMessage(),e);
-		}
-	}
+	//public URI zipOutput(){
+		//if (isLocal()) {
+			//return mOutputDir.toURI();
+		//}
+		//List<File> files = IOHelper.treeFileList(mOutputDir);
+		//try {
+			//URI zipFile = IOHelper.zipFromEntries(files,new File(mBaseDir,"results.zip"),mOutputDir.getAbsolutePath()+File.separator);
+			//return zipFile;
+		//} catch (Exception e) {
+			//throw new RuntimeException("Error while building zip file with the results:"+e.getMessage(),e);
+		//}
+	//}
 
 	/**
 	 * Gets the log file.

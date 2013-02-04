@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -126,15 +125,20 @@ public class IOHelper {
 	 * @param base the base
 	 * @return the list
 	 */
-	public static List<File> treeFileList(File base) {
-		LinkedList<File> result= new LinkedList<File>();
-		for(File f:base.listFiles()){
-			if(f.isDirectory()){
-				result.addAll(treeFileList(f));
-			}else{
-				result.add(f);
+	public static List<URI> treeFileList(URI uriBase) {
+		File base=new File(uriBase);	
+		
+		LinkedList<URI> result= new LinkedList<URI>();
+		File[] fList=base.listFiles();
+		if (fList!=null) 
+			for(File f:base.listFiles()){
+				if(f.isDirectory()){
+					result.addAll(treeFileList(f.toURI()));
+				}else{
+					result.add(f.toURI());
+				}
 			}
-		}
+
 		return result;
 	}
 
@@ -165,12 +169,14 @@ public class IOHelper {
 
 	public static boolean deleteDir(File parent){
 		logger.debug("Deleting directory:"+parent);
-		for( File f: parent.listFiles()){
-			if (f.isDirectory()){
-				IOHelper.deleteDir(f);
+		File[] fList=parent.listFiles();
+		if (fList!=null)
+			for( File f: parent.listFiles()){
+				if (f.isDirectory()){
+					IOHelper.deleteDir(f);
+				}
+				f.delete();
 			}
-			f.delete();
-		}
 		return parent.delete();
 	}
 }

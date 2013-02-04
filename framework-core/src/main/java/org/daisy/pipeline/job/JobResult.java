@@ -2,7 +2,6 @@ package org.daisy.pipeline.job;
 
 import java.net.URI;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class JobResult.
  */
@@ -10,7 +9,7 @@ public class JobResult {
 
 	static class Builder{
 		private String idx;
-		private URI uri;
+		private URI path;
 		private String mediaType;
 
 		/**
@@ -30,12 +29,12 @@ public class JobResult {
 		}
 
 		/**
-		 * Sets the uri for this instance.
+		 * Sets the path for this instance.
 		 *
-		 * @param uri The uri.
+		 * @param path The path.
 		 */
-		public Builder withUri(URI uri) {
-			this.uri = uri;
+		public Builder withPath(URI path) {
+			this.path = path;
 			return this;
 		}
 
@@ -50,15 +49,15 @@ public class JobResult {
 		}
 		
 		public JobResult build(){
-			return new  JobResult(this.idx,this.uri,this.mediaType);
+			return new  JobResult(this.idx,this.path,this.mediaType);
 		}
 	}
 
 	//short index for the result 
 	private String idx;
 
-	// uri to the actual file
-	private URI uri;
+	// path to the actual file
+	private URI path;
 
 	//media type
 	private String mediaType;
@@ -67,12 +66,12 @@ public class JobResult {
 	 * Constructs a new instance.
 	 *
 	 * @param idx The idx for this instance.
-	 * @param uri The uri for this instance.
+	 * @param path The path for this instance.
 	 * @param mediaType The mediaType for this instance.
 	 */
-	public JobResult(String idx, URI uri, String mediaType) {
+	public JobResult(String idx, URI path, String mediaType) {
 		this.idx = idx;
-		this.uri = uri;
+		this.path = path;
 		this.mediaType = mediaType;
 	}
 
@@ -86,12 +85,12 @@ public class JobResult {
 	}
 
 	/**
-	 * Gets the uri for this instance.
+	 * Gets the path for this instance.
 	 *
-	 * @return The uri.
+	 * @return The path.
 	 */
-	public URI getUri() {
-		return this.uri;
+	public URI getPath() {
+		return this.path;
 	}
 
 	/**

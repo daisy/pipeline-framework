@@ -2,7 +2,6 @@ package org.daisy.pipeline.job;
 
 import java.net.URI;
 
-import java.util.Set;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcMonitor;
@@ -16,7 +15,7 @@ import com.google.common.eventbus.EventBus;
 public interface JobContext{
 	public XProcInput getInputs() ;
 	public XProcOutput getOutputs();
-	void writeXProcResult(XProcResult result) ;
+	void writeResult(XProcResult result) ;
 	public URI getLogFile() ;
 	public XProcMonitor getMonitor() ;
 	public EventBus getEventBus() ;

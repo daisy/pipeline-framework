@@ -33,9 +33,6 @@ public class Job {
 	}
 
 
-	/** The results. */
-	private JobResult results;
-
 	/** The status. */
 	private volatile Status status = Status.IDLE;
 
@@ -70,7 +67,9 @@ public class Job {
 	 * @return the status
 	 */
 	public final Status getStatus() {
-		return status;
+		synchronized(this.status){
+			return status;
+		}
 	}
 
 	protected void setStatus(Status status){
@@ -110,7 +109,7 @@ public class Job {
 	 *
 	 * @param engine the engine
 	 */
-	public final void run(XProcEngine engine) {
+	public synchronized final void run(XProcEngine engine) {
 		changeStatus(Status.RUNNING);
 		XProcPipeline pipeline = null;
 		try{
@@ -123,32 +122,13 @@ public class Job {
 			Properties props=new Properties();
 			props.setProperty("JOB_ID", this.ctxt.getId().toString());
 			XProcResult results = pipeline.run(this.ctxt.getInputs(),this.ctxt.getMonitor(),props);
-			buildResults();
+			this.ctxt.writeResult(results);
 			changeStatus( Status.DONE );
 		}catch(Exception e){
 			logger.error("job finished with error state",e);
-			//buildResults();
 			changeStatus( Status.ERROR);
 		}
 
-	}
-	private void buildResults() {
-		//TODO: manage results
-		//JobResult.Builder builder = new JobResult.Builder();
-		//builder.withMessageAccessor(this.ctxt.getMonitor().getMessageAccessor());
-		//builder.withLogFile(this.ctxt.getLogFile());
-		//builder = (ioBridge != null) ? builder.withZipFile(ioBridge
-				//.zipOutput()) : builder;
-		//results = builder.build();
-		results=null;
-	}
-	/**
-	 * Gets the result.
-	 *
-	 * @return the result
-	 */
-	public final JobResult getResult() {
-		return results;
 	}
 
 	protected void onStatusChanged(Status newStatus){
