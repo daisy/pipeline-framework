@@ -45,6 +45,7 @@ public abstract class AbstractJobManager implements JobManager {
 	@Override
 	public Job deleteJob(JobId id) {
 		//jobs.get(id).cleanUp();
+		//clean the fs of files 
 		return JobStorageFactory.getJobStorage().remove(id); 
 	}
 
