@@ -14,13 +14,16 @@ import java.util.zip.ZipOutputStream;
 
 import javax.xml.namespace.QName;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 
 public final class ResultSet {
-
+	private static final Logger logger = LoggerFactory.getLogger(ResultSet.class);
 	public static class Builder{
 		private final Multimap<String,JobResult> outputPorts=LinkedListMultimap.create();
 		private final Multimap<QName,JobResult> options=LinkedListMultimap.create();
@@ -46,6 +49,7 @@ public final class ResultSet {
 		}
 
 		public Builder addResult(QName option,JobResult result){
+			logger.debug(String.format("Adding result %s",result));
 			options.put(option,result);	
 			return this;
 		}

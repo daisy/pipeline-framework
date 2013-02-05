@@ -12,6 +12,9 @@
     <class>org.daisy.pipeline.persistence.jobs.PersistentParameter</class>
     <class>org.daisy.pipeline.persistence.jobs.PersistentJobContext</class>
     <class>org.daisy.pipeline.persistence.jobs.PersistentJob</class>
+    <class>org.daisy.pipeline.persistence.jobs.PersistentPortResult</class>
+    <class>org.daisy.pipeline.persistence.jobs.PersistentOptionResult</class>
+    <class>org.daisy.pipeline.persistence.jobs.PersistentMapper</class>
     <properties>
       <property name="eclipselink.ddl-generation" value="create-tables"/>
       <property name="eclipselink.ddl-generation.output-mode" value="database"/>

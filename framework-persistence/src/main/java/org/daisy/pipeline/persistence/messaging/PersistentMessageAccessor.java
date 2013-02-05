@@ -9,12 +9,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
+
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.pipeline.job.JobId;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PersistentMessageAccessor extends MessageAccessor {
+	private static final Logger logger =
+		LoggerFactory.getLogger(PersistentMessageAccessor.class);
+
 
 	JobId jobId;
 	private EntityManagerFactory emf;

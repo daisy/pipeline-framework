@@ -10,6 +10,8 @@ import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.job.JobStorageProvider;
 import org.daisy.pipeline.persistence.Database;
 
+import org.daisy.pipeline.script.ScriptRegistry;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,12 +19,18 @@ public class PersistentJobStorage  implements JobStorage,JobStorageProvider{
 
 	private static final Logger logger = LoggerFactory.getLogger(PersistentJobStorage.class);
 
-	Database db;
-
+	private Database db;
+	private JobContextFactory ctxtFactory;
 	public void setDatabase(Database db){
 		this.db=db;
 	}
-
+	public void setRegistry(ScriptRegistry scriptRegistry){
+		PersistentJobContext.setScriptRegistry(scriptRegistry);
+	}
+	public void setJobContextFactory(JobContextFactory ctxtFactory){
+		PersistentJobContext.setJobContextFactory(ctxtFactory);
+		this.ctxtFactory=ctxtFactory;
+	}
 	private void checkDatabase(){
 		if (db==null){
 			logger.warn("Database is null in persistent job storage");	
@@ -46,7 +54,7 @@ public class PersistentJobStorage  implements JobStorage,JobStorageProvider{
 		checkDatabase();
 		logger.debug("Adding job to db:"+job.getContext().getId());
 		PersistentJob pjob=new PersistentJob(job,db);
-		JobContextFactory.getInstance().configure((PersistentJobContext)pjob.getContext());
+		this.ctxtFactory.configure((PersistentJobContext)pjob.getContext());
 		db.addObject(pjob);	
 
 		return pjob;
@@ -69,7 +77,7 @@ public class PersistentJobStorage  implements JobStorage,JobStorageProvider{
 		PersistentJob job =db.getEntityManager().find(PersistentJob.class,id.toString());
 		if(job!=null){
 			job.setDatabase(db);
-			JobContextFactory.getInstance().configure((PersistentJobContext)job.getContext());
+			this.ctxtFactory.configure((PersistentJobContext)job.getContext());
 		}
 		return job; 
 	}

@@ -1,6 +1,5 @@
 package org.daisy.pipeline.persistence.jobs;
 
-
 import java.net.URI;
 import java.util.Set;
 
@@ -17,6 +16,9 @@ import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
+import org.daisy.pipeline.job.JobResult;
+import org.daisy.pipeline.job.ResultSet;
+import org.daisy.pipeline.job.URIMapper;
 
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
@@ -32,9 +34,16 @@ public class Mocks   {
 	public static final QName opt2Qname=new QName("www.daisy.org","opt2"); 
 	public static final String value1="value1";
 	public static final String value2="value2";
-	public static final String paramPort="params"; 	
+	public static final String paramPort="params";	
 	public static final String qparam="param1"; 
 	public static final String paramVal="pval";
+	public static final URI in=URI.create("file:/tmp/in/");
+	public static final URI out=URI.create("file:/tmp/out/");
+	public static final String portResult="res"; 
+
+	
+	public static final JobResult res1= new JobResult.Builder().withPath(in).withIdx(value1).build();
+	public static final JobResult res2= new JobResult.Builder().withPath(out).withIdx(value2).build();
 
 	public static class DummyScriptService implements ScriptRegistry{
 
@@ -102,24 +111,33 @@ public class Mocks   {
 
 	public static AbstractJobContext buildContext(){  
 
-		XProcScript script;
 		XProcPortInfo pinfo= XProcPortInfo.newInputPort("source",true,true);
 		XProcPortInfo ppinfo= XProcPortInfo.newParameterPort(Mocks.paramPort,true);
 		XProcPipelineInfo pipelineInfo = new XProcPipelineInfo.Builder().withURI(URI.create(Mocks.scriptUri)).withPort(pinfo).withPort(ppinfo).build();
-		script = new XProcScript(pipelineInfo, "", "", "", null, null, null); 
-		ScriptRegistryHolder.setScriptRegistry(new Mocks.DummyScriptService(script));
+		final XProcScript script = new XProcScript(pipelineInfo, "", "", "", null, null, null); 
+		//ScriptRegistryHolder.setScriptRegistry(new Mocks.DummyScriptService(script));
 		//Input setup
-		XProcInput input= new XProcInput.Builder().withInput("source",new Mocks.SimpleSourceProvider(file1)).withInput("source", new Mocks.SimpleSourceProvider(file2)).withOption(opt1Qname,value1).withOption(opt2Qname,value2).withParameter(paramPort,new QName(qparam),paramVal).build();
+		final XProcInput input= new XProcInput.Builder().withInput("source",new Mocks.SimpleSourceProvider(file1)).withInput("source", new Mocks.SimpleSourceProvider(file2)).withOption(opt1Qname,value1).withOption(opt2Qname,value2).withParameter(paramPort,new QName(qparam),paramVal).build();
 		
-		JobId id = JobIdFactory.newId();
-		AbstractJobContext base= new AbstractJobContext(id,script,input,null,null){ 
-				
+		final JobId id = JobIdFactory.newId();
+		final URIMapper mapper= new URIMapper(in,out);
+		final ResultSet rSet=new ResultSet.Builder().addResult(portResult,res1).addResult(opt1Qname,res2).build();
+		//inception!
+		class MyHiddenContext extends AbstractJobContext{
+			public MyHiddenContext(){
+				super(id,script,input,null,mapper);
+				this.setResults(rSet);
+			}
+			@Override
 			public URI getLogFile(){
 				return URI.create(testLogFile);
 			}
 
+
 		};
-		return base;
+		
+	
+		return new MyHiddenContext();
 	}
 
 }

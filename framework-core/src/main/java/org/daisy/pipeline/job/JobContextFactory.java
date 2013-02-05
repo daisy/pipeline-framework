@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
  */
 public final class JobContextFactory {
 	private static final Logger logger = LoggerFactory.getLogger(JobContextFactory.class);
-	private static JobContextFactory INSTANCE = new JobContextFactory();
 
 	private JobMonitorFactory monitorFactory;
 	private EventBusProvider eventbusProvider;
@@ -43,10 +42,7 @@ public final class JobContextFactory {
 		//nothing
 	}
 
-	public static JobContextFactory getInstance(){
-		return INSTANCE;
-	}
-	public static JobContext newMappingJobContext(XProcScript script,XProcInput input,XProcOutput output,ResourceCollection collection){
+	public JobContext newMappingJobContext(XProcScript script,XProcInput input,XProcOutput output,ResourceCollection collection){
 		JobId id = JobIdFactory.newId();
 		AbstractJobContext ctxt=null;
 		try{
@@ -54,37 +50,30 @@ public final class JobContextFactory {
 		}catch (IOException ex){
 			throw new RuntimeException("Error while creating MappingJobContext",ex);
 		}
-		synchronized(INSTANCE){
-			INSTANCE.configure(ctxt);
-		}
+		this.configure(ctxt);
 		return ctxt;
 
 	}
 
-	public static JobContext newMappingJobContext(XProcScript script,XProcInput input,XProcOutput output){
+	public JobContext newMappingJobContext(XProcScript script,XProcInput input,XProcOutput output){
 		return newMappingJobContext(script,input,output,null);
 	}
 
-	public static JobContext newJobContext(XProcScript script,XProcInput input,XProcOutput output){
+	public JobContext newJobContext(XProcScript script,XProcInput input,XProcOutput output){
 		JobId id = JobIdFactory.newId();
 		AbstractJobContext ctxt=new SimpleJobContext(id,script,input,output);
-		synchronized(INSTANCE){
-			INSTANCE.configure(ctxt);
-		}
+		this.configure(ctxt);
 		return ctxt;
 
 	}
 	public void setJobMonitorFactory(JobMonitorFactory monitorFactory){
-		synchronized(INSTANCE){
 			logger.debug("setting monitor factory");
-			INSTANCE.monitorFactory=monitorFactory;
-		}
+			this.monitorFactory=monitorFactory;
+		
 	}
 	public void setEventBusProvider(EventBusProvider eventbusProvider){
-		synchronized(INSTANCE){
 			logger.debug("setting even bus factory");
-			INSTANCE.eventbusProvider=eventbusProvider;
-		}
+			this.eventbusProvider=eventbusProvider;
 	}
 
 	//FIXME: probably move these two methods somewhere else, maybe a dummy class for the framework just tu publish this.
@@ -108,15 +97,9 @@ public final class JobContextFactory {
 	public void configure(RuntimeConfigurable runtimeObj){
 
 		logger.debug(String.format("configuring object %s",runtimeObj));
-		logger.debug(String.format("configuring with bus factory %s",INSTANCE.eventbusProvider));
-		logger.debug(String.format("configuring with monitor factory %s",INSTANCE.monitorFactory));
-		synchronized(INSTANCE){
-			if (INSTANCE.eventbusProvider!=null)
-				runtimeObj.setEventBusProvider(INSTANCE.eventbusProvider);
-
-			if(INSTANCE.monitorFactory!=null)
-				runtimeObj.setMonitorFactory(INSTANCE.monitorFactory);
-		}
+		runtimeObj.setEventBusProvider(this.eventbusProvider);
+		runtimeObj.setMonitorFactory(this.monitorFactory);
+		
 
 	}
 }

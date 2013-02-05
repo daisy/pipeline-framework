@@ -78,7 +78,7 @@ public class ResultResource extends AuthenticatedResource {
 
 		Collection<JobResult> results = job.getContext().getResults().getResults();
 		if (results.size() == 0) {
-			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			setStatus(Status.SERVER_ERROR_INTERNAL);
 			return this.getErrorRepresentation("No results available");
 		}
 		try{

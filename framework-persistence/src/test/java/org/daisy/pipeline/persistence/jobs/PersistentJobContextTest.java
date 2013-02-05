@@ -1,6 +1,8 @@
 package org.daisy.pipeline.persistence.jobs;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 
@@ -11,6 +13,8 @@ import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 
 import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobResult;
+import org.daisy.pipeline.job.URIMapper;
 
 import org.daisy.pipeline.persistence.Database;
 
@@ -20,6 +24,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 
 public class PersistentJobContextTest  {
 
@@ -74,6 +79,25 @@ public class PersistentJobContextTest  {
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
 		XProcInput inputs=jCtxt.getInput();
 		Assert.assertEquals(inputs.getParameters(Mocks.paramPort).get(new QName(Mocks.qparam)),Mocks.paramVal);
+	}
+
+	@Test
+	public void mapperTest(){
+		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
+		Assert.assertEquals(jCtxt.getMapper(),new URIMapper(Mocks.in,Mocks.out));
+	}
+	
+	@Test
+	public void resultPortTest(){
+		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
+		List<JobResult> l=new LinkedList<JobResult>(jCtxt.getResults().getResults(Mocks.portResult));
+		Assert.assertEquals(l.get(0),Mocks.res1);
+	}
+	@Test
+	public void resultOptionTest(){
+		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
+		List<JobResult> l=new LinkedList<JobResult>(jCtxt.getResults().getResults(Mocks.opt1Qname));
+		Assert.assertEquals(l.get(0),Mocks.res2);
 	}
 
 }

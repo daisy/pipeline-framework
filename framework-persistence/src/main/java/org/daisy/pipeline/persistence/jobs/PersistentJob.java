@@ -25,10 +25,13 @@ import org.daisy.pipeline.job.Job;
 
 import org.daisy.pipeline.persistence.Database;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Entity
 @Table(name="jobs")
 public class PersistentJob  extends Job implements Serializable {
-
+	private static final Logger logger = LoggerFactory.getLogger(PersistentJob.class);
 	public static final long serialVersionUID=1L;
 
 	/* A job is just an executable context + status 
@@ -106,8 +109,13 @@ public class PersistentJob  extends Job implements Serializable {
 	@Override
 	protected synchronized void onStatusChanged(Job.Status to) {
 		this.currentStatus=to;
-		if(this.db!=null)
+		logger.info("Changing Status:"+to);	
+		if(this.db!=null){
+			logger.debug("Updating object");	
 			db.updateObject(this);
+			db.updateObject(this.pCtxt);
+		}
+		
 		
 	}
 

@@ -7,7 +7,26 @@ import java.net.URI;
  */
 public class JobResult {
 
-	static class Builder{
+	@Override
+	public int hashCode() {
+		return this.idx.hashCode()+this.path.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj==null || !(obj instanceof JobResult))
+			return false;
+		JobResult other=(JobResult) obj;
+		return this.idx.equals(other.idx)&&this.path.equals(other.path);
+
+	}
+
+	@Override
+	public String toString() {
+		return String.format("JobResult [#=%s path='%s']", this.idx,this.path);
+	}
+
+	public static class Builder{
 		private String idx;
 		private URI path;
 		private String mediaType;
@@ -101,5 +120,7 @@ public class JobResult {
 	public String getMediaType() {
 		return this.mediaType;
 	}
+
+
 
 }

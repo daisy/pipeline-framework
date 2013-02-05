@@ -180,7 +180,6 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	@Override
 	public void setMonitorFactory(JobMonitorFactory monitor) {
 		this.monitor=monitor.newJobMonitor(this.id);
-		logger.debug(String.format("New monitor set to %s for %s",this.monitor,this));
 	}
 
 	@Override

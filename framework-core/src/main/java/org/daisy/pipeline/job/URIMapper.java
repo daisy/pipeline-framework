@@ -40,4 +40,19 @@ public final class URIMapper{
 	public URI getOutputBase() {
 		return this.outputBase;
 	}
+
+	@Override
+	public int hashCode() {
+		return this.inputBase.hashCode()+this.outputBase.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj==null || ! (obj instanceof URIMapper))
+			return false;
+		URIMapper other=(URIMapper)obj;
+		return this.inputBase.equals(other.inputBase)&&this.outputBase.equals(other.outputBase);
+
+	}
+
 }

@@ -1,15 +1,16 @@
 package org.daisy.pipeline.persistence.jobs;
 
+import org.daisy.pipeline.persistence.Database;
 import java.io.Serializable;
 
 import java.net.URI;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.MapsId;
@@ -28,25 +29,27 @@ import org.daisy.common.base.Provider;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPortInfo;
-import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobContextFactory;
-import org.daisy.pipeline.job.JobFactory;
-import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobMonitorFactory;
 
 import javax.persistence.Entity;
 
 import org.daisy.pipeline.job.JobIdFactory;
+import org.daisy.pipeline.job.JobResult;
+import org.daisy.pipeline.job.ResultSet;
 import org.daisy.pipeline.job.RuntimeConfigurable;
 
-import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.ScriptRegistry;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Entity
 @Table(name="job_contexts")
 public class PersistentJobContext extends AbstractJobContext implements Serializable,RuntimeConfigurable{
 	public static final long serialVersionUID=1L;
+	private static final Logger logger = LoggerFactory.getLogger(PersistentJobContext.class);
 	@Id
 	@Column(name="job_id")
 	String sId;
@@ -58,6 +61,9 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 	//this is virtual, the xproc input is not stored as such
 	@Transient
 	XProcInput input;
+
+	@Embedded
+	PersistentMapper pMapper;
 
 	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
 	//@JoinColumn(name="job_id",referencedColumnName="job_id")
@@ -74,6 +80,16 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 	//@JoinColumn(name="job_id",referencedColumnName="job_id")
 	List<PersistentParameter> parameters= new ArrayList<PersistentParameter>();
 
+	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+	@MapsId("job_id")
+	//@JoinColumn(name="job_id",referencedColumnName="job_id")
+	List<PersistentPortResult> portResults= new ArrayList<PersistentPortResult>();
+
+	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+	@MapsId("job_id")
+	//@JoinColumn(name="job_id",referencedColumnName="job_id")
+	List<PersistentOptionResult> optionResults= new ArrayList<PersistentOptionResult>();
+
 	public PersistentJobContext(AbstractJobContext ctxt) {
 		super(ctxt.getId(),ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs(),ctxt.getMapper());
 		this.sId=ctxt.getId().toString();
@@ -85,6 +101,7 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 
 		this.scriptUri=ctxt.getScript().getURI().toString();
 		this.input=ctxt.getInputs();
+		this.setResults(ctxt.getResults());
 	}
 
 	/**
@@ -96,32 +113,42 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 
 	@PrePersist
 	@PreUpdate
-	public void buildPersistentInputs(){
+	public void prePerist(){
+		logger.debug(" PerPersist/update callback: ");
 		if(this.getScript()==null){
-			this.setScript(ScriptRegistryHolder.load(URI.create(this.scriptUri)));//getScriptService(URI.create(this.scriptUri)).getScript();
+			logger.debug(String.format("script %s",this.registry));
+			this.setScript(this.registry.getScript(URI.create(this.scriptUri)).load());//getScriptService(URI.create(this.scriptUri)).getScript();
 		}
-		//input ports	
-		for( XProcPortInfo portName:this.getScript().getXProcPipelineInfo().getInputPorts()){
-			PersistentInputPort anon=new PersistentInputPort(this.getId(),portName.getName());
-			for (Provider<Source> src:this.input.getInputs(portName.getName())){
-				anon.addSource(new PersistentSource(src.provide().getSystemId()));
+
+		if (this.inputPorts.size()==0)
+			for( XProcPortInfo portName:this.getScript().getXProcPipelineInfo().getInputPorts()){
+				PersistentInputPort anon=new PersistentInputPort(this.getId(),portName.getName());
+				for (Provider<Source> src:this.input.getInputs(portName.getName())){
+					anon.addSource(new PersistentSource(src.provide().getSystemId()));
+				}
+				this.inputPorts.add(anon);
 			}
-			this.inputPorts.add(anon);
-		}
 		// options 
-		for(QName option:this.input.getOptions().keySet()){
-			this.options.add(new PersistentOption(this.getId(),option,this.input.getOptions().get(option)));
-		}
-		//parameters 
-		for( String portName:this.getScript().getXProcPipelineInfo().getParameterPorts()){
-			for (QName paramName :this.input.getParameters(portName).keySet()){
-				this.parameters.add(new PersistentParameter(this.getId(),portName,paramName,this.input.getParameters(portName).get(paramName)));
+		if (this.options.size()==0)
+			for(QName option:this.input.getOptions().keySet()){
+				this.options.add(new PersistentOption(this.getId(),option,this.input.getOptions().get(option)));
 			}
-		}
+		//parameters 
+		if (this.parameters.size()==0)
+			for( String portName:this.getScript().getXProcPipelineInfo().getParameterPorts()){
+				for (QName paramName :this.input.getParameters(portName).keySet()){
+					this.parameters.add(new PersistentParameter(this.getId(),portName,paramName,this.input.getParameters(portName).get(paramName)));
+				}
+			}
+
+		this.sId=this.getId().toString();
+		this.pMapper=new PersistentMapper(this.getMapper());
+		//results 
+		this.updateResults();	
 	}
 
 	@PostLoad
-	public void loadPersistentInputs(){
+	public void postLoad(){
 		XProcInput.Builder builder= new XProcInput.Builder();	
 		for ( PersistentInputPort input:this.inputPorts){
 			for (PersistentSource src:input.getSources()){
@@ -135,32 +162,44 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 			builder.withParameter(param.getPort(),param.getName(),param.getValue());
 		}
 		this.input=builder.build();
-		//FIXME!!: this should not be like this 
-		//the service should be set to an element of this bundle and then accessed
-		JobContextFactory.getInstance().configure(this);
+		this.setId(JobIdFactory.newIdFromString(this.sId));
+
+		this.setMapper(this.pMapper.getMapper());
+
+		ResultSet.Builder rBuilder=new ResultSet.Builder();
+
+		for(PersistentPortResult pRes: this.portResults){
+			rBuilder.addResult(pRes.getPortName(),pRes.getJobResult());
+		}
+		for(PersistentOptionResult pRes: this.optionResults){
+			rBuilder.addResult(pRes.getOptionName(),pRes.getJobResult());
+		}
+		this.setResults(rBuilder.build());
+		if (ctxtFactory!=null)
+			ctxtFactory.configure(this);
+		
+		
+	}
+
+	private void updateResults(){
+		ResultSet rSet= this.getResults();
+		if(this.portResults.size()==0)
+			for(String port:rSet.getPorts()){
+				for(JobResult res:rSet.getResults(port)){
+					this.portResults.add(new PersistentPortResult(this.getId(),res,port));
+				}
+			}
+		if(this.optionResults.size()==0)
+			for(QName option:rSet.getOptions()){
+				logger.debug(String.format(" Persisting job context with # %d result options",rSet.getResults(option).size()));
+				for(JobResult res:rSet.getResults(option)){
+					this.optionResults.add(new PersistentOptionResult(this.getId(),res,option));
+				}
+
+			}
 	}
 
 
-// Getters and setters
-
-
-	/**
-	 * Gets the id for this instance.
-	 *
-	 * @return The id.
-	 */
-	public JobId getId() {
-		return JobIdFactory.newIdFromString(this.sId);
-	}
-
-	/**
-	 * Sets the id for this instance.
-	 *
-	 * @param id The id.
-	 */
-	public void setId(JobId id) {
-		this.sId =id.toString(); 
-	}
 
 	/**
 	 * Gets the logFile for this instance.
@@ -171,21 +210,13 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 		return URI.create(this.logFile);
 	}
 
-	/**
-	 * Sets the logFile for this instance.
-	 *
-	 * @param logFile The logFile.
-	 */
-	public void setLogFile(URI logFile) {
-		this.logFile = logFile.toString();
-	}
 
 	/**
 	 * Gets the script for this instance.
 	 *
 	 * @return The script.
 	 */
-	public URI getScriptUri() {
+	 URI getScriptUri() {
 		return URI.create(this.scriptUri);
 	}
 
@@ -194,7 +225,7 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 	 *
 	 * @param script The script.
 	 */
-	public void setScriptUri(URI script) {
+	 void setScriptUri(URI script) {
 		this.scriptUri = script.toString();
 	}
 
@@ -203,7 +234,7 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 	 *
 	 * @return The input.
 	 */
-	public XProcInput getInput() {
+	 XProcInput getInput() {
 		return this.input;
 	}
 
@@ -212,9 +243,26 @@ public class PersistentJobContext extends AbstractJobContext implements Serializ
 	 *
 	 * @param input The input.
 	 */
-	public void setInput(XProcInput input) {
+	 protected void setInput(XProcInput input) {
 		this.input = input;
 	}
 
+	@Override
+	public void writeResult(XProcResult result) {
+		super.writeResult(result);
+		this.updateResults();
+				
+	}
+	
+	@Transient
+	static ScriptRegistry registry;
+	public static void setScriptRegistry(ScriptRegistry sregistry){
+		registry=sregistry;
+	}
+	@Transient
+	static JobContextFactory ctxtFactory;
+	public static void setJobContextFactory(JobContextFactory jobContextFactory){
+		PersistentJobContext.ctxtFactory=jobContextFactory;
+	}
 		
 }
