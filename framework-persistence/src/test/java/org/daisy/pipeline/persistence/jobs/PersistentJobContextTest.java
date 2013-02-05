@@ -54,7 +54,7 @@ public class PersistentJobContextTest  {
 	@Test
 	public void inputPortsTest(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
-		XProcInput inputs=jCtxt.getInput();
+		XProcInput inputs=jCtxt.getInputs();
 		HashSet<String> expectedSrcs=new HashSet<String>();
 		for ( Provider<Source> psrc:inputs.getInputs("source")){
 			expectedSrcs.add(psrc.provide().getSystemId());	
@@ -67,7 +67,7 @@ public class PersistentJobContextTest  {
 	@Test
 	public void optionTest(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
-		XProcInput inputs=jCtxt.getInput();
+		XProcInput inputs=jCtxt.getInputs();
 		Assert.assertTrue(inputs.getOptions().containsKey(Mocks.opt1Qname));
 		Assert.assertTrue(inputs.getOptions().containsKey(Mocks.opt2Qname));
 		Assert.assertEquals(inputs.getOptions().get(Mocks.opt1Qname),Mocks.value1);
@@ -77,7 +77,7 @@ public class PersistentJobContextTest  {
 	@Test
 	public void paramTest(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
-		XProcInput inputs=jCtxt.getInput();
+		XProcInput inputs=jCtxt.getInputs();
 		Assert.assertEquals(inputs.getParameters(Mocks.paramPort).get(new QName(Mocks.qparam)),Mocks.paramVal);
 	}
 

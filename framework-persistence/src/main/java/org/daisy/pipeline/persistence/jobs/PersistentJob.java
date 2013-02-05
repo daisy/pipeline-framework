@@ -15,7 +15,6 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
-import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -75,7 +74,6 @@ public class PersistentJob  extends Job implements Serializable {
 
 
 	@PrePersist
-	@PreRemove
 	@PreUpdate
 	public void preCallback(){
 			//this.currentStatus=this.status;
@@ -89,16 +87,6 @@ public class PersistentJob  extends Job implements Serializable {
 		this.setStatus(this.currentStatus);
 	}
 
-	//public static Iterable<JobId> getAllJobIds(Database db){
-		//List<String> ids=db.runQuery("select distinct j.job_id from PersistentJob j",String.class);
-		//return Collections2.transform(ids,new Function<String,JobId>(){
-			//@Override
-			//public JobId apply(String sId) {
-				//return JobIdFactory.newIdFromString(sId);
-			//}
-		//});
-
-	//}
 	public static List<Job> getAllJobs(Database db){
 		List<Job> jobs=db.runQuery("select j from PersistentJob j",Job.class);
 		return jobs;
@@ -113,7 +101,6 @@ public class PersistentJob  extends Job implements Serializable {
 		if(this.db!=null){
 			logger.debug("Updating object");	
 			db.updateObject(this);
-			db.updateObject(this.pCtxt);
 		}
 		
 		

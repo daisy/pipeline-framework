@@ -81,6 +81,9 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 		return this.logFile;
 	}
 
+	protected void setLogFile(URI logFile) {
+		this.logFile=logFile;
+	}
 
 
 	/**
