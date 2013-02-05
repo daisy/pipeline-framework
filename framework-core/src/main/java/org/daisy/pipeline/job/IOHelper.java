@@ -1,7 +1,6 @@
 package org.daisy.pipeline.job;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,15 +8,12 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipOutputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The Class IOHelper offers some utilities to the {@link IOBridge} class.
+ * IO related utities.
  */
 public class IOHelper {
 
@@ -79,7 +75,7 @@ public class IOHelper {
 	 * @param context the context
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	static void dump(ResourceCollection resources,URIMapper mapper) throws IOException {
+	public static void dump(ResourceCollection resources,URIMapper mapper) throws IOException {
 		for (String path : resources.getNames()) {
 			IOHelper.dump(resources.getResource(path).provide(),mapper.getInputBase() 
 					, URI.create(path.replace("\\", "/")));
@@ -102,22 +98,6 @@ public class IOHelper {
 		}
 	}
 
-	/**
-	 * Generate output names  based on its media type.
-	 *
-	 * @param name the name
-	 * @param type the type
-	 * @param mediaType the media type
-	 * @return the string
-	 */
-	public static String generateOutput(String name, String type, String mediaType) {
-		if(type.equals(XProcDecorator.TranslatableOption.ANY_DIR_URI.getName())){
-			return name+SLASH;
-		}else{
-			return name+".xml";
-		}
-
-	}
 
 	/**
 	 * creates a flat list out of a tree directory.
@@ -126,6 +106,7 @@ public class IOHelper {
 	 * @return the list
 	 */
 	public static List<URI> treeFileList(URI uriBase) {
+		System.out.println("URI"+uriBase);
 		File base=new File(uriBase);	
 		
 		LinkedList<URI> result= new LinkedList<URI>();
@@ -142,41 +123,16 @@ public class IOHelper {
 		return result;
 	}
 
-	/**
-	 * Creates a zip from a list of files.
-	 *
-	 * @param files the files
-	 * @param output the output
-	 * @param pathMask the path mask
-	 * @return the uRI
-	 * @throws ZipException the zip exception
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 */
-	public static URI zipFromEntries(List<File> files, File output,String pathMask) throws ZipException, IOException {
-		ZipOutputStream zipOs = new ZipOutputStream(new FileOutputStream(output));
-
-		for(File f:files){
-			ZipEntry entry= new ZipEntry(f.toString().replace(pathMask, ""));
-			zipOs.putNextEntry(entry);
-			InputStream is=new FileInputStream(f);
-			dump(is,zipOs);
-			is.close();
-
-		}
-		zipOs.close();
-		return output.toURI();
-	}
-
 	public static boolean deleteDir(File parent){
 		logger.debug("Deleting directory:"+parent);
 		File[] fList=parent.listFiles();
 		if (fList!=null)
-			for( File f: parent.listFiles()){
-				if (f.isDirectory()){
-					IOHelper.deleteDir(f);
-				}
-				f.delete();
+		for( File f: parent.listFiles()){
+			if (f.isDirectory()){
+				IOHelper.deleteDir(f);
 			}
+			f.delete();
+		}
 		return parent.delete();
 	}
 }

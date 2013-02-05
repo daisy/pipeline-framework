@@ -59,7 +59,7 @@ final class URITranslatorHelper   {
 
 	}
 	public static final String generateOptionOutput(XProcOptionInfo option,XProcScript script){
-		return IOHelper.generateOutput(
+		return URITranslatorHelper.generateOutput(
 					option.getName().toString(),
 					script.getOptionMetadata(option.getName())
 					.getType(),
@@ -107,5 +107,21 @@ final class URITranslatorHelper   {
 		return parts;	
 	}
 
+	/**
+	 * Generate output names  based on its media type.
+	 *
+	 * @param name the name
+	 * @param type the type
+	 * @param mediaType the media type
+	 * @return the string
+	 */
+	public static String generateOutput(String name, String type, String mediaType) {
+		if(type.equals(XProcDecorator.TranslatableOption.ANY_DIR_URI.getName())){
+			return name+'/';
+		}else{
+			return name+".xml";
+		}
+
+	}
 	
 }

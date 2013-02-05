@@ -88,7 +88,7 @@ public class JobResult {
 	 * @param path The path for this instance.
 	 * @param mediaType The mediaType for this instance.
 	 */
-	public JobResult(String idx, URI path, String mediaType) {
+	private JobResult(String idx, URI path, String mediaType) {
 		this.idx = idx;
 		this.path = path;
 		this.mediaType = mediaType;

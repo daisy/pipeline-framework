@@ -9,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+//TODO:Rethink this class...
 public final class JobStorageFactory  {
 
 	private static final Logger logger = LoggerFactory.getLogger(JobStorageFactory.class);
