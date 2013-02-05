@@ -21,28 +21,14 @@ public class XProcOutput {
 	 */
 	public static final class Builder {
 
-		/** The info. */
-		private final XProcPipelineInfo info;
+		
 
 		/** The outputs. */
 		private final HashMap<String, Provider<Result>> outputs = Maps
 				.newHashMap();
 
-		/**
-		 * Instantiates a new builder.
-		 */
-		public Builder() {
-			info = null;
-		}
-
-		/**
-		 * Instantiates a new builder.
-		 *
-		 * @param info the info
-		 */
-		public Builder(XProcPipelineInfo info) {
-			this.info = info;
-		}
+	
+	
 
 		/**
 		 * With output.
