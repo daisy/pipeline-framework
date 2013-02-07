@@ -55,6 +55,7 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 		this.script=script;
 		this.output=output;
 		this.mapper=mapper;
+		this.logFile=JobURIUtils.getLogFile(id);
 		this.results=new ResultSet.Builder().build();
 		
 	}

@@ -1,7 +1,8 @@
 package org.daisy.pipeline.job;
 
+import java.io.File;
 
-
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,11 +10,25 @@ import org.junit.Test;
 public class JobStorageFactoryTest   {
 	JobId id1;
 	JobId id2;
+
+	String oldIoBase="";
+	File tmpdir;
 	@Before
 	public void setUp(){
 		accessed=false;
 		id1=JobIdFactory.newId();
 		id2=JobIdFactory.newId();
+
+		oldIoBase=System.getProperty(JobURIUtils.ORG_DAISY_PIPELINE_IOBASE);	
+		tmpdir= new File(System.getProperty("java.io.tmpdir"));
+		System.setProperty(JobURIUtils.ORG_DAISY_PIPELINE_IOBASE,tmpdir.toString());	
+	}
+
+
+	@After
+	public void tearDown(){
+		if(oldIoBase!=null)
+			System.setProperty(JobURIUtils.ORG_DAISY_PIPELINE_IOBASE,oldIoBase);	
 	}
 
 

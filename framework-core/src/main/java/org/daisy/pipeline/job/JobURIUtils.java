@@ -7,7 +7,7 @@ import java.net.URI;
 
 import org.daisy.pipeline.job.URIMapper;
 
-public class URIMapperFactory   {
+public class JobURIUtils   {
 	/** The Constant ORG_DAISY_PIPELINE_IOBASE. */
 	final static String ORG_DAISY_PIPELINE_IOBASE = "org.daisy.pipeline.iobase";
 
@@ -21,22 +21,44 @@ public class URIMapperFactory   {
 	public static URIMapper newURIMapper(){
 		return new URIMapper(URI.create(""),URI.create(""));
 	}
+
+
 	/**
 	 * Returns a URI mapper which builds a directory extructure 
 	 * based on the jobid
 	 */
 	public static URIMapper newURIMapper(JobId id) throws IOException{
-		if (System.getProperty(ORG_DAISY_PIPELINE_IOBASE) == null) {
-			throw new IllegalStateException("The property "
-					+ ORG_DAISY_PIPELINE_IOBASE + " is not set");
-		}
 		//Base based on the the id
-		File ioBase=IOHelper.makeDirs(System.getProperty(ORG_DAISY_PIPELINE_IOBASE));
-		File baseDir = IOHelper.makeDirs(new File(ioBase, id.toString()));
-
+		File baseDir = getJobBaseFile(id); 
 		File contextDir = IOHelper.makeDirs(new File(baseDir, IO_DATA_SUBDIR));
 		File outputDir = IOHelper.makeDirs(new File(baseDir, IO_OUTPUT_SUBDIR));
 		return new URIMapper(contextDir.toURI(),outputDir.toURI());
 
+	}
+
+	public static URI getLogFile(JobId id) {
+		//this has to be done according to the logback configuration file
+		
+		File logFile;
+		try {
+			logFile = new File(getJobBaseFile(id),String.format("%s.log",id.toString()));
+			logFile.createNewFile();
+			return logFile.toURI();
+		} catch (IOException e) {
+			throw new RuntimeException(String.format("Error creating the log file for %s",id.toString()),e);
+		}
+	}
+	
+	private static File getJobBaseFile(JobId id) throws IOException{
+		return IOHelper.makeDirs(new File(new File(frameworkBase()), id.toString()));
+	}
+	public static URI getJobBase(JobId id) throws IOException{
+		return getJobBaseFile(id).toURI();
+	}
+	private static String frameworkBase(){
+		if (System.getProperty(ORG_DAISY_PIPELINE_IOBASE) == null) {
+			throw new IllegalStateException(String.format("The property %s is not set",ORG_DAISY_PIPELINE_IOBASE ));
+		}
+		return System.getProperty(ORG_DAISY_PIPELINE_IOBASE);
 	}
 }
