@@ -14,6 +14,7 @@ import org.daisy.common.xproc.XProcInput;
 
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobResult;
+import org.daisy.pipeline.job.JobURIUtils;
 import org.daisy.pipeline.job.URIMapper;
 
 import org.daisy.pipeline.persistence.Database;
@@ -34,7 +35,7 @@ public class PersistentJobContextTest  {
 	@Before	
 	public void setUp(){
 		//script setup
-			
+		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		ctxt=new PersistentJobContext(Mocks.buildContext());
 		id=ctxt.getId();
 		db=DatabaseProvider.getDatabase();

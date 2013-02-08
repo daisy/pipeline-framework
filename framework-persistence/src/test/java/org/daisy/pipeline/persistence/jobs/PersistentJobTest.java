@@ -21,6 +21,7 @@ public class PersistentJobTest   {
 	public void setUp(){
 		//script setup
 			
+		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		job = new PersistentJob(Job.newJob(Mocks.buildContext()),db);
 		id=job.getContext().getId();
 		db=DatabaseProvider.getDatabase();
