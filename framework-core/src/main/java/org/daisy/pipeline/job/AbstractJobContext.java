@@ -55,8 +55,12 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 		this.script=script;
 		this.output=output;
 		this.mapper=mapper;
+
 		if(id!=null)
 			this.logFile=JobURIUtils.getLogFile(id);
+		else
+			this.logFile=URI.create("");
+
 		this.results=new ResultSet.Builder().build();
 		
 	}
@@ -97,7 +101,7 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	 *
 	 * @param mapper The mapper.
 	 */
-	public void setMapper(URIMapper mapper) {
+	protected void setMapper(URIMapper mapper) {
 		this.mapper = mapper;
 	}
 
@@ -106,7 +110,7 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	 *
 	 * @param results The results.
 	 */
-	public void setResults(ResultSet results) {
+	protected void setResults(ResultSet results) {
 		this.results = results;
 	}
 
@@ -187,6 +191,12 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 		result.writeTo(this.output);
 		this.results=ResultSetFactory.newResultSet(this,this.mapper);
 				
+	}
+
+	public void cleanUp(){
+		logger.info(String.format( "Deleting context for job %s" ,this.id));
+		JobURIUtils.cleanJobBase(this.id);
+		this.monitor.getMessageAccessor().delete();
 	}
 
 

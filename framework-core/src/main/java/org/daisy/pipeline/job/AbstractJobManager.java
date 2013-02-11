@@ -39,14 +39,21 @@ public abstract class AbstractJobManager implements JobManager {
 		return JobStorageFactory.getJobStorage();
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * Deletes the job and cleans its context. If you are not using AbstractJobContexts 
+	 * (you have implemented your own JobContexts) you should implement this class and 
+	 * make a custom deletion, otherwise the context won't be cleared out.
 	 * @see org.daisy.pipeline.job.JobManager#deleteJob(org.daisy.pipeline.job.JobId)
 	 */
 	@Override
 	public Job deleteJob(JobId id) {
-		//jobs.get(id).cleanUp();
-		//clean the fs of files 
-		return JobStorageFactory.getJobStorage().remove(id); 
+		Job job=this.getJob(id);
+		JobStorageFactory.getJobStorage().remove(id);
+		if (job!=null && job.getContext() instanceof AbstractJobContext){
+			//clean the context 
+			((AbstractJobContext)job.getContext()).cleanUp();
+		}
+		return job; 
 	}
 
 	/* (non-Javadoc)

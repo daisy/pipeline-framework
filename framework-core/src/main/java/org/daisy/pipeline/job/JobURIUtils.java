@@ -55,6 +55,14 @@ public class JobURIUtils   {
 	public static URI getJobBase(JobId id) throws IOException{
 		return getJobBaseFile(id).toURI();
 	}
+
+	public static boolean cleanJobBase(JobId id){
+		try {
+			return IOHelper.delete(getJobBase(id));
+		} catch (IOException e) {
+			throw new RuntimeException(String.format("Error cleaning Job id:%s",id),e);
+		}
+	}
 	private static String frameworkBase(){
 		if (System.getProperty(ORG_DAISY_PIPELINE_IOBASE) == null) {
 			throw new IllegalStateException(String.format("The property %s is not set",ORG_DAISY_PIPELINE_IOBASE ));

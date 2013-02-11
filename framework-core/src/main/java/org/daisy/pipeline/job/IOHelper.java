@@ -123,6 +123,9 @@ public class IOHelper {
 		return result;
 	}
 
+	public static boolean delete(URI parent){
+		return deleteDir(new File(parent));
+	}
 	public static boolean deleteDir(File parent){
 		logger.debug("Deleting directory:"+parent);
 		File[] fList=parent.listFiles();
