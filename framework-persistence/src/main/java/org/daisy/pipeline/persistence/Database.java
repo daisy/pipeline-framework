@@ -2,6 +2,7 @@ package org.daisy.pipeline.persistence;
 
 import java.util.List;
 
+import javax.persistence.Cache;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
@@ -66,6 +67,14 @@ public class Database {
 		else
 			throw new IllegalStateException("entity manager factory was null");
 	}
+
+	public Cache getCache(){
+		if (emf!=null)
+			return emf.getCache();
+		else
+			throw new IllegalStateException("entity manager factory was null");
+	}
+
 	public void setEntityManagerFactory(EntityManagerFactory emf) {
 		this.emf=emf;
 	}

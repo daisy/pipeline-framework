@@ -1,9 +1,9 @@
 package org.daisy.pipeline.persistence.jobs;
 
 import java.io.Serializable;
-
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,13 +21,17 @@ import javax.persistence.Transient;
 
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
-
 import org.daisy.pipeline.persistence.Database;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Entity
+//This plus the correct configuration 
+//of the pu should be enough to ensure that jobs 
+//with the same id will return true to
+//job1==job2
+//namely, only one object wandering around per JobId
+@Cacheable
 @Table(name="jobs")
 public class PersistentJob  extends Job implements Serializable {
 	private static final Logger logger = LoggerFactory.getLogger(PersistentJob.class);
@@ -72,7 +76,6 @@ public class PersistentJob  extends Job implements Serializable {
 	}
 
 
-
 	@PrePersist
 	@PreUpdate
 	public void preCallback(){
@@ -95,12 +98,14 @@ public class PersistentJob  extends Job implements Serializable {
 	}
 	//this will watch for changes in the status and update the db
 	@Override
-	protected synchronized void onStatusChanged(Job.Status to) {
-		this.currentStatus=to;
-		logger.info("Changing Status:"+to);	
-		if(this.db!=null){
-			logger.debug("Updating object");	
-			db.updateObject(this);
+	protected void onStatusChanged(Job.Status to) {
+		synchronized(this){
+			this.currentStatus=to;
+			logger.info("Changing Status:"+to);	
+			if(this.db!=null){
+				logger.debug("Updating object");	
+				db.updateObject(this);
+			}
 		}
 		
 		

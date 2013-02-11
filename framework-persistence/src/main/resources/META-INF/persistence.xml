@@ -18,6 +18,7 @@
     <properties>
       <property name="eclipselink.ddl-generation" value="create-tables"/>
       <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+      <property name="eclipselink.persistence-context.reference-mode" value="WEAK"/>
       <property name="eclipselink.logging.level" value="INFO"/>
       <property name="eclipselink.logging.thread" value="true"/>
       <property name="eclipselink.logging.session" value="false"/>

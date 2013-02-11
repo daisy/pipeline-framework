@@ -3,6 +3,7 @@
 
   <persistence-unit name="pipeline-pu-test" transaction-type="RESOURCE_LOCAL">
 
+
     <class>org.daisy.pipeline.persistence.jobs.PersistentSource</class>
     <class>org.daisy.pipeline.persistence.jobs.PersistentInputPort</class>
     <class>org.daisy.pipeline.persistence.jobs.PersistentOption</class>
@@ -12,12 +13,15 @@
     <class>org.daisy.pipeline.persistence.jobs.PersistentPortResult</class>
     <class>org.daisy.pipeline.persistence.jobs.PersistentOptionResult</class>
     <class>org.daisy.pipeline.persistence.jobs.PersistentMapper</class>
+    <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+
     <properties>
     <property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:myDB;create=true"/>
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
 
       <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
       <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+      <property name="eclipselink.persistence-context.reference-mode" value="WEAK"/>
       <property name="eclipselink.logging.level" value="WARNING"/>
       <property name="eclipselink.logging.thread" value="true"/>
       <property name="eclipselink.logging.session" value="false"/>

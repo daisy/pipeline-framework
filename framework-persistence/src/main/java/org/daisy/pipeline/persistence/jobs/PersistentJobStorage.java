@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.persistence.Cache;
+
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobId;
@@ -15,26 +17,18 @@ import org.daisy.pipeline.persistence.Database;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//FIXME: make sure that the weakreference approach is thread-safe, this is imporatant
 public class PersistentJobStorage  implements JobStorage,JobStorageProvider{ 
 
 	private static final Logger logger = LoggerFactory.getLogger(PersistentJobStorage.class);
 
 	private Database db;
 	private JobContextFactory ctxtFactory;
-	//used as a set
-	private Map<JobId,WeakReference<PersistentJob>> cache= new HashMap<JobId,WeakReference<PersistentJob>>();
-
+	private Cache cache;
 		
-	/**
-	 *
-	 */
-	public PersistentJobStorage() {
-		this.cache=Collections.synchronizedMap(this.cache);
-	}
 
 	public void setDatabase(Database db){
 		this.db=db;
+		this.cache=db.getCache();
 	}
 	public void setRegistry(ScriptRegistry scriptRegistry){
 		PersistentJobContext.setScriptRegistry(scriptRegistry);
@@ -68,8 +62,6 @@ public class PersistentJobStorage  implements JobStorage,JobStorageProvider{
 		PersistentJob pjob=new PersistentJob(job,db);
 		this.ctxtFactory.configure((PersistentJobContext)pjob.getContext());
 		db.addObject(pjob);	
-		cache.put(pjob.getContext().getId(),new WeakReference<PersistentJob>(pjob));
-
 		return pjob;
 	}
 
@@ -79,7 +71,6 @@ public class PersistentJobStorage  implements JobStorage,JobStorageProvider{
 		Job job=db.getEntityManager().find(PersistentJob.class,jobId.toString());
 		if(job!=null){
 			db.deleteObject(job);
-			cache.remove(job.getContext().getId());
 			logger.debug(String.format("Job with id %s deleted",jobId));
 		}
 		return job;
@@ -89,15 +80,7 @@ public class PersistentJobStorage  implements JobStorage,JobStorageProvider{
 	public Job get(JobId id) {
 		checkDatabase();
 		PersistentJob job =null;
-		if(this.cache.containsKey(id)){
-			job=this.cache.get(id).get();
-			if(job==null)
-				this.cache.remove(id);
-		}
-
-		if(job==null)
-			db.getEntityManager().find(PersistentJob.class,id.toString());
-
+		job=db.getEntityManager().find(PersistentJob.class,id.toString());
 		if(job!=null){
 			job.setDatabase(db);
 			this.ctxtFactory.configure((PersistentJobContext)job.getContext());
