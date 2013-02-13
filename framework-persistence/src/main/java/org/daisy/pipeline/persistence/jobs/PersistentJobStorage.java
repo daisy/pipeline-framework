@@ -1,34 +1,26 @@
 package org.daisy.pipeline.persistence.jobs;
 
-import java.lang.ref.WeakReference;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
-
-import javax.persistence.Cache;
 
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
-import org.daisy.pipeline.job.JobStorageProvider;
 import org.daisy.pipeline.persistence.Database;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-public class PersistentJobStorage  implements JobStorage,JobStorageProvider{ 
+
+public class PersistentJobStorage  implements JobStorage{ 
 
 	private static final Logger logger = LoggerFactory.getLogger(PersistentJobStorage.class);
 
 	private Database db;
 	private JobContextFactory ctxtFactory;
-	private Cache cache;
 		
 
 	public void setDatabase(Database db){
 		this.db=db;
-		this.cache=db.getCache();
 	}
 	public void setRegistry(ScriptRegistry scriptRegistry){
 		PersistentJobContext.setScriptRegistry(scriptRegistry);
@@ -50,10 +42,6 @@ public class PersistentJobStorage  implements JobStorage,JobStorageProvider{
 		return PersistentJob.getAllJobs(this.db).iterator();
 	}
 
-	@Override
-	public JobStorage provide() {
-		return this;
-	}
 
 	@Override
 	public Job add(Job job) {

@@ -7,28 +7,28 @@ package org.daisy.pipeline.job;
  */
 public abstract class AbstractJobManager implements JobManager {
 
-	private JobStorageProvider provider;
+	private JobStorage storage;
 
 	/* (non-Javadoc)
 	 * @see org.daisy.pipeline.job.JobManager#newJob(org.daisy.pipeline.script.XProcScript, org.daisy.common.xproc.XProcInput, org.daisy.pipeline.job.ResourceCollection)
 	 */
 	@Override
 	public final Job newJob(JobContext ctxt) {
-		this.checkProvider();
+		this.checkStorage();
 		if(this.getJob(ctxt.getId())!=null)
 				throw new IllegalArgumentException(String.format("Job with id %s already exists in this manager",ctxt.getId()));
 		//this part is quite critical, peristent storage needs to wrap the 
 		//job object, so we MUST be sure that we return the right reference.
 		//That's why newJob is final, if a concrete JobManager wants to do 
 		//something to job will be done by "onJobCreated" 
-		Job job = this.provider.provide().add(Job.newJob(ctxt));
+		Job job = this.storage.add(Job.newJob(ctxt));
 		this.onNewJob(job);
 		return job;
 	}
 	
-	private void checkProvider(){
-		if (this.provider==null) 
-			throw new IllegalStateException("No JobStorageProvider in AbstractJobManager");
+	private void checkStorage(){
+		if (this.storage==null) 
+			throw new IllegalStateException("No JobStorage in AbstractJobManager");
 	}
 	/**
 	 * This method allows to do some after job creation hook-ups if needed.
@@ -41,8 +41,8 @@ public abstract class AbstractJobManager implements JobManager {
 	 */
 	@Override
 	public Iterable<Job> getJobs() {
-		this.checkProvider();
-		return this.provider.provide();
+		this.checkStorage();
+		return this.storage;
 	}
 
 	/**
@@ -53,9 +53,9 @@ public abstract class AbstractJobManager implements JobManager {
 	 */
 	@Override
 	public Job deleteJob(JobId id) {
-		this.checkProvider();
+		this.checkStorage();
 		Job job=this.getJob(id);
-		this.provider.provide().remove(id);
+		this.storage.remove(id);
 		if (job!=null && job.getContext() instanceof AbstractJobContext){
 			//clean the context 
 			((AbstractJobContext)job.getContext()).cleanUp();
@@ -68,11 +68,11 @@ public abstract class AbstractJobManager implements JobManager {
 	 */
 	@Override
 	public Job getJob(JobId id) {
-		this.checkProvider();
-		return this.provider.provide().get(id);
+		this.checkStorage();
+		return this.storage.get(id);
 	}
 
-	public void setJobStorageProvider(JobStorageProvider provider){
-		this.provider=provider;
+	public void setJobStorage(JobStorage storage){
+		this.storage=storage;
 	}
 }

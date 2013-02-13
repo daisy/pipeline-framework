@@ -2,7 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="persistent-job-storage">
    <implementation class="org.daisy.pipeline.persistence.jobs.PersistentJobStorage"/>
    <service>
-      <provide interface="org.daisy.pipeline.job.JobStorageProvider"/>
+      <provide interface="org.daisy.pipeline.job.JobStorage"/>
    </service>
    <reference  name="script-registry" interface="org.daisy.pipeline.script.ScriptRegistry" bind="setRegistry" cardinality="1..1" policy="static"/> 
    <reference bind="setDatabase" interface="org.daisy.pipeline.persistence.Database" name="database" policy="static" cardinality="1..1"/>
