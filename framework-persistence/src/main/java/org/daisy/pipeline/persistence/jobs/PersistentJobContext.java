@@ -1,15 +1,14 @@
 package org.daisy.pipeline.persistence.jobs;
 
 import java.io.Serializable;
-
 import java.net.URI;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.MapsId;
@@ -17,28 +16,21 @@ import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
 import javax.xml.namespace.QName;
-
 import javax.xml.transform.Source;
 
 import org.daisy.common.base.Provider;
-
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobContextFactory;
-
-import javax.persistence.Entity;
-
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.ResultSet;
 import org.daisy.pipeline.job.RuntimeConfigurable;
-
+import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +77,7 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	List<PersistentOptionResult> optionResults= new ArrayList<PersistentOptionResult>();
 
 	public PersistentJobContext(AbstractJobContext ctxt) {
-		super(ctxt.getId(),ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs(),ctxt.getMapper());
+		super(ctxt.getId(),BoundXProcScript.from(ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs()),ctxt.getMapper());
 		this.sId=ctxt.getId().toString();
 		if (ctxt.getLogFile()==null)
 			this.logFile="";
@@ -100,7 +92,7 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	 * Constructs a new instance.
 	 */
 	public PersistentJobContext() {
-		super(null,null,null,null,null);
+		super(null,null,null);
 	}
 
 	private void load(){

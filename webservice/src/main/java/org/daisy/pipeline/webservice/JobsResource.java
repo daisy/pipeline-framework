@@ -17,7 +17,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.daisy.common.base.Provider;
 import org.daisy.common.transform.LazySaxSourceProvider;
@@ -30,6 +29,7 @@ import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.ResourceCollection;
 import org.daisy.pipeline.job.ZipResourceContext;
+import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
@@ -334,8 +334,7 @@ public class JobsResource extends AuthenticatedResource {
 
 		addOptionsToJob(doc.getElementsByTagName("option"), script, inBuilder);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
 
-		XProcInput input = inBuilder.build();
-		XProcOutput output = outBuilder.build();
+		BoundXProcScript bound= BoundXProcScript.from(script,inBuilder.build(),outBuilder.build());
 
 		JobManager jobMan = webservice().getJobManager();
 		JobContext ctxt=null;
@@ -344,10 +343,10 @@ public class JobsResource extends AuthenticatedResource {
 			resourceCollection = new ZipResourceContext(zip);
 		}
 		if(webservice().getConfiguration().isLocal()){
-			ctxt=webservice().getJobContextFactory().newJobContext(script,input,output);	
+			ctxt=webservice().getJobContextFactory().newJobContext(bound);	
 
 		}else{
-			ctxt=webservice().getJobContextFactory().newMappingJobContext(script,input,output,resourceCollection);
+			ctxt=webservice().getJobContextFactory().newMappingJobContext(bound,resourceCollection);
 		}
 		Job job = jobMan.newJob(ctxt);
 

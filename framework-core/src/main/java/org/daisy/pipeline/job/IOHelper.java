@@ -106,7 +106,6 @@ public class IOHelper {
 	 * @return the list
 	 */
 	public static List<URI> treeFileList(URI uriBase) {
-		System.out.println("URI"+uriBase);
 		File base=new File(uriBase);	
 		
 		LinkedList<URI> result= new LinkedList<URI>();

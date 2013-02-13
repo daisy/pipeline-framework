@@ -4,17 +4,11 @@ import java.io.IOException;
 
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
-
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
-
 import org.daisy.pipeline.event.EventBusProvider;
-
-import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.JobContext;
-
+import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScript;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,11 +36,11 @@ public final class JobContextFactory {
 		//nothing
 	}
 
-	public JobContext newMappingJobContext(XProcScript script,XProcInput input,XProcOutput output,ResourceCollection collection){
+	public JobContext newMappingJobContext(BoundXProcScript boundedScript,ResourceCollection collection){
 		JobId id = JobIdFactory.newId();
 		AbstractJobContext ctxt=null;
 		try{
-			 ctxt=new MappingJobContext(id,script,input,output,collection);
+			 ctxt=new MappingJobContext(id,boundedScript,collection);
 		}catch (IOException ex){
 			throw new RuntimeException("Error while creating MappingJobContext",ex);
 		}
@@ -55,13 +49,13 @@ public final class JobContextFactory {
 
 	}
 
-	public JobContext newMappingJobContext(XProcScript script,XProcInput input,XProcOutput output){
-		return newMappingJobContext(script,input,output,null);
+	public JobContext newMappingJobContext(BoundXProcScript boundScript){
+		return newMappingJobContext(boundScript,null);
 	}
 
-	public JobContext newJobContext(XProcScript script,XProcInput input,XProcOutput output){
+	public JobContext newJobContext(BoundXProcScript boundScript){
 		JobId id = JobIdFactory.newId();
-		AbstractJobContext ctxt=new SimpleJobContext(id,script,input,output);
+		AbstractJobContext ctxt=new SimpleJobContext(id,boundScript);
 		this.configure(ctxt);
 		return ctxt;
 
@@ -102,4 +96,5 @@ public final class JobContextFactory {
 		
 
 	}
+
 }

@@ -2,20 +2,15 @@ package org.daisy.pipeline.job;
 
 import java.io.IOException;
 
-
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcOutput;
-import org.daisy.common.xproc.XProcResult;
-
-import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.BoundXProcScript;
 
 final class MappingJobContext extends AbstractJobContext {
 
-	public MappingJobContext(JobId id, XProcScript script,XProcInput input,XProcOutput output,ResourceCollection collection) throws IOException{
-		super(id, script,input,output,JobURIUtils.newURIMapper(id));
-		XProcDecorator decorator=XProcDecorator.from(script,this.getMapper(),collection);
-		setInput(decorator.decorate(input));
-		setOutput(decorator.decorate(output));
+	public MappingJobContext(JobId id, BoundXProcScript boundScript,ResourceCollection collection) throws IOException{
+		super(id, boundScript,JobURIUtils.newURIMapper(id));
+		XProcDecorator decorator=XProcDecorator.from(this.getScript(),this.getMapper(),collection);
+		setInput(decorator.decorate(this.getInputs()));
+		setOutput(decorator.decorate(this.getOutputs()));
 
 	}
 

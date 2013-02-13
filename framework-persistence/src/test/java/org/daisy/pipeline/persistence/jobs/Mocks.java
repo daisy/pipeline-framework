@@ -1,25 +1,21 @@
 package org.daisy.pipeline.persistence.jobs;
 
 import java.net.URI;
-import java.util.Set;
 
 import javax.xml.namespace.QName;
-
 import javax.xml.transform.Source;
 
 import org.daisy.common.base.Provider;
-
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
-
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.ResultSet;
 import org.daisy.pipeline.job.URIMapper;
-
+import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
@@ -125,7 +121,7 @@ public class Mocks   {
 		//inception!
 		class MyHiddenContext extends AbstractJobContext{
 			public MyHiddenContext(){
-				super(id,script,input,null,mapper);
+				super(id,BoundXProcScript.from(script,input,null),mapper);
 				this.setResults(rSet);
 			}
 			@Override

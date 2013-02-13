@@ -2,18 +2,13 @@ package org.daisy.pipeline.job;
 
 import java.net.URI;
 
-
-
-
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
-
 import org.daisy.pipeline.event.EventBusProvider;
-
+import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScript;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,11 +44,13 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	private ResultSet results;
 		
 
-	public AbstractJobContext(JobId id,XProcScript script,XProcInput input,XProcOutput output,URIMapper mapper){
-		this.input=input;
+	public AbstractJobContext(JobId id,BoundXProcScript boundScript,URIMapper mapper){
+		if(boundScript!=null){
+			this.input=boundScript.getInput();
+			this.script=boundScript.getScript();
+			this.output=boundScript.getOutput();		
+		}
 		this.id=id;
-		this.script=script;
-		this.output=output;
 		this.mapper=mapper;
 
 		if(id!=null)

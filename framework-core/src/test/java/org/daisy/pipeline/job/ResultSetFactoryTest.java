@@ -2,21 +2,18 @@ package org.daisy.pipeline.job;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.net.URI;
-
 import java.util.HashSet;
 import java.util.List;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
-import org.daisy.common.base.Provider;
 
+import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
-
+import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScript;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,6 +30,7 @@ public class ResultSetFactoryTest {
 	String sysId="dir/file.xml";
 	String dir="option/";
 	String oldIoBase="";
+	BoundXProcScript bound;
 	@Before
 	public void setUp() throws IOException{
 		script= new Mock.ScriptGenerator.Builder().withOutputPorts(2).withOptionOutputsFile(1).withOptionOutputsDir(1).build().generate();
@@ -52,6 +50,7 @@ public class ResultSetFactoryTest {
 		input = new XProcInput.Builder().withOption(optDir,dir).withOption(optName,sysId).build();
 		input=trans.decorate(input);
 		Mock.populateDir(input.getOptions().get(optDir));
+		bound=BoundXProcScript.from(script,input,output);
 	}
 
 
@@ -194,7 +193,7 @@ public class ResultSetFactoryTest {
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 		Provider<Result> res=output.getResultProvider(outName);
 		res.provide();
-		AbstractJobContext ctxt= new AbstractJobContext(JobIdFactory.newId(),script,input,output,mapper){};
+		AbstractJobContext ctxt= new AbstractJobContext(JobIdFactory.newId(),bound,mapper){};
 		ResultSet rSet=ResultSetFactory.newResultSet(ctxt,mapper);
 		Assert.assertEquals(5,rSet.getResults().size());
 	}
