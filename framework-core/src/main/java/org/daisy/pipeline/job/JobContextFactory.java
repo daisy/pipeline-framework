@@ -36,11 +36,11 @@ public final class JobContextFactory {
 		//nothing
 	}
 
-	public JobContext newMappingJobContext(BoundXProcScript boundedScript,ResourceCollection collection){
+	public JobContext newMappingJobContext(String niceName,BoundXProcScript boundedScript,ResourceCollection collection){
 		JobId id = JobIdFactory.newId();
 		AbstractJobContext ctxt=null;
 		try{
-			 ctxt=new MappingJobContext(id,boundedScript,collection);
+			 ctxt=new MappingJobContext(id,niceName,boundedScript,collection);
 		}catch (IOException ex){
 			throw new RuntimeException("Error while creating MappingJobContext",ex);
 		}
@@ -49,13 +49,13 @@ public final class JobContextFactory {
 
 	}
 
-	public JobContext newMappingJobContext(BoundXProcScript boundScript){
-		return newMappingJobContext(boundScript,null);
+	public JobContext newMappingJobContext(String niceName,BoundXProcScript boundScript){
+		return newMappingJobContext(niceName,boundScript,null);
 	}
 
-	public JobContext newJobContext(BoundXProcScript boundScript){
+	public JobContext newJobContext(String niceName,BoundXProcScript boundScript){
 		JobId id = JobIdFactory.newId();
-		AbstractJobContext ctxt=new SimpleJobContext(id,boundScript);
+		AbstractJobContext ctxt=new SimpleJobContext(id,niceName,boundScript);
 		this.configure(ctxt);
 		return ctxt;
 

@@ -121,7 +121,7 @@ public class Mocks   {
 		//inception!
 		class MyHiddenContext extends AbstractJobContext{
 			public MyHiddenContext(){
-				super(id,BoundXProcScript.from(script,input,null),mapper);
+				super(id,"hidden",BoundXProcScript.from(script,input,null),mapper);
 				this.setResults(rSet);
 			}
 			@Override

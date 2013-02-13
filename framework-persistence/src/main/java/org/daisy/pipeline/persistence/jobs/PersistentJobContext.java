@@ -77,7 +77,7 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	List<PersistentOptionResult> optionResults= new ArrayList<PersistentOptionResult>();
 
 	public PersistentJobContext(AbstractJobContext ctxt) {
-		super(ctxt.getId(),BoundXProcScript.from(ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs()),ctxt.getMapper());
+		super(ctxt.getId(),ctxt.getName(),BoundXProcScript.from(ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs()),ctxt.getMapper());
 		this.sId=ctxt.getId().toString();
 		if (ctxt.getLogFile()==null)
 			this.logFile="";
@@ -92,7 +92,7 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	 * Constructs a new instance.
 	 */
 	public PersistentJobContext() {
-		super(null,null,null);
+		super(null,"",null,null);
 	}
 
 	private void load(){

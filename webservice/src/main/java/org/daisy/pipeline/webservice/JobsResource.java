@@ -343,10 +343,10 @@ public class JobsResource extends AuthenticatedResource {
 			resourceCollection = new ZipResourceContext(zip);
 		}
 		if(webservice().getConfiguration().isLocal()){
-			ctxt=webservice().getJobContextFactory().newJobContext(bound);	
+			ctxt=webservice().getJobContextFactory().newJobContext("",bound);	
 
 		}else{
-			ctxt=webservice().getJobContextFactory().newMappingJobContext(bound,resourceCollection);
+			ctxt=webservice().getJobContextFactory().newMappingJobContext("",bound,resourceCollection);
 		}
 		Job job = jobMan.newJob(ctxt);
 

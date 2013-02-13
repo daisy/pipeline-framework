@@ -43,14 +43,17 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 
 	private ResultSet results;
 		
+	private String niceName;
 
-	public AbstractJobContext(JobId id,BoundXProcScript boundScript,URIMapper mapper){
+	public AbstractJobContext(JobId id,String niceName,BoundXProcScript boundScript,URIMapper mapper){
 		if(boundScript!=null){
 			this.input=boundScript.getInput();
 			this.script=boundScript.getScript();
 			this.output=boundScript.getOutput();		
 		}
+
 		this.id=id;
+		this.niceName=niceName;
 		this.mapper=mapper;
 
 		if(id!=null)
@@ -196,5 +199,10 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 		this.monitor.getMessageAccessor().delete();
 	}
 
+
+	@Override
+	public String getName() {
+		return niceName;
+	}
 
 }

@@ -193,7 +193,7 @@ public class ResultSetFactoryTest {
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 		Provider<Result> res=output.getResultProvider(outName);
 		res.provide();
-		AbstractJobContext ctxt= new AbstractJobContext(JobIdFactory.newId(),bound,mapper){};
+		AbstractJobContext ctxt= new AbstractJobContext(JobIdFactory.newId(),"name",bound,mapper){};
 		ResultSet rSet=ResultSetFactory.newResultSet(ctxt,mapper);
 		Assert.assertEquals(5,rSet.getResults().size());
 	}

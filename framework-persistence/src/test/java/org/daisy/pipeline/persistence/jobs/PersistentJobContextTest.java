@@ -14,7 +14,6 @@ import org.daisy.common.xproc.XProcInput;
 
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobResult;
-import org.daisy.pipeline.job.JobURIUtils;
 import org.daisy.pipeline.job.URIMapper;
 
 import org.daisy.pipeline.persistence.Database;
