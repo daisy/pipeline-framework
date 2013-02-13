@@ -46,7 +46,7 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-		  <Service-Component>OSGI-INF/event-provider.xml, OSGI-INF/job-execution-service.xml, OSGI-INF/job-context-factory.xml, OSGI-INF/job-manager.xml, OSGI-INF/parser.xml, OSGI-INF/registry.xml,OSGI-INF/job-storage-factory.xml</Service-Component>
+		  <Service-Component>OSGI-INF/event-provider.xml, OSGI-INF/job-execution-service.xml, OSGI-INF/job-context-factory.xml, OSGI-INF/job-manager.xml, OSGI-INF/parser.xml, OSGI-INF/registry.xml</Service-Component>
           </instructions>
         </configuration>
       </plugin>
