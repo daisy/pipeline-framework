@@ -31,6 +31,7 @@ import org.daisy.pipeline.job.ResultSet;
 import org.daisy.pipeline.job.RuntimeConfigurable;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
+import org.daisy.pipeline.script.XProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +47,8 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	String logFile;
 
 	String scriptUri;
+
+	String sNiceName;
 
 
 	@Embedded
@@ -85,6 +88,7 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 			this.logFile=ctxt.getLogFile().toString();
 		this.scriptUri=ctxt.getScript().getURI().toString();
 		this.setResults(ctxt.getResults());
+		this.sNiceName=ctxt.getName();
 		this.load();
 	}
 
@@ -96,11 +100,12 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	}
 
 	private void load(){
-		logger.debug(" coping the objects to the model ");
-		if(this.getScript()==null){
-			logger.debug(String.format("script %s",registry));
-			this.setScript(registry.getScript(URI.create(this.scriptUri)).load());//getScriptService(URI.create(this.scriptUri)).getScript();
-		}
+		logger.debug("coping the objects to the model ");
+		//if(this.getScript()==null){
+			//XProcScript xcript=registry.getScript(URI.create(this.scriptUri)).load();
+			//logger.debug(String.format("load script %s",xcript));
+			//this.setScript(xcript);//getScriptService(URI.create(this.scriptUri)).getScript();
+		//}
 
 		for( XProcPortInfo portName:this.getScript().getXProcPipelineInfo().getInputPorts()){
 			PersistentInputPort anon=new PersistentInputPort(this.getId(),portName.getName());
@@ -122,6 +127,7 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 
 		this.sId=this.getId().toString();
 		this.pMapper=new PersistentMapper(this.getMapper());
+		this.sNiceName=this.getName();
 		//results 
 		//everything is inmutable but this
 		this.updateResults();	
@@ -130,6 +136,12 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 
 	@PostLoad
 	public void postLoad(){
+		logger.debug("Post loading jobcontext");
+		if(this.getScript()==null && registry!=null){
+				XProcScript xcript=registry.getScript(URI.create(this.scriptUri)).load();
+				logger.debug(String.format("load script %s",xcript));
+				this.setScript(xcript);//getScriptService(URI.create(this.scriptUri)).getScript();
+		}
 		//we have all the model but we have to hidrate the actual objects
 		XProcInput.Builder builder= new XProcInput.Builder();	
 		for ( PersistentInputPort input:this.inputPorts){
@@ -158,10 +170,10 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 		}
 		this.setResults(rBuilder.build());
 		this.setLogFile(URI.create(this.logFile));
+		this.setName(this.sNiceName);	
 		//so the context is configured once it leaves to the real world.
 		if (ctxtFactory!=null)
 			ctxtFactory.configure(this);
-		
 		
 	}
 

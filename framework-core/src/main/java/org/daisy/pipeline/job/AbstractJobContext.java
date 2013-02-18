@@ -205,4 +205,8 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 		return niceName;
 	}
 
+	protected void setName(String name) {
+		this.niceName=name;
+	}
+
 }

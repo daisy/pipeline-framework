@@ -304,7 +304,10 @@ public class JobsResource extends AuthenticatedResource {
 	private Job createJob(Document doc, ZipFile zip, Client client) {
 
 		Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
-
+		String niceName="";
+		NodeList elems=doc.getElementsByTagName("niceName"); 
+		if(elems.getLength()!=0)
+			niceName=elems.item(0).getTextContent();
 		// TODO eventually we might want to have an href-script ID lookup table
 		// but for now, we'll get the script ID from the last part of the URL
 		String scriptId = scriptElm.getAttribute("href");
@@ -343,10 +346,10 @@ public class JobsResource extends AuthenticatedResource {
 			resourceCollection = new ZipResourceContext(zip);
 		}
 		if(webservice().getConfiguration().isLocal()){
-			ctxt=webservice().getJobContextFactory().newJobContext("",bound);	
+			ctxt=webservice().getJobContextFactory().newJobContext(niceName,bound);	
 
 		}else{
-			ctxt=webservice().getJobContextFactory().newMappingJobContext("",bound,resourceCollection);
+			ctxt=webservice().getJobContextFactory().newMappingJobContext(niceName,bound,resourceCollection);
 		}
 		Job job = jobMan.newJob(ctxt);
 
