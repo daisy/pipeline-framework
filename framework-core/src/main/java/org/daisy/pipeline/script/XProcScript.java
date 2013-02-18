@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class XProcScript {
 
+
 	/**
 	 * Builder for {@link XProcScript} objects.
 	 */
@@ -252,4 +253,10 @@ public final class XProcScript {
 	public XProcScriptService getDescriptor() {
 		return descriptor;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("XProcScript[name=%s]",this.getName());
+	}
+
 }
