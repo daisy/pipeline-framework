@@ -5,6 +5,7 @@ start =
         element script {
             attribute href { xsd:anyURI }
         }
+	& element nicename {text}?
         
         & element input {
             attribute name { text } 

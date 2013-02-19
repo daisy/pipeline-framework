@@ -305,9 +305,10 @@ public class JobsResource extends AuthenticatedResource {
 
 		Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
 		String niceName="";
-		NodeList elems=doc.getElementsByTagName("niceName"); 
+		NodeList elems=doc.getElementsByTagName("nicename"); 
 		if(elems.getLength()!=0)
 			niceName=elems.item(0).getTextContent();
+		logger.debug(String.format("Job's nice name: %s",niceName));
 		// TODO eventually we might want to have an href-script ID lookup table
 		// but for now, we'll get the script ID from the last part of the URL
 		String scriptId = scriptElm.getAttribute("href");
