@@ -12,12 +12,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.MapsId;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.TypedQuery;
 
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
@@ -33,6 +35,7 @@ import org.slf4j.LoggerFactory;
 //namely, only one object wandering around per JobId
 @Cacheable
 @Table(name="jobs")
+@NamedQuery ( name="Job.getAll", query="select j from PersistentJob j")
 public class PersistentJob  extends Job implements Serializable {
 	private static final Logger logger = LoggerFactory.getLogger(PersistentJob.class);
 	public static final long serialVersionUID=1L;
@@ -91,7 +94,9 @@ public class PersistentJob  extends Job implements Serializable {
 	}
 
 	public static List<Job> getAllJobs(Database db){
-		List<Job> jobs=db.runQuery("select j from PersistentJob j",Job.class);
+		TypedQuery<Job> query =
+			      db.getEntityManager().createNamedQuery("Job.getAll", Job.class);
+		List<Job> jobs=query.getResultList();
 		return jobs;
 		
 
