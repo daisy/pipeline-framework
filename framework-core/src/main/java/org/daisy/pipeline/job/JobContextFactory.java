@@ -13,19 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This is a proxified singleton so we can cope with 
- * osgi easily. 
  *
- * This means that all the 'this' calls have been
- * replaced by INSTANCE.
- * This allows osgi create an instance of the object (or any other class)
- * using the public constructor but all the changes will be performed over the 
- * static instance
- *
- * 
  *
  */
 public final class JobContextFactory {
+
 	private static final Logger logger = LoggerFactory.getLogger(JobContextFactory.class);
 
 	private JobMonitorFactory monitorFactory;
@@ -36,11 +28,11 @@ public final class JobContextFactory {
 		//nothing
 	}
 
-	public JobContext newMappingJobContext(String niceName,BoundXProcScript boundedScript,ResourceCollection collection){
+	public JobContext newMappingJobContext(String niceName,BoundXProcScript boundScript,ResourceCollection collection){
 		JobId id = JobIdFactory.newId();
 		AbstractJobContext ctxt=null;
 		try{
-			 ctxt=new MappingJobContext(id,niceName,boundedScript,collection);
+			 ctxt=new MappingJobContext(id,niceName,boundScript,collection);
 		}catch (IOException ex){
 			throw new RuntimeException("Error while creating MappingJobContext",ex);
 		}
@@ -89,12 +81,9 @@ public final class JobContextFactory {
 	}
 
 	public void configure(RuntimeConfigurable runtimeObj){
-
 		logger.debug(String.format("configuring object %s",runtimeObj));
 		runtimeObj.setEventBusProvider(this.eventbusProvider);
 		runtimeObj.setMonitorFactory(this.monitorFactory);
-		
-
 	}
 
 }
