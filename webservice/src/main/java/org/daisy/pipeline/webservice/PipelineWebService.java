@@ -84,7 +84,7 @@ public class PipelineWebService extends Application {
 		
 		router.attach(Routes.RESULT_PORT_ROUTE       , PortResultResource.class);
 		//goto :comment
-		route= router.attach(Routes.RESULT_PORT_ROUTE_IDX , OptionResultResource.class);
+		route= router.attach(Routes.RESULT_PORT_ROUTE_IDX , PortResultResource.class);
 		routeVariables = route.getTemplate().getVariables();
 		routeVariables.put("idx", new Variable(Variable.TYPE_URI_ALL));
 		router.attach(Routes.ALIVE_ROUTE,AliveResource.class);
