@@ -2,6 +2,8 @@ package org.daisy.pipeline.webservice;
 
 import java.util.Collection;
 
+import javax.xml.namespace.QName;
+
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
@@ -17,14 +19,20 @@ import org.restlet.resource.Get;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+
 /**
  * The Class ResultResource.
  */
-public class ResultResource extends AuthenticatedResource {
+public abstract class NamedResultResource extends AuthenticatedResource {
 	/** The job. */
 	private Job job;
-	private static Logger logger = LoggerFactory.getLogger(ResultResource.class
-			.getName());
+	private String idx;
+	private String name;
+	private static Logger logger = LoggerFactory
+			.getLogger(NamedResultResource.class.getName());
 
 	/*
 	 * (non-Javadoc)
@@ -43,9 +51,11 @@ public class ResultResource extends AuthenticatedResource {
 			JobId id = JobIdFactory.newIdFromString(idParam);
 			job = jobMan.getJob(id);
 		} catch (Exception e) {
-			logger.debug("Job Id malformed - Job not found: " + idParam);
+			logger.warn("Job Id malformed - Job not found: " + idParam);
 			job = null;
 		}
+		name = (String) getRequestAttributes().get("name");
+		idx = (String) getRequestAttributes().get("idx");
 	}
 
 	/**
@@ -69,8 +79,51 @@ public class ResultResource extends AuthenticatedResource {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return this.getErrorRepresentation("Job status differnt to DONE");
 		}
+		if (!(name!=null&&!name.isEmpty())) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return this.getErrorRepresentation("No name provided");
+		}
+		if (idx!=null&&!idx.isEmpty()){
+			return this.singleResult();
 
-		Collection<JobResult> results = job.getContext().getResults().getResults();
+		}else{
+			return this.zippedResult();
+		}
+	}
+
+	private Representation singleResult(){
+		Collection<JobResult> results=this.gatherResults(this.job,this.name);
+		logger.debug(String.format("Getting single result for %s idx: %s",this.name,this.idx));
+		results=Collections2.filter(results, new Predicate<JobResult>(){
+			@Override
+			public boolean apply(JobResult res) {
+				return res.getIdx().equals(NamedResultResource.this.idx);
+			}
+		});
+		if(results.size()==0){
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return this.getErrorRepresentation(String.format("Option idx %s not found for option name %s",idx,name));
+		}
+
+		try{
+		JobResult res=Lists.newArrayList(results).get(0);
+			Representation rep = new InputRepresentation(res.getPath().toURL().openStream(),
+					MediaType.APPLICATION_ALL);//TODO get media type from the result
+			Disposition disposition = new Disposition();
+			disposition.setFilename(res.getIdx());
+			disposition.setType(Disposition.TYPE_ATTACHMENT);
+			rep.setDisposition(disposition);
+			return rep;
+		}catch(Exception e){
+				setStatus(Status.SERVER_ERROR_INTERNAL);
+				return this.getErrorRepresentation(e);
+		}
+			
+	}
+
+	private Representation zippedResult(){
+		Collection<JobResult> results=this.gatherResults(this.job,this.name);
+		logger.debug(String.format("Getting port result for %s ",this.name));
 		if (results.size() == 0) {
 			setStatus(Status.SERVER_ERROR_INTERNAL);
 			return this.getErrorRepresentation("No results available");
@@ -87,5 +140,8 @@ public class ResultResource extends AuthenticatedResource {
 				setStatus(Status.SERVER_ERROR_INTERNAL);
 				return this.getErrorRepresentation(e);
 		}
+
 	}
+
+	protected abstract Collection<JobResult> gatherResults(Job job,String name);
 }
