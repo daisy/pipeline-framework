@@ -19,6 +19,7 @@ import javax.xml.transform.sax.SAXSource;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.daisy.common.base.Provider;
+import org.daisy.common.transform.LazySaxResultProvider;
 import org.daisy.common.transform.LazySaxSourceProvider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
@@ -337,6 +338,7 @@ public class JobsResource extends AuthenticatedResource {
 		  }*/
 
 		addOptionsToJob(doc.getElementsByTagName("option"), script, inBuilder);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
+		addOutputsToJob(doc.getElementsByTagName("output"), script.getXProcPipelineInfo().getOutputPorts(), outBuilder);
 
 		BoundXProcScript bound= BoundXProcScript.from(script,inBuilder.build(),outBuilder.build());
 
@@ -402,14 +404,6 @@ public class JobsResource extends AuthenticatedResource {
 					if (fileNodes.getLength() > 0) {
 						for (int j = 0; j < fileNodes.getLength(); j++) {
 							String src = ((Element)fileNodes.item(j)).getAttribute("value");
-							//							Provider<Source> prov= new Provider<Source>(){
-							//								@Override
-							//								public Source provide(){
-							//									SAXSource source = new SAXSource();
-							//									source.setSystemId(new String(src.getBytes()));
-							//									return source;
-							//								}
-							//							};
 							LazySaxSourceProvider prov= new LazySaxSourceProvider(src);
 							builder.withInput(name, prov);
 						}
@@ -447,6 +441,36 @@ public class JobsResource extends AuthenticatedResource {
 
 	}
 
+	/**
+	 * Adds the inputs to job.
+	 *
+	 * @param nodes the nodes
+	 * @param inputPorts the input ports
+	 * @param builder the builder
+	 */
+	private void addOutputsToJob(NodeList nodes, Iterable<XProcPortInfo> ports, XProcOutput.Builder builder) {
+		if(!webservice().getConfiguration().isLocal()){
+			return;
+		}
+
+		for(XProcPortInfo output : ports){
+			String outputName = output.getName();
+			for (int i = 0; i < nodes.getLength(); i++) {
+				Element outputElm = (Element) nodes.item(i);
+				String name = outputElm.getAttribute("name");
+				if (name.equals(outputName)) {
+					NodeList fileNodes = outputElm.getElementsByTagName("item");
+
+					for (int j = 0; j < fileNodes.getLength(); j++) {
+						String res = ((Element)fileNodes.item(j)).getAttribute("value");
+						LazySaxResultProvider prov= new LazySaxResultProvider(res);
+						builder.withOutput(name, prov);
+					}
+				}
+			}
+		}
+
+	}
 	/**
 	 * Adds the options to job.
 	 */
