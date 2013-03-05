@@ -18,8 +18,8 @@ start =
         }* 
         
         & element output {
-            attribute name { text }
-            & text
+            attribute name { text } 
+            & (text | item+)
         }*
         & element callback {
             attribute href { text }
