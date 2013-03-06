@@ -12,26 +12,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Component {
 
-	//private static final String META_INF = "/META-INF/";
 
-	/**
-	 * The Enum Space.
-	 */
-	public enum Space {
-
-		/** The XSLT. */
-		XSLT,
-		/** The XPROC. */
-		XPROC,
-		/** The XQUERY. */
-		XQUERY,
-		/** The RNC. */
-		RNC,
-		/** The XSD. */
-		XSD,
-		/** The NG. */
-		NG
-	}
 
 	/** The uri. */
 	private final URI uri;
@@ -61,7 +42,6 @@ public class Component {
 	public Component(URI uri, String path, ResourceLoader loader) {
 		this.uri = uri;
 		this.path = path;
-		//this.space = space;
 		this.loader = loader;
 	}
 

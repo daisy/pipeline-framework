@@ -73,7 +73,9 @@ public class JobResource extends AuthenticatedResource {
 
 		setStatus(Status.SUCCESS_OK);
 		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
-		
+	
+		if(!this.webservice().getConfiguration().isLocal())
+			writer.withFullResults(true);		
 		if (msgSeq == -1) {
 			writer = writer.withAllMessages();
 		}

@@ -3,12 +3,13 @@ package org.daisy.pipeline.webservice;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Random;
 
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.common.properties.PropertyTracker;
-
+import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.webserviceutils.Properties;
@@ -22,11 +23,13 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
 import org.restlet.Application;
-import org.restlet.Server;
 import org.restlet.Component;
 import org.restlet.Restlet;
+import org.restlet.Server;
 import org.restlet.data.Protocol;
 import org.restlet.routing.Router;
+import org.restlet.routing.TemplateRoute;
+import org.restlet.routing.Variable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +47,7 @@ public class PipelineWebService extends Application {
 	/** The job manager. */
 	private JobManager jobManager;
 
+	private JobContextFactory ctxtFactory;
 	/** The script registry. */
 	private ScriptRegistry scriptRegistry;
 
@@ -71,6 +75,18 @@ public class PipelineWebService extends Application {
 		router.attach(Routes.JOB_ROUTE, JobResource.class);
 		router.attach(Routes.LOG_ROUTE, LogResource.class);
 		router.attach(Routes.RESULT_ROUTE, ResultResource.class);
+		router.attach(Routes.RESULT_OPTION_ROUTE     , OptionResultResource.class);
+		//:comment This allows to have url-like elements in the idx part of the query	
+		TemplateRoute route= router.attach(Routes.RESULT_OPTION_ROUTE_IDX , OptionResultResource.class);
+		Map<String, Variable> routeVariables = route.getTemplate().getVariables();
+		routeVariables.put("idx", new Variable(Variable.TYPE_URI_ALL));
+
+		
+		router.attach(Routes.RESULT_PORT_ROUTE       , PortResultResource.class);
+		//goto :comment
+		route= router.attach(Routes.RESULT_PORT_ROUTE_IDX , PortResultResource.class);
+		routeVariables = route.getTemplate().getVariables();
+		routeVariables.put("idx", new Variable(Variable.TYPE_URI_ALL));
 		router.attach(Routes.ALIVE_ROUTE,AliveResource.class);
 
 		// init the administrative paths
@@ -78,7 +94,6 @@ public class PipelineWebService extends Application {
 		router.attach(Routes.CLIENT_ROUTE, ClientResource.class);
 		router.attach(Routes.HALT_ROUTE, HaltResource.class);
 		router.attach(Routes.PROPERTIES_ROUTE, PropertiesResource.class  );
-
 		return router;
 	}
 
@@ -218,8 +233,25 @@ public class PipelineWebService extends Application {
 		this.jobManager = jobManager;
 	}
 
+	/**
+	 * Sets the job context factory.
+	 *
+	 * @param  ctxtFactory the JobContextFactory
+	 */
+	public void setJobContextFactory(JobContextFactory ctxtFactory){
+		this.ctxtFactory= ctxtFactory;
+	}
 	public PipelineWebServiceConfiguration getConfiguration(){
 		return this.conf;	
+	}
+
+	/**
+	 * Gets the ctxtFactory for this instance.
+	 *
+	 * @return The job context factory.
+	 */
+	public JobContextFactory getJobContextFactory() {
+		return this.ctxtFactory;
 	}
 
 	/**

@@ -1,7 +1,5 @@
 package org.daisy.pipeline.job;
 
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.pipeline.script.XProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +8,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Job manager + executing service
  */
-public class ExecutingJobManager extends DefaultJobManager {
+public class ExecutingJobManager extends AbstractJobManager {
 
 	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory.getLogger(ExecutingJobManager.class);
@@ -29,14 +27,11 @@ public class ExecutingJobManager extends DefaultJobManager {
 	 * @see org.daisy.pipeline.job.DefaultJobManager#newJob(org.daisy.pipeline.script.XProcScript, org.daisy.common.xproc.XProcInput, org.daisy.pipeline.job.ResourceCollection)
 	 */
 	@Override
-	public Job newJob(XProcScript script, XProcInput input,
-			ResourceCollection context) {
+	protected void onNewJob(Job job) {
 		if (executor == null) {
 			throw new IllegalStateException("Execution service unavailable");
 		}
-		Job job = super.newJob(script, input, context);
 		executor.submit(job);
-		return job;
 	}
 
 	/* (non-Javadoc)
@@ -44,7 +39,7 @@ public class ExecutingJobManager extends DefaultJobManager {
 	 */
 	@Override
 	public Job deleteJob(JobId id) {
-		// TODO cancel job when deleting
+		//FIXME: executor should be able to stop tasks
 		return super.deleteJob(id);
 	}
 

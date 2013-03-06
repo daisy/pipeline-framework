@@ -17,17 +17,20 @@ import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.daisy.common.base.Provider;
+import org.daisy.common.transform.LazySaxResultProvider;
 import org.daisy.common.transform.LazySaxSourceProvider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
+import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.ResourceCollection;
 import org.daisy.pipeline.job.ZipResourceContext;
+import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
@@ -302,7 +305,11 @@ public class JobsResource extends AuthenticatedResource {
 	private Job createJob(Document doc, ZipFile zip, Client client) {
 
 		Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
-
+		String niceName="";
+		NodeList elems=doc.getElementsByTagName("nicename"); 
+		if(elems.getLength()!=0)
+			niceName=elems.item(0).getTextContent();
+		logger.debug(String.format("Job's nice name: %s",niceName));
 		// TODO eventually we might want to have an href-script ID lookup table
 		// but for now, we'll get the script ID from the last part of the URL
 		String scriptId = scriptElm.getAttribute("href");
@@ -320,28 +327,34 @@ public class JobsResource extends AuthenticatedResource {
 			return null;
 		}
 		XProcScript script = unfilteredScript.load();
-		XProcInput.Builder builder = new XProcInput.Builder(script.getXProcPipelineInfo());
+		XProcInput.Builder inBuilder = new XProcInput.Builder();
+		XProcOutput.Builder outBuilder = new XProcOutput.Builder();
 
-		addInputsToJob(doc.getElementsByTagName("input"), script.getXProcPipelineInfo().getInputPorts(), builder);
+		addInputsToJob(doc.getElementsByTagName("input"), script.getXProcPipelineInfo().getInputPorts(), inBuilder);
 
 		/*Iterable<XProcOptionInfo> filteredOptions = null;
 		  if (!((PipelineWebService) getApplication()).isLocal()) {
 		  filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
 		  }*/
 
-		addOptionsToJob(doc.getElementsByTagName("option"), script, builder);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
+		addOptionsToJob(doc.getElementsByTagName("option"), script, inBuilder);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
+		addOutputsToJob(doc.getElementsByTagName("output"), script.getXProcPipelineInfo().getOutputPorts(), outBuilder);
 
-		XProcInput input = builder.build();
+		BoundXProcScript bound= BoundXProcScript.from(script,inBuilder.build(),outBuilder.build());
 
 		JobManager jobMan = webservice().getJobManager();
-		Job job = null;
+		JobContext ctxt=null;
+		ResourceCollection resourceCollection=null;
 		if (zip != null){
-			ResourceCollection resourceCollection = new ZipResourceContext(zip);
-			job = jobMan.newJob(script, input, resourceCollection);
+			resourceCollection = new ZipResourceContext(zip);
 		}
-		else {
-			job = jobMan.newJob(script, input);
+		if(webservice().getConfiguration().isLocal()){
+			ctxt=webservice().getJobContextFactory().newJobContext(niceName,bound);	
+
+		}else{
+			ctxt=webservice().getJobContextFactory().newMappingJobContext(niceName,bound,resourceCollection);
 		}
+		Job job = jobMan.newJob(ctxt);
 
 		NodeList callbacks = doc.getElementsByTagName("callback");
 		for (int i = 0; i<callbacks.getLength(); i++) {
@@ -391,14 +404,6 @@ public class JobsResource extends AuthenticatedResource {
 					if (fileNodes.getLength() > 0) {
 						for (int j = 0; j < fileNodes.getLength(); j++) {
 							String src = ((Element)fileNodes.item(j)).getAttribute("value");
-							//							Provider<Source> prov= new Provider<Source>(){
-							//								@Override
-							//								public Source provide(){
-							//									SAXSource source = new SAXSource();
-							//									source.setSystemId(new String(src.getBytes()));
-							//									return source;
-							//								}
-							//							};
 							LazySaxSourceProvider prov= new LazySaxSourceProvider(src);
 							builder.withInput(name, prov);
 						}
@@ -436,6 +441,36 @@ public class JobsResource extends AuthenticatedResource {
 
 	}
 
+	/**
+	 * Adds the inputs to job.
+	 *
+	 * @param nodes the nodes
+	 * @param inputPorts the input ports
+	 * @param builder the builder
+	 */
+	private void addOutputsToJob(NodeList nodes, Iterable<XProcPortInfo> ports, XProcOutput.Builder builder) {
+		if(!webservice().getConfiguration().isLocal()){
+			return;
+		}
+
+		for(XProcPortInfo output : ports){
+			String outputName = output.getName();
+			for (int i = 0; i < nodes.getLength(); i++) {
+				Element outputElm = (Element) nodes.item(i);
+				String name = outputElm.getAttribute("name");
+				if (name.equals(outputName)) {
+					NodeList fileNodes = outputElm.getElementsByTagName("item");
+
+					for (int j = 0; j < fileNodes.getLength(); j++) {
+						String res = ((Element)fileNodes.item(j)).getAttribute("value");
+						LazySaxResultProvider prov= new LazySaxResultProvider(res);
+						builder.withOutput(name, prov);
+					}
+				}
+			}
+		}
+
+	}
 	/**
 	 * Adds the options to job.
 	 */

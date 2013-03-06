@@ -1,142 +1,126 @@
 package org.daisy.pipeline.job;
 
 import java.net.URI;
-import java.util.LinkedList;
-import java.util.List;
 
-import org.daisy.common.messaging.Message;
-import org.daisy.common.messaging.MessageAccessor;
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class JobResult.
  */
 public class JobResult {
 
-	/**
-	 * The Class Builder.
-	 */
-	public static class Builder {
+	@Override
+	public int hashCode() {
+		return this.idx.hashCode()+this.path.hashCode();
+	}
 
-		/** The m zip file. */
-		URI mZipFile;
+	@Override
+	public boolean equals(Object obj) {
+		if(obj==null || !(obj instanceof JobResult))
+			return false;
+		JobResult other=(JobResult) obj;
+		return this.idx.equals(other.idx)&&this.path.equals(other.path);
 
-		/** The m messages. */
-		MessageAccessor mMessages;
+	}
 
-		/** The m log file. */
-		URI mLogFile;
+	@Override
+	public String toString() {
+		return String.format("JobResult [#=%s path='%s']", this.idx,this.path);
+	}
+
+	public static class Builder{
+		private String idx;
+		private URI path;
+		private String mediaType;
 
 		/**
-		 * With message accessor.
-		 *
-		 * @param messageAccessor the message accessor
-		 * @return the builder
+		 * Constructs a new instance.
 		 */
-		public Builder withMessageAccessor(MessageAccessor messageAccessor) {
-			mMessages = messageAccessor;
+		public Builder() {
+		}
+
+		/**
+		 * Sets the idx for this instance.
+		 *
+		 * @param idx The idx.
+		 */
+		public Builder withIdx(String idx) {
+			this.idx = idx;
 			return this;
 		}
 
 		/**
-		 * With zip file.
+		 * Sets the path for this instance.
 		 *
-		 * @param zipFile the zip file
-		 * @return the builder
+		 * @param path The path.
 		 */
-		public Builder withZipFile(URI zipFile) {
-			mZipFile = zipFile;
+		public Builder withPath(URI path) {
+			this.path = path;
 			return this;
 		}
 
 		/**
-		 * With log file.
+		 * Sets the mediaType for this instance.
 		 *
-		 * @param logFile the log file
-		 * @return the builder
+		 * @param mediaType The mediaType.
 		 */
-		public Builder withLogFile(URI logFile) {
-			mLogFile=logFile;
+		public Builder withMediaType(String mediaType) {
+			this.mediaType = mediaType;
 			return this;
 		}
-
-		/**
-		 * Builds the job result object.
-		 *
-		 * @return the job result
-		 */
-		public JobResult build() {
-			return new JobResult(mZipFile, mMessages,mLogFile);
-		}
-
-
-	}
-
-	/** The zip file. */
-	final URI mZipFile;
-
-	/** The  messages. */
-	final MessageAccessor mMessages;
-
-	/** The  log file. */
-	final URI mLogFile;
-
-	/**
-	 * Instantiates a new job result.
-	 *
-	 * @param zipFile the zip file
-	 * @param messages the messages
-	 * @param logFile the log file
-	 */
-	private JobResult(URI zipFile, MessageAccessor messages,URI logFile) {
-		super();
-		mZipFile = zipFile;
-		mMessages = messages;
-		mLogFile=logFile;
-	}
-
-	/**
-	 * Gets the errors produced during the pipeline execution.
-	 *
-	 * @return the errors
-	 */
-	public List<Message> getErrors() {
-		if (mMessages == null) {
-			return new LinkedList<Message>();
-		} else {
-			return mMessages.getErrors();
+		
+		public JobResult build(){
+			return new  JobResult(this.idx,this.path,this.mediaType);
 		}
 	}
 
+	//short index for the result 
+	private String idx;
+
+	// path to the actual file
+	private URI path;
+
+	//media type
+	private String mediaType;
+
 	/**
-	 * Gets the warnings produced during the pipeline execution.
+	 * Constructs a new instance.
 	 *
-	 * @return the warnings
+	 * @param idx The idx for this instance.
+	 * @param path The path for this instance.
+	 * @param mediaType The mediaType for this instance.
 	 */
-	public List<Message> getWarnings() {
-		if (mMessages == null) {
-			return new LinkedList<Message>();
-		} else {
-			return mMessages.getWarnings();
-		}
+	private JobResult(String idx, URI path, String mediaType) {
+		this.idx = idx;
+		this.path = path;
+		this.mediaType = mediaType;
 	}
 
 	/**
-	 * Gets the zip.
+	 * Gets the idx for this instance.
 	 *
-	 * @return the zip
+	 * @return The idx.
 	 */
-	public URI getZip() {
-		return mZipFile;
+	public String getIdx() {
+		return this.idx;
 	}
 
 	/**
-	 * Gets the log file.
+	 * Gets the path for this instance.
 	 *
-	 * @return the log file
+	 * @return The path.
 	 */
-	public URI getLogFile(){
-		return mLogFile;
+	public URI getPath() {
+		return this.path;
 	}
+
+	/**
+	 * Gets the mediaType for this instance.
+	 *
+	 * @return The mediaType.
+	 */
+	public String getMediaType() {
+		return this.mediaType;
+	}
+
+
 
 }

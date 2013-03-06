@@ -240,8 +240,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		} catch (SaxonApiException e) {
 			e.printStackTrace();
 		}
-		// pipeline set to null to free its reference
-		return CalabashXProcResult.newInstance(/* pipeline.xpipe */null,
+		return CalabashXProcResult.newInstance( pipeline.xpipe ,
 				pipeline.config);
 	}
 

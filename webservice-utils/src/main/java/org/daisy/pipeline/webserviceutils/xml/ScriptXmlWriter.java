@@ -129,8 +129,10 @@ public class ScriptXmlWriter {
 	}
 	
 	private void addOutputPorts(Iterable<XProcPortInfo> outputs, Element parent) {
+		logger.debug("Adding output ports");
 		Document doc = parent.getOwnerDocument();
 		for (XProcPortInfo output : outputs) {
+			logger.debug("Adding output port"+output.getName());
 			XProcPortMetadata meta = script.getPortMetadata(output.getName());
 			Element outputElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "output");
 			outputElm.setAttribute("name", output.getName());

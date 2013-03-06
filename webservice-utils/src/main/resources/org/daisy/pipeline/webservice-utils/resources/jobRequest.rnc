@@ -5,6 +5,7 @@ start =
         element script {
             attribute href { xsd:anyURI }
         }
+	& element nicename {text}?
         
         & element input {
             attribute name { text } 
@@ -17,8 +18,8 @@ start =
         }* 
         
         & element output {
-            attribute name { text }
-            & text
+            attribute name { text } 
+            & (text | item+)
         }*
         & element callback {
             attribute href { text }

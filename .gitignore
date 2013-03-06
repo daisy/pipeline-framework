@@ -5,6 +5,7 @@ target/
 .classpath
 .project
 .settings/
+.metadata
 
 # OS Files
 .DS_Store

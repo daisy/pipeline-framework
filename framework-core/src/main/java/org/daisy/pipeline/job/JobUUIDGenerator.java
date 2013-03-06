@@ -53,17 +53,6 @@ public class JobUUIDGenerator implements JobIdGenerator {
 			mId = UUID.fromString(base);
 		}
 
-		/* (non-Javadoc)
-		 * @see java.lang.Comparable#compareTo(java.lang.Object)
-		 */
-		@Override
-		public int compareTo(JobId other) {
-			if (other instanceof JobUUID) {
-				return ((JobUUID) other).mId.compareTo(mId);
-			} else {
-				return -1;
-			}
-		}
 
 		/* (non-Javadoc)
 		 * @see java.lang.Object#hashCode()

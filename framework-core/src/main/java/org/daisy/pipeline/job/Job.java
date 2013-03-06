@@ -1,23 +1,14 @@
 package org.daisy.pipeline.job;
 
-import java.io.IOException;
-
 import java.util.Properties;
 
 import org.daisy.common.xproc.XProcEngine;
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
 
 import org.daisy.pipeline.job.StatusMessage;
-import org.daisy.pipeline.job.StatusMessage;
-import org.daisy.pipeline.job.StatusMessage;
-import org.daisy.pipeline.script.XProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.eventbus.EventBus;
 
 // TODO: Auto-generated Javadoc
 //TODO check thread safety
@@ -42,61 +33,32 @@ public class Job {
 	}
 
 
-	private EventBus eventBus;
-	/** The id. */
-	private final JobId id;
-
-	/** The input. */
-	private final XProcInput input;
-
-	/** The script. */
-	private final XProcScript script;
-
-	//private XProcResult output;
-
-	/** The results. */
-	private JobResult results;
-
-	/** The io bridge. */
-	private final IOBridge ioBridge;
-
 	/** The status. */
-	private Status status = Status.IDLE;
+	private volatile Status status = Status.IDLE;
 
-	private final XProcMonitor monitor;
+	
+	protected JobContext ctxt;
 
-	/**
-	 * Instantiates a new job.
-	 *
-	 * @param id
-	 *            the id
-	 * @param script
-	 *            the script
-	 * @param input
-	 *            the input
-	 * @param ioBridge
-	 *            the io bridge
-	 */
-	Job(JobId id, XProcScript script, XProcInput input,
-			IOBridge ioBridge,JobMonitor monitor,EventBus eventBus) {
-		// TODO check arguments
-		this.id = id;
-		this.script = script;
-		this.input = input;
-		this.ioBridge = ioBridge;
-		this.monitor=monitor;
-		this.eventBus=eventBus;
-		this.results=new JobResult.Builder().withMessageAccessor(monitor.getMessageAccessor()).withZipFile(null).withLogFile(null).build();
-		this.postStatus();
+	protected Job(JobContext ctxt) {
+		this.ctxt=ctxt;
 	}
 
+	protected Job(JobContext ctxt,Status status) {
+		this.ctxt=ctxt;
+		this.status=status;
+	}
+	public static Job newJob(JobContext ctxt){
+		Job job=new Job(ctxt);
+		job.changeStatus(Status.IDLE);
+		return job;
+	}
 	/**
 	 * Gets the id.
 	 *
 	 * @return the id
 	 */
-	public JobId getId() {
-		return id;
+	public final JobId getId() {
+		return this.ctxt.getId();
 	}
 
 	/**
@@ -104,17 +66,24 @@ public class Job {
 	 *
 	 * @return the status
 	 */
-	public Status getStatus() {
-		return status;
+	public final Status getStatus() {
+		synchronized(this.status){
+			return status;
+		}
 	}
 
+	protected void setStatus(Status status){
+		synchronized(this.status){
+			this.status=status;
+		}
+	}
 	/**
-	 * Gets the script.
+	 * Gets the ctxt for this instance.
 	 *
-	 * @return the script
+	 * @return The ctxt.
 	 */
-	public XProcScript getScript() {
-		return script;
+	public final JobContext getContext() {
+		return this.ctxt;
 	}
 
 	/**
@@ -122,67 +91,48 @@ public class Job {
 	 *
 	 * @return the x proc output
 	 */
-	XProcResult getXProcOutput() {
+	final XProcResult getXProcOutput() {
 		return null;
 	}
-	private void postStatus(){
-		this.eventBus.post(new StatusMessage.Builder().withJobId(this.id).withStatus(this.status).build());
+
+	protected synchronized final void changeStatus(Status to){
+		this.status=to;
+		if (this.ctxt!=null&&this.ctxt.getEventBus()!=null)
+			this.ctxt.getEventBus().post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
+		else
+			logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? " the context ": " event bus ") + "is null");
+		this.onStatusChanged(to);
 	}
+
 	/**
 	 * Runs the job using the XProcEngine as script loader.
 	 *
 	 * @param engine the engine
 	 */
-	public void run(XProcEngine engine) {
-		status = Status.RUNNING;
-		this.postStatus();
+	public synchronized final void run(XProcEngine engine) {
+		changeStatus(Status.RUNNING);
 		XProcPipeline pipeline = null;
 		try{
-		pipeline = engine.load(script.getURI());
+		pipeline = engine.load(this.ctxt.getScript().getURI());
 		}catch (Exception e){
-			logger.error("Error while loading the script:"+this.script.getName());
+			logger.error("Error while loading the script:"+this.ctxt.getScript().getName());
 			throw new RuntimeException(e);
 		}
 		try{
 			Properties props=new Properties();
-			props.setProperty("JOB_ID", id.toString());
-			pipeline.run(input,monitor,props);
-			buildResults();
-			status=Status.DONE;
-			this.postStatus();
+			props.setProperty("JOB_ID", this.ctxt.getId().toString());
+			XProcResult results = pipeline.run(this.ctxt.getInputs(),this.ctxt.getMonitor(),props);
+			this.ctxt.writeResult(results);
+			changeStatus( Status.DONE );
 		}catch(Exception e){
 			logger.error("job finished with error state",e);
-			//buildResults();
-			status=Status.ERROR;
-			this.postStatus();
+			changeStatus( Status.ERROR);
 		}
 
 	}
-	private void buildResults() {
-		JobResult.Builder builder = new JobResult.Builder();
-		builder.withMessageAccessor(monitor.getMessageAccessor());
-		builder.withLogFile(ioBridge.getLogFile());
-		builder = (ioBridge != null) ? builder.withZipFile(ioBridge
-				.zipOutput()) : builder;
-		results = builder.build();
-	}
-	/**
-	 * Gets the result.
-	 *
-	 * @return the result
-	 */
-	public JobResult getResult() {
-		return results;
-	}
 
-	public XProcMonitor getMonitor(){
-		return monitor;
-	}
-
-	public boolean cleanUp(){
-		boolean clean=true;
-		clean&=this.getMonitor().getMessageAccessor().delete();	
-		return	clean&this.ioBridge.cleanUp();
+	protected void onStatusChanged(Status newStatus){
+		//for subclasses
 	}
 
 }

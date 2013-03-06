@@ -7,7 +7,8 @@ import java.util.Map;
 
 // TODO: Auto-generated Javadoc
 /**
- * Daisy pipeline module holds a set of components accesible via their uri, its name, version and dependencies.
+ * Daisy pipeline module holds a set of components accesible via their uri, its
+ * name, version and dependencies.
  */
 public class Module {
 
@@ -20,36 +21,39 @@ public class Module {
 	/** The title. */
 	private final String title;
 
-	/** The dependencies. */
-	private final Map<String, String> dependencies;
-
 	/** The components. */
-	private final HashMap<URI,Component> components = new HashMap<URI, Component>();
+	private final HashMap<URI, Component> components = new HashMap<URI, Component>();
 	/** The entities. */
-	private final HashMap<String,Entity> entities = new HashMap<String, Entity>();
+	private final HashMap<String, Entity> entities = new HashMap<String, Entity>();
 
 	/**
 	 * Instantiates a new module.
-	 *
-	 * @param name the name
-	 * @param version the version
-	 * @param title the title
-	 * @param dependencies the dependencies
-	 * @param components the components
-	 * @param entities the entities
+	 * 
+	 * @param name
+	 *            the name
+	 * @param version
+	 *            the version
+	 * @param title
+	 *            the title
+	 * @param dependencies
+	 *            the dependencies
+	 * @param components
+	 *            the components
+	 * @param entities
+	 *            the entities
 	 */
 	public Module(String name, String version, String title,
-			Map<String, String> dependencies, List<Component> components,List<Entity> entities) {
+			List<Component> components, List<Entity> entities) {
 		this.name = name;
 		this.version = version;
 		this.title = title;
-		this.dependencies = dependencies;
-		for (Component component:components ){
+
+		for (Component component : components) {
 			component.setModule(this);
 			this.components.put(component.getURI(), component);
 		}
 
-		for (Entity entity:entities){
+		for (Entity entity : entities) {
 			entity.setModule(this);
 			this.entities.put(entity.getPublicId(), entity);
 		}
@@ -58,7 +62,7 @@ public class Module {
 
 	/**
 	 * Gets the name.
-	 *
+	 * 
 	 * @return the name
 	 */
 	public String getName() {
@@ -67,7 +71,7 @@ public class Module {
 
 	/**
 	 * Gets the version.
-	 *
+	 * 
 	 * @return the version
 	 */
 	public String getVersion() {
@@ -76,7 +80,7 @@ public class Module {
 
 	/**
 	 * Gets the title.
-	 *
+	 * 
 	 * @return the title
 	 */
 	public String getTitle() {
@@ -84,17 +88,8 @@ public class Module {
 	}
 
 	/**
-	 * Gets the dependencies.
-	 *
-	 * @return the dependencies
-	 */
-	public Map<String, String> getDependencies() {
-		return dependencies;
-	}
-
-	/**
 	 * Gets the components.
-	 *
+	 * 
 	 * @return the components
 	 */
 	public Iterable<Component> getComponents() {
@@ -103,34 +98,38 @@ public class Module {
 
 	/**
 	 * Gets the component identified by the given uri.
-	 *
-	 * @param uri the uri
+	 * 
+	 * @param uri
+	 *            the uri
 	 * @return the component
 	 */
-	public Component getComponent(URI uri){
+	public Component getComponent(URI uri) {
 		return components.get(uri);
 	}
 
 	/**
 	 * Gets the list of entities.
-	 *
+	 * 
 	 * @return the entities
 	 */
-	public Iterable<Entity> getEntities(){
+	public Iterable<Entity> getEntities() {
 		return entities.values();
 	}
 
 	/**
 	 * Gets the entity identified by the given public id.
-	 *
-	 * @param publicId the public id
+	 * 
+	 * @param publicId
+	 *            the public id
 	 * @return the entity
 	 */
-	public Entity getEntity(String publicId){
+	public Entity getEntity(String publicId) {
 		return entities.get(publicId);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

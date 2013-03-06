@@ -9,12 +9,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
+
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.pipeline.job.JobId;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PersistentMessageAccessor extends MessageAccessor {
+	private static final Logger logger =
+		LoggerFactory.getLogger(PersistentMessageAccessor.class);
+
 
 	JobId jobId;
 	private EntityManagerFactory emf;
@@ -108,26 +115,10 @@ public class PersistentMessageAccessor extends MessageAccessor {
 	
 	private List<Message> getMessages(JobId id,int from, List<Level> levels){
 		EntityManager em = emf.createEntityManager();
-		/*
-		StringBuilder sqlBuilder=new StringBuilder("select m from PersistentMessage m where m.jobId='%s' and  m.sequence > %s and m.level in ( ");
-		
-		for (int i=0;i<levels.size();i++){
-			sqlBuilder.append(" ?"+(i+1) );
-			if(i!=levels.size()-1)
-				sqlBuilder.append(", ");
-		}
-		sqlBuilder.append(") order by m.sequence ");
-		String sql=String.format(sqlBuilder.toString(), id.toString(),from);
-		*/
 		StringBuilder sqlBuilder=new StringBuilder("select m from PersistentMessage m where m.jobId='%s' and  m.sequence > %s");
 		String sql=String.format(sqlBuilder.toString(), id.toString(),from);
 		Query q=em.createQuery(sql);
-		/*
-		int i=1;
-		for (Level l:levels){
-			q.setParameter(i++, l);
-		}
-		*/
+
 		@SuppressWarnings("unchecked") //just how persistence works
 		List<Message> result = q.getResultList();
 		em.close();
@@ -136,26 +127,9 @@ public class PersistentMessageAccessor extends MessageAccessor {
 	
 	private List<Message> getMessagesInRange(JobId id,int start, int end, List<Level> levels){
 		EntityManager em = emf.createEntityManager();
-		/*
-		StringBuilder sqlBuilder=new StringBuilder("select m from PersistentMessage m where m.jobId='%s' and  m.sequence > %s and m.level in ( ");
-		
-		for (int i=0;i<levels.size();i++){
-			sqlBuilder.append(" ?"+(i+1) );
-			if(i!=levels.size()-1)
-				sqlBuilder.append(", ");
-		}
-		sqlBuilder.append(") order by m.sequence ");
-		String sql=String.format(sqlBuilder.toString(), id.toString(),from);
-		*/
 		StringBuilder sqlBuilder=new StringBuilder("select m from PersistentMessage m where m.jobId='%s' and  m.sequence >= %s and m.sequence <= %s");
 		String sql=String.format(sqlBuilder.toString(), id.toString(),start,end);
 		Query q=em.createQuery(sql);
-		/*
-		int i=1;
-		for (Level l:levels){
-			q.setParameter(i++, l);
-		}
-		*/
 		@SuppressWarnings("unchecked") //just how persistence works
 		List<Message> result = q.getResultList();
 		em.close();
