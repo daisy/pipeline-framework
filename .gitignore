@@ -20,3 +20,6 @@ Thumbs.db
 #vim files
 .*.sw?
 .*~
+
+#Log files
+*.log
