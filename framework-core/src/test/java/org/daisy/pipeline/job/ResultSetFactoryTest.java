@@ -36,7 +36,7 @@ public class ResultSetFactoryTest {
 		script= new Mock.ScriptGenerator.Builder().withOutputPorts(2).withOptionOutputsFile(1).withOptionOutputsDir(1).build().generate();
 		URI tmp=new File(System.getProperty("java.io.tmpdir")).toURI();
 		oldIoBase=System.getProperty(JobURIUtils.ORG_DAISY_PIPELINE_IOBASE);	
-		System.setProperty(JobURIUtils.ORG_DAISY_PIPELINE_IOBASE,tmp.toString());	
+		System.setProperty(JobURIUtils.ORG_DAISY_PIPELINE_IOBASE,new File(tmp).toString());	
 		mapper = new URIMapper(tmp.resolve("inputs/"),tmp.resolve("outputs/"));
 		builder = new ResultSet.Builder();
 
