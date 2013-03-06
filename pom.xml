@@ -144,7 +144,7 @@
     <daisy.xpath-registry.version>1.0-SNAPSHOT</daisy.xpath-registry.version>
     <daisy.xproc-api.version>1.0-SNAPSHOT</daisy.xproc-api.version>
     <!-- Dependencies Versions -->
-    <calabash.version>1.0.3</calabash.version>
+    <calabash.version>1.0.8</calabash.version>
     <commons.codec.version>1.6</commons.codec.version>
     <commons.fileupload.version>1.2.2</commons.fileupload.version>
     <commons.io.version>2.3</commons.io.version>
@@ -156,7 +156,7 @@
     <junit.version>4.10</junit.version>
     <osgi.version>4.2.0</osgi.version>
     <restlet.version>2.1-RC6</restlet.version>
-    <saxon-he.version>9.4</saxon-he.version>
+    <saxon-he.version>9.4.0.7</saxon-he.version>
     <slf4j.version>1.6.4</slf4j.version>
     <woodstox.core.version>4.1.2</woodstox.core.version>
     <woodstox.stax2-api.version>3.1.1</woodstox.stax2-api.version>
