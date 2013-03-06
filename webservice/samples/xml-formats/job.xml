@@ -9,5 +9,14 @@
 		<message level="WARNING" sequence="22">Warning about this job</message>
 	</messages>
 	<log href="http://example.org/ws/jobs/job-id-01/log"/>
-	<result href="http://example.org/ws/jobs/job-id-01/result"/>
+	<results href="http://example.org/ws/jobs/job-id-01/result" mime-type="zip">
+		<result from="option" href="http://example.org/ws/jobs/job-id-01/result/option/output-dir" mime-type="zip" name="output-dir">
+			<result href="http://example.org/ws/jobs/job-id-01/result/option/output-dir/file-1.xhtml" mime-type="application/xml"/>
+		</result>
+		<result from="port" href="http://example.org/ws/jobs/job-id-01/result/port/result" mime-type="zip" name="output-dir">
+			<result href="http://example.org/ws/jobs/job-id-01/result/port/result/result-1.xml" mime-type="application/xml"/>
+			<result href="http://example.org/ws/jobs/job-id-01/result/port/result/result-2.xml" mime-type="application/xml"/>
+		</result>
+	</results>
+
 </job>

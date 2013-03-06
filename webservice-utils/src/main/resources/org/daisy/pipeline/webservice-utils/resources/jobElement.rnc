@@ -3,32 +3,45 @@ default namespace = "http://www.daisy.org/ns/pipeline/data"
 include "scriptElement.rnc"
 
 job = 
-    element job {
-        attribute id { text }
-        
-        & attribute href { xsd:anyURI }
-        
-        & attribute status { job.status }
-        
-        & script?
-        
-        & element messages {
-            element message { 
-                attribute level { message.level }
-                & attribute sequence { text }
-                & text
-            }*
-        }?
-        
-        & element log {
-            attribute href { xsd:anyURI }
-        }?
-        
-        & element result {
-            attribute href { xsd:anyURI }
-        }?
-    }
-    
-    job.status = "IDLE" | "RUNNING" | "DONE" | "ERROR"
-    
-    message.level = "WARNING" | "ERROR" | "INFO" | "DEBUG" | "TRACE"
+element job {
+	attribute id { text }
+
+	& attribute href { xsd:anyURI }
+
+	& attribute status { job.status }
+
+	& script?
+
+		& element messages {
+			element message { 
+				attribute level { message.level }
+				& attribute sequence { text }
+				& text
+			}*
+		}?
+
+	& element log {
+		attribute href { xsd:anyURI }
+	}?
+
+	& element results {
+		attribute href { xsd:anyURI }
+		& attribute mime-type { text }
+		& result+
+	}
+}
+
+result= 
+element result{
+	attribute href { xsd:anyURI }
+	& attribute mime-type { text }
+	& ( 	
+			attribute from { text }
+			& attribute name { text }
+	  )?
+		& result*
+}
+
+job.status = "IDLE" | "RUNNING" | "DONE" | "ERROR"
+
+message.level = "WARNING" | "ERROR" | "INFO" | "DEBUG" | "TRACE"
