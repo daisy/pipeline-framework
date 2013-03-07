@@ -1,6 +1,7 @@
 package org.daisy.pipeline.push;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,10 +21,10 @@ import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
 import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
 import org.osgi.framework.BundleContext;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 
 // notify clients whenever there are new messages or a change in status
@@ -33,28 +34,29 @@ import com.google.common.eventbus.Subscribe;
 public class PushNotifier {
 
 
+
 	private CallbackRegistry callbackRegistry;
 	private EventBusProvider eventBusProvider;
 	private JobManager jobManager;
 	/** The logger. */
-	private Logger logger;// = LoggerFactory.getLogger(Poster.class.getName());
+	private Logger logger;//= LoggerFactory.getLogger(Poster.class.getName());
                
 	// for now: push notifications every second. TODO: support different frequencies.
 	final int PUSH_INTERVAL = 1000;
 
 	// track the starting point in the message sequence for every timed push
-	// TODO something similar for status
-	MessageList messages;
+	MessageList messages = new MessageList();
+	List<StatusMessage> statusList= Collections.synchronizedList(new LinkedList<StatusMessage>());
 
 	Timer timer = null;
-	boolean started = false;
+	volatile boolean  started = false;
 
 	public PushNotifier() {
 	}
 
 	public void init(BundleContext context) {
-		messages = new MessageList();
 		logger = LoggerFactory.getLogger(Poster.class.getName());
+		this.startTimer();
 
 	}
 
@@ -88,18 +90,18 @@ public class PushNotifier {
 
 	@Subscribe
 	public synchronized void handleMessage(Message msg) {
-		if (started == false) {
-			started = true;
-			startTimer();
-		}
 		JobUUIDGenerator gen = new JobUUIDGenerator();
 		JobId jobId = gen.generateIdFromString(msg.getJobId());
 		messages.addMessage(jobId, msg);
 	}
 
 	@Subscribe
-	public synchronized void handleStatus(StatusMessage message) {
+	public void handleStatus(StatusMessage message) {
 		logger.debug(String.format("Status changed %s->%s",message.getJobId(),message.getStatus()));
+		synchronized(this.statusList){	
+			this.statusList.add(message);
+		}
+
 	}
 
 
@@ -110,13 +112,30 @@ public class PushNotifier {
 
 		@Override
 		public synchronized void run() {
-			//System.out.println("Timer running");
 			postMessages();
+			postStatus();
+		}
+		private void postStatus() {
+			//logger.debug("Posting messages");
+			List<StatusMessage> toPost=Lists.newLinkedList();
+			synchronized(PushNotifier.this.statusList){
+				toPost.addAll(PushNotifier.this.statusList);	
+				PushNotifier.this.statusList.clear();
+			}
+			for (StatusMessage msg: toPost) {
+				logger.debug("Posting status for "+msg.getJobId());
+				Job job = jobManager.getJob(msg.getJobId());
+
+				for (Callback callback : callbackRegistry.getCallbacks(job.getContext().getId())) {
+					if (callback.getType() == CallbackType.STATUS) {
+						Poster.postStatusUpdate(job, msg, callback);
+					}
+				}
+			}
+
 		}
 		private synchronized void postMessages() {
 			synchronized(PushNotifier.this){
-			//logger.debug("Posting messages");
-			//logger.debug("Jobs cnt: "+messages.getJobs().size());
 				for (JobId jobId : messages.getJobs()) {
 					Job job = jobManager.getJob(jobId);
 					for (Callback callback : callbackRegistry.getCallbacks(jobId)) {
