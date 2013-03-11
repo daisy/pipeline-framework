@@ -28,7 +28,7 @@ element job {
 		attribute href { xsd:anyURI }
 		& attribute mime-type { text }
 		& result+
-	}
+	}?
 }
 
 result= 
