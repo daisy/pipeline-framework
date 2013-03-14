@@ -45,11 +45,10 @@ public class PushNotifier {
 	final int PUSH_INTERVAL = 1000;
 
 	// track the starting point in the message sequence for every timed push
-	MessageList messages = new MessageList();
-	List<StatusMessage> statusList= Collections.synchronizedList(new LinkedList<StatusMessage>());
+	private MessageList messages = new MessageList();
+	private List<StatusMessage> statusList= Collections.synchronizedList(new LinkedList<StatusMessage>());
 
 	Timer timer = null;
-	volatile boolean  started = false;
 
 	public PushNotifier() {
 	}
@@ -98,14 +97,12 @@ public class PushNotifier {
 	@Subscribe
 	public void handleStatus(StatusMessage message) {
 		logger.debug(String.format("Status changed %s->%s",message.getJobId(),message.getStatus()));
-		synchronized(this.statusList){	
-			this.statusList.add(message);
-		}
+		statusList.add(message);
 
 	}
 
 
-	class NotifyTask extends TimerTask {
+	private class NotifyTask extends TimerTask {
 		public NotifyTask() {
 			super();
 		}
@@ -157,7 +154,7 @@ public class PushNotifier {
 		}
 	}
 
-	class MessageList {
+	private class MessageList {
 		HashMap<JobId, List<Message>> messages;
 
 		public MessageList() {
