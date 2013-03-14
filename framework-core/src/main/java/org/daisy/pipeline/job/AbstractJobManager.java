@@ -21,7 +21,7 @@ public abstract class AbstractJobManager implements JobManager {
 		//job object, so we MUST be sure that we return the right reference.
 		//That's why newJob is final, if a concrete JobManager wants to do 
 		//something to job will be done by "onJobCreated" 
-		Job job = this.storage.add(Job.newJob(ctxt));
+		Job job = this.storage.add(ctxt);
 		this.onNewJob(job);
 		return job;
 	}

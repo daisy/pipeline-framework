@@ -3,6 +3,7 @@ package org.daisy.pipeline.persistence.jobs;
 import java.util.Iterator;
 
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
@@ -44,17 +45,17 @@ public class PersistentJobStorage  implements JobStorage{
 
 
 	@Override
-	public Job add(Job job) {
+	public synchronized Job add(JobContext ctxt) {
 		checkDatabase();
-		logger.debug("Adding job to db:"+job.getContext().getId());
-		PersistentJob pjob=new PersistentJob(job,db);
+		logger.debug("Adding job to db:"+ctxt.getId());
+		PersistentJob pjob=new PersistentJob(Job.newJob(ctxt),db);
 		this.ctxtFactory.configure((PersistentJobContext)pjob.getContext());
 		db.addObject(pjob);	
 		return pjob;
 	}
 
 	@Override
-	public Job remove(JobId jobId) {
+	public synchronized Job remove(JobId jobId) {
 		checkDatabase();
 		Job job=db.getEntityManager().find(PersistentJob.class,jobId.toString());
 		if(job!=null){
@@ -65,7 +66,7 @@ public class PersistentJobStorage  implements JobStorage{
 	}
 
 	@Override
-	public Job get(JobId id) {
+	public synchronized Job get(JobId id) {
 		checkDatabase();
 		PersistentJob job =null;
 		job=db.getEntityManager().find(PersistentJob.class,id.toString());
