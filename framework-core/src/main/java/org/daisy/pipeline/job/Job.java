@@ -5,10 +5,10 @@ import java.util.Properties;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
-
-import org.daisy.pipeline.job.StatusMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.eventbus.EventBus;
 
 // TODO: Auto-generated Javadoc
 //TODO check thread safety
@@ -16,11 +16,40 @@ import org.slf4j.LoggerFactory;
  * The Class Job defines the execution unit.
  */
 public class Job {
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(Job.class);
+
+	public static class  JobBuilder{
+		protected JobContext ctxt;
+		protected EventBus bus;
+		public JobBuilder withContext(JobContext ctxt){
+			this.ctxt=ctxt;
+			return this;
+		}
+
+		public JobBuilder withEventBus(EventBus bus){
+			this.bus=bus;
+			return this;
+		}
+		protected Job build(){
+			return new Job(this.ctxt,this.bus);
+		}
+	}
+
+	public static Job newJob(JobBuilder builder){
+		//the builder delegation is used as a 'closure' to delay
+		//the status change until the object is completely built 
+		Job job = builder.build();
+		job.changeStatus(Status.IDLE);
+		return job;
+	}
+
 	/**
 	 * The Enum Status.
 	 */
+
+
 	public static enum Status {
 
 		/** The IDLE. */
@@ -36,22 +65,14 @@ public class Job {
 	/** The status. */
 	private volatile Status status = Status.IDLE;
 
-	
 	protected JobContext ctxt;
+	private EventBus eventBus;
 
-	protected Job(JobContext ctxt) {
+	protected Job(JobContext ctxt,EventBus eventBus) {
 		this.ctxt=ctxt;
+		this.eventBus=eventBus;
 	}
 
-	protected Job(JobContext ctxt,Status status) {
-		this.ctxt=ctxt;
-		this.status=status;
-	}
-	public static Job newJob(JobContext ctxt){
-		Job job=new Job(ctxt);
-		job.changeStatus(Status.IDLE);
-		return job;
-	}
 	/**
 	 * Gets the id.
 	 *
@@ -77,6 +98,14 @@ public class Job {
 			this.status=status;
 		}
 	}
+
+	/**
+	 * @param eventBus the eventBus to set
+	 */
+	public void setEventBus(EventBus eventBus) {
+		this.eventBus = eventBus;
+	}
+
 	/**
 	 * Gets the ctxt for this instance.
 	 *
@@ -97,8 +126,8 @@ public class Job {
 
 	protected synchronized final void changeStatus(Status to){
 		this.status=to;
-		if (this.ctxt!=null&&this.ctxt.getEventBus()!=null)
-			this.ctxt.getEventBus().post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
+		if (this.eventBus!=null)
+			this.eventBus.post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
 		else
 			logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? " the context ": " event bus ") + "is null");
 		this.onStatusChanged(to);
