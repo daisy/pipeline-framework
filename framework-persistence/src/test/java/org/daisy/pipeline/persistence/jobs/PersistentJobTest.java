@@ -3,10 +3,10 @@ package org.daisy.pipeline.persistence.jobs;
 import java.util.List;
 
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.Job.JobBuilder;
 import org.daisy.pipeline.job.JobId;
-
 import org.daisy.pipeline.persistence.Database;
-
+import org.daisy.pipeline.persistence.jobs.PersistentJob.PersistentJobBuilder;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,11 +21,11 @@ public class PersistentJobTest   {
 	public void setUp(){
 		//script setup
 			
-		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
-		job = new PersistentJob(Job.newJob(Mocks.buildContext()),db);
-		id=job.getContext().getId();
 		db=DatabaseProvider.getDatabase();
-		db.addObject(job);
+		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
+		JobBuilder builder= new PersistentJobBuilder(db).withContext(Mocks.buildContext());
+		job =(PersistentJob) Job.newJob(builder);//new PersistentJob(Job.newJob(Mocks.buildContext()),db);
+		id=job.getContext().getId();
 	}
 	@After
 	public void tearDown(){

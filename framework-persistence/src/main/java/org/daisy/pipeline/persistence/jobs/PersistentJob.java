@@ -23,9 +23,12 @@ import javax.persistence.TypedQuery;
 
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.persistence.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.eventbus.EventBus;
 
 @Entity
 //This plus the correct configuration 
@@ -37,6 +40,26 @@ import org.slf4j.LoggerFactory;
 @Table(name="jobs")
 @NamedQuery ( name="Job.getAll", query="select j from PersistentJob j")
 public class PersistentJob  extends Job implements Serializable {
+
+	public static class PersistentJobBuilder extends JobBuilder{
+		private Database db;
+
+		/**
+		 * @param db
+		 */
+		public PersistentJobBuilder(Database db) {
+			this.db = db;
+		}
+
+		@Override
+		protected Job build(){
+			logger.debug("Context +++++ "+this.ctxt);
+			Job pjob=new PersistentJob(this.ctxt,this.bus,this.db);
+			this.db.addObject(pjob);	
+			return pjob;
+		}
+	}
+
 	private static final Logger logger = LoggerFactory.getLogger(PersistentJob.class);
 	public static final long serialVersionUID=1L;
 
@@ -61,21 +84,17 @@ public class PersistentJob  extends Job implements Serializable {
 	//and this very object is in charge of updating itself
 	@Transient
 	Database db=null;
-	public PersistentJob(Job job,Database db) {
-		super(new PersistentJobContext((AbstractJobContext)job.getContext()),job.getStatus());
+	protected PersistentJob(JobContext ctxt,EventBus bus,Database db) {
+		super(new PersistentJobContext((AbstractJobContext)ctxt),bus);
 		this.db=db;
 	}
 
-	public PersistentJob(PersistentJob job,Database db) {
-		super(job.getContext(),job.getStatus());
-		this.db=db;
-	}
 
 	/**
 	 * Constructs a new instance.
 	 */
 	public PersistentJob() {
-		super(null);
+		super(null,null);
 	}
 
 
@@ -119,6 +138,5 @@ public class PersistentJob  extends Job implements Serializable {
 	protected void setDatabase(Database db){
 		this.db=db;
 	}
-
 
 }
