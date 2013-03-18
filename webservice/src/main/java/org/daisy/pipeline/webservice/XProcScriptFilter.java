@@ -8,6 +8,9 @@ import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcOptionMetadata.Output;
 import org.daisy.pipeline.script.XProcScript;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class XProcScriptFilter.
@@ -40,12 +43,21 @@ public final class XProcScriptFilter implements Filter<XProcScript> {
 	public XProcScript filter(XProcScript script) {
 		XProcPipelineInfo xproc = script.getXProcPipelineInfo();
 		// create the script builder
-		XProcScript.Builder scriptBuilder = new XProcScript.Builder()
+		final XProcScript.Builder scriptBuilder = new XProcScript.Builder()
 				.withShortName(script.getName()).withDescription(
 						script.getDescription()).withHomepage(script.getHomepage()).withDescriptor(script.getDescriptor());
 		// create the filtered pipeline info
 		XProcPipelineInfo.Builder xprocBuilder = new XProcPipelineInfo.Builder();
 		xprocBuilder.withURI(xproc.getURI());
+		//copy filesets
+		for( String fileset: script.getInputFilesets()){
+			scriptBuilder.withInputFileset(fileset);
+		}
+
+		for( String fileset: script.getOutputFilesets()){
+			scriptBuilder.withOutputFileset(fileset);
+		}
+
 		// copy input ports
 		for (XProcPortInfo port : xproc.getInputPorts()) {
 			xprocBuilder.withPort(port);
