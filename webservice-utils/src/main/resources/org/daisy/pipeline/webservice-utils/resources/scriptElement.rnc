@@ -5,6 +5,10 @@ script =
         attribute id { text } 
         
         & attribute href { xsd:anyURI } 
+
+        & attribute input-media-type{ text } 
+
+        & attribute output-media-type{ text } 
         
         & element nicename { text } 
         
