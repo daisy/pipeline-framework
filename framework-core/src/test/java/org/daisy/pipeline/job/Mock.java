@@ -2,24 +2,21 @@ package org.daisy.pipeline.job;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.net.URI;
-
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
-
-import javax.xml.transform.Source;
 import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 
 import org.daisy.common.base.Provider;
-
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
-
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
@@ -288,7 +285,8 @@ class Mock   {
 				pipelineBuilder.withPort(port);
 				portMetadatas.put(port.getName(), new XProcPortMetadata.Builder().build());
 			}
-			return new XProcScript(pipelineBuilder.build(), null, null, null, portMetadatas, optionMetadatas,null);
+			List<String> inputMedias= Collections.emptyList();
+			return new XProcScript(pipelineBuilder.build(), null, null, null, portMetadatas, optionMetadatas,null,inputMedias,inputMedias);
 
 		}
 
