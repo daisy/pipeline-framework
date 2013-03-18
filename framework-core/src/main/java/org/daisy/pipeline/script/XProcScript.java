@@ -68,13 +68,13 @@ public final class XProcScript {
 			return this;
 		}
 
-		public Builder withInputFileset(String mediaType){
-			this.inputFilesets.add(mediaType);
+		public Builder withInputFileset(String fileset){
+			this.inputFilesets.add(fileset);
 			return this;
 		}
 
-		public Builder withOutputFileset(String mediaType){
-			this.outputFilesets.add(mediaType);
+		public Builder withOutputFileset(String fileset){
+			this.outputFilesets.add(fileset);
 			return this;
 		}
 		/**
