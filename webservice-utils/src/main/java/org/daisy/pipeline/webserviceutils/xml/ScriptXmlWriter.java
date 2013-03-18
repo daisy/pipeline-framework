@@ -17,7 +17,8 @@ public class ScriptXmlWriter {
 	XProcScript script = null;
 	boolean details = false;
 	private static Logger logger = LoggerFactory.getLogger(ScriptXmlWriter.class.getName());
-	
+
+
 	public ScriptXmlWriter(XProcScript script) {
 		this.script = script;
 	}
@@ -56,6 +57,15 @@ public class ScriptXmlWriter {
 		return doc;
 	}
 
+	private static String reduceMediaTypes(Iterable<String> strings){
+		StringBuilder builder= new StringBuilder();
+		for (String st:strings){
+			builder.append(st);
+			builder.append(" ");
+		}
+		builder.deleteCharAt(builder.length()-1);
+		return builder.toString();
+	}
 	// element is <script> but it's empty
 	private void addElementData(XProcScript script, Element element) {
 		Document doc = element.getOwnerDocument();
@@ -64,7 +74,8 @@ public class ScriptXmlWriter {
 
 		element.setAttribute("id", script.getDescriptor().getId());
 		element.setAttribute("href", scriptHref);
-
+		element.setAttribute("input-media-type",ScriptXmlWriter.reduceMediaTypes(script.getInputMediaTypes()));
+		element.setAttribute("output-media-type",ScriptXmlWriter.reduceMediaTypes(script.getOutputMediaTypes()));
 		Element nicenameElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "nicename");
 		nicenameElm.setTextContent(script.getName());
 		element.appendChild(nicenameElm);
