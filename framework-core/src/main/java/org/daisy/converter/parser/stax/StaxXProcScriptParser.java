@@ -280,14 +280,14 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			if (inputs!=null){
 				String splitInputs[]=inputs.getValue().split(" ");
 				for( String fset : splitInputs){
-					this.scriptBuilder.withInputMediaType(fset);
+					this.scriptBuilder.withInputFileset(fset);
 				}
 			}
 
 			if (outputs!=null){
 				String splitOutputs[]=outputs.getValue().split(" ");
 				for( String fset : splitOutputs){
-					this.scriptBuilder.withOutputMediaType(fset);
+					this.scriptBuilder.withOutputFileset(fset);
 				}
 			}
 

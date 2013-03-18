@@ -74,8 +74,8 @@ public class ScriptXmlWriter {
 
 		element.setAttribute("id", script.getDescriptor().getId());
 		element.setAttribute("href", scriptHref);
-		element.setAttribute("input-media-type",ScriptXmlWriter.reduceMediaTypes(script.getInputMediaTypes()));
-		element.setAttribute("output-media-type",ScriptXmlWriter.reduceMediaTypes(script.getOutputMediaTypes()));
+		element.setAttribute("input-filesets",ScriptXmlWriter.reduceMediaTypes(script.getInputFilesets()));
+		element.setAttribute("output-filesets",ScriptXmlWriter.reduceMediaTypes(script.getOutputFilesets()));
 		Element nicenameElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "nicename");
 		nicenameElm.setTextContent(script.getName());
 		element.appendChild(nicenameElm);

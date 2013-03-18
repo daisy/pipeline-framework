@@ -6,9 +6,9 @@ script =
         
         & attribute href { xsd:anyURI } 
 
-        & attribute input-media-type{ text } 
+        & attribute input-filesets{ text }+
 
-        & attribute output-media-type{ text } 
+        & attribute output-filesets{ text }+ 
         
         & element nicename { text } 
         

@@ -192,9 +192,9 @@ public class XProcScriptParserTest {
 	 @Test
 	 public void inputFilesets() {
 		 //input-filesets
-		assertTrue(Iterables.contains(this.scp.getInputMediaTypes(),"dtbook"));
-		assertTrue(Iterables.contains(this.scp.getInputMediaTypes(),"epub3"));
-		assertEquals(2,Iterables.size(this.scp.getInputMediaTypes()));
+		assertTrue(Iterables.contains(this.scp.getInputFilesets(),"dtbook"));
+		assertTrue(Iterables.contains(this.scp.getInputFilesets(),"epub3"));
+		assertEquals(2,Iterables.size(this.scp.getInputFilesets()));
 		 
 	}
 
@@ -204,9 +204,9 @@ public class XProcScriptParserTest {
 	 @Test
 	 public void outputFilesets() {
 		 //output-filesets
-		assertTrue(Iterables.contains(this.scp.getOutputMediaTypes(),"html"));
-		assertTrue(Iterables.contains(this.scp.getOutputMediaTypes(),"zedai"));
-		assertEquals(2,Iterables.size(this.scp.getOutputMediaTypes()));
+		assertTrue(Iterables.contains(this.scp.getOutputFilesets(),"html"));
+		assertTrue(Iterables.contains(this.scp.getOutputFilesets(),"zedai"));
+		assertEquals(2,Iterables.size(this.scp.getOutputFilesets()));
 		 
 	}
 }

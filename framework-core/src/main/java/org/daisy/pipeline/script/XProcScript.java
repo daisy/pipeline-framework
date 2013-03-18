@@ -35,9 +35,9 @@ public final class XProcScript {
 		/** The name. */
 		private String shortName;
 
-		private List<String> inputMediaTypes=Lists.newLinkedList();
+		private List<String> inputFilesets=Lists.newLinkedList();
 
-		private List<String> outputMediaTypes=Lists.newLinkedList();
+		private List<String> outputFilesets=Lists.newLinkedList();
 
 		/** The description. */
 		private String description;
@@ -68,13 +68,13 @@ public final class XProcScript {
 			return this;
 		}
 
-		public Builder withInputMediaType(String mediaType){
-			this.inputMediaTypes.add(mediaType);
+		public Builder withInputFileset(String mediaType){
+			this.inputFilesets.add(mediaType);
 			return this;
 		}
 
-		public Builder withOutputMediaType(String mediaType){
-			this.outputMediaTypes.add(mediaType);
+		public Builder withOutputFileset(String mediaType){
+			this.outputFilesets.add(mediaType);
 			return this;
 		}
 		/**
@@ -84,8 +84,7 @@ public final class XProcScript {
 		 * @return the builder
 		 */
 		public Builder withShortName(String shortName){
-			if(shortName!=null) {
-				this.shortName=shortName;
+			if(shortName!=null) { this.shortName=shortName;
 			}
 			return this;
 		}
@@ -148,7 +147,7 @@ public final class XProcScript {
 		public XProcScript build(){
 
 			return new XProcScript(pipelineInfo,shortName,description,homepage,portsMetadata,
-					optionsMetadata,descriptor,inputMediaTypes,outputMediaTypes);
+					optionsMetadata,descriptor,inputFilesets,outputFilesets);
 		}
 	}
 	private static Logger logger = LoggerFactory.getLogger(XProcScript.class);
@@ -173,9 +172,9 @@ public final class XProcScript {
 
 	private final XProcScriptService descriptor;
 
-	private final List<String> inputMediaTypes;
+	private final List<String> inputFilesets;
 
-	private final List<String> outputMediaTypes;
+	private final List<String> outputFilesets;
 
 
 	/**
@@ -190,7 +189,7 @@ public final class XProcScript {
 	 */
 	public XProcScript(XProcPipelineInfo pipelineInfo, String name,
 			String description, String homepage, Map<String, XProcPortMetadata> portsMetadata,
-			Map<QName, XProcOptionMetadata> optionsMetadata,XProcScriptService descriptor,List<String> inputMediaTypes,List<String> outputMediaTypes) {
+			Map<QName, XProcOptionMetadata> optionsMetadata,XProcScriptService descriptor,List<String> inputFilesets,List<String> outputFilesets) {
 		this.pipelineInfo = pipelineInfo;
 		this.name = name;
 		this.description = description;
@@ -198,8 +197,8 @@ public final class XProcScript {
 		this.portsMetadata = portsMetadata;
 		this.optionsMetadata = optionsMetadata;
 		this.descriptor = descriptor;
-		this.inputMediaTypes= ImmutableList.copyOf(inputMediaTypes);
-		this.outputMediaTypes= ImmutableList.copyOf(outputMediaTypes);
+		this.inputFilesets= ImmutableList.copyOf(inputFilesets);
+		this.outputFilesets= ImmutableList.copyOf(outputFilesets);
 
 	}
 
@@ -280,15 +279,15 @@ public final class XProcScript {
 	/**
 	 * @return the inputMediaTypes
 	 */
-	public Iterable<String> getInputMediaTypes() {
-		return inputMediaTypes;
+	public Iterable<String> getInputFilesets() {
+		return inputFilesets;
 	}
 
 	/**
 	 * @return the outputMediaTypes
 	 */
-	public Iterable<String> getOutputMediaTypes() {
-		return outputMediaTypes;
+	public Iterable<String> getOutputFilesets() {
+		return outputFilesets;
 	}
 
 	@Override
