@@ -5,6 +5,7 @@ package org.daisy.pipeline.script;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -14,7 +15,9 @@ import org.daisy.common.xproc.XProcPipelineInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
 /**
  * XProcScript is an enhanced {@link XProcPipeline} with some extra information, such as production, port and options metadata.
  */
@@ -31,6 +34,10 @@ public final class XProcScript {
 
 		/** The name. */
 		private String shortName;
+
+		private List<String> inputMediaTypes=Lists.newLinkedList();
+
+		private List<String> outputMediaTypes=Lists.newLinkedList();
 
 		/** The description. */
 		private String description;
@@ -61,6 +68,15 @@ public final class XProcScript {
 			return this;
 		}
 
+		public Builder withInputMediaType(String mediaType){
+			this.inputMediaTypes.add(mediaType);
+			return this;
+		}
+
+		public Builder withOutputMediaType(String mediaType){
+			this.outputMediaTypes.add(mediaType);
+			return this;
+		}
 		/**
 		 * With nice name.
 		 *
@@ -131,7 +147,8 @@ public final class XProcScript {
 		 */
 		public XProcScript build(){
 
-			return new XProcScript(pipelineInfo,shortName,description,homepage,portsMetadata,optionsMetadata,descriptor);
+			return new XProcScript(pipelineInfo,shortName,description,homepage,portsMetadata,
+					optionsMetadata,descriptor,inputMediaTypes,outputMediaTypes);
 		}
 	}
 	private static Logger logger = LoggerFactory.getLogger(XProcScript.class);
@@ -156,6 +173,10 @@ public final class XProcScript {
 
 	private final XProcScriptService descriptor;
 
+	private final List<String> inputMediaTypes;
+
+	private final List<String> outputMediaTypes;
+
 
 	/**
 	 * Instantiates a new x proc script.
@@ -169,7 +190,7 @@ public final class XProcScript {
 	 */
 	public XProcScript(XProcPipelineInfo pipelineInfo, String name,
 			String description, String homepage, Map<String, XProcPortMetadata> portsMetadata,
-			Map<QName, XProcOptionMetadata> optionsMetadata,XProcScriptService descriptor) {
+			Map<QName, XProcOptionMetadata> optionsMetadata,XProcScriptService descriptor,List<String> inputMediaTypes,List<String> outputMediaTypes) {
 		this.pipelineInfo = pipelineInfo;
 		this.name = name;
 		this.description = description;
@@ -177,6 +198,8 @@ public final class XProcScript {
 		this.portsMetadata = portsMetadata;
 		this.optionsMetadata = optionsMetadata;
 		this.descriptor = descriptor;
+		this.inputMediaTypes= ImmutableList.copyOf(inputMediaTypes);
+		this.outputMediaTypes= ImmutableList.copyOf(outputMediaTypes);
 
 	}
 
@@ -252,6 +275,20 @@ public final class XProcScript {
 	 */
 	public XProcScriptService getDescriptor() {
 		return descriptor;
+	}
+
+	/**
+	 * @return the inputMediaTypes
+	 */
+	public Iterable<String> getInputMediaTypes() {
+		return inputMediaTypes;
+	}
+
+	/**
+	 * @return the outputMediaTypes
+	 */
+	public Iterable<String> getOutputMediaTypes() {
+		return outputMediaTypes;
 	}
 
 	@Override
