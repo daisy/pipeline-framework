@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step version="1.0" name="unit-test-script"
     type="px:unit-test-script"
+    px:input-filesets="dtbook epub3"
+    px:output-filesets="zedai html"
     xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
     xmlns:xd="http://www.daisy.org/ns/pipeline/doc">
