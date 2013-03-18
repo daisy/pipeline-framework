@@ -8,9 +8,6 @@ import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcOptionMetadata.Output;
 import org.daisy.pipeline.script.XProcScript;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class XProcScriptFilter.
