@@ -203,7 +203,10 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		public void parseStep(final XMLEventReader reader) throws XMLStreamException {
 			while (reader.hasNext()) {
 				XMLEvent event = readNext(reader);
-				if (event.isStartElement()
+				if(event.isStartElement() &&event.asStartElement().getName()
+								.equals(Elements.P_DECLARE_STEP)){ 
+					parseFilesets(event.asStartElement());
+				}else if (event.isStartElement()
 						&& event.asStartElement().getName()
 								.equals(Elements.P_DOCUMENTATION)) {
 					DocumentationHolder dHolder = new DocumentationHolder();
@@ -267,6 +270,28 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			}
 		}
 
+		protected void parseFilesets(final StartElement declareStep)
+				throws XMLStreamException {
+			Attribute inputs = declareStep
+					.getAttributeByName(XProcScriptConstants.Attributes.PX_INPUT_FILESETS);
+
+			Attribute outputs = declareStep
+					.getAttributeByName(XProcScriptConstants.Attributes.PX_OUTPUT_FILESETS);
+			if (inputs!=null){
+				String splitInputs[]=inputs.getValue().split(" ");
+				for( String fset : splitInputs){
+					this.scriptBuilder.withInputMediaType(fset);
+				}
+			}
+
+			if (outputs!=null){
+				String splitOutputs[]=outputs.getValue().split(" ");
+				for( String fset : splitOutputs){
+					this.scriptBuilder.withOutputMediaType(fset);
+				}
+			}
+
+		}
 		/**
 		 * Parses the option.
 		 *
