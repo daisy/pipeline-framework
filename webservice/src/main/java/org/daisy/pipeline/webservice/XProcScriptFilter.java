@@ -43,7 +43,7 @@ public final class XProcScriptFilter implements Filter<XProcScript> {
 	public XProcScript filter(XProcScript script) {
 		XProcPipelineInfo xproc = script.getXProcPipelineInfo();
 		// create the script builder
-		final XProcScript.Builder scriptBuilder = new XProcScript.Builder()
+		XProcScript.Builder scriptBuilder = new XProcScript.Builder()
 				.withShortName(script.getName()).withDescription(
 						script.getDescription()).withHomepage(script.getHomepage()).withDescriptor(script.getDescriptor());
 		// create the filtered pipeline info
