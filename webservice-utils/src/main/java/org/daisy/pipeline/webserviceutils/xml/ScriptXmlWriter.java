@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.google.common.collect.Iterables;
+
 public class ScriptXmlWriter {
 	
 	XProcScript script = null;
@@ -63,7 +65,9 @@ public class ScriptXmlWriter {
 			builder.append(st);
 			builder.append(" ");
 		}
-		builder.deleteCharAt(builder.length()-1);
+		if(builder.length()>1){
+			builder.deleteCharAt(builder.length()-1);
+		}
 		return builder.toString();
 	}
 	// element is <script> but it's empty
@@ -74,8 +78,15 @@ public class ScriptXmlWriter {
 
 		element.setAttribute("id", script.getDescriptor().getId());
 		element.setAttribute("href", scriptHref);
-		element.setAttribute("input-filesets",ScriptXmlWriter.reduceMediaTypes(script.getInputFilesets()));
-		element.setAttribute("output-filesets",ScriptXmlWriter.reduceMediaTypes(script.getOutputFilesets()));
+		if(!Iterables.isEmpty(script.getInputFilesets())){
+			element.setAttribute("input-filesets",ScriptXmlWriter.reduceMediaTypes(script.getInputFilesets()));
+		}
+
+
+		if(!Iterables.isEmpty(script.getOutputFilesets())){
+			element.setAttribute("output-filesets",ScriptXmlWriter.reduceMediaTypes(script.getOutputFilesets()));
+		}
+
 		Element nicenameElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "nicename");
 		nicenameElm.setTextContent(script.getName());
 		element.appendChild(nicenameElm);
