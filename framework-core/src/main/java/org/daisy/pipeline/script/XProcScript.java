@@ -69,12 +69,16 @@ public final class XProcScript {
 		}
 
 		public Builder withInputFileset(String fileset){
-			this.inputFilesets.add(fileset);
+			if (fileset!=null && !fileset.isEmpty()){
+				this.inputFilesets.add(fileset);
+			}
 			return this;
 		}
 
 		public Builder withOutputFileset(String fileset){
-			this.outputFilesets.add(fileset);
+			if (fileset!=null && !fileset.isEmpty()){
+				this.outputFilesets.add(fileset);
+			}
 			return this;
 		}
 		/**
