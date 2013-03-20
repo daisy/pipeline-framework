@@ -12,12 +12,16 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Iterables;
+
 public class ScriptXmlWriter {
 	
 	XProcScript script = null;
 	boolean details = false;
 	private static Logger logger = LoggerFactory.getLogger(ScriptXmlWriter.class.getName());
-	
+
+
 	public ScriptXmlWriter(XProcScript script) {
 		this.script = script;
 	}
@@ -64,6 +68,15 @@ public class ScriptXmlWriter {
 
 		element.setAttribute("id", script.getDescriptor().getId());
 		element.setAttribute("href", scriptHref);
+		Joiner joiner = Joiner.on(" ");
+		if(!Iterables.isEmpty(script.getInputFilesets())){
+			element.setAttribute("input-filesets",joiner.join(script.getInputFilesets()));
+		}
+
+
+		if(!Iterables.isEmpty(script.getOutputFilesets())){
+			element.setAttribute("output-filesets",joiner.join(script.getOutputFilesets()));
+		}
 
 		Element nicenameElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "nicename");
 		nicenameElm.setTextContent(script.getName());

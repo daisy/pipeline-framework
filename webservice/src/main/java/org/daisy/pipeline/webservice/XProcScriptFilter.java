@@ -46,6 +46,15 @@ public final class XProcScriptFilter implements Filter<XProcScript> {
 		// create the filtered pipeline info
 		XProcPipelineInfo.Builder xprocBuilder = new XProcPipelineInfo.Builder();
 		xprocBuilder.withURI(xproc.getURI());
+		//copy filesets
+		for( String fileset: script.getInputFilesets()){
+			scriptBuilder.withInputFileset(fileset);
+		}
+
+		for( String fileset: script.getOutputFilesets()){
+			scriptBuilder.withOutputFileset(fileset);
+		}
+
 		// copy input ports
 		for (XProcPortInfo port : xproc.getInputPorts()) {
 			xprocBuilder.withPort(port);
