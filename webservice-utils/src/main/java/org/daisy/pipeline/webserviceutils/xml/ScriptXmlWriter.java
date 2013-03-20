@@ -60,17 +60,6 @@ public class ScriptXmlWriter {
 		return doc;
 	}
 
-	private static String reduceMediaTypes(Iterable<String> strings){
-		StringBuilder builder= new StringBuilder();
-		for (String st:strings){
-			builder.append(st);
-			builder.append(" ");
-		}
-		if(builder.length()>1){
-			builder.deleteCharAt(builder.length()-1);
-		}
-		return builder.toString();
-	}
 	// element is <script> but it's empty
 	private void addElementData(XProcScript script, Element element) {
 		Document doc = element.getOwnerDocument();
