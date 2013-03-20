@@ -5,6 +5,7 @@ package org.daisy.pipeline.script;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -14,7 +15,9 @@ import org.daisy.common.xproc.XProcPipelineInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
 /**
  * XProcScript is an enhanced {@link XProcPipeline} with some extra information, such as production, port and options metadata.
  */
@@ -31,6 +34,10 @@ public final class XProcScript {
 
 		/** The name. */
 		private String shortName;
+
+		private List<String> inputFilesets=Lists.newLinkedList();
+
+		private List<String> outputFilesets=Lists.newLinkedList();
 
 		/** The description. */
 		private String description;
@@ -61,6 +68,19 @@ public final class XProcScript {
 			return this;
 		}
 
+		public Builder withInputFileset(String fileset){
+			if (fileset!=null && !fileset.isEmpty()){
+				this.inputFilesets.add(fileset);
+			}
+			return this;
+		}
+
+		public Builder withOutputFileset(String fileset){
+			if (fileset!=null && !fileset.isEmpty()){
+				this.outputFilesets.add(fileset);
+			}
+			return this;
+		}
 		/**
 		 * With nice name.
 		 *
@@ -68,8 +88,7 @@ public final class XProcScript {
 		 * @return the builder
 		 */
 		public Builder withShortName(String shortName){
-			if(shortName!=null) {
-				this.shortName=shortName;
+			if(shortName!=null) { this.shortName=shortName;
 			}
 			return this;
 		}
@@ -131,7 +150,8 @@ public final class XProcScript {
 		 */
 		public XProcScript build(){
 
-			return new XProcScript(pipelineInfo,shortName,description,homepage,portsMetadata,optionsMetadata,descriptor);
+			return new XProcScript(pipelineInfo,shortName,description,homepage,portsMetadata,
+					optionsMetadata,descriptor,inputFilesets,outputFilesets);
 		}
 	}
 	private static Logger logger = LoggerFactory.getLogger(XProcScript.class);
@@ -156,6 +176,10 @@ public final class XProcScript {
 
 	private final XProcScriptService descriptor;
 
+	private final List<String> inputFilesets;
+
+	private final List<String> outputFilesets;
+
 
 	/**
 	 * Instantiates a new x proc script.
@@ -169,7 +193,7 @@ public final class XProcScript {
 	 */
 	public XProcScript(XProcPipelineInfo pipelineInfo, String name,
 			String description, String homepage, Map<String, XProcPortMetadata> portsMetadata,
-			Map<QName, XProcOptionMetadata> optionsMetadata,XProcScriptService descriptor) {
+			Map<QName, XProcOptionMetadata> optionsMetadata,XProcScriptService descriptor,List<String> inputFilesets,List<String> outputFilesets) {
 		this.pipelineInfo = pipelineInfo;
 		this.name = name;
 		this.description = description;
@@ -177,6 +201,8 @@ public final class XProcScript {
 		this.portsMetadata = portsMetadata;
 		this.optionsMetadata = optionsMetadata;
 		this.descriptor = descriptor;
+		this.inputFilesets= ImmutableList.copyOf(inputFilesets);
+		this.outputFilesets= ImmutableList.copyOf(outputFilesets);
 
 	}
 
@@ -252,6 +278,20 @@ public final class XProcScript {
 	 */
 	public XProcScriptService getDescriptor() {
 		return descriptor;
+	}
+
+	/**
+	 * @return the inputMediaTypes
+	 */
+	public Iterable<String> getInputFilesets() {
+		return inputFilesets;
+	}
+
+	/**
+	 * @return the outputMediaTypes
+	 */
+	public Iterable<String> getOutputFilesets() {
+		return outputFilesets;
 	}
 
 	@Override
