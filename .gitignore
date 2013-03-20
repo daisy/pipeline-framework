@@ -23,3 +23,6 @@ Thumbs.db
 
 #Log files
 *.log
+
+#tag files
+tags
