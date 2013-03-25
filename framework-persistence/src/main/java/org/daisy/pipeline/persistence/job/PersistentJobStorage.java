@@ -3,9 +3,9 @@ package org.daisy.pipeline.persistence.job;
 import java.util.Iterator;
 
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
+import org.daisy.pipeline.job.context.JobContextFactory;
 import org.daisy.pipeline.persistence.Database;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.slf4j.Logger;

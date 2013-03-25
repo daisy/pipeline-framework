@@ -1,4 +1,4 @@
-package org.daisy.pipeline.job;
+package org.daisy.pipeline.job.context;
 
 import java.io.IOException;
 
@@ -16,6 +16,10 @@ import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
 
+import org.daisy.pipeline.job.DynamicResultProvider;
+import org.daisy.pipeline.job.IOHelper;
+import org.daisy.pipeline.job.ResourceCollection;
+import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.script.XProcScript;
 
 import org.slf4j.Logger;
@@ -27,7 +31,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-class XProcDecorator {
+public class XProcDecorator {
 	
 
 	private static final Logger logger = LoggerFactory.getLogger(XProcDecorator.class);
@@ -39,7 +43,7 @@ class XProcDecorator {
 	/** The m generated outputs. */
 	private final HashSet<String> generatedOutputs = Sets.newHashSet();
 	
-	enum TranslatableOption{
+	public enum TranslatableOption{
 		ANY_DIR_URI("anyDirURI"),
 		ANY_FILE_URI("anyFileURI");
 		private final String name;

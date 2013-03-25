@@ -1,4 +1,4 @@
-package org.daisy.pipeline.job;
+package org.daisy.pipeline.job.context;
 
 import java.net.URI;
 
@@ -7,6 +7,14 @@ import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobMonitorFactory;
+import org.daisy.pipeline.job.JobURIUtils;
+import org.daisy.pipeline.job.ResultSet;
+import org.daisy.pipeline.job.ResultSetFactory;
+import org.daisy.pipeline.job.RuntimeConfigurable;
+import org.daisy.pipeline.job.URIMapper;
+import org.daisy.pipeline.job.ResultSet.Builder;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScript;
 import org.slf4j.Logger;

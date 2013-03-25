@@ -1,4 +1,4 @@
-package org.daisy.pipeline.job;
+package org.daisy.pipeline.job.context;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +19,12 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
 
+import org.daisy.pipeline.job.Mock;
+import org.daisy.pipeline.job.URIMapper;
+import org.daisy.pipeline.job.Mock.ScriptGenerator;
+import org.daisy.pipeline.job.Mock.ScriptGenerator.Builder;
+import org.daisy.pipeline.job.context.URITranslatorHelper;
+import org.daisy.pipeline.job.context.XProcDecorator;
 import org.daisy.pipeline.script.XProcScript;
 
 import org.junit.Assert;
@@ -282,7 +288,7 @@ public class XProcDecoratorTest   {
 	 * Tests 'translateInputs'. The details are tested in the rest of the methods of this class/
 	 * This test is just to check that we go through all the kind of options
 	 *
-	 * @see org.daisy.pipeline.job.XProcDecorator#decorate(XProcInput)
+	 * @see org.daisy.pipeline.job.context.XProcDecorator#decorate(XProcInput)
 	 */
 	@Test
 	public void translateInputs() throws Exception {

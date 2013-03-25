@@ -20,6 +20,7 @@ import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 
+import org.daisy.pipeline.job.context.URITranslatorHelper;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 
@@ -65,7 +66,7 @@ public class URITranslatorHelperTest   {
 	/**
 	 * Tests 'getTranslatableOptionFilter'.
 	 *
-	 * @see org.daisy.pipeline.job.URITranslatorHelper#getTranslatableOptionFilter(XProcScript)
+	 * @see org.daisy.pipeline.job.context.URITranslatorHelper#getTranslatableOptionFilter(XProcScript)
 	 */
 	@Test
 	public void getTranslatableOptionFilter() throws Exception {
@@ -89,7 +90,7 @@ public class URITranslatorHelperTest   {
 	/**
 	 * Tests 'getOutputOptionFilter'.
 	 *
-	 * @see org.daisy.pipeline.job.URITranslatorHelper#getOutputOptionFilter(XProcScript)
+	 * @see org.daisy.pipeline.job.context.URITranslatorHelper#getOutputOptionFilter(XProcScript)
 	 */
 	@Test
 	public void getOutputOptionFilter() throws Exception {
@@ -108,7 +109,7 @@ public class URITranslatorHelperTest   {
 	/**
 	 * Tests 'getTranslatableOutputOptionsFilter'.
 	 *
-	 * @see org.daisy.pipeline.job.URITranslatorHelper#getTranslatableOutputOptionsFilter(XProcScript)
+	 * @see org.daisy.pipeline.job.context.URITranslatorHelper#getTranslatableOutputOptionsFilter(XProcScript)
 	 */
 	@Test
 	public void getTranslatableOutputOptionsFilter() throws Exception {
@@ -127,7 +128,7 @@ public class URITranslatorHelperTest   {
 	/**
 	 * Tests 'getTranslatableInputOptionsFilter'.
 	 *
-	 * @see org.daisy.pipeline.job.URITranslatorHelper#getTranslatableInputOptionsFilter(XProcScript)
+	 * @see org.daisy.pipeline.job.context.URITranslatorHelper#getTranslatableInputOptionsFilter(XProcScript)
 	 */
 	@Test
 	public void getTranslatableInputOptionsFilter() throws Exception {

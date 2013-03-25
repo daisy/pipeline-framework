@@ -12,6 +12,8 @@ import javax.xml.transform.Result;
 import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
+import org.daisy.pipeline.job.context.AbstractJobContext;
+import org.daisy.pipeline.job.context.XProcDecorator;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScript;
 import org.junit.After;

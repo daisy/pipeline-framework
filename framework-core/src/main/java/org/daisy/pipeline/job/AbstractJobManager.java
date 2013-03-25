@@ -1,5 +1,8 @@
 package org.daisy.pipeline.job;
 
+import org.daisy.pipeline.job.context.AbstractJobContext;
+import org.daisy.pipeline.job.context.JobContext;
+
 
 
 /**

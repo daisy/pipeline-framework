@@ -7,6 +7,7 @@ import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
 
 import org.daisy.pipeline.job.StatusMessage;
+import org.daisy.pipeline.job.context.JobContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,8 @@
-package org.daisy.pipeline.job;
+package org.daisy.pipeline.job.context;
 
 
+import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobURIUtils;
 import org.daisy.pipeline.script.BoundXProcScript;
 
 final class SimpleJobContext extends AbstractJobContext{

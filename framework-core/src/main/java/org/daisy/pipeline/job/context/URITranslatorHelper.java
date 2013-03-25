@@ -1,4 +1,4 @@
-package org.daisy.pipeline.job;
+package org.daisy.pipeline.job.context;
 
 import org.daisy.common.base.Provider;
 
@@ -7,13 +7,14 @@ import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 
 import javax.xml.transform.Result;
+
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
-final class URITranslatorHelper   {
+public final class URITranslatorHelper   {
 
 	public static final boolean notEmpty(String value){
 		return value != null && !value.isEmpty();
