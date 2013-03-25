@@ -1,6 +1,5 @@
 package org.daisy.pipeline.webservice;
 
-import org.daisy.common.base.Filter;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
@@ -8,11 +7,13 @@ import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcOptionMetadata.Output;
 import org.daisy.pipeline.script.XProcScript;
 
+import com.google.common.base.Function;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class XProcScriptFilter.
  */
-public final class XProcScriptFilter implements Filter<XProcScript> {
+public final class XProcScriptFilter implements Function<XProcScript,XProcScript> {
 
 	/** The Constant INSTANCE. */
 	public static final XProcScriptFilter INSTANCE = new XProcScriptFilter();
@@ -32,12 +33,11 @@ public final class XProcScriptFilter implements Filter<XProcScript> {
 	private XProcScriptFilter() {
 		// singleton
 	}
-
 	/* (non-Javadoc)
 	 * @see org.daisy.common.base.Filter#filter(java.lang.Object)
 	 */
 	@Override
-	public XProcScript filter(XProcScript script) {
+	public XProcScript apply(XProcScript script) {
 		XProcPipelineInfo xproc = script.getXProcPipelineInfo();
 		// create the script builder
 		XProcScript.Builder scriptBuilder = new XProcScript.Builder()

@@ -481,7 +481,7 @@ public class JobsResource extends AuthenticatedResource {
 
 		Iterable<XProcOptionInfo> filteredOptions = null;
 		if (!webservice().getConfiguration().isLocal()) {
-			filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
+			filteredOptions = XProcScriptFilter.INSTANCE.apply(script).getXProcPipelineInfo().getOptions();
 		}
 
 		Iterator<XProcOptionInfo> it = allOptions.iterator();

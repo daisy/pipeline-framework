@@ -92,7 +92,7 @@ public class Validator {
 			script = unfilteredScript.load();
 		}
 		else {
-			script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
+			script = XProcScriptFilter.INSTANCE.apply(unfilteredScript.load());
 		}
 
 		// inputs
