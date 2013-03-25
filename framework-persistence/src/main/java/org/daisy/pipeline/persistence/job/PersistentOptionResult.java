@@ -1,4 +1,4 @@
-package org.daisy.pipeline.persistence.jobs;
+package org.daisy.pipeline.persistence.job;
 
 import java.io.Serializable;
 
@@ -10,57 +10,59 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import javax.xml.namespace.QName;
+
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
 
 @Entity
-@Table(name="job_port_results")
-public class PersistentPortResult   {
+@Table(name="job_option_results")
+public class PersistentOptionResult{
 
 	
 	
 	@EmbeddedId
 	private PK id;
 
-	String portName;
+	String optionName;
 
 	String path;
 
 	String mediaType;
 
-	public PersistentPortResult(JobId jobId, JobResult result,String port) {
+	public PersistentOptionResult(JobId jobId, JobResult result,QName option) {
 		this.id=new PK(jobId,result.getIdx());
 		this.path=result.getPath().toString();
+		this.optionName=option.toString();
 		this.mediaType=result.getMediaType();
-		this.portName=port;
 	}
 
 	
 	/**
 	 * Constructs a new instance.
 	 */
-	public PersistentPortResult() {
+	public PersistentOptionResult() {
 	}
 
 	/**
-	 * Gets the portName for this instance.
+	 * Gets the optionName for this instance.
 	 *
-	 * @return The portName.
+	 * @return The optionName.
 	 */
-	public String getPortName()
+	public QName getOptionName()
 	{
-		return this.portName;
+		return QName.valueOf(this.optionName);
 	}
 
 	/**
-	 * Sets the portName for this instance.
+	 * Sets the optionName for this instance.
 	 *
-	 * @param portName The portName.
+	 * @param optionName The optionName.
 	 */
-	public void setPortName(String portName)
+	public void setOptionName(QName optionName)
 	{
-		this.portName = portName;
+		this.optionName = optionName.toString();
 	}
 
 	/**
@@ -74,31 +76,22 @@ public class PersistentPortResult   {
 	}
 
 	/**
+	 * Sets the path for this instance.
+	 *
+	 * @param path The path.
+	 */
+	public void setPath(String path)
+	{
+		this.path = path;
+	}
+
+	/**
 	 * Gets the mediaType for this instance.
 	 *
 	 * @return The mediaType.
 	 */
 	public String getMediaType() {
 		return this.mediaType;
-	}
-
-	/**
-	 * Sets the mediaType for this instance.
-	 *
-	 * @param mediaType The mediaType.
-	 */
-	public void setMediaType(String mediaType) {
-		this.mediaType = mediaType;
-	}
-
-	/**
-	 * Sets the path for this instance.
-	 *
-	 * @param path The path.
-	 */
-	public void setPath(URI path)
-	{
-		this.path = path.toString();
 	}
 
 	public String getIdx(){

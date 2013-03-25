@@ -1,4 +1,4 @@
-package org.daisy.pipeline.persistence.jobs;
+package org.daisy.pipeline.persistence.job;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,7 +12,8 @@ import org.daisy.pipeline.job.JobUUIDGenerator;
 
 import org.daisy.pipeline.persistence.Database;
 
-import org.daisy.pipeline.persistence.jobs.PersistentInputPort;
+import org.daisy.pipeline.persistence.job.PersistentInputPort;
+import org.daisy.pipeline.persistence.job.PersistentSource;
 
 import org.junit.After;
 import org.junit.Assert;

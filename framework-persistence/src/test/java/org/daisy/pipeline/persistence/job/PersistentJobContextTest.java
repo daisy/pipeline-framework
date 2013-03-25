@@ -1,25 +1,19 @@
-package org.daisy.pipeline.persistence.jobs;
+package org.daisy.pipeline.persistence.job;
 
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.namespace.QName;
-
 import javax.xml.transform.Source;
 
 import org.daisy.common.base.Provider;
-
 import org.daisy.common.xproc.XProcInput;
-
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.URIMapper;
-
 import org.daisy.pipeline.persistence.Database;
-
-import org.daisy.pipeline.persistence.jobs.Mocks;
-
+import org.daisy.pipeline.persistence.job.PersistentJobContext;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

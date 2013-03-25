@@ -1,4 +1,4 @@
-package org.daisy.pipeline.persistence.jobs;
+package org.daisy.pipeline.persistence.job;
 
 import java.util.HashMap;
 import java.util.Map;

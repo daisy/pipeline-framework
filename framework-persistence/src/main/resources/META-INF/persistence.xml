@@ -6,15 +6,15 @@
     <class>org.daisy.pipeline.persistence.webservice.PersistentClient</class>
     <class>org.daisy.pipeline.persistence.webservice.PersistentRequestLogEntry</class>
 
-    <class>org.daisy.pipeline.persistence.jobs.PersistentSource</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentInputPort</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentOption</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentParameter</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentJobContext</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentJob</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentPortResult</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentOptionResult</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentMapper</class>
+    <class>org.daisy.pipeline.persistence.job.PersistentSource</class>
+    <class>org.daisy.pipeline.persistence.job.PersistentInputPort</class>
+    <class>org.daisy.pipeline.persistence.job.PersistentOption</class>
+    <class>org.daisy.pipeline.persistence.job.PersistentParameter</class>
+    <class>org.daisy.pipeline.persistence.job.PersistentJobContext</class>
+    <class>org.daisy.pipeline.persistence.job.PersistentJob</class>
+    <class>org.daisy.pipeline.persistence.job.PersistentPortResult</class>
+    <class>org.daisy.pipeline.persistence.job.PersistentOptionResult</class>
+    <class>org.daisy.pipeline.persistence.job.PersistentMapper</class>
     <properties>
       <property name="eclipselink.ddl-generation" value="create-tables"/>
       <property name="eclipselink.ddl-generation.output-mode" value="database"/>

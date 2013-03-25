@@ -1,4 +1,4 @@
-package org.daisy.pipeline.persistence.jobs;
+package org.daisy.pipeline.persistence.job;
 
 import javax.xml.namespace.QName;
 
@@ -6,41 +6,40 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobUUIDGenerator;
 
 import org.daisy.pipeline.persistence.Database;
+import org.daisy.pipeline.persistence.job.PersistentOption;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class PersistentParameterTest   {
+public class PersistentOptionTest   {
 	
 	Database db;
+	PersistentOption po1;
+	QName qn1;
+	String value;
 	JobId id1;
-	String port1="params";
-	String value="some value";
-	QName qn1=new QName("http://daisy.com","test");
-	PersistentParameter pi1;
 	@Before	
 	public void setUp(){
 		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		db=DatabaseProvider.getDatabase();
 		id1= new JobUUIDGenerator().generateId();
-		qn1=new QName("http://daisy.com","test");
-		pi1=new PersistentParameter(id1,port1,qn1,value);
-		db.addObject(pi1);
+		qn1=new QName("http://daisy.org","test");
+		value= "some value";
+		po1= new PersistentOption(id1,qn1,value);	
+		db.addObject(po1);
 	}	
 
 	@After
 	public void tearDown(){
-		db.deleteObject(pi1);
+		db.deleteObject(po1);
 	}	
 	@Test
-	public void simpleParameter(){
-		PersistentParameter stored=db.getEntityManager().find(PersistentParameter.class,new PersistentParameter.PK(id1,port1,qn1));
+	public void retrieveOption(){
+		PersistentOption stored=db.getEntityManager().find(PersistentOption.class,new PersistentOption.PK(id1,qn1));
 		Assert.assertNotNull(stored);
 		Assert.assertEquals(stored.getJobId(),id1);
-		Assert.assertEquals(stored.getPort(),port1);
 		Assert.assertEquals(stored.getName(),qn1);
-		Assert.assertEquals(stored.getValue(),value);
 	}
 }

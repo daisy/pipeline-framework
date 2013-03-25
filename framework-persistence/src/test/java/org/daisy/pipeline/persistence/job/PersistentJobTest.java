@@ -1,4 +1,4 @@
-package org.daisy.pipeline.persistence.jobs;
+package org.daisy.pipeline.persistence.job;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 
 import org.daisy.pipeline.persistence.Database;
+import org.daisy.pipeline.persistence.job.PersistentJob;
 
 import org.junit.After;
 import org.junit.Assert;
