@@ -1,8 +1,7 @@
-package org.daisy.common.messaging.impl;
+package org.daisy.common.messaging;
 
 import java.util.Date;
 
-import org.daisy.common.messaging.Message;
 
 public class DefaultMessage implements Message {
 	Throwable throwable;
