@@ -1,4 +1,4 @@
-package org.daisy.pipeline.persistence;
+package org.daisy.pipeline.persistence.jobs;
 
 import javax.persistence.EntityManagerFactory;
 
