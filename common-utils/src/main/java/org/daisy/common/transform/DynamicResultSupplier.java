@@ -1,4 +1,4 @@
-package org.daisy.pipeline.job;
+package org.daisy.common.transform;
 
 import java.util.Collection;
 import java.util.Collections;

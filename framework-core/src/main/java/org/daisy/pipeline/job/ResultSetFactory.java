@@ -11,6 +11,7 @@ import javax.xml.transform.Result;
 
 import com.google.common.base.Supplier;
 
+import org.daisy.common.transform.DynamicResultSupplier;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;

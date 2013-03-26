@@ -1,5 +1,6 @@
-package org.daisy.pipeline.job;
+package org.daisy.common.transform;
 
+import org.daisy.common.transform.DynamicResultSupplier;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
