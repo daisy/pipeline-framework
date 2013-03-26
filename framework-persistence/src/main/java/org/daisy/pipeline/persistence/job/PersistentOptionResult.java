@@ -14,7 +14,7 @@ import javax.xml.namespace.QName;
 
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
-import org.daisy.pipeline.job.JobResult;
+import org.daisy.pipeline.job.result.JobResult;
 
 @Entity
 @Table(name="job_option_results")

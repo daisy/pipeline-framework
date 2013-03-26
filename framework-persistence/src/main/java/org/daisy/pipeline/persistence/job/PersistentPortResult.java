@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
-import org.daisy.pipeline.job.JobResult;
+import org.daisy.pipeline.job.result.JobResult;
 
 @Entity
 @Table(name="job_port_results")

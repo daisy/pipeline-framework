@@ -2,35 +2,25 @@ package org.daisy.pipeline.job.context;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.net.URI;
-
 import java.util.Collection;
 import java.util.List;
 
 import javax.xml.namespace.QName;
-
-import javax.xml.transform.Source;
 import javax.xml.transform.Result;
-
-import com.google.common.base.Supplier;
+import javax.xml.transform.Source;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
-
 import org.daisy.pipeline.job.Mock;
-import org.daisy.pipeline.job.URIMapper;
-import org.daisy.pipeline.job.Mock.ScriptGenerator;
-import org.daisy.pipeline.job.Mock.ScriptGenerator.Builder;
-import org.daisy.pipeline.job.context.URITranslatorHelper;
-import org.daisy.pipeline.job.context.XProcDecorator;
+import org.daisy.pipeline.job.util.URIMapper;
 import org.daisy.pipeline.script.XProcScript;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 
 public class XProcDecoratorTest   {

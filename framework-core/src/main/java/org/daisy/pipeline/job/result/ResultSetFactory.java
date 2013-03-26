@@ -1,30 +1,24 @@
 package org.daisy.pipeline.job.result;
 
-import java.io.File;
-
 import java.net.URI;
-
 import java.util.Collection;
 import java.util.List;
 
 import javax.xml.transform.Result;
-
-import com.google.common.base.Supplier;
 
 import org.daisy.common.transform.DynamicResultSupplier;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
-
 import org.daisy.pipeline.job.context.JobContext;
 import org.daisy.pipeline.job.context.URITranslatorHelper;
 import org.daisy.pipeline.job.context.XProcDecorator;
-import org.daisy.pipeline.job.context.XProcDecorator.TranslatableOption;
 import org.daisy.pipeline.job.util.IOHelper;
 import org.daisy.pipeline.job.util.URIMapper;
 import org.daisy.pipeline.script.XProcScript;
 
+import com.google.common.base.Supplier;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 

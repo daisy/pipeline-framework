@@ -245,50 +245,6 @@ public class Validator {
 	 * @param script the script
 	 * @return true, if successful
 	 */
-	// TODO: this function can probably be removed
-	private static boolean validateJobRequestOutputPortData(Iterable<XProcPortInfo> ports, NodeList nodes, XProcScript script) {
-		Iterator<XProcPortInfo>it = ports.iterator();
-		boolean hasAllRequiredArgs = true;
-		List<String> missingArgs = new ArrayList<String>();
-		
-		while (it.hasNext()) {
-			XProcPortInfo arg = it.next();
-			boolean validArg = false;
-			for (int i=0; i<nodes.getLength(); i++) {
-				Element elm = (Element)nodes.item(i);
-				if (elm.getAttribute("name").equals(arg.getName())) {
-					// this didn't match what the schema specified for <output> elements
-					/*NodeList itemNodes = elm.getElementsByTagName("item");
-
-					if (itemNodes.getLength() == 0) {
-						validArg = false;
-					}
-					else {
-						if (itemNodes.getLength() > 0) {
-							validArg = validateItemElements(itemNodes);
-						}
-					}*/
-					validArg = true;
-					break;
-				}
-			}
-			hasAllRequiredArgs &= validArg;
-			
-			if (!validArg) {
-				missingArgs.add(arg.getName());
-			}
-		}
-
-		if (hasAllRequiredArgs == false) {
-			String missingArgsStr = "";
-			for (String s : missingArgs){
-			    missingArgsStr += s + ",";
-			}
-			
-			logger.error("Required jobRequest output port arg(s) missing: " + missingArgsStr);
-		}
-		return hasAllRequiredArgs;
-	}
 
 	// make sure these nodes contain well-formed XML
 	// nodes must contain at least one item

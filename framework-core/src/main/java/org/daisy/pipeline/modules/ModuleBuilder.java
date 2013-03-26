@@ -2,7 +2,6 @@ package org.daisy.pipeline.modules;
 
 import java.net.URI;
 import java.util.Collection;
-import java.util.Map;
 
 public interface ModuleBuilder {
 

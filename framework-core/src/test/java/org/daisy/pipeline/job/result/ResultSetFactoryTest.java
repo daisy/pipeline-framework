@@ -9,20 +9,13 @@ import java.util.List;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
 
-import com.google.common.base.Supplier;
-
 import org.daisy.common.transform.DynamicResultSupplier;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.Mock;
-import org.daisy.pipeline.job.Mock.ScriptGenerator;
-import org.daisy.pipeline.job.Mock.ScriptGenerator.Builder;
 import org.daisy.pipeline.job.context.AbstractJobContext;
 import org.daisy.pipeline.job.context.XProcDecorator;
-import org.daisy.pipeline.job.result.JobResult;
-import org.daisy.pipeline.job.result.ResultSet;
-import org.daisy.pipeline.job.result.ResultSetFactory;
 import org.daisy.pipeline.job.util.IOHelper;
 import org.daisy.pipeline.job.util.JobURIUtils;
 import org.daisy.pipeline.job.util.URIMapper;
@@ -33,6 +26,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 
 public class ResultSetFactoryTest {

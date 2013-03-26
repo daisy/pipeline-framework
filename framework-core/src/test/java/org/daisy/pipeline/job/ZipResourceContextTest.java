@@ -4,14 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-import com.google.common.base.Supplier;
+import org.daisy.pipeline.job.util.ZipResourceContext;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.google.common.base.Supplier;
 
 public class ZipResourceContextTest {
 	ZipFile mFile;

@@ -11,7 +11,6 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.result.ResultSet;
 import org.daisy.pipeline.job.result.ResultSetFactory;
-import org.daisy.pipeline.job.result.ResultSet.Builder;
 import org.daisy.pipeline.job.util.JobURIUtils;
 import org.daisy.pipeline.job.util.RuntimeConfigurable;
 import org.daisy.pipeline.job.util.URIMapper;

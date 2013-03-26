@@ -2,6 +2,7 @@ package org.daisy.pipeline.job;
 
 import java.net.URI;
 
+import org.daisy.pipeline.job.util.URIMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

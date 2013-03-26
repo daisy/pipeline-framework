@@ -4,7 +4,7 @@ import java.net.URI;
 
 import javax.persistence.Embeddable;
 
-import org.daisy.pipeline.job.URIMapper;
+import org.daisy.pipeline.job.util.URIMapper;
 
 @Embeddable
 public class PersistentMapper {

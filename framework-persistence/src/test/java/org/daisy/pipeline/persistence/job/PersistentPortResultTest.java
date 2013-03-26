@@ -3,8 +3,8 @@ package org.daisy.pipeline.persistence.job;
 import java.net.URI;
 
 import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobUUIDGenerator;
+import org.daisy.pipeline.job.result.JobResult;
 
 import org.daisy.pipeline.persistence.Database;
 import org.daisy.pipeline.persistence.job.PersistentPortResult;

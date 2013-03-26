@@ -1,29 +1,14 @@
 package org.daisy.pipeline.job;
 
-import java.io.IOException;
-
-import java.net.URI;
-
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
 
-import javax.xml.transform.Source;
-
-import com.google.common.base.Supplier;
-
-import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
-import org.daisy.common.xproc.XProcPipelineInfo;
-import org.daisy.common.xproc.XProcPortInfo;
-
 import org.daisy.pipeline.job.context.URITranslatorHelper;
-import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

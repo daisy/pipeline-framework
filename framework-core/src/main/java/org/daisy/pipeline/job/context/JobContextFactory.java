@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.event.EventBusSupplier;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
@@ -13,7 +11,6 @@ import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.util.ResourceCollection;
 import org.daisy.pipeline.job.util.RuntimeConfigurable;
 import org.daisy.pipeline.script.BoundXProcScript;
-import org.daisy.pipeline.script.XProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
