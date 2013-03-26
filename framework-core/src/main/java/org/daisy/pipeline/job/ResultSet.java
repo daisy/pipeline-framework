@@ -14,6 +14,7 @@ import java.util.zip.ZipOutputStream;
 
 import javax.xml.namespace.QName;
 
+import org.daisy.pipeline.job.util.IOHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

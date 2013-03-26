@@ -1,19 +1,19 @@
-package org.daisy.pipeline.job;
+package org.daisy.pipeline.job.util;
 
 import java.io.File;
 import java.io.IOException;
 
 import java.net.URI;
 
-import org.daisy.pipeline.job.URIMapper;
+import org.daisy.pipeline.job.JobId;
 
 public class JobURIUtils   {
 	/** The Constant ORG_DAISY_PIPELINE_IOBASE. */
-	final static String ORG_DAISY_PIPELINE_IOBASE = "org.daisy.pipeline.iobase";
+	public final static String ORG_DAISY_PIPELINE_IOBASE = "org.daisy.pipeline.iobase";
 
-	final static String IO_DATA_SUBDIR = "context";
+	public final static String IO_DATA_SUBDIR = "context";
 	/** The I o_ outpu t_ subdir. */
-	final static String IO_OUTPUT_SUBDIR = "output";
+	public static String IO_OUTPUT_SUBDIR = "output";
 	/**
 	 * Returns an idle uri mapping, in case we are expecting absolute uris 
 	 * all the time

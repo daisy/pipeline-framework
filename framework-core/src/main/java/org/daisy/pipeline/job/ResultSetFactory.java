@@ -21,6 +21,8 @@ import org.daisy.pipeline.job.context.JobContext;
 import org.daisy.pipeline.job.context.URITranslatorHelper;
 import org.daisy.pipeline.job.context.XProcDecorator;
 import org.daisy.pipeline.job.context.XProcDecorator.TranslatableOption;
+import org.daisy.pipeline.job.util.IOHelper;
+import org.daisy.pipeline.job.util.URIMapper;
 import org.daisy.pipeline.script.XProcScript;
 
 import com.google.common.collect.Collections2;
