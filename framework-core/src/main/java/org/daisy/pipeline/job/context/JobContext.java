@@ -7,7 +7,7 @@ import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.ResultSet;
+import org.daisy.pipeline.job.result.ResultSet;
 import org.daisy.pipeline.script.XProcScript;
 
 import com.google.common.eventbus.EventBus;

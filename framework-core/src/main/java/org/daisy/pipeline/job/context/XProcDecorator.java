@@ -17,9 +17,9 @@ import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
 
-import org.daisy.pipeline.job.IOHelper;
-import org.daisy.pipeline.job.ResourceCollection;
-import org.daisy.pipeline.job.URIMapper;
+import org.daisy.pipeline.job.util.IOHelper;
+import org.daisy.pipeline.job.util.ResourceCollection;
+import org.daisy.pipeline.job.util.URIMapper;
 import org.daisy.pipeline.script.XProcScript;
 
 import org.slf4j.Logger;

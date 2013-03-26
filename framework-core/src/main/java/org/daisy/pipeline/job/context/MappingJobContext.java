@@ -3,8 +3,8 @@ package org.daisy.pipeline.job.context;
 import java.io.IOException;
 
 import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobURIUtils;
-import org.daisy.pipeline.job.ResourceCollection;
+import org.daisy.pipeline.job.util.JobURIUtils;
+import org.daisy.pipeline.job.util.ResourceCollection;
 import org.daisy.pipeline.script.BoundXProcScript;
 
 final class MappingJobContext extends AbstractJobContext {
