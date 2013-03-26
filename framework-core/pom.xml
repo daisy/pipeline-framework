@@ -37,6 +37,14 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>xproc-api</artifactId>
     </dependency>    
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xmlcatalog</artifactId>
+    </dependency>    
+    <dependency>
+	    <groupId>org.osgi</groupId>
+	    <artifactId>org.osgi.compendium</artifactId>
+    </dependency>	
   </dependencies>
 
   <build>
@@ -46,7 +54,7 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-		  <Service-Component>OSGI-INF/event-provider.xml, OSGI-INF/job-execution-service.xml, OSGI-INF/job-context-factory.xml, OSGI-INF/job-manager.xml, OSGI-INF/parser.xml, OSGI-INF/registry.xml</Service-Component>
+		  <Service-Component>OSGI-INF/event-provider.xml, OSGI-INF/job-execution-service.xml, OSGI-INF/job-context-factory.xml, OSGI-INF/job-manager.xml, OSGI-INF/script-parser.xml, OSGI-INF/script-registry.xml,OSGI-INF/module-registry.xml, OSGI-INF/module-resolver.xml</Service-Component>
           </instructions>
         </configuration>
       </plugin>

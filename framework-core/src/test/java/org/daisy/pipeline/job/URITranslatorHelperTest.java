@@ -1,28 +1,14 @@
 package org.daisy.pipeline.job;
 
-import java.io.IOException;
-
-import java.net.URI;
-
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
 
-import javax.xml.transform.Source;
-
-import org.daisy.common.base.Provider;
-
-import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
-import org.daisy.common.xproc.XProcPipelineInfo;
-import org.daisy.common.xproc.XProcPortInfo;
-
-import org.daisy.pipeline.script.XProcOptionMetadata;
+import org.daisy.pipeline.job.context.URITranslatorHelper;
 import org.daisy.pipeline.script.XProcScript;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,7 +51,7 @@ public class URITranslatorHelperTest   {
 	/**
 	 * Tests 'getTranslatableOptionFilter'.
 	 *
-	 * @see org.daisy.pipeline.job.URITranslatorHelper#getTranslatableOptionFilter(XProcScript)
+	 * @see org.daisy.pipeline.job.context.URITranslatorHelper#getTranslatableOptionFilter(XProcScript)
 	 */
 	@Test
 	public void getTranslatableOptionFilter() throws Exception {
@@ -89,7 +75,7 @@ public class URITranslatorHelperTest   {
 	/**
 	 * Tests 'getOutputOptionFilter'.
 	 *
-	 * @see org.daisy.pipeline.job.URITranslatorHelper#getOutputOptionFilter(XProcScript)
+	 * @see org.daisy.pipeline.job.context.URITranslatorHelper#getOutputOptionFilter(XProcScript)
 	 */
 	@Test
 	public void getOutputOptionFilter() throws Exception {
@@ -108,7 +94,7 @@ public class URITranslatorHelperTest   {
 	/**
 	 * Tests 'getTranslatableOutputOptionsFilter'.
 	 *
-	 * @see org.daisy.pipeline.job.URITranslatorHelper#getTranslatableOutputOptionsFilter(XProcScript)
+	 * @see org.daisy.pipeline.job.context.URITranslatorHelper#getTranslatableOutputOptionsFilter(XProcScript)
 	 */
 	@Test
 	public void getTranslatableOutputOptionsFilter() throws Exception {
@@ -127,7 +113,7 @@ public class URITranslatorHelperTest   {
 	/**
 	 * Tests 'getTranslatableInputOptionsFilter'.
 	 *
-	 * @see org.daisy.pipeline.job.URITranslatorHelper#getTranslatableInputOptionsFilter(XProcScript)
+	 * @see org.daisy.pipeline.job.context.URITranslatorHelper#getTranslatableInputOptionsFilter(XProcScript)
 	 */
 	@Test
 	public void getTranslatableInputOptionsFilter() throws Exception {
@@ -140,59 +126,59 @@ public class URITranslatorHelperTest   {
 	}
 	
 	@Test 
-	public void getDynamicResultProviderPartsNullProvider() throws Exception{
+	public void getDynamicResultSupplierPartsNullSupplier() throws Exception{
 
 		String outName = Mock.ScriptGenerator.getOutputName(0);
-		String[] parts= URITranslatorHelper.getDynamicResultProviderParts(outName,null,"");
+		String[] parts= URITranslatorHelper.getDynamicResultSupplierParts(outName,null,"");
 		Assert.assertEquals(outName+"/"+outName,parts[0]);
 		Assert.assertEquals(".xml",parts[1]);
 		
 	}
 	@Test 
-	public void getDynamicResultProviderPartsEmpty() throws Exception{
+	public void getDynamicResultSupplierPartsEmpty() throws Exception{
 
 		String outName = Mock.ScriptGenerator.getOutputName(0);
-		String[] parts= URITranslatorHelper.getDynamicResultProviderParts(outName,Mock.getResultProvider(""),"");
+		String[] parts= URITranslatorHelper.getDynamicResultSupplierParts(outName,Mock.getResultSupplier(""),"");
 		Assert.assertEquals(outName+"/"+outName,parts[0]);
 		Assert.assertEquals(".xml",parts[1]);
 		
 	}
 		
 	@Test 
-	public void getDynamicResultProviderPartsFile() throws Exception{
+	public void getDynamicResultSupplierPartsFile() throws Exception{
 
 		String outName = Mock.ScriptGenerator.getOutputName(0);
-		String[] parts= URITranslatorHelper.getDynamicResultProviderParts(outName,Mock.getResultProvider("dir/file.opf"),"");
+		String[] parts= URITranslatorHelper.getDynamicResultSupplierParts(outName,Mock.getResultSupplier("dir/file.opf"),"");
 		Assert.assertEquals("dir/file",parts[0]);
 		Assert.assertEquals(".opf",parts[1]);
 		
 	}
 
 	@Test 
-	public void getDynamicResultProviderPartsFileNoExtension() throws Exception{
+	public void getDynamicResultSupplierPartsFileNoExtension() throws Exception{
 
 		String outName = Mock.ScriptGenerator.getOutputName(0);
-		String[] parts= URITranslatorHelper.getDynamicResultProviderParts(outName,Mock.getResultProvider("dir/file"),"");
+		String[] parts= URITranslatorHelper.getDynamicResultSupplierParts(outName,Mock.getResultSupplier("dir/file"),"");
 		Assert.assertEquals("dir/file",parts[0]);
 		Assert.assertEquals("",parts[1]);
 		
 	}
 
 	@Test 
-	public void getDynamicResultProviderPartsFileNoExtensionAndDotsInPath() throws Exception{
+	public void getDynamicResultSupplierPartsFileNoExtensionAndDotsInPath() throws Exception{
 
 		String outName = Mock.ScriptGenerator.getOutputName(0);
-		String[] parts= URITranslatorHelper.getDynamicResultProviderParts(outName,Mock.getResultProvider("di.r/file"),"");
+		String[] parts= URITranslatorHelper.getDynamicResultSupplierParts(outName,Mock.getResultSupplier("di.r/file"),"");
 		Assert.assertEquals("di.r/file",parts[0]);
 		Assert.assertEquals("",parts[1]);
 		
 	}
 
 	@Test 
-	public void getDynamicResultProviderPartsDir() throws Exception{
+	public void getDynamicResultSupplierPartsDir() throws Exception{
 
 		String outName = Mock.ScriptGenerator.getOutputName(0);
-		String[] parts= URITranslatorHelper.getDynamicResultProviderParts(outName,Mock.getResultProvider("dir/"),"");
+		String[] parts= URITranslatorHelper.getDynamicResultSupplierParts(outName,Mock.getResultSupplier("dir/"),"");
 		Assert.assertEquals("dir/"+outName,parts[0]);
 		Assert.assertEquals(".xml",parts[1]);
 		

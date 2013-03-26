@@ -8,7 +8,7 @@ import javax.xml.namespace.QName;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobResult;
+import org.daisy.pipeline.job.result.JobResult;
 import org.daisy.pipeline.webserviceutils.Routes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

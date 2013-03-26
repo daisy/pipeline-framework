@@ -3,7 +3,6 @@ package org.daisy.pipeline.persistence.webservice;
 import java.util.List;
 
 import org.daisy.pipeline.persistence.Database;
-import org.daisy.pipeline.webserviceutils.callback.DefaultCallbackRegistry;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLogEntry;
 import org.slf4j.Logger;

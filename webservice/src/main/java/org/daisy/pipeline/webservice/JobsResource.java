@@ -18,18 +18,18 @@ import javax.xml.transform.sax.SAXSource;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.daisy.common.base.Provider;
-import org.daisy.common.transform.LazySaxResultProvider;
-import org.daisy.common.transform.LazySaxSourceProvider;
+import com.google.common.base.Supplier;
+import org.daisy.common.transform.LazySaxResultSupplier;
+import org.daisy.common.transform.LazySaxSourceSupplier;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobManager;
-import org.daisy.pipeline.job.ResourceCollection;
-import org.daisy.pipeline.job.ZipResourceContext;
+import org.daisy.pipeline.job.context.JobContext;
+import org.daisy.pipeline.job.util.ResourceCollection;
+import org.daisy.pipeline.job.util.ZipResourceContext;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
@@ -404,7 +404,7 @@ public class JobsResource extends AuthenticatedResource {
 					if (fileNodes.getLength() > 0) {
 						for (int j = 0; j < fileNodes.getLength(); j++) {
 							String src = ((Element)fileNodes.item(j)).getAttribute("value");
-							LazySaxSourceProvider prov= new LazySaxSourceProvider(src);
+							LazySaxSourceSupplier prov= new LazySaxSourceSupplier(src);
 							builder.withInput(name, prov);
 						}
 					}
@@ -426,9 +426,9 @@ public class JobsResource extends AuthenticatedResource {
 							String xml = XmlUtils.nodeToString(content);
 							InputSource is = new org.xml.sax.InputSource(new java.io.StringReader(xml));
 							source.setInputSource(is);
-							Provider<Source> prov= new Provider<Source>(){
+							Supplier<Source> prov= new Supplier<Source>(){
 								@Override
-								public Source provide(){
+								public Source get(){
 									return source;
 								}
 							};
@@ -463,7 +463,7 @@ public class JobsResource extends AuthenticatedResource {
 
 					for (int j = 0; j < fileNodes.getLength(); j++) {
 						String res = ((Element)fileNodes.item(j)).getAttribute("value");
-						LazySaxResultProvider prov= new LazySaxResultProvider(res);
+						LazySaxResultSupplier prov= new LazySaxResultSupplier(res);
 						builder.withOutput(name, prov);
 					}
 				}
@@ -481,7 +481,7 @@ public class JobsResource extends AuthenticatedResource {
 
 		Iterable<XProcOptionInfo> filteredOptions = null;
 		if (!webservice().getConfiguration().isLocal()) {
-			filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
+			filteredOptions = XProcScriptFilter.INSTANCE.apply(script).getXProcPipelineInfo().getOptions();
 		}
 
 		Iterator<XProcOptionInfo> it = allOptions.iterator();

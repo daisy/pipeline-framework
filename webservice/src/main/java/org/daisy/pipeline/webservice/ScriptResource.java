@@ -44,7 +44,7 @@ public class ScriptResource extends AuthenticatedResource {
 		if (unfilteredScript != null) {
 			script = (webservice().getConfiguration().isLocal()) ? unfilteredScript
 					.load() : XProcScriptFilter.INSTANCE
-					.filter(unfilteredScript.load());
+					.apply(unfilteredScript.load());
 		}
 	}
 

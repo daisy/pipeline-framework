@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.xml.transform.Result;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -24,7 +24,7 @@ public class XProcOutput {
 		
 
 		/** The outputs. */
-		private final HashMap<String, Provider<Result>> outputs = Maps
+		private final HashMap<String, Supplier<Result>> outputs = Maps
 				.newHashMap();
 
 	
@@ -37,7 +37,7 @@ public class XProcOutput {
 		 * @param result the result
 		 * @return the builder
 		 */
-		public Builder withOutput(String port, Provider<Result> result) {
+		public Builder withOutput(String port, Supplier<Result> result) {
 			// TODO check if compatible with info
 			outputs.put(port, result);
 			return this;
@@ -54,24 +54,24 @@ public class XProcOutput {
 	}
 
 	/** The outputs. */
-	private final Map<String, Provider<Result>> outputs;
+	private final Map<String, Supplier<Result>> outputs;
 
 	/**
 	 * Instantiates a new x proc output.
 	 *
 	 * @param outputs the outputs
 	 */
-	private XProcOutput(Map<String, Provider<Result>> outputs) {
+	private XProcOutput(Map<String, Supplier<Result>> outputs) {
 		this.outputs = ImmutableMap.copyOf(outputs);
 	}
 
 	/**
-	 * Gets the result provider for the given port name
+	 * Gets the result supplier for the given port name
 	 *
 	 * @param port the port
-	 * @return the result provider
+	 * @return the result supplier
 	 */
-	public Provider<Result> getResultProvider(String port) {
+	public Supplier<Result> getResultSupplier(String port) {
 		return outputs.get(port);
 	}
 }

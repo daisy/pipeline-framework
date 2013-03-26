@@ -3,7 +3,7 @@ package org.daisy.pipeline.webservice;
 import java.util.Collection;
 
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobResult;
+import org.daisy.pipeline.job.result.JobResult;
 
 /**
  * The Class ResultResource.

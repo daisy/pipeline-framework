@@ -9,7 +9,7 @@ import net.sf.saxon.s9api.XdmNode;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.Message.MessageBuilder;
 import org.daisy.common.messaging.MessageBuliderFactory;
-import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.event.EventBusSupplier;
 
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRunnable;
@@ -22,12 +22,12 @@ import com.xmlcalabash.core.XProcRunnable;
 public class EventBusMessageListener implements XProcMessageListener {
 
 	/** The listener. */
-	EventBusProvider eventBus;
+	EventBusSupplier eventBus;
 	MessageBuliderFactory messageBuilderFactory;
 	Properties props;
 	int sequence = 0;
 
-	public EventBusMessageListener(EventBusProvider eventBus,
+	public EventBusMessageListener(EventBusSupplier eventBus,
 			 Properties props) {
 		super();
 		this.eventBus = eventBus;

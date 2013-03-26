@@ -100,8 +100,6 @@
     <module>framework-core</module>
     <module>framework-persistence</module>
     <module>logging-activator</module>
-    <module>modules-api</module>
-    <module>modules-registry</module>
     <module>persistence-derby</module>
     <module>persistence-mysql</module>
     <module>push-notifier</module>
@@ -132,8 +130,6 @@
     <daisy.framework-core.version>1.0-SNAPSHOT</daisy.framework-core.version>
     <daisy.framework-persistence.version>1.0-SNAPSHOT</daisy.framework-persistence.version>
     <daisy.logging-activator.version>1.0-SNAPSHOT</daisy.logging-activator.version>
-    <daisy.modules-api.version>1.0-SNAPSHOT</daisy.modules-api.version>
-    <daisy.modules-registry.version>1.0-SNAPSHOT</daisy.modules-registry.version>
     <daisy.persistence-derby.version>1.0-SNAPSHOT</daisy.persistence-derby.version>
     <daisy.persistence-mysql.version>1.0-SNAPSHOT</daisy.persistence-mysql.version>
     <daisy.push-notifier.version>1.0-SNAPSHOT</daisy.push-notifier.version>
@@ -198,16 +194,6 @@
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>logging-activator</artifactId>
         <version>${daisy.logging-activator.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>modules-api</artifactId>
-        <version>${daisy.modules-api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>modules-registry</artifactId>
-        <version>${daisy.modules-registry.version}</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>

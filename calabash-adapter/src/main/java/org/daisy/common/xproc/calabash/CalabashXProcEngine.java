@@ -12,7 +12,7 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcResult;
-import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.event.EventBusSupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.EntityResolver;
@@ -37,8 +37,8 @@ public final class CalabashXProcEngine implements XProcEngine {
 	/** The config factory. */
 	private XProcConfigurationFactory configFactory = null;
 
-	/** The event bus provider. */
-	private EventBusProvider eventBusProvider;
+	/** The event bus supplier. */
+	private EventBusSupplier eventBusSupplier;
 
 
 
@@ -67,7 +67,7 @@ public final class CalabashXProcEngine implements XProcEngine {
 					"Calabash configuration factory unavailable");
 		}
 
-		return new CalabashXProcPipeline(uri, configFactory, uriResolver, entityResolver,eventBusProvider);
+		return new CalabashXProcPipeline(uri, configFactory, uriResolver, entityResolver,eventBusSupplier);
 	}
 
 	/* (non-Javadoc)
@@ -118,8 +118,8 @@ public final class CalabashXProcEngine implements XProcEngine {
 	 *
 	 * @param factory the new message listener factory
 	 */
-	public void setEventBusProvider(EventBusProvider eventBusProvider){
-		this.eventBusProvider=eventBusProvider;
+	public void setEventBusSupplier(EventBusSupplier eventBusSupplier){
+		this.eventBusSupplier=eventBusSupplier;
 	}
 	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
 		PropertyPublisher propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	

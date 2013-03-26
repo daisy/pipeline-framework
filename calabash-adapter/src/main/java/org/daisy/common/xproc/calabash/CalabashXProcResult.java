@@ -14,7 +14,7 @@ import javax.xml.transform.stream.StreamResult;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
 
@@ -69,13 +69,13 @@ public final class CalabashXProcResult implements XProcResult {
 		if(xpipeline.getOutputs() != null)
 			for (String port : xpipeline.getOutputs()) {
 
-				Provider<Result> resultProvider = output.getResultProvider(port);
+				Supplier<Result> resultSupplier = output.getResultSupplier(port);
 
 				ReadablePipe rpipe = xpipeline.readFrom(port);
 				while (rpipe.moreDocuments()) {
 					Serializer serializer = SerializationUtils.newSerializer(
 							xpipeline.getSerialization(port), configuration);
-					Result result = resultProvider.provide();
+					Result result = resultSupplier.get();
 					if (result instanceof StreamResult) {
 						StreamResult streamResult = (StreamResult) result;
 						serializer.setOutputStream(streamResult.getOutputStream());
