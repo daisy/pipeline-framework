@@ -7,7 +7,7 @@ import java.util.List;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobResult;
@@ -31,7 +31,7 @@ public class PersistentJobContextTest  {
 		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		ctxt=new PersistentJobContext(Mocks.buildContext());
 		id=ctxt.getId();
-		db=DatabaseProvider.getDatabase();
+		db=DatabaseSupplier.getDatabase();
 		db.addObject(ctxt);
 	}
 	@After
@@ -50,8 +50,8 @@ public class PersistentJobContextTest  {
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
 		XProcInput inputs=jCtxt.getInputs();
 		HashSet<String> expectedSrcs=new HashSet<String>();
-		for ( Provider<Source> psrc:inputs.getInputs("source")){
-			expectedSrcs.add(psrc.provide().getSystemId());	
+		for ( Supplier<Source> psrc:inputs.getInputs("source")){
+			expectedSrcs.add(psrc.get().getSystemId());	
 		}
 		Assert.assertTrue(expectedSrcs.contains(Mocks.file1));
 		Assert.assertTrue(expectedSrcs.contains(Mocks.file2));

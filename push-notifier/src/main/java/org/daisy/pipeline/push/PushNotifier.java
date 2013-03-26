@@ -10,7 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.daisy.common.messaging.Message;
-import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.event.EventBusSupplier;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobManager;
@@ -34,7 +34,7 @@ public class PushNotifier {
 
 
 	private CallbackRegistry callbackRegistry;
-	private EventBusProvider eventBusProvider;
+	private EventBusSupplier eventBusSupplier;
 	private JobManager jobManager;
 	/** The logger. */
 	private Logger logger;// = LoggerFactory.getLogger(Poster.class.getName());
@@ -73,9 +73,9 @@ public class PushNotifier {
 		}
 	}
 
-	public void setEventBusProvider(EventBusProvider eventBusProvider) {
-		this.eventBusProvider = eventBusProvider;
-		this.eventBusProvider.get().register(this);
+	public void setEventBusSupplier(EventBusSupplier eventBusSupplier) {
+		this.eventBusSupplier = eventBusSupplier;
+		this.eventBusSupplier.get().register(this);
 	}
 
 	public void setCallbackRegistry(CallbackRegistry callbackRegistry) {

@@ -9,14 +9,14 @@ import java.util.HashSet;
 
 import javax.xml.transform.Source;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
 
-import org.daisy.pipeline.job.DynamicResultProvider;
+import org.daisy.pipeline.job.DynamicResultSupplier;
 import org.daisy.pipeline.job.IOHelper;
 import org.daisy.pipeline.job.ResourceCollection;
 import org.daisy.pipeline.job.URIMapper;
@@ -119,9 +119,9 @@ public class XProcDecorator {
 		XProcOutput.Builder builder = new XProcOutput.Builder();
 		Iterable<XProcPortInfo> outputInfos=script.getXProcPipelineInfo().getOutputPorts();
 		for(XProcPortInfo info:outputInfos){
-			String parts[] = URITranslatorHelper.getDynamicResultProviderParts(info.getName(),output.getResultProvider(info.getName()),script.getPortMetadata(info.getName()).getMediaType());
+			String parts[] = URITranslatorHelper.getDynamicResultSupplierParts(info.getName(),output.getResultSupplier(info.getName()),script.getPortMetadata(info.getName()).getMediaType());
 			String prefix = mapper.mapOutput(URI.create(parts[0])).toString();
-			builder.withOutput(info.getName(),new DynamicResultProvider(prefix,parts[1]));
+			builder.withOutput(info.getName(),new DynamicResultSupplier(prefix,parts[1]));
 		}
 		return builder.build();
 	}
@@ -143,11 +143,11 @@ public class XProcDecorator {
 		for (XProcPortInfo portInfo : inputInfos){
 			//number of inputs for this port
 			int inputCnt = 0;
-			for (Provider<Source> prov : input.getInputs(portInfo.getName())) {
+			for (Supplier<Source> prov : input.getInputs(portInfo.getName())) {
 				URI relUri = null;
-				if (prov.provide().getSystemId() != null) {
+				if (prov.get().getSystemId() != null) {
 					try {
-						relUri = URI.create(prov.provide().getSystemId());
+						relUri = URI.create(prov.get().getSystemId());
 					} catch (Exception e) {
 						throw new RuntimeException(
 								"Error parsing uri when building the input port"
@@ -160,7 +160,7 @@ public class XProcDecorator {
 							+ ".xml");
 				}
 				URI uri = mapper.mapInput(relUri);//contextDir.toURI().resolve(relUri);
-				prov.provide().setSystemId(uri.toString());
+				prov.get().setSystemId(uri.toString());
 				builder.withInput(portInfo.getName(), prov);
 				inputCnt++;
 			}

@@ -36,8 +36,8 @@ public class DynamicXProcConfigurationFactory implements
 	private static final Logger logger = LoggerFactory
 			.getLogger(DynamicXProcConfigurationFactory.class);
 
-	/** The step providers. */
-	private final Map<QName, XProcStepProvider> stepProviders = new HashMap<QName, XProcStepProvider>();
+	/** The step suppliers. */
+	private final Map<QName, XProcStepSupplier> stepSuppliers = new HashMap<QName, XProcStepSupplier>();
 
 	// private FunctionLibraryList mFunctionLibrary=new FunctionLibraryList();
 	private XPathFunctionRegistry mXPathRegistry = null;
@@ -103,29 +103,29 @@ public class DynamicXProcConfigurationFactory implements
 	/**
 	 * Adds the step.
 	 *
-	 * @param stepProvider
-	 *            the step provider
+	 * @param stepSupplier
+	 *            the step supplier
 	 * @param properties
 	 *            the properties
 	 */
-	public void addStep(XProcStepProvider stepProvider, Map<?, ?> properties) {
+	public void addStep(XProcStepSupplier stepSupplier, Map<?, ?> properties) {
 		QName type = QName.fromClarkName((String) properties.get("type"));
 		logger.debug("Adding step to registry: {}", type.toString());
-		stepProviders.put(type, stepProvider);
+		stepSuppliers.put(type, stepSupplier);
 	}
 
 	/**
 	 * Removes the step from the registry
 	 *
-	 * @param stepProvider
-	 *            the step provider
+	 * @param stepSupplier
+	 *            the step supplier
 	 * @param properties
 	 *            the properties
 	 */
-	public void removeStep(XProcStepProvider stepProvider, Map<?, ?> properties) {
+	public void removeStep(XProcStepSupplier stepSupplier, Map<?, ?> properties) {
 		QName type = QName.fromClarkName((String) properties.get("type"));
 		logger.debug("Removing step from registry: {}", type.toString());
-		stepProviders.remove(type);
+		stepSuppliers.remove(type);
 	}
 
 	/*
@@ -137,7 +137,7 @@ public class DynamicXProcConfigurationFactory implements
 	 */
 	@Override
 	public boolean hasStep(QName type) {
-		return stepProviders.containsKey(type);
+		return stepSuppliers.containsKey(type);
 	}
 
 	/*
@@ -150,8 +150,8 @@ public class DynamicXProcConfigurationFactory implements
 	 */
 	@Override
 	public XProcStep newStep(QName type, XProcRuntime runtime, XAtomicStep step) {
-		XProcStepProvider stepProvider = stepProviders.get(type);
-		return (stepProvider != null) ? stepProvider.newStep(runtime, step)
+		XProcStepSupplier stepSupplier = stepSuppliers.get(type);
+		return (stepSupplier != null) ? stepSupplier.newStep(runtime, step)
 				: null;
 	}
 

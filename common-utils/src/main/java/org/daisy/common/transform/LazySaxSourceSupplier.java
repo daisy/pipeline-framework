@@ -1,9 +1,9 @@
 package org.daisy.common.transform;
 import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 
-public class LazySaxSourceProvider implements Provider<Source>{
+public class LazySaxSourceSupplier implements Supplier<Source>{
 
 	private String systemId;
 
@@ -13,13 +13,13 @@ public class LazySaxSourceProvider implements Provider<Source>{
 	 *
 	 * @param systemId The systemId for this instance.
 	 */
-	public LazySaxSourceProvider(String systemId) {
+	public LazySaxSourceSupplier(String systemId) {
 		this.systemId=systemId;
 	}
 
 
 	@Override
-	public Source provide() {
+	public Source get() {
 		SAXSource src=new ProxiedSAXSource();
 		src.setSystemId(this.systemId);
 		return src;
@@ -29,7 +29,7 @@ public class LazySaxSourceProvider implements Provider<Source>{
 		@Override
 		public void setSystemId(String systemId) {
 			super.setSystemId(systemId);
-			LazySaxSourceProvider.this.systemId=systemId;
+			LazySaxSourceSupplier.this.systemId=systemId;
 		}
 
 	}

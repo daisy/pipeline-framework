@@ -13,7 +13,6 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
-import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOptionInfo;
@@ -21,7 +20,7 @@ import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcResult;
-import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.event.EventBusSupplier;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -57,7 +56,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	private final EntityResolver entityResolver;
 
 	/** The message listener factory. */
-	private final EventBusProvider eventBusProvider;
+	private final EventBusSupplier eventBusSupplier;
 
 
 
@@ -158,12 +157,12 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	public CalabashXProcPipeline(URI uri,
 			XProcConfigurationFactory configFactory, URIResolver uriResolver,
 			EntityResolver entityResolver,
-			EventBusProvider eventBusProvider) {
+			EventBusSupplier eventBusSupplier) {
 		this.uri = uri;
 		this.configFactory = configFactory;
 		this.uriResolver = uriResolver;
 		this.entityResolver = entityResolver;
-		this.eventBusProvider=eventBusProvider;
+		this.eventBusSupplier=eventBusSupplier;
 
 	}
 
@@ -194,11 +193,11 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		PipelineInstance pipeline = pipelineSupplier.get();
 		// monitor.setMessageAccessor(pipeline.messageAccessor);
 		((XProcMessageListenerAggregator) pipeline.xpipe.getStep().getXProc()
-				.getMessageListener()).add(new EventBusMessageListener(eventBusProvider,props));
+				.getMessageListener()).add(new EventBusMessageListener(eventBusSupplier,props));
 		// bind inputs
 		for (String name : pipeline.xpipe.getInputs()) {
-			for (Provider<Source> sourceProvider : data.getInputs(name)) {
-				Source source = sourceProvider.provide();
+			for (Supplier<Source> sourceSupplier : data.getInputs(name)) {
+				Source source = sourceSupplier.get();
 				// TODO hack to set the entity resolver
 				if (source instanceof SAXSource) {
 					XMLReader reader = ((SAXSource) source).getXMLReader();

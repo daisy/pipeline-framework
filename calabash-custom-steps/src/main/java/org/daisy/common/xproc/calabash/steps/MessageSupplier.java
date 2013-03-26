@@ -4,7 +4,7 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
-import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.calabash.XProcStepSupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,13 +19,13 @@ import com.xmlcalabash.runtime.XAtomicStep;
 /**
  * This class offers a reimplementation of calabash's Message step (cx:message) which uses internal message throwing mechanisms instead of dumping the messages to stdout.
  */
-public class MessageProvider implements XProcStepProvider {
+public class MessageSupplier implements XProcStepSupplier {
 
 	/** The logger. */
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/* (non-Javadoc)
-	 * @see org.daisy.common.xproc.calabash.XProcStepProvider#newStep(com.xmlcalabash.core.XProcRuntime, com.xmlcalabash.runtime.XAtomicStep)
+	 * @see org.daisy.common.xproc.calabash.XProcStepSupplier#newStep(com.xmlcalabash.core.XProcRuntime, com.xmlcalabash.runtime.XAtomicStep)
 	 */
 	@Override
 	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
@@ -36,7 +36,7 @@ public class MessageProvider implements XProcStepProvider {
 	 * Activate (OSGI)
 	 */
 	public void activate() {
-		logger.trace("Activating cx:message provider");
+		logger.trace("Activating cx:message supplier");
 	}
 }
 

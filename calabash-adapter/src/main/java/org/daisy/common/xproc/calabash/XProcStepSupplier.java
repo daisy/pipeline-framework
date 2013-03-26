@@ -6,9 +6,9 @@ import com.xmlcalabash.runtime.XAtomicStep;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface XProcStepProvider.
+ * The Interface XProcStepSupplier.
  */
-public interface XProcStepProvider {
+public interface XProcStepSupplier {
 
 	/**
 	 *  Returns the implementation for the step represented by the XAtomicStep

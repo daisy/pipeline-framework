@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.xml.transform.Result;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
@@ -44,14 +44,14 @@ public class ResultSetFactory {
 
 	static synchronized void collectOutputs(XProcScript script,XProcOutput outputs,URIMapper mapper,ResultSet.Builder builder){
 		for (XProcPortInfo info: script.getXProcPipelineInfo().getOutputPorts()){
-			Provider<Result> prov= outputs.getResultProvider(info.getName());
+			Supplier<Result> prov= outputs.getResultSupplier(info.getName());
 
 			if(prov==null)
 				continue;
 
 			List<JobResult> results=null;
-			if(prov instanceof DynamicResultProvider){
-				results=buildJobResult((DynamicResultProvider) prov,mapper);
+			if(prov instanceof DynamicResultSupplier){
+				results=buildJobResult((DynamicResultSupplier) prov,mapper);
 			}else{
 				results=buildJobResult(prov,mapper);
 			}
@@ -60,15 +60,15 @@ public class ResultSetFactory {
 
 	}
 	//Non dymamic just one result will be returned in fact
-	static List<JobResult> buildJobResult(Provider<Result> provider,URIMapper mapper){
+	static List<JobResult> buildJobResult(Supplier<Result> supplier,URIMapper mapper){
 		List<JobResult> jobs= Lists.newLinkedList();
-		URI path=URI.create(provider.provide().getSystemId());
+		URI path=URI.create(supplier.get().getSystemId());
 		jobs.add(singleResult(path,mapper));
 		return jobs;
 	}
-	static List<JobResult> buildJobResult(DynamicResultProvider provider,URIMapper mapper){
+	static List<JobResult> buildJobResult(DynamicResultSupplier supplier,URIMapper mapper){
 		List<JobResult> jobs= Lists.newLinkedList();
-		for( Result res: provider.providedResults()){
+		for( Result res: supplier.providedResults()){
 			URI path=URI.create(res.getSystemId());
 			jobs.add(singleResult(path,mapper));
 		}

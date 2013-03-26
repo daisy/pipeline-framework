@@ -13,7 +13,7 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 import javax.xml.transform.Result;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
@@ -49,8 +49,8 @@ public class XProcDecoratorTest   {
 	public void testResolveInputPorts() throws IOException {
 		//inputs from the script definition
 		XProcScript mscript= new Mock.ScriptGenerator.Builder().withInputs(1).build().generate();
-		Provider<Source> srcProv= Mock.getSourceProvider(testFile);
-		Provider<Source> srcProv2= Mock.getSourceProvider(testFile2);
+		Supplier<Source> srcProv= Mock.getSourceSupplier(testFile);
+		Supplier<Source> srcProv2= Mock.getSourceSupplier(testFile2);
 		//adding a value to the input option
 		String optName=Mock.ScriptGenerator.getInputName(0);
 		XProcInput input = new XProcInput.Builder().
@@ -61,12 +61,12 @@ public class XProcDecoratorTest   {
 		trans.decorateInputPorts(mscript,input,builder);
 
 		XProcInput newInput = builder.build();
-		List<Provider<Source>> providers = Lists.newLinkedList(newInput.getInputs(optName));
-		URI res1 = URI.create(providers.get(0).provide().getSystemId());
+		List<Supplier<Source>> suppliers = Lists.newLinkedList(newInput.getInputs(optName));
+		URI res1 = URI.create(suppliers.get(0).get().getSystemId());
 		URI expected=URI.create(mapper.getInputBase().toString()+testFile);
 		Assert.assertEquals(res1,expected);
 
-		URI res2 = URI.create(providers.get(1).provide().getSystemId());
+		URI res2 = URI.create(suppliers.get(1).get().getSystemId());
 		URI expected2=URI.create(mapper.getInputBase().toString()+testFile2);
 		Assert.assertEquals(res2,expected2);
 	}
@@ -75,8 +75,8 @@ public class XProcDecoratorTest   {
 	public void testResolveInputPortGenerated() throws IOException {
 		//inputs from the script definition
 		XProcScript mscript= new Mock.ScriptGenerator.Builder().withInputs(1).build().generate();
-		Provider<Source> srcProv= Mock.getSourceProvider(null);
-		Provider<Source> srcProv2= Mock.getSourceProvider(null);
+		Supplier<Source> srcProv= Mock.getSourceSupplier(null);
+		Supplier<Source> srcProv2= Mock.getSourceSupplier(null);
 		//adding a value to the input option
 		String optName=Mock.ScriptGenerator.getInputName(0);
 		XProcInput input = new XProcInput.Builder().
@@ -87,12 +87,12 @@ public class XProcDecoratorTest   {
 		trans.decorateInputPorts(mscript,input,builder);
 
 		XProcInput newInput = builder.build();
-		List<Provider<Source>> providers = Lists.newLinkedList(newInput.getInputs(optName));
-		URI res1 = URI.create(providers.get(0).provide().getSystemId());
+		List<Supplier<Source>> suppliers = Lists.newLinkedList(newInput.getInputs(optName));
+		URI res1 = URI.create(suppliers.get(0).get().getSystemId());
 		URI expected=URI.create(mapper.getInputBase()+optName+"-0.xml");
 		Assert.assertEquals(res1,expected);
 
-		URI res2 = URI.create(providers.get(1).provide().getSystemId());
+		URI res2 = URI.create(suppliers.get(1).get().getSystemId());
 		URI expected2=URI.create(mapper.getInputBase()+optName+"-1.xml");
 		Assert.assertEquals(res2,expected2);
 
@@ -102,7 +102,7 @@ public class XProcDecoratorTest   {
 	public void testResolveInputPortURIError() throws IOException {
 		//inputs from the script definition
 		XProcScript mscript= new Mock.ScriptGenerator.Builder().withInputs(1).build().generate();
-		Provider<Source> srcProv= Mock.getSourceProvider("with space.xml");
+		Supplier<Source> srcProv= Mock.getSourceSupplier("with space.xml");
 		//adding a value to the input option
 		String optName=Mock.ScriptGenerator.getInputName(0);
 		XProcInput input = new XProcInput.Builder().
@@ -320,14 +320,14 @@ public class XProcDecoratorTest   {
 		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
-		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("dir/file.xml")).build();
+		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultSupplier("dir/file.xml")).build();
 		XProcDecorator trans=XProcDecorator.from(script,mapper);
 		XProcOutput decorated=trans.decorate(outs);
 		
-		Provider<Result> res=decorated.getResultProvider(outName);
+		Supplier<Result> res=decorated.getResultSupplier(outName);
 		String expected=(mapper.getOutputBase()+"dir/file.xml");
 		
-		Assert.assertEquals(expected.toString(),res.provide().getSystemId());
+		Assert.assertEquals(expected.toString(),res.get().getSystemId());
 
 
 	}
@@ -337,17 +337,17 @@ public class XProcDecoratorTest   {
 		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
-		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("dir/file.xml")).build();
+		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultSupplier("dir/file.xml")).build();
 		XProcDecorator trans=XProcDecorator.from(script,mapper);
 		XProcOutput decorated=trans.decorate(outs);
 		
-		Provider<Result> res=decorated.getResultProvider(outName);
+		Supplier<Result> res=decorated.getResultSupplier(outName);
 		String expected2=(mapper.getOutputBase()+"dir/file-1.xml");
 		
 		//Assert.assertEquals(expected.toString(),res.provide().getSystemId());
 		//discard one
-		res.provide();
-		Assert.assertEquals(expected2.toString(),res.provide().getSystemId());
+		res.get();
+		Assert.assertEquals(expected2.toString(),res.get().getSystemId());
 
 	}
 
@@ -356,14 +356,14 @@ public class XProcDecoratorTest   {
 		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
-		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("dir/")).build();
+		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultSupplier("dir/")).build();
 		XProcDecorator trans=XProcDecorator.from(script,mapper);
 		XProcOutput decorated=trans.decorate(outs);
 		
-		Provider<Result> res=decorated.getResultProvider(outName);
+		Supplier<Result> res=decorated.getResultSupplier(outName);
 		String expected=(mapper.getOutputBase()+"dir/"+outName+".xml");
 		
-		Assert.assertEquals(expected.toString(),res.provide().getSystemId());
+		Assert.assertEquals(expected.toString(),res.get().getSystemId());
 	}
 
 	@Test 
@@ -371,15 +371,15 @@ public class XProcDecoratorTest   {
 		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
-		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("dir/")).build();
+		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultSupplier("dir/")).build();
 		XProcDecorator trans=XProcDecorator.from(script,mapper);
 		XProcOutput decorated=trans.decorate(outs);
 		
-		Provider<Result> res=decorated.getResultProvider(outName);
+		Supplier<Result> res=decorated.getResultSupplier(outName);
 		String expected=(mapper.getOutputBase()+"dir/"+outName+"-1.xml");
 		//discard first
-		res.provide();
-		Assert.assertEquals(expected.toString(),res.provide().getSystemId());
+		res.get();
+		Assert.assertEquals(expected.toString(),res.get().getSystemId());
 	}
 
 	@Test 
@@ -387,14 +387,14 @@ public class XProcDecoratorTest   {
 		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
-		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("")).build();
+		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultSupplier("")).build();
 		XProcDecorator trans=XProcDecorator.from(script,mapper);
 		XProcOutput decorated=trans.decorate(outs);
 		
-		Provider<Result> res=decorated.getResultProvider(outName);
+		Supplier<Result> res=decorated.getResultSupplier(outName);
 		String expected=(mapper.getOutputBase()+outName+"/"+outName+".xml");
 		
-		Assert.assertEquals(expected.toString(),res.provide().getSystemId());
+		Assert.assertEquals(expected.toString(),res.get().getSystemId());
 	}
 
 	@Test 
@@ -406,10 +406,10 @@ public class XProcDecoratorTest   {
 		XProcDecorator trans=XProcDecorator.from(script,mapper);
 		XProcOutput decorated=trans.decorate(outs);
 		
-		Provider<Result> res=decorated.getResultProvider(outName);
+		Supplier<Result> res=decorated.getResultSupplier(outName);
 		String expected=(mapper.getOutputBase()+outName+"/"+outName+".xml");
 		
-		Assert.assertEquals(expected.toString(),res.provide().getSystemId());
+		Assert.assertEquals(expected.toString(),res.get().getSystemId());
 	}
 
 	@Test 
@@ -421,10 +421,10 @@ public class XProcDecoratorTest   {
 		XProcDecorator trans=XProcDecorator.from(script,mapper);
 		XProcOutput decorated=trans.decorate(outs);
 		
-		Provider<Result> res=decorated.getResultProvider(outName);
+		Supplier<Result> res=decorated.getResultSupplier(outName);
 		String expected=(mapper.getOutputBase()+outName+"/"+outName+"-1.xml");
-		res.provide();	
-		Assert.assertEquals(expected.toString(),res.provide().getSystemId());
+		res.get();	
+		Assert.assertEquals(expected.toString(),res.get().getSystemId());
 	}
 
 	@Test 
@@ -432,14 +432,14 @@ public class XProcDecoratorTest   {
 		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
-		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("")).build();
+		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultSupplier("")).build();
 		XProcDecorator trans=XProcDecorator.from(script,mapper);
 		XProcOutput decorated=trans.decorate(outs);
 		
-		Provider<Result> res=decorated.getResultProvider(outName);
+		Supplier<Result> res=decorated.getResultSupplier(outName);
 		String expected=(mapper.getOutputBase()+outName+"/"+outName+"-1.xml");
-		res.provide();	
-		Assert.assertEquals(expected.toString(),res.provide().getSystemId());
+		res.get();	
+		Assert.assertEquals(expected.toString(),res.get().getSystemId());
 	}
 
 

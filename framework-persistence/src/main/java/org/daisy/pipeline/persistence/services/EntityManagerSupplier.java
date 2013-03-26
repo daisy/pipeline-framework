@@ -6,7 +6,7 @@ import javax.persistence.Persistence;
 import com.google.common.base.Supplier;
 
 
-public class EntityManagerProvider implements Supplier<EntityManager>{
+public class EntityManagerSupplier implements Supplier<EntityManager>{
 
 	private static EntityManager mEm;
 	static{

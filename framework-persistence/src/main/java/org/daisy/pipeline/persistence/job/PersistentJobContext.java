@@ -19,7 +19,7 @@ import javax.persistence.Transient;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcResult;
@@ -109,8 +109,8 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 
 		for( XProcPortInfo portName:this.getScript().getXProcPipelineInfo().getInputPorts()){
 			PersistentInputPort anon=new PersistentInputPort(this.getId(),portName.getName());
-			for (Provider<Source> src:this.getInputs().getInputs(portName.getName())){
-				anon.addSource(new PersistentSource(src.provide().getSystemId()));
+			for (Supplier<Source> src:this.getInputs().getInputs(portName.getName())){
+				anon.addSource(new PersistentSource(src.get().getSystemId()));
 			}
 			this.inputPorts.add(anon);
 		}

@@ -1,7 +1,7 @@
 package org.daisy.pipeline.persistence.messaging;
 
 import org.daisy.common.messaging.Message;
-import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.event.EventBusSupplier;
 import org.daisy.pipeline.persistence.Database;
 
 import com.google.common.eventbus.Subscribe;
@@ -14,12 +14,12 @@ import com.google.common.eventbus.Subscribe;
  */
 public class PersistentMessageEventListener {
 
-	EventBusProvider eventBusProvider;
+	EventBusSupplier eventBusSupplier;
 	Database datbase;
 
-	public void setEventBusProvider(EventBusProvider eventBusProvider) {
-		this.eventBusProvider = eventBusProvider;
-		this.eventBusProvider.get().register(this);
+	public void setEventBusSupplier(EventBusSupplier eventBusSupplier) {
+		this.eventBusSupplier = eventBusSupplier;
+		this.eventBusSupplier.get().register(this);
 	}
 
 	public synchronized void setDatabase(Database database) {

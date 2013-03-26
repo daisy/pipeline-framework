@@ -16,7 +16,7 @@ public class PersistentSourceTest   {
 	private static final String SYS_ID_1="file:/tmp/file.xml";
 	@Before	
 	public void setUp(){
-		//db=DatabaseProvider.getDatabase();
+		//db=DatabaseSupplier.getDatabase();
 		//src1=new PersistentSource();
 		//src1.setSystemId(SYS_ID_1);
 		//db.addObject(src1);

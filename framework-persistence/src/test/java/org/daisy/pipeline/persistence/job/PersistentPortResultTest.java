@@ -26,7 +26,7 @@ public class PersistentPortResultTest {
 	public void setUp(){
 		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		result= new JobResult.Builder().withPath(path).withIdx(idx).build();
-		db=DatabaseProvider.getDatabase();
+		db=DatabaseSupplier.getDatabase();
 		id1= new JobUUIDGenerator().generateId();
 
 		pi1=new PersistentPortResult(id1,result,name);

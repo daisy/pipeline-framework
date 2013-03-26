@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -18,7 +18,7 @@ import com.google.common.collect.ImmutableMap;
 public final class ZipResourceContext implements ResourceCollection {
 
 	/** The resources. */
-	private final Map<String, Provider<InputStream>> resources;
+	private final Map<String, Supplier<InputStream>> resources;
 
 	/**
 	 * Instantiates a new zip resource context.
@@ -26,15 +26,15 @@ public final class ZipResourceContext implements ResourceCollection {
 	 * @param zip the zip
 	 */
 	public ZipResourceContext(final ZipFile zip) {
-		ImmutableMap.Builder<String, Provider<InputStream>> mapBuilder = ImmutableMap
+		ImmutableMap.Builder<String, Supplier<InputStream>> mapBuilder = ImmutableMap
 				.builder();
 		Enumeration<? extends ZipEntry> entries = zip.entries();
 		while (entries.hasMoreElements()) {
 			final ZipEntry entry = entries.nextElement();
-			mapBuilder.put(entry.getName(), new Provider<InputStream>() {
+			mapBuilder.put(entry.getName(), new Supplier<InputStream>() {
 
 				@Override
-				public InputStream provide() {
+				public InputStream get() {
 					try {
 						return zip.getInputStream(entry);
 					} catch (IOException e) {
@@ -51,7 +51,7 @@ public final class ZipResourceContext implements ResourceCollection {
 	 * @see org.daisy.pipeline.job.ResourceCollection#getResources()
 	 */
 	@Override
-	public Iterable<Provider<InputStream>> getResources() {
+	public Iterable<Supplier<InputStream>> getResources() {
 		return resources.values();
 	}
 
@@ -59,7 +59,7 @@ public final class ZipResourceContext implements ResourceCollection {
 	 * @see org.daisy.pipeline.job.ResourceCollection#getResource(java.lang.String)
 	 */
 	@Override
-	public Provider<InputStream> getResource(String name) {
+	public Supplier<InputStream> getResource(String name) {
 		return resources.get(name);
 	}
 

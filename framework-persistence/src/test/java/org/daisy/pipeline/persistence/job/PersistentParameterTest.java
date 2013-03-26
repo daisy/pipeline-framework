@@ -24,7 +24,7 @@ public class PersistentParameterTest   {
 	@Before	
 	public void setUp(){
 		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
-		db=DatabaseProvider.getDatabase();
+		db=DatabaseSupplier.getDatabase();
 		id1= new JobUUIDGenerator().generateId();
 		qn1=new QName("http://daisy.com","test");
 		pi1=new PersistentParameter(id1,port1,qn1,value);

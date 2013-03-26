@@ -7,7 +7,7 @@ import java.util.List;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
@@ -79,7 +79,7 @@ public class Mocks   {
 	}
 
 
-	static class SimpleSourceProvider implements Source,Provider<Source>{
+	static class SimpleSourceSupplier implements Source,Supplier<Source>{
 		String sysId;
 
 		/**
@@ -87,12 +87,12 @@ public class Mocks   {
 		 *
 		 * @param sysId The sysId for this instance.
 		 */
-		public SimpleSourceProvider(String sysId) {
+		public SimpleSourceSupplier(String sysId) {
 			this.sysId = sysId;
 		}
 
 		@Override
-		public Source provide() {
+		public Source get() {
 			return this;
 		}
 
@@ -116,7 +116,7 @@ public class Mocks   {
 		final XProcScript script = new XProcScript(pipelineInfo, "", "", "", null, null, null,fileset,fileset); 
 		//ScriptRegistryHolder.setScriptRegistry(new Mocks.DummyScriptService(script));
 		//Input setup
-		final XProcInput input= new XProcInput.Builder().withInput("source",new Mocks.SimpleSourceProvider(file1)).withInput("source", new Mocks.SimpleSourceProvider(file2)).withOption(opt1Qname,value1).withOption(opt2Qname,value2).withParameter(paramPort,new QName(qparam),paramVal).build();
+		final XProcInput input= new XProcInput.Builder().withInput("source",new Mocks.SimpleSourceSupplier(file1)).withInput("source", new Mocks.SimpleSourceSupplier(file2)).withOption(opt1Qname,value1).withOption(opt2Qname,value2).withParameter(paramPort,new QName(qparam),paramVal).build();
 		
 		final JobId id = JobIdFactory.newId();
 		final URIMapper mapper= new URIMapper(in,out);

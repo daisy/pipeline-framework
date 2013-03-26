@@ -29,7 +29,7 @@ public class PersistentInputPortTest   {
 	@Before	
 	public void setUp(){
 		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
-		db=DatabaseProvider.getDatabase();
+		db=DatabaseSupplier.getDatabase();
 		id1= new JobUUIDGenerator().generateId();
 		pi1=new PersistentInputPort(id1,name1);
 		db.addObject(pi1);

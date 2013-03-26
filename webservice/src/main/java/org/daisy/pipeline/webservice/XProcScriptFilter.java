@@ -34,7 +34,7 @@ public final class XProcScriptFilter implements Function<XProcScript,XProcScript
 		// singleton
 	}
 	/* (non-Javadoc)
-	 * @see org.daisy.common.base.Filter#filter(java.lang.Object)
+	 * @see com.google.common.base.Filter#filter(java.lang.Object)
 	 */
 	@Override
 	public XProcScript apply(XProcScript script) {

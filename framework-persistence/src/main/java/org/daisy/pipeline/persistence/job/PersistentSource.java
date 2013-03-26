@@ -6,10 +6,10 @@ import javax.persistence.Embeddable;
 
 import javax.xml.transform.Source;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 
 @Embeddable
-public class PersistentSource implements Source,Serializable,Provider<Source>{
+public class PersistentSource implements Source,Serializable,Supplier<Source>{
 	static final long serialVersionUID=98749124L;
 
 	private String systemId;
@@ -40,7 +40,7 @@ public class PersistentSource implements Source,Serializable,Provider<Source>{
 	}
 
 	@Override
-	public Source provide() {
+	public Source get() {
 		return this;
 	}
 

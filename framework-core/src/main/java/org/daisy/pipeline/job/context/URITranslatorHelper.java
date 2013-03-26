@@ -1,6 +1,6 @@
 package org.daisy.pipeline.job.context;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
@@ -68,24 +68,24 @@ public final class URITranslatorHelper   {
 					.getMediaType());
 	}
 	/**
-	 * Returns the prefix (unmmaped) at index 0 and suffix at index 1 for the a dynamic result provider based on the provider and 
+	 * Returns the prefix (unmmaped) at index 0 and suffix at index 1 for the a dynamic result supplier based on the supplier and 
 	 * the port info
 	 * TODO: At some point it would be nice to generate the names based on the mime-type, ask jostein where 
 	 * he got the list of mime-types for the webui
 	 */
-	public static final String[] getDynamicResultProviderParts(String name,Provider<Result> result,String mimetype){
+	public static final String[] getDynamicResultSupplierParts(String name,Supplier<Result> result,String mimetype){
 		String parts[]=null;
 		//on the result/result.xml way
-		if (result==null || result.provide().getSystemId().isEmpty()){
+		if (result==null || result.get().getSystemId().isEmpty()){
 			parts= new String[]{String.format("%s/%s",name,name),".xml"};
 		//directory-> dir/name, .xml
 		//the first part is the last char of the sysId
-		}else if(result.provide().getSystemId().charAt(result.provide().getSystemId().length()-1)=='/'){
-			parts= new String[]{String.format("%s%s",result.provide().getSystemId(),name),".xml"};
+		}else if(result.get().getSystemId().charAt(result.get().getSystemId().length()-1)=='/'){
+			parts= new String[]{String.format("%s%s",result.get().getSystemId(),name),".xml"};
 		//file name/name, (".???"|"")
 		}else{
 			String ext="";
-			String path=result.provide().getSystemId();
+			String path=result.get().getSystemId();
 			int idx;
 
 			//get the extension if there is one

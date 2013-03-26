@@ -9,7 +9,7 @@ import javax.persistence.Persistence;
 
 import org.daisy.pipeline.persistence.Database;
 
-public class DatabaseProvider {
+public class DatabaseSupplier {
 	private static EntityManagerFactory entityManagerFactory=Persistence.createEntityManagerFactory("pipeline-pu-test");
 
 	public static Database getDatabase(){

@@ -13,7 +13,7 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
@@ -32,7 +32,7 @@ public class Mock   {
 		};
 	}
 
-	public static class MockSource implements Source,Provider<Source>{
+	public static class MockSource implements Source,Supplier<Source>{
 		String sId;
 
 		/**
@@ -56,12 +56,12 @@ public class Mock   {
 		}
 
 		@Override
-		public Source provide() {
+		public Source get() {
 			return this;
 		}
 	}
 
-	public static class MockResult implements Result,Provider<Result>{
+	public static class MockResult implements Result,Supplier<Result>{
 		String sId;
 
 		/**
@@ -85,15 +85,15 @@ public class Mock   {
 		}
 
 		@Override
-		public Result provide() {
+		public Result get() {
 			return this;
 		}
 	}
-	public static Provider<Source> getSourceProvider(String systemId){
+	public static Supplier<Source> getSourceSupplier(String systemId){
 		return new MockSource(systemId);
 
 	}
-	public static Provider<Result> getResultProvider(String systemId){
+	public static Supplier<Result> getResultSupplier(String systemId){
 		return new MockResult(systemId);
 
 	}

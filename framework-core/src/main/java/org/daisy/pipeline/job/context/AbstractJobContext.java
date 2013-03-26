@@ -6,7 +6,7 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
-import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.event.EventBusSupplier;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobURIUtils;
@@ -185,8 +185,8 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	}
 
 	@Override
-	public void setEventBusProvider(EventBusProvider eventBusProvider) {
-		this.bus=eventBusProvider.get();
+	public void setEventBusSupplier(EventBusSupplier eventBusSupplier) {
+		this.bus=eventBusSupplier.get();
 	}
 
 	@Override

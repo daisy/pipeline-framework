@@ -6,7 +6,7 @@ import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
-import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.event.EventBusSupplier;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobMonitorFactory;
@@ -26,7 +26,7 @@ public final class JobContextFactory {
 	private static final Logger logger = LoggerFactory.getLogger(JobContextFactory.class);
 
 	private JobMonitorFactory monitorFactory;
-	private EventBusProvider eventbusProvider;
+	private EventBusSupplier eventbusSupplier;
 
 
 	public JobContextFactory() {
@@ -62,9 +62,9 @@ public final class JobContextFactory {
 			this.monitorFactory=monitorFactory;
 		
 	}
-	public void setEventBusProvider(EventBusProvider eventbusProvider){
+	public void setEventBusSupplier(EventBusSupplier eventbusSupplier){
 			logger.debug("setting even bus factory");
-			this.eventbusProvider=eventbusProvider;
+			this.eventbusSupplier=eventbusSupplier;
 	}
 
 	//FIXME: probably move these two methods somewhere else, maybe a dummy class for the framework just tu publish this.
@@ -87,7 +87,7 @@ public final class JobContextFactory {
 
 	public void configure(RuntimeConfigurable runtimeObj){
 		logger.debug(String.format("configuring object %s",runtimeObj));
-		runtimeObj.setEventBusProvider(this.eventbusProvider);
+		runtimeObj.setEventBusSupplier(this.eventbusSupplier);
 		runtimeObj.setMonitorFactory(this.monitorFactory);
 	}
 
