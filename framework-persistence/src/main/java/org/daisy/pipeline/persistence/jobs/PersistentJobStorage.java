@@ -57,7 +57,7 @@ public class PersistentJobStorage  implements JobStorage{
 
 
 	@Override
-	public synchronized Job add(JobContext ctxt) {
+	public Job add(JobContext ctxt) {
 		checkDatabase();
 		logger.debug("Adding job to db:"+ctxt.getId());
 		JobBuilder builder= new PersistentJob.PersistentJobBuilder(db)
@@ -68,7 +68,7 @@ public class PersistentJobStorage  implements JobStorage{
 	}
 
 	@Override
-	public synchronized Job remove(JobId jobId) {
+	public Job remove(JobId jobId) {
 		checkDatabase();
 		Job job=db.getEntityManager().find(PersistentJob.class,jobId.toString());
 		if(job!=null){
@@ -79,7 +79,7 @@ public class PersistentJobStorage  implements JobStorage{
 	}
 
 	@Override
-	public synchronized Job get(JobId id) {
+	public Job get(JobId id) {
 		checkDatabase();
 		PersistentJob job =null;
 		job=db.getEntityManager().find(PersistentJob.class,id.toString());
