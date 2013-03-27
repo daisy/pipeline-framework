@@ -52,8 +52,7 @@ public class PersistentJob  extends Job implements Serializable {
 		}
 
 		@Override
-		protected Job build(){
-			logger.debug("Context +++++ "+this.ctxt);
+		protected Job initJob(){
 			Job pjob=new PersistentJob(this.ctxt,this.bus,this.db);
 			this.db.addObject(pjob);	
 			return pjob;

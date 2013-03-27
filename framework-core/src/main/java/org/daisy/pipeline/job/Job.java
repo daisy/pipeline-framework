@@ -32,18 +32,18 @@ public class Job {
 			this.bus=bus;
 			return this;
 		}
-		protected Job build(){
-			return new Job(this.ctxt,this.bus);
+		//available for subclasses to override
+		protected Job initJob(){
+			Job job = new Job(this.ctxt,this.bus);
+			return job;
+		}
+		public final Job build(){
+			Job job=this.initJob();
+			job.changeStatus(Status.IDLE);
+			return job;
 		}
 	}
 
-	public static Job newJob(JobBuilder builder){
-		//the builder delegation is used as a 'closure' to delay
-		//the status change until the object is completely built 
-		Job job = builder.build();
-		job.changeStatus(Status.IDLE);
-		return job;
-	}
 
 	/**
 	 * The Enum Status.
@@ -124,7 +124,7 @@ public class Job {
 		return null;
 	}
 
-	protected synchronized final void changeStatus(Status to){
+	private synchronized final void changeStatus(Status to){
 		this.status=to;
 		if (this.eventBus!=null)
 			this.eventBus.post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());

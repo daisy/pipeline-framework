@@ -62,7 +62,7 @@ public class PersistentJobStorage  implements JobStorage{
 		logger.debug("Adding job to db:"+ctxt.getId());
 		JobBuilder builder= new PersistentJob.PersistentJobBuilder(db)
 			.withContext(ctxt).withEventBus(this.ctxtFactory.getEventBus());
-		Job pjob=Job.newJob(builder);
+		Job pjob=builder.build();
 		this.ctxtFactory.configure((PersistentJobContext)pjob.getContext());
 		return pjob;
 	}
