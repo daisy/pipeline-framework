@@ -21,6 +21,7 @@ public class JobXmlWriter {
 	private List<Message> messages = null;
 	private boolean scriptDetails = false;
 	private boolean fullResult=false;
+	private Job.Status statusOverWrite=null;
 	private static Logger logger = LoggerFactory.getLogger(JobXmlWriter.class
 			.getName());
 
@@ -91,6 +92,9 @@ public class JobXmlWriter {
 		this.fullResult =fullResult;
 	}
 	
+	public void overwriteStatus(Job.Status status) {
+		this.statusOverWrite=status;
+	}
 	private Document jobToXmlDocument() {
 		Document doc = XmlUtils.createDom("job");
 		Element jobElm = doc.getDocumentElement();
@@ -107,7 +111,7 @@ public class JobXmlWriter {
 	private void addElementData(Job job, Element element) {
 		Document doc = element.getOwnerDocument();
 		String baseUri = new Routes().getBaseUri();
-		Job.Status status = job.getStatus();
+		Job.Status status = (this.statusOverWrite==null)?job.getStatus():this.statusOverWrite;
 		String jobHref = baseUri + Routes.JOB_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
 		
 		element.setAttribute("id", job.getId().toString());

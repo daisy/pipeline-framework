@@ -31,8 +31,6 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	private XProcScript script;
 
 	private JobId id;
-	/** bus */
-	private EventBus bus;
 
 	/** monitor */
 	private XProcMonitor monitor;
@@ -128,11 +126,6 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 		return this.monitor;
 	}
 
-	@Override
-	public EventBus getEventBus() {
-		return this.bus;
-	}
-
 	/**
 	 * Sets the input for this instance.
 	 *
@@ -174,11 +167,6 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	@Override
 	public ResultSet getResults() {
 		return this.results;
-	}
-
-	@Override
-	public void setEventBusProvider(EventBusProvider eventBusProvider) {
-		this.bus=eventBusProvider.get();
 	}
 
 	@Override
