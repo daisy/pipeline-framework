@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.StatusMessage;
 import org.daisy.pipeline.webserviceutils.Authenticator;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.clients.Client;
@@ -26,6 +27,7 @@ public class Poster {
 	private static Logger logger = LoggerFactory.getLogger(Poster.class.getName());
 
 	public static void postMessage(Job job, List<Message> messages, Callback callback) {
+		logger.debug("Posting message");
 		URI url = callback.getHref();
 		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
 		//writer.withMessageRange(msgStart, msgEnd);
@@ -34,9 +36,10 @@ public class Poster {
 		postXml(doc, url, callback.getClient());
 	}
 
-	public static void postStatusUpdate(Job job, Callback callback) {
+	public static void postStatusUpdate(Job job, StatusMessage message,Callback callback) {
 		URI url = callback.getHref();
 		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
+		writer.overwriteStatus(message.getStatus());
 		Document doc = writer.getXmlDocument();
 		postXml(doc, url, callback.getClient());
 	}
@@ -88,6 +91,7 @@ public class Poster {
 
         // Send the request data.
         try {
+	logger.debug("Posting XML: "+XmlUtils.DOMToString(doc));
             output.writeBytes(XmlUtils.DOMToString(doc));
             output.flush();
             output.close();

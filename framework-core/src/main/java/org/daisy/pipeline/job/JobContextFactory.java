@@ -4,13 +4,12 @@ import java.io.IOException;
 
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.script.BoundXProcScript;
-import org.daisy.pipeline.script.XProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.eventbus.EventBus;
 
 /**
  *
@@ -62,6 +61,10 @@ public final class JobContextFactory {
 			this.eventbusProvider=eventbusProvider;
 	}
 
+	public EventBus getEventBus(){
+		return this.eventbusProvider.get();
+	}
+		
 	//FIXME: probably move these two methods somewhere else, maybe a dummy class for the framework just tu publish this.
 	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
 		PropertyPublisher propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
@@ -82,7 +85,6 @@ public final class JobContextFactory {
 
 	public void configure(RuntimeConfigurable runtimeObj){
 		logger.debug(String.format("configuring object %s",runtimeObj));
-		runtimeObj.setEventBusProvider(this.eventbusProvider);
 		runtimeObj.setMonitorFactory(this.monitorFactory);
 	}
 

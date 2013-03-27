@@ -15,7 +15,6 @@ public interface JobContext{
 	public XProcOutput getOutputs();
 	public URI getLogFile() ;
 	public XProcMonitor getMonitor() ;
-	public EventBus getEventBus() ;
 	public XProcScript getScript(); 
 	public JobId getId();
 	public ResultSet getResults();

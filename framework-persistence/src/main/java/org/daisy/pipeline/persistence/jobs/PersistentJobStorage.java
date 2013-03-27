@@ -3,6 +3,8 @@ package org.daisy.pipeline.persistence.jobs;
 import java.util.Iterator;
 
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.Job.JobBuilder;
+import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
@@ -10,6 +12,9 @@ import org.daisy.pipeline.persistence.Database;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 
 public class PersistentJobStorage  implements JobStorage{ 
 
@@ -39,17 +44,26 @@ public class PersistentJobStorage  implements JobStorage{
 	@Override
 	public Iterator<Job> iterator() {
 		checkDatabase();
-		return PersistentJob.getAllJobs(this.db).iterator();
+		//sets the event bus for all the jobs returned 
+		return Collections2.transform(PersistentJob.getAllJobs(this.db),
+				new Function<Job, Job>() {
+					@Override
+					public Job apply(Job job) {
+						job.setEventBus(PersistentJobStorage.this.ctxtFactory.getEventBus());
+						return job;
+					}
+		}).iterator();
 	}
 
 
 	@Override
-	public Job add(Job job) {
+	public Job add(JobContext ctxt) {
 		checkDatabase();
-		logger.debug("Adding job to db:"+job.getContext().getId());
-		PersistentJob pjob=new PersistentJob(job,db);
+		logger.debug("Adding job to db:"+ctxt.getId());
+		JobBuilder builder= new PersistentJob.PersistentJobBuilder(db)
+			.withContext(ctxt).withEventBus(this.ctxtFactory.getEventBus());
+		Job pjob=builder.build();
 		this.ctxtFactory.configure((PersistentJobContext)pjob.getContext());
-		db.addObject(pjob);	
 		return pjob;
 	}
 
@@ -71,6 +85,7 @@ public class PersistentJobStorage  implements JobStorage{
 		job=db.getEntityManager().find(PersistentJob.class,id.toString());
 		if(job!=null){
 			job.setDatabase(db);
+			job.setEventBus(this.ctxtFactory.getEventBus());
 			this.ctxtFactory.configure((PersistentJobContext)job.getContext());
 		}
 		return job; 
