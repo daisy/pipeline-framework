@@ -72,6 +72,7 @@ public interface Message {
 	public abstract int getSequence();
 
 	public abstract String getJobId();
+
 	public static interface MessageBuilder{
 
 		public abstract MessageBuilder withThrowable(Throwable throwable);

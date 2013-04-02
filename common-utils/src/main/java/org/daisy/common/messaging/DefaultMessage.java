@@ -4,20 +4,19 @@ import java.util.Date;
 
 
 public class DefaultMessage implements Message {
-	Throwable throwable;
-	String text;
-	Level level;
-	int line;
-	int column;
-	Date timeStamp;
-	int sequence;
-	String jobId;
-	String file;
+	private final Throwable throwable;
+	private final String text;
+	private final Level level;
+	private final int line;
+	private final int column;
+	private final Date timeStamp;
+	private final int sequence;
+	private final String jobId;
+	private final String file;
 
 	private DefaultMessage(Throwable throwable, String text, Level level,
 			int line, int column, Date timeStamp, int sequence, String jobId,
 			String file) {
-		super();
 		this.throwable = throwable;
 		this.text = text;
 		this.level = level;
