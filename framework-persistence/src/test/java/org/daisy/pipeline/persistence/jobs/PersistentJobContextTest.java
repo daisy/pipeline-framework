@@ -44,6 +44,12 @@ public class PersistentJobContextTest  {
 	public void tearDown(){
 		db.deleteObject(ctxt);
 	}	
+
+	@Test
+	public void generateResults(){
+		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
+		Assert.assertTrue(jCtxt.getGenerateResults());
+	}
 	@Test
 	public void storeInput(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());

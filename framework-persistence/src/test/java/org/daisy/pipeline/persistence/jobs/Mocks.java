@@ -126,6 +126,7 @@ public class Mocks   {
 			public MyHiddenContext(){
 				super(id,"hidden",BoundXProcScript.from(script,input,null),mapper);
 				this.setResults(rSet);
+				this.generateResults=true;
 			}
 			@Override
 			public URI getLogFile(){
