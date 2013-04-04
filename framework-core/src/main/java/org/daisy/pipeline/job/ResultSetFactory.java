@@ -26,20 +26,16 @@ public class ResultSetFactory {
 
 	public static ResultSet newResultSet(JobContext ctxt,URIMapper mapper){
 		ResultSet.Builder builder = new ResultSet.Builder();
-		//avoid scanning parts of the fs that we are not supposed to look into
-		//if the mapping is not in a controlled environment
-		if(!mapper.getOutputBase().toString().equals("")){
-			//go through the outputs write them add the uri's to the 
-			//result object
+		//go through the outputs write them add the uri's to the 
+		//result object
 
-			ResultSetFactory.collectOutputs(ctxt.getScript(),ctxt.getOutputs(), mapper,builder);
+		ResultSetFactory.collectOutputs(ctxt.getScript(),ctxt.getOutputs(), mapper,builder);
 
-			//go through the output options and add them, this is a bit more tricky 
-			//as you have to check if the files exist
-			//if your working with an anyURIDir then scan the directory to 
-			//get all the files inside.
-			ResultSetFactory.collectOptions(ctxt.getScript(), ctxt.getInputs(), mapper,builder);
-		}
+		//go through the output options and add them, this is a bit more tricky 
+		//as you have to check if the files exist
+		//if your working with an anyURIDir then scan the directory to 
+		//get all the files inside.
+		ResultSetFactory.collectOptions(ctxt.getScript(), ctxt.getInputs(), mapper,builder);
 		return builder.build();
 	}
 
