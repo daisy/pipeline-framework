@@ -42,6 +42,8 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	private ResultSet results;
 		
 	private String niceName;
+	
+	protected boolean generateResults;
 
 	public AbstractJobContext(JobId id,String niceName,BoundXProcScript boundScript,URIMapper mapper){
 		if(boundScript!=null){
@@ -112,6 +114,7 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 		this.results = results;
 	}
 
+
 	/**
 	 * Sets the id for this instance.
 	 *
@@ -177,7 +180,9 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 	@Override
 	public void writeResult(XProcResult result) {
 		result.writeTo(this.output);
-		this.results=ResultSetFactory.newResultSet(this,this.mapper);
+		if(this.generateResults){
+			this.results=ResultSetFactory.newResultSet(this,this.mapper);
+		}
 				
 	}
 
@@ -195,6 +200,14 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 
 	protected void setName(String name) {
 		this.niceName=name;
+	}
+
+	/**
+	 * @return if this context will generate a result set 
+	 */
+	@Override
+	public boolean isGeneratingResults() {
+		return this.generateResults;
 	}
 
 }

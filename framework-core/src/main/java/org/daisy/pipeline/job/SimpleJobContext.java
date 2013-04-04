@@ -10,6 +10,7 @@ final class SimpleJobContext extends AbstractJobContext{
 		try{
 			XProcDecorator decorator=XProcDecorator.from(this.getScript(),this.getMapper());
 			this.setOutput(decorator.decorate(this.getOutputs()));
+			this.generateResults=false;
 
 		}catch(Exception ex){
 			throw new RuntimeException("Error while initialising the mapping context",ex);
