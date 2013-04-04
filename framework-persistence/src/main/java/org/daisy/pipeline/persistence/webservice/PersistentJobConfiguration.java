@@ -73,7 +73,7 @@ public class PersistentJobConfiguration  {
 	public PersistentJobConfiguration() {
 	}
 
-	protected PersistentJobConfiguration(String jobId,byte[] configuration){
+	private PersistentJobConfiguration(String jobId,byte[] configuration){
 		this.jobId=jobId;
 		this.configuration=configuration;
 	}
