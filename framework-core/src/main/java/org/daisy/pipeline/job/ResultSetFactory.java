@@ -25,9 +25,10 @@ public class ResultSetFactory {
 
 
 	public static ResultSet newResultSet(JobContext ctxt,URIMapper mapper){
+		ResultSet.Builder builder = new ResultSet.Builder();
 		//go through the outputs write them add the uri's to the 
 		//result object
-		ResultSet.Builder builder = new ResultSet.Builder();
+
 		ResultSetFactory.collectOutputs(ctxt.getScript(),ctxt.getOutputs(), mapper,builder);
 
 		//go through the output options and add them, this is a bit more tricky 
@@ -78,7 +79,7 @@ public class ResultSetFactory {
 
 	static void collectOptions(XProcScript script,XProcInput inputs,URIMapper mapper,ResultSet.Builder builder){
 		Collection<XProcOptionInfo> optionInfos = Lists.newLinkedList(script.getXProcPipelineInfo().getOptions());
-		//options which are translatable and outputs	
+		//options which are translatable and outputs
 		Collection<XProcOptionInfo> options= Collections2.filter(optionInfos,URITranslatorHelper.getTranslatableOutputOptionsFilter(script));
 		for(XProcOptionInfo option: options){
 			if(inputs.getOptions().get(option.getName())==null)

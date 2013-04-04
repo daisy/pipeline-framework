@@ -5,6 +5,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -37,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 @Entity
 @Table(name="job_contexts")
+@Access(AccessType.FIELD)
 public final class PersistentJobContext extends AbstractJobContext implements Serializable,RuntimeConfigurable{
 	public static final long serialVersionUID=1L;
 	private static final Logger logger = LoggerFactory.getLogger(PersistentJobContext.class);
@@ -89,6 +92,7 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 		this.scriptUri=ctxt.getScript().getURI().toString();
 		this.setResults(ctxt.getResults());
 		this.sNiceName=ctxt.getName();
+		this.generateResults=ctxt.isGeneratingResults();
 		this.load();
 	}
 
@@ -208,8 +212,14 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 		return URI.create(this.scriptUri);
 	}
 
-
-
+	@Column(name= "generate_results")
+	@Access(AccessType.PROPERTY)
+	public boolean getGenerateResults(){
+		return this.generateResults;
+	}
+	public void setGenerateResults(boolean generate){
+		this.generateResults=generate;
+	}
 
 	@Override
 	public void writeResult(XProcResult result) {
@@ -219,6 +229,8 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 		this.updateResults();
 				
 	}
+
+
 	//Configuration for adding runtime inforamtion	
 	@Transient
 	static ScriptRegistry registry;

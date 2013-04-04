@@ -11,6 +11,7 @@ final class MappingJobContext extends AbstractJobContext {
 		XProcDecorator decorator=XProcDecorator.from(this.getScript(),this.getMapper(),collection);
 		setInput(decorator.decorate(this.getInputs()));
 		setOutput(decorator.decorate(this.getOutputs()));
+		this.generateResults=true;
 
 	}
 

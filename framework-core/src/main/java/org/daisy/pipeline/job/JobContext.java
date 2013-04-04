@@ -20,4 +20,5 @@ public interface JobContext{
 	public ResultSet getResults();
 	public void writeResult(XProcResult result) ;
 	public String getName();
+	public boolean isGeneratingResults();
 }
