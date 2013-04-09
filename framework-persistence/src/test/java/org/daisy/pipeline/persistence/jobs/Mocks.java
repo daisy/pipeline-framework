@@ -127,10 +127,6 @@ public class Mocks   {
 				super(id,"hidden",BoundXProcScript.from(script,input,null),mapper);
 				this.setResults(rSet);
 			}
-			@Override
-			public URI getLogFile(){
-				return URI.create(testLogFile);
-			}
 
 
 		};

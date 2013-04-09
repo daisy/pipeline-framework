@@ -5,6 +5,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -37,18 +39,16 @@ import org.slf4j.LoggerFactory;
 
 @Entity
 @Table(name="job_contexts")
+@Access(AccessType.FIELD)
 public final class PersistentJobContext extends AbstractJobContext implements Serializable,RuntimeConfigurable{
 	public static final long serialVersionUID=1L;
 	private static final Logger logger = LoggerFactory.getLogger(PersistentJobContext.class);
+	//proxified id
 	@Id
 	@Column(name="job_id")
 	String sId;
 	
-	String logFile;
-
 	String scriptUri;
-
-	String sNiceName;
 
 
 	@Embedded
@@ -82,13 +82,8 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	public PersistentJobContext(AbstractJobContext ctxt) {
 		super(ctxt.getId(),ctxt.getName(),BoundXProcScript.from(ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs()),ctxt.getMapper());
 		this.sId=ctxt.getId().toString();
-		if (ctxt.getLogFile()==null)
-			this.logFile="";
-		else
-			this.logFile=ctxt.getLogFile().toString();
 		this.scriptUri=ctxt.getScript().getURI().toString();
 		this.setResults(ctxt.getResults());
-		this.sNiceName=ctxt.getName();
 		this.load();
 	}
 
@@ -127,7 +122,6 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 
 		this.sId=this.getId().toString();
 		this.pMapper=new PersistentMapper(this.getMapper());
-		this.sNiceName=this.getName();
 		//results 
 		//everything is inmutable but this
 		this.updateResults();	
@@ -169,8 +163,6 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 			rBuilder.addResult(pRes.getOptionName(),pRes.getJobResult());
 		}
 		this.setResults(rBuilder.build());
-		this.setLogFile(URI.create(this.logFile));
-		this.setName(this.sNiceName);	
 		//so the context is configured once it leaves to the real world.
 		if (ctxtFactory!=null)
 			ctxtFactory.configure(this);
@@ -197,7 +189,23 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 
 
 
+	/**
+	 * @return the logFile
+	 */
+	@Column(name="log_file")
+	@Access(AccessType.PROPERTY)
+	public String getStringLogFile() {
+		if(super.getLogFile()==null)
+			return "";
+		return super.getLogFile().toString();
+	}
 
+	/**
+	 * @param logFile the logFile to set
+	 */
+	public void setStringLogFile(String logFile) {
+		super.setLogFile(URI.create(logFile));
+	}
 
 	/**
 	 * Gets the script for this instance.
@@ -209,7 +217,23 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	}
 
 
+	/**
+	 * @return the sNiceName
+	 */
+	@Column(name="nice_name")
+	@Access(AccessType.PROPERTY)
+	@Override
+	public String getName() {
+		return super.getName();
+	}
 
+	/**
+	 * @param sNiceName the sNiceName to set
+	 */
+	@Override
+	public void setName(String Name) {
+		super.setName(Name);
+	}
 
 	@Override
 	public void writeResult(XProcResult result) {

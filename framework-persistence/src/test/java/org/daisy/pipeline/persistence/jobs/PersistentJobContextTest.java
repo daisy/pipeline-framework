@@ -1,25 +1,19 @@
 package org.daisy.pipeline.persistence.jobs;
 
+import java.net.URI;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.namespace.QName;
-
 import javax.xml.transform.Source;
 
 import org.daisy.common.base.Provider;
-
 import org.daisy.common.xproc.XProcInput;
-
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.URIMapper;
-
 import org.daisy.pipeline.persistence.Database;
-
-import org.daisy.pipeline.persistence.jobs.Mocks;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,11 +25,13 @@ public class PersistentJobContextTest  {
 	Database db;
 	PersistentJobContext ctxt;
 	JobId id;
+	URI logFile;
 	@Before	
 	public void setUp(){
 		//script setup
 		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		ctxt=new PersistentJobContext(Mocks.buildContext());
+		logFile=ctxt.getLogFile();
 		id=ctxt.getId();
 		db=DatabaseProvider.getDatabase();
 		db.addObject(ctxt);
@@ -49,7 +45,7 @@ public class PersistentJobContextTest  {
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
 		Assert.assertEquals(jCtxt.getId(),id);
 		Assert.assertEquals(jCtxt.getScriptUri().toString(),Mocks.scriptUri);
-		Assert.assertEquals(jCtxt.getLogFile().toString(),Mocks.testLogFile);
+		Assert.assertEquals(jCtxt.getLogFile(),this.logFile);
 	}
 	@Test
 	public void inputPortsTest(){
