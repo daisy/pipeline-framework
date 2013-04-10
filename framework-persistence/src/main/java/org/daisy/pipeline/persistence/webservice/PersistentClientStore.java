@@ -11,18 +11,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //public class PersistentClientStore implements ClientStore {
-	public class PersistentClientStore implements ClientStore<PersistentClient> {
+public class PersistentClientStore implements ClientStore<PersistentClient> {
 	
 	private static Logger logger = LoggerFactory.getLogger(PersistentClientStore.class);
 	
 	private Database database;
 
-	public void activate() {
-		logger.debug("activated!");
-	}
 	
-	public PersistentClientStore(){
-		logger.debug("created");
+	public PersistentClientStore(Database database){
+		this.database=database;
 	}
 	
 	public void setDatabase(Database database) {
@@ -31,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 	@Override
 //	public Iterable<Client> getAll() {
-		public List<PersistentClient> getAll() {
+	public List<PersistentClient> getAll() {
 //		public <T extends Client> List<T> getAll() {
 //		List<Client> clients = database.runQuery("select c from Client as c", PersistentClient.class);
 		return database.runQuery("select c from PersistentClient as c", PersistentClient.class);
