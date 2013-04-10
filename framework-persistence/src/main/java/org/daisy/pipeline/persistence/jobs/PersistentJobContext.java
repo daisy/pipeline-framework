@@ -84,7 +84,6 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 
 	public PersistentJobContext(AbstractJobContext ctxt) {
 		super(ctxt.getId(),ctxt.getName(),BoundXProcScript.from(ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs()),ctxt.getMapper());
-		this.pMapper=new PersistentMapper(this.getMapper());
 		this.setResults(ctxt.getResults());
 		this.load();
 	}
@@ -101,10 +100,10 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	 */
 	private void load(){
 		logger.debug("coping the objects to the model ");
+		this.pMapper=new PersistentMapper(this.getMapper());
 		this.inputPorts=ContextHydrator.dehydrateInputPorts(this);
 		this.options=ContextHydrator.dehydrateOptions(this);
 		this.parameters=ContextHydrator.dehydrateParameters(this);
-
 		//everything is inmutable but this
 		this.updateResults();	
 	}
