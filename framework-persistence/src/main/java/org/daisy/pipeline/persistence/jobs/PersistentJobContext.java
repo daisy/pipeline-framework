@@ -37,25 +37,28 @@ import org.daisy.pipeline.script.XProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This class persists job contexts.
+ * The general idea is to write getters and setters (Access property)  when possible
+ * to make proxification as transparent as possible.
+ * Complex depenedencies of the context like ports, options, mapper
+ * and results are wrapped in their own persistent objects so in this
+ * case they're are persisted as fields. 
+ * @author Javier Asensio Cubero capitan.cambio@gmail.com
+ */
 @Entity
 @Table(name="job_contexts")
 @Access(AccessType.FIELD)
 public final class PersistentJobContext extends AbstractJobContext implements Serializable,RuntimeConfigurable{
 	public static final long serialVersionUID=1L;
 	private static final Logger logger = LoggerFactory.getLogger(PersistentJobContext.class);
-	//proxified id
-	@Id
-	@Column(name="job_id")
-	String sId;
-	
-	String scriptUri;
 
 
+	//embedded mapper
 	@Embedded
 	PersistentMapper pMapper;
 
 	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
-	//@JoinColumn(name="job_id",referencedColumnName="job_id")
 	@MapsId("job_id")
 	List<PersistentInputPort> inputPorts= new ArrayList<PersistentInputPort>();
 
@@ -81,8 +84,7 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 
 	public PersistentJobContext(AbstractJobContext ctxt) {
 		super(ctxt.getId(),ctxt.getName(),BoundXProcScript.from(ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs()),ctxt.getMapper());
-		this.sId=ctxt.getId().toString();
-		this.scriptUri=ctxt.getScript().getURI().toString();
+		this.pMapper=new PersistentMapper(this.getMapper());
 		this.setResults(ctxt.getResults());
 		this.load();
 	}
@@ -94,14 +96,11 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 		super(null,"",null,null);
 	}
 
+	/**
+	 * Maps complex objects to their Persistent representation
+	 */
 	private void load(){
 		logger.debug("coping the objects to the model ");
-		//if(this.getScript()==null){
-			//XProcScript xcript=registry.getScript(URI.create(this.scriptUri)).load();
-			//logger.debug(String.format("load script %s",xcript));
-			//this.setScript(xcript);//getScriptService(URI.create(this.scriptUri)).getScript();
-		//}
-
 		for( XProcPortInfo portName:this.getScript().getXProcPipelineInfo().getInputPorts()){
 			PersistentInputPort anon=new PersistentInputPort(this.getId(),portName.getName());
 			for (Provider<Source> src:this.getInputs().getInputs(portName.getName())){
@@ -120,8 +119,6 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 			}
 		}
 
-		this.sId=this.getId().toString();
-		this.pMapper=new PersistentMapper(this.getMapper());
 		//results 
 		//everything is inmutable but this
 		this.updateResults();	
@@ -131,11 +128,6 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	@PostLoad
 	public void postLoad(){
 		logger.debug("Post loading jobcontext");
-		if(this.getScript()==null && registry!=null){
-				XProcScript xcript=registry.getScript(URI.create(this.scriptUri)).load();
-				logger.debug(String.format("load script %s",xcript));
-				this.setScript(xcript);//getScriptService(URI.create(this.scriptUri)).getScript();
-		}
 		//we have all the model but we have to hidrate the actual objects
 		XProcInput.Builder builder= new XProcInput.Builder();	
 		for ( PersistentInputPort input:this.inputPorts){
@@ -150,7 +142,6 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 			builder.withParameter(param.getPort(),param.getName(),param.getValue());
 		}
 		this.setInput(builder.build());
-		this.setId(JobIdFactory.newIdFromString(this.sId));
 
 		this.setMapper(this.pMapper.getMapper());
 
@@ -187,14 +178,33 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 			}
 	}
 
+	/**
+	 * @return the sId
+	 */
+	@Column(name="job_id")
+	@Id
+	@Access(AccessType.PROPERTY)
+	@SuppressWarnings("unused") //used by jpa
+	private String getStringId() {
+		return this.getId().toString();
+	}
+
+	/**
+	 * @param sId the sId to set
+	 */
+	@SuppressWarnings("unused") //used by jpa
+	private void setStringId(String sId) {
+		super.setId(JobIdFactory.newIdFromString(sId));
+	}
 
 
 	/**
 	 * @return the logFile
 	 */
+	@SuppressWarnings("unused") //used by jpa
 	@Column(name="log_file")
 	@Access(AccessType.PROPERTY)
-	public String getStringLogFile() {
+	private String getStringLogFile() {
 		if(super.getLogFile()==null)
 			return "";
 		return super.getLogFile().toString();
@@ -203,7 +213,8 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	/**
 	 * @param logFile the logFile to set
 	 */
-	public void setStringLogFile(String logFile) {
+	@SuppressWarnings("unused") //used by jpa
+	private void setStringLogFile(String logFile) {
 		super.setLogFile(URI.create(logFile));
 	}
 
@@ -212,10 +223,31 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	 *
 	 * @return The script.
 	 */
-	 URI getScriptUri() {
-		return URI.create(this.scriptUri);
+	@Column(name="script_uri")
+	@Access(AccessType.PROPERTY)
+	@SuppressWarnings("unused") //used by jpa
+	private String getScriptUri() {
+		if(this.getScript()!=null){
+			return this.getScript().getURI().toString();
+		}else{
+			throw new IllegalStateException("Script is null");
+		}
+
 	}
 
+	@SuppressWarnings("unused") //used by jpa
+	private void setScriptUri(String uri) {
+		if(registry!=null){
+			XProcScript xcript=registry.getScript(URI.create(uri)).load();
+			logger.debug(String.format("load script %s",xcript));
+			this.setScript(xcript);//getScriptService(URI.create(this.scriptUri)).getScript();
+		}else{
+			throw new IllegalStateException(
+					String.format("Illegal state for recovering XProcScript: registry %s"
+						,this.getScript(),registry));
+		}
+
+	}
 
 	/**
 	 * @return the sNiceName
@@ -234,6 +266,7 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	public void setName(String Name) {
 		super.setName(Name);
 	}
+
 
 	@Override
 	public void writeResult(XProcResult result) {
@@ -254,5 +287,6 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	public static void setJobContextFactory(JobContextFactory jobContextFactory){
 		PersistentJobContext.ctxtFactory=jobContextFactory;
 	}
+
 		
 }
