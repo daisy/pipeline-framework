@@ -1,8 +1,6 @@
 package org.daisy.pipeline.persistence.messaging;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +20,7 @@ public class PersistentMessage extends Message{
 	private static final int TEXT_LEN=1024;
 	private static final int FILE_LEN=512;
 	
-	public PersistentMessage(){
+	private PersistentMessage(){
 		super(null,null,null,0,0,null,0,null,null);
 	};
 	
@@ -56,7 +54,8 @@ public class PersistentMessage extends Message{
 	/**
 	 * @param throwable the throwable to set
 	 */
-	public void setThrowable(Throwable throwable) {
+	@SuppressWarnings("unused") //jpa
+	private void setThrowable(Throwable throwable) {
 		this.throwable = throwable;
 	}
 
@@ -72,7 +71,8 @@ public class PersistentMessage extends Message{
 	/**
 	 * @param text the text to set
 	 */
-	public void setText(String text) {
+	@SuppressWarnings("unused") //jpa
+	private void setText(String text) {
 		this.text = text;
 	}
 
@@ -88,7 +88,8 @@ public class PersistentMessage extends Message{
 	/**
 	 * @param level the level to set
 	 */
-	public void setLevel(Message.Level level) {
+	@SuppressWarnings("unused") //jpa
+	private void setLevel(Message.Level level) {
 		this.level = level;
 	}
 
@@ -105,7 +106,8 @@ public class PersistentMessage extends Message{
 	/**
 	 * @param timeStamp the timeStamp to set
 	 */
-	public void setTimeStamp(Date timeStamp) {
+	@SuppressWarnings("unused") //jpa
+	private void setTimeStamp(Date timeStamp) {
 		this.timeStamp = timeStamp;
 	}
 
@@ -122,7 +124,8 @@ public class PersistentMessage extends Message{
 	/**
 	 * @param sequence the sequence to set
 	 */
-	public void setSequence(int sequence) {
+	@SuppressWarnings("unused") //jpa
+	private void setSequence(int sequence) {
 		this.sequence = sequence;
 	}
 
@@ -138,7 +141,8 @@ public class PersistentMessage extends Message{
 	/**
 	 * @param jobId the jobId to set
 	 */
-	public void setJobId(String jobId) {
+	@SuppressWarnings("unused") //jpa
+	private void setJobId(String jobId) {
 		this.jobId = jobId;
 	}
 
@@ -154,7 +158,8 @@ public class PersistentMessage extends Message{
 	/**
 	 * @param line the line to set
 	 */
-	public void setLine(int line) {
+	@SuppressWarnings("unused") //jpa
+	private void setLine(int line) {
 		this.line = line;
 	}
 
@@ -170,7 +175,8 @@ public class PersistentMessage extends Message{
 	/**
 	 * @param column the column to set
 	 */
-	public void setColumn(int column) {
+	@SuppressWarnings("unused") //jpa
+	private void setColumn(int column) {
 		this.column = column;
 	}
 
@@ -186,7 +192,8 @@ public class PersistentMessage extends Message{
 	/**
 	 * @param file the file to set
 	 */
-	public void setFile(String file) {
+	@SuppressWarnings("unused") //jpa
+	private void setFile(String file) {
 		this.file = file;
 	}
 	
