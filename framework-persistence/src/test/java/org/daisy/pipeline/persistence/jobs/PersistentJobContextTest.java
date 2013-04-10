@@ -30,6 +30,7 @@ public class PersistentJobContextTest  {
 	public void setUp(){
 		//script setup
 		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
+		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
 		ctxt=new PersistentJobContext(Mocks.buildContext());
 		logFile=ctxt.getLogFile();
 		id=ctxt.getId();
@@ -44,7 +45,7 @@ public class PersistentJobContextTest  {
 	public void storeInput(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
 		Assert.assertEquals(jCtxt.getId(),id);
-		Assert.assertEquals(jCtxt.getScriptUri().toString(),Mocks.scriptUri);
+		Assert.assertEquals(jCtxt.getScript().getURI().toString(),Mocks.scriptUri);
 		Assert.assertEquals(jCtxt.getLogFile(),this.logFile);
 	}
 	@Test
