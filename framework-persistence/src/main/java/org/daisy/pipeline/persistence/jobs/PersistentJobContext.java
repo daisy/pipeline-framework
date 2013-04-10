@@ -142,18 +142,9 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	private void updateResults(){
 		ResultSet rSet= this.getResults();
 		if(this.portResults.size()==0)
-			for(String port:rSet.getPorts()){
-				for(JobResult res:rSet.getResults(port)){
-					this.portResults.add(new PersistentPortResult(this.getId(),res,port));
-				}
-			}
+			this.portResults=ContextHydrator.dehydratePortResults(this);
 		if(this.optionResults.size()==0)
-			for(QName option:rSet.getOptions()){
-				for(JobResult res:rSet.getResults(option)){
-					this.optionResults.add(new PersistentOptionResult(this.getId(),res,option));
-				}
-
-			}
+			this.optionResults=ContextHydrator.dehydrateOptionResults(this);
 	}
 
 	/**

@@ -9,6 +9,7 @@ import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.JobContext;
+import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.ResultSet;
 
 import com.google.common.collect.Lists;
@@ -75,5 +76,27 @@ class ContextHydrator {
 			}
 		}
 		return parameters;
+	}
+
+	static List<PersistentPortResult> dehydratePortResults(JobContext ctxt){
+		List<PersistentPortResult> portResults= Lists.newLinkedList();
+		ResultSet rSet= ctxt.getResults();
+		for(String port:rSet.getPorts()){
+			for(JobResult res:rSet.getResults(port)){
+				portResults.add(new PersistentPortResult(ctxt.getId(),res,port));
+			}
+		}
+		return portResults;
+	}
+
+	static List<PersistentOptionResult> dehydrateOptionResults(JobContext ctxt){
+		List<PersistentOptionResult> optionResults= Lists.newLinkedList();
+		ResultSet rSet= ctxt.getResults();
+		for(QName option:rSet.getOptions()){
+			for(JobResult res:rSet.getResults(option)){
+				optionResults.add(new PersistentOptionResult(ctxt.getId(),res,option));
+			}
+		}
+		return optionResults;
 	}
 }
