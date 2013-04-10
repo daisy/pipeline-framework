@@ -101,25 +101,10 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	 */
 	private void load(){
 		logger.debug("coping the objects to the model ");
-		for( XProcPortInfo portName:this.getScript().getXProcPipelineInfo().getInputPorts()){
-			PersistentInputPort anon=new PersistentInputPort(this.getId(),portName.getName());
-			for (Provider<Source> src:this.getInputs().getInputs(portName.getName())){
-				anon.addSource(new PersistentSource(src.provide().getSystemId()));
-			}
-			this.inputPorts.add(anon);
-		}
-		// options 
-		for(QName option:this.getInputs().getOptions().keySet()){
-			this.options.add(new PersistentOption(this.getId(),option,this.getInputs().getOptions().get(option)));
-		}
-		//parameters 
-		for( String portName:this.getScript().getXProcPipelineInfo().getParameterPorts()){
-			for (QName paramName :this.getInputs().getParameters(portName).keySet()){
-				this.parameters.add(new PersistentParameter(this.getId(),portName,paramName,this.getInputs().getParameters(portName).get(paramName)));
-			}
-		}
+		this.inputPorts=ContextHydrator.dehydrateInputPorts(this);
+		this.options=ContextHydrator.dehydrateOptions(this);
+		this.parameters=ContextHydrator.dehydrateParameters(this);
 
-		//results 
 		//everything is inmutable but this
 		this.updateResults();	
 	}
@@ -164,7 +149,6 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 			}
 		if(this.optionResults.size()==0)
 			for(QName option:rSet.getOptions()){
-				logger.debug(String.format(" Persisting job context with # %d result options",rSet.getResults(option).size()));
 				for(JobResult res:rSet.getResults(option)){
 					this.optionResults.add(new PersistentOptionResult(this.getId(),res,option));
 				}
