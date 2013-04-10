@@ -70,7 +70,6 @@ public class PersistentJob  extends Job implements Serializable {
 	 * unless the superclass is annotated. 
 	 * So here we follow a bean approach
 	 * The id is proxified.
-	 *
 	 */
 	@Id
 	@Column(name="job_id")
@@ -82,7 +81,7 @@ public class PersistentJob  extends Job implements Serializable {
 	Database db=null;
 
 
-	protected PersistentJob(JobContext ctxt,EventBus bus,Database db) {
+	private PersistentJob(JobContext ctxt,EventBus bus,Database db) {
 		super(new PersistentJobContext((AbstractJobContext)ctxt),bus);
 		this.db=db;
 		this.sJobId=ctxt.getId().toString();
@@ -92,7 +91,7 @@ public class PersistentJob  extends Job implements Serializable {
 	/**
 	 * Constructs a new instance.
 	 */
-	PersistentJob() {
+	private PersistentJob() {
 		super(null,null);
 	}
 
@@ -101,6 +100,7 @@ public class PersistentJob  extends Job implements Serializable {
 	 */
 	@Enumerated(EnumType.ORDINAL)
 	@Access(value=AccessType.PROPERTY)
+	@Override
 	public Status getStatus() {
 		return super.getStatus();
 	}
@@ -108,6 +108,7 @@ public class PersistentJob  extends Job implements Serializable {
 	/**
 	 * @param currentStatus the currentStatus to set
 	 */
+	@Override
 	public void setStatus(Status currentStatus) {
 		super.setStatus(currentStatus);
 	}
