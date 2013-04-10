@@ -13,6 +13,13 @@ public interface WebserviceStorage {
 	 * @return the requestLog
 	 */
 	public RequestLog getRequestLog();
+
+	/**
+	 * Returns a job configuration storage 
+	 * object
+	 * @return the job storage
+	 */
+	public JobConfigurationStorage getJobConfigurationStorage();
 	
 }
 
