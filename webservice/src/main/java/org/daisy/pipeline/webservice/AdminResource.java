@@ -16,7 +16,7 @@ public class AdminResource extends AuthenticatedResource {
 
 	private boolean authorizeAsAdmin() {
 		String id = getQuery().getFirstValue("authid");
-		Client client = webservice().getWebserviceStorage().getClientStore().get(id);
+		Client client = webservice().getStorage().getClientStore().get(id);
 		return client!=null && Client.Role.ADMIN.equals(client.getRole());
 	}
 

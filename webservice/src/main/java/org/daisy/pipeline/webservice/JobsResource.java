@@ -111,7 +111,7 @@ public class JobsResource extends AuthenticatedResource {
 		Client client = null;
 		if (webservice().getConfiguration().isAuthenticationEnabled()) {
 			String clientId = getQuery().getFirstValue("authid");
-			client = webservice().getWebserviceStorage().getClientStore().get(clientId);
+			client = webservice().getStorage().getClientStore().get(clientId);
 		}
 
 		if (representation == null) {
@@ -181,7 +181,7 @@ public class JobsResource extends AuthenticatedResource {
 		}
 		
 		//store the config
-		webservice().getWebserviceStorage().getJobConfigurationStorage()
+		webservice().getStorage().getJobConfigurationStorage()
 			.add(job.getId(),XmlUtils.DOMToString(doc));
 
 		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);

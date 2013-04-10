@@ -72,7 +72,7 @@ public class JobConfigurationResource extends AuthenticatedResource{
 			return this.getErrorRepresentation("Job not found");
 		}
 		
-		String xml = webservice().getWebserviceStorage().getJobConfigurationStorage().get(job.getId());
+		String xml = webservice().getStorage().getJobConfigurationStorage().get(job.getId());
 		Document doc;
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

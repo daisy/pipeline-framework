@@ -280,7 +280,7 @@ public class PipelineWebService extends Application {
 	/**
 	 * @return the webserviceStorage
 	 */
-	public WebserviceStorage getWebserviceStorage() {
+	public WebserviceStorage getStorage() {
 		return webserviceStorage;
 	}
 
