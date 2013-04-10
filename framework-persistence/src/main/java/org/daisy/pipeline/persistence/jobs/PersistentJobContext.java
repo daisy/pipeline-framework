@@ -125,36 +125,29 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	}
 
 
+	/**
+	 * Although we could delegate the actual hydration
+	 * to setters (i.e. getInput) the performance would be affected.
+	 * Therefore we prefer doing hydration on the PostLoad event.
+	 */
 	@PostLoad
 	@SuppressWarnings("unused")//jpa only
 	private void postLoad(){
 		logger.debug("Post loading jobcontext");
 		//we have all the model but we have to hidrate the actual objects
-		XProcInput.Builder builder= new XProcInput.Builder();	
-		for ( PersistentInputPort input:this.inputPorts){
-			for (PersistentSource src:input.getSources()){
-				builder.withInput(input.getName(),src);
-			}
-		}
-		for (PersistentOption option:this.options){
-			builder.withOption(option.getName(),option.getValue());
-		}
-		for(PersistentParameter param:this.parameters){
-			builder.withParameter(param.getPort(),param.getName(),param.getValue());
-		}
+		XProcInput.Builder builder=new XProcInput.Builder();
+		ContextHydrator.hydrateInputPorts(builder,inputPorts);
+		ContextHydrator.hydrateOptions(builder,options);
+		ContextHydrator.hydrateParams(builder,parameters);
 		this.setInput(builder.build());
 
 		this.setMapper(this.pMapper.getMapper());
 
 		ResultSet.Builder rBuilder=new ResultSet.Builder();
-
-		for(PersistentPortResult pRes: this.portResults){
-			rBuilder.addResult(pRes.getPortName(),pRes.getJobResult());
-		}
-		for(PersistentOptionResult pRes: this.optionResults){
-			rBuilder.addResult(pRes.getOptionName(),pRes.getJobResult());
-		}
+		ContextHydrator.hydrateResultPorts(rBuilder,portResults);
+		ContextHydrator.hydrateResultOptions(rBuilder,optionResults);
 		this.setResults(rBuilder.build());
+
 		//so the context is configured once it leaves to the real world.
 		if (ctxtFactory!=null)
 			ctxtFactory.configure(this);
@@ -277,6 +270,9 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 		this.updateResults();
 				
 	}
+
+	
+
 	//Configuration for adding runtime inforamtion	
 	@Transient
 	static ScriptRegistry registry;
@@ -288,6 +284,4 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	public static void setJobContextFactory(JobContextFactory jobContextFactory){
 		PersistentJobContext.ctxtFactory=jobContextFactory;
 	}
-
-		
 }
