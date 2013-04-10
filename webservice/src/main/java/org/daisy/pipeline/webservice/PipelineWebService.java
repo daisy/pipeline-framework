@@ -19,6 +19,7 @@ import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.clients.ClientStore;
 import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
+import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
@@ -51,9 +52,7 @@ public class PipelineWebService extends Application {
 	/** The script registry. */
 	private ScriptRegistry scriptRegistry;
 
-    /** The Client Store **/
-	private ClientStore<?> clientStore;
-
+	private WebserviceStorage webserviceStorage;
 	private CallbackRegistry callbackRegistry;
 
 	private PropertyPublisher propertyPublisher;
@@ -61,7 +60,7 @@ public class PipelineWebService extends Application {
 
 	private BundleContext bundleCtxt;
 
-	private RequestLog requestLog;
+
 	private Component component;
 	/* (non-Javadoc)
 	 * @see org.restlet.Application#createInboundRoot()
@@ -152,7 +151,7 @@ public class PipelineWebService extends Application {
 		if (this.conf.isAuthenticationEnabled()) {
 			//if the clientStore is empty close the 
 			//WS
-			if (clientStore.getAll().size()==0){
+			if (webserviceStorage.getClientStore().getAll().size()==0){
 				//no properties supplied
 				if (conf.getClientKey()==null || conf.getClientSecret()==null || conf.getClientKey().isEmpty()|| conf.getClientSecret().isEmpty()){
 					//Making the error more eye catchy	
@@ -170,7 +169,7 @@ public class PipelineWebService extends Application {
 				}else{
 					//new admin client via configuration properties
 					logger.debug("Inserting new client: "+conf.getClientKey());
-					clientStore.add(new SimpleClient(conf.getClientKey(),conf.getClientSecret(),Client.Role.ADMIN,"from configuration"));
+					this.webserviceStorage.getClientStore().add(new SimpleClient(conf.getClientKey(),conf.getClientSecret(),Client.Role.ADMIN,"from configuration"));
 
 				}
 
@@ -276,16 +275,23 @@ public class PipelineWebService extends Application {
 		this.callbackRegistry = callbackRegistry;
 	}
 
+
+	/**
+	 * @return the webserviceStorage
+	 */
+	public WebserviceStorage getWebserviceStorage() {
+		return webserviceStorage;
+	}
+
+	/**
+	 * @param webserviceStorage the webserviceStorage to set
+	 */
+	public void setWebserviceStorage(WebserviceStorage webserviceStorage) {
+		this.webserviceStorage = webserviceStorage;
+	}
+
 	public CallbackRegistry getCallbackRegistry() {
 		return callbackRegistry;
-	}
-
-	public void setRequestLog(RequestLog requestLog) {
-		this.requestLog = requestLog;
-	}
-
-	public RequestLog getRequestLog() {
-		return requestLog;
 	}
 
 	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
@@ -302,21 +308,6 @@ public class PipelineWebService extends Application {
 	 *
 	 * @return the client store
 	 */
-	public  ClientStore<?> getClientStore() {
-//		public  <T extends Client>  ClientStore<T> getClientStore() {
-		return clientStore;
-	}
-
-	/**
-	 * Sets the client store
-	 *
-	 * @param clientStore the new client store
-	 */
-	public void setClientStore(ClientStore<?> clientStore) {
-		this.clientStore = clientStore;
-
-	}
-
 	public PropertyTracker getPropertyTracker(){
 		if(this.propertyPublisher == null)
 			return null;
