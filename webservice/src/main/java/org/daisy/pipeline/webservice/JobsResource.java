@@ -179,6 +179,10 @@ public class JobsResource extends AuthenticatedResource {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return this.getErrorRepresentation("Could not create job (job was null)");
 		}
+		
+		//store the config
+		webservice().getWebserviceStorage().getJobConfigurationStorage()
+			.add(job.getId(),XmlUtils.DOMToString(doc));
 
 		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
 		Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();
