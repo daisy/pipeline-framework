@@ -13,6 +13,7 @@
     <class>org.daisy.pipeline.persistence.jobs.PersistentPortResult</class>
     <class>org.daisy.pipeline.persistence.jobs.PersistentOptionResult</class>
     <class>org.daisy.pipeline.persistence.jobs.PersistentMapper</class>
+    <class>org.daisy.pipeline.persistence.webservice.PersistentJobConfiguration</class>  
     <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 
     <properties>

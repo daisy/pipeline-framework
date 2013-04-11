@@ -111,7 +111,7 @@ public class JobsResource extends AuthenticatedResource {
 		Client client = null;
 		if (webservice().getConfiguration().isAuthenticationEnabled()) {
 			String clientId = getQuery().getFirstValue("authid");
-			client = webservice().getClientStore().get(clientId);
+			client = webservice().getStorage().getClientStorage().get(clientId);
 		}
 
 		if (representation == null) {
@@ -179,6 +179,10 @@ public class JobsResource extends AuthenticatedResource {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return this.getErrorRepresentation("Could not create job (job was null)");
 		}
+		
+		//store the config
+		webservice().getStorage().getJobConfigurationStorage()
+			.add(job.getId(),XmlUtils.DOMToString(doc));
 
 		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
 		Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();
