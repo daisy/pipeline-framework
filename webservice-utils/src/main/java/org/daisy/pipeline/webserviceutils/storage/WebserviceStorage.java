@@ -7,7 +7,7 @@ public interface WebserviceStorage {
 	/**
 	 * @return the clientStore
 	 */
-	public ClientStorage<?> getClientStore();
+	public ClientStorage getClientStore();
 
 	/**
 	 * @return the requestLog
