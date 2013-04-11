@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class PersistentWebserviceStorage implements WebserviceStorage {
 	private static final Logger logger = LoggerFactory
 			.getLogger(PersistentWebserviceStorage.class);
-	private ClientStorage<PersistentClient> clientStore;
+	private ClientStorage clientStore;
 	private RequestLog requestLog;
 	private JobConfigurationStorage jobCnfStorage;
 	private Database database;
@@ -28,7 +28,7 @@ public class PersistentWebserviceStorage implements WebserviceStorage {
 	}
 
 	@Override
-	public ClientStorage<?> getClientStore() {
+	public ClientStorage getClientStore() {
 		return clientStore;
 	}
 

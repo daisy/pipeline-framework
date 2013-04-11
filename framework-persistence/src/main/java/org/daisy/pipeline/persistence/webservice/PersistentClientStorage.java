@@ -27,7 +27,7 @@ public class PersistentClientStorage implements ClientStorage {
 
 	@Override
 //	public Iterable<Client> getAll() {
-	public List<PersistentClient> getAll() {
+	public List<? extends Client> getAll() {
 //		public <T extends Client> List<T> getAll() {
 //		List<Client> clients = database.runQuery("select c from Client as c", PersistentClient.class);
 		return database.runQuery("select c from PersistentClient as c", PersistentClient.class);
