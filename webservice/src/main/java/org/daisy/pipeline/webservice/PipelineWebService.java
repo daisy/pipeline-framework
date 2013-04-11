@@ -152,7 +152,7 @@ public class PipelineWebService extends Application {
 		if (this.conf.isAuthenticationEnabled()) {
 			//if the clientStore is empty close the 
 			//WS
-			if (webserviceStorage.getClientStore().getAll().size()==0){
+			if (webserviceStorage.getClientStorage().getAll().size()==0){
 				//no properties supplied
 				if (conf.getClientKey()==null || conf.getClientSecret()==null || conf.getClientKey().isEmpty()|| conf.getClientSecret().isEmpty()){
 					//Making the error more eye catchy	
@@ -170,7 +170,7 @@ public class PipelineWebService extends Application {
 				}else{
 					//new admin client via configuration properties
 					logger.debug("Inserting new client: "+conf.getClientKey());
-					this.webserviceStorage.getClientStore().add(new SimpleClient(conf.getClientKey(),conf.getClientSecret(),Client.Role.ADMIN,"from configuration"));
+					this.webserviceStorage.getClientStorage().add(new SimpleClient(conf.getClientKey(),conf.getClientSecret(),Client.Role.ADMIN,"from configuration"));
 
 				}
 

@@ -28,7 +28,7 @@ public class PersistentWebserviceStorage implements WebserviceStorage {
 	}
 
 	@Override
-	public ClientStorage getClientStore() {
+	public ClientStorage getClientStorage() {
 		return clientStore;
 	}
 

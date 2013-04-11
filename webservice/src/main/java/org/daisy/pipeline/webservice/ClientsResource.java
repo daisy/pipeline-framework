@@ -57,7 +57,7 @@ public class ClientsResource extends AdminResource {
     	}
 
     	setStatus(Status.SUCCESS_OK);
-    	ClientsXmlWriter writer = XmlWriterFactory.createXmlWriterForClients(webservice().getStorage().getClientStore().getAll());
+    	ClientsXmlWriter writer = XmlWriterFactory.createXmlWriterForClients(webservice().getStorage().getClientStorage().getAll());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
 
@@ -113,7 +113,7 @@ public class ClientsResource extends AdminResource {
 			    root.getAttribute("secret"), Client.Role.valueOf(root
 				    .getAttribute("role")), root.getAttribute("contact"));
 
-	    if (!webservice().getStorage().getClientStore().add(newClient)) {
+	    if (!webservice().getStorage().getClientStorage().add(newClient)) {
 		    // the client ID was probably not unique
 		    logger.debug("Client id not unique");
 		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);

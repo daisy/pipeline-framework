@@ -111,7 +111,7 @@ public class JobsResource extends AuthenticatedResource {
 		Client client = null;
 		if (webservice().getConfiguration().isAuthenticationEnabled()) {
 			String clientId = getQuery().getFirstValue("authid");
-			client = webservice().getStorage().getClientStore().get(clientId);
+			client = webservice().getStorage().getClientStorage().get(clientId);
 		}
 
 		if (representation == null) {
