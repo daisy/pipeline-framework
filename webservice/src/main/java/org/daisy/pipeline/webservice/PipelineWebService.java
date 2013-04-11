@@ -16,7 +16,7 @@ import org.daisy.pipeline.webserviceutils.Properties;
 import org.daisy.pipeline.webserviceutils.Routes;
 import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
 import org.daisy.pipeline.webserviceutils.clients.Client;
-import org.daisy.pipeline.webserviceutils.clients.ClientStore;
+import org.daisy.pipeline.webserviceutils.clients.ClientStorage;
 import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;

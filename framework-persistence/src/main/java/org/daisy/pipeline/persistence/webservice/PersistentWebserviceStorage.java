@@ -1,7 +1,7 @@
 package org.daisy.pipeline.persistence.webservice;
 
 import org.daisy.pipeline.persistence.Database;
-import org.daisy.pipeline.webserviceutils.clients.ClientStore;
+import org.daisy.pipeline.webserviceutils.clients.ClientStorage;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.daisy.pipeline.webserviceutils.storage.JobConfigurationStorage;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class PersistentWebserviceStorage implements WebserviceStorage {
 	private static final Logger logger = LoggerFactory
 			.getLogger(PersistentWebserviceStorage.class);
-	private ClientStore<PersistentClient> clientStore;
+	private ClientStorage<PersistentClient> clientStore;
 	private RequestLog requestLog;
 	private JobConfigurationStorage jobCnfStorage;
 	private Database database;
@@ -22,13 +22,13 @@ public class PersistentWebserviceStorage implements WebserviceStorage {
 
 	public void activate() {
 		logger.debug("Bringing WebserviceStorage up");
-		this.clientStore = new PersistentClientStore(this.database);
+		this.clientStore = new PersistentClientStorage(this.database);
 		this.requestLog = new PersistentRequestLog(this.database);
 		this.jobCnfStorage=new PersistentJobConfigurationStorage(this.database);
 	}
 
 	@Override
-	public ClientStore<?> getClientStore() {
+	public ClientStorage<?> getClientStore() {
 		return clientStore;
 	}
 
