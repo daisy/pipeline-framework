@@ -9,7 +9,7 @@ public interface JobConfigurationStorage  {
 	 * @param id Job's id
 	 * @param configuration the job configuration string representation
 	 */
-	public void add(JobId id,String configuration);	
+	public boolean add(JobId id,String configuration);	
 
 	/**
 	 * Returns the configuration for 
