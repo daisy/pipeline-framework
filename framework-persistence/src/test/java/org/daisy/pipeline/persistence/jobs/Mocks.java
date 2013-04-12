@@ -107,13 +107,17 @@ public class Mocks   {
 		}
 	}
 
-	public static AbstractJobContext buildContext(){  
-
+	public static XProcScript buildScript(){
 		XProcPortInfo pinfo= XProcPortInfo.newInputPort("source",true,true);
 		XProcPortInfo ppinfo= XProcPortInfo.newParameterPort(Mocks.paramPort,true);
 		XProcPipelineInfo pipelineInfo = new XProcPipelineInfo.Builder().withURI(URI.create(Mocks.scriptUri)).withPort(pinfo).withPort(ppinfo).build();
 		List<String> fileset=Collections.emptyList();	
 		final XProcScript script = new XProcScript(pipelineInfo, "", "", "", null, null, null,fileset,fileset); 
+		return script;
+	}
+
+	public static AbstractJobContext buildContext(){  
+		final XProcScript script = Mocks.buildScript();
 		//ScriptRegistryHolder.setScriptRegistry(new Mocks.DummyScriptService(script));
 		//Input setup
 		final XProcInput input= new XProcInput.Builder().withInput("source",new Mocks.SimpleSourceProvider(file1)).withInput("source", new Mocks.SimpleSourceProvider(file2)).withOption(opt1Qname,value1).withOption(opt2Qname,value2).withParameter(paramPort,new QName(qparam),paramVal).build();
@@ -126,10 +130,6 @@ public class Mocks   {
 			public MyHiddenContext(){
 				super(id,"hidden",BoundXProcScript.from(script,input,null),mapper);
 				this.setResults(rSet);
-			}
-			@Override
-			public URI getLogFile(){
-				return URI.create(testLogFile);
 			}
 
 
