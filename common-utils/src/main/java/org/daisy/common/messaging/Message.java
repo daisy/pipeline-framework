@@ -2,7 +2,7 @@ package org.daisy.common.messaging;
 
 import java.util.Date;
 
-public interface Message {
+public class Message {
 	/**
 	 * Message levels.
 	 */
@@ -18,81 +18,138 @@ public interface Message {
 		/** The TRACE. */
 		TRACE
 	}
-	/**
-	 * Gets the throwable in case was defined in the constructor or null otherwise.
-	 *
-	 * @return the throwable
-	 */
-	public abstract Throwable getThrowable();
 
-	/**
-	 * Gets the msg
-	 *
-	 * @return the msg
-	 */
-	public abstract String getText();
+	protected Throwable throwable;
+	protected String text;
+	protected Level level;
+	protected int line;
+	protected int column;
+	protected Date timeStamp;
+	protected int sequence;
+	protected String jobId;
+	protected String file;
 
-	/**
-	 * Gets the level.
-	 *
-	 * @return the level
-	 */
-	public abstract Level getLevel();
+	protected Message(Throwable throwable, String text, Level level,
+			int line, int column, Date timeStamp, int sequence, String jobId,
+			String file) {
+		this.throwable = throwable;
+		this.text = text;
+		this.level = level;
+		this.line = line;
+		this.column = column;
+		this.timeStamp = timeStamp;
+		this.sequence = sequence;
+		this.jobId = jobId;
+		this.file = file;
+	}
 
-	/**
-	 * Gets the file line.
-	 *
-	 * @return the level
-	 */
-	public abstract int getLine();
+	public Throwable getThrowable() {
+		return throwable;
+	}
 
-	/**
-	 * Gets the file column.
-	 *
-	 * @return the level
-	 */
-	public abstract int getColumn();
+	public String getText() {
+		return text;
+	}
 
-	/**
-	 * Gets the file.
-	 *
-	 * @return the level
-	 */
-	public abstract String getFile();
+	public Level getLevel() {
+		return level;
+	}
+
+	public int getLine() {
+		return line;
+	}
+
+	public int getColumn() {
+		return column;
+	}
+
+	public Date getTimeStamp() {
+		return timeStamp;
+	}
+
+	public int getSequence() {
+		return sequence;
+	}
+
+	public String getJobId() {
+		return jobId;
+	}
+
+	public String getFile() {
+		return file;
+	}
+
+	public static class MessageBuilder {
+		Throwable throwable;
+		String text;
+		Level level;
+		int line;
+		int column;
+		Date timeStamp;
+		int sequence;
+		String jobId;
+		String file;
 
 
+		public MessageBuilder withThrowable(Throwable throwable) {
+			this.throwable = throwable;
+			return this;
+		}
 
-	/**
-	 * Gets the time stamp.
-	 *
-	 * @return the time stamp
-	 */
-	public abstract Date getTimeStamp();
 
-	public abstract int getSequence();
+		public MessageBuilder withText(String text) {
+			this.text = text;
+			return this;
+		}
 
-	public abstract String getJobId();
-	public static interface MessageBuilder{
 
-		public abstract MessageBuilder withThrowable(Throwable throwable);
+		public MessageBuilder withLevel(Level level) {
+			this.level = level;
+			return this;
+		}
 
-		public abstract MessageBuilder withText(String text);
 
-		public abstract MessageBuilder withLevel(Level level);
+		public MessageBuilder withLine(int line) {
+			this.line = line;
+			return this;
+		}
 
-		public abstract MessageBuilder withLine(int line);
 
-		public abstract MessageBuilder withColumn(int column);
+		public MessageBuilder withColumn(int column) {
+			this.column = column;
+			return this;
+		}
 
-		public abstract MessageBuilder withTimeStamp(Date timeStamp);
 
-		public abstract MessageBuilder withSequence(int sequence);
+		public MessageBuilder withTimeStamp(Date timeStamp) {
+			this.timeStamp = timeStamp;
+			return this;
+		}
 
-		public abstract MessageBuilder withJobId(String string);
 
-		public abstract MessageBuilder withFile(String file);
-		public Message build();
+		public MessageBuilder withSequence(int sequence) {
+			this.sequence = sequence;
+			return this;
+		}
+
+
+		public MessageBuilder withJobId(String jobId) {
+			this.jobId = jobId;
+			return this;
+		}
+
+
+		public MessageBuilder withFile(String file) {
+			this.file = file;
+			return this;
+		}
+
+		public Message build() {
+			return new Message(throwable, text, level, line, column,
+					timeStamp, sequence, jobId, file);
+		}
 
 	}
+
 
 }

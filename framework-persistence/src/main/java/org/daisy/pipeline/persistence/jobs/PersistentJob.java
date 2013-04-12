@@ -3,6 +3,8 @@ package org.daisy.pipeline.persistence.jobs;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.MapsId;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
-import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -39,7 +40,9 @@ import com.google.common.eventbus.EventBus;
 @Cacheable
 @Table(name="jobs")
 @NamedQuery ( name="Job.getAll", query="select j from PersistentJob j")
+@Access(value=AccessType.FIELD)
 public class PersistentJob  extends Job implements Serializable {
+
 
 	public static class PersistentJobBuilder extends JobBuilder{
 		private Database db;
@@ -64,52 +67,69 @@ public class PersistentJob  extends Job implements Serializable {
 
 	/* A job is just an executable context + status 
 	 * Due to the limitations of jpa we cant persist superclass attributes
-	 * unless the superclass is annotated.
-	 * That's a not go as framework-core would depened on jpa.
-	 *
-	 * We'll store the status in the attribute currentStatus and use the 
-	 * callbacks to update it
+	 * unless the superclass is annotated. 
+	 * So here we follow a bean approach
+	 * The id is proxified.
 	 */
-	@Enumerated(EnumType.ORDINAL)
-	Status currentStatus;	
 	@Id
 	@Column(name="job_id")
 	String sJobId;
 
-	@OneToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-	@MapsId("job_id")
-	PersistentJobContext pCtxt;
 	//the status changed will be watched by changeStatus
 	//and this very object is in charge of updating itself
 	@Transient
 	Database db=null;
-	protected PersistentJob(JobContext ctxt,EventBus bus,Database db) {
+
+
+	private PersistentJob(JobContext ctxt,EventBus bus,Database db) {
 		super(new PersistentJobContext((AbstractJobContext)ctxt),bus);
 		this.db=db;
+		this.sJobId=ctxt.getId().toString();
 	}
 
 
 	/**
 	 * Constructs a new instance.
 	 */
-	public PersistentJob() {
+	private PersistentJob() {
 		super(null,null);
 	}
 
+	/**
+	 * @return the currentStatus
+	 */
+	@Enumerated(EnumType.ORDINAL)
+	@Access(value=AccessType.PROPERTY)
+	@Override
+	public Status getStatus() {
+		return super.getStatus();
+	}
 
-	@PrePersist
-	@PreUpdate
-	public void preCallback(){
-			//this.currentStatus=this.status;
-			this.pCtxt=(PersistentJobContext)this.ctxt;
-			this.sJobId=this.getContext().getId().toString();
-		
+	/**
+	 * @param currentStatus the currentStatus to set
+	 */
+	@Override
+	public void setStatus(Status currentStatus) {
+		super.setStatus(currentStatus);
 	}
-	@PostLoad
-	public void postCallback(){
-		this.ctxt=this.pCtxt;
-		this.setStatus(this.currentStatus);
+
+	/**
+	 * @return the pCtxt
+	 */
+	@OneToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	@MapsId("job_id")
+	@Access(value=AccessType.PROPERTY)
+	public PersistentJobContext getContext() {
+		return (PersistentJobContext)super.getContext();
 	}
+
+	/**
+	 * @param pCtxt the pCtxt to set
+	 */
+	public void setContext(PersistentJobContext pCtxt) {
+		super.ctxt= pCtxt;
+	}
+
 
 	public static List<Job> getAllJobs(Database db){
 		TypedQuery<Job> query =
@@ -119,19 +139,17 @@ public class PersistentJob  extends Job implements Serializable {
 		
 
 	}
+
 	//this will watch for changes in the status and update the db
 	@Override
-	protected void onStatusChanged(Job.Status to) {
-		synchronized(this){
-			this.currentStatus=to;
-			logger.info("Changing Status:"+to);	
-			if(this.db!=null){
-				logger.debug("Updating object");	
-				db.updateObject(this);
-			}
+	protected synchronized void onStatusChanged(Job.Status to) {
+		logger.info("Changing Status:"+to);	
+		if(this.db!=null){
+			logger.debug("Updating object");	
+			db.updateObject(this);
+		}else{
+			logger.warn("Object not updated as the Database is null");
 		}
-		
-		
 	}
 
 	protected void setDatabase(Database db){

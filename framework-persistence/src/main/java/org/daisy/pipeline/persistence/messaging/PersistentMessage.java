@@ -1,8 +1,6 @@
 package org.daisy.pipeline.persistence.messaging;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,76 +12,23 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.daisy.common.messaging.Message;
-import org.daisy.pipeline.job.JobId;
 
 @Entity
 @IdClass(PersistenceMessagePK.class)
 //@NoSql(dataFormat=DataFormatType.MAPPED)
-public class PersistentMessage implements Message{
+public class PersistentMessage extends Message{
 	private static final int TEXT_LEN=1024;
 	private static final int FILE_LEN=512;
-	public enum PersistentLevel {
-		/** The ERROR. */
-		ERROR,
-		/** The WARNING. */
-		WARNING,
-		/** The INFO. */
-		INFO,
-		/** The DEBUG. */
-		DEBUG,
-		/** The TRACE. */
-		TRACE;
-		public static PersistentLevel fromLevel(Level level){
-			return valueOf(level.name());
-		}
-		public static List<PersistentLevel> fromLevel(List<Level> levels) {
-			List<PersistentLevel> res = new ArrayList<PersistentMessage.PersistentLevel>(levels.size());
-			for (Level level : levels) {
-				res.add(fromLevel(level));
-			}
-			return res;
-		}
-	}
-	@Column(name="throwable")
 	
-	 Throwable throwable;
-	
-	@Column(name="text",length=TEXT_LEN)
-	String text;
-
-	/** The m level. */
-	@Enumerated(EnumType.STRING)
-//	@Column(name="level")
-	PersistentLevel level;
-	
-	@Column(name="timestamp")
-	@Temporal(TemporalType.TIMESTAMP)
-	Date timeStamp;
-	
-	@Id
-	@Column(name="sequence")
-	int sequence;
-	
-	@Id
-	@Column(name="jobId")
-	String jobId;
-	
-	@Column(name="line")
-	private int line;
-	
-	@Column(name="col")
-	private int column;
-	
-	@Column(name="file",length=FILE_LEN)
-	private String file;
-	
-	
-	public PersistentMessage(){};
+	private PersistentMessage(){
+		super(null,null,null,0,0,null,0,null,null);
+	};
 	
 	public PersistentMessage(Message other){
+		this();
 		this.throwable = other.getThrowable();
 		this.text = trim(other.getText(),TEXT_LEN-1);
-		this.level = PersistentLevel.valueOf(other.getLevel().toString());
+		this.level = other.getLevel();
 		this.timeStamp = other.getTimeStamp();
 		this.sequence = other.getSequence();
 		this.jobId = other.getJobId();
@@ -98,70 +43,158 @@ public class PersistentMessage implements Message{
 		return str;
 	}
 
+	/**
+	 * @return the throwable
+	 */
+	@Column(name="throwable")
+	@Override
 	public Throwable getThrowable() {
-		return throwable;
+		return this.throwable;
 	}
-	public void setThrowable(Throwable throwable) {
+	/**
+	 * @param throwable the throwable to set
+	 */
+	@SuppressWarnings("unused") //jpa
+	private void setThrowable(Throwable throwable) {
 		this.throwable = throwable;
 	}
+
+	/**
+	 * @return the text
+	 */
+	@Column(name="text",length=TEXT_LEN)
+	@Override
 	public String getText() {
 		return text;
 	}
-	public void setText(String msg) {
-		this.text = trim(msg,TEXT_LEN-1);
+
+	/**
+	 * @param text the text to set
+	 */
+	@SuppressWarnings("unused") //jpa
+	private void setText(String text) {
+		this.text = text;
 	}
+
+	/**
+	 * @return the level
+	 */
+	@Enumerated(EnumType.STRING)
+	@Override
 	public Message.Level getLevel() {
-		return Message.Level.valueOf(level.toString());
+		return level;
 	}
-	public void setLevel(PersistentLevel level) {
+
+	/**
+	 * @param level the level to set
+	 */
+	@SuppressWarnings("unused") //jpa
+	private void setLevel(Message.Level level) {
 		this.level = level;
 	}
+
+	/**
+	 * @return the timeStamp
+	 */
+	@Column(name="timestamp")
+	@Temporal(TemporalType.TIMESTAMP)
+	@Override
 	public Date getTimeStamp() {
 		return timeStamp;
 	}
-	public void setTimeStamp(Date timeStamp) {
+
+	/**
+	 * @param timeStamp the timeStamp to set
+	 */
+	@SuppressWarnings("unused") //jpa
+	private void setTimeStamp(Date timeStamp) {
 		this.timeStamp = timeStamp;
 	}
+
+	/**
+	 * @return the sequence
+	 */
+	@Id
+	@Column(name="sequence")
+	@Override
 	public int getSequence() {
 		return sequence;
 	}
-	public void setSequence(int sequence) {
+
+	/**
+	 * @param sequence the sequence to set
+	 */
+	@SuppressWarnings("unused") //jpa
+	private void setSequence(int sequence) {
 		this.sequence = sequence;
 	}
+
+	/**
+	 * @return the jobId
+	 */
+	@Id
+	@Column(name="jobId")
+	@Override
 	public String getJobId() {
 		return jobId;
 	}
-	public void setJobId(String jobId) {
+	/**
+	 * @param jobId the jobId to set
+	 */
+	@SuppressWarnings("unused") //jpa
+	private void setJobId(String jobId) {
 		this.jobId = jobId;
-	}		
-	public void setJobId(JobId jobId) {
-		this.jobId = jobId.toString();
-	}	
+	}
 
-
+	/**
+	 * @return the line
+	 */
+	@Column(name="line")
 	@Override
 	public int getLine() {
-		return this.line;
-	}
-	public void setLine(int line) {
-		this.line=line;
+		return line;
 	}
 
+	/**
+	 * @param line the line to set
+	 */
+	@SuppressWarnings("unused") //jpa
+	private void setLine(int line) {
+		this.line = line;
+	}
+
+	/**
+	 * @return the column
+	 */
+	@Column(name="col")
 	@Override
 	public int getColumn() {
-		
-		return this.column;
-	}
-	public void setColumn(int column) {
-		this.column=column;
+		return column;
 	}
 
+	/**
+	 * @param column the column to set
+	 */
+	@SuppressWarnings("unused") //jpa
+	private void setColumn(int column) {
+		this.column = column;
+	}
+
+	/**
+	 * @return the file
+	 */
+	@Column(name="file",length=FILE_LEN)
 	@Override
 	public String getFile() {
-		return this.file;
+		return file;
 	}
-	public void setFile(String file) {
-		this.file=trim(file,FILE_LEN-1);
+
+	/**
+	 * @param file the file to set
+	 */
+	@SuppressWarnings("unused") //jpa
+	private void setFile(String file) {
+		this.file = file;
 	}
 	
 }
