@@ -5,6 +5,7 @@
     <class>org.daisy.pipeline.persistence.messaging.PersistentMessage</class>
     <class>org.daisy.pipeline.persistence.webservice.PersistentClient</class>
     <class>org.daisy.pipeline.persistence.webservice.PersistentRequestLogEntry</class>
+    <class>org.daisy.pipeline.persistence.webservice.PersistentJobConfiguration</class>
 
     <class>org.daisy.pipeline.persistence.jobs.PersistentSource</class>
     <class>org.daisy.pipeline.persistence.jobs.PersistentInputPort</class>

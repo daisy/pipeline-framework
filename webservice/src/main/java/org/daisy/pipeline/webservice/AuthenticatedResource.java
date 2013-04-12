@@ -27,13 +27,13 @@ public abstract class AuthenticatedResource extends GenericResource {
 
 		long maxRequestTime = webservice().getConfiguration().getMaxRequestTime();
 		String authid = getQuery().getFirstValue("authid");
-		Client client = webservice().getClientStore().get(authid);
+		Client client = webservice().getStorage().getClientStorage().get(authid);
 		// make sure the client exists
 		if (client == null) {
 			logger.error(String.format("Client with auth ID %s not found", authid));
 			return false;
 		}
-		RequestLog requestLog = webservice().getRequestLog();
+		RequestLog requestLog = webservice().getStorage().getRequestLog();
 		return new Authenticator(requestLog).authenticate(client, getQuery().getFirstValue("sign"),
 				getQuery().getFirstValue("time"), getQuery().getFirstValue("nonce"), getReference().toString(),
 				maxRequestTime);
