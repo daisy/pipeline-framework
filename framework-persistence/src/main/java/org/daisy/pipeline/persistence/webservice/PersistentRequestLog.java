@@ -14,12 +14,11 @@ public class PersistentRequestLog implements RequestLog {
 	private Database database;
 	private static final Logger logger = LoggerFactory.getLogger(PersistentRequestLog.class);
 	
-	public void activate() {
-		logger.debug("activated!");
-	}
-	
-	
-	public void setDatabase(Database database) {
+
+	/**
+	 * @param database
+	 */
+	public PersistentRequestLog(Database database) {
 		this.database = database;
 	}
 

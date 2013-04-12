@@ -64,7 +64,6 @@ public class Job {
 
 	/** The status. */
 	private volatile Status status = Status.IDLE;
-
 	protected JobContext ctxt;
 	private EventBus eventBus;
 
@@ -78,7 +77,7 @@ public class Job {
 	 *
 	 * @return the id
 	 */
-	public final JobId getId() {
+	public JobId getId() {
 		return this.ctxt.getId();
 	}
 
@@ -87,7 +86,7 @@ public class Job {
 	 *
 	 * @return the status
 	 */
-	public final Status getStatus() {
+	public Status getStatus() {
 		synchronized(this.status){
 			return status;
 		}
@@ -111,8 +110,17 @@ public class Job {
 	 *
 	 * @return The ctxt.
 	 */
-	public final JobContext getContext() {
+	public JobContext getContext() {
 		return this.ctxt;
+	}
+
+	/**
+	 * Gets the ctxt for this instance.
+	 *
+	 * @return The ctxt.
+	 */
+	protected void setContext(JobContext ctxt) {
+		this.ctxt=ctxt;
 	}
 
 	/**

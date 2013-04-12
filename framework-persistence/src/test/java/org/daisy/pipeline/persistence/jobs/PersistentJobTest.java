@@ -23,6 +23,7 @@ public class PersistentJobTest   {
 			
 		db=DatabaseProvider.getDatabase();
 		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
+		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
 		JobBuilder builder= new PersistentJobBuilder(db).withContext(Mocks.buildContext());
 		job =(PersistentJob) builder.build();//new PersistentJob(Job.newJob(Mocks.buildContext()),db);
 		id=job.getContext().getId();
@@ -42,11 +43,10 @@ public class PersistentJobTest   {
 	public void changeStatusTest(){
 		PersistentJob pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
 		pjob.setDatabase(db);
-
+		pjob.setStatus(Job.Status.DONE);
 		pjob.onStatusChanged(Job.Status.DONE);
-
 		pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
-		Assert.assertEquals(pjob.getStatus(),Job.Status.DONE);
+		Assert.assertEquals(Job.Status.DONE,pjob.getStatus());
 
 	}
 	@Test 

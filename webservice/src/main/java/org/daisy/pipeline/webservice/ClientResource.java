@@ -39,7 +39,7 @@ public class ClientResource extends AdminResource {
 			return;
 		}
 		String idParam = (String) getRequestAttributes().get("id");
-		client = webservice().getClientStore().get(idParam);
+		client = webservice().getStorage().getClientStorage().get(idParam);
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class ClientResource extends AdminResource {
 		}
 
 
-		if (webservice().getClientStore().delete(client)) {
+		if (webservice().getStorage().getClientStorage().delete(client)) {
 			setStatus(Status.SUCCESS_NO_CONTENT);
 		}
 		else {
@@ -149,7 +149,7 @@ public class ClientResource extends AdminResource {
 		Element root = doc.getDocumentElement();
 		// TODO add setters to the Client interface instead ?
 		Client newClient = new SimpleClient(root.getAttribute("id"),root.getAttribute("secret"),Client.Role.valueOf(root.getAttribute("role")),root.getAttribute("contact"));
-		webservice().getClientStore().update(newClient);
+		webservice().getStorage().getClientStorage().update(newClient);
 
 		setStatus(Status.SUCCESS_OK);
 		ClientXmlWriter writer = XmlWriterFactory.createXmlWriterForClient(newClient);

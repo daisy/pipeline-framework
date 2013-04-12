@@ -11,6 +11,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -20,7 +22,7 @@ import org.w3c.dom.ls.LSSerializer;
 public class XmlUtils {
 	/** The Constant NS_PIPELINE_DATA. */
 	public static final String NS_PIPELINE_DATA = "http://www.daisy.org/ns/pipeline/data";
-
+	private static final Logger logger = LoggerFactory.getLogger(XmlUtils.class);
 	
 	/**
 	 * DOM to string.
@@ -48,7 +50,8 @@ public class XmlUtils {
 				trans.transform(source, result);
 				xmlString = sw.toString();
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.warn("Error converting dom to string ",e);		
+				
 			}
 		}
 		return xmlString;
@@ -92,7 +95,8 @@ public class XmlUtils {
 			return document;
 
 		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
+			logger.warn("creating dom document",e);		
+			//e.printStackTrace();
 			return null;
 		}
 

@@ -13,6 +13,7 @@ public class Routes {
 	public static final String JOBS_ROUTE = "/jobs";
 	public static final String JOB_ROUTE = "/jobs/{id}";
 	public static final String LOG_ROUTE = "/jobs/{id}/log";
+	public static final String JOB_CONF_ROUTE = "/jobs/{id}/configuration";
 	public static final String ALIVE_ROUTE = "/alive";
 	public static final String RESULT_ROUTE = "/jobs/{id}/result";
 	public static final String RESULT_OPTION_ROUTE = "/jobs/{id}/result/option/{name}";
