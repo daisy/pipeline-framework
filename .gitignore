@@ -26,3 +26,5 @@ Thumbs.db
 
 #tag files
 tags
+
+*.pyc

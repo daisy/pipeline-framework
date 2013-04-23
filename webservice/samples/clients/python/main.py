@@ -15,6 +15,7 @@ import os
 import argparse
 from lxml import etree
 import resources
+import settings
 
 def main():
     """Main entry point"""
@@ -32,6 +33,7 @@ def main():
   log           Show the log for a job.
   result        Show where the result is stored for a job.
   delete-job    Delete a job.
+  delete-all    Delete all jobs
   new-job       Create a new job.
   
   Examples:
@@ -79,6 +81,8 @@ def handle_command(args):
         delete_job(args.id)
     elif args.command == "new-job":
         post_job(args.request, args.jobdata)
+    elif args.command == "delete-all":
+        delete_all()
     else:
         print "Command %s not recognized" % args.command
 
@@ -127,7 +131,7 @@ def get_log(job_id):
         print "ID required"
         return
     status = resources.get_job_status(job_id)
-    if status != "DONE":
+    if status != "DONE" and status != "ERROR":
         print "Cannot get log until the job is done. Job status: %s." % status
         return
     log = resources.get_log(job_id)
@@ -194,7 +198,7 @@ def delete_job(job_id):
         return
     
     status = resources.get_job_status(job_id)
-    if status != "DONE":
+    if status != "DONE" and status != "ERROR":
         print "Cannot delete until the job is done. Job status: %s." % status
         return
     
@@ -204,6 +208,14 @@ def delete_job(job_id):
     else:
         print "Error deleting job"
 
+def delete_all():
+    """Delete all jobs"""
+    doc = resources.get_jobs()
+    xpath_expr = "//{{{0}}}job/@id".format(settings.PX_NS)
+    xpath_fn = etree.ETXPath(xpath_expr)
+    results = xpath_fn(doc)
+    for r in results:
+        delete_job(r)
 
 if __name__ == "__main__":
     main()

@@ -11,7 +11,7 @@ namespace PipelineWSClient
 		private static string JOB_REQUEST = "job-request";
 		private static string JOB_DATA = "job-data";
 		
-		public static string baseUri = "http://localhost:8182/ws";
+		public static string baseUri = "http://localhost:8181/ws";
 		
 		public static XmlDocument GetScript(string id)
 		{
@@ -59,7 +59,7 @@ namespace PipelineWSClient
 			return Rest.DeleteResource(uri);
 		}
 		
-		public static string PostJob(string request, FileInfo data = null)
+		public static XmlDocument PostJob(string request, FileInfo data = null)
 		{
 			string uri = String.Format("{0}/jobs", baseUri);
 			if (data == null)

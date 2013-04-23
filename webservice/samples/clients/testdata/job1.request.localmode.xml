@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
-    <script href="http://localhost:8182/ws/scripts/dtbook-to-zedai"/>
+    <script href="http://localhost:8181/ws/scripts/dtbook-to-zedai"/>
     <input name='source'>
         <docwrapper>
             <dtbook xmlns='http://www.daisy.org/z3986/2005/dtbook/' version='2005-3' xml:lang='en-US'>
@@ -50,8 +50,8 @@
             </dtbook>
         </docwrapper>
     </input>
-    <option name='output-dir'>file:/tmp/dp2_jobs</option>
-    <callback type='messages' href='http://localhost:8080/ws/jobmessage' frequency='10'/>
+    <option name='output-dir'>file:/tmp/dpout</option>
+    <!-- <callback type='messages' href='http://localhost:8080/ws/jobmessage' frequency='10'/>
     <callback type='status' href='http://localhost:8080/ws/jobstatus' frequency='10'/>
-    
+     -->
 </jobRequest>
