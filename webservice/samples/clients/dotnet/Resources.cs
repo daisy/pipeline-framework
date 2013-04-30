@@ -75,7 +75,21 @@ namespace PipelineWSClient
 				return Rest.PostResource(uri, postData, data, fileMimeType, fileFormKey);			
 			}
 		}	
-		
+		public static XmlDocument Alive()
+		{
+			string uri = String.Format("{0}/alive", baseUri);
+			return Rest.GetResourceAsXml(uri);
+		}
+
+		public static void Halt()
+		{
+			string path = String.Format ("{0}dp2key.txt", GetTempDir());
+			string key = File.ReadAllText(path);
+			string uri = String.Format("{0}/admin/halt/{1}", baseUri, key);
+			Rest.GetResource(uri);
+		}
+
+
 		// returns "DONE", "IDLE", or "RUNNING"
 		// status isn't a core pipeline resource, but it's useful nonetheless
 		public static string GetJobStatus(string id)
@@ -96,6 +110,27 @@ namespace PipelineWSClient
 			doc.WriteTo(textWriter);
 			string retval = stringWriter.ToString();
 			return retval;
+		}
+
+		private static string GetTempDir()
+		{
+            String dir;
+			int p = (int) Environment.OSVersion.Platform;
+			if ((p == 4) || (p == 6) || (p == 128)) 
+			{
+				// Running on Unix
+				dir = System.Environment.GetEnvironmentVariable("TMPDIR");
+			} 
+			else 
+			{
+				// NOT running on Unix
+				dir = System.Environment.GetEnvironmentVariable("TEMP");
+			}
+            if (!dir.EndsWith("/"))
+            {
+                dir += "/";
+            }
+            return dir;
 		}
 	}
 }

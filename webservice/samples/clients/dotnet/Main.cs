@@ -95,6 +95,14 @@ namespace PipelineWSClient
 					PostJob(jobRequestFile, jobDataFile);
 				}
 			}
+			else if (command == "alive") 
+			{
+				Alive();
+			}
+			else if (command == "halt")
+			{
+				Halt();
+			}
 			else
 			{
 				Console.WriteLine ("Command not recognized.");
@@ -129,23 +137,13 @@ namespace PipelineWSClient
 		public static void GetScripts()
 		{
 			XmlDocument doc = Resources.GetScripts();
-			if (doc == null)
-			{
-				Console.WriteLine("No data returned.");
-				return;
-			}
-			PrettyPrint(doc);
+			PrintDoc (doc);
 		}
 		
 		public static void GetScript(string id)
 		{
 			XmlDocument doc = Resources.GetScript(id);
-			if (doc == null)
-			{
-				Console.WriteLine("No data returned.");
-				return;
-			}
-			PrettyPrint(doc);
+			PrintDoc (doc);
 		}
 		
 		public static void PostJob(string jobRequestFilepath, string jobDataFilepath = null)
@@ -173,23 +171,13 @@ namespace PipelineWSClient
 		public static void GetJobs()
 		{
 			XmlDocument doc = Resources.GetJobs();
-			if (doc == null)
-			{
-				Console.WriteLine("No data returned.");
-				return;
-			}
-			PrettyPrint(doc);			
+			PrintDoc (doc);			
 		}
 		
 		public static void GetJob(string id)
 		{
 			XmlDocument doc = Resources.GetJob(id);
-			if (doc == null)
-			{
-				Console.WriteLine("No data returned.");
-				return;
-			}
-			PrettyPrint(doc);
+			PrintDoc(doc);
 		}
 		
 		public static void GetLog(string id)
@@ -243,7 +231,24 @@ namespace PipelineWSClient
 				Console.WriteLine ("Job deleted.");
 			}
 		}
-		
+		public static void Halt() 
+		{
+			Resources.Halt();
+		}
+		public static void Alive() 
+		{
+			XmlDocument doc = Resources.Alive ();
+			PrintDoc (doc);
+		}
+		public static void PrintDoc(XmlDocument doc)
+		{
+			if (doc == null)
+			{
+				Console.WriteLine("No data.");
+				return;
+			}
+			PrettyPrint(doc);
+		}
 		public static void PrettyPrint(XmlDocument doc)
 		{
 			using (StringWriter stringWriter = new StringWriter())

@@ -8,6 +8,7 @@
 	}
 
 	function get_script($id) {
+
 		$result = Resources::get_script($id);
 		handle_xml_result($result);
 	}
@@ -65,7 +66,7 @@
 			return;
 		}
 		
-		show_message("New job created: " . $result['data']);
+		show_message("New job created: " . implode("\n", $result['data']));
 	}
 
 	function delete($id) {
@@ -92,9 +93,8 @@
 			show_message("No data returned");
 			return;
 		} 
-		
-		header("Content-Type: application/xml");
-        echo preg_replace('/>/is',">\n<?xml-stylesheet type=\"text/xsl\" href=\"ws-xhtml.xsl\"?".">",$xml->asXML(),1);
+		// unfortunately not pretty-printed...
+		echo $xml->asXML();
 	}
 	
 	function download_file($file_contents, $filename, $content_type) {
@@ -108,29 +108,94 @@
 	}
 	
 	function show_message($text) {
-		header("Content-Type: text/html");
-		echo "<p>" . $text . "</p>";
+		//header("Content-Type: text/html");
+		//echo "<p>" . $text . "</p>";
+		echo $text . "\n";
 	}
 	
+	function show_usage() {
+		echo "Examples \n";
+		echo "List all scripts: \n\tmain.php scripts \n";
+		echo "List one script: \n\tmain.php scripts <scriptID> \n";
+		echo "List all jobs: \n\tmain.php jobs \n";
+		echo "List one job: \n\tmain.php jobs <jobID>\n";
+		echo "Create a job: \n\tmain.php new-job <job-request.xml> <job-data.zip>\n";
+		echo "Get the job's log: \n\tmain.php log <jobID>\n";
+		echo "Get the job's result: \n\tmain.php result <jobID>\n";
+		echo "Delete a job: \n\tmain.php delete <jobID>\n";
+		echo "Is the Pipeline2 alive: \n\tmain.php alive\n";
+	}
+	function alive() {
+		$result = Resources::alive();
+		handle_xml_result($result);
+	}
 	
-	// examples of calling the above functions
+	// ********************************************************
+	// MAIN
+	//*********************************************************
+	if (count($argv) < 2) {
+		echo "Command required.\n";
+		show_usage();
+		return;
+	}
+
+	$cmd = $argv[1];
 	
-	$id = "fc5e02c9-e499-44ce-b6be-14c6b44df2d3";
-	$script = "http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl";
-	$job1_request_file = "testdata/job1.request.xml";
-	$job2_request_file = "testdata/job2.request.xml";
-	$job2_data_file = "testdata/job2.data.xml";
-	
-	//get_scripts();
-	//get_script($script);
-	//post_job($job1_request_file, null);
-	
-	//post_job($job2_request_file, $job2_data_file);
-	
-	//get_jobs();
-	//get_job($id);
-	get_result($id);
-	//get_log($id);
-	//delete($id);
+	if ($cmd == "scripts") {
+		if (count($argv) > 2) {
+			get_script($argv[2]);
+		}
+		else {
+			get_scripts();
+		}
+	}
+	else if ($cmd == "jobs") {
+		if (count($argv) > 2) {
+			get_job($argv[2]);
+		}
+		else {
+			get_jobs();
+		}
+	}
+	else if ($cmd == "new-job") {
+		if (count($argv) == 2) {
+			echo "Error: more arguments required.";
+			return;
+		}
+		if (count($argv) == 3) {
+			post_job($argv[2], null);
+		}
+		else if (count($argv) == 4) {
+			post_job($argv[2], $argv[3]);
+		}
+	}
+	else if ($cmd == "log") {
+		if (count($argv) == 2) {
+			echo "Error: more arguments required.";
+			return;	
+		}
+		get_log($argv[2]);
+	}
+	else if ($cmd == "result") {
+		if (count($argv) == 2) {
+			echo "Error: more arguments required.";
+			return;	
+		}
+		get_result($argv[2]);
+	}
+	else if ($cmd == "delete") {
+		if (count($argv) == 2) {
+			echo "Error: more arguments required.";
+			return;	
+		}
+		delete($argv[2]);
+	}
+	else if ($cmd == "alive") {
+		alive();
+	}
+	else {
+		echo "Command not recognized.\n";
+		show_usage();
+	}
 	
 ?>

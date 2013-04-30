@@ -10,13 +10,17 @@ def main
   checkargs
 
   if Settings.instance.command == "scripts"
-    get_scripts
-  elsif Settings.instance.command == "script"
-    get_script(Settings.instance.options[:id])
+    if Settings.instance.options[:id]
+      get_script(Settings.instance.options[:id])
+    else
+      get_scripts
+    end
   elsif Settings.instance.command == "jobs"
-    get_jobs
-  elsif Settings.instance.command == "job"
-    get_job(Settings.instance.options[:id])
+    if Settings.instance.options[:id]
+      get_job(Settings.instance.options[:id])
+    else
+     get_jobs
+    end
   elsif Settings.instance.command == "log"
     get_log(Settings.instance.options[:id])
   elsif Settings.instance.command == "result"
@@ -37,6 +41,8 @@ def main
 		delete_client(Settings.instance.options[:id])
   elsif Settings.instance.command == 'halt'
     halt(Settings.instance.options[:id])
+  elsif Settings.instance.command == 'alive'
+    alive
   else
     puts "Command #{Settings.instance.command} not recognized"
   end
@@ -320,7 +326,7 @@ def delete_job(id)
     puts "No data returned"
     return
   end
-  if status != "DONE"
+  if status != "DONE" and status != "ERROR"
     puts "Cannot delete until the job is done. Job status: #{status}."
     return
   end
@@ -362,6 +368,7 @@ def halt(id)
     puts "Failure"
   end
 end
+
 
 # execution starts here
 main 

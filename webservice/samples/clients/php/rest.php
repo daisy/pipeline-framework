@@ -62,7 +62,7 @@
 			// return the content location header
 			if ($info['http_code'] == 201) {
 				$parsed = Rest::parse_http_response($response);
-				return array("success" => true, "status-code" => $info['http_code'], "data" => $parsed[0]['content-location']);
+				return array("success" => true, "status-code" => $info['http_code'], "data" => $parsed);
 			}
 			else {
 				return array("success" => false, "status-code" => $info['http_code'], "data" => null);

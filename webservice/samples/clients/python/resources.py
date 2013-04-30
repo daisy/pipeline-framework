@@ -3,6 +3,7 @@ import rest
 import settings
 from lxml import etree
 import string
+import tempfile
 
 def get_scripts():
     """Return an XML document for all scripts"""
@@ -46,7 +47,7 @@ def post_job(request, data):
     if data == None:
         doc = rest.post_resource(uri, request)
     else:
-        doc = rest.post_resource(uri, {"job-data": data, "job-request": request})#{"job-request": request, "job-data": data})
+        doc = rest.post_resource(uri, {"job-data": data, "job-request": request})
     return doc
 
 def delete_job(job_id):
@@ -54,6 +55,22 @@ def delete_job(job_id):
     uri = "{0}/jobs/{1}".format(settings.BASEURI, job_id)
     success = rest.delete_resource(uri)
     return success
+
+def alive():
+    """Is the Pipeline2 alive?"""
+    uri = "{0}/alive".format(settings.BASEURI)
+    doc = rest.get_resource_as_xml(uri)
+    return doc
+
+def halt():
+    """Halt the Pipeline2"""
+    keyfile = "{0}/dp2key.txt".format(tempfile.gettempdir())
+    f = open(keyfile)
+    key = f.read()
+    f.close()
+    uri = "{0}/admin/halt/{1}".format(settings.BASEURI, key)
+    doc = rest.get_resource(uri)
+    return doc
 
 def get_job_status(job_id):
     """Return the status of the given job"""

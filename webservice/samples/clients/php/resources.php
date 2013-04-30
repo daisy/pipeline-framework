@@ -2,7 +2,7 @@
 
 	require("rest.php");
 	class Resources {
-		private static $BASEURI = "http://localhost:8182/ws";
+		private static $BASEURI = "http://localhost:8181/ws";
 		
 		public static function get_scripts() {
 			$uri = Resources::$BASEURI . "/scripts";
@@ -67,6 +67,11 @@
 		public static function delete($id) {
 			$uri = Resources::$BASEURI . "/jobs/" . $id;
 			return Rest::delete_resource($uri);
+		}
+
+		public static function alive() {
+			$uri = Resources::$BASEURI . "/alive";
+			return Rest::get_resource_as_xml($uri);
 		}
 	}
 

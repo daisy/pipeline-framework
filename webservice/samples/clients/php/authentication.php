@@ -27,6 +27,7 @@
 		// adapted from http://www.peej.co.uk/projects/phphttpdigest
 		private static function generate_nonce() {
 			$time = ceil(time() / 300) * 300;
+			date_default_timezone_set('UTC');
 			return md5(date('Y-m-d H:i', $time)  .':' . Authentication::$CLIENT_SECRET);
 		}
 
