@@ -1,3 +1,4 @@
+require 'tempfile'
 require './rest'
 module Resources
   module_function
@@ -93,10 +94,19 @@ module Resources
     return success
 	end
   
-  def halt(key)
-    uri = "#{Settings::BASEURI}/admin/halt?haltkey=#{key}"
-    success = Rest.get_resource(uri)
-    puts success
-    return success
+  def halt()
+    keyfile = Dir.tmpdir() + '/dp2key.txt'
+    key = text = File.read(keyfile)
+    uri = "#{Settings::BASEURI}/admin/halt/#{key}"
+    if Rest.get_resource(uri)
+      return true
+    else
+      return false
+    end
+  end
+
+  def alive()
+    uri = "#{Settings::BASEURI}/alive"
+    return Rest.get_resource_as_xml(uri)
   end
 end

@@ -30,9 +30,11 @@ def main
   elsif Settings.instance.command == "new-job"
     post_job(Settings.instance.options[:request], Settings.instance.options[:job_data])
   elsif Settings.instance.command == "clients"
-	  get_clients
-	elsif Settings.instance.command == "client"
-	  get_client(Settings.instance.options[:id])
+	  if Settings.instance.options[:id]
+      get_client(Settings.instance.options[:id])
+    else
+      get_clients
+    end
 	elsif Settings.instance.command == "new-client"
 	  post_client(Settings.instance.options[:request])
 	elsif Settings.instance.command == "update-client"
@@ -40,7 +42,7 @@ def main
 	elsif Settings.instance.command == "delete-client"
 		delete_client(Settings.instance.options[:id])
   elsif Settings.instance.command == 'halt'
-    halt(Settings.instance.options[:id])
+    halt
   elsif Settings.instance.command == 'alive'
     alive
   else
@@ -59,28 +61,27 @@ def checkargs
 
   Commands:
 
-  scripts       List all scripts.
-  script        List details for a single script.
-  jobs          List all jobs.
-  job           List details for a single job.
+  scripts       List all scripts, or a specific script.
+  jobs          List all jobs, or a specific job.
   log           Show the log for a job.
   result        Show where the result is stored for a job.
   delete-job    Delete a job.
   new-job       Create a new job.
-  clients       List all clients (admin only).
-  client        List details for a single client.
+  halt          Stop the web service
+
+  ADMIN-ONLY:
+  clients       List all clients, or a specific script.
   delete-client Delete a client.
   new-client    Create a new client.
   update-client Provide new information for an existing client.
-  halt          Stop the web service
-
+  
   Examples:
   Show all scripts:
 	  main.rb scripts
   Show a specific script:
-	  main.rb script --id=http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl
+	  main.rb scripts --id=http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl
   Show a specific job:
-	  main.rb job --id=873ce8d7-0b92-42f6-a2ed-b5e6a13b8cd7
+	  main.rb jobs --id=873ce8d7-0b92-42f6-a2ed-b5e6a13b8cd7
   Create a job:
 	  main.rb new-job --request=../testdata/job1.request.xml
   Create a job:
@@ -108,7 +109,6 @@ def checkargs
         Settings.instance.options[:request] = val
     end
 
-
     opts.on('--help', 'Display this screen') do
       puts opts
       exit
@@ -127,49 +127,26 @@ def checkargs
     Settings.instance.command = a
     break
   end
+  #validate_options(Settings.instance.command)
 end
 
 def get_scripts
   doc = Resources.get_scripts
-  if doc == nil
-    return
-  end
-  puts doc.to_xml(:indent => 2)
+  print_doc(doc)
 end
 
 def get_script(id)
-  if id == ""
-    puts "ID required"
-    return
-  end
   doc = Resources.get_script(id)
-  if doc == nil
-    puts "No data returned"
-    return
-  end
-  puts doc.to_xml(:indent => 2)
+  print_doc(doc)
 end
 
 def get_jobs
   doc = Resources.get_jobs
-  if doc == nil
-    puts "No data returned"
-    return
-  end
-  puts doc.to_xml(:indent => 2)
+  print_doc(doc)
 end
 
 def get_job(id)
-  if id == nil
-    puts "ID required"
-    return
-  end
-  doc = Resources.get_job(id)
-  if doc == nil
-    puts "No data returned"
-    return
-  end
-  puts doc.to_xml(:indent => 2)
+  print_doc(doc)
 end
 
 def get_log(id)
@@ -220,11 +197,7 @@ end
 
 def get_clients
 	doc = Resources.get_clients
-  if doc == nil
-    puts "No data returned"
-    return
-  end
-  puts doc.to_xml(:indent => 2)
+  print_doc(doc)
 end
 
 def get_client(id)
@@ -233,11 +206,7 @@ def get_client(id)
     return
   end
   doc = Resources.get_client(id)
-  if doc == nil
-    puts "No data returned"
-    return
-  end
-  puts doc.to_xml(:indent => 2)
+  print_doc(doc)
 end
 
 def post_job(job_request_filepath, job_data_filepath)
@@ -355,20 +324,25 @@ def delete_client(id)
 
 end
 
-def halt(id)
-  if id == ""
-    puts "ID required (find the value in the key.txt file generated when the WS started)"
-    return
-  end
-  
-  result = Resources.halt(id)
-  if result != nil
+def alive()
+  doc = Resources.alive()
+  print_doc(doc)
+end
+
+def halt()
+  if Resources.halt()
     puts "Success"
   else
-    puts "Failure"
+    puts "Could not halt"
   end
 end
 
+def print_doc(doc)
+  if doc == nil
+    return
+  end
+  puts doc.to_xml(:indent => 2)
+end
 
 # execution starts here
 main 
