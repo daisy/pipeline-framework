@@ -57,7 +57,7 @@ public class IOHelper {
 			//linux & mac doesnt create empty files out of outstreams where nothing was written
 			//but win does, anyway this piece is more elegant than before.
 			File fout = new File(base.resolve(path));
-			if(!fout.toURI().toString().endsWith(SLASH)){
+			if(!path.toString().endsWith(SLASH)){
 				fout.getParentFile().mkdirs();
 				FileOutputStream fos=new FileOutputStream(fout);
 				dump(is,fos);
