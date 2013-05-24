@@ -157,7 +157,7 @@
     <osgi.version>4.2.0</osgi.version>
     <restlet.version>2.1-RC6</restlet.version>
     <saxon-he.version>9.4.0.7</saxon-he.version>
-    <slf4j.version>1.6.4</slf4j.version>
+    <slf4j.version>1.7.2</slf4j.version>
     <woodstox.core.version>4.1.2</woodstox.core.version>
     <woodstox.stax2-api.version>3.1.1</woodstox.stax2-api.version>
   </properties>
