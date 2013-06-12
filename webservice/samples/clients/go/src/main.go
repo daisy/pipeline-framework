@@ -2,23 +2,25 @@ package main
 
 
 import (
+    //"os"
     "flag"
 )
 
-var command = flag.String("command", "", "the command you want to run")
-
 func main() {
-    println("hello")
+    println("Pipeline 2 client")
 
-    
+   // var command string
+    //flag.StringVar(&command, "command", "default", "The command you want to run")
+ 
     flag.Parse()
 
+    var command = flag.Arg(0)
     println(command)
 
-    if &command == "scripts" {
+    if command == "scripts" {
     	rs := get_resource(SCRIPTS_URI)
     	println(rs)
-    } else if &command == "jobs" {
+    } else if command == "jobs" {
     	rs := get_resource(JOBS_URI)
     	println(rs)
     }

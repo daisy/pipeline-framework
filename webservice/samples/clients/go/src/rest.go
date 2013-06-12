@@ -9,18 +9,17 @@ import (
 
 func get_resource(uri string) string {
     // TODO authentication
+    println("GET", uri)
     var authuri = uri
     resp, err := http.Get(authuri)
-    println("Response was ", resp.StatusCode)
-
-    if err != nil {
-        // handle error
-        println("GET failed for ", uri)
+    if resp == nil || err != nil {
+        println("GET failed for", uri)
         return ""
     }
+    println("Response was ", resp.StatusCode)
 
     defer resp.Body.Close()
-    body, err := ioutil.ReadAll(resp.Body)
+    body, _ := ioutil.ReadAll(resp.Body)
     return string(body)
 }
 
@@ -32,7 +31,7 @@ func delete_resource(uri string) {
     var authuri = uri
     req, err := http.NewRequest("DELETE", authuri, nil)
     if err !=  nil {
-        println ("DELETE failed for ", uri)
+        println ("DELETE failed for", uri)
         return
     }
     http.DefaultClient.Do(req)
