@@ -16,12 +16,15 @@ public class VolatileWebserviceStorage   implements WebserviceStorage{
 	private RequestLog requestLog;
 	private JobConfigurationStorage jobCnfStorage;
 
+	public VolatileWebserviceStorage(){
+
+		clientStore= new VolatileClientStorage();
+		requestLog= new VolatileRequestLog();
+		jobCnfStorage= new VolatileJobConfigurationStorage();
+	}
 
 	public void activate() {
 		logger.debug("Bringing VolatileWebserviceStorage up");
-		//this.clientStore = new VolatileClientStorage(this.database);
-		//this.requestLog = new VolatileRequestLog(this.database);
-		//this.jobCnfStorage=new VolatileJobConfigurationStorage(this.database);
 	}
 
 	@Override
