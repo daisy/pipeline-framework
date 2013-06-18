@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.webserivce;
+package org.daisy.pipeline.nonpersistent.webservice;
 
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLogEntry;

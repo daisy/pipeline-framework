@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.webserivce;
+package org.daisy.pipeline.nonpersistent.webservice;
 
 import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.clients.ClientStorage;

@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.webserivce;
+package org.daisy.pipeline.nonpersistent.webservice;
 
 import static org.junit.Assert.fail;
 
@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.daisy.pipeline.nonpersistent.webservice.VolatileClientStorage;
 import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
 import org.junit.Assert;
