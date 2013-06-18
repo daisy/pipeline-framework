@@ -2,6 +2,7 @@ package org.daisy.pipeline.nonpersistent.messaging;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -116,6 +117,10 @@ public class VolatileMessageAccessor extends MessageAccessor{
 	 * @return
 	 */
 	private List<Message> getMessagesInRange(int start,int end,Set<Level> levels){
+		if(this.storage.get(this.id).size()==0){
+			return Collections.emptyList();
+		}
+
 		List<Message> indexed= this.storage.get(this.id).subList(start,end);
 		indexed=new LinkedList<Message>(Collections2.filter(indexed,Filters.getLevelSetFilter(levels)));
 

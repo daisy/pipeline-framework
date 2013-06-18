@@ -135,4 +135,10 @@ public class VolatileMessageAccessorTest   {
 	public void createRangeSanity() {
 		List<Message> out= accessor.createFilter().inRange(10,2).getMessages();
 	}
+	@Test
+	public void filterWithEmptyList() {
+		VolatileMessageStorage.getInstance().removeAll();
+		List<Message> out= accessor.createFilter().greaterThan(0).getMessages();
+		Assert.assertEquals(out.size(),0);
+	}
 }
