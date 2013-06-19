@@ -11,9 +11,11 @@ import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
 
+import com.google.common.base.Function;
 import com.google.common.eventbus.EventBus;
 
 public class VolatileJobStorage implements JobStorage {
+//	private static final Logger logger = LoggerFactory.getLogger(VolatileJobStorage.class);
 
 	private Map<JobId,Job> jobs = Collections.synchronizedMap(new HashMap<JobId,Job>()); 
 	private EventBus bus;
@@ -29,23 +31,32 @@ public class VolatileJobStorage implements JobStorage {
 	}
 
 	@Override
-	public Job add(JobContext ctxt) {
+	public synchronized Job add(final JobContext ctxt) {
 		if(!this.jobs.containsKey(ctxt.getId())){
-			Job job= new Job.JobBuilder().withEventBus(this.bus).withContext(ctxt).build();
-			jobs.put(ctxt.getId(),job);
+			//Store the job before its status gets broadcasted
+			Job job= new Job.JobBuilder()
+				.withEventBus(this.bus)
+				.withContext(ctxt)
+				.build(new Function<Job, Job>() {
+					@Override
+					public Job apply(Job job) {
+						VolatileJobStorage.this.jobs.put(ctxt.getId(),job);
+						return job;
+					}
+				});
 			return job;
 		}
 		return null;
 	}
 
 	@Override
-	public Job remove(JobId jobId) {
+	public synchronized Job remove(JobId jobId) {
 		return this.jobs.remove(jobId);
 		
 	}
 
 	@Override
-	public Job get(JobId jobId) {
+	public synchronized Job get(JobId jobId) {
 		return this.jobs.get(jobId);
 	}
 	
