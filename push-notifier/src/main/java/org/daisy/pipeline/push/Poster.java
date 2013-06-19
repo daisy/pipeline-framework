@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.StatusMessage;
+import org.daisy.pipeline.job.Job.Status;
 import org.daisy.pipeline.webserviceutils.Authenticator;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.clients.Client;
@@ -36,10 +36,10 @@ public class Poster {
 		postXml(doc, url, callback.getClient());
 	}
 
-	public static void postStatusUpdate(Job job, StatusMessage message,Callback callback) {
+	public static void postStatusUpdate(Job job, Status status,Callback callback) {
 		URI url = callback.getHref();
 		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
-		writer.overwriteStatus(message.getStatus());
+		writer.overwriteStatus(status);
 		Document doc = writer.getXmlDocument();
 		postXml(doc, url, callback.getClient());
 	}
