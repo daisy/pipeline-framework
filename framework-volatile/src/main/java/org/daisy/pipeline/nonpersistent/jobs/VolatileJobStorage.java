@@ -14,7 +14,7 @@ import org.daisy.pipeline.job.JobStorage;
 import com.google.common.base.Function;
 import com.google.common.eventbus.EventBus;
 
-public class VolatileJobStorage implements JobStorage {
+public final class VolatileJobStorage implements JobStorage {
 //	private static final Logger logger = LoggerFactory.getLogger(VolatileJobStorage.class);
 
 	private Map<JobId,Job> jobs = Collections.synchronizedMap(new HashMap<JobId,Job>()); 
@@ -31,32 +31,35 @@ public class VolatileJobStorage implements JobStorage {
 	}
 
 	@Override
-	public synchronized Job add(final JobContext ctxt) {
-		if(!this.jobs.containsKey(ctxt.getId())){
-			//Store the job before its status gets broadcasted
-			Job job= new Job.JobBuilder()
-				.withEventBus(this.bus)
-				.withContext(ctxt)
-				.build(new Function<Job, Job>() {
-					@Override
-					public Job apply(Job job) {
-						VolatileJobStorage.this.jobs.put(ctxt.getId(),job);
-						return job;
-					}
-				});
-			return job;
+	public Job add(final JobContext ctxt) {
+		//avoid inserting the job twice
+		synchronized(this.jobs){
+			if(!this.jobs.containsKey(ctxt.getId())){
+				//Store the job before its status gets broadcasted
+				Job job= new Job.JobBuilder()
+					.withEventBus(this.bus)
+					.withContext(ctxt)
+					.build(new Function<Job, Job>() {
+						@Override
+						public Job apply(Job job) {
+							VolatileJobStorage.this.jobs.put(ctxt.getId(),job);
+							return job;
+						}
+					});
+				return job;
+			}
 		}
 		return null;
 	}
 
 	@Override
-	public synchronized Job remove(JobId jobId) {
+	public Job remove(JobId jobId) {
 		return this.jobs.remove(jobId);
 		
 	}
 
 	@Override
-	public synchronized Job get(JobId jobId) {
+	public Job get(JobId jobId) {
 		return this.jobs.get(jobId);
 	}
 	

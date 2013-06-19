@@ -6,7 +6,7 @@ import org.daisy.pipeline.job.JobMonitor;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.nonpersistent.messaging.VolatileMessageAccessor;
 
-public class VolatileJobMonitorFactory implements JobMonitorFactory{
+public final class VolatileJobMonitorFactory implements JobMonitorFactory{
 
 
 
@@ -16,7 +16,7 @@ public class VolatileJobMonitorFactory implements JobMonitorFactory{
 		return new VolatileJobMonitor(id);
 	}
 
-	private static class VolatileJobMonitor implements JobMonitor {
+	private final static class VolatileJobMonitor implements JobMonitor {
 		private JobId id;
 
 		/**

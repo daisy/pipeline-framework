@@ -49,19 +49,41 @@ public class VolatileMessageAccessor extends MessageAccessor{
 
 	@Override
 	public MessageFilter createFilter() {
-		// TODO Auto-generated method stub
 		return new VolatileMessgeFilter();
 	}
-	
+
+
+	/**
+	 *
+	 *
+	 * @param start inclusive
+	 * @param end inclusive
+	 * @param levels
+	 * @return
+	 */
+	private List<Message> getMessagesInRange(int start,int end,Set<Level> levels){
+		if(this.storage.get(this.id).size()==0){
+			return Collections.emptyList();
+		}
+
+		List<Message> indexed= this.storage.get(this.id).subList(start,end);
+		indexed=new LinkedList<Message>(Collections2.filter(indexed,Filters.getLevelSetFilter(levels)));
+
+		return indexed;
+	}
+
+	private List<Message> getMessagesFromIdx(int start,Set<Level> levels){
+		return getMessagesInRange(start,this.storage.get(this.id).size(),levels);
+	}
 
 	private class VolatileMessgeFilter implements
 			MessageAccessor.MessageFilter {
 
-		Set<Level> mLevels = new HashSet(Arrays.asList(Level.values()));
-		int mSeq = -1;
-		int mStart;
-		int mEnd;
-		boolean getRange = false;
+		private Set<Level> mLevels = new HashSet(Arrays.asList(Level.values()));
+		private int mSeq = -1;
+		private int mStart;
+		private int mEnd;
+		private boolean getRange = false;
 		
 		@Override
 		public MessageFilter filterLevels(final Set<Level> levels) {
@@ -106,29 +128,6 @@ public class VolatileMessageAccessor extends MessageAccessor{
 			}	
 			//return null;
 		}
-	}
-
-	/**
-	 *
-	 *
-	 * @param start inclusive
-	 * @param end inclusive
-	 * @param levels
-	 * @return
-	 */
-	private List<Message> getMessagesInRange(int start,int end,Set<Level> levels){
-		if(this.storage.get(this.id).size()==0){
-			return Collections.emptyList();
-		}
-
-		List<Message> indexed= this.storage.get(this.id).subList(start,end);
-		indexed=new LinkedList<Message>(Collections2.filter(indexed,Filters.getLevelSetFilter(levels)));
-
-		return indexed;
-	}
-
-	private List<Message> getMessagesFromIdx(int start,Set<Level> levels){
-		return getMessagesInRange(start,this.storage.get(this.id).size(),levels);
 	}
 
 	private static class Filters{

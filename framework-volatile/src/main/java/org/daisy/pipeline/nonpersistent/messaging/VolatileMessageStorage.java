@@ -18,9 +18,10 @@ import com.google.common.collect.Lists;
 /**
  * Singleton
  */
-public class VolatileMessageStorage {
+public final class VolatileMessageStorage {
 
 	private static final VolatileMessageStorage INSTANCE = new VolatileMessageStorage();
+	private static final  String CACHE_TIMEOUT_PROPERTY="org.daisy.pipeline.messaging.cache";
 	private LoadingCache<String, List<Message>> cache;
 	private static final Logger logger = LoggerFactory.getLogger(VolatileMessageStorage.class);
 
@@ -29,7 +30,7 @@ public class VolatileMessageStorage {
 	 */
 	private VolatileMessageStorage() {
 		int timeout = Integer.valueOf(System.getProperty(
-				"org.daisy.pipeline.messaging.cache", "60"));
+				CACHE_TIMEOUT_PROPERTY, "60"));
 		cache = CacheBuilder.newBuilder()
 				.expireAfterAccess(timeout, TimeUnit.SECONDS)
 				.build(new CacheLoader<String, List<Message>>() {
@@ -92,31 +93,4 @@ public class VolatileMessageStorage {
 	public static VolatileMessageStorage getInstance() {
 		return INSTANCE;
 	}
-
-	
-	//static class IndexedMessage{
-		//private int index;
-		//private Message message;
-		/**
-		 * @param index
-		 * @param message
-		 */
-		//public IndexedMessage(int index, Message message) {
-			//this.index = index;
-			//this.message = message;
-		//}
-		/**
-		 * @return the index
-		 */
-		//public int getIndex() {
-			//return index;
-		//}
-		/**
-		 * @return the message
-		 */
-		//public Message getMessage() {
-			//return message;
-		//}
-	//}
-
 }
