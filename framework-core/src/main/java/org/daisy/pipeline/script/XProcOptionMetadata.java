@@ -28,7 +28,7 @@ public class XProcOptionMetadata {
 	}
 
 	/** The Constant SEPARATOR_DEFAULT */
-	static final String SEPARATOR_DEFAULT = " ";
+	public static final String DEFAULT_SEPARATOR= " ";
 
 	/** The nice name. */
 	final private String niceName;
@@ -76,7 +76,7 @@ public class XProcOptionMetadata {
 		this.output = output;
 		isSequence = sequence;
 		isOrdered = ordered;
-		this.separator = separator;
+		this.separator=separator;
 	}
 
 	/**
@@ -172,7 +172,7 @@ public class XProcOptionMetadata {
 		private boolean sequence = false;
 
 		/** The separator for a sequence */
-		private String separator = SEPARATOR_DEFAULT;
+		private String separator = XProcOptionMetadata.DEFAULT_SEPARATOR;
 
 		/**
 		 * With description.
@@ -273,7 +273,11 @@ public class XProcOptionMetadata {
 		}
 
 		public Builder withSeparator(String value) {
-			separator = value;
+			if(value==null || value.isEmpty()){
+				this.separator= DEFAULT_SEPARATOR; 
+			}else{
+				this.separator=separator;
+			}
 			return this;
 		}
 

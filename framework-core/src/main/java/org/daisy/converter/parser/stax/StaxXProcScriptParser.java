@@ -270,6 +270,9 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			}
 		}
 
+
+		protected void parseSeparator(final StartElement declareStep){
+		}
 		protected void parseFilesets(final StartElement declareStep)
 				throws XMLStreamException {
 			Attribute inputs = declareStep
