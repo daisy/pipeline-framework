@@ -273,10 +273,8 @@ public class XProcOptionMetadata {
 		}
 
 		public Builder withSeparator(String value) {
-			if(value==null || value.isEmpty()){
-				this.separator= DEFAULT_SEPARATOR; 
-			}else{
-				this.separator=separator;
+			if(value!=null && !value.isEmpty()){
+				this.separator=value;
 			}
 			return this;
 		}
