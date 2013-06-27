@@ -158,13 +158,13 @@ public class JobXmlWriter {
 		Element resultsElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "results");
 		String resultHref = baseUri + Routes.RESULT_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
 		resultsElm.setAttribute("href", resultHref);
-		resultsElm.setAttribute("mime-type", "zip");
+		resultsElm.setAttribute("mime-type", "application/zip");
 		jobElem.appendChild(resultsElm);
 		//ports
 		for(String port: this.job.getContext().getResults().getPorts()){
 			Element portResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
 			portResultElm.setAttribute("href", String.format("%s/port/%s",resultHref,port));
-			portResultElm.setAttribute("mime-type", "zip");
+			portResultElm.setAttribute("mime-type", "application/zip");
 			portResultElm.setAttribute("from", "port");
 			portResultElm.setAttribute("name", port);
 			resultsElm.appendChild(portResultElm);
