@@ -171,7 +171,9 @@ public class JobXmlWriter {
 			for(JobResult result: this.job.getContext().getResults().getResults(port)){
 				Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
 				resultElm.setAttribute("href", String.format("%s/port/%s",resultHref,result.getIdx()));
-				resultElm.setAttribute("mime-type", result.getMediaType());
+				if(result.getMediaType()!= null && !result.getMediaType().isEmpty()){
+					resultElm.setAttribute("mime-type", result.getMediaType());
+				}
 				portResultElm.appendChild(resultElm);
 					
 			}
@@ -180,14 +182,16 @@ public class JobXmlWriter {
 		for(QName option: this.job.getContext().getResults().getOptions()){
 			Element optionResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
 			optionResultElm.setAttribute("href", String.format("%s/option/%s",resultHref,option));
-			optionResultElm.setAttribute("mime-type", "zip");
+			optionResultElm.setAttribute("mime-type", "application/zip");
 			optionResultElm.setAttribute("from", "option");
 			optionResultElm.setAttribute("name", option.toString());
 			resultsElm.appendChild(optionResultElm);
 			for(JobResult result: this.job.getContext().getResults().getResults(option)){
 				Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
 				resultElm.setAttribute("href", String.format("%s/option/%s",resultHref,result.getIdx()));
-				resultElm.setAttribute("mime-type", result.getMediaType());
+				if(result.getMediaType()!= null && !result.getMediaType().isEmpty()){
+					resultElm.setAttribute("mime-type", result.getMediaType());
+				}
 				optionResultElm.appendChild(resultElm);
 			}
 		}
