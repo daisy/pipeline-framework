@@ -33,6 +33,11 @@ public interface JobManager {
 	public Job deleteJob(JobId id);
 
 	/**
+	 * Deletes all jobs.
+	 *
+	 */
+	public void deleteAll();
+	/**
 	 * Gets the job.
 	 *
 	 * @param id the id
