@@ -10,12 +10,14 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
 import com.google.common.eventbus.EventBus;
 
 public final class VolatileJobStorage implements JobStorage {
-//	private static final Logger logger = LoggerFactory.getLogger(VolatileJobStorage.class);
+	private static final Logger logger = LoggerFactory.getLogger(VolatileJobStorage.class);
 
 	private Map<JobId,Job> jobs = Collections.synchronizedMap(new HashMap<JobId,Job>()); 
 	private EventBus bus;
@@ -31,9 +33,7 @@ public final class VolatileJobStorage implements JobStorage {
 	}
 
 	@Override
-	public Job add(final JobContext ctxt) {
-		//avoid inserting the job twice
-		synchronized(this.jobs){
+	public synchronized Job add(final JobContext ctxt) {
 			if(!this.jobs.containsKey(ctxt.getId())){
 				//Store the job before its status gets broadcasted
 				Job job= new Job.JobBuilder()
@@ -48,18 +48,17 @@ public final class VolatileJobStorage implements JobStorage {
 					});
 				return job;
 			}
-		}
 		return null;
 	}
 
 	@Override
-	public Job remove(JobId jobId) {
+	public synchronized Job remove(JobId jobId) {
 		return this.jobs.remove(jobId);
 		
 	}
 
 	@Override
-	public Job get(JobId jobId) {
+	public synchronized Job get(JobId jobId) {
 		return this.jobs.get(jobId);
 	}
 	
