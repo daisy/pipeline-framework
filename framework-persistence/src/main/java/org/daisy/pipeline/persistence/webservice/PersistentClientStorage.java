@@ -26,10 +26,7 @@ public class PersistentClientStorage implements ClientStorage {
 	}
 
 	@Override
-//	public Iterable<Client> getAll() {
 	public List<? extends Client> getAll() {
-//		public <T extends Client> List<T> getAll() {
-//		List<Client> clients = database.runQuery("select c from Client as c", PersistentClient.class);
 		return database.runQuery("select c from PersistentClient as c", PersistentClient.class);
 	}
 
@@ -57,16 +54,17 @@ public class PersistentClientStorage implements ClientStorage {
 	}
 
 	@Override
-	public void update(Client client) {
+	public boolean update(Client client) {
 		PersistentClient clientInDb = get(client.getId());
 		if (clientInDb == null) {
-			return;
+			return false;
 		}
 		clientInDb.setContactInfo(client.getContactInfo());
 		clientInDb.setRole(client.getRole());
 		clientInDb.setSecret(client.getSecret());
 		//TODO check if no DB is present
 		database.updateObject(clientInDb);		
+		return true;
 	}
 
 	@Override
