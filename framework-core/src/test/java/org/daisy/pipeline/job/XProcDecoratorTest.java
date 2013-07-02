@@ -2,25 +2,20 @@ package org.daisy.pipeline.job;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.net.URI;
-
 import java.util.Collection;
 import java.util.List;
 
 import javax.xml.namespace.QName;
-
-import javax.xml.transform.Source;
 import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 
 import org.daisy.common.base.Provider;
-
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
-
+import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -92,21 +87,24 @@ public class XProcDecoratorTest   {
 
 	}
 
-	@Test(expected=RuntimeException.class)
-	public void testResolveInputPortURIError() throws IOException {
-		//inputs from the script definition
-		XProcScript mscript= new Mock.ScriptGenerator.Builder().withInputs(1).build().generate();
-		Provider<Source> srcProv= Mock.getSourceProvider("with space.xml");
-		//adding a value to the input option
-		String optName=Mock.ScriptGenerator.getInputName(0);
-		XProcInput input = new XProcInput.Builder().
-				withInput(optName, srcProv).build();
+	//test space errors doesnt make much sense now that we accept multiple uris with 
+	//a separator. That means that suspected uris have to be checked before comming into the framework
+	
+       /* @Test(expected=RuntimeException.class)*/
+	//public void testResolveInputPortURIError() throws IOException {
+		////inputs from the script definition
+		//XProcScript mscript= new Mock.ScriptGenerator.Builder().withInputs(1).build().generate();
+		//Provider<Source> srcProv= Mock.getSourceProvider("with space.xml");
+		////adding a value to the input option
+		//String optName=Mock.ScriptGenerator.getInputName(0);
+		//XProcInput input = new XProcInput.Builder().
+				//withInput(optName, srcProv).build();
 
-		XProcInput.Builder builder = new XProcInput.Builder();
-		XProcDecorator trans=XProcDecorator.from(mscript,mapper);
-		trans.decorateInputPorts(mscript,input,builder);
+		//XProcInput.Builder builder = new XProcInput.Builder();
+		//XProcDecorator trans=XProcDecorator.from(mscript,mapper);
+		//trans.decorateInputPorts(mscript,input,builder);
 
-	}
+       /* }*/
 
 	@Test
 	public void testResolveOptionsInput() throws IOException {
@@ -128,24 +126,44 @@ public class XProcDecoratorTest   {
 		Assert.assertEquals(res1,expected);
 	}
 
-	@Test(expected=RuntimeException.class)
-	public void testResolveOptionsInputURIError() throws IOException {
+	@Test
+	public void testResolveOptionsInputSequence() throws IOException {
 		//inputs from the script definition
-
-		XProcScript script= new Mock.ScriptGenerator.Builder().withOptionInputs(1).build().generate();
-		Collection<XProcOptionInfo> optionInfos = Lists.newLinkedList(script.getXProcPipelineInfo().getOptions());
-		//spaces makes uris sad
-		String testFile="dir/my file.xml";
-		QName optName=Mock.ScriptGenerator.getOptionInputName(0);
+		XProcScript mscript= new Mock.ScriptGenerator.Builder().withOptionInputs(1).build().generate();
+		Collection<XProcOptionInfo> optionInfos = Lists.newLinkedList(mscript.getXProcPipelineInfo().getOptions());
 		//adding a value to the input option
+		QName optName=Mock.ScriptGenerator.getOptionInputName(0);
 		XProcInput input = new XProcInput.Builder()
-				.withOption(optName,testFile).build();
+				.withOption(optName, testFile+XProcOptionMetadata.DEFAULT_SEPARATOR+testFile2).build();
 
 		XProcInput.Builder builder = new XProcInput.Builder();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(mscript,mapper);
 		trans.decorateInputOptions(optionInfos,input,builder);
 
+		XProcInput newInput = builder.build();
+		String res= newInput.getOptions().get(optName);
+		String expected1=URI.create(mapper.getInputBase()+testFile).toString();
+		String expected2=URI.create(mapper.getInputBase()+testFile2).toString();
+		Assert.assertEquals(res,expected1+XProcOptionMetadata.DEFAULT_SEPARATOR+expected2);
 	}
+	//@Test(expected=RuntimeException.class)
+	//public void testResolveOptionsInputURIError() throws IOException {
+		////inputs from the script definition
+
+		//XProcScript script= new Mock.ScriptGenerator.Builder().withOptionInputs(1).build().generate();
+		//Collection<XProcOptionInfo> optionInfos = Lists.newLinkedList(script.getXProcPipelineInfo().getOptions());
+		////spaces makes uris sad
+		//String testFile="dir/my file.xml";
+		//QName optName=Mock.ScriptGenerator.getOptionInputName(0);
+		////adding a value to the input option
+		//XProcInput input = new XProcInput.Builder()
+				//.withOption(optName,testFile).build();
+
+		//XProcInput.Builder builder = new XProcInput.Builder();
+		//XProcDecorator trans=XProcDecorator.from(script,mapper);
+		//trans.decorateInputOptions(optionInfos,input,builder);
+
+	//}
 
 	@Test
 	public void testResolveOptionsInputEmpty() throws IOException {
@@ -163,7 +181,7 @@ public class XProcDecoratorTest   {
 
 		XProcInput newInput = builder.build();
 
-		Assert.assertNull(newInput.getOptions().get(optName));
+		Assert.assertEquals("",newInput.getOptions().get(optName));
 	}
 
 	@Test
@@ -263,20 +281,23 @@ public class XProcDecoratorTest   {
 		Assert.assertEquals(expected,reslut);
 	}
 
-	@Test(expected=RuntimeException.class)
-	public void testResolveOptionsOutputsURIError() throws IOException {
+	//test space errors doesnt make much sense now that we accept multiple uris with 
+	//a separator. That means that suspected uris have to be checked before comming into the framework
+	
+	//@Test(expected=RuntimeException.class)
+	//public void testResolveOptionsOutputsURIError() throws IOException {
 
-		XProcScript script= new Mock.ScriptGenerator.Builder().withOptionOutputsFile(1).build().generate();
-		Collection<XProcOptionInfo> optionInfos = Lists.newLinkedList(script.getXProcPipelineInfo().getOptions());
-		QName optName=Mock.ScriptGenerator.getOptionOutputFileName(0);
-		//adding a value to the input option
-		XProcInput input = new XProcInput.Builder().withOption(optName,"with space.xml").build();
+		//XProcScript script= new Mock.ScriptGenerator.Builder().withOptionOutputsFile(1).build().generate();
+		//Collection<XProcOptionInfo> optionInfos = Lists.newLinkedList(script.getXProcPipelineInfo().getOptions());
+		//QName optName=Mock.ScriptGenerator.getOptionOutputFileName(0);
+		////adding a value to the input option
+		//XProcInput input = new XProcInput.Builder().withOption(optName,"with space.xml").build();
 
-		XProcInput.Builder builder = new XProcInput.Builder();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
-		trans.decorateOutputOptions(optionInfos,input,builder);
+		//XProcInput.Builder builder = new XProcInput.Builder();
+		//XProcDecorator trans=XProcDecorator.from(script,mapper);
+		//trans.decorateOutputOptions(optionInfos,input,builder);
 
-	}
+	//}
 
 	/**
 	 * Tests 'translateInputs'. The details are tested in the rest of the methods of this class/
