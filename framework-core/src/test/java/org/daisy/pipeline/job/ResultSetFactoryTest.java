@@ -113,10 +113,11 @@ public class ResultSetFactoryTest {
 		DynamicResultProvider res=(DynamicResultProvider) output.getResultProvider(outName);
 		res.provide();
 		res.provide();
-		List<JobResult> jobs=ResultSetFactory.buildJobResult(res,mapper);
+		List<JobResult> jobs=ResultSetFactory.buildJobResult(res,mapper,"xml");
 		Assert.assertEquals(jobs.size(),2);
 		Assert.assertEquals(mapper.mapOutput(URI.create(sysId)),jobs.get(0).getPath());
 		Assert.assertEquals(sysId,jobs.get(0).getIdx());
+		Assert.assertEquals("xml",jobs.get(0).getMediaType());
 		
 	}
 
@@ -124,9 +125,10 @@ public class ResultSetFactoryTest {
 	public void nonDynamicProviderResults() throws Exception{
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 		Provider<Result> res= output.getResultProvider(outName);
-		List<JobResult> jobs=ResultSetFactory.buildJobResult(res,mapper);
+		List<JobResult> jobs=ResultSetFactory.buildJobResult(res,mapper,"xml");
 		Assert.assertEquals(mapper.mapOutput(URI.create(sysId)),jobs.get(0).getPath());
 		Assert.assertEquals(sysId,jobs.get(0).getIdx());
+		Assert.assertEquals("xml",jobs.get(0).getMediaType());
 		
 	}
 

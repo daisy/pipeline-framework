@@ -158,20 +158,22 @@ public class JobXmlWriter {
 		Element resultsElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "results");
 		String resultHref = baseUri + Routes.RESULT_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
 		resultsElm.setAttribute("href", resultHref);
-		resultsElm.setAttribute("mime-type", "zip");
+		resultsElm.setAttribute("mime-type", "application/zip");
 		jobElem.appendChild(resultsElm);
 		//ports
 		for(String port: this.job.getContext().getResults().getPorts()){
 			Element portResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
 			portResultElm.setAttribute("href", String.format("%s/port/%s",resultHref,port));
-			portResultElm.setAttribute("mime-type", "zip");
+			portResultElm.setAttribute("mime-type", "application/zip");
 			portResultElm.setAttribute("from", "port");
 			portResultElm.setAttribute("name", port);
 			resultsElm.appendChild(portResultElm);
 			for(JobResult result: this.job.getContext().getResults().getResults(port)){
 				Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
 				resultElm.setAttribute("href", String.format("%s/port/%s",resultHref,result.getIdx()));
-				resultElm.setAttribute("mime-type", result.getMediaType());
+				if(result.getMediaType()!= null && !result.getMediaType().isEmpty()){
+					resultElm.setAttribute("mime-type", result.getMediaType());
+				}
 				portResultElm.appendChild(resultElm);
 					
 			}
@@ -180,14 +182,16 @@ public class JobXmlWriter {
 		for(QName option: this.job.getContext().getResults().getOptions()){
 			Element optionResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
 			optionResultElm.setAttribute("href", String.format("%s/option/%s",resultHref,option));
-			optionResultElm.setAttribute("mime-type", "zip");
+			optionResultElm.setAttribute("mime-type", "application/zip");
 			optionResultElm.setAttribute("from", "option");
 			optionResultElm.setAttribute("name", option.toString());
 			resultsElm.appendChild(optionResultElm);
 			for(JobResult result: this.job.getContext().getResults().getResults(option)){
 				Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
 				resultElm.setAttribute("href", String.format("%s/option/%s",resultHref,result.getIdx()));
-				resultElm.setAttribute("mime-type", result.getMediaType());
+				if(result.getMediaType()!= null && !result.getMediaType().isEmpty()){
+					resultElm.setAttribute("mime-type", result.getMediaType());
+				}
 				optionResultElm.appendChild(resultElm);
 			}
 		}
