@@ -1,17 +1,21 @@
 package org.daisy.pipeline.job;
 
-import org.daisy.common.base.Provider;
+import java.util.Collections;
+import java.util.LinkedList;
 
+import javax.xml.transform.Result;
+
+import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
-
-import javax.xml.transform.Result;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import com.google.common.base.Splitter;
 
 final class URITranslatorHelper   {
 
@@ -122,6 +126,23 @@ final class URITranslatorHelper   {
 			return name+".xml";
 		}
 
+	}
+
+
+	public static String implode(LinkedList<String> optionItems,
+			XProcOptionInfo option, XProcScript script) {
+		String separator=script.getOptionMetadata(option.getName()).getSeparator();
+		return Joiner.on(separator).skipNulls().join(optionItems);
+	}
+
+
+	public static Iterable<String> explode(String optionString, XProcOptionInfo option,
+			XProcScript script) {
+		if (optionString==null)
+			return Collections.emptyList();
+		String separator=script.getOptionMetadata(option.getName()).getSeparator();
+	
+		return Splitter.on(separator).split(optionString);
 	}
 	
 }
