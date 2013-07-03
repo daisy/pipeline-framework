@@ -16,7 +16,8 @@ import com.google.common.base.Predicates;
 final class URITranslatorHelper   {
 
 	public static final boolean notEmpty(String value){
-		return value != null && !value.isEmpty();
+		return value != null && !value.isEmpty() && ! value.equals("''")
+			&& !value.equals("\"\"");
 	}
 
 	
