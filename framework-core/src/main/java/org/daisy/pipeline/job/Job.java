@@ -159,7 +159,7 @@ public class Job {
 			logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? " the context ": " event bus ") + "is null");
 		this.onStatusChanged(to);
 	}
-	private synchronized final void broadcastError(String text){
+	private final void broadcastError(String text){
 		Message msg= new MessageBuilder()
 			.withJobId(this.getId().toString())
 			.withLevel(Level.ERROR)
