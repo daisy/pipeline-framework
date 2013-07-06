@@ -13,6 +13,7 @@ import java.util.TimerTask;
 import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.Job.Status;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobUUIDGenerator;
@@ -34,19 +35,17 @@ import com.google.common.eventbus.Subscribe;
 public class PushNotifier {
 
 
-
 	private CallbackRegistry callbackRegistry;
 	private EventBusProvider eventBusProvider;
 	private JobManager jobManager;
 	/** The logger. */
-	private Logger logger;//= LoggerFactory.getLogger(Poster.class.getName());
-               
+	private static Logger logger = LoggerFactory.getLogger(PushNotifier.class); 
 	// for now: push notifications every second. TODO: support different frequencies.
 	final int PUSH_INTERVAL = 1000;
 
 	// track the starting point in the message sequence for every timed push
 	private MessageList messages = new MessageList();
-	private List<StatusMessage> statusList= Collections.synchronizedList(new LinkedList<StatusMessage>());
+	private List<StatusHolder> statusList= Collections.synchronizedList(new LinkedList<StatusHolder>());
 
 	Timer timer = null;
 
@@ -97,7 +96,10 @@ public class PushNotifier {
 	@Subscribe
 	public void handleStatus(StatusMessage message) {
 		logger.debug(String.format("Status changed %s->%s",message.getJobId(),message.getStatus()));
-		statusList.add(message);
+		StatusHolder holder= new StatusHolder();
+		holder.status=message.getStatus();
+		holder.job=jobManager.getJob(message.getJobId());
+		statusList.add(holder);
 
 	}
 
@@ -114,18 +116,18 @@ public class PushNotifier {
 		}
 		private void postStatus() {
 			//logger.debug("Posting messages");
-			List<StatusMessage> toPost=Lists.newLinkedList();
+			List<StatusHolder> toPost=Lists.newLinkedList();
 			synchronized(PushNotifier.this.statusList){
 				toPost.addAll(PushNotifier.this.statusList);	
 				PushNotifier.this.statusList.clear();
 			}
-			for (StatusMessage msg: toPost) {
-				logger.debug("Posting status for "+msg.getJobId());
-				Job job = jobManager.getJob(msg.getJobId());
+			for (StatusHolder holder: toPost) {
+				logger.debug("Posting status for "+holder.job.getId());
+				Job job = holder.job;
 
 				for (Callback callback : callbackRegistry.getCallbacks(job.getContext().getId())) {
 					if (callback.getType() == CallbackType.STATUS) {
-						Poster.postStatusUpdate(job, msg, callback);
+						Poster.postStatusUpdate(job, holder.status, callback);
 					}
 				}
 			}
@@ -204,6 +206,15 @@ public class PushNotifier {
 				System.out.println("#" + msg.getSequence() + ", job #" + msg.getJobId());
 			}
 		}
+	}
+	
+	/*
+	 * In order to not lose the reference 
+	 * to the job if it's been deleted
+	 */
+	private class StatusHolder{
+		Status status;
+		Job job;
 	}
 
 }

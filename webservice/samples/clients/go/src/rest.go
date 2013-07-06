@@ -82,4 +82,5 @@ func delete_resource(uri string) {
         panic(err)
     }
     http.DefaultClient.Do(req)
+    println ("DELETE ok",uri);
 }

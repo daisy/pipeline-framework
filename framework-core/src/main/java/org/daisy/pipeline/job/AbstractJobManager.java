@@ -1,11 +1,19 @@
 package org.daisy.pipeline.job;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Iterables;
+
+
 
 
 /**
  * DefaultJobManager allows to manage the jobs submitted to the daisy pipeline 2
  */
 public abstract class AbstractJobManager implements JobManager {
+
+	private static final Logger logger = LoggerFactory.getLogger(AbstractJobManager.class);
 
 	private JobStorage storage;
 
@@ -20,7 +28,7 @@ public abstract class AbstractJobManager implements JobManager {
 		//this part is quite critical, peristent storage needs to wrap the 
 		//job object, so we MUST be sure that we return the right reference.
 		//That's why newJob is final, if a concrete JobManager wants to do 
-		//something to job will be done by "onJobCreated" 
+		//something to job will be done by "onNewJob" 
 		Job job = this.storage.add(ctxt);
 		this.onNewJob(job);
 		return job;
@@ -75,4 +83,25 @@ public abstract class AbstractJobManager implements JobManager {
 	public void setJobStorage(JobStorage storage){
 		this.storage=storage;
 	}
+
+	@Override
+	public void deleteAll() {
+		this.checkStorage();
+		logger.info("deleting all jobs");
+		//iterate over a copy of the jobs, to make sure
+		//that we clean the context up
+		for (Job job:Iterables.toArray(this.storage,Job.class)){
+			logger.debug(String.format("Deleting job %s",job));
+			((AbstractJobContext)job.getContext()).cleanUp();
+			this.storage.remove(job.getId());
+		}
+		
+	}
+
+	//public void deactivate(){
+		//String cleanUp=System.getProperty("org.daisy.pipeline.cleanJobs","");
+		//if(cleanUp.equalsIgnoreCase("true")){
+			//logger.info("deactivate AbstractJobManager: cleaning jobs");
+	//}
+	//}
 }

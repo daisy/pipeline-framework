@@ -1,28 +1,23 @@
 package org.daisy.pipeline.job;
 
 import java.io.IOException;
-
 import java.net.URI;
-
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 import javax.xml.transform.Source;
 
 import org.daisy.common.base.Provider;
-
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
-
 import org.daisy.pipeline.script.XProcScript;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicates;
-
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -198,42 +193,50 @@ class XProcDecorator {
 
 	void decorateInputOptions(Collection<XProcOptionInfo> options,XProcInput input,XProcInput.Builder builder){
 			for(XProcOptionInfo option: options){
-				String relative = input.getOptions().get(option.getName());
-				if(URITranslatorHelper.notEmpty(relative)){
-					try{
-						URI uri=mapper.mapInput(URI.create(relative));//contextDir.toURI().resolve(URI.create(relative));
-						builder.withOption(option.getName(), uri.toString());
-					}catch(IllegalArgumentException e){
-						throw new RuntimeException(String.format("Error parsing uri (%s) for option %s",relative,option.getName()));
+				String optionString= input.getOptions().get(option.getName());
+				LinkedList<String> translated= Lists.newLinkedList();
+				//explode the content of the option
+				for (String optionUri : URITranslatorHelper.explode(optionString,option,this.script) ){
+					if(URITranslatorHelper.notEmpty(optionUri)){
+						try{
+							URI uri=mapper.mapInput(URI.create(optionUri));
+							translated.add(uri.toString());
+						}catch(IllegalArgumentException e){
+							throw new RuntimeException(String.format("Error parsing uri (%s) for option %s",optionUri,option.getName()));
+						}
 					}
 				}
+				//implode the uris based on the separator
+				builder.withOption(option.getName(), URITranslatorHelper.implode(translated,option,script));
 
 			}
 	}
 
 	void decorateOutputOptions(Collection<XProcOptionInfo> options,XProcInput input,XProcInput.Builder builder){
 			for(XProcOptionInfo option: options){
-				String relative = input.getOptions().get(option.getName());
-				if(!URITranslatorHelper.notEmpty(relative)){
+
+				String optionUri= input.getOptions().get(option.getName());
+				//explode the content of the option
+				if(!URITranslatorHelper.notEmpty(optionUri)){
 					//get the uri from select if possible otherwise generate
-					relative=URITranslatorHelper.notEmpty(option.getSelect()) ? option.getSelect() : 
+					optionUri=URITranslatorHelper.notEmpty(option.getSelect()) ? option.getSelect() : 
 						URITranslatorHelper.generateOptionOutput(option,script); 
 					//maybe it should be better to check all the outputs at the end?
-					if (generatedOutputs.contains(relative)) {
+					if (generatedOutputs.contains(optionUri)) {
 						throw new IllegalArgumentException(
-								String.format("Conflict when generating uri's a default value and option name have are equal: %s",relative));
+								String.format("Conflict when generating uri's a default value and option name have are equal: %s",optionUri));
 					}
-					generatedOutputs.add(relative);
+					generatedOutputs.add(optionUri);
 				}
 
 				try{
-					URI uri=mapper.mapOutput(URI.create(relative));//outputDir.toURI().resolve(URI.create(relative));
+					URI uri=mapper.mapOutput(URI.create(optionUri));//outputDir.toURI().resolve(URI.create(optionUri));
 					builder.withOption(option.getName(), uri.toString());
 				}catch(IllegalArgumentException e){
-					throw new RuntimeException(String.format("Error parsing uri (%s) for option %s",relative,option.getName()),e);
+					throw new RuntimeException(String.format("Error parsing uri (%s) for option %s",optionUri,option.getName()),e);
 				}
-
 			}
+
 	}
 
 

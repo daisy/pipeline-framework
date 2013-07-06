@@ -8,6 +8,7 @@ import org.daisy.common.xproc.XProcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Function;
 import com.google.common.eventbus.EventBus;
 
 // TODO: Auto-generated Javadoc
@@ -23,6 +24,7 @@ public class Job {
 	public static class  JobBuilder{
 		protected JobContext ctxt;
 		protected EventBus bus;
+		private Job job;
 		public JobBuilder withContext(JobContext ctxt){
 			this.ctxt=ctxt;
 			return this;
@@ -38,9 +40,23 @@ public class Job {
 			return job;
 		}
 		public final Job build(){
-			Job job=this.initJob();
-			job.changeStatus(Status.IDLE);
+			this.job=this.initJob();
+			this.job.changeStatus(Status.IDLE);
 			return job;
+		}
+		
+		/**
+		 * Builds the job allowing a preprocessing before the status is 
+		 * broadcasted
+		 * @param initialiser
+		 * @return
+		 */
+		public final Job build(Function<Job,Job> initialiser){
+			this.job= initialiser.apply(this.initJob());
+			this.job.changeStatus(Status.IDLE);
+			return job;
+		}
+		public final void initialise(){
 		}
 	}
 
@@ -150,7 +166,7 @@ public class Job {
 		changeStatus(Status.RUNNING);
 		XProcPipeline pipeline = null;
 		try{
-		pipeline = engine.load(this.ctxt.getScript().getURI());
+			pipeline = engine.load(this.ctxt.getScript().getURI());
 		}catch (Exception e){
 			logger.error("Error while loading the script:"+this.ctxt.getScript().getName());
 			throw new RuntimeException(e);

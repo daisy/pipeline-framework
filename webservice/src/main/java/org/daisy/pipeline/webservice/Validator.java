@@ -143,7 +143,11 @@ public class Validator {
 			for (int i=0; i<nodes.getLength(); i++) {
 				Element elm = (Element)nodes.item(i);
 				if (elm.getAttribute("name").equals(arg.getName().toString())) {
-					validArg = validateOptionType(elm.getTextContent(), script.getOptionMetadata(arg.getName()).getMediaType());
+					if(!script.getOptionMetadata(arg.getName()).isSequence()){
+						validArg = validateOptionType(elm.getTextContent(), script.getOptionMetadata(arg.getName()).getMediaType());
+					}else{//otherwise is been validated by the schema
+						validArg=true;
+					}
 					break;
 				}
 			}
