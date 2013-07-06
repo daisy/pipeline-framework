@@ -43,7 +43,7 @@ def get_result(job_id):
 
 def post_job(request, data):
     """Create a new job and return the job description XML document"""
-    uri = "{0}/jobs".format(settings.BASEURI)
+    uri = "{0}/test".format(settings.BASEURI)
     if data == None:
         doc = rest.post_resource(uri, request)
     else:

@@ -23,5 +23,7 @@ func main() {
     } else if command == "jobs" {
     	rs := get_resource(JOBS_URI)
     	println(rs)
+    } else if command == "new-job" {
+        post_resource(JOBS_URI)
     }
 }

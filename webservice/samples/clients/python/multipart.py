@@ -24,7 +24,7 @@ class FileParam:
         """A string representing the key/file pair as a multipart request"""
         return """Content-Disposition: form-data; name="{key}"; filename="{filename}"\r\n""" \
         "Content-Transfer-Encoding: binary\r\n" \
-        "Content-Type: {mime}\r\n\r\n{contents}" \
+        "Content-Type: {mime}\r\n\r\n{content}" \
         "\r\n".format(key = self.key, filename = self.filename, content = self.content, mime = mimetypes.guess_type(self.filename)[0])
 
 class MultipartPost:

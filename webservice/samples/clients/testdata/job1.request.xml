@@ -2,6 +2,7 @@
 <jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
   <script href="http://localhost:8182/ws/scripts/dtbook-to-zedai"/>
     <input name='source'>
+        <!-- NOTE that support for inline content is DEPRECATED as of 2013-06-12 -->
         <docwrapper>
             <dtbook xmlns='http://www.daisy.org/z3986/2005/dtbook/' version='2005-3' xml:lang='en-US'>
                 <head>
