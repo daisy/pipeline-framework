@@ -58,6 +58,8 @@ public class URITranslatorHelperTest   {
 	public void notEmpty(){
 		Assert.assertTrue(URITranslatorHelper.notEmpty("hola"));
 		Assert.assertFalse(URITranslatorHelper.notEmpty(""));
+		Assert.assertFalse(URITranslatorHelper.notEmpty("''"));
+		Assert.assertFalse(URITranslatorHelper.notEmpty("\"\""));
 		Assert.assertFalse(URITranslatorHelper.notEmpty(null));
 	}
 
