@@ -2,6 +2,9 @@ package org.daisy.pipeline.job;
 
 import java.util.Properties;
 
+import org.daisy.common.messaging.Message;
+import org.daisy.common.messaging.Message.Level;
+import org.daisy.common.messaging.Message.MessageBuilder;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
@@ -156,6 +159,18 @@ public class Job {
 			logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? " the context ": " event bus ") + "is null");
 		this.onStatusChanged(to);
 	}
+	private final void broadcastError(String text){
+		Message msg= new MessageBuilder()
+			.withJobId(this.getId().toString())
+			.withLevel(Level.ERROR)
+			.withText(text)
+			.withSequence(1)
+			.build();
+		if (this.eventBus!=null)
+			this.eventBus.post(msg);
+		else
+			logger.warn("I couldnt broadcast an error "+((this.ctxt==null)? " the context ": " event bus ") + "is null");
+	}
 
 	/**
 	 * Runs the job using the XProcEngine as script loader.
@@ -167,17 +182,13 @@ public class Job {
 		XProcPipeline pipeline = null;
 		try{
 			pipeline = engine.load(this.ctxt.getScript().getURI());
-		}catch (Exception e){
-			logger.error("Error while loading the script:"+this.ctxt.getScript().getName());
-			throw new RuntimeException(e);
-		}
-		try{
 			Properties props=new Properties();
 			props.setProperty("JOB_ID", this.ctxt.getId().toString());
 			XProcResult results = pipeline.run(this.ctxt.getInputs(),this.ctxt.getMonitor(),props);
 			this.ctxt.writeResult(results);
 			changeStatus( Status.DONE );
 		}catch(Exception e){
+			broadcastError(e.getMessage());
 			logger.error("job finished with error state",e);
 			changeStatus( Status.ERROR);
 		}
