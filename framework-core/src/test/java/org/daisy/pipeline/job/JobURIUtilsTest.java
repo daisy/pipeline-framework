@@ -40,9 +40,10 @@ public class JobURIUtilsTest   {
 	@Test
 	public void idBasedUriMapper() throws Exception{
 		URIMapper mapper = JobURIUtils.newURIMapper(id);
-		String commonBase=tmpdir.toURI().toString()+id.toString()+File.separator;
-		Assert.assertEquals(URI.create(commonBase+JobURIUtils.IO_DATA_SUBDIR+File.separator),mapper.getInputBase());
-		Assert.assertEquals(URI.create(commonBase+JobURIUtils.IO_OUTPUT_SUBDIR+File.separator),mapper.getOutputBase());
+		String commonBase=tmpdir.toURI().toString()+id.toString()+"/";
+		System.out.println(commonBase+JobURIUtils.IO_DATA_SUBDIR+"/");
+		Assert.assertEquals(URI.create(commonBase+JobURIUtils.IO_DATA_SUBDIR+"/"),mapper.getInputBase());
+		Assert.assertEquals(URI.create(commonBase+JobURIUtils.IO_OUTPUT_SUBDIR+"/"),mapper.getOutputBase());
 
 	}
 
