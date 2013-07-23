@@ -1,5 +1,6 @@
 package org.daisy.common.xproc.calabash;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -165,6 +166,9 @@ public class DynamicXProcConfigurationFactory implements
 		// TODO cleanup and cache
 		String configPath = System.getProperty(CONFIG_PATH);
 		if (configPath != null) {
+			if (!configPath.startsWith("file:")) {
+				configPath = new File(configPath).toURI().toString();
+			}
 			logger.debug("Reading Calabash configuration from {}", configPath);
 			// Make this absolute because sometimes it fails from the command
 			// line otherwise. WTF?
