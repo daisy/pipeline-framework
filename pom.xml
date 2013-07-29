@@ -101,6 +101,7 @@
     <module>framework-persistence</module>
     <module>framework-volatile</module>
     <module>logging-activator</module>
+    <module>logging-appender</module>
     <module>modules-api</module>
     <module>modules-registry</module>
     <module>persistence-derby</module>
@@ -134,6 +135,7 @@
     <daisy.framework-persistence.version>1.0-SNAPSHOT</daisy.framework-persistence.version>
     <daisy.framework-volatile.version>1.0-SNAPSHOT</daisy.framework-volatile.version>
     <daisy.logging-activator.version>1.0-SNAPSHOT</daisy.logging-activator.version>
+    <daisy.logging-appender.version>1.0-SNAPSHOT</daisy.logging-appender.version>
     <daisy.modules-api.version>1.0-SNAPSHOT</daisy.modules-api.version>
     <daisy.modules-registry.version>1.0-SNAPSHOT</daisy.modules-registry.version>
     <daisy.persistence-derby.version>1.0-SNAPSHOT</daisy.persistence-derby.version>
@@ -160,6 +162,7 @@
     <restlet.version>2.1-RC6</restlet.version>
     <saxon-he.version>9.4.0.7</saxon-he.version>
     <slf4j.version>1.7.2</slf4j.version>
+    <logback.version>1.0.11</logback.version>
     <woodstox.core.version>4.1.2</woodstox.core.version>
     <woodstox.stax2-api.version>3.1.1</woodstox.stax2-api.version>
   </properties>
@@ -205,6 +208,11 @@
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>logging-activator</artifactId>
         <version>${daisy.logging-activator.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>logging-appender</artifactId>
+        <version>${daisy.logging-appender.version}</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -451,6 +459,11 @@
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+                  <groupId>ch.qos.logback</groupId>
+                  <artifactId>logback-classic</artifactId>
+		  <version>${logback.version}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
