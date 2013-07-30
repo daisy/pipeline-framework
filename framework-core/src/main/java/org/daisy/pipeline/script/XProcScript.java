@@ -5,6 +5,7 @@ package org.daisy.pipeline.script;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +50,7 @@ public final class XProcScript {
 		private final Map<String, XProcPortMetadata> portsMetadata=new HashMap<String, XProcPortMetadata>();
 
 		/** The options metadata. */
-		private final Map<QName, XProcOptionMetadata> optionsMetadata=new HashMap<QName, XProcOptionMetadata>();
+		private final Map<QName, XProcOptionMetadata> optionsMetadata=new LinkedHashMap<QName, XProcOptionMetadata>();
 
 		/**
 		 * With pipeline info.
