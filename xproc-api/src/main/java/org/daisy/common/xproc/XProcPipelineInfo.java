@@ -32,7 +32,7 @@ public final class XProcPipelineInfo {
 		private final Map<String, XProcPortInfo> outputPorts = Maps.newHashMap();
 
 		/** The options. */
-		private final Map<QName, XProcOptionInfo> options = Maps.newHashMap();
+		private final Map<QName, XProcOptionInfo> options = Maps.newLinkedHashMap();
 
 		/**
 		 * Instantiates a new builder.
@@ -79,6 +79,7 @@ public final class XProcPipelineInfo {
 		 * @return the builder
 		 */
 		public Builder withOption(XProcOptionInfo option) {
+			System.out.println("Option in: "+option.getName());	
 			options.put(option.getName(), option);
 			return this;
 		}
