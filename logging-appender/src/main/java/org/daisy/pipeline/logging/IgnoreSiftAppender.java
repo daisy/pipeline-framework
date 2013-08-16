@@ -1,0 +1,21 @@
+package org.daisy.pipeline.logging;
+import ch.qos.logback.classic.sift.SiftingAppender;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+
+public class IgnoreSiftAppender extends SiftingAppender {
+
+	@Override
+	protected void append(ILoggingEvent event) {
+		if (!isStarted()) {
+			return;
+		}
+		String discriminatingValue = this.getDiscriminator().getDiscriminatingValue(event);
+		if( !"default".equals(discriminatingValue)){
+			super.append(event);
+		}else{
+			//ignore
+			return;
+		} 
+		
+	}
+}
