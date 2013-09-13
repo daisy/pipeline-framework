@@ -87,13 +87,7 @@ public class Validator {
 			return false;
 		}
 
-		XProcScript script;
-		if (application.getConfiguration().isLocal()) {
-			script = unfilteredScript.load();
-		}
-		else {
-			script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
-		}
+		XProcScript script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
 
 		// inputs
 		boolean hasAllRequiredInputs = validateJobRequestInputPortData(script.getXProcPipelineInfo().getInputPorts(),

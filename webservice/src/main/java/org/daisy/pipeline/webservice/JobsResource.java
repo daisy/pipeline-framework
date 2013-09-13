@@ -353,7 +353,7 @@ public class JobsResource extends AuthenticatedResource {
 			resourceCollection = new ZipResourceContext(zip);
 		}
 		if(webservice().getConfiguration().isLocal()){
-			ctxt=webservice().getJobContextFactory().newJobContext(niceName,bound);	
+			ctxt=webservice().getJobContextFactory().newMappingJobContext(niceName,bound);	
 
 		}else{
 			ctxt=webservice().getJobContextFactory().newMappingJobContext(niceName,bound,resourceCollection);
@@ -484,9 +484,7 @@ public class JobsResource extends AuthenticatedResource {
 		Iterable<XProcOptionInfo> allOptions = script.getXProcPipelineInfo().getOptions();
 
 		Iterable<XProcOptionInfo> filteredOptions = null;
-		if (!webservice().getConfiguration().isLocal()) {
-			filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
-		}
+		filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
 
 		Iterator<XProcOptionInfo> it = allOptions.iterator();
 		while(it.hasNext()) {
