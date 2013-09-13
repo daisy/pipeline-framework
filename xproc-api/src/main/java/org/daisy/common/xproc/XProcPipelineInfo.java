@@ -79,7 +79,6 @@ public final class XProcPipelineInfo {
 		 * @return the builder
 		 */
 		public Builder withOption(XProcOptionInfo option) {
-			System.out.println("Option in: "+option.getName());	
 			options.put(option.getName(), option);
 			return this;
 		}
