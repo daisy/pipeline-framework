@@ -6,6 +6,8 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -224,11 +226,11 @@ class Mock   {
 
 
 		public XProcScript generate(){
-			Set<XProcPortInfo> inputSet= new HashSet<XProcPortInfo>(); 
-			Set<XProcPortInfo> outputSet= new HashSet<XProcPortInfo>(); 
-			Set<XProcOptionInfo> optionsSet= new HashSet<XProcOptionInfo>(); 
-			HashMap<QName,XProcOptionMetadata> optionMetadatas= new HashMap<QName,XProcOptionMetadata>(); 
-			HashMap<String,XProcPortMetadata> portMetadatas= new HashMap<String,XProcPortMetadata>(); 
+			Set<XProcPortInfo> inputSet= new LinkedHashSet<XProcPortInfo>(); 
+			Set<XProcPortInfo> outputSet= new LinkedHashSet<XProcPortInfo>(); 
+			Set<XProcOptionInfo> optionsSet= new LinkedHashSet<XProcOptionInfo>(); 
+			HashMap<QName,XProcOptionMetadata> optionMetadatas= new LinkedHashMap<QName,XProcOptionMetadata>(); 
+			HashMap<String,XProcPortMetadata> portMetadatas= new LinkedHashMap<String,XProcPortMetadata>(); 
 			//inputs
 			for (int i=0;i<this.inputs;i++){
 				inputSet.add(XProcPortInfo.newInputPort(getInputName(i),false, true));
