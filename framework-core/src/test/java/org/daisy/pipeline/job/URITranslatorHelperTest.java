@@ -136,8 +136,8 @@ public class URITranslatorHelperTest   {
 		List<XProcOptionInfo> infos=Lists.newLinkedList(mscript.getXProcPipelineInfo().getOptions());
 		Collection<XProcOptionInfo> filtered=Collections2.filter(infos,URITranslatorHelper.getTranslatableInputOptionsFilter(mscript));	
 		Assert.assertEquals(2,filtered.size());
-		Assert.assertEquals(Lists.newArrayList(filtered).get(0).getName(),optOutNA);
-		Assert.assertEquals(Lists.newArrayList(filtered).get(1).getName(),optIn);
+		Assert.assertEquals(Lists.newArrayList(filtered).get(1).getName(),optOutNA);
+		Assert.assertEquals(Lists.newArrayList(filtered).get(0).getName(),optIn);
 
 	}
 	
