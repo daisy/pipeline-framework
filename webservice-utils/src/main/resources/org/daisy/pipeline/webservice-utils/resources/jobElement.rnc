@@ -39,6 +39,7 @@ element result{
 	& ( 	
 			attribute from { text }
 			& attribute name { text }
+			& attribute size { xsd:long }
 	  )?
 		& result*
 }

@@ -58,7 +58,6 @@ public class JobXmlWriter {
                 return this;
         }
 
-
         public JobXmlWriter withLocalPaths() {
                 localPaths= true;
                 return this;
@@ -158,7 +157,7 @@ public class JobXmlWriter {
                 }
         }       
 
-        private void addResults(Element jobElem){
+        private void addResults(Element jobElem) {
                 Document doc = jobElem.getOwnerDocument();
                 String baseUri = new Routes().getBaseUri();
                 Element resultsElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "results");
@@ -167,7 +166,7 @@ public class JobXmlWriter {
                 resultsElm.setAttribute("mime-type", "application/zip");
                 jobElem.appendChild(resultsElm);
                 //ports
-                for(String port: this.job.getContext().getResults().getPorts()){
+                for (String port : this.job.getContext().getResults().getPorts()) {
                         Element portResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
                         portResultElm.setAttribute("href", String.format("%s/port/%s",resultHref,port));
                         portResultElm.setAttribute("mime-type", "application/zip");
@@ -183,8 +182,9 @@ public class JobXmlWriter {
                                 if ( this.localPaths){
                                         resultElm.setAttribute("file",result.getPath().toString());
                                 }
-                                portResultElm.appendChild(resultElm);
-                                        
+                                resultElm.setAttribute("size",
+                                                String.format("%s", result.getSize()));
+                                portResultElm.appendChild(resultElm); 
                         }
                 }
 
@@ -204,6 +204,8 @@ public class JobXmlWriter {
                                 if ( this.localPaths){
                                         resultElm.setAttribute("file",result.getPath().toString());
                                 }
+                                resultElm.setAttribute("size",
+                                                String.format("%s", result.getSize()));
                                 optionResultElm.appendChild(resultElm);
                         }
                 }
