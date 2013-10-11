@@ -128,6 +128,7 @@ public class JobResult {
         }
 
         /**
+         * Returns the size of the file pointed by path in bytes
          * @return the size
          */
         public long getSize() {
