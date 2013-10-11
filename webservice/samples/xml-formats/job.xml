@@ -14,8 +14,8 @@
 			<result href="http://example.org/ws/jobs/job-id-01/result/option/output-dir/file-1.xhtml" mime-type="application/xml"/>
 		</result>
 		<result from="port" href="http://example.org/ws/jobs/job-id-01/result/port/result" mime-type="zip" name="output-dir">
-			<result href="http://example.org/ws/jobs/job-id-01/result/port/result/result-1.xml" mime-type="application/xml"/>
-			<result href="http://example.org/ws/jobs/job-id-01/result/port/result/result-2.xml" mime-type="application/xml"/>
+			<result href="http://example.org/ws/jobs/job-id-01/result/port/result/result-1.xml" mime-type="application/xml" size="1024"/>
+			<result href="http://example.org/ws/jobs/job-id-01/result/port/result/result-2.xml" mime-type="application/xml" size="54321"/>
 		</result>
 	</results>
 
