@@ -35,6 +35,7 @@ result=
 element result{
 	attribute href { xsd:anyURI }
 	& attribute mime-type { text }
+	& (attribute file { text }) ?
 	& ( 	
 			attribute from { text }
 			& attribute name { text }
