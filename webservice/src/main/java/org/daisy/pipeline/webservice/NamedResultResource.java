@@ -76,9 +76,9 @@ public abstract class NamedResultResource extends AuthenticatedResource {
 			return this.getErrorRepresentation("Job not found");
 		}
 
-		if (!job.getStatus().equals(Job.Status.DONE)) {
+		if (!(job.getStatus().equals(Job.Status.DONE) || job.getStatus().equals(Job.Status.VALIDATION_FAIL))) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-			return this.getErrorRepresentation("Job status differnt to DONE");
+			return this.getErrorRepresentation("Job status differnt to DONE or VALIDATION_FAIL");
 		}
 		if (!(name!=null&&!name.isEmpty())) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
