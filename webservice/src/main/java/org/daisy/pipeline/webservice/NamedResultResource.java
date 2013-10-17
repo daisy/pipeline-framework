@@ -1,5 +1,6 @@
 package org.daisy.pipeline.webservice;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Collection;
 
@@ -12,6 +13,7 @@ import org.daisy.pipeline.job.ResultSet;
 import org.restlet.data.Disposition;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
+import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.InputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
@@ -105,16 +107,16 @@ public abstract class NamedResultResource extends AuthenticatedResource {
 		}
 
 		try{
-		JobResult res=Lists.newArrayList(results).get(0);
-                        InputStream in = res.getPath().toURL().openStream();
-			Representation rep = new InputRepresentation(in,
-					MediaType.APPLICATION_ALL);//TODO get media type from the result
-			Disposition disposition = new Disposition();
-			disposition.setFilename(res.getIdx());
-                        disposition.setSize(in.available());
-			disposition.setType(Disposition.TYPE_ATTACHMENT);
-			rep.setDisposition(disposition);
-			return rep;
+                        JobResult res=Lists.newArrayList(results).get(0);
+                        File file = new File(res.getPath());
+                        Representation rep = new FileRepresentation(file,
+                                        MediaType.APPLICATION_ALL);//TODO get media type from the file
+                        Disposition disposition = new Disposition();
+                        disposition.setFilename(res.getIdx());
+                        disposition.setSize(file.length());
+                        disposition.setType(Disposition.TYPE_ATTACHMENT);
+                        rep.setDisposition(disposition);
+                        return rep;
 		}catch(Exception e){
 				setStatus(Status.SERVER_ERROR_INTERNAL);
 				return this.getErrorRepresentation(e);
