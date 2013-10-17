@@ -1,8 +1,7 @@
 package org.daisy.pipeline.webservice;
 
+import java.io.InputStream;
 import java.util.Collection;
-
-import javax.xml.namespace.QName;
 
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
@@ -107,10 +106,12 @@ public abstract class NamedResultResource extends AuthenticatedResource {
 
 		try{
 		JobResult res=Lists.newArrayList(results).get(0);
-			Representation rep = new InputRepresentation(res.getPath().toURL().openStream(),
+                        InputStream in = res.getPath().toURL().openStream();
+			Representation rep = new InputRepresentation(in,
 					MediaType.APPLICATION_ALL);//TODO get media type from the result
 			Disposition disposition = new Disposition();
 			disposition.setFilename(res.getIdx());
+                        disposition.setSize(in.available());
 			disposition.setType(Disposition.TYPE_ATTACHMENT);
 			rep.setDisposition(disposition);
 			return rep;
@@ -129,11 +130,13 @@ public abstract class NamedResultResource extends AuthenticatedResource {
 			return this.getErrorRepresentation("No results available");
 		}
 		try{
-			Representation rep = new InputRepresentation(ResultSet.asZip(results),
+                        InputStream in = ResultSet.asZip(results);
+			Representation rep = new InputRepresentation(in,
 					MediaType.APPLICATION_ZIP);
 			Disposition disposition = new Disposition();
 			disposition.setFilename(job.getId().toString() + ".zip");
 			disposition.setType(Disposition.TYPE_ATTACHMENT);
+                        disposition.setSize(in.available());
 			rep.setDisposition(disposition);
 			return rep;
 		}catch(Exception e){

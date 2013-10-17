@@ -1,5 +1,6 @@
 package org.daisy.pipeline.webservice;
 
+import java.io.InputStream;
 import java.util.Collection;
 
 import org.daisy.pipeline.job.Job;
@@ -76,11 +77,14 @@ public class ResultResource extends AuthenticatedResource {
 			return this.getErrorRepresentation("No results available");
 		}
 		try{
-			Representation rep = new InputRepresentation(ResultSet.asZip(results),
+                        InputStream in =ResultSet.asZip(results);
+			Representation rep = new InputRepresentation(in,
 					MediaType.APPLICATION_ZIP);
+                        
 			Disposition disposition = new Disposition();
 			disposition.setFilename(job.getId().toString() + ".zip");
 			disposition.setType(Disposition.TYPE_ATTACHMENT);
+                        disposition.setSize(in.available());
 			rep.setDisposition(disposition);
 			return rep;
 		}catch(Exception e){
