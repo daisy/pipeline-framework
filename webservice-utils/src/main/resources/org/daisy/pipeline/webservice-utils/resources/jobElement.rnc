@@ -44,6 +44,6 @@ element result{
 		& result*
 }
 
-job.status = "IDLE" | "RUNNING" | "DONE" | "ERROR"
+job.status = "IDLE" | "RUNNING" | "DONE" | "ERROR" | "VALIDATION_FAIL"
 
 message.level = "WARNING" | "ERROR" | "INFO" | "DEBUG" | "TRACE"
