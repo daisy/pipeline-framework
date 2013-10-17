@@ -70,10 +70,10 @@ public class ResultResource extends AuthenticatedResource {
                         return this.getErrorRepresentation("Job not found");
                 }
 
-                if (!job.getStatus().equals(Job.Status.DONE)) {
-                        setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-                        return this.getErrorRepresentation("Job status differnt to DONE");
-                }
+        		if (!(job.getStatus().equals(Job.Status.DONE) || job.getStatus().equals(Job.Status.VALIDATION_FAIL))) {
+		          	setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			        return this.getErrorRepresentation("Job status differnt to DONE");
+		        }
 
                 Collection<JobResult> results = job.getContext().getResults()
                                 .getResults();

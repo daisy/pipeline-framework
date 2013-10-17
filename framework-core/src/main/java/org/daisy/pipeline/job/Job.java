@@ -155,6 +155,7 @@ public class Job {
 	}
 
 	private synchronized final void changeStatus(Status to){
+                logger.info(String.format("Changing job status to: %s",to));
 		this.status=to;
 		if (this.eventBus!=null)
 			this.eventBus.post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
@@ -192,8 +193,9 @@ public class Job {
                         //if the validation fails set the job status
                         if (!this.checkValid()){
                                 changeStatus(Status.VALIDATION_FAIL);
+                        }else{
+			        changeStatus( Status.DONE );
                         }
-			changeStatus( Status.DONE );
 		}catch(Exception e){
 			broadcastError(e.getMessage());
 			logger.error("job finished with error state",e);
