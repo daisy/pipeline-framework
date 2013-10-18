@@ -1,7 +1,7 @@
 package org.daisy.pipeline.webservice;
 
 import java.io.File;
-import java.io.InputStream;
+import java.security.MessageDigest;
 import java.util.Collection;
 
 import org.daisy.pipeline.job.Job;
@@ -9,12 +9,11 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobResult;
-import org.daisy.pipeline.job.ResultSet;
+import org.restlet.data.Digest;
 import org.restlet.data.Disposition;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.FileRepresentation;
-import org.restlet.representation.InputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.slf4j.Logger;
@@ -23,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 
 /**
  * The Class ResultResource.
@@ -111,6 +111,8 @@ public abstract class NamedResultResource extends AuthenticatedResource {
                         File file = new File(res.getPath());
                         Representation rep = new FileRepresentation(file,
                                         MediaType.APPLICATION_ALL);//TODO get media type from the file
+                        //rep.setDigest(new Digest(Files.hash(file,Hashing.md5()).asBytes()));//TODO update to guava 1.5
+                        rep.setDigest(new Digest(Files.getDigest(file,MessageDigest.getInstance("MD5"))));
                         Disposition disposition = new Disposition();
                         disposition.setFilename(res.getIdx());
                         disposition.setSize(file.length());
@@ -132,15 +134,7 @@ public abstract class NamedResultResource extends AuthenticatedResource {
 			return this.getErrorRepresentation("No results available");
 		}
 		try{
-                        InputStream in = ResultSet.asZip(results);
-			Representation rep = new InputRepresentation(in,
-					MediaType.APPLICATION_ZIP);
-			Disposition disposition = new Disposition();
-			disposition.setFilename(job.getId().toString() + ".zip");
-			disposition.setType(Disposition.TYPE_ATTACHMENT);
-                        disposition.setSize(in.available());
-			rep.setDisposition(disposition);
-			return rep;
+                        return ResultResource.getZippedRepresentation(results,this.job);
 		}catch(Exception e){
 				setStatus(Status.SERVER_ERROR_INTERNAL);
 				return this.getErrorRepresentation(e);
@@ -149,4 +143,6 @@ public abstract class NamedResultResource extends AuthenticatedResource {
 	}
 
 	protected abstract Collection<JobResult> gatherResults(Job job,String name);
+
+        
 }
