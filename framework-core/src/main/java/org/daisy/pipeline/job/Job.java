@@ -77,7 +77,10 @@ public class Job {
 		RUNNING,
 		/** The DONE. */
 		DONE,
-		ERROR
+		/** The ERROR. */
+		ERROR,
+                /** The VALIDATION_FAIL */
+                VALIDATION_FAIL
 	}
 
 
@@ -152,6 +155,7 @@ public class Job {
 	}
 
 	private synchronized final void changeStatus(Status to){
+                logger.info(String.format("Changing job status to: %s",to));
 		this.status=to;
 		if (this.eventBus!=null)
 			this.eventBus.post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
@@ -186,7 +190,12 @@ public class Job {
 			props.setProperty("JOB_ID", this.ctxt.getId().toString());
 			XProcResult results = pipeline.run(this.ctxt.getInputs(),this.ctxt.getMonitor(),props);
 			this.ctxt.writeResult(results);
-			changeStatus( Status.DONE );
+                        //if the validation fails set the job status
+                        if (!this.checkValid()){
+                                changeStatus(Status.VALIDATION_FAIL);
+                        }else{
+			        changeStatus( Status.DONE );
+                        }
 		}catch(Exception e){
 			broadcastError(e.getMessage());
 			logger.error("job finished with error state",e);
@@ -198,5 +207,9 @@ public class Job {
 	protected void onStatusChanged(Status newStatus){
 		//for subclasses
 	}
+        //checks if the internal validations are ok
+        private boolean checkValid(){
+                return JobUtils.checkValidPort(this.getContext().getResults());
+        }
 
 }
