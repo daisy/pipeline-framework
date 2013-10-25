@@ -244,8 +244,8 @@
                 </artifactItem>
                 <!-- From dependencies used at compile time in the Framework parent POM -->
                 <artifactItem>
-                  <groupId>com.googlecode.guava-osgi</groupId>
-                  <artifactId>guava-osgi</artifactId>
+                  <groupId>com.google.guava</groupId>
+                  <artifactId>guava</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.libs</groupId>

@@ -152,7 +152,7 @@
     <commons.codec.version>1.6</commons.codec.version>
     <commons.fileupload.version>1.2.2</commons.fileupload.version>
     <commons.io.version>2.3</commons.io.version>
-    <guava.version>11.0.1</guava.version>
+    <guava.version>15.0</guava.version>
     <javax.persistence.version>2.0.0</javax.persistence.version>
     <javax.servlet-api.version>2.5</javax.servlet-api.version>
     <jing.version>20091111</jing.version>
@@ -281,8 +281,8 @@
 	<version>10.9.1.0</version>
 </dependency> 
       <dependency>
-        <groupId>com.googlecode.guava-osgi</groupId>
-        <artifactId>guava-osgi</artifactId>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
         <version>${guava.version}</version>
       </dependency>
       <dependency>
