@@ -3,12 +3,8 @@ package org.daisy.pipeline.job;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
-import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobIdFactory;
-import org.daisy.pipeline.job.JobURIUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -85,5 +81,21 @@ public class JobSizeTest   {
         public void testDirSize(){
                long res=JobSize.getDirSize(contextDir);
                Assert.assertEquals("JobsSizeCalculartorulate directory size",(long)inputTxt.getBytes().length*2+contextDir.length()*2,res);
+        }
+
+        @Test
+        public void getSum(){
+               JobSize size=new JobSize(null,1,2,3);
+               Assert.assertEquals("size sum",6,size.getSum());
+        }
+
+        @Test
+        public void getTotal(){
+               JobSize size=new JobSize(null,1,2,3);
+               LinkedList<JobSize> list=new LinkedList<JobSize>();
+               list.add(size);
+               list.add(size);
+               list.add(size);
+               Assert.assertEquals("size sum",18,JobSize.getTotal(list));
         }
 }

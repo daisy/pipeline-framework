@@ -24,7 +24,7 @@ public final class JobSize {
          * @param outputSize
          * @param logSize
          */
-        private JobSize(Job job, long contextSize, long outputSize,
+        protected JobSize(Job job, long contextSize, long outputSize,
                         long logSize) {
                 this.job = job;
                 this.contextSize = contextSize;
@@ -59,6 +59,11 @@ public final class JobSize {
         public Job getJob() {
                 return job;
         }
+        /** Return the sum of all three sizes
+         */
+        public long getSum(){
+                return this.logSize+this.outputSize+this.contextSize;
+        }
         /**
          * Returns the job sizes for a collection of jobs
          */
@@ -70,6 +75,13 @@ public final class JobSize {
                 return sizes;
         }
 
+        public static long getTotal(Iterable<JobSize> sizes) {
+                long total=0;
+                for (JobSize size:sizes){
+                        total+=size.getSum();
+                }
+                return total;
+        }
         public static JobSize getSize(Job job){
                 JobSize size=null;
                 try {

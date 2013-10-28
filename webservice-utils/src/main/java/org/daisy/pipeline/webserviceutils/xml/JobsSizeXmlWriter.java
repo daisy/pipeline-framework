@@ -8,9 +8,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public class JobsSizeXmlWriter{
-        Iterable<? extends JobSize> sizes; 
+        Iterable<JobSize> sizes; 
         private static final Logger logger = LoggerFactory.getLogger(JobsSizeXmlWriter.class);
-	public JobsSizeXmlWriter(Iterable<? extends JobSize> sizes) {
+	public JobsSizeXmlWriter(Iterable<JobSize> sizes) {
 		this.sizes = sizes;
 	}
 	
@@ -22,11 +22,12 @@ public class JobsSizeXmlWriter{
 		return sizesToXml(this.sizes);
 	}
 	
-	private static Document sizesToXml(Iterable<? extends JobSize> sizes) {
+	private static Document sizesToXml(Iterable<JobSize> sizes) {
 		String baseUri = new Routes().getBaseUri();
 		Document doc = XmlUtils.createDom("jobSizes");
 		Element sizesElm = doc.getDocumentElement();
 		sizesElm.setAttribute("href", baseUri + Routes.SIZES_ROUTE);
+		sizesElm.setAttribute("total", String.valueOf(JobSize.getTotal(sizes)));
 		
 		for (JobSize size : sizes) {
 			JobSizeXmlWriter writer = new JobSizeXmlWriter(size);

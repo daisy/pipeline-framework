@@ -21,7 +21,7 @@ public class XmlWriterFactory {
 		return new JobsXmlWriter(jobs);
 	}
 	
-	public static JobsSizeXmlWriter createXmlWriterForJobSizes(Iterable<? extends JobSize> sizes) {
+	public static JobsSizeXmlWriter createXmlWriterForJobSizes(Iterable<JobSize> sizes) {
 		return new JobsSizeXmlWriter(sizes);
 	}
 	public static ScriptXmlWriter createXmlWriterForScript(XProcScript script) {
