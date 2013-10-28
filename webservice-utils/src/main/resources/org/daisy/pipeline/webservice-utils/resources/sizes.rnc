@@ -1,0 +1,10 @@
+default namespace = "http://www.daisy.org/ns/pipeline/data"
+
+include "sizeElem.rnc"
+
+start = 
+    element jobSizes{
+        attribute href { xsd:anyURI }?,
+        jobSize*
+    }
+
