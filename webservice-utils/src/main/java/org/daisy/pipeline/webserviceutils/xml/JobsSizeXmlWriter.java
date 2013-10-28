@@ -33,10 +33,9 @@ public class JobsSizeXmlWriter{
 			writer.addAsElementChild(sizesElm);
 		}
 		
-		// for debugging only
-		//if (!XmlValidator.validate(doc, XmlValidator.JOBS_SCHEMA_URL)) {
-			//logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
-		//}
+                if (!XmlValidator.validate(doc, XmlValidator.SIZES_SCHEMA_URL)) {
+                        logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
+                }
 
 		return doc;
 	}
