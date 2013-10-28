@@ -5,6 +5,7 @@ import java.util.List;
 import org.daisy.common.properties.Property;
 
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobSize;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.webserviceutils.clients.Client;
 
@@ -20,6 +21,9 @@ public class XmlWriterFactory {
 		return new JobsXmlWriter(jobs);
 	}
 	
+	public static JobsSizeXmlWriter createXmlWriterForJobSizes(Iterable<? extends JobSize> sizes) {
+		return new JobsSizeXmlWriter(sizes);
+	}
 	public static ScriptXmlWriter createXmlWriterForScript(XProcScript script) {
 		return new ScriptXmlWriter(script);
 	}

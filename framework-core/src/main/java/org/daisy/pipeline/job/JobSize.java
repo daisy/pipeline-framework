@@ -62,7 +62,7 @@ public final class JobSize {
         /**
          * Returns the job sizes for a collection of jobs
          */
-        public static Collection<JobSize> getSizes(Collection<Job> jobs) {
+        public static Iterable<JobSize> getSizes(Iterable<Job> jobs) {
                 LinkedList<JobSize> sizes= new LinkedList<JobSize>(); 
                 for (Job job:jobs){
                         sizes.add(JobSize.getSize(job));
