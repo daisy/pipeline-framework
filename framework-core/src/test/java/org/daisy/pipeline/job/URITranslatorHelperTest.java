@@ -138,7 +138,6 @@ public class URITranslatorHelperTest   {
 		Assert.assertEquals(2,filtered.size());
 		Assert.assertEquals(Lists.newArrayList(filtered).get(1).getName(),optOutNA);
 		Assert.assertEquals(Lists.newArrayList(filtered).get(0).getName(),optIn);
-
 	}
 	
 	@Test 
@@ -148,8 +147,8 @@ public class URITranslatorHelperTest   {
 		String[] parts= URITranslatorHelper.getDynamicResultProviderParts(outName,null,"");
 		Assert.assertEquals(outName+"/"+outName,parts[0]);
 		Assert.assertEquals(".xml",parts[1]);
-		
 	}
+	
 	@Test 
 	public void getDynamicResultProviderPartsEmpty() throws Exception{
 

@@ -48,8 +48,13 @@ public class XmlValidator {
 	public static final URL CLIENTS_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/clients.rnc");
 	public static final URL ERROR_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/error.rnc");
 	public static final URL ALIVE_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/alive.rnc");;
+	public static final URL SIZES_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/sizes.rnc");
 	
 	public static boolean validate(Document document, URL schemaUrl) {
+                if (schemaUrl==null) {
+                        logger.error("schema url is null");
+                        return false;
+                }
 		ErrorHandlerImpl errorHandler = new ErrorHandlerImpl();
 
 		PropertyMapBuilder properties = new PropertyMapBuilder();
