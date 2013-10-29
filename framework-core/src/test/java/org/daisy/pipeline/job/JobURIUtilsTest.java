@@ -64,4 +64,16 @@ public class JobURIUtilsTest   {
 		URI expected= tmpdir.toURI().resolve(URI.create(String.format("%s/",id.toString())));
 		Assert.assertEquals(JobURIUtils.getJobBase(id),expected);
 	}
+
+	@Test
+	public void getJobContextDir() throws Exception{
+                File context=JobURIUtils.getJobContextDir(id);
+		Assert.assertEquals(new File(JobURIUtils.getJobBaseFile(id),JobURIUtils.IO_DATA_SUBDIR).getAbsolutePath(),context.getAbsolutePath());
+	}
+
+	@Test
+	public void getJobOutputDir() throws Exception{
+                File output=JobURIUtils.getJobOutputDir(id);
+		Assert.assertEquals(new File(JobURIUtils.getJobBaseFile(id),JobURIUtils.IO_OUTPUT_SUBDIR).getAbsolutePath(),output.getAbsolutePath());
+	}
 }
