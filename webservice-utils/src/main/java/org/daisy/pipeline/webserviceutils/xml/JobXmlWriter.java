@@ -175,7 +175,7 @@ public class JobXmlWriter {
                         resultsElm.appendChild(portResultElm);
                         for(JobResult result: this.job.getContext().getResults().getResults(port)){
                                 Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
-                                resultElm.setAttribute("href", String.format("%s/port/%s",resultHref,result.getIdx()));
+                                resultElm.setAttribute("href", String.format("%s/port/%s/idx/%s",resultHref,port,result.getIdx()));
                                 if(result.getMediaType()!= null && !result.getMediaType().isEmpty()){
                                         resultElm.setAttribute("mime-type", result.getMediaType());
                                 }
@@ -197,7 +197,7 @@ public class JobXmlWriter {
                         resultsElm.appendChild(optionResultElm);
                         for(JobResult result: this.job.getContext().getResults().getResults(option)){
                                 Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
-                                resultElm.setAttribute("href", String.format("%s/option/%s",resultHref,result.getIdx()));
+                                resultElm.setAttribute("href", String.format("%s/option/%s/idx/%s",resultHref,option,result.getIdx()));
                                 if(result.getMediaType()!= null && !result.getMediaType().isEmpty()){
                                         resultElm.setAttribute("mime-type", result.getMediaType());
                                 }
