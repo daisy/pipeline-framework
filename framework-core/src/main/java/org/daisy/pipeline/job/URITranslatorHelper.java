@@ -32,6 +32,9 @@ final class URITranslatorHelper   {
 			}
 		};
 	}
+
+
+
 	/** Tranlatable options are those marked as anyFileURI or anyDirURI 
 	 */
 	public static final Predicate<XProcOptionInfo> getTranslatableOptionFilter(final XProcScript script){
@@ -52,12 +55,25 @@ final class URITranslatorHelper   {
 		};
 	}
 
+	public static final Predicate<XProcOptionInfo> getTemporalOptionsFilter(final XProcScript script){
+		return  new Predicate<XProcOptionInfo>(){
+			public boolean apply(XProcOptionInfo optionInfo){
+				return script.getOptionMetadata(optionInfo.getName())
+					.getOutput() == XProcOptionMetadata.Output.TEMP;
+			}
+		};
+	}
 	public static final Predicate<XProcOptionInfo> getTranslatableOutputOptionsFilter(final XProcScript script){
 		return Predicates.and(URITranslatorHelper.getTranslatableOptionFilter(script),
 					URITranslatorHelper.getOutputOptionFilter(script));
 
 	}
 
+	public static final Predicate<XProcOptionInfo> getResultOptionsFilter(final XProcScript script){
+		return Predicates.and(URITranslatorHelper.getTranslatableOptionFilter(script),
+					URITranslatorHelper.getOutputOptionFilter(script),Predicates.not(URITranslatorHelper.getTemporalOptionsFilter(script)));
+
+	}
 	public static final Predicate<XProcOptionInfo> getTranslatableInputOptionsFilter(final XProcScript script){
 		return Predicates.and(URITranslatorHelper.getTranslatableOptionFilter(script),
 				Predicates.not(URITranslatorHelper.getOutputOptionFilter(script)));

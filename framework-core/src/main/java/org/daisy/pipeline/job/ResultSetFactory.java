@@ -1,6 +1,10 @@
 package org.daisy.pipeline.job;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
@@ -80,7 +84,7 @@ public class ResultSetFactory {
 	static void collectOptions(XProcScript script,XProcInput inputs,URIMapper mapper,ResultSet.Builder builder){
 		Collection<XProcOptionInfo> optionInfos = Lists.newLinkedList(script.getXProcPipelineInfo().getOptions());
 		//options which are translatable and outputs
-		Collection<XProcOptionInfo> options= Collections2.filter(optionInfos,URITranslatorHelper.getTranslatableOutputOptionsFilter(script));
+		Collection<XProcOptionInfo> options= Collections2.filter(optionInfos,URITranslatorHelper.getResultOptionsFilter(script));
 		for(XProcOptionInfo option: options){
 			if(inputs.getOptions().get(option.getName())==null)
 				continue;
@@ -102,7 +106,5 @@ public class ResultSetFactory {
 		}
 
 	}
-
-
 	
 }

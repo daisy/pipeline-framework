@@ -35,13 +35,15 @@ result=
 element result{
 	attribute href { xsd:anyURI }
 	& attribute mime-type { text }
+	& (attribute file { text }) ?
 	& ( 	
 			attribute from { text }
 			& attribute name { text }
+			& attribute size { xsd:long }
 	  )?
 		& result*
 }
 
-job.status = "IDLE" | "RUNNING" | "DONE" | "ERROR"
+job.status = "IDLE" | "RUNNING" | "DONE" | "ERROR" | "VALIDATION_FAIL"
 
 message.level = "WARNING" | "ERROR" | "INFO" | "DEBUG" | "TRACE"

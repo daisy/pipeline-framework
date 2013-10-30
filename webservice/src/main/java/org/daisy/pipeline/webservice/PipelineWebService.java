@@ -94,6 +94,7 @@ public class PipelineWebService extends Application {
 		router.attach(Routes.CLIENT_ROUTE, ClientResource.class);
 		router.attach(Routes.HALT_ROUTE, HaltResource.class);
 		router.attach(Routes.PROPERTIES_ROUTE, PropertiesResource.class  );
+		router.attach(Routes.SIZES_ROUTE, SizesResource.class  );
 		return router;
 	}
 
