@@ -40,19 +40,21 @@ public class URITranslatorHelperTest   {
         QName  optOutFile ;
         QName  optOutDir  ;
         QName  optOutNA  ;
+        QName  optTemp;
 
 
 
 	@Before 
 	public void setUp(){
 
-		mscript= new Mock.ScriptGenerator.Builder().withOptionOutputsNA(1).withOptionInputs(1).withOptionOther(1).withOptionOutputsDir(1).withOptionOutputsFile(1).build().generate();
+		mscript= new Mock.ScriptGenerator.Builder().withOptionOutputsNA(1).withOptionInputs(1).withOptionOther(1).withOptionOutputsDir(1).withOptionOutputsFile(1).withOptionTemp(1).build().generate();
 		//options names
 		optIn      = Mock.ScriptGenerator.getOptionInputName(0);
 		optReg     = Mock.ScriptGenerator.getRegularOptionName(0);
 		optOutFile = Mock.ScriptGenerator.getOptionOutputFileName(0);
 		optOutDir  = Mock.ScriptGenerator.getOptionOutputDirName(0);
 		optOutNA  = Mock.ScriptGenerator.getOptionOutputNAName(0);
+		optTemp = Mock.ScriptGenerator.getOptionTempName(0);
 	}
 	@Test
 	public void notEmpty(){
@@ -74,13 +76,14 @@ public class URITranslatorHelperTest   {
 
 		List<XProcOptionInfo> infos=Lists.newLinkedList(mscript.getXProcPipelineInfo().getOptions());
 		Collection<XProcOptionInfo> filtered=Collections2.filter(infos,URITranslatorHelper.getTranslatableOptionFilter(mscript));	
-		Assert.assertEquals(4,filtered.size());
+		Assert.assertEquals(5,filtered.size());
 		//check we have the ones we expect
 		Set<QName> names= Sets.newHashSet();
 		names.add(optIn);
 		names.add(optOutDir);
 		names.add(optOutFile);
 		names.add(optOutNA);
+		names.add(optTemp);
 		for(XProcOptionInfo inf:filtered)
 			Assert.assertTrue(String.format("Name %s should've been filtered out",inf.getName()),names.contains(inf.getName()));
 
@@ -98,11 +101,12 @@ public class URITranslatorHelperTest   {
 		List<XProcOptionInfo> infos=Lists.newLinkedList(mscript.getXProcPipelineInfo().getOptions());
 		Collection<XProcOptionInfo> filtered=Collections2.filter(infos,URITranslatorHelper.getOutputOptionFilter(mscript));	
 
-		Assert.assertEquals(2,filtered.size());
+		Assert.assertEquals(3,filtered.size());
 		//check we have the ones we expect
 		Set<QName> names= Sets.newHashSet();
 		names.add(optOutDir);
 		names.add(optOutFile);
+		names.add(optTemp);
 		for(XProcOptionInfo inf:filtered)
 			Assert.assertTrue(String.format("Name %s should've been filtered",inf.getName()),names.contains(inf.getName()));
 	}
@@ -117,6 +121,21 @@ public class URITranslatorHelperTest   {
 		List<XProcOptionInfo> infos=Lists.newLinkedList(mscript.getXProcPipelineInfo().getOptions());
 		Collection<XProcOptionInfo> filtered=Collections2.filter(infos,URITranslatorHelper.getTranslatableOutputOptionsFilter(mscript));	
 
+		Assert.assertEquals(3,filtered.size());
+		//check we have the ones we expect
+		Set<QName> names= Sets.newHashSet();
+		names.add(optOutDir);
+		names.add(optOutFile);
+		names.add(optTemp);
+		for(XProcOptionInfo inf:filtered)
+			Assert.assertTrue(String.format("Name %s should've been filtered",inf.getName()),names.contains(inf.getName()));
+	}
+
+	@Test
+	public void getResultOptionsFilter() throws Exception {
+		List<XProcOptionInfo> infos=Lists.newLinkedList(mscript.getXProcPipelineInfo().getOptions());
+		Collection<XProcOptionInfo> filtered=Collections2.filter(infos,URITranslatorHelper.getResultOptionsFilter(mscript));	
+
 		Assert.assertEquals(2,filtered.size());
 		//check we have the ones we expect
 		Set<QName> names= Sets.newHashSet();
@@ -125,7 +144,6 @@ public class URITranslatorHelperTest   {
 		for(XProcOptionInfo inf:filtered)
 			Assert.assertTrue(String.format("Name %s should've been filtered",inf.getName()),names.contains(inf.getName()));
 	}
-
 	/**
 	 * Tests 'getTranslatableInputOptionsFilter'.
 	 *
