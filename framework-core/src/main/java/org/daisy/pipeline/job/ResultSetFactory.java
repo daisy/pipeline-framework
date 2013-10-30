@@ -84,7 +84,7 @@ public class ResultSetFactory {
 	static void collectOptions(XProcScript script,XProcInput inputs,URIMapper mapper,ResultSet.Builder builder){
 		Collection<XProcOptionInfo> optionInfos = Lists.newLinkedList(script.getXProcPipelineInfo().getOptions());
 		//options which are translatable and outputs
-		Collection<XProcOptionInfo> options= Collections2.filter(optionInfos,URITranslatorHelper.getTranslatableOutputOptionsFilter(script));
+		Collection<XProcOptionInfo> options= Collections2.filter(optionInfos,URITranslatorHelper.getResultOptionsFilter(script));
 		for(XProcOptionInfo option: options){
 			if(inputs.getOptions().get(option.getName())==null)
 				continue;
