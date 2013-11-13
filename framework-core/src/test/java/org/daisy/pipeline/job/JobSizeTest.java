@@ -69,18 +69,18 @@ public class JobSizeTest   {
         @Test
         public void testContextSize() throws IOException {
                long res=JobSize.getContextSize(id);
-               Assert.assertEquals("JobsSizeCalculartorulate directory size",(long)inputTxt.getBytes().length*2+contextDir.length()*2,res);
+               Assert.assertEquals("JobsSizeCalculartorulate directory size",(long)inputTxt.getBytes().length*2,res);
         }
 
         @Test
         public void testOutputSize() throws IOException {
                long res=JobSize.getOutputSize(id);
-               Assert.assertEquals("JobsSizeCalculartorulate directory size",(long)inputTxt.getBytes().length+outputDir.length()*2,res);
+               Assert.assertEquals("JobsSizeCalculartorulate directory size",(long)inputTxt.getBytes().length,res);
         }
         @Test
         public void testDirSize(){
                long res=JobSize.getDirSize(contextDir);
-               Assert.assertEquals("JobsSizeCalculartorulate directory size",(long)inputTxt.getBytes().length*2+contextDir.length()*2,res);
+               Assert.assertEquals("JobsSizeCalculartorulate directory size",(long)inputTxt.getBytes().length*2,res);
         }
 
         @Test

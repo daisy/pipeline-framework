@@ -115,7 +115,10 @@ public final class JobSize {
         protected static long getDirSize(File dir){
                 long size=0;
                 for (File f: Files.fileTreeTraverser().postOrderTraversal(dir)){
-                        size+=f.length();
+                        //ignore the size of dirs due to x-platform interoperability
+                        if (!f.isDirectory()){
+                                size+=f.length();
+                        }
                 }
                 return size;
         }
