@@ -65,477 +65,519 @@ import org.xml.sax.SAXException;
  */
 public class JobsResource extends AuthenticatedResource {
 
-	/** The tempfile prefix. */
-	private final String tempfilePrefix = "p2ws";
-	private final String tempfileSuffix = ".zip";
+        /** The tempfile prefix. */
+        private final String tempfilePrefix = "p2ws";
+        private final String tempfileSuffix = ".zip";
 
-	private final String JOB_DATA_FIELD = "job-data";
-	private final String JOB_REQUEST_FIELD = "job-request";
+        private final String JOB_DATA_FIELD = "job-data";
+        private final String JOB_REQUEST_FIELD = "job-request";
 
-	/** The logger. */
-	private static Logger logger = LoggerFactory.getLogger(JobsResource.class.getName());
+        /** The logger. */
+        private static Logger logger = LoggerFactory.getLogger(JobsResource.class.getName());
 
-	/**
-	 * Gets the resource.
-	 *
-	 * @return the resource
-	 */
-	@Get("xml")
-	public Representation getResource() {
-		if (!isAuthenticated()) {
-			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-			return null;
-		}
-		JobManager jobMan = webservice().getJobManager();
-		JobsXmlWriter writer = XmlWriterFactory.createXmlWriterForJobs(jobMan.getJobs());
-		Document doc = writer.getXmlDocument();
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
-		setStatus(Status.SUCCESS_OK);
-		return dom;
-	}
-
-
-	/**
-	 * Creates the resource.
-	 *
-	 * @param representation the representation
-	 * @return the representation
-	 * @throws Exception the exception
-	 */
-	@Post
-	public Representation createResource(Representation representation) {
-		if (!isAuthenticated()) {
-			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-			return null;
-		}
-		Client client = null;
-		if (webservice().getConfiguration().isAuthenticationEnabled()) {
-			String clientId = getQuery().getFirstValue("authid");
-			client = webservice().getStorage().getClientStorage().get(clientId);
-		}
-
-		if (representation == null) {
-			// POST request with no entity.
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return this.getErrorRepresentation("POST request with no entity");
-		}
+        /**
+         * Gets the resource.
+         *
+         * @return the resource
+         */
+        @Get("xml")
+        public Representation getResource() {
+                if (!isAuthenticated()) {
+                        setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+                        return null;
+                }
+                JobManager jobMan = webservice().getJobManager();
+                JobsXmlWriter writer = XmlWriterFactory.createXmlWriterForJobs(jobMan.getJobs());
+                Document doc = writer.getXmlDocument();
+                DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
+                setStatus(Status.SUCCESS_OK);
+                return dom;
+        }
 
 
-		Document doc = null;
-		ZipFile zipfile = null;
+        /**
+         * Creates the resource.
+         *
+         * @param representation the representation
+         * @return the representation
+         * @throws Exception the exception
+         */
+        @Post
+        public Representation createResource(Representation representation) {
+                if (!isAuthenticated()) {
+                        setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+                        return null;
+                }
+                Client client = null;
+                if (webservice().getConfiguration().isAuthenticationEnabled()) {
+                        String clientId = getQuery().getFirstValue("authid");
+                        client = webservice().getStorage().getClientStorage().get(clientId);
+                }
 
-		if (MediaType.MULTIPART_FORM_DATA.equals(representation.getMediaType(), true)) {
-			Request request = getRequest();
-			// sort through the multipart request
-			MultipartRequestData data = null;
-			try{
-				data = processMultipart(request);
-			}catch(Exception e){
-				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return this.getErrorRepresentation(e);
-			}
-			if (data == null) {
-				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return this.getErrorRepresentation("Multipart data is empty");
-			}
-			doc = data.getXml();
-			zipfile = data.getZipFile();
-		}
-		// else it's not multipart; all data should be inline.
-		else {
-			String s;
-			try {
-				s = representation.getText();
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				factory.setNamespaceAware(true);
-				DocumentBuilder builder = factory.newDocumentBuilder();
-				InputSource is = new InputSource(new StringReader(s));
-				doc = builder.parse(is);
-			} catch (IOException e) {
-				logger.error(e.getMessage());
-				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return this.getErrorRepresentation(e);
-			} catch (ParserConfigurationException e) {
-				logger.error(e.getMessage());
-				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return this.getErrorRepresentation(e);
-			} catch (SAXException e) {
-				logger.error(e.getMessage());
-				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return this.getErrorRepresentation(e);
-			}
-		}
+                if (representation == null) {
+                        // POST request with no entity.
+                        setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                        return this.getErrorRepresentation("POST request with no entity");
+                }
 
-		boolean isValid = Validator.validateJobRequest(doc, webservice());
 
-		if (!isValid) {
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return this.getErrorRepresentation("Job Request XML is not valid");
-		}
+                Document doc = null;
+                ZipFile zipfile = null;
 
-		Job job = createJob(doc, zipfile, client);
+                if (MediaType.MULTIPART_FORM_DATA.equals(representation.getMediaType(), true)) {
+                        Request request = getRequest();
+                        // sort through the multipart request
+                        MultipartRequestData data = null;
+                        try{
+                                data = processMultipart(request);
+                        }catch(Exception e){
+                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                                return this.getErrorRepresentation(e);
+                        }
+                        if (data == null) {
+                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                                return this.getErrorRepresentation("Multipart data is empty");
+                        }
+                        doc = data.getXml();
+                        zipfile = data.getZipFile();
+                }
+                // else it's not multipart; all data should be inline.
+                else {
+                        String s;
+                        try {
+                                s = representation.getText();
+                                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                                factory.setNamespaceAware(true);
+                                DocumentBuilder builder = factory.newDocumentBuilder();
+                                InputSource is = new InputSource(new StringReader(s));
+                                doc = builder.parse(is);
+                        } catch (IOException e) {
+                                logger.error(e.getMessage());
+                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                                return this.getErrorRepresentation(e);
+                        } catch (ParserConfigurationException e) {
+                                logger.error(e.getMessage());
+                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                                return this.getErrorRepresentation(e);
+                        } catch (SAXException e) {
+                                logger.error(e.getMessage());
+                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                                return this.getErrorRepresentation(e);
+                        }
+                }
 
-		if (job == null) {
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return this.getErrorRepresentation("Could not create job (job was null)");
-		}
-		
-		//store the config
-		webservice().getStorage().getJobConfigurationStorage()
-			.add(job.getId(),XmlUtils.DOMToString(doc));
+                boolean isValid = Validator.validateJobRequest(doc, webservice());
 
-		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
-		Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
-		setStatus(Status.SUCCESS_CREATED);
-		return dom;
+                if (!isValid) {
+                        setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                        return this.getErrorRepresentation("Job Request XML is not valid");
+                }
 
-	}
+                Job job;
+                try {
+                        job = createJob(doc, zipfile, client);
+                } catch (LocalInputException e) {
+                        setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                        return this.getErrorRepresentation("WS does not allow local inputs but a href starting with 'file:' was found");
+                }
 
-	/*
-	 * taken from an example at:
-	 * http://wiki.restlet.org/docs_2.0/13-restlet/28-restlet/64-restlet.html
-	 */
-	/**
-	 * Process multipart.
-	 *
-	 * @param request the request
-	 * @return the multipart request data
-	 */
-	private MultipartRequestData processMultipart(Request request) throws Exception {
+                if (job == null) {
+                        setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                        return this.getErrorRepresentation("Could not create job (job was null)");
+                }
+                
+                //store the config
+                webservice().getStorage().getJobConfigurationStorage()
+                        .add(job.getId(),XmlUtils.DOMToString(doc));
 
-		String tmpdir = webservice().getConfiguration().getTmpDir();
-		logger.debug("Tmpdir: "+tmpdir);
-		// 1/ Create a factory for disk-based file items
-		DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
-		fileItemFactory.setSizeThreshold(1000240);
+                JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
+                Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();
+                DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
+                setStatus(Status.SUCCESS_CREATED);
+                return dom;
 
-		// 2/ Create a new file upload handler based on the Restlet
-		// FileUpload extension that will parse Restlet requests and
-		// generates FileItems.
-		RestletFileUpload upload = new RestletFileUpload(fileItemFactory);
-		List<FileItem> items;
+        }
 
-		ZipFile zip = null;
-		String xml = "";
-			items = upload.parseRequest(request);
-			Iterator<FileItem> it = items.iterator();
-			while (it.hasNext()) {
-				FileItem fi = it.next();
-				if (fi.getFieldName().equals(JOB_DATA_FIELD)) {
-					File file = File.createTempFile(tempfilePrefix, tempfileSuffix, new File(tmpdir));
-					fi.write(file);
+        /*
+         * taken from an example at:
+         * http://wiki.restlet.org/docs_2.0/13-restlet/28-restlet/64-restlet.html
+         */
+        /**
+         * Process multipart.
+         *
+         * @param request the request
+         * @return the multipart request data
+         */
+        private MultipartRequestData processMultipart(Request request) throws Exception {
 
-					// re-opening the file after writing to it
-					File file2 = new File(file.getAbsolutePath());
-					zip = new ZipFile(file2);
-				}
-				else if (fi.getFieldName().equals(JOB_REQUEST_FIELD)) {
-					xml = fi.getString("utf-8");
-					logger.debug("XML multi:"+xml);
-				}
-			}
+                String tmpdir = webservice().getConfiguration().getTmpDir();
+                logger.debug("Tmpdir: "+tmpdir);
+                // 1/ Create a factory for disk-based file items
+                DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
+                fileItemFactory.setSizeThreshold(1000240);
 
-			if (zip == null || xml.length() == 0) {
-				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return null;
-			}
+                // 2/ Create a new file upload handler based on the Restlet
+                // FileUpload extension that will parse Restlet requests and
+                // generates FileItems.
+                RestletFileUpload upload = new RestletFileUpload(fileItemFactory);
+                List<FileItem> items;
 
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-			docFactory.setNamespaceAware(true);
-			DocumentBuilder builder = docFactory.newDocumentBuilder();
-			InputSource is = new InputSource(new StringReader(xml));
-			Document doc = builder.parse(is);
-			MultipartRequestData data = new MultipartRequestData(zip, doc);
-			return data;
+                ZipFile zip = null;
+                String xml = "";
+                        items = upload.parseRequest(request);
+                        Iterator<FileItem> it = items.iterator();
+                        while (it.hasNext()) {
+                                FileItem fi = it.next();
+                                if (fi.getFieldName().equals(JOB_DATA_FIELD)) {
+                                        File file = File.createTempFile(tempfilePrefix, tempfileSuffix, new File(tmpdir));
+                                        fi.write(file);
 
-	}
+                                        // re-opening the file after writing to it
+                                        File file2 = new File(file.getAbsolutePath());
+                                        zip = new ZipFile(file2);
+                                }
+                                else if (fi.getFieldName().equals(JOB_REQUEST_FIELD)) {
+                                        xml = fi.getString("utf-8");
+                                        logger.debug("XML multi:"+xml);
+                                }
+                        }
 
-	// just a convenience class for representing the parts of a multipart request
-	/**
-	 * The Class MultipartRequestData.
-	 */
-	private class MultipartRequestData {
+                        if (zip == null || xml.length() == 0) {
+                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                                return null;
+                        }
 
-		/**
-		 * Process multipart.
-		 *
-		 * @param request the request
-		 * @return the multipart request data
-		 */
-		/** The zip. */
-		private final ZipFile zip;
+                        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+                        docFactory.setNamespaceAware(true);
+                        DocumentBuilder builder = docFactory.newDocumentBuilder();
+                        InputSource is = new InputSource(new StringReader(xml));
+                        Document doc = builder.parse(is);
+                        MultipartRequestData data = new MultipartRequestData(zip, doc);
+                        return data;
 
-		/** The xml. */
-		private final Document xml;
+        }
 
-		/**
-		 * Instantiates a new multipart request data.
-		 *
-		 * @param zip the zip
-		 * @param xml the xml
-		 */
-		MultipartRequestData(ZipFile zip, Document xml) {
-			this.zip = zip;
-			this.xml = xml;
-		}
+        // just a convenience class for representing the parts of a multipart request
+        /**
+         * The Class MultipartRequestData.
+         */
+        private class MultipartRequestData {
 
-		/**
-		 * Gets the zip file.
-		 *
-		 * @return the zip file
-		 */
-		ZipFile getZipFile() {
-			return zip;
-		}
+                /**
+                 * Process multipart.
+                 *
+                 * @param request the request
+                 * @return the multipart request data
+                 */
+                /** The zip. */
+                private final ZipFile zip;
 
-		/**
-		 * Gets the xml.
-		 *
-		 * @return the xml
-		 */
-		Document getXml() {
-			return xml;
-		}
-	}
+                /** The xml. */
+                private final Document xml;
 
-	/**
-	 * Creates the job.
-	 *
-	 * @param doc the doc
-	 * @param zip the zip
-	 * @return the job
-	 */
-	private Job createJob(Document doc, ZipFile zip, Client client) {
+                /**
+                 * Instantiates a new multipart request data.
+                 *
+                 * @param zip the zip
+                 * @param xml the xml
+                 */
+                MultipartRequestData(ZipFile zip, Document xml) {
+                        this.zip = zip;
+                        this.xml = xml;
+                }
 
-		Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
-		String niceName="";
-		NodeList elems=doc.getElementsByTagName("nicename"); 
-		if(elems.getLength()!=0)
-			niceName=elems.item(0).getTextContent();
-		logger.debug(String.format("Job's nice name: %s",niceName));
-		// TODO eventually we might want to have an href-script ID lookup table
-		// but for now, we'll get the script ID from the last part of the URL
-		String scriptId = scriptElm.getAttribute("href");
-		if (scriptId.endsWith("/")) {
-			scriptId = scriptId.substring(0, scriptId.length() - 1);
-		}
-		int idx = scriptId.lastIndexOf('/');
-		scriptId = scriptId.substring(idx+1);
+                /**
+                 * Gets the zip file.
+                 *
+                 * @return the zip file
+                 */
+                ZipFile getZipFile() {
+                        return zip;
+                }
 
-		// get the script from the ID
-		ScriptRegistry scriptRegistry = webservice().getScriptRegistry();
-		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptId);
-		if (unfilteredScript == null) {
-			logger.error("Script not found");
-			return null;
-		}
-		XProcScript script = unfilteredScript.load();
-		XProcInput.Builder inBuilder = new XProcInput.Builder();
-		XProcOutput.Builder outBuilder = new XProcOutput.Builder();
+                /**
+                 * Gets the xml.
+                 *
+                 * @return the xml
+                 */
+                Document getXml() {
+                        return xml;
+                }
+        }
 
-		addInputsToJob(doc.getElementsByTagName("input"), script.getXProcPipelineInfo().getInputPorts(), inBuilder);
+        /**
+         * Creates the job.
+         *
+         * @param doc the doc
+         * @param zip the zip
+         * @return the job
+         * @throws LocalInputException
+         */
+        private Job createJob(Document doc, ZipFile zip, Client client)
+                        throws LocalInputException {
 
-		/*Iterable<XProcOptionInfo> filteredOptions = null;
-		  if (!((PipelineWebService) getApplication()).isLocal()) {
-		  filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
-		  }*/
+                Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
+                String niceName="";
+                NodeList elems=doc.getElementsByTagName("nicename"); 
+                if(elems.getLength()!=0)
+                        niceName=elems.item(0).getTextContent();
+                logger.debug(String.format("Job's nice name: %s",niceName));
+                // TODO eventually we might want to have an href-script ID lookup table
+                // but for now, we'll get the script ID from the last part of the URL
+                String scriptId = scriptElm.getAttribute("href");
+                if (scriptId.endsWith("/")) {
+                        scriptId = scriptId.substring(0, scriptId.length() - 1);
+                }
+                int idx = scriptId.lastIndexOf('/');
+                scriptId = scriptId.substring(idx+1);
 
-		addOptionsToJob(doc.getElementsByTagName("option"), script, inBuilder);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
-		addOutputsToJob(doc.getElementsByTagName("output"), script.getXProcPipelineInfo().getOutputPorts(), outBuilder);
+                // get the script from the ID
+                ScriptRegistry scriptRegistry = webservice().getScriptRegistry();
+                XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptId);
+                if (unfilteredScript == null) {
+                        logger.error("Script not found");
+                        return null;
+                }
+                XProcScript script = unfilteredScript.load();
+                XProcInput.Builder inBuilder = new XProcInput.Builder();
+                XProcOutput.Builder outBuilder = new XProcOutput.Builder();
 
-		BoundXProcScript bound= BoundXProcScript.from(script,inBuilder.build(),outBuilder.build());
+                addInputsToJob(doc.getElementsByTagName("input"), script.getXProcPipelineInfo().getInputPorts(), inBuilder);
 
-		JobManager jobMan = webservice().getJobManager();
-		JobContext ctxt=null;
-		ResourceCollection resourceCollection=null;
-		if (zip != null){
-			resourceCollection = new ZipResourceContext(zip);
-		}
-		if(webservice().getConfiguration().isLocalFS()){
-			ctxt=webservice().getJobContextFactory().newMappingJobContext(niceName,bound);	
+                /*Iterable<XProcOptionInfo> filteredOptions = null;
+                  if (!((PipelineWebService) getApplication()).isLocal()) {
+                  filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
+                  }*/
 
-		}else{
-			ctxt=webservice().getJobContextFactory().newMappingJobContext(niceName,bound,resourceCollection);
-		}
-		Job job = jobMan.newJob(ctxt);
+                addOptionsToJob(doc.getElementsByTagName("option"), script, inBuilder);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
+                addOutputsToJob(doc.getElementsByTagName("output"), script.getXProcPipelineInfo().getOutputPorts(), outBuilder);
 
-		NodeList callbacks = doc.getElementsByTagName("callback");
-		for (int i = 0; i<callbacks.getLength(); i++) {
-			Element elm = (Element)callbacks.item(i);
-			String href = elm.getAttribute("href");
-			CallbackType type = CallbackType.valueOf(elm.getAttribute("type").toUpperCase());
-			String frequency = elm.getAttribute("frequency");
-			Callback callback = null;
-			int freq = 0;
-			if (frequency.length() > 0) {
-				freq = Integer.parseInt(frequency);
-			}
+                BoundXProcScript bound= BoundXProcScript.from(script,inBuilder.build(),outBuilder.build());
 
-			try {
-				callback = new Callback(job.getId(), client, new URI(href), type, freq);
-			} catch (URISyntaxException e) {
-				logger.warn("Cannot create callback: " + e.getMessage());
-			}
+                JobManager jobMan = webservice().getJobManager();
+                JobContext ctxt=null;
+                ResourceCollection resourceCollection=null;
+                if (zip != null){
+                        resourceCollection = new ZipResourceContext(zip);
+                }
+                if(webservice().getConfiguration().isLocalFS()){
+                        ctxt=webservice().getJobContextFactory().newMappingJobContext(niceName,bound);  
 
-			if (callback != null) {
-				webservice().getCallbackRegistry().addCallback(callback);
-			}
-		}
-		return job;
-	}
+                }else{
+                        ctxt=webservice().getJobContextFactory().newMappingJobContext(niceName,bound,resourceCollection);
+                }
+                Job job = jobMan.newJob(ctxt);
 
-	/**
-	 * Adds the inputs to job.
-	 *
-	 * @param nodes the nodes
-	 * @param inputPorts the input ports
-	 * @param builder the builder
-	 */
-	private void addInputsToJob(NodeList nodes, Iterable<XProcPortInfo> inputPorts, XProcInput.Builder builder) {
+                NodeList callbacks = doc.getElementsByTagName("callback");
+                for (int i = 0; i<callbacks.getLength(); i++) {
+                        Element elm = (Element)callbacks.item(i);
+                        String href = elm.getAttribute("href");
+                        CallbackType type = CallbackType.valueOf(elm.getAttribute("type").toUpperCase());
+                        String frequency = elm.getAttribute("frequency");
+                        Callback callback = null;
+                        int freq = 0;
+                        if (frequency.length() > 0) {
+                                freq = Integer.parseInt(frequency);
+                        }
 
-		Iterator<XProcPortInfo> it = inputPorts.iterator();
-		while (it.hasNext()) {
-			XProcPortInfo input = it.next();
-			String inputName = input.getName();
-			for (int i = 0; i < nodes.getLength(); i++) {
-				Element inputElm = (Element) nodes.item(i);
-				String name = inputElm.getAttribute("name");
-				if (name.equals(inputName)) {
-					NodeList fileNodes = inputElm.getElementsByTagName("item");
-					NodeList docwrapperNodes = inputElm.getElementsByTagName("docwrapper");
+                        try {
+                                callback = new Callback(job.getId(), client, new URI(href), type, freq);
+                        } catch (URISyntaxException e) {
+                                logger.warn("Cannot create callback: " + e.getMessage());
+                        }
 
-					if (fileNodes.getLength() > 0) {
-						for (int j = 0; j < fileNodes.getLength(); j++) {
-							String src = ((Element)fileNodes.item(j)).getAttribute("value");
-							LazySaxSourceProvider prov= new LazySaxSourceProvider(src);
-							builder.withInput(name, prov);
-						}
-					}
-					else {
-						for (int j = 0; j< docwrapperNodes.getLength(); j++){
-							Element docwrapper = (Element)docwrapperNodes.item(j);
-							Node content = null;
-							// find the first element child
-							for (int q = 0; q < docwrapper.getChildNodes().getLength(); q++) {
-								if (docwrapper.getChildNodes().item(q).getNodeType() == Node.ELEMENT_NODE) {
-									content = docwrapper.getChildNodes().item(q);
-									break;
-								}
-							}
+                        if (callback != null) {
+                                webservice().getCallbackRegistry().addCallback(callback);
+                        }
+                }
+                return job;
+        }
 
-							final SAXSource source = new SAXSource();
+        /**
+         * Adds the inputs to job.
+         *
+         * @param nodes the nodes
+         * @param inputPorts the input ports
+         * @param builder the builder
+         * @throws LocalInputException
+         */
+        private void addInputsToJob(NodeList nodes,
+                        Iterable<XProcPortInfo> inputPorts, XProcInput.Builder builder)
+                        throws LocalInputException {
 
-							// TODO any way to get Source directly from a node?
-							String xml = XmlUtils.nodeToString(content);
-							InputSource is = new org.xml.sax.InputSource(new java.io.StringReader(xml));
-							source.setInputSource(is);
-							Provider<Source> prov= new Provider<Source>(){
-								@Override
-								public Source provide(){
-									return source;
-								}
-							};
-							builder.withInput(name, prov);
-						}
-					}
-				}
-			}
-		}
+                Iterator<XProcPortInfo> it = inputPorts.iterator();
+                while (it.hasNext()) {
+                        XProcPortInfo input = it.next();
+                        String inputName = input.getName();
+                        for (int i = 0; i < nodes.getLength(); i++) {
+                                Element inputElm = (Element) nodes.item(i);
+                                String name = inputElm.getAttribute("name");
+                                if (name.equals(inputName)) {
+                                        NodeList fileNodes = inputElm.getElementsByTagName("item");
+                                        NodeList docwrapperNodes = inputElm.getElementsByTagName("docwrapper");
 
-	}
+                                        if (fileNodes.getLength() > 0) {
+                                                for (int j = 0; j < fileNodes.getLength(); j++) {
+                                                        String src = ((Element)fileNodes.item(j)).getAttribute("value");
+                                                        this.checkInput(src);
+                                                        LazySaxSourceProvider prov= new LazySaxSourceProvider(src);
+                                                        builder.withInput(name, prov);
+                                                }
+                                        }
+                                        else {
+                                                for (int j = 0; j< docwrapperNodes.getLength(); j++){
+                                                        Element docwrapper = (Element)docwrapperNodes.item(j);
+                                                        Node content = null;
+                                                        // find the first element child
+                                                        for (int q = 0; q < docwrapper.getChildNodes().getLength(); q++) {
+                                                                if (docwrapper.getChildNodes().item(q).getNodeType() == Node.ELEMENT_NODE) {
+                                                                        content = docwrapper.getChildNodes().item(q);
+                                                                        break;
+                                                                }
+                                                        }
 
-	/**
-	 * Adds the inputs to job.
-	 *
-	 * @param nodes the nodes
-	 * @param inputPorts the input ports
-	 * @param builder the builder
-	 */
-	private void addOutputsToJob(NodeList nodes, Iterable<XProcPortInfo> ports, XProcOutput.Builder builder) {
-		if(!webservice().getConfiguration().isLocalFS()){
-			return;
-		}
+                                                        final SAXSource source = new SAXSource();
 
-		for(XProcPortInfo output : ports){
-			String outputName = output.getName();
-			for (int i = 0; i < nodes.getLength(); i++) {
-				Element outputElm = (Element) nodes.item(i);
-				String name = outputElm.getAttribute("name");
-				if (name.equals(outputName)) {
-					NodeList fileNodes = outputElm.getElementsByTagName("item");
+                                                        // TODO any way to get Source directly from a node?
+                                                        //
+                                                        String xml = XmlUtils.nodeToString(content);
+                                                        InputSource is = new org.xml.sax.InputSource(new java.io.StringReader(xml));
+                                                        source.setInputSource(is);
+                                                        Provider<Source> prov= new Provider<Source>(){
+                                                                @Override
+                                                                public Source provide(){
+                                                                        return source;
+                                                                }
+                                                        };
+                                                        builder.withInput(name, prov);
+                                                }
+                                        }
+                                }
+                        }
+                }
 
-					for (int j = 0; j < fileNodes.getLength(); j++) {
-						String res = ((Element)fileNodes.item(j)).getAttribute("value");
-						LazySaxResultProvider prov= new LazySaxResultProvider(res);
-						builder.withOutput(name, prov);
-					}
-				}
-			}
-		}
+        }
 
-	}
-	/**
-	 * Adds the options to job.
-	 */
-	//private void addOptionsToJob(NodeList nodes, Iterable<XProcOptionInfo> allOptions, XProcInput.Builder builder, Iterable<XProcOptionInfo> filteredOptions) {
-	private void addOptionsToJob(NodeList nodes, XProcScript script, XProcInput.Builder builder) {
+        /**
+         * Adds the inputs to job.
+         *
+         * @param nodes the nodes
+         * @param inputPorts the input ports
+         * @param builder the builder
+         */
+        private void addOutputsToJob(NodeList nodes, Iterable<XProcPortInfo> ports, XProcOutput.Builder builder) {
+                if(!webservice().getConfiguration().isLocalFS()){
+                        return;
+                }
 
-		Iterable<XProcOptionInfo> allOptions = script.getXProcPipelineInfo().getOptions();
+                for(XProcPortInfo output : ports){
+                        String outputName = output.getName();
+                        for (int i = 0; i < nodes.getLength(); i++) {
+                                Element outputElm = (Element) nodes.item(i);
+                                String name = outputElm.getAttribute("name");
+                                if (name.equals(outputName)) {
+                                        NodeList fileNodes = outputElm.getElementsByTagName("item");
 
-		Iterable<XProcOptionInfo> filteredOptions = null;
-		filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
+                                        for (int j = 0; j < fileNodes.getLength(); j++) {
+                                                String res = ((Element)fileNodes.item(j)).getAttribute("value");
+                                                LazySaxResultProvider prov= new LazySaxResultProvider(res);
+                                                builder.withOutput(name, prov);
+                                        }
+                                }
+                        }
+                }
 
-		Iterator<XProcOptionInfo> it = allOptions.iterator();
-		while(it.hasNext()) {
-			XProcOptionInfo opt = it.next();
-			String optionName = opt.getName().toString();
+        }
+        
+        /**
+         * Adds the options to job.
+         * @throws LocalInputException
+         */
+        //private void addOptionsToJob(NodeList nodes, Iterable<XProcOptionInfo> allOptions, XProcInput.Builder builder, Iterable<XProcOptionInfo> filteredOptions) {
+        private void addOptionsToJob(NodeList nodes, XProcScript script,
+                        XProcInput.Builder builder) throws LocalInputException {
 
-			// if we are filtering options, then check to ensure that this particular option exists in the filtered set
-			if (filteredOptions != null) {
-				Iterator<XProcOptionInfo> itFilter = filteredOptions.iterator();
-				boolean found = false;
-				while (itFilter.hasNext()) {
-					String filteredOptName = itFilter.next().getName().toString();
-					if (filteredOptName.equals(optionName)) {
-						found = true;
-						break;
-					}
-				}
+                Iterable<XProcOptionInfo> allOptions = script.getXProcPipelineInfo().getOptions();
 
-				// if the option did not exist in the filtered set of options
-				// then we are not allowed to set it
-				// however, it still requires a value, so set it to ""
-				if (!found) {
-					builder.withOption(new QName(optionName), "");
-					continue;
-				}
-			}
+                Iterable<XProcOptionInfo> filteredOptions = null;
+                filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
 
-			// this is an option we are allowed to set. so, look for the option in the job request doc.
-			for (int i = 0; i< nodes.getLength(); i++) {
-				Element optionElm = (Element) nodes.item(i);
-				String name = optionElm.getAttribute("name");
-				if (name.equals(optionName)) {
-					XProcOptionMetadata metadata = script.getOptionMetadata(new QName(name));
-					if (metadata.isSequence()) {
-						NodeList items = optionElm.getElementsByTagName("item");
-						// concat items
-						String val = ((Element)items.item(0)).getAttribute("value");
-						for (int j = 1; j<items.getLength(); j++) {
-							Element e = (Element)items.item(j);
-							val += metadata.getSeparator() + e.getAttribute("value");
-						}
-						builder.withOption(new QName(name), val);
-					}
-					else {
-						String val = optionElm.getTextContent();
-						builder.withOption(new QName(name), val);
-						break;
-					}
+                Iterator<XProcOptionInfo> it = allOptions.iterator();
+                while(it.hasNext()) {
+                        XProcOptionInfo opt = it.next();
+                        String optionName = opt.getName().toString();
+                        // if we are filtering options, then check to ensure that this particular option exists in the filtered set
+                        if (filteredOptions != null) {
+                                Iterator<XProcOptionInfo> itFilter = filteredOptions.iterator();
+                                boolean found = false;
+                                while (itFilter.hasNext()) {
+                                        String filteredOptName = itFilter.next().getName().toString();
+                                        if (filteredOptName.equals(optionName)) {
+                                                found = true;
+                                                break;
+                                        }
+                                }
 
-				}
-			}
-		}
-	}
-	}
+                                // if the option did not exist in the filtered set of options
+                                // then we are not allowed to set it
+                                // however, it still requires a value, so set it to ""
+                                if (!found) {
+                                        builder.withOption(new QName(optionName), "");
+                                        continue;
+                                }
+                        }
+
+                        // this is an option we are allowed to set. so, look for the option in the job request doc.
+                        for (int i = 0; i< nodes.getLength(); i++) {
+                                Element optionElm = (Element) nodes.item(i);
+                                String name = optionElm.getAttribute("name");
+                                XProcOptionMetadata metadata = script.getOptionMetadata(new QName(name));
+                                //if input we have to check
+                                boolean isInput = metadata.getType()== "anyDirURI" ||metadata.getType()== "anyFileURI";
+                                if (name.equals(optionName)) {
+                                        if (metadata.isSequence()) {
+                                                NodeList items = optionElm.getElementsByTagName("item");
+                                                // concat items
+                                                String val = ((Element)items.item(0)).getAttribute("value");
+
+                                                for (int j = 1; j<items.getLength(); j++) {
+                                                        Element e = (Element)items.item(j);
+                                                        if(isInput){
+                                                                checkInput(e.getAttribute("value"));
+                                                        }
+                                                        val += metadata.getSeparator() + e.getAttribute("value");
+                                                }
+                                                builder.withOption(new QName(name), val);
+                                        }
+                                        else {
+                                                String val = optionElm.getTextContent();
+                                                if(isInput){
+                                                        checkInput(val);
+                                                }
+                                                builder.withOption(new QName(name), val);
+                                                break;
+                                        }
+
+                                }
+                        }
+                }
+        }
+        private void checkInput(String uri) throws LocalInputException{ 
+                //if the uri file starts with "file" but we're not executing in
+                //localfs mode send exception
+                if (uri.contains("file:") && ! this.webservice().getConfiguration().isLocalFS()){
+                        throw new LocalInputException(uri);
+                }
+        }
+
+        private class LocalInputException extends Exception{
+                /**
+                 *
+                 */
+                private static final long serialVersionUID = 1L;
+
+                public LocalInputException(String message){
+                        super(message);
+                }
+        }
+}
