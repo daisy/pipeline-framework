@@ -352,7 +352,7 @@ public class JobsResource extends AuthenticatedResource {
 		if (zip != null){
 			resourceCollection = new ZipResourceContext(zip);
 		}
-		if(webservice().getConfiguration().isLocal()){
+		if(webservice().getConfiguration().isLocalFS()){
 			ctxt=webservice().getJobContextFactory().newMappingJobContext(niceName,bound);	
 
 		}else{
@@ -453,7 +453,7 @@ public class JobsResource extends AuthenticatedResource {
 	 * @param builder the builder
 	 */
 	private void addOutputsToJob(NodeList nodes, Iterable<XProcPortInfo> ports, XProcOutput.Builder builder) {
-		if(!webservice().getConfiguration().isLocal()){
+		if(!webservice().getConfiguration().isLocalFS()){
 			return;
 		}
 

@@ -4,7 +4,7 @@ public interface Properties {
 	public static final String MAX_REQUEST_TIME = "org.daisy.pipeline.ws.maxrequesttime";
 	public static final String TMPDIR = "org.daisy.pipeline.ws.tmpdir";
 	public static final String AUTHENTICATION = "org.daisy.pipeline.ws.authentication";
-	public static final String LOCAL_MODE = "org.daisy.pipeline.ws.local";
+	public static final String LOCALFS= "org.daisy.pipeline.ws.localfs";
 	public static final String FRAMEWORK_VERSION="org.daisy.pipeline.version";
 	public static final String JAVA_IO_TMPDIR = "java.io.tmpdir";
 	public static final String PORT = "org.daisy.pipeline.ws.port";
