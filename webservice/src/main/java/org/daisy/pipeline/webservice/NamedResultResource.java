@@ -1,6 +1,9 @@
 package org.daisy.pipeline.webservice;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.util.Collection;
 
 import org.daisy.pipeline.job.Job;
@@ -28,85 +31,85 @@ import com.google.common.io.Files;
  * The Class ResultResource.
  */
 public abstract class NamedResultResource extends AuthenticatedResource {
-	/** The job. */
-	private Job job;
-	private String idx;
-	private String name;
-	private static Logger logger = LoggerFactory
-			.getLogger(NamedResultResource.class.getName());
+        /** The job. */
+        private Job job;
+        private String idx;
+        private String name;
+        private static Logger logger = LoggerFactory
+                        .getLogger(NamedResultResource.class.getName());
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.restlet.resource.Resource#doInit()
-	 */
-	@Override
-	public void doInit() {
-		super.doInit();
-		if (!isAuthenticated()) {
-			return;
-		}
-		JobManager jobMan = webservice().getJobManager();
-		String idParam = (String) getRequestAttributes().get("id");
-		try {
-			JobId id = JobIdFactory.newIdFromString(idParam);
-			job = jobMan.getJob(id);
-		} catch (Exception e) {
-			logger.warn("Job Id malformed - Job not found: " + idParam);
-			job = null;
-		}
-		name = (String) getRequestAttributes().get("name");
-		idx = (String) getRequestAttributes().get("idx");
-	}
+        /*
+         * (non-Javadoc)
+         *
+         * @see org.restlet.resource.Resource#doInit()
+         */
+        @Override
+        public void doInit() {
+                super.doInit();
+                if (!isAuthenticated()) {
+                        return;
+                }
+                JobManager jobMan = webservice().getJobManager();
+                String idParam = (String) getRequestAttributes().get("id");
+                try {
+                        JobId id = JobIdFactory.newIdFromString(idParam);
+                        job = jobMan.getJob(id);
+                } catch (Exception e) {
+                        logger.warn("Job Id malformed - Job not found: " + idParam);
+                        job = null;
+                }
+                name = NamedResultResource.decode((String) getRequestAttributes().get("name"));
+                idx = NamedResultResource.decode((String)getRequestAttributes().get("idx"));
+        }
 
-	/**
-	 * Gets the resource.
-	 *
-	 * @return the resource
-	 */
-	@Get
-	public Representation getResource() {
-		if (!isAuthenticated()) {
-			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-			return null;
-		}
+        /**
+         * Gets the resource.
+         *
+         * @return the resource
+         */
+        @Get
+        public Representation getResource() {
+                if (!isAuthenticated()) {
+                        setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+                        return null;
+                }
 
-		if (job == null) {
-			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-			return this.getErrorRepresentation("Job not found");
-		}
+                if (job == null) {
+                        setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+                        return this.getErrorRepresentation("Job not found");
+                }
 
-		if (!(job.getStatus().equals(Job.Status.DONE) || job.getStatus().equals(Job.Status.VALIDATION_FAIL))) {
-			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-			return this.getErrorRepresentation("Job status differnt to DONE or VALIDATION_FAIL");
-		}
-		if (!(name!=null&&!name.isEmpty())) {
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return this.getErrorRepresentation("No name provided");
-		}
-		if (idx!=null&&!idx.isEmpty()){
-			return this.singleResult();
+                if (!(job.getStatus().equals(Job.Status.DONE) || job.getStatus().equals(Job.Status.VALIDATION_FAIL))) {
+                        setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+                        return this.getErrorRepresentation("Job status differnt to DONE or VALIDATION_FAIL");
+                }
+                if (!(name!=null&&!name.isEmpty())) {
+                        setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                        return this.getErrorRepresentation("No name provided");
+                }
+                if (idx!=null&&!idx.isEmpty()){
+                        return this.singleResult();
 
-		}else{
-			return this.zippedResult();
-		}
-	}
+                }else{
+                        return this.zippedResult();
+                }
+        }
 
-	private Representation singleResult(){
-		Collection<JobResult> results=this.gatherResults(this.job,this.name);
-		logger.debug(String.format("Getting single result for %s idx: %s",this.name,this.idx));
-		results=Collections2.filter(results, new Predicate<JobResult>(){
-			@Override
-			public boolean apply(JobResult res) {
-				return res.getIdx().equals(NamedResultResource.this.idx);
-			}
-		});
-		if(results.size()==0){
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return this.getErrorRepresentation(String.format("Option idx %s not found for option name %s",idx,name));
-		}
+        private Representation singleResult(){
+                Collection<JobResult> results=this.gatherResults(this.job,this.name);
+                logger.debug(String.format("Getting single result for %s idx: %s",this.name,this.idx));
+                results=Collections2.filter(results, new Predicate<JobResult>(){
+                        @Override
+                        public boolean apply(JobResult res) {
+                                return res.getIdx().equals(NamedResultResource.this.idx);
+                        }
+                });
+                if(results.size()==0){
+                        setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                        return this.getErrorRepresentation(String.format("Option idx %s not found for option name %s",idx,name));
+                }
 
-		try{
+                try{
                         JobResult res=Lists.newArrayList(results).get(0);
                         File file = new File(res.getPath());
                         Representation rep = new FileRepresentation(file,
@@ -119,30 +122,37 @@ public abstract class NamedResultResource extends AuthenticatedResource {
                         disposition.setType(Disposition.TYPE_ATTACHMENT);
                         rep.setDisposition(disposition);
                         return rep;
-		}catch(Exception e){
-				setStatus(Status.SERVER_ERROR_INTERNAL);
-				return this.getErrorRepresentation(e);
-		}
-			
-	}
+                }catch(Exception e){
+                                setStatus(Status.SERVER_ERROR_INTERNAL);
+                                return this.getErrorRepresentation(e);
+                }
+                        
+        }
 
-	private Representation zippedResult(){
-		Collection<JobResult> results=this.gatherResults(this.job,this.name);
-		logger.debug(String.format("Getting port result for %s ",this.name));
-		if (results.size() == 0) {
-			setStatus(Status.SERVER_ERROR_INTERNAL);
-			return this.getErrorRepresentation("No results available");
-		}
-		try{
+        private Representation zippedResult(){
+                Collection<JobResult> results=this.gatherResults(this.job,this.name);
+                logger.debug(String.format("Getting port result for %s ",this.name));
+                if (results.size() == 0) {
+                        setStatus(Status.SERVER_ERROR_INTERNAL);
+                        return this.getErrorRepresentation("No results available");
+                }
+                try{
                         return ResultResource.getZippedRepresentation(results,this.job);
-		}catch(Exception e){
-				setStatus(Status.SERVER_ERROR_INTERNAL);
-				return this.getErrorRepresentation(e);
-		}
+                }catch(Exception e){
+                                setStatus(Status.SERVER_ERROR_INTERNAL);
+                                return this.getErrorRepresentation(e);
+                }
 
-	}
+        }
 
-	protected abstract Collection<JobResult> gatherResults(Job job,String name);
+        protected abstract Collection<JobResult> gatherResults(Job job,String name);
 
+        private static String decode(String urlPart){
+                try {
+                        return  new URI(urlPart).getPath();
+                } catch (URISyntaxException e) {
+                        throw new RuntimeException("Error decoding url",e);
+                }
+        }
         
 }
