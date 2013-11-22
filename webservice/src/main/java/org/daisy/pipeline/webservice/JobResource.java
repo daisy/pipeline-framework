@@ -75,7 +75,7 @@ public class JobResource extends AuthenticatedResource {
                 JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
         
                 writer.withFullResults(true);
-                if(this.webservice().getConfiguration().isLocal()){
+                if(this.webservice().getConfiguration().isLocalFS()){
                 	writer.withLocalPaths();
                 }
                 if (msgSeq == -1) {

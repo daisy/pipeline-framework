@@ -29,8 +29,7 @@ public class Routes {
 	
 	
 	private String path = "/ws";
-	private static final int LOCAL_PORT_DEF=8181;
-	private static final int REMOTE_PORT_DEF=8182;
+	private static final int PORT=8181;
 	private int portNumber = 0;
 	private String host = "http://localhost";
 	
@@ -83,13 +82,10 @@ public class Routes {
 						Properties.PORT, port, portNumber));
 			}
 		} else {
-			portNumber = isLocal() ? LOCAL_PORT_DEF : REMOTE_PORT_DEF;
+			portNumber =PORT;
 		}
 
 	}
 	
-	public boolean isLocal() {
-		return Boolean.valueOf(System.getProperty(Properties.LOCAL_MODE));
-	}	
 	
 }
