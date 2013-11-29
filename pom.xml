@@ -115,9 +115,9 @@
     <module>xproc-api</module>
   </modules>
   <scm>
-    <connection>scm:hg:https://code.google.com/p/daisy-pipeline/</connection>
-    <developerConnection>scm:hg:https://code.google.com/p/daisy-pipeline/</developerConnection>
-    <url>https://code.google.com/p/daisy-pipeline/source/browse/</url>
+    <connection>scm:git:git@github.com:daisy-consortium/pipeline-framework.git</connection>
+    <url>scm:git:git@github.com:daisy-consortium/pipeline-framework.git</url>
+    <developerConnection>scm:git:git@github.com:daisy-consortium/pipeline-framework.git</developerConnection>
   </scm>
   <issueManagement>
     <system>Google Code Issue Tracker</system>
