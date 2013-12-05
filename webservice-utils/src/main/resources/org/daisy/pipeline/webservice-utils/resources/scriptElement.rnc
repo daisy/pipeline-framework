@@ -18,6 +18,7 @@ script =
         
         & element input {
             port.attrs 
+            & attribute primary { xsd:boolean }
             & mediatype.attr?
         }*
         
