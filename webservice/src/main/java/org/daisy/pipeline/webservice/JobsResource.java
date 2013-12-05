@@ -535,8 +535,10 @@ public class JobsResource extends AuthenticatedResource {
                                 //if input we have to check
                                 boolean isInput = metadata.getType()== "anyDirURI" ||metadata.getType()== "anyFileURI";
                                 if (name.equals(optionName)) {
-                                        if (metadata.isSequence()) {
-                                                NodeList items = optionElm.getElementsByTagName("item");
+                                        //eventhough the option is a sequence it may happen that 
+                                        //there are no item elements, just one value
+                                        NodeList items = optionElm.getElementsByTagName("item");
+                                        if (metadata.isSequence() && items.getLength()>0) {
                                                 // concat items
                                                 String val = ((Element)items.item(0)).getAttribute("value");
 
