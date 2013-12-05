@@ -179,7 +179,9 @@ public class Validator {
 		
 		while (it.hasNext()) {
 			XProcPortInfo arg = it.next();
-			boolean validArg = false;
+                        //small trick: if it's not primary it's valid until otherwise proven (i.e.  item@value len ==0)
+                        //if is primary is unvalid util otherwise proven, it's set and all the items are correctly constructed
+			boolean validArg = !arg.isPrimary();
 			// input elements should be of one of two forms:
 			// <input name="in1">
 			//   <item value="./path/to/file/book.xml/>
