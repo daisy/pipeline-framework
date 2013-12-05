@@ -83,8 +83,7 @@ public class ModuleUriResolver implements URIResolver, EntityResolver {
 		InputSource src=null;
 		Module mod = mRegistry.getModuleByEntity(publicId);
 		//by public id
-		if (mod != null) {
-
+		if (mod != null &&mod.getEntity(publicId)!=null && mod.getEntity(publicId).getResource()!=null) {
 			src=new InputSource(mod.getEntity(publicId).getResource().toString());
 
 		}else{
