@@ -1,19 +1,20 @@
 package org.daisy.converter.parser;
 
-import javax.xml.namespace.QName;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.xml.namespace.QName;
 
 /**
  * Constants used when parsing XProcScripts
  */
 public final class XProcScriptConstants {
 
-
 	private XProcScriptConstants() {
 		// no instantiations
 	}
 
-	/**  CD  namespace. */
+	/** CD namespace. */
 	public static String CD_NS = "http://www.daisy.org/ns/pipeline/converter";
 
 	/** P namespace. */
@@ -33,17 +34,32 @@ public final class XProcScriptConstants {
 		/** documentation. */
 		public static QName P_DOCUMENTATION = new QName(P_NS, "documentation");
 
-		/**  input. */
+		/** input. */
 		public static QName P_INPUT = new QName(P_NS, "input");
 
-		/**  output. */
+		/** output. */
 		public static QName P_OUTPUT = new QName(P_NS, "output");
 
-		/**  option. */
+		/** option. */
 		public static QName P_OPTION = new QName(P_NS, "option");
 
-		/**  params. */
 		public static QName P_PARAMS = new QName(P_NS, "params");
+
+		public static QName P_EMPTY = new QName(P_NS, "empty");
+
+		public static QName P_DOCUMENT = new QName(P_NS, "document");
+
+		public static QName P_INLINE = new QName(P_NS, "inline");
+
+		public static QName P_DATA = new QName(P_NS, "data");
+		
+		public static Set<QName> CONNECTIONS = new HashSet<QName>();
+		static {
+			CONNECTIONS.add(P_EMPTY);
+			CONNECTIONS.add(P_DOCUMENT);
+			CONNECTIONS.add(P_INLINE);
+			CONNECTIONS.add(P_DATA);
+		}
 
 		/**
 		 * Instantiates a new elements.
@@ -54,7 +70,7 @@ public final class XProcScriptConstants {
 	}
 
 	/**
-	 *  Attributes.
+	 * Attributes.
 	 */
 	public static final class Attributes {
 
@@ -89,10 +105,12 @@ public final class XProcScriptConstants {
 		public static final QName PX_TYPE = new QName(PX_NS, "type");
 
 		/** The Constant PX_TYPE. */
-		public static final QName PX_INPUT_FILESETS = new QName(PX_NS, "input-filesets");
+		public static final QName PX_INPUT_FILESETS = new QName(PX_NS,
+				"input-filesets");
 
 		/** The Constant PX_TYPE. */
-		public static final QName PX_OUTPUT_FILESETS = new QName(PX_NS, "output-filesets");
+		public static final QName PX_OUTPUT_FILESETS = new QName(PX_NS,
+				"output-filesets");
 
 		/** The Constant PX_ROLE */
 		public static final QName PX_ROLE = new QName(PX_NS, "role");
