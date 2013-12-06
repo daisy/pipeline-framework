@@ -1,5 +1,7 @@
 package org.daisy.converter.parser;
 
+import java.util.HashSet;
+
 import javax.xml.namespace.QName;
 
 
@@ -42,8 +44,23 @@ public final class XProcScriptConstants {
 		/**  option. */
 		public static QName P_OPTION = new QName(P_NS, "option");
 
-		/**  params. */
 		public static QName P_PARAMS = new QName(P_NS, "params");
+
+		public static QName P_EMPTY= new QName(P_NS, "empty");
+
+		public static QName P_DOCUMENT= new QName(P_NS, "document");
+
+		public static QName P_INLINE= new QName(P_NS, "inline");
+
+		public static QName P_DATA= new QName(P_NS, "data");
+
+                public final static HashSet<QName> CONNECTIONS = new HashSet<QName>();
+                static{
+                        CONNECTIONS.add(P_EMPTY);
+                        CONNECTIONS.add(P_DOCUMENT);
+                        CONNECTIONS.add(P_INLINE);
+                        CONNECTIONS.add(P_DATA);
+                }
 
 		/**
 		 * Instantiates a new elements.

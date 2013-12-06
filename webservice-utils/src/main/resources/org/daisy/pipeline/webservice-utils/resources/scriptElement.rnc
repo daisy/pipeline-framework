@@ -24,7 +24,6 @@ script =
         & element option {
             port.attrs
             & attribute ordered { xsd:boolean } # does the order matter
-            & attribute required { xsd:boolean } 
             & attribute type { text } # XSD type
             & mediatype.attr? # use if option references a file
             & attribute outputType { output.type }?
@@ -39,6 +38,7 @@ script =
  port.attrs =
     attribute name { text } 
     & attribute desc { text } 
+    & attribute required { xsd:boolean } 
     & attribute sequence { xsd:boolean }
 
 mediatype.attr = 

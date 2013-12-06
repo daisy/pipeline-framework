@@ -171,8 +171,25 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		 *
 		 * @return true, if is first child
 		 */
-		public boolean isFirstChild() {
+		private boolean isFirstChild() {
 			return mAncestors.size() == 2;
+		}
+
+		/**
+		 * Checks if is first child.
+		 *
+		 * @return true, if is first child
+		 */
+		private boolean isDepth(int detph) {
+			return mAncestors.size() == detph+1;
+		}
+		/**
+		 * Checks if is first child.
+		 *
+		 * @return true, if is first child
+		 */
+		private QName getParentName() {
+                        return mAncestors.get(mAncestors.size() - 2).asStartElement().getName();
 		}
 
 		/**
@@ -215,18 +232,14 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 						scriptBuilder.withDescription(dHolder.mDetail);
 						scriptBuilder.withShortName(dHolder.mShort);
 						scriptBuilder.withHomepage(dHolder.mHomepage);
-					} else if (mAncestors.get(mAncestors.size() - 2)
-							.asStartElement().getName()
+					} else if (this.getParentName()
 							.equals(Elements.P_INPUT)
-							|| mAncestors.get(mAncestors.size() - 2)
-									.asStartElement().getName()
-									.equals(Elements.P_OUTPUT)) {
+							|| this.getParentName().equals(Elements.P_OUTPUT)) {
 						mPortBuilders.peekLast().mBuilder
 								.withDescription(dHolder.mDetail);
 						mPortBuilders.peekLast().mBuilder
 								.withNiceName(dHolder.mShort);
-					} else if (mAncestors.get(mAncestors.size() - 2)
-							.asStartElement().getName()
+					} else if (this.getParentName()
 							.equals(Elements.P_OPTION)) {
 						mOptionBuilders.peekLast().mBuilder
 								.withDescription(dHolder.mDetail);
@@ -249,6 +262,8 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 					bHolder.mName = name.getValue();
 					bHolder.mBuilder = portBuilder;
 					mPortBuilders.add(bHolder);
+                                        //by defualt all ports are required
+                                        portBuilder.withRequired(true);
 					parsePort(event.asStartElement(), portBuilder);
 
 				} else if (event.isStartElement()
@@ -265,14 +280,24 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 						mOptionBuilders.add(bHolder);
 
 					}
-				}
+				}else if (this.isPortConnection(event)){
+					mPortBuilders.peekLast().mBuilder.withRequired(false);
+                                }
 
 			}
 		}
 
+                protected boolean isPortConnection(XMLEvent event){
 
-		protected void parseSeparator(final StartElement declareStep){
-		}
+                        boolean ret=event.isStartElement()
+                                                && this.isDepth(2)
+						&& this.getParentName()
+							.equals(Elements.P_INPUT) 
+                                                        && Elements.CONNECTIONS.contains(event.asStartElement().getName());
+                        return ret;
+								
+                }
+
 		protected void parseFilesets(final StartElement declareStep)
 				throws XMLStreamException {
 			Attribute inputs = declareStep
