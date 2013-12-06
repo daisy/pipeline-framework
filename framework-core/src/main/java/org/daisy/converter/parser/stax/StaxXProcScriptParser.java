@@ -174,6 +174,15 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		private boolean isFirstChild() {
 			return mAncestors.size() == 2;
 		}
+
+		/**
+		 * Checks if is first child.
+		 *
+		 * @return true, if is first child
+		 */
+		private boolean isDepth(int detph) {
+			return mAncestors.size() == detph+1;
+		}
 		/**
 		 * Checks if is first child.
 		 *
@@ -281,7 +290,10 @@ public class StaxXProcScriptParser implements XProcScriptParser {
                 protected boolean isPortConnection(XMLEvent event){
 
                         boolean ret=event.isStartElement()
-						&& Elements.CONNECTIONS.contains(event.asStartElement().getName());
+                                                && this.isDepth(2)
+						&& this.getParentName()
+							.equals(Elements.P_INPUT) 
+                                                        && Elements.CONNECTIONS.contains(event.asStartElement().getName());
                         return ret;
 								
                 }
