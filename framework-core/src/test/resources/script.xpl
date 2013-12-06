@@ -33,7 +33,9 @@
         </p:documentation>
     </p:input>
     
-    <p:input port="source2"/>
+    <p:input port="source2">
+            <p:empty/>
+    </p:input>
     
     <p:input port="parameters" kind="parameter"/>
     
