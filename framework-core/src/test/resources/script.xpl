@@ -46,7 +46,9 @@
         </p:documentation>
     </p:output>
     
-    <p:output port="result2"/>
+    <p:output port="result2">
+            <p:empty/>
+    </p:output>
 
     <p:option name="option1" select="." required="true" px:dir="output" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
