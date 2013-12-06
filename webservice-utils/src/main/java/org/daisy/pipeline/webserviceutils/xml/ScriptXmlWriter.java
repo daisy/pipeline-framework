@@ -107,6 +107,7 @@ public class ScriptXmlWriter {
 
 			Element inputElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "input");
 			inputElm.setAttribute("name", input.getName());
+			inputElm.setAttribute("required", Boolean.toString(meta.isRequired()));
 			inputElm.setAttribute("sequence", Boolean.toString(input.isSequence()));
 			if (meta.getMediaType() != null && !meta.getMediaType().isEmpty()) {
 				inputElm.setAttribute("mediaType", meta.getMediaType());

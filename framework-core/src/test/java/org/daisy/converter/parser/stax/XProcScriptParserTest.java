@@ -17,6 +17,7 @@ import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -108,6 +109,14 @@ public class XProcScriptParserTest {
 	 
 	 }
 	 
+	 @Test
+	 public void testInputPortRequired() {
+		 XProcPortMetadata port = scp.getPortMetadata("source");
+                 assertTrue(port.isRequired());
+		 port = scp.getPortMetadata("source2");
+                 Assert.assertFalse(port.isRequired());
+	 
+	 }
 	 /**
 	  * Test missing input metadata.
 	  */

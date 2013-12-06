@@ -36,12 +36,14 @@ import com.google.common.base.Predicates;
 
 // TODO: Auto-generated Javadoc
 /**
- * StaxXProcScriptParser parses the xpl file extracting the metadata and buiding the XProcScript object
+ * StaxXProcScriptParser parses the xpl file extracting the metadata and buiding
+ * the XProcScript object
  */
 public class StaxXProcScriptParser implements XProcScriptParser {
 
 	/** The Constant logger. */
-	private static final Logger logger = LoggerFactory.getLogger(StaxXProcScriptParser.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(StaxXProcScriptParser.class);
 	/** The xmlinputfactory. */
 	private XMLInputFactory mFactory;
 
@@ -50,8 +52,9 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 	/**
 	 * Sets the uri resolver.
-	 *
-	 * @param uriResolver the new uri resolver
+	 * 
+	 * @param uriResolver
+	 *            the new uri resolver
 	 */
 	public void setUriResolver(URIResolver uriResolver) {
 		mUriResolver = uriResolver;
@@ -59,8 +62,9 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 	/**
 	 * Sets the factory.
-	 *
-	 * @param factory the new factory
+	 * 
+	 * @param factory
+	 *            the new factory
 	 */
 	public void setFactory(XMLInputFactory factory) {
 		mFactory = factory;
@@ -69,11 +73,13 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 	/**
 	 * Activate (OSGI)
 	 */
-	public void activate(){
+	public void activate() {
 		logger.trace("Activating XProc script parser");
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.daisy.pipeline.script.XProcScriptParser#parse(java.net.URI)
 	 */
 	@Override
@@ -82,7 +88,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 	}
 
 	/**
-	 *StatefulParser makes the parsing process thread safe.
+	 * StatefulParser makes the parsing process thread safe.
 	 */
 	private class StatefulParser {
 
@@ -96,12 +102,14 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		private final LinkedList<XProcOptionMetadataBuilderHolder> mOptionBuilders = new LinkedList<XProcOptionMetadataBuilderHolder>();
 
 		/** The script builder. */
-		private XProcScript.Builder scriptBuilder ;
+		private XProcScript.Builder scriptBuilder;
 
 		/**
-		 * Parses the xpl file extracting the metadata attached to options,ports and the step
-		 *
-		 * @param uri the uri
+		 * Parses the xpl file extracting the metadata attached to options,ports
+		 * and the step
+		 * 
+		 * @param uri
+		 *            the uri
 		 * @return the x proc script
 		 */
 		public XProcScript parse(final XProcScriptService descriptor) {
@@ -111,15 +119,16 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			InputStream is = null;
 			XMLEventReader reader = null;
 			scriptBuilder = new XProcScript.Builder();
-			logger.debug("Parsing with descriptor:"+descriptor);
-			scriptBuilder=scriptBuilder.withDescriptor(descriptor);
+			logger.debug("Parsing with descriptor:" + descriptor);
+			scriptBuilder = scriptBuilder.withDescriptor(descriptor);
 			StaxXProcPipelineInfoParser infoParser = new StaxXProcPipelineInfoParser();
 			infoParser.setFactory(mFactory);
 			infoParser.setUriResolver(mUriResolver);
 			try {
 				// init the XMLStreamReader
 				// uRL descUrl = pipelineInfo.getURI().toURL();
-				scriptBuilder.withPipelineInfo(infoParser.parse(descriptor.getURI()));
+				scriptBuilder.withPipelineInfo(infoParser.parse(descriptor
+						.getURI()));
 				URL descUrl = descriptor.getURI().toURL();
 				// if we have a url resolver resolve the
 				if (mUriResolver != null) {
@@ -168,19 +177,40 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 		/**
 		 * Checks if is first child.
-		 *
+		 * 
 		 * @return true, if is first child
 		 */
-		public boolean isFirstChild() {
+		private boolean isFirstChild() {
 			return mAncestors.size() == 2;
 		}
 
 		/**
+		 * Checks the depth of the current element
+		 * 
+		 * @return true, if the element's depth is the given depth
+		 */
+		private boolean isDepth(int detph) {
+			return mAncestors.size() == detph + 1;
+		}
+
+		/**
+		 * Returns the name of the current element's parent.
+		 * 
+		 * @return the QName of the parent
+		 */
+		private QName getParentName() {
+			return mAncestors.get(mAncestors.size() - 2).asStartElement()
+					.getName();
+		}
+
+		/**
 		 * Reads the next element
-		 *
-		 * @param reader the reader
+		 * 
+		 * @param reader
+		 *            the reader
 		 * @return the xML event
-		 * @throws XMLStreamException the xML stream exception
+		 * @throws XMLStreamException
+		 *             the xML stream exception
 		 */
 		private XMLEvent readNext(XMLEventReader reader)
 				throws XMLStreamException {
@@ -196,17 +226,21 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 		/**
 		 * Parses the step.
-		 *
-		 * @param reader the reader
-		 * @throws XMLStreamException the xML stream exception
+		 * 
+		 * @param reader
+		 *            the reader
+		 * @throws XMLStreamException
+		 *             the xML stream exception
 		 */
-		public void parseStep(final XMLEventReader reader) throws XMLStreamException {
+		public void parseStep(final XMLEventReader reader)
+				throws XMLStreamException {
 			while (reader.hasNext()) {
 				XMLEvent event = readNext(reader);
-				if(event.isStartElement() &&event.asStartElement().getName()
-								.equals(Elements.P_DECLARE_STEP)){ 
+				if (event.isStartElement()
+						&& event.asStartElement().getName()
+								.equals(Elements.P_DECLARE_STEP)) {
 					parseFilesets(event.asStartElement());
-				}else if (event.isStartElement()
+				} else if (event.isStartElement()
 						&& event.asStartElement().getName()
 								.equals(Elements.P_DOCUMENTATION)) {
 					DocumentationHolder dHolder = new DocumentationHolder();
@@ -215,19 +249,13 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 						scriptBuilder.withDescription(dHolder.mDetail);
 						scriptBuilder.withShortName(dHolder.mShort);
 						scriptBuilder.withHomepage(dHolder.mHomepage);
-					} else if (mAncestors.get(mAncestors.size() - 2)
-							.asStartElement().getName()
-							.equals(Elements.P_INPUT)
-							|| mAncestors.get(mAncestors.size() - 2)
-									.asStartElement().getName()
-									.equals(Elements.P_OUTPUT)) {
+					} else if (this.getParentName().equals(Elements.P_INPUT)
+							|| this.getParentName().equals(Elements.P_OUTPUT)) {
 						mPortBuilders.peekLast().mBuilder
 								.withDescription(dHolder.mDetail);
 						mPortBuilders.peekLast().mBuilder
 								.withNiceName(dHolder.mShort);
-					} else if (mAncestors.get(mAncestors.size() - 2)
-							.asStartElement().getName()
-							.equals(Elements.P_OPTION)) {
+					} else if (this.getParentName().equals(Elements.P_OPTION)) {
 						mOptionBuilders.peekLast().mBuilder
 								.withDescription(dHolder.mDetail);
 						mOptionBuilders.peekLast().mBuilder
@@ -249,6 +277,8 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 					bHolder.mName = name.getValue();
 					bHolder.mBuilder = portBuilder;
 					mPortBuilders.add(bHolder);
+					// by default all ports are required
+					portBuilder.withRequired(true);
 					parsePort(event.asStartElement(), portBuilder);
 
 				} else if (event.isStartElement()
@@ -265,14 +295,24 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 						mOptionBuilders.add(bHolder);
 
 					}
+				} else if (this.isPortConnection(event)) {
+					mPortBuilders.peekLast().mBuilder.withRequired(false);
 				}
 
 			}
 		}
 
+		protected boolean isPortConnection(XMLEvent event) {
 
-		protected void parseSeparator(final StartElement declareStep){
+			boolean ret = event.isStartElement()
+					&& this.isDepth(2)
+					&& this.getParentName().equals(Elements.P_INPUT)
+					&& Elements.CONNECTIONS.contains(event.asStartElement()
+							.getName());
+			return ret;
+
 		}
+
 		protected void parseFilesets(final StartElement declareStep)
 				throws XMLStreamException {
 			Attribute inputs = declareStep
@@ -280,27 +320,31 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 			Attribute outputs = declareStep
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_OUTPUT_FILESETS);
-			if (inputs!=null){
-				String splitInputs[]=inputs.getValue().split("\\s+");
-				for( String fset : splitInputs){
+			if (inputs != null) {
+				String splitInputs[] = inputs.getValue().split("\\s+");
+				for (String fset : splitInputs) {
 					this.scriptBuilder.withInputFileset(fset);
 				}
 			}
 
-			if (outputs!=null){
-				String splitOutputs[]=outputs.getValue().split("\\s+");
-				for( String fset : splitOutputs){
+			if (outputs != null) {
+				String splitOutputs[] = outputs.getValue().split("\\s+");
+				for (String fset : splitOutputs) {
 					this.scriptBuilder.withOutputFileset(fset);
 				}
 			}
 
 		}
+
 		/**
 		 * Parses the option.
-		 *
-		 * @param optionElement the option element
-		 * @param optionBuilder the option builder
-		 * @throws XMLStreamException the xML stream exception
+		 * 
+		 * @param optionElement
+		 *            the option element
+		 * @param optionBuilder
+		 *            the option builder
+		 * @throws XMLStreamException
+		 *             the xML stream exception
 		 */
 		protected void parseOption(final StartElement optionElement,
 				final XProcOptionMetadata.Builder optionBuilder)
@@ -308,9 +352,10 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 			Attribute type = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_TYPE);
-			/*Attribute dir = optionElement
-					.getAttributeByName(XProcScriptConstants.Attributes.PX_DIR);
-			*/
+			/*
+			 * Attribute dir = optionElement
+			 * .getAttributeByName(XProcScriptConstants.Attributes.PX_DIR);
+			 */
 			Attribute mediaType = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_MEDIA_TYPE);
 			Attribute output = optionElement
@@ -328,9 +373,9 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			if (type != null) {
 				optionBuilder.withType(type.getValue());
 			}
-			/*if (dir != null) {
-				optionBuilder.withDirection(dir.getValue());
-			}*/
+			/*
+			 * if (dir != null) { optionBuilder.withDirection(dir.getValue()); }
+			 */
 			if (output != null) {
 				optionBuilder.withOutput(output.getValue());
 			}
@@ -347,36 +392,46 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 		/**
 		 * Parses the documentation.
-		 *
-		 * @param reader the reader
-		 * @param dHolder the d holder
+		 * 
+		 * @param reader
+		 *            the reader
+		 * @param dHolder
+		 *            the d holder
 		 * @return the documentation holder
-		 * @throws XMLStreamException the xML stream exception
+		 * @throws XMLStreamException
+		 *             the xML stream exception
 		 */
 		private DocumentationHolder parseDocumentation(
 				final XMLEventReader reader, final DocumentationHolder dHolder)
 				throws XMLStreamException {
 
-			Predicate<XMLEvent> pred = Predicates.or(EventPredicates.IS_START_ELEMENT,
+			Predicate<XMLEvent> pred = Predicates.or(
+					EventPredicates.IS_START_ELEMENT,
 					EventPredicates.IS_END_ELEMENT);
 
-			// the tricky thing here is that you have to ignore blocks of markup for px:role="author" and px:role="maintainer"
+			// the tricky thing here is that you have to ignore blocks of markup
+			// for px:role="author" and px:role="maintainer"
 			StaxEventHelper.loop(reader, pred,
 					EventPredicates.getChildOrSiblingPredicate(),
 					new EventProcessor() {
 
-						// keep track of when we enter and exit a block that we want to ignore with these vars
+						// keep track of when we enter and exit a block that we
+						// want to ignore with these vars
 						boolean processChildren = true;
 						int elemsToIgnore = 0;
 
 						@Override
-						public void process(XMLEvent event) throws XMLStreamException {
+						public void process(XMLEvent event)
+								throws XMLStreamException {
 
 							if (event.isStartElement()) {
 
-								// in cases where we need to ignore the child elements, just keep count of how many open
-								// elements we're seeing so that we can note when they have been closed
-								if (processChildren == false && elemsToIgnore > 0) {
+								// in cases where we need to ignore the child
+								// elements, just keep count of how many open
+								// elements we're seeing so that we can note
+								// when they have been closed
+								if (processChildren == false
+										&& elemsToIgnore > 0) {
 									elemsToIgnore++;
 								}
 								// we got past the block we wanted to skip
@@ -386,11 +441,15 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 								if (processChildren) {
 									StartElement elm = event.asStartElement();
-									Attribute attr = elm.getAttributeByName(Attributes.PX_ROLE);
-									String role = (attr != null ? attr.getValue() : "");
+									Attribute attr = elm
+											.getAttributeByName(Attributes.PX_ROLE);
+									String role = (attr != null ? attr
+											.getValue() : "");
 
-									// ignore blocks of author and maintainer data
-									if (role.contains(Values.AUTHOR) || role.contains(Values.MAINTAINER)) {
+									// ignore blocks of author and maintainer
+									// data
+									if (role.contains(Values.AUTHOR)
+											|| role.contains(Values.MAINTAINER)) {
 										elemsToIgnore++;
 										processChildren = false;
 										return;
@@ -398,28 +457,32 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 									else if (role.equals(Values.NAME)) {
 										reader.next();
-										dHolder.mShort = reader.peek().asCharacters().getData();
+										dHolder.mShort = reader.peek()
+												.asCharacters().getData();
 									}
 
 									else if (role.equals(Values.DESC)) {
 										reader.next();
-										dHolder.mDetail = reader.peek().asCharacters().getData();
-									}
-									else if (role.equals(Values.HOMEPAGE)) {
+										dHolder.mDetail = reader.peek()
+												.asCharacters().getData();
+									} else if (role.equals(Values.HOMEPAGE)) {
 										reader.next();
 										// if @href is present, use that
 										if (elm.getAttributeByName(Attributes.HREF) != null) {
-											dHolder.mHomepage = elm.getAttributeByName(Attributes.HREF).getValue();
+											dHolder.mHomepage = elm
+													.getAttributeByName(
+															Attributes.HREF)
+													.getValue();
 										}
 										// otherwise just use the text contents
 										else {
-											dHolder.mHomepage = reader.peek().asCharacters().getData();
+											dHolder.mHomepage = reader.peek()
+													.asCharacters().getData();
 										}
 									}
 
 								}
-							}
-							else if (event.isEndElement()) {
+							} else if (event.isEndElement()) {
 
 								if (processChildren == false) {
 									elemsToIgnore--;
@@ -432,10 +495,13 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 		/**
 		 * Parses the port.
-		 *
-		 * @param portElement the port element
-		 * @param portBuilder the port builder
-		 * @throws XMLStreamException the xML stream exception
+		 * 
+		 * @param portElement
+		 *            the port element
+		 * @param portBuilder
+		 *            the port builder
+		 * @throws XMLStreamException
+		 *             the xML stream exception
 		 */
 		private void parsePort(final StartElement portElement,
 				final XProcPortMetadata.Builder portBuilder)
@@ -488,6 +554,5 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		/** The m builder. */
 		XProcPortMetadata.Builder mBuilder;
 	}
-
 
 }
