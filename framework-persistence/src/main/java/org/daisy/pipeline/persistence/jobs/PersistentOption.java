@@ -6,8 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
-
 import javax.xml.namespace.QName;
 
 import org.daisy.pipeline.job.JobId;
@@ -19,7 +19,7 @@ public class PersistentOption  implements Serializable {
 	public static final long serialVersionUID=1L;
 	@EmbeddedId
 	PK id;
-
+        @Lob
 	String value;
 
 	/**

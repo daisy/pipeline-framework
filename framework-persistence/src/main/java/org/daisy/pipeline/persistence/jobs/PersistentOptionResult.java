@@ -1,7 +1,6 @@
 package org.daisy.pipeline.persistence.jobs;
 
 import java.io.Serializable;
-
 import java.net.URI;
 
 import javax.persistence.Column;
@@ -9,7 +8,6 @@ import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import javax.xml.namespace.QName;
 
 import org.daisy.pipeline.job.JobId;
@@ -27,6 +25,7 @@ public class PersistentOptionResult{
 
 	String optionName;
 
+        @Column(length=32672)
 	String path;
 
 	String mediaType;
