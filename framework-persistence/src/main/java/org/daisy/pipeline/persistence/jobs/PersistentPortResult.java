@@ -1,7 +1,6 @@
 package org.daisy.pipeline.persistence.jobs;
 
 import java.io.Serializable;
-
 import java.net.URI;
 
 import javax.persistence.Column;
@@ -24,7 +23,7 @@ public class PersistentPortResult   {
 	private PK id;
 
 	String portName;
-
+        @Column(length=32672)
 	String path;
 
 	String mediaType;

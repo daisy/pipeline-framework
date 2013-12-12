@@ -2,8 +2,8 @@ package org.daisy.pipeline.persistence.jobs;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
-
 import javax.xml.transform.Source;
 
 import org.daisy.common.base.Provider;
@@ -12,6 +12,7 @@ import org.daisy.common.base.Provider;
 public class PersistentSource implements Source,Serializable,Provider<Source>{
 	static final long serialVersionUID=98749124L;
 
+        @Column(length=32672)
 	private String systemId;
 
 	/**
