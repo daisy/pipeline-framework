@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-parent</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Framework Parent POM</name>
   <description>The DAISY Pipeline 2 is an open source framework for the automated processing of various digital formats efficiently and economically. It intends to facilitate the production and maintenance of accessible content for people with print disabilities.</description>
@@ -118,6 +118,7 @@
     <connection>scm:git:git@github.com:daisy-consortium/pipeline-framework.git</connection>
     <url>scm:git:git@github.com:daisy-consortium/pipeline-framework.git</url>
     <developerConnection>scm:git:git@github.com:daisy-consortium/pipeline-framework.git</developerConnection>
+    <tag>v1.7</tag>
   </scm>
   <issueManagement>
     <system>Google Code Issue Tracker</system>
@@ -127,26 +128,26 @@
     <!-- Targeted Java Version -->
     <java.version>1.6</java.version>
     <!-- Modules Versions -->
-    <daisy.calabash-adapter.version>1.0-SNAPSHOT</daisy.calabash-adapter.version>
-    <daisy.calabash-custom-steps.version>1.0-SNAPSHOT</daisy.calabash-custom-steps.version>
-    <daisy.common-stax.version>1.0-SNAPSHOT</daisy.common-stax.version>
-    <daisy.common-utils.version>1.0-SNAPSHOT</daisy.common-utils.version>
-    <daisy.framework-core.version>1.0-SNAPSHOT</daisy.framework-core.version>
-    <daisy.framework-persistence.version>1.0-SNAPSHOT</daisy.framework-persistence.version>
-    <daisy.framework-volatile.version>1.0-SNAPSHOT</daisy.framework-volatile.version>
-    <daisy.logging-activator.version>1.0-SNAPSHOT</daisy.logging-activator.version>
-    <daisy.logging-appender.version>1.0-SNAPSHOT</daisy.logging-appender.version>
-    <daisy.modules-api.version>1.0-SNAPSHOT</daisy.modules-api.version>
-    <daisy.modules-registry.version>1.0-SNAPSHOT</daisy.modules-registry.version>
-    <daisy.persistence-derby.version>1.0-SNAPSHOT</daisy.persistence-derby.version>
-    <daisy.persistence-mysql.version>1.0-SNAPSHOT</daisy.persistence-mysql.version>
-    <daisy.push-notifier.version>1.0-SNAPSHOT</daisy.push-notifier.version>
-    <daisy.webservice.version>1.0-SNAPSHOT</daisy.webservice.version>
-    <daisy.webservice-utils.version>1.0-SNAPSHOT</daisy.webservice-utils.version>
-    <daisy.woodstox-osgi-adapter.version>1.0-SNAPSHOT</daisy.woodstox-osgi-adapter.version>
-    <daisy.xmlcatalog.version>1.0-SNAPSHOT</daisy.xmlcatalog.version>
-    <daisy.xpath-registry.version>1.0-SNAPSHOT</daisy.xpath-registry.version>
-    <daisy.xproc-api.version>1.0-SNAPSHOT</daisy.xproc-api.version>
+    <daisy.calabash-adapter.version>1.0.0</daisy.calabash-adapter.version>
+    <daisy.calabash-custom-steps.version>1.0.0</daisy.calabash-custom-steps.version>
+    <daisy.common-stax.version>1.0.0</daisy.common-stax.version>
+    <daisy.common-utils.version>1.0.0</daisy.common-utils.version>
+    <daisy.framework-core.version>1.0.0</daisy.framework-core.version>
+    <daisy.framework-persistence.version>1.0.0</daisy.framework-persistence.version>
+    <daisy.framework-volatile.version>1.0.0</daisy.framework-volatile.version>
+    <daisy.logging-activator.version>1.0.0</daisy.logging-activator.version>
+    <daisy.logging-appender.version>1.0.0</daisy.logging-appender.version>
+    <daisy.modules-api.version>1.0.0</daisy.modules-api.version>
+    <daisy.modules-registry.version>1.0.0</daisy.modules-registry.version>
+    <daisy.persistence-derby.version>1.0.0</daisy.persistence-derby.version>
+    <daisy.persistence-mysql.version>1.0.0</daisy.persistence-mysql.version>
+    <daisy.push-notifier.version>1.0.0</daisy.push-notifier.version>
+    <daisy.webservice.version>1.0.0</daisy.webservice.version>
+    <daisy.webservice-utils.version>1.0.0</daisy.webservice-utils.version>
+    <daisy.woodstox-osgi-adapter.version>1.0.0</daisy.woodstox-osgi-adapter.version>
+    <daisy.xmlcatalog.version>1.0.0</daisy.xmlcatalog.version>
+    <daisy.xpath-registry.version>1.0.0</daisy.xpath-registry.version>
+    <daisy.xproc-api.version>1.0.0</daisy.xproc-api.version>
     <!-- Dependencies Versions -->
     <calabash.version>1.0.8</calabash.version>
     <commons.codec.version>1.6</commons.codec.version>
@@ -560,7 +561,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
               </pluginExecutions>
