@@ -58,8 +58,12 @@ public abstract class NamedResultResource extends AuthenticatedResource {
                         logger.warn("Job Id malformed - Job not found: " + idParam);
                         job = null;
                 }
-                name = NamedResultResource.decode((String) getRequestAttributes().get("name"));
-                idx = NamedResultResource.decode((String)getRequestAttributes().get("idx"));
+                if (getRequestAttributes().get("name")!=null){
+                        name = NamedResultResource.decode((String) getRequestAttributes().get("name"));
+                }
+                if ( getRequestAttributes().get("idx")!=null){
+                        idx = NamedResultResource.decode((String)getRequestAttributes().get("idx"));
+                }
         }
 
         /**
