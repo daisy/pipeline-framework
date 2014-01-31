@@ -179,6 +179,9 @@ public class JobsResource extends AuthenticatedResource {
                 } catch (LocalInputException e) {
                         setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
                         return this.getErrorRepresentation("WS does not allow local inputs but a href starting with 'file:' was found");
+                } catch (IllegalArgumentException iea) {
+                        setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                        return this.getErrorRepresentation(iea.getMessage());
                 }
 
                 if (job == null) {
@@ -532,9 +535,13 @@ public class JobsResource extends AuthenticatedResource {
                                 Element optionElm = (Element) nodes.item(i);
                                 String name = optionElm.getAttribute("name");
                                 XProcOptionMetadata metadata = script.getOptionMetadata(new QName(name));
+                                if (metadata==null){
+                                        throw new IllegalArgumentException(String.format("Option %s is not recognized by script %s",name,script.getName()));
+                                }
+
                                 //if input we have to check
-                                boolean isInput = metadata.getType()== "anyDirURI" ||metadata.getType()== "anyFileURI";
                                 if (name.equals(optionName)) {
+                                        boolean isInput = metadata.getType()== "anyDirURI" ||metadata.getType()== "anyFileURI";
                                         //eventhough the option is a sequence it may happen that 
                                         //there are no item elements, just one value
                                         NodeList items = optionElm.getElementsByTagName("item");
