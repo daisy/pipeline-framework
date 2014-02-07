@@ -93,26 +93,26 @@
     </mailingList>
   </mailingLists>
   <modules>
-    <!--<module>calabash-adapter</module>-->
-    <!--<module>calabash-custom-steps</module>-->
-    <!--<module>common-stax</module>-->
-    <!--<module>common-utils</module>-->
-    <!--<module>framework-core</module>-->
-    <!--<module>framework-persistence</module>-->
-    <!--<module>framework-volatile</module>-->
-    <!--<module>logging-activator</module>-->
-    <!--<module>logging-appender</module>-->
-    <!--<module>modules-api</module>-->
-    <!--<module>modules-registry</module>-->
-    <!--<module>persistence-derby</module>-->
-    <!--<module>persistence-mysql</module>-->
-    <!--<module>push-notifier</module>-->
+    <module>calabash-adapter</module>
+    <module>calabash-custom-steps</module>
+    <module>common-stax</module>
+    <module>common-utils</module>
+    <module>framework-core</module>
+    <module>framework-persistence</module>
+    <module>framework-volatile</module>
+    <module>logging-activator</module>
+    <module>logging-appender</module>
+    <module>modules-api</module>
+    <module>modules-registry</module>
+    <module>persistence-derby</module>
+    <module>persistence-mysql</module>
+    <module>push-notifier</module>
     <module>webservice</module>
-    <!--<module>webservice-utils</module>-->
-    <!--<module>woodstox-osgi-adapter</module>-->
-    <!--<module>xmlcatalog</module>-->
-    <!--<module>xpath-registry</module>-->
-    <!--<module>xproc-api</module>-->
+    <module>webservice-utils</module>
+    <module>woodstox-osgi-adapter</module>
+    <module>xmlcatalog</module>
+    <module>xpath-registry</module>
+    <module>xproc-api</module>
   </modules>
   <scm>
     <connection>scm:git:git@github.com:daisy-consortium/pipeline-framework.git</connection>
@@ -128,26 +128,26 @@
     <!-- Targeted Java Version -->
     <java.version>1.6</java.version>
     <!-- Modules Versions -->
-    <daisy.calabash-adapter.version>1.0.0</daisy.calabash-adapter.version>
-    <daisy.calabash-custom-steps.version>1.0.0</daisy.calabash-custom-steps.version>
-    <daisy.common-stax.version>1.0.0</daisy.common-stax.version>
-    <daisy.common-utils.version>1.0.0</daisy.common-utils.version>
-    <daisy.framework-core.version>1.0.0</daisy.framework-core.version>
-    <daisy.framework-persistence.version>1.0.0</daisy.framework-persistence.version>
-    <daisy.framework-volatile.version>1.0.0</daisy.framework-volatile.version>
-    <daisy.logging-activator.version>1.0.0</daisy.logging-activator.version>
-    <daisy.logging-appender.version>1.0.0</daisy.logging-appender.version>
-    <daisy.modules-api.version>1.0.0</daisy.modules-api.version>
-    <daisy.modules-registry.version>1.0.0</daisy.modules-registry.version>
-    <daisy.persistence-derby.version>1.0.0</daisy.persistence-derby.version>
-    <daisy.persistence-mysql.version>1.0.0</daisy.persistence-mysql.version>
-    <daisy.push-notifier.version>1.0.0</daisy.push-notifier.version>
+    <daisy.calabash-adapter.version>1.0.1-SNAPSHOT</daisy.calabash-adapter.version>
+    <daisy.calabash-custom-steps.version>1.0.1-SNAPSHOT</daisy.calabash-custom-steps.version>
+    <daisy.common-stax.version>1.0.1-SNAPSHOT</daisy.common-stax.version>
+    <daisy.common-utils.version>1.0.1-SNAPSHOT</daisy.common-utils.version>
+    <daisy.framework-core.version>1.0.1-SNAPSHOT</daisy.framework-core.version>
+    <daisy.framework-persistence.version>1.0.1-SNAPSHOT</daisy.framework-persistence.version>
+    <daisy.framework-volatile.version>1.0.1-SNAPSHOT</daisy.framework-volatile.version>
+    <daisy.logging-activator.version>1.0.1-SNAPSHOT</daisy.logging-activator.version>
+    <daisy.logging-appender.version>1.0.1-SNAPSHOT</daisy.logging-appender.version>
+    <daisy.modules-api.version>1.0.1-SNAPSHOT</daisy.modules-api.version>
+    <daisy.modules-registry.version>1.0.1-SNAPSHOT</daisy.modules-registry.version>
+    <daisy.persistence-derby.version>1.0.1-SNAPSHOT</daisy.persistence-derby.version>
+    <daisy.persistence-mysql.version>1.0.1-SNAPSHOT</daisy.persistence-mysql.version>
+    <daisy.push-notifier.version>1.0.1-SNAPSHOT</daisy.push-notifier.version>
     <daisy.webservice.version>1.0.2-SNAPSHOT</daisy.webservice.version>
-    <daisy.webservice-utils.version>1.0.0</daisy.webservice-utils.version>
-    <daisy.woodstox-osgi-adapter.version>1.0.0</daisy.woodstox-osgi-adapter.version>
-    <daisy.xmlcatalog.version>1.0.0</daisy.xmlcatalog.version>
-    <daisy.xpath-registry.version>1.0.0</daisy.xpath-registry.version>
-    <daisy.xproc-api.version>1.0.0</daisy.xproc-api.version>
+    <daisy.webservice-utils.version>1.0.1-SNAPSHOT</daisy.webservice-utils.version>
+    <daisy.woodstox-osgi-adapter.version>1.0.1-SNAPSHOT</daisy.woodstox-osgi-adapter.version>
+    <daisy.xmlcatalog.version>1.0.1-SNAPSHOT</daisy.xmlcatalog.version>
+    <daisy.xpath-registry.version>1.0.1-SNAPSHOT</daisy.xpath-registry.version>
+    <daisy.xproc-api.version>1.0.1-SNAPSHOT</daisy.xproc-api.version>
     <!-- Dependencies Versions -->
     <calabash.version>1.0.8</calabash.version>
     <commons.codec.version>1.6</commons.codec.version>
