@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-parent</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Framework Parent POM</name>
   <description>The DAISY Pipeline 2 is an open source framework for the automated processing of various digital formats efficiently and economically. It intends to facilitate the production and maintenance of accessible content for people with print disabilities.</description>
@@ -118,7 +118,7 @@
     <connection>scm:git:git@github.com:daisy-consortium/pipeline-framework.git</connection>
     <url>scm:git:git@github.com:daisy-consortium/pipeline-framework.git</url>
     <developerConnection>scm:git:git@github.com:daisy-consortium/pipeline-framework.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v1.7.1</tag>
   </scm>
   <issueManagement>
     <system>Google Code Issue Tracker</system>
@@ -142,7 +142,7 @@
     <daisy.persistence-derby.version>1.0.0</daisy.persistence-derby.version>
     <daisy.persistence-mysql.version>1.0.0</daisy.persistence-mysql.version>
     <daisy.push-notifier.version>1.0.0</daisy.push-notifier.version>
-    <daisy.webservice.version>1.0.1-SNAPSHOT</daisy.webservice.version>
+    <daisy.webservice.version>1.0.1</daisy.webservice.version>
     <daisy.webservice-utils.version>1.0.0</daisy.webservice-utils.version>
     <daisy.woodstox-osgi-adapter.version>1.0.0</daisy.woodstox-osgi-adapter.version>
     <daisy.xmlcatalog.version>1.0.0</daisy.xmlcatalog.version>
