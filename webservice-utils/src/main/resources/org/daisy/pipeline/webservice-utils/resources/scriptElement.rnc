@@ -37,6 +37,7 @@ script =
     
  port.attrs =
     attribute name { text } 
+    & attribute nicename { text } 
     & attribute desc { text } 
     & attribute required { xsd:boolean } 
     & attribute sequence { xsd:boolean }
