@@ -2,12 +2,18 @@ package org.daisy.pipeline.job.priority;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
+import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import com.google.common.base.Function;
 import com.google.common.primitives.Doubles;
 
 public class InferenceEngineTest{
+        @Rule
+        public TestRule benchmarkRun = new BenchmarkRule();
 
         FuzzyVariable f1;
         FuzzyVariable f2;
