@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-core</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
-
   <name>DAISY Pipeline 2 :: Framework Core</name>
-
   <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -36,9 +31,14 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>xproc-api</artifactId>
-    </dependency>    
+    </dependency>
+    <dependency>
+      <groupId>com.carrotsearch</groupId>
+      <artifactId>junit-benchmarks</artifactId>
+      <version>0.7.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -46,11 +46,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-		  <Service-Component>OSGI-INF/event-provider.xml, OSGI-INF/job-execution-service.xml, OSGI-INF/job-context-factory.xml, OSGI-INF/job-manager.xml, OSGI-INF/parser.xml, OSGI-INF/registry.xml</Service-Component>
+            <Service-Component>OSGI-INF/event-provider.xml, OSGI-INF/job-execution-service.xml, OSGI-INF/job-context-factory.xml, OSGI-INF/job-manager.xml, OSGI-INF/parser.xml, OSGI-INF/registry.xml</Service-Component>
           </instructions>
         </configuration>
       </plugin>
     </plugins>
   </build>
-
 </project>
