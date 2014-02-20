@@ -28,12 +28,13 @@ public class XPathFactoryImpl extends net.sf.saxon.xpath.XPathFactoryImpl {
 	}
 	
 	public void setURIResolver(URIResolver resolver) {
-		uriResolver = resolver;		
+		uriResolver = resolver;
 	}
 	
 	public void activate() {
 		Configuration config = getConfiguration();
-		config.setURIResolver(uriResolver);
+		if (uriResolver != null)
+			config.setURIResolver(uriResolver);
 		for (Object function : xpathExtensionFunctions)
 			config.registerExtensionFunction((ExtensionFunctionDefinition)function);
 	}

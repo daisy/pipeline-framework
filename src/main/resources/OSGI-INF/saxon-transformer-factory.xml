@@ -11,7 +11,7 @@
                   name="ExtensionFunctionDefinition"
                   policy="static"/>
    <scr:reference bind="setURIResolver"
-                  cardinality="1..1"
+                  cardinality="0..1"
                   interface="javax.xml.transform.URIResolver"
                   name="URIResolver"
                   policy="static"/>

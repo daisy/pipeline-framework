@@ -33,7 +33,8 @@ public class TransformerFactoryImpl extends net.sf.saxon.TransformerFactoryImpl 
 	
 	public void activate() {
 		Configuration config = getConfiguration();
-		config.setURIResolver(uriResolver);
+		if (uriResolver != null)
+			config.setURIResolver(uriResolver);
 		for (Object function : xpathExtensionFunctions)
 			config.registerExtensionFunction((ExtensionFunctionDefinition)function);
 	}
