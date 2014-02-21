@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.primitives.Doubles;
+
 
 
 public class InferenceEngine {
@@ -24,16 +26,17 @@ public class InferenceEngine {
          * (ΣiΣj weight_j*memebership_j(x_i)) / Σj weith_j where memebership_j(x_i)!=0  
          *
          */
-        public double getScore(Collection<Double> crispValues){
+        public double getScore(double ...crispValues){
+                Collection<Double> crispCol=Doubles.asList(crispValues);
                 //size(values) == size(sets)
-                if (crispValues.size()!=this.variables.size()){
-                        throw new IllegalArgumentException(String.format("The size of crisp values is different from the ammount of variables %s != %s",crispValues.size(),this.variables.size()));
+                if (crispCol.size()!=this.variables.size()){
+                        throw new IllegalArgumentException(String.format("The size of crisp values is different from the ammount of variables %s != %s",crispCol.size(),this.variables.size()));
                 }
 
                 double denominator=0.0;
                 double numerator=0.0;
                 //no zipping in java!
-                Iterator<Double> crispIter=crispValues.iterator();
+                Iterator<Double> crispIter=crispCol.iterator();
                 Iterator<FuzzyVariable> variableIter=this.variables.iterator();
                 //crisps and variables have the same size
                 while(crispIter.hasNext()){

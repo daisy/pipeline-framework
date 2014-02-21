@@ -86,7 +86,7 @@ public class InferenceEngineTest{
         public void crispCountsError(){
                 InferenceEngine eng = new InferenceEngine();
                 eng.add(f1).add(f2);
-                eng.getScore(Doubles.asList(new double[]{1,2,3}));
+                eng.getScore(new double[]{1,2,3});
         }
         @Test
         public void scoreFromVariable(){
@@ -94,18 +94,18 @@ public class InferenceEngineTest{
                 eng.add(f3);
 
                 double res=0;
-                res= eng.getScore(Doubles.asList(0.1));
+                res= eng.getScore(0.1);
                 //numerator low -> 10*0.1 + 50*0.0 +100*0.0 =1.0
                 //denominator low 0.1 
                 //res = 0.1
                 Assert.assertEquals("only low ", 10.0, res,0.0);
                 
-                res= eng.getScore(Doubles.asList(0.5));
+                res= eng.getScore(0.5);
                 //numerator medium -> 10*0.0 + 50*0.5 +100*0.0 =25
                 //denominator medium 0.5 
                 //res = 50 
                 Assert.assertEquals("only med", 50, res,0.0);
-                res= eng.getScore(Doubles.asList(1));
+                res= eng.getScore(1);
                 //numerator high-> 10*0.0 + 50*0.0 +100*0.9 =90
                 //denominator medium 0.9 
                 //res = 100 
@@ -119,17 +119,17 @@ public class InferenceEngineTest{
                 //example 1 x_1=0.5 x_2=0.5
                 //rules fired f1_med f2_high
                 //=> sum(1.0*50 + 1.0*80)/sum(1,1) = 65
-                double res= eng.getScore(Doubles.asList(0.5,0.5));
+                double res= eng.getScore(0.5,0.5);
                 Assert.assertEquals("test f1 mid f2 high is 65",65.0,res,0.00);
 
                 //rules fired f1_low f2_medium
                 //=> sum(1.0*10 + 1.0*60)/sum(1,1) = 35 
-                res= eng.getScore(Doubles.asList(0.2,0.1));
+                res= eng.getScore(0.2,0.1);
                 Assert.assertEquals("test f1 low f2 medium is 35",35.0,res,0.00);
 
                 //rules fired f1_high f2_low
                 //=> sum(1.0*100 + 1.0*5)/sum(1,1) = 52.5 
-                res= eng.getScore(Doubles.asList(0.8,0.05));
+                res= eng.getScore(0.8,0.05);
                 Assert.assertEquals("test f1 low f2 medium is 52.5",52.5,res,0.00);
         }
         

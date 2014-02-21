@@ -1,7 +1,6 @@
 package org.daisy.pipeline.job.priority;
 
 import com.google.common.base.Function;
-import com.google.common.base.Supplier;
 
 /**
  * A runnable that is able to compute its own priority and supplies the element used to compute its priority
@@ -9,8 +8,8 @@ import com.google.common.base.Supplier;
  */
 public abstract class PrioritizedRunnable implements Runnable{
         long timestamp;
-        private boolean dirty=true;
-        private double relativeWaitingTime;
+        protected boolean dirty=true;
+        protected double relativeWaitingTime;
 
         public PrioritizedRunnable(){
                 timestamp=System.nanoTime();
@@ -45,7 +44,7 @@ public abstract class PrioritizedRunnable implements Runnable{
         }
 
         /**
-         * @param dirty marks this runnable as dirty 
+         *  marks this runnable as dirty 
          */
         void markDirty() {
                 this.dirty = true;
