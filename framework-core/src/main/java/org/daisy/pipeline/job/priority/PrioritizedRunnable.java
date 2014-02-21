@@ -9,6 +9,8 @@ import com.google.common.base.Supplier;
  */
 public abstract class PrioritizedRunnable implements Runnable{
         long timestamp;
+        private boolean dirty=true;
+        private double relativeWaitingTime;
 
         public PrioritizedRunnable(){
                 timestamp=System.nanoTime();
@@ -34,5 +36,29 @@ public abstract class PrioritizedRunnable implements Runnable{
                 return timestamp;
         }
 
+        /**
+         * @return the relativeWaitingTime
+         */
+        public double getRelativeWaitingTime() {
+
+                return this.relativeWaitingTime;
+        }
+
+        /**
+         * @param dirty marks this runnable as dirty 
+         */
+        void markDirty() {
+                this.dirty = true;
+        }
+
+        /**
+         * Uses the normaliser to set the relative waiting time of this 
+         * runnable and marks it as dirty;
+         */
+        public synchronized void setRelativeWaitingTime(Function<Long,Double> normalizer){
+                
+                this.relativeWaitingTime=normalizer.apply(this.getTimestamp());
+                this.markDirty();
+        }
        
 }
