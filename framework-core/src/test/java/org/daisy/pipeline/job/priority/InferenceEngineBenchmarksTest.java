@@ -60,41 +60,41 @@ public class InferenceEngineBenchmarksTest   {
         @Test
         public void simple20(){
                 for (int i=0;i<20;i++)
-                        eng.getScore(Doubles.asList(nums[random.nextInt(MAX)]));
+                        eng.getScore(nums[random.nextInt(MAX)]);
         }
 
         @Test
         public void simple50(){
                 for (int i=0;i<50;i++)
-                        eng.getScore(Doubles.asList(nums[random.nextInt(MAX)]));
+                        eng.getScore(nums[random.nextInt(MAX)]);
         }
 
         @Test
         public void simple100(){
                 for (int i=0;i<100;i++)
-                        eng.getScore(Doubles.asList(nums[random.nextInt(MAX)]));
+                        eng.getScore(nums[random.nextInt(MAX)]);
         }
 
         @Test
         public void simple500(){
                 for (int i=0;i<500;i++)
-                        eng.getScore(Doubles.asList(nums[random.nextInt(MAX)]));
+                        eng.getScore(nums[random.nextInt(MAX)]);
         }
 
         @Test
         public void simple1000(){
                 for (int i=0;i<1000;i++)
-                        eng.getScore(Doubles.asList(nums[random.nextInt(MAX)]));
+                        eng.getScore(nums[random.nextInt(MAX)]);
         }
 
         @Test
         public void simple10000(){
                 for (int i=0;i<10000;i++)
-                        eng.getScore(Doubles.asList(nums[random.nextInt(MAX)]));
+                        eng.getScore(nums[random.nextInt(MAX)]);
         }
         @Test
         public void simple100000(){
                 for (int i=0;i<100000;i++)
-                        eng.getScore(Doubles.asList(nums[random.nextInt(MAX)]));
+                        eng.getScore(nums[random.nextInt(MAX)]);
         }
 }
