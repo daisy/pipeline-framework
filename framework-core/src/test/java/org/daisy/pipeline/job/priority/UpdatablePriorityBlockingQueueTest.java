@@ -184,7 +184,7 @@ public class UpdatablePriorityBlockingQueueTest{
                queue.offer(task1);
                queue.offer(task2);
                queue.offer(task3);
-               Collection<PrioritizedRunnable> col=queue.asCollection();
+               Collection<PrioritizedRunnable> col=queue.asOrderedCollection();
 
                Assert.assertEquals("First is task 2",task2,col.toArray()[0]);
                Assert.assertEquals("Second is task 1",task1,col.toArray()[1]);

@@ -39,7 +39,7 @@ public class TimeTracker{
                 this.times= new long[size];
         }
 
-        public void executing(FuzzyRunnable runnable){
+        public void executing(PrioritizedRunnable runnable){
                 //update counter and buff
                 this.times[counter]=runnable.getTimestamp();
                 counter++;
