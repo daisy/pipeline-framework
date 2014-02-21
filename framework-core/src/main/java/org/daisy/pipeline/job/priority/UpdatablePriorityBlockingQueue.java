@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ForwardingBlockingQueue;
 
 /**
@@ -122,13 +123,20 @@ public class UpdatablePriorityBlockingQueue  extends
         }
 
         /**
-         * Returns the list as a collection <b>maintaining</b> the order given by the priority
+         * Returns the runnables as a collection <b>maintaining</b> the order given by the priority
          */
-        public synchronized Collection<PrioritizedRunnable> asCollection(){
+        public synchronized Collection<PrioritizedRunnable> asOrderedCollection(){
                 PrioritizedRunnable []arr = new PrioritizedRunnable[this.delegate.size()];
                 this.delegate.toArray(arr);
                 Arrays.sort(arr,new PrioritizedComparator()); 
-                return Arrays.asList(arr);
+                return ImmutableList.copyOf(Arrays.asList(arr));
+        }
+
+        /**
+         * Returns the list as a collection <b>without maintaining</b> the order given by the priority
+         */
+        public synchronized Collection<PrioritizedRunnable> asCollection(){
+                return ImmutableList.copyOf(this.delegate);
         }
 
         @Override
