@@ -27,4 +27,22 @@ public class TimeStats{
                 return this.times;
         }
 
+        /**
+         * @return the times referenced to the reference instant 
+         */
+        public long[] getReferencedTimes() {
+                long[] refd=new long[this.times.length];
+                for (int i=0;i<this.times.length;i++){
+                        refd[i]=this.reference(this.times[i]);
+                }
+                return refd;
+        }
+
+        /**
+         * References the given time 
+         */
+        public long reference(long l){
+                return this.reference-l;
+        }
+
 }
