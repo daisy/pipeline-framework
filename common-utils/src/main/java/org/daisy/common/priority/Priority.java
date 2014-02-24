@@ -7,6 +7,6 @@ public enum Priority{
                 //for efficiency 
                 private static final int size = Priority.values().length;
                 public double asDouble(){
-                        return this.ordinal()/size;
+                        return this.ordinal()/(double)(size-1);
                 }
 }
