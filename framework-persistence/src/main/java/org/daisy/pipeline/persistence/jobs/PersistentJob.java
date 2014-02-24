@@ -16,8 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.MapsId;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
@@ -56,7 +54,7 @@ public class PersistentJob  extends Job implements Serializable {
 
 		@Override
 		protected Job initJob(){
-			Job pjob=new PersistentJob(this.ctxt,this.bus,this.db);
+			Job pjob=new PersistentJob(this.ctxt,this.bus,this.priority,this.db);
 			this.db.addObject(pjob);	
 			return pjob;
 		}
@@ -81,8 +79,8 @@ public class PersistentJob  extends Job implements Serializable {
 	Database db=null;
 
 
-	private PersistentJob(JobContext ctxt,EventBus bus,Database db) {
-		super(new PersistentJobContext((AbstractJobContext)ctxt),bus);
+	private PersistentJob(JobContext ctxt,EventBus bus,Priority priority,Database db) {
+		super(new PersistentJobContext((AbstractJobContext)ctxt),bus,priority);
 		this.db=db;
 		this.sJobId=ctxt.getId().toString();
 	}
@@ -92,7 +90,7 @@ public class PersistentJob  extends Job implements Serializable {
 	 * Constructs a new instance.
 	 */
 	private PersistentJob() {
-		super(null,null);
+		super(null,null,null);
 	}
 
 	/**
@@ -111,6 +109,24 @@ public class PersistentJob  extends Job implements Serializable {
 	@Override
 	public void setStatus(Status currentStatus) {
 		super.setStatus(currentStatus);
+	}
+
+	/**
+	 * @return the currentStatus
+	 */
+	@Enumerated(EnumType.ORDINAL)
+	@Access(value=AccessType.PROPERTY)
+	@Override
+	public Priority getPriority() {
+		return super.getPriority();
+	}
+
+	/**
+	 * @param currentStatus the currentStatus to set
+	 */
+	@Override
+	public void setPriority(Priority priority) {
+		super.setPriority(priority);
 	}
 
 	/**
