@@ -18,6 +18,29 @@ public class MembershipFunctionsTest   {
                 Assert.assertEquals("Out of upper boundary 0.9",-1,set.getSegment(0.9));
         }
         @Test
+        public void inSegmentLowerThanZero(){
+                TrapezoidFunction set=TrapezoidFunction.fromPoints(0.0,0.0,0.1,0.8);
+                Assert.assertEquals("lower than zero",0.0,set.getSegment(-0.1),0.0);
+        }
+
+
+        @Test
+        public void inSegmentGreaterThanOne(){
+                TrapezoidFunction set=TrapezoidFunction.fromPoints(0.5,0.6,1.0,1.0);
+                Assert.assertEquals(">1",1.0,set.getSegment(7.0),0.0);
+        }
+
+        @Test
+        public void applyInLowerBoundary(){
+                TrapezoidFunction set=TrapezoidFunction.fromPoints(0.0,0.0,0.1,0.8);
+                Assert.assertEquals("apply in lower boundary ",1.0,set.apply(0.0),0.0);
+        }
+        @Test
+        public void applyInUpperBoundary(){
+                TrapezoidFunction set=TrapezoidFunction.fromPoints(0.5,0.7,1.0,1.0);
+                Assert.assertEquals("apply in upper boundary ",1.0,set.apply(1.0),0.0);
+        }
+        @Test
         public void applyOutOfSetTrapezoid(){
                 TrapezoidFunction set=TrapezoidFunction.fromPoints(0.2,0.6,0.7,0.8);
                 Assert.assertEquals("membership 0, out of lower ",0.0,set.apply(0.1),0.0);
