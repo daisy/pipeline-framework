@@ -15,22 +15,20 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.xml.namespace.QName;
-import javax.xml.transform.Source;
 
-import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcResult;
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobIdFactory;
-import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.ResultSet;
 import org.daisy.pipeline.job.RuntimeConfigurable;
+import org.daisy.pipeline.persistence.webservice.PersistentClient;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
@@ -58,6 +56,8 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	@Embedded
 	private PersistentMapper pMapper;
 
+        private PersistentClient pClient;
+
 	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
 	@MapsId("job_id")
 	private List<PersistentInputPort> inputPorts= new ArrayList<PersistentInputPort>();
@@ -83,7 +83,7 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	private List<PersistentOptionResult> optionResults= new ArrayList<PersistentOptionResult>();
 
 	public PersistentJobContext(AbstractJobContext ctxt) {
-		super(ctxt.getId(),ctxt.getName(),BoundXProcScript.from(ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs()),ctxt.getMapper());
+		super(ctxt.getClient(),ctxt.getId(),ctxt.getName(),BoundXProcScript.from(ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs()),ctxt.getMapper());
 		this.setResults(ctxt.getResults());
 		this.generateResults=ctxt.isGeneratingResults();
 		this.load();
@@ -93,7 +93,7 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 	 * Constructs a new instance.
 	 */
 	private PersistentJobContext() {
-		super(null,"",null,null);
+		super(null,null,"",null,null);
 	}
 
 	/**
@@ -105,6 +105,7 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 		this.inputPorts=ContextHydrator.dehydrateInputPorts(this);
 		this.options=ContextHydrator.dehydrateOptions(this);
 		this.parameters=ContextHydrator.dehydrateParameters(this);
+                this.pClient=(PersistentClient)this.getClient();
 		//everything is inmutable but this
 		this.updateResults();	
 	}
@@ -127,6 +128,7 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
 		this.setInput(builder.build());
 
 		this.setMapper(this.pMapper.getMapper());
+                this.setClient(this.pClient);
 
 		ResultSet.Builder rBuilder=new ResultSet.Builder();
 		ContextHydrator.hydrateResultPorts(rBuilder,portResults);

@@ -6,8 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.daisy.pipeline.webserviceutils.clients.Client;
-import org.daisy.pipeline.webserviceutils.clients.ClientStorage;
+import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.clients.ClientStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

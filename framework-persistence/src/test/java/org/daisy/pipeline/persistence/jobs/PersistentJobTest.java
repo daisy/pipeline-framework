@@ -3,9 +3,9 @@ package org.daisy.pipeline.persistence.jobs;
 import java.util.HashSet;
 import java.util.List;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.JobBuilder;
-import org.daisy.pipeline.job.Job.Priority;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.persistence.Database;
 import org.daisy.pipeline.persistence.jobs.PersistentJob.PersistentJobBuilder;
@@ -46,13 +46,13 @@ public class PersistentJobTest   {
         public void storeTest(){
                 PersistentJob pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
                 Assert.assertEquals(pjob.getContext().getId(),id);
-                Assert.assertEquals("Default priority",Job.Priority.MEDIUM,pjob.getPriority());
+                Assert.assertEquals("Default priority",Priority.MEDIUM,pjob.getPriority());
 
         }
         @Test 
         public void highPriority(){
                 PersistentJob pjob= db.getEntityManager().find(PersistentJob.class,idHigh.toString());
-                Assert.assertEquals("High priority",Job.Priority.HIGH,pjob.getPriority());
+                Assert.assertEquals("High priority",Priority.HIGH,pjob.getPriority());
 
         }
         @Test 

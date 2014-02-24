@@ -9,11 +9,11 @@ import java.net.URI;
 import java.util.List;
 
 import org.daisy.common.messaging.Message;
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.Status;
 import org.daisy.pipeline.webserviceutils.Authenticator;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
-import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.xml.JobXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.XmlUtils;
 import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;

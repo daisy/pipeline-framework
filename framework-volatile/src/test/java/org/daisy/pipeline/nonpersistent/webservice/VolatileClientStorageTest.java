@@ -6,9 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.clients.SimpleClient;
 import org.daisy.pipeline.nonpersistent.webservice.VolatileClientStorage;
-import org.daisy.pipeline.webserviceutils.clients.Client;
-import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

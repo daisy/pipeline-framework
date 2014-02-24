@@ -7,30 +7,22 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.pipeline.webserviceutils.clients.Client;
-import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
-
+import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.clients.SimpleClient;
 import org.daisy.pipeline.webserviceutils.xml.ClientXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.ClientsXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.XmlValidator;
 import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
-
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
-
 import org.restlet.ext.xml.DomRepresentation;
-
 import org.restlet.representation.Representation;
-
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 

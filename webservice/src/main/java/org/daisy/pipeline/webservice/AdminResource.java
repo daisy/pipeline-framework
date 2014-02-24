@@ -1,6 +1,6 @@
 package org.daisy.pipeline.webservice;
 
-import org.daisy.pipeline.webserviceutils.clients.Client;
+import org.daisy.pipeline.clients.Client;
 
 
 

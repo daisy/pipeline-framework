@@ -5,6 +5,7 @@ import java.util.Properties;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.Message.MessageBuilder;
+import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
@@ -90,21 +91,6 @@ public class Job {
                 VALIDATION_FAIL
         }
 
-        /**
-         * Priorities.
-         */
-
-        public static enum Priority{
-
-                LOW,
-                MEDIUM,
-                HIGH;
-                //for efficiency 
-                private static final int size = Priority.values().length;
-                public double asDouble(){
-                        return this.ordinal()/size;
-                }
-        }
 
         /** The status. */
         private volatile Status status = Status.IDLE;
