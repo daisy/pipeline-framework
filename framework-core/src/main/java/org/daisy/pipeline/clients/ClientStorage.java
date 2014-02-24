@@ -1,4 +1,4 @@
-package org.daisy.pipeline.webserviceutils.clients;
+package org.daisy.pipeline.clients;
 
 import java.util.List;
 

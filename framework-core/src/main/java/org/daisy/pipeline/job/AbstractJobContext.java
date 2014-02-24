@@ -6,13 +6,11 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
-import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.eventbus.EventBus;
 
 /** This class defines the common behaviour to jobs contexts, the context will mainly differ depending on the mode of 
  * the WS, local or remote. 
@@ -20,194 +18,206 @@ import com.google.common.eventbus.EventBus;
  * input,output,option redirections.
  */
 public abstract class AbstractJobContext implements JobContext,RuntimeConfigurable{
-	private static final Logger logger = LoggerFactory.getLogger(AbstractJobContext.class);
-	/** The input. */
-	private XProcInput input;
+        private static final Logger logger = LoggerFactory.getLogger(AbstractJobContext.class);
+        /** The input. */
+        private XProcInput input;
 
-	/** The output. */
-	private XProcOutput output;
+        /** The output. */
+        private XProcOutput output;
 
-	/**Script details*/
-	private XProcScript script;
+        /**Script details*/
+        private XProcScript script;
 
-	private JobId id;
+        private JobId id;
 
-	/** monitor */
-	private XProcMonitor monitor;
+        /** monitor */
+        private XProcMonitor monitor;
 
-	private URI logFile;
+        private URI logFile;
 
-	private URIMapper mapper;  
+        private URIMapper mapper;  
 
-	private ResultSet results;
-		
-	private String niceName;
-	
-	protected boolean generateResults;
+        private ResultSet results;
+                
+        private String niceName;
 
-	public AbstractJobContext(JobId id,String niceName,BoundXProcScript boundScript,URIMapper mapper){
-		if(boundScript!=null){
-			this.input=boundScript.getInput();
-			this.script=boundScript.getScript();
-			this.output=boundScript.getOutput();		
-		}
+        private Client client;
+        
+        protected boolean generateResults;
 
-		this.id=id;
-		this.niceName=niceName;
-		this.mapper=mapper;
+        public AbstractJobContext(Client client,JobId id,String niceName,BoundXProcScript boundScript,URIMapper mapper){
+                if(boundScript!=null){
+                        this.input=boundScript.getInput();
+                        this.script=boundScript.getScript();
+                        this.output=boundScript.getOutput();            
+                }
 
-		if(id!=null)
-			this.logFile=JobURIUtils.getLogFile(id);
-		else
-			this.logFile=URI.create("");
+                this.client=client;
+                this.id=id;
+                this.niceName=niceName;
+                this.mapper=mapper;
 
-		this.results=new ResultSet.Builder().build();
-		
-	}
+                if(id!=null)
+                        this.logFile=JobURIUtils.getLogFile(id);
+                else
+                        this.logFile=URI.create("");
 
-
-	@Override
-	public XProcInput getInputs() {
-		return this.input;
-	}
-
-	@Override
-	public XProcOutput getOutputs() {
-		return this.output;
-	}
+                this.results=new ResultSet.Builder().build();
+                
+        }
 
 
-	@Override
-	public URI getLogFile() {
-		return this.logFile;
-	}
+        @Override
+        public XProcInput getInputs() {
+                return this.input;
+        }
 
-	protected void setLogFile(URI logFile) {
-		this.logFile=logFile;
-	}
-
-
-	/**
-	 * Gets the mapper for this instance.
-	 *
-	 * @return The mapper.
-	 */
-	public URIMapper getMapper() {
-		return this.mapper;
-	}
-
-	/**
-	 * Sets the mapper for this instance.
-	 *
-	 * @param mapper The mapper.
-	 */
-	protected void setMapper(URIMapper mapper) {
-		this.mapper = mapper;
-	}
-
-	/**
-	 * Sets the results for this instance.
-	 *
-	 * @param results The results.
-	 */
-	protected void setResults(ResultSet results) {
-		this.results = results;
-	}
+        @Override
+        public XProcOutput getOutputs() {
+                return this.output;
+        }
 
 
-	/**
-	 * Sets the id for this instance.
-	 *
-	 * @param id The id.
-	 */
-	protected void setId(JobId id) {
-		this.id = id;
-	}
+        @Override
+        public URI getLogFile() {
+                return this.logFile;
+        }
 
-	@Override
-	public XProcMonitor getMonitor() {
-		return this.monitor;
-	}
-
-	/**
-	 * Sets the input for this instance.
-	 *
-	 * @param input The input.
-	 */
-	protected void setInput(XProcInput input) {
-		this.input = input;
-	}
-
-	/**
-	 * Sets the output for this instance.
-	 *
-	 * @param output The output.
-	 */
-	protected void setOutput(XProcOutput output)
-	{
-		this.output = output;
-	}
-
-	@Override
-	public XProcScript getScript() {
-		return this.script;
-	}
-
-	/**
-	 * Sets the script for this instance.
-	 *
-	 * @param script The script.
-	 */
-	protected void setScript(XProcScript script) {
-		this.script = script;
-	}
-
-	@Override
-	public JobId getId() {
-		return this.id;
-	}
-
-	@Override
-	public ResultSet getResults() {
-		return this.results;
-	}
-
-	@Override
-	public void setMonitorFactory(JobMonitorFactory monitor) {
-		this.monitor=monitor.newJobMonitor(this.id);
-	}
-
-	@Override
-	public void writeResult(XProcResult result) {
-		result.writeTo(this.output);
-		if(this.generateResults){
-			this.results=ResultSetFactory.newResultSet(this,this.mapper);
-		}
-				
-	}
-
-	public void cleanUp(){
-		logger.info(String.format( "Deleting context for job %s" ,this.id));
-		JobURIUtils.cleanJobBase(this.id);
-		this.monitor.getMessageAccessor().delete();
-	}
+        protected void setLogFile(URI logFile) {
+                this.logFile=logFile;
+        }
 
 
-	@Override
-	public String getName() {
-		return niceName;
-	}
+        /**
+         * Gets the mapper for this instance.
+         *
+         * @return The mapper.
+         */
+        public URIMapper getMapper() {
+                return this.mapper;
+        }
 
-	protected void setName(String name) {
-		this.niceName=name;
-	}
+        /**
+         * Sets the mapper for this instance.
+         *
+         * @param mapper The mapper.
+         */
+        protected void setMapper(URIMapper mapper) {
+                this.mapper = mapper;
+        }
 
-	/**
-	 * @return if this context will generate a result set 
-	 */
-	@Override
-	public boolean isGeneratingResults() {
-		return this.generateResults;
-	}
+        /**
+         * Sets the results for this instance.
+         *
+         * @param results The results.
+         */
+        protected void setResults(ResultSet results) {
+                this.results = results;
+        }
+
+
+        /**
+         * Sets the id for this instance.
+         *
+         * @param id The id.
+         */
+        protected void setId(JobId id) {
+                this.id = id;
+        }
+
+        @Override
+        public XProcMonitor getMonitor() {
+                return this.monitor;
+        }
+
+        /**
+         * Sets the input for this instance.
+         *
+         * @param input The input.
+         */
+        protected void setInput(XProcInput input) {
+                this.input = input;
+        }
+
+        /**
+         * Sets the output for this instance.
+         *
+         * @param output The output.
+         */
+        protected void setOutput(XProcOutput output)
+        {
+                this.output = output;
+        }
+
+        @Override
+        public XProcScript getScript() {
+                return this.script;
+        }
+
+        /**
+         * Sets the script for this instance.
+         *
+         * @param script The script.
+         */
+        protected void setScript(XProcScript script) {
+                this.script = script;
+        }
+
+        @Override
+        public JobId getId() {
+                return this.id;
+        }
+
+        @Override
+        public ResultSet getResults() {
+                return this.results;
+        }
+
+        @Override
+        public void setMonitorFactory(JobMonitorFactory monitor) {
+                this.monitor=monitor.newJobMonitor(this.id);
+        }
+
+        @Override
+        public void writeResult(XProcResult result) {
+                result.writeTo(this.output);
+                if(this.generateResults){
+                        this.results=ResultSetFactory.newResultSet(this,this.mapper);
+                }
+                                
+        }
+
+        public void cleanUp(){
+                logger.info(String.format( "Deleting context for job %s" ,this.id));
+                JobURIUtils.cleanJobBase(this.id);
+                this.monitor.getMessageAccessor().delete();
+        }
+
+
+        @Override
+        public String getName() {
+                return niceName;
+        }
+
+        protected void setName(String name) {
+                this.niceName=name;
+        }
+
+        /**
+         * @return if this context will generate a result set 
+         */
+        @Override
+        public boolean isGeneratingResults() {
+                return this.generateResults;
+        }
+
+        @Override
+        public Client getClient() {
+                return this.client;
+        }
+
+        protected void setClient(Client client) {
+                this.client=client;
+        }
 
 }

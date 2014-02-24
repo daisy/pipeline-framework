@@ -1,7 +1,7 @@
 package org.daisy.pipeline.webservice;
 
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.webserviceutils.Authenticator;
-import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

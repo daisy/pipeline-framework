@@ -2,8 +2,8 @@ package org.daisy.pipeline.webserviceutils.callback;
 
 import java.net.URI;
 
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.webserviceutils.clients.Client;
 
 public class Callback {
 	public enum CallbackType {STATUS, MESSAGES}

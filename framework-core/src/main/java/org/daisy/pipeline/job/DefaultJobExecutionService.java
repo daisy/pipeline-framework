@@ -53,6 +53,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
 	@Override
 	public void submit(final Job job) {
 		logger.info("Submitting job");
+                //Make a FuzzyRunnables out of jobs
 		executor.submit(new ThreadWrapper(new Runnable() {
 
 			@Override

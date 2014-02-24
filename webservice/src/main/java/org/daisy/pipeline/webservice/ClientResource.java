@@ -7,9 +7,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.clients.SimpleClient;
 import org.daisy.pipeline.webserviceutils.xml.XmlValidator;
-import org.daisy.pipeline.webserviceutils.clients.Client;
-import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
 import org.daisy.pipeline.webserviceutils.xml.ClientXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
 import org.restlet.data.MediaType;

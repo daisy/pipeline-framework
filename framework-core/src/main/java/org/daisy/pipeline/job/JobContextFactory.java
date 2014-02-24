@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.slf4j.Logger;
@@ -27,11 +28,11 @@ public final class JobContextFactory {
 		//nothing
 	}
 
-	public JobContext newMappingJobContext(String niceName,BoundXProcScript boundScript,ResourceCollection collection){
+	public JobContext newMappingJobContext(Client client,String niceName,BoundXProcScript boundScript,ResourceCollection collection){
 		JobId id = JobIdFactory.newId();
 		AbstractJobContext ctxt=null;
 		try{
-			 ctxt=new MappingJobContext(id,niceName,boundScript,collection);
+			 ctxt=new MappingJobContext(client,id,niceName,boundScript,collection);
 		}catch (IOException ex){
 			throw new RuntimeException("Error while creating MappingJobContext",ex);
 		}
@@ -40,13 +41,13 @@ public final class JobContextFactory {
 
 	}
 
-	public JobContext newMappingJobContext(String niceName,BoundXProcScript boundScript){
-		return newMappingJobContext(niceName,boundScript,null);
+	public JobContext newMappingJobContext(Client client,String niceName,BoundXProcScript boundScript){
+		return newMappingJobContext(client,niceName,boundScript,null);
 	}
 
-	public JobContext newJobContext(String niceName,BoundXProcScript boundScript){
+	public JobContext newJobContext(Client client,String niceName,BoundXProcScript boundScript){
 		JobId id = JobIdFactory.newId();
-		AbstractJobContext ctxt=new SimpleJobContext(id,niceName,boundScript);
+		AbstractJobContext ctxt=new SimpleJobContext(client,id,niceName,boundScript);
 		this.configure(ctxt);
 		return ctxt;
 

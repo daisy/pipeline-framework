@@ -39,7 +39,6 @@ public abstract class PrioritizedRunnable implements Runnable{
          * @return the relativeWaitingTime
          */
         public double getRelativeWaitingTime() {
-
                 return this.relativeWaitingTime;
         }
 

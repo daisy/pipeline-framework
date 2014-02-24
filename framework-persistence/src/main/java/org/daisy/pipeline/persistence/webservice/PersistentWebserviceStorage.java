@@ -1,7 +1,7 @@
 package org.daisy.pipeline.persistence.webservice;
 
+import org.daisy.pipeline.clients.ClientStorage;
 import org.daisy.pipeline.persistence.Database;
-import org.daisy.pipeline.webserviceutils.clients.ClientStorage;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.daisy.pipeline.webserviceutils.storage.JobConfigurationStorage;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
