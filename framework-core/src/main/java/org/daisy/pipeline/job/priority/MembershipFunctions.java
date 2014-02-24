@@ -9,6 +9,16 @@ public class MembershipFunctions{
 
        }
 
+       public static Function<Double,Double> newEqualsFunction(final double value){
+                return new Function<Double, Double>() {
+
+                        @Override
+                        public Double apply(Double otherValue) {
+                                return (otherValue==value)? 1.0:0.0;
+                        }
+               };
+       }
+
 
        //Protected classes 
        
@@ -51,12 +61,16 @@ public class MembershipFunctions{
                                         break;
                                 case 0: //(x-x_0)/(x_1-x_0)
                                         res=(x-this.points[seg])/(this.points[seg+1]-this.points[seg]);
+                                        if (Double.isNaN(res))
+                                                res=1;
                                         break;
                                 case 1:
                                         res=1;
                                         break;
                                 case 2://(x1-x)/(x_1-x_0)
                                         res=(this.points[seg+1]-x)/(this.points[seg+1]-this.points[seg]);
+                                        if (Double.isNaN(res))
+                                                res=1;
                                         break;
                         }
                         return new Double(res);
@@ -67,9 +81,12 @@ public class MembershipFunctions{
                  * 
                  */
                 int getSegment(double x){
-                        if (x<0 || x>1.0){
-                                return -1;
+                        if (x<0.0 ){
+                                x=0;
+                        }else if (x>1.0){
+                                x=1;
                         }
+                                
                         for (int  i=0;i<this.points.length-1;i++){
                                 if(inSegment(i,x)){
                                         return i;

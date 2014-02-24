@@ -35,8 +35,8 @@ public abstract class FuzzyRunnable extends PrioritizedRunnable{
         public synchronized double getScore(){
                 //Lazy score calcualtion and caching
                 if(this.dirty){
-                        double[] crispValues=Doubles.concat(new double[]{this.relativeWaitingTime},this.getPriorities());
-                        this.score=this.infereneceEngine.getScore(crispValues);
+                        double[] crispValues=Doubles.concat(new double[]{this.getRelativeWaitingTime()},this.getPriorities());
+                        this.score=this.getInfereneceEngine().getScore(crispValues);
                         this.dirty=false;
                 }
                 return this.score;

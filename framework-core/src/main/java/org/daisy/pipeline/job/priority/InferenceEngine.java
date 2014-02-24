@@ -39,11 +39,12 @@ public class InferenceEngine {
                 Iterator<Double> crispIter=crispCol.iterator();
                 Iterator<FuzzyVariable> variableIter=this.variables.iterator();
                 //crisps and variables have the same size
+                double memebership;
                 while(crispIter.hasNext()){
                         FuzzyVariable var=variableIter.next();
                         double x=crispIter.next();
                         for (FuzzySet set:var.getSets()){
-                                double memebership=set.getMembership().apply(x);
+                                memebership=set.getMembership().apply(x);
                                 numerator+=memebership*set.getWeight();
                                 denominator+=memebership;
                         }
