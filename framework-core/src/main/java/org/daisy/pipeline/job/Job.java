@@ -21,192 +21,230 @@ import com.google.common.eventbus.EventBus;
  */
 public class Job {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(Job.class);
+        private static final Logger logger = LoggerFactory
+                        .getLogger(Job.class);
 
-	public static class  JobBuilder{
-		protected JobContext ctxt;
-		protected EventBus bus;
-		private Job job;
-		public JobBuilder withContext(JobContext ctxt){
-			this.ctxt=ctxt;
-			return this;
-		}
+        public static class  JobBuilder{
+                protected JobContext ctxt;
+                protected EventBus bus;
+                protected Priority priority=Priority.MEDIUM;
+                private Job job;
 
-		public JobBuilder withEventBus(EventBus bus){
-			this.bus=bus;
-			return this;
-		}
-		//available for subclasses to override
-		protected Job initJob(){
-			Job job = new Job(this.ctxt,this.bus);
-			return job;
-		}
-		public final Job build(){
-			this.job=this.initJob();
-			this.job.changeStatus(Status.IDLE);
-			return job;
-		}
-		
-		/**
-		 * Builds the job allowing a preprocessing before the status is 
-		 * broadcasted
-		 * @param initialiser
-		 * @return
-		 */
-		public final Job build(Function<Job,Job> initialiser){
-			this.job= initialiser.apply(this.initJob());
-			this.job.changeStatus(Status.IDLE);
-			return job;
-		}
-		public final void initialise(){
-		}
-	}
+                public JobBuilder withPriority(Priority priority){
+                        this.priority=priority;
+                        return this;
+                }
+
+                public JobBuilder withContext(JobContext ctxt){
+                        this.ctxt=ctxt;
+                        return this;
+                }
+
+                public JobBuilder withEventBus(EventBus bus){
+                        this.bus=bus;
+                        return this;
+                }
+                //available for subclasses to override
+                protected Job initJob(){
+                        Job job = new Job(this.ctxt,this.bus,this.priority);
+                        return job;
+                }
+                public final Job build(){
+                        this.job=this.initJob();
+                        this.job.changeStatus(Status.IDLE);
+                        return job;
+                }
+                
+                /**
+                 * Builds the job allowing a preprocessing before the status is 
+                 * broadcasted
+                 * @param initialiser
+                 * @return
+                 */
+                public final Job build(Function<Job,Job> initialiser){
+                        this.job= initialiser.apply(this.initJob());
+                        this.job.changeStatus(Status.IDLE);
+                        return job;
+                }
+                public final void initialise(){
+                }
+        }
 
 
-	/**
-	 * The Enum Status.
-	 */
+        /**
+         * The Enum Status.
+         */
 
 
-	public static enum Status {
+        public static enum Status {
 
-		/** The IDLE. */
-		IDLE,
-		/** The RUNNING. */
-		RUNNING,
-		/** The DONE. */
-		DONE,
-		/** The ERROR. */
-		ERROR,
+                /** The IDLE. */
+                IDLE,
+                /** The RUNNING. */
+                RUNNING,
+                /** The DONE. */
+                DONE,
+                /** The ERROR. */
+                ERROR,
                 /** The VALIDATION_FAIL */
                 VALIDATION_FAIL
-	}
+        }
 
+        /**
+         * Priorities.
+         */
 
-	/** The status. */
-	private volatile Status status = Status.IDLE;
-	protected JobContext ctxt;
-	private EventBus eventBus;
+        public static enum Priority{
 
-	protected Job(JobContext ctxt,EventBus eventBus) {
-		this.ctxt=ctxt;
-		this.eventBus=eventBus;
-	}
+                LOW,
+                MEDIUM,
+                HIGH;
+                //for efficiency 
+                private static final int size = Priority.values().length;
+                public double asDouble(){
+                        return this.ordinal()/size;
+                }
+        }
 
-	/**
-	 * Gets the id.
-	 *
-	 * @return the id
-	 */
-	public JobId getId() {
-		return this.ctxt.getId();
-	}
+        /** The status. */
+        private volatile Status status = Status.IDLE;
+        private Priority priority;
+        protected JobContext ctxt;
+        private EventBus eventBus;
 
-	/**
-	 * Gets the status.
-	 *
-	 * @return the status
-	 */
-	public Status getStatus() {
-		synchronized(this.status){
-			return status;
-		}
-	}
+        protected Job(JobContext ctxt,EventBus eventBus,Priority priority) {
+                this.ctxt=ctxt;
+                this.eventBus=eventBus;
+                this.priority=priority;
+        }
 
-	protected void setStatus(Status status){
-		synchronized(this.status){
-			this.status=status;
-		}
-	}
+        /**
+         * Gets the id.
+         *
+         * @return the id
+         */
+        public JobId getId() {
+                return this.ctxt.getId();
+        }
 
-	/**
-	 * @param eventBus the eventBus to set
-	 */
-	public void setEventBus(EventBus eventBus) {
-		this.eventBus = eventBus;
-	}
+        /**
+         * Gets the status.
+         *
+         * @return the status
+         */
+        public Status getStatus() {
+                synchronized(this.status){
+                        return status;
+                }
+        }
 
-	/**
-	 * Gets the ctxt for this instance.
-	 *
-	 * @return The ctxt.
-	 */
-	public JobContext getContext() {
-		return this.ctxt;
-	}
+        protected void setStatus(Status status){
+                synchronized(this.status){
+                        this.status=status;
+                }
+        }
 
-	/**
-	 * Gets the ctxt for this instance.
-	 *
-	 * @return The ctxt.
-	 */
-	protected void setContext(JobContext ctxt) {
-		this.ctxt=ctxt;
-	}
+        /**
+         * @return the priority
+         */
+        public Priority getPriority() {
+                return priority;
+        }
 
-	/**
-	 * Gets the x proc output.
-	 *
-	 * @return the x proc output
-	 */
-	final XProcResult getXProcOutput() {
-		return null;
-	}
+        /**
+         * @return the priority
+         */
+        protected void setPriority(Priority priority) {
+                this.priority=priority;
+        }
 
-	private synchronized final void changeStatus(Status to){
+        /**
+         * @param eventBus the eventBus to set
+         */
+        public void setEventBus(EventBus eventBus) {
+                this.eventBus = eventBus;
+        }
+
+        /**
+         * Gets the ctxt for this instance.
+         *
+         * @return The ctxt.
+         */
+        public JobContext getContext() {
+                return this.ctxt;
+        }
+
+        /**
+         * Gets the ctxt for this instance.
+         *
+         * @return The ctxt.
+         */
+        protected void setContext(JobContext ctxt) {
+                this.ctxt=ctxt;
+        }
+
+        /**
+         * Gets the x proc output.
+         *
+         * @return the x proc output
+         */
+        final XProcResult getXProcOutput() {
+                return null;
+        }
+
+        private synchronized final void changeStatus(Status to){
                 logger.info(String.format("Changing job status to: %s",to));
-		this.status=to;
-		if (this.eventBus!=null)
-			this.eventBus.post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
-		else
-			logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? " the context ": " event bus ") + "is null");
-		this.onStatusChanged(to);
-	}
-	private final void broadcastError(String text){
-		Message msg= new MessageBuilder()
-			.withJobId(this.getId().toString())
-			.withLevel(Level.ERROR)
-			.withText(text)
-			.withSequence(1)
-			.build();
-		if (this.eventBus!=null)
-			this.eventBus.post(msg);
-		else
-			logger.warn("I couldnt broadcast an error "+((this.ctxt==null)? " the context ": " event bus ") + "is null");
-	}
+                this.status=to;
+                if (this.eventBus!=null)
+                        this.eventBus.post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
+                else
+                        logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? " the context ": " event bus ") + "is null");
+                this.onStatusChanged(to);
+        }
+        private final void broadcastError(String text){
+                Message msg= new MessageBuilder()
+                        .withJobId(this.getId().toString())
+                        .withLevel(Level.ERROR)
+                        .withText(text)
+                        .withSequence(1)
+                        .build();
+                if (this.eventBus!=null)
+                        this.eventBus.post(msg);
+                else
+                        logger.warn("I couldnt broadcast an error "+((this.ctxt==null)? " the context ": " event bus ") + "is null");
+        }
 
-	/**
-	 * Runs the job using the XProcEngine as script loader.
-	 *
-	 * @param engine the engine
-	 */
-	public synchronized final void run(XProcEngine engine) {
-		changeStatus(Status.RUNNING);
-		XProcPipeline pipeline = null;
-		try{
-			pipeline = engine.load(this.ctxt.getScript().getURI());
-			Properties props=new Properties();
-			props.setProperty("JOB_ID", this.ctxt.getId().toString());
-			XProcResult results = pipeline.run(this.ctxt.getInputs(),this.ctxt.getMonitor(),props);
-			this.ctxt.writeResult(results);
+        /**
+         * Runs the job using the XProcEngine as script loader.
+         *
+         * @param engine the engine
+         */
+        public synchronized final void run(XProcEngine engine) {
+                changeStatus(Status.RUNNING);
+                XProcPipeline pipeline = null;
+                try{
+                        pipeline = engine.load(this.ctxt.getScript().getURI());
+                        Properties props=new Properties();
+                        props.setProperty("JOB_ID", this.ctxt.getId().toString());
+                        XProcResult results = pipeline.run(this.ctxt.getInputs(),this.ctxt.getMonitor(),props);
+                        this.ctxt.writeResult(results);
                         //if the validation fails set the job status
                         if (!this.checkValid()){
                                 changeStatus(Status.VALIDATION_FAIL);
                         }else{
-			        changeStatus( Status.DONE );
+                                changeStatus( Status.DONE );
                         }
-		}catch(Exception e){
-			broadcastError(e.getMessage());
-			logger.error("job finished with error state",e);
-			changeStatus( Status.ERROR);
-		}
+                }catch(Exception e){
+                        broadcastError(e.getMessage());
+                        logger.error("job finished with error state",e);
+                        changeStatus( Status.ERROR);
+                }
 
-	}
+        }
 
-	protected void onStatusChanged(Status newStatus){
-		//for subclasses
-	}
+        protected void onStatusChanged(Status newStatus){
+                //for subclasses
+        }
         //checks if the internal validations are ok
         private boolean checkValid(){
                 return JobUtils.checkValidPort(this.getContext().getResults());

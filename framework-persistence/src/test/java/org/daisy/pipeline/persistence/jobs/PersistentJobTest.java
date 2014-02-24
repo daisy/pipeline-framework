@@ -1,9 +1,11 @@
 package org.daisy.pipeline.persistence.jobs;
 
+import java.util.HashSet;
 import java.util.List;
 
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.JobBuilder;
+import org.daisy.pipeline.job.Job.Priority;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.persistence.Database;
 import org.daisy.pipeline.persistence.jobs.PersistentJob.PersistentJobBuilder;
@@ -16,7 +18,9 @@ public class PersistentJobTest   {
 
 	Database db;
 	JobId id;
+	JobId idHigh;
 	PersistentJob job;
+	PersistentJob jobHigh;
 	@Before	
 	public void setUp(){
 		//script setup
@@ -27,32 +31,49 @@ public class PersistentJobTest   {
 		JobBuilder builder= new PersistentJobBuilder(db).withContext(Mocks.buildContext());
 		job =(PersistentJob) builder.build();//new PersistentJob(Job.newJob(Mocks.buildContext()),db);
 		id=job.getContext().getId();
+                //high priority
+                builder= new PersistentJobBuilder(db).withContext(Mocks.buildContext());
+		jobHigh =(PersistentJob) builder.withPriority(Priority.HIGH).build();//new PersistentJob(Job.newJob(Mocks.buildContext()),db);
+		idHigh=jobHigh.getContext().getId();
 	}
 	@After
 	public void tearDown(){
 		db.deleteObject(job);
+		db.deleteObject(jobHigh);
 	}	
 
-	@Test 
-	public void storeTest(){
-		PersistentJob pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
-		Assert.assertEquals(pjob.getContext().getId(),id);
+        @Test 
+        public void storeTest(){
+                PersistentJob pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
+                Assert.assertEquals(pjob.getContext().getId(),id);
+                Assert.assertEquals("Default priority",Job.Priority.MEDIUM,pjob.getPriority());
 
-	}
-	@Test 
-	public void changeStatusTest(){
-		PersistentJob pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
-		pjob.setDatabase(db);
-		pjob.setStatus(Job.Status.DONE);
-		pjob.onStatusChanged(Job.Status.DONE);
-		pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
-		Assert.assertEquals(Job.Status.DONE,pjob.getStatus());
+        }
+        @Test 
+        public void highPriority(){
+                PersistentJob pjob= db.getEntityManager().find(PersistentJob.class,idHigh.toString());
+                Assert.assertEquals("High priority",Job.Priority.HIGH,pjob.getPriority());
 
-	}
+        }
+        @Test 
+        public void changeStatusTest(){
+                PersistentJob pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
+                pjob.setDatabase(db);
+                pjob.setStatus(Job.Status.DONE);
+                pjob.onStatusChanged(Job.Status.DONE);
+                pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
+                Assert.assertEquals(Job.Status.DONE,pjob.getStatus());
+
+        }
 	@Test 
 	public void getJobsTest(){
 		List<Job> jobs=PersistentJob.getAllJobs(db);
-		Assert.assertEquals(jobs.get(0).getContext().getId(),id);
+                Assert.assertEquals("2 jobs",2,jobs.size());
+                HashSet<JobId> ids=new HashSet<JobId>();
+                ids.add(id);
+                ids.add(idHigh);
+		Assert.assertTrue("Contains job: "+jobs.get(0).getId(),ids.contains(jobs.get(0).getContext().getId()));
+		Assert.assertTrue("Contains job: "+jobs.get(1).getId(),ids.contains(jobs.get(1).getContext().getId()));
 
 	}
 
