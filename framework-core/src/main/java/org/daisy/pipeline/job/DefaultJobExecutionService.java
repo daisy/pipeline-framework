@@ -1,9 +1,13 @@
 package org.daisy.pipeline.job;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.daisy.common.xproc.XProcEngine;
+import org.daisy.pipeline.job.priority.FuzzyJobFactory;
+import org.daisy.pipeline.job.priority.FuzzyJobRunnable;
+import org.daisy.pipeline.job.priority.PriorityThreadPoolExecutor;
+import org.daisy.pipeline.job.priority.timetracking.TimeFunctions;
+import org.daisy.pipeline.job.priority.timetracking.TimeTrackerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -21,7 +25,14 @@ public class DefaultJobExecutionService implements JobExecutionService {
 	/** The xproc engine. */
 	private XProcEngine xprocEngine;
 
-	private  ExecutorService executor=Executors.newFixedThreadPool(2);
+        //TODO: get these sizes from properties
+	private  ExecutorService executor=PriorityThreadPoolExecutor.newFixedSizeThreadPoolExecutor(2,
+                        TimeTrackerFactory.newFactory(5,TimeFunctions.newLinearTimeFunctionFactory()));
+
+        /** Creates fuzzy jobs out of jobs and runnables */
+        private FuzzyJobFactory fuzzyJobFactory= FuzzyJobFactory.newFuzzyJobFactory();
+
+        
 
 
 	/**
@@ -53,8 +64,8 @@ public class DefaultJobExecutionService implements JobExecutionService {
 	@Override
 	public void submit(final Job job) {
 		logger.info("Submitting job");
-                //Make a FuzzyRunnables out of jobs
-		executor.submit(new ThreadWrapper(new Runnable() {
+                //The runnable to execute the job
+		Runnable runnable=new ThreadWrapper(new Runnable() {
 
 			@Override
 			public void run() {
@@ -71,7 +82,10 @@ public class DefaultJobExecutionService implements JobExecutionService {
 				}
 
 			}
-		}));
+		});
+
+                //Make the runnable ready to submit to the fuzzy-prioritized thread pool 
+               this.executor.submit(this.fuzzyJobFactory.newFuzzyJob(job,runnable));
 	}
 	/**
 	 * This class offers a solution to avoid memory leaks due to 

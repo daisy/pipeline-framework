@@ -30,7 +30,7 @@ public class PriorityThreadPoolExecutor extends ThreadPoolExecutor implements
          * Creates a new PriorityThreadPoolExecutor of the given size and uses the TimeTracker and normalising functions
          * returned by the factories.
          */
-        public static  PriorityThreadPoolExecutor newFixedSizeThreadPoolExecutor(int poolSize,TimeTrackerFactory trackerFactory,TimeFunctionFactory normalizerFactory) {
+        public static  PriorityThreadPoolExecutor newFixedSizeThreadPoolExecutor(int poolSize,TimeTrackerFactory trackerFactory) {
                 UpdatablePriorityBlockingQueue queue = new UpdatablePriorityBlockingQueue(); 
                 TimeTracker tracker=trackerFactory.newTimeTracker(queue); 
                 return new PriorityThreadPoolExecutor(poolSize,poolSize,0L,TimeUnit.MICROSECONDS,queue,tracker);
