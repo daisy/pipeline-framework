@@ -19,6 +19,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.google.common.base.Function;
 
 @RunWith(MockitoJUnitRunner.class)
+@SuppressWarnings({"unchecked"})
 public class TimeTrackingTest {
 
         private UpdatablePriorityBlockingQueue queue;
@@ -50,7 +51,7 @@ public class TimeTrackingTest {
                 TimeTracker tracker=new TimeTracker(3,queue, functionFactory);
                 tracker.executing(r1);
                 tracker.executing(r2);
-                verify(queue,times(0)).update(any(Runnable.class));
+                verify(queue,times(0)).update(any(Function.class));
         }
 
         @Test 
@@ -59,7 +60,7 @@ public class TimeTrackingTest {
                 tracker.executing(r1);
                 tracker.executing(r2);
                 tracker.executing(r3);
-                verify(queue,times(1)).update(any(Runnable.class));
+                verify(queue,times(1)).update(any(Function.class));
         }
 
         @Test 
@@ -69,10 +70,10 @@ public class TimeTrackingTest {
                 tracker.executing(r1);
                 tracker.executing(r2);
                 tracker.executing(r3);
-                verify(queue,times(1)).update(any(Runnable.class));
+                verify(queue,times(1)).update(any(Function.class));
                 tracker.executing(r1);
                 tracker.executing(r2);
-                verify(queue,times(1)).update(any(Runnable.class));
+                verify(queue,times(1)).update(any(Function.class));
                 //
         }
 
@@ -83,11 +84,11 @@ public class TimeTrackingTest {
                 tracker.executing(r1);
                 tracker.executing(r2);
                 tracker.executing(r3);
-                verify(queue,times(1)).update(any(Runnable.class));
+                verify(queue,times(1)).update(any(Function.class));
                 tracker.executing(r1);
                 tracker.executing(r2);
                 tracker.executing(r3);
-                verify(queue,times(2)).update(any(Runnable.class));
+                verify(queue,times(2)).update(any(Function.class));
                 //
         }
 
