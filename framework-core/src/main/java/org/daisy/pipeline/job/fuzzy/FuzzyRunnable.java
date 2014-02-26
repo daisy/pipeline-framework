@@ -6,8 +6,20 @@ import com.google.common.base.Function;
 import com.google.common.primitives.Doubles;
 
 
+/**
+ * Runnable that computes its final priority from a set of priorities and 
+ * the time spent in the execution queue. This computation is calculated
+ * using a fuzzy {@link InferenceEngine}.
+ *
+ */
 public abstract class FuzzyRunnable extends PrioritizedRunnable{
-        private InferenceEngine infereneceEngine;
+        /**
+         * Inference engine used to compute the final priority
+         */
+        private final InferenceEngine infereneceEngine;
+        /**
+         * score given by the engine for the current runnable status 
+         */
         private double score;
 
         /**
@@ -18,11 +30,12 @@ public abstract class FuzzyRunnable extends PrioritizedRunnable{
         }
 
         /**
-         * Returns the crisps values 
+         * Returns the crisp values (in american english chips, I mean, real values) from the priorities 
          */
         public abstract double[] getPriorities();
 
         /**
+         *
          * @return the infereneceEngine
          */
         public InferenceEngine getInfereneceEngine() {
@@ -31,8 +44,7 @@ public abstract class FuzzyRunnable extends PrioritizedRunnable{
        
 
         /**
-         * Returns the score of this FuzzyRunnable
-         *
+         * Returns the score of this FuzzyRunnable computed with InfereneceEngine
          */
         public synchronized double getScore(){
                 //Lazy score calcualtion and caching

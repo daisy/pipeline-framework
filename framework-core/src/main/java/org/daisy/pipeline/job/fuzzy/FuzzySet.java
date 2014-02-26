@@ -4,15 +4,22 @@ import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 
 /**
- * FuzzySet needs a name, a weight and a function to calculate the membership value 
- * of a given x
- *
- *
+* A fuzzy set is defined by a name which describes the intensity (high, low , very cold, hot, etc.), a weight and a memebership function, the memebership function should define behaviuors in the range (0,1) and return values from (0,1). 
+*
 */
 public class FuzzySet {
-        private String name;
-        private double weight;
-        private Function<Double, Double> membership;
+        /**
+         * Set's name
+         */
+        final private String name;
+        /**
+         * The weight to be applied  
+         */
+        final private double weight;
+        /**
+         * Function that measures the membership of a given x
+         */
+        final private Function<Double, Double> membership;
 
         /**
          * @param name
@@ -29,21 +36,21 @@ public class FuzzySet {
         /**
          * @return the name
          */
-        public String getName() {
+        final public String getName() {
                 return name;
         }
 
         /**
          * @return the weight
          */
-        public double getWeight() {
+        final public double getWeight() {
                 return weight;
         }
 
         /**
-         * @return the membership
+         * @return the membership function
          */
-        public Function<Double, Double> getMembership() {
+        final public Function<Double, Double> getMembership() {
                 return membership;
         }
 

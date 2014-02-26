@@ -8,19 +8,31 @@ import com.google.common.base.Supplier;
 
 
 /**
- * The x limits are always going to be between 0 and 1
- *
+ * A fuzzy variable is just a group of fuzzy sets
  */
-public class FuzzyVariable {
+public final class FuzzyVariable {
 
-        List<FuzzySet> sets=new LinkedList<FuzzySet>();
+        /**
+         * The list of sets
+         */
+        final List<FuzzySet> sets=new LinkedList<FuzzySet>();
       
-        public FuzzyVariable add(FuzzySet set){
+        /**
+         * Adds a new fuzzy set to this variable
+         * @param set
+         * @return
+         */
+        final public FuzzyVariable add(FuzzySet set){
                 this.sets.add(set);
                 return this;
         }
         
-        public Iterable<FuzzySet> getSets(){
+        /**
+         * Returns iterable of this variable sets
+         *
+         * @return
+         */
+        final public Iterable<FuzzySet> getSets(){
                 return this.sets;
         }
 
