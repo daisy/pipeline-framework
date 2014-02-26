@@ -11,7 +11,7 @@ public class FuzzyJobRunnable extends FuzzyRunnable {
         public FuzzyJobRunnable(Job job, Runnable jobTask,InferenceEngine infereneceEngine) {
                 super(infereneceEngine);
                 this.job=job;
-                this.runnable=runnable;
+                this.runnable=jobTask;
         }
 
         @Override

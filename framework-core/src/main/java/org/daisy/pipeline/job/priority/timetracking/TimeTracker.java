@@ -1,8 +1,9 @@
 package org.daisy.pipeline.job.priority.timetracking;
 
-import org.daisy.pipeline.job.priority.FuzzyRunnable;
 import org.daisy.pipeline.job.priority.PrioritizedRunnable;
 import org.daisy.pipeline.job.priority.UpdatablePriorityBlockingQueue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
 
@@ -13,18 +14,8 @@ public class TimeTracker{
         private TimeFunctionFactory functionFactory ;
         private int counter=0;
 
-        Runnable timeUpdater = new Runnable(){
-                @Override
-                public void run(){
-                        TimeStats stats= new TimeStats(System.nanoTime(),TimeTracker.this.times);
-                        Function<Long,Double> function=TimeTracker.this.functionFactory.getFunction(stats);
-                        for(PrioritizedRunnable runnable:TimeTracker.this.queue.asCollection()){
-                                runnable.setRelativeWaitingTime(function);
-                        }
+        private static final Logger logger = LoggerFactory.getLogger(TimeTracker.class);
 
-                }
-
-        };
         
 
 
@@ -39,19 +30,29 @@ public class TimeTracker{
                 this.times= new long[size];
         }
 
-        public void executing(PrioritizedRunnable runnable){
+        public synchronized void executing(PrioritizedRunnable runnable){
                 //update counter and buff
-                this.times[counter]=runnable.getTimestamp();
-                counter++;
+                this.times[this.counter]=runnable.getTimestamp();
+                this.counter++;
                 //if the buffer if full 
                 //send a runnable to update the queue
-                if( counter == size){
+                if( this.counter == size){
                         this.update();                                 
-                        counter=0;
+                        this.counter=0;
                 }
         }
 
-        private void update(){
-                this.queue.update(timeUpdater);
+        void update(){
+                logger.debug("Updating queue");
+                TimeStats stats= new TimeStats(System.nanoTime(),TimeTracker.this.times);
+                final Function<Long,Double> timeUpdater=TimeTracker.this.functionFactory.getFunction(stats);
+                this.queue.update(new Function<PrioritizedRunnable, Void>() {
+                        @Override
+                        public Void apply(PrioritizedRunnable runnable) {
+                                runnable.setRelativeWaitingTime(timeUpdater);
+                                //ugly as hell but you can't intantiate void, go figure.
+                                return null;
+                        }
+                });
         }
 }

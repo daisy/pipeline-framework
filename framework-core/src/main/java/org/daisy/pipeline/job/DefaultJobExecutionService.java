@@ -4,7 +4,6 @@ import java.util.concurrent.ExecutorService;
 
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.job.priority.FuzzyJobFactory;
-import org.daisy.pipeline.job.priority.FuzzyJobRunnable;
 import org.daisy.pipeline.job.priority.PriorityThreadPoolExecutor;
 import org.daisy.pipeline.job.priority.timetracking.TimeFunctions;
 import org.daisy.pipeline.job.priority.timetracking.TimeTrackerFactory;
@@ -12,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-// TODO: Auto-generated Javadoc
 /**
  * DefaultJobExecutionService is the defualt way to execute jobs
  */
@@ -21,8 +19,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
 	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory
 			.getLogger(DefaultJobExecutionService.class);
-
-	/** The xproc engine. */
+/** The xproc engine. */
 	private XProcEngine xprocEngine;
 
         //TODO: get these sizes from properties
@@ -42,7 +39,6 @@ public class DefaultJobExecutionService implements JobExecutionService {
 	 *            the new x proc engine
 	 */
 	public void setXProcEngine(XProcEngine xprocEngine) {
-		// TODO make it dynamic
 		this.xprocEngine = xprocEngine;
 	}
 
@@ -63,9 +59,14 @@ public class DefaultJobExecutionService implements JobExecutionService {
 	 */
 	@Override
 	public void submit(final Job job) {
-		logger.info("Submitting job");
-                //The runnable to execute the job
-		Runnable runnable=new ThreadWrapper(new Runnable() {
+		//logger.info("Submitting job");
+                //Make the runnable ready to submit to the fuzzy-prioritized thread pool 
+                this.executor.execute(this.fuzzyJobFactory.newFuzzyJob(job,this.getRunnable(job)));
+        }
+
+
+        Runnable getRunnable(final Job job){
+		return new ThreadWrapper(new Runnable() {
 
 			@Override
 			public void run() {
@@ -83,10 +84,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
 
 			}
 		});
-
-                //Make the runnable ready to submit to the fuzzy-prioritized thread pool 
-               this.executor.submit(this.fuzzyJobFactory.newFuzzyJob(job,runnable));
-	}
+        }
 	/**
 	 * This class offers a solution to avoid memory leaks due to 
 	 * the missuse of ThreadLocal variables. 
