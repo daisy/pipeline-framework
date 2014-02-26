@@ -3,7 +3,7 @@ package org.daisy.pipeline.job;
 import java.util.concurrent.ExecutorService;
 
 import org.daisy.common.xproc.XProcEngine;
-import org.daisy.pipeline.job.priority.FuzzyJobFactory;
+import org.daisy.pipeline.job.fuzzy.FuzzyJobFactory;
 import org.daisy.pipeline.job.priority.PriorityThreadPoolExecutor;
 import org.daisy.pipeline.job.priority.timetracking.TimeFunctions;
 import org.daisy.pipeline.job.priority.timetracking.TimeTrackerFactory;

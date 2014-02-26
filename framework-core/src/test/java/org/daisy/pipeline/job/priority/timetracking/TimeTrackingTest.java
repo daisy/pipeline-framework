@@ -7,7 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.daisy.pipeline.job.priority.FuzzyRunnable;
+import org.daisy.pipeline.job.fuzzy.FuzzyRunnable;
 import org.daisy.pipeline.job.priority.UpdatablePriorityBlockingQueue;
 import org.junit.Assert;
 import org.junit.Before;

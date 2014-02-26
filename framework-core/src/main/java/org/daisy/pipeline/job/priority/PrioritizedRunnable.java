@@ -45,7 +45,7 @@ public abstract class PrioritizedRunnable implements Runnable{
         /**
          *  marks this runnable as dirty 
          */
-        void markDirty() {
+        public void markDirty() {
                 this.dirty = true;
         }
 

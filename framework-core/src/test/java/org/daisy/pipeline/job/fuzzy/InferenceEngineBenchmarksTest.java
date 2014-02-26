@@ -1,8 +1,12 @@
-package org.daisy.pipeline.job.priority;
+package org.daisy.pipeline.job.fuzzy;
 
 import java.util.Collection;
 import java.util.Random;
 
+import org.daisy.pipeline.job.fuzzy.FuzzySet;
+import org.daisy.pipeline.job.fuzzy.FuzzyVariable;
+import org.daisy.pipeline.job.fuzzy.InferenceEngine;
+import org.daisy.pipeline.job.fuzzy.MembershipFunctions;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
