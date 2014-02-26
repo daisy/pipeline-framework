@@ -1,4 +1,6 @@
-package org.daisy.pipeline.job.priority;
+package org.daisy.pipeline.job.fuzzy;
+
+import org.daisy.pipeline.job.priority.PrioritizedRunnable;
 
 import com.google.common.base.Function;
 import com.google.common.primitives.Doubles;

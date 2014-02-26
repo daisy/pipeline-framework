@@ -1,4 +1,4 @@
-package org.daisy.pipeline.job.priority;
+package org.daisy.pipeline.job.fuzzy;
 
 import com.google.common.base.Function;
 

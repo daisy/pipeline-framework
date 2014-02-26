@@ -1,4 +1,4 @@
-package org.daisy.pipeline.job.priority;
+package org.daisy.pipeline.job.fuzzy;
 
 import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Mockito.spy;
@@ -6,6 +6,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.daisy.pipeline.job.fuzzy.FuzzyRunnable;
+import org.daisy.pipeline.job.fuzzy.InferenceEngine;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

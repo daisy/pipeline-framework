@@ -1,7 +1,10 @@
-package org.daisy.pipeline.job.priority;
+package org.daisy.pipeline.job.fuzzy;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;
+import org.daisy.pipeline.job.fuzzy.FuzzyJobRunnable;
+import org.daisy.pipeline.job.fuzzy.InferenceEngine;
+import org.daisy.pipeline.job.priority.Priority;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

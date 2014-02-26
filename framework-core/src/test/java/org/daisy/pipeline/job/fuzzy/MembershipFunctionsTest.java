@@ -1,6 +1,6 @@
-package org.daisy.pipeline.job.priority;
+package org.daisy.pipeline.job.fuzzy;
 
-import org.daisy.pipeline.job.priority.MembershipFunctions.TrapezoidFunction;
+import org.daisy.pipeline.job.fuzzy.MembershipFunctions.TrapezoidFunction;
 import org.junit.Assert;
 import org.junit.Test;
 

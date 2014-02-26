@@ -1,5 +1,8 @@
-package org.daisy.pipeline.job.priority;
+package org.daisy.pipeline.job.fuzzy;
 
+import org.daisy.pipeline.job.fuzzy.FuzzyJobFactory;
+import org.daisy.pipeline.job.fuzzy.FuzzyRunnable;
+import org.daisy.pipeline.job.fuzzy.InferenceEngine;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
