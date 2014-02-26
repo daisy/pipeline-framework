@@ -1,8 +1,10 @@
 package org.daisy.pipeline.job.priority.timetracking;
-
-public class TimeStats{
-        long reference; 
-        long[] times;
+/**
+ * Mantains a snapshot of the {@link TimeTracker} and the reference time used to make comparisions.
+ */
+public final class TimeStats{
+        final long reference; 
+        final long[] times;
 
         /**
          * @param reference
@@ -21,13 +23,15 @@ public class TimeStats{
         }
 
         /**
-         * @return the reference
+         * Unreferenced times
+         * @return 
          */
         public long[] getTimes() {
                 return this.times;
         }
 
         /**
+         * References the times and retuns the array
          * @return the times referenced to the reference instant 
          */
         public long[] getReferencedTimes() {

@@ -2,6 +2,9 @@ package org.daisy.pipeline.job.priority.timetracking;
 
 import com.google.common.base.Function;
 
+/**
+ * Provides functions that perform linear normalisations given using {@likn TimeStats} as reference.
+ */
 public class LinearTimeNormalizer implements TimeFunctionFactory {
         /**
          * Returns a function that normalises a given number accordingly
@@ -20,7 +23,9 @@ public class LinearTimeNormalizer implements TimeFunctionFactory {
                         }};
         }
 
-
+        /**
+         * Finds the max and min of the given array
+         */
         long[] findMinMax(long vals[]){
                 long min=Long.MAX_VALUE;
                 long max=Long.MIN_VALUE;

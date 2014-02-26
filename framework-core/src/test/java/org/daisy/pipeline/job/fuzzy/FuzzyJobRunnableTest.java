@@ -49,7 +49,6 @@ public class FuzzyJobRunnableTest   {
                Mockito.when(ctxt.getClient()).thenReturn(client);
                Mockito.when(job.getContext()).thenReturn(ctxt);
                Mockito.when(job.getPriority()).thenReturn(Priority.HIGH);
-               System.out.println(job.getPriority().asDouble());
                double []res=fuzzyJob.getPriorities();
 
                Assert.assertArrayEquals("Check first client prio and then job prio",new double[]{0.0,1.0},res,0.0);

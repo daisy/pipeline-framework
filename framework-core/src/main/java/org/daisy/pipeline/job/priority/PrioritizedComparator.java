@@ -3,7 +3,10 @@ package org.daisy.pipeline.job.priority;
 import java.util.Comparator;
 
 
-public class PrioritizedComparator implements
+/**
+ * Comparator for PrioritizedRunnables based on their priorities
+ */
+public final class PrioritizedComparator implements
                 Comparator<PrioritizedRunnable> {
 
        
