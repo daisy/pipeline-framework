@@ -1,5 +1,4 @@
 package org.daisy.pipeline.job.priority;
-import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;

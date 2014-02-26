@@ -9,11 +9,11 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
 import org.daisy.common.base.Provider;
-import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.URIMapper;
+import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.persistence.Database;
 import org.junit.After;
 import org.junit.Assert;

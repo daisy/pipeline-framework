@@ -1,4 +1,4 @@
-package org.daisy.common.priority;
+package org.daisy.pipeline.job.priority;
 
 public enum Priority{
                 LOW,
