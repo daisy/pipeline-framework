@@ -8,7 +8,6 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
 import org.daisy.common.base.Provider;
-import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
@@ -21,6 +20,7 @@ import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.ResultSet;
 import org.daisy.pipeline.job.URIMapper;
+import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.persistence.webservice.PersistentClient;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;

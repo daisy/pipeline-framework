@@ -1,5 +1,6 @@
-package org.daisy.common.priority;
+package org.daisy.pipeline.job.priority;
 
+import org.daisy.pipeline.job.priority.Priority;
 import org.junit.Assert;
 import org.junit.Test;
 

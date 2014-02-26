@@ -1,6 +1,6 @@
 package org.daisy.pipeline.clients;
 
-import org.daisy.common.priority.Priority;
+import org.daisy.pipeline.job.priority.Priority;
 
 public final class SimpleClient implements Client {
 

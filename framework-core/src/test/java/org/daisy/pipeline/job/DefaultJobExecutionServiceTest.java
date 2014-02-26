@@ -3,8 +3,8 @@ package org.daisy.pipeline.job;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.job.priority.Priority;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
