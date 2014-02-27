@@ -21,14 +21,14 @@ public class PersistentClient implements Client {
                 return internalId;
         }
 
-        public enum PersistentRole {
-                ADMIN, CLIENTAPP
-        }
+        //public enum PersistentRole {
+                //ADMIN, CLIENTAPP
+        //}
 
         // the fields for each client object
         private String id;
         private String secret;
-        private PersistentRole role = PersistentRole.CLIENTAPP;
+        private Role role ;
 
         // in the future, use a separate table to list contact information for
         // client app maintainers
@@ -42,12 +42,12 @@ public class PersistentClient implements Client {
         public PersistentClient() {
         }
 
-        public PersistentClient(Client client) {
-                this.id = client.getId();
-                this.secret = client.getSecret();
-                this.role = PersistentRole.valueOf(client.getRole().name());
-                this.contactInfo = client.getContactInfo();
-                this.priority=client.getPriority();
+        public PersistentClient(String id, String secret, Role role, String contactInfo,Priority priority) {
+                this.id = id;
+                this.secret = secret;
+                this.role = role;
+                this.contactInfo = contactInfo;
+                this.priority=priority;
         }
 
         public String getId() {
@@ -67,11 +67,11 @@ public class PersistentClient implements Client {
         }
 
         public Role getRole() {
-                return Role.valueOf(role.name());
+                return role;
         }
 
         public void setRole(Role role) {
-                this.role = PersistentRole.valueOf(role.name());
+                this.role = role;
         }
 
         public String getContactInfo() {

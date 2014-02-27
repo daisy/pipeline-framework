@@ -21,6 +21,8 @@ public final class JobContextFactory {
 	private static final Logger logger = LoggerFactory.getLogger(JobContextFactory.class);
 
 	private JobMonitorFactory monitorFactory;
+        //TODO: I bet that this shouldn't be here
+        //check the implications with the osgi service
 	private EventBusProvider eventbusProvider;
 
 

@@ -131,7 +131,7 @@ public class Mocks   {
 		final URIMapper mapper= new URIMapper(in,out);
 		final ResultSet rSet=new ResultSet.Builder().addResult(portResult,res1).addResult(opt1Qname,res2).build();
                 //add to the db
-                final PersistentClient client=new PersistentClient(new SimpleClient("a","b",Role.ADMIN,"a@a",Priority.LOW));
+                final PersistentClient client=new PersistentClient("a","b",Role.ADMIN,"a@a",Priority.LOW);
                 DatabaseProvider.getDatabase().addObject(client);
 		//inception!
 		class MyHiddenContext extends AbstractJobContext{
