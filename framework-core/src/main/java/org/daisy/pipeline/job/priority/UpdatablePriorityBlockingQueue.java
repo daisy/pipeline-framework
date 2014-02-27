@@ -127,11 +127,11 @@ public class UpdatablePriorityBlockingQueue extends
          * @param runnable
          */
         public synchronized void moveUp(PrioritizedRunnable runnable) {
-                this.enterUpdate();
                 //first element doesn't move up
                 if (runnable.equals(delegate.element())) {
                         return;
                 }
+                this.enterUpdate();
                 //get element and previous elements
                 PrioritizedRunnable iter, prev, prevToPrev;
                 iter = prev = prevToPrev = null;
