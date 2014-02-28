@@ -33,6 +33,9 @@ public final class XmlCatalogConstants {
 
 		/** The Constant E_URI. */
 		public static final QName E_URI = new QName(XML_CATALOG_NS,"uri");
+
+		/** The Constant E_URI. */
+		public static final QName E_REWRITE = new QName(XML_CATALOG_NS,"rewriteURI");
 	}
 
 	/**
@@ -61,6 +64,12 @@ public final class XmlCatalogConstants {
 
 		/** The Constant A_URI. */
 		public static final QName A_URI= new QName( "uri");
+
+		/** The Constant A_START_STRING. */
+		public static final QName A_START_STRING= new QName( "uriStartString");
+
+		/** The Constant A_REWRITE_PREFIX. */
+		public static final QName A_REWRITE_PREFIX= new QName( "rewritePrefix");
 	}
 
 

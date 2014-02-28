@@ -19,7 +19,8 @@ public class XmlCatalog {
 	/** The m uri mappings. */
 	HashMap<URI, URI> mURIMappings = new HashMap<URI, URI>();
 
-	// TODO: rewrite rules
+	/** The m uri mappings. */
+	HashMap<URI, URI> mRewriteUris= new HashMap<URI, URI>();
 
 	/**
 	 * Instantiates a new xml catalog.
@@ -30,10 +31,13 @@ public class XmlCatalog {
 	 */
 	private XmlCatalog(HashMap<String, URI> publicMappings,
 			HashMap<URI, URI> systemIdMappings,
-			HashMap<URI, URI> uriMappMappings) {
+			HashMap<URI, URI> uriMappMappings,
+                        HashMap<URI, URI> rewriteUris) {
+
 			mPublicMappings.putAll(publicMappings);
 			mSystemIdMappings.putAll(systemIdMappings);
 			mURIMappings.putAll(uriMappMappings);
+			mRewriteUris.putAll(rewriteUris);
 	}
 
 	/**
@@ -64,6 +68,15 @@ public class XmlCatalog {
 	}
 
 	/**
+	 * Gets the rewriteUris.
+	 *
+	 * @return the uri mappings
+	 */
+	public Map<URI, URI> getRewriteUris() {
+		return mRewriteUris;
+	}
+
+	/**
 	 *  Builds a xml catalog
 	 */
 	public static class Builder {
@@ -77,6 +90,8 @@ public class XmlCatalog {
 		/** The m uri mappings. */
 		HashMap<URI, URI> mURIMappings = new HashMap<URI, URI>();
 
+		/** The m uri mappings. */
+		HashMap<URI, URI> mRewriteUris= new HashMap<URI, URI>();
 		/**
 		 * With public mapping.
 		 *
@@ -114,12 +129,23 @@ public class XmlCatalog {
 		}
 
 		/**
+		 * With uri mapping.
+		 *
+		 * @param name the name
+		 * @param uri the uri
+		 * @return the builder
+		 */
+		public Builder withRewriteUri(URI startString, URI rewritePrefix) {
+			this.mRewriteUris.put(startString, rewritePrefix);
+			return this;
+		}
+		/**
 		 * gets the catalog based on the state of the builder
 		 *
 		 * @return the xml catalog
 		 */
 		public XmlCatalog build(){
-			return new XmlCatalog(mPublicMappings,mSystemIdMappings,mURIMappings);
+			return new XmlCatalog(mPublicMappings,mSystemIdMappings,mURIMappings,mRewriteUris);
 		}
 
 	}

@@ -6,6 +6,7 @@
             uri="docbookx.dtd"/>
     <system systemId="http://example.com/groupfile.xml" uri="mysistemIdgroup.xml"/>
     <uri name="http://example.com/groupuri.xml" uri="myurigroup.xml"/>
+    <rewriteURI uriStartString="http://example.com/static" rewritePrefix="static/"/>
   </group>
   <group xml:base="mybase/">
   	<uri name="http://example.com/groupuri2.xml" uri="myurigroup2.xml"/>
