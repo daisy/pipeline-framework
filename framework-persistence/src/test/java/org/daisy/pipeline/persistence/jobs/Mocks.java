@@ -122,6 +122,7 @@ public class Mocks   {
 	}
 
 	public static AbstractJobContext buildContext(){  
+                //new RuntimeException().printStackTrace();
 		final XProcScript script = Mocks.buildScript();
 		//ScriptRegistryHolder.setScriptRegistry(new Mocks.DummyScriptService(script));
 		//Input setup

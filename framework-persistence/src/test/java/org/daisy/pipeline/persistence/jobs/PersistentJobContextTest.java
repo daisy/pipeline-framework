@@ -41,6 +41,7 @@ public class PersistentJobContextTest  {
 	@After
 	public void tearDown(){
 		db.deleteObject(ctxt);
+                db.deleteObject(ctxt.getClient());
 	}	
 
         @Test

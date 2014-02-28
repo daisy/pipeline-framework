@@ -39,7 +39,9 @@ public class PersistentJobTest   {
 	@After
 	public void tearDown(){
 		db.deleteObject(job);
+		db.deleteObject(job.getContext().getClient());
 		db.deleteObject(jobHigh);
+		db.deleteObject(jobHigh.getContext().getClient());
 	}	
 
         @Test 
