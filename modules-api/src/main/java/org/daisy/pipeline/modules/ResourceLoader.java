@@ -15,4 +15,11 @@ public interface ResourceLoader {
 	 * @return the uRL
 	 */
 	URL loadResource(String path);
+	/**
+	 * Loads a list of resources recursively.
+	 *
+	 * @param path the path
+	 * @return the uRL
+	 */
+	Iterable<URL> loadResources(String path);
 }

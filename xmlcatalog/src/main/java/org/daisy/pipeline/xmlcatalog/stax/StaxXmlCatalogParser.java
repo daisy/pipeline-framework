@@ -164,7 +164,8 @@ public class StaxXmlCatalogParser implements XmlCatalogParser {
 					EventPredicates.isStartOrStopElement(Elements.E_GROUP),
 					EventPredicates.isStartOrStopElement(Elements.E_PUBLIC),
 					EventPredicates.isStartOrStopElement(Elements.E_SYSTEM),
-					EventPredicates.isStartOrStopElement(Elements.E_URI));
+					EventPredicates.isStartOrStopElement(Elements.E_URI),
+					EventPredicates.isStartOrStopElement(Elements.E_REWRITE));
 			StaxEventHelper.loop(reader, pred,
 					EventPredicates.getChildOrSiblingPredicate(),
 					new EventProcessor() {
@@ -207,6 +208,11 @@ public class StaxXmlCatalogParser implements XmlCatalogParser {
 									&& event.asStartElement().getName()
 											.equals(Elements.E_URI)) {
 								parseUri(event);
+							}
+							if (event.isStartElement()
+									&& event.asStartElement().getName()
+											.equals(Elements.E_REWRITE)) {
+								parseRewrite(event);
 							}
 
 						}
@@ -293,6 +299,37 @@ public class StaxXmlCatalogParser implements XmlCatalogParser {
 				throw new IllegalStateException("uri is null");
 			}
 			mCatalogBuilder.withSystemIdMapping(systemIdUri, uriUri);
+		}
+
+		/**
+		 * Parses the rewriteUri element 
+		 *
+		 * @param event
+		 *            the event
+		 */
+		private void parseRewrite(XMLEvent event) {
+			Attribute startString= event.asStartElement().getAttributeByName(
+					Attributes.A_START_STRING);
+			Attribute rewrite= event.asStartElement().getAttributeByName(
+					Attributes.A_REWRITE_PREFIX);
+			URI startStringUri= null;
+			URI rewriteUri= null;
+			if (startString!= null) {
+                                if (startString.getValue().endsWith("/")){
+                                        startStringUri= URI.create(startString.getValue());
+                                }else{
+                                        startStringUri= URI.create(startString.getValue()+"/");
+                                }
+
+			} else {
+				throw new IllegalStateException("startString is null");
+			}
+			if (rewrite != null) {
+				rewriteUri= addBase(rewrite.getValue(), mBase.peek());
+			} else {
+				throw new IllegalStateException("rewrite preffix is null");
+			}
+			mCatalogBuilder.withRewriteUri(startStringUri, rewriteUri);
 		}
 	}
 
