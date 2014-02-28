@@ -1,88 +1,80 @@
 package org.daisy.pipeline.nonpersistent.webservice;
 
-import static org.junit.Assert.fail;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.clients.SimpleClient;
-import org.daisy.pipeline.nonpersistent.webservice.VolatileClientStorage;
+import org.daisy.pipeline.clients.Client.Role;
+import org.daisy.pipeline.job.priority.Priority;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.base.Optional;
+
 public class VolatileClientStorageTest   {
 
-	Client c1;
-	Client c2;
-	VolatileClientStorage clients;	
-	@Before
-	public void setUp(){
-		c1=new SimpleClient("1","supersecret",Client.Role.CLIENTAPP,"pipeliners@daisy.org");
-		c2=new SimpleClient("2","notthatsecret",Client.Role.ADMIN,"pipeliners@daisy.org");
-		clients=new VolatileClientStorage();
-		clients.add(c1);
-		clients.add(c2);
+        VolatileClientStorage storage;  
+        String secret="secret";
+        String contact="name@server.com";
+        @Before
+        public void setUp(){
+                storage=new VolatileClientStorage();
 
-	}
+        }
 
-	@Test
-	public void addPresent() {
-		Assert.assertFalse(clients.add(c1));
-	}
+        @Test
+        public void addPresent() {
+                String id="cli"; 
+                Optional<Client> c=storage.addClient(id,secret,Role.ADMIN,contact,Priority.HIGH);
+                Assert.assertTrue(c.isPresent());
+                Client res=storage.get(id).get();
+                Assert.assertEquals("id",id,res.getId());
+                Assert.assertEquals("secret",secret,res.getSecret());
+                Assert.assertEquals("contact",contact,res.getContactInfo());
+                Assert.assertEquals("role",Role.ADMIN,res.getRole());
+                Assert.assertEquals("priority",Priority.HIGH,res.getPriority());
+        }
 
-	@Test
-	public void get() {
-		Client res=clients.get("1");
-		Assert.assertEquals("1",res.getId());
-	}
+        @Test 
+        public void addDefault(){
+                Client c= storage.defaultClient();
+                Optional<Client>def=storage.update(VolatileClientStorage.DEFAULT,"",Role.ADMIN,"",Priority.LOW);
+                Assert.assertFalse(def.isPresent());
+        }
 
-	@Test
-	public void getEmpty() {
-		Client res=clients.get("10000");
-		Assert.assertNull(res);
-	}
+        @Test
+        public void getEmpty() {
+                Optional<Client> res=storage.get("10000");
+                Assert.assertFalse(res.isPresent());
+        }
 
-	@Test
-	public void delete() {
-		//assert the delete
-		Assert.assertTrue(clients.delete(c1));
-		Client res=clients.get("1");
-		//and then that it's not present
-		Assert.assertNull(res);
-	}
+        @Test
+        public void delete() {
+                String id="cli"; 
+                Optional<Client> c=storage.addClient(id,secret,Role.ADMIN,contact,Priority.HIGH);
+                //assert the delete
+                Assert.assertTrue(storage.delete(c.get()));
+                Optional<Client> res=storage.get("1");
+                //and then that it's not present
+                Assert.assertFalse(res.isPresent());
+        }
 
-	@Test
-	public void deleteNotPresent() {
-		clients.delete(c1);
-		Assert.assertFalse(clients.delete(c1));
-	}
+        @Test
+        public void deleteNotPresent() {
+                Client c=new VolatileClient("id","",Role.ADMIN,"",Priority.LOW);
+                Assert.assertFalse(storage.delete(c));
+        }
 
-	@Test
-	public void getAll() {
-		List<? extends Client> list=clients.getAll();
-		Assert.assertEquals(list.size(),2);
-		Set<String> ids=new HashSet<String>();
-		for( Client c : list){
-			ids.add(c.getId());
-		}
-		Assert.assertTrue(ids.contains("1"));
-		Assert.assertTrue(ids.contains("2"));
-	}
 
-	@Test
-	public void update() {
-		Client other=new SimpleClient(c1.getId(),"X",c1.getRole(),c1.getContactInfo());
-		clients.update(other);
-		Assert.assertEquals(clients.get(c1.getId()).getSecret(),"X");
-	}
+        @Test
+        public void update() {
+                Client cli=storage.addClient("id",secret,Role.ADMIN,contact,Priority.LOW).get();
+                Optional<Client> updated=storage.update(cli,"mytreasure",Role.CLIENTAPP,"paco@gmail.com",Priority.HIGH);
 
-	@Test
-	public void updateNotPresent() {
-		Client other=new SimpleClient("1000","X",c1.getRole(),c1.getContactInfo());
-		Assert.assertFalse(clients.update(other));
-	}
+                Assert.assertEquals("mytreasure",updated.get().getSecret());
+                Assert.assertEquals("paco@gmail.com",updated.get().getContactInfo());
+                Assert.assertEquals(Role.CLIENTAPP,updated.get().getRole());
+                Assert.assertEquals(Priority.HIGH,updated.get().getPriority());
+
+        }
+
 
 }
