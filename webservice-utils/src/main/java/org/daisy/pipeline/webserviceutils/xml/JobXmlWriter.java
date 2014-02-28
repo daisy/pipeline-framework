@@ -172,6 +172,7 @@ public class JobXmlWriter {
                         portResultElm.setAttribute("mime-type", "application/zip");
                         portResultElm.setAttribute("from", "port");
                         portResultElm.setAttribute("name", port);
+                        portResultElm.setAttribute("nicename", job.getContext().getScript().getPortMetadata(port).getNiceName());
                         resultsElm.appendChild(portResultElm);
                         for(JobResult result: this.job.getContext().getResults().getResults(port)){
                                 Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
@@ -194,6 +195,7 @@ public class JobXmlWriter {
                         optionResultElm.setAttribute("mime-type", "application/zip");
                         optionResultElm.setAttribute("from", "option");
                         optionResultElm.setAttribute("name", option.toString());
+                        optionResultElm.setAttribute("nicename", job.getContext().getScript().getOptionMetadata(option).getNiceName());
                         resultsElm.appendChild(optionResultElm);
                         for(JobResult result: this.job.getContext().getResults().getResults(option)){
                                 Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
