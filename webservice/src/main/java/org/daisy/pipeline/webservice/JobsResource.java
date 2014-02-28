@@ -108,11 +108,6 @@ public class JobsResource extends AuthenticatedResource {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
                 }
-                Client client = null;
-                if (webservice().getConfiguration().isAuthenticationEnabled()) {
-                        String clientId = getQuery().getFirstValue("authid");
-                        client = webservice().getStorage().getClientStorage().get(clientId);
-                }
 
                 if (representation == null) {
                         // POST request with no entity.
@@ -175,7 +170,7 @@ public class JobsResource extends AuthenticatedResource {
 
                 Job job;
                 try {
-                        job = createJob(doc, zipfile, client);
+                        job = createJob(doc, zipfile );
                 } catch (LocalInputException e) {
                         setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
                         return this.getErrorRepresentation("WS does not allow local inputs but a href starting with 'file:' was found");
@@ -313,7 +308,7 @@ public class JobsResource extends AuthenticatedResource {
          * @return the job
          * @throws LocalInputException
          */
-        private Job createJob(Document doc, ZipFile zip, Client client)
+        private Job createJob(Document doc, ZipFile zip)
                         throws LocalInputException {
 
                 Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
@@ -361,10 +356,10 @@ public class JobsResource extends AuthenticatedResource {
                         resourceCollection = new ZipResourceContext(zip);
                 }
                 if(webservice().getConfiguration().isLocalFS()){
-                        ctxt=webservice().getJobContextFactory().newMappingJobContext(niceName,bound);  
+                        ctxt=webservice().getJobContextFactory().newMappingJobContext(this.getClient(),niceName,bound);  
 
                 }else{
-                        ctxt=webservice().getJobContextFactory().newMappingJobContext(niceName,bound,resourceCollection);
+                        ctxt=webservice().getJobContextFactory().newMappingJobContext(this.getClient(),niceName,bound,resourceCollection);
                 }
                 Job job = jobMan.newJob(ctxt);
 
@@ -381,7 +376,7 @@ public class JobsResource extends AuthenticatedResource {
                         }
 
                         try {
-                                callback = new Callback(job.getId(), client, new URI(href), type, freq);
+                                callback = new Callback(job.getId(), this.getClient(), new URI(href), type, freq);
                         } catch (URISyntaxException e) {
                                 logger.warn("Cannot create callback: " + e.getMessage());
                         }

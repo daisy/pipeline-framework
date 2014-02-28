@@ -8,7 +8,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.clients.SimpleClient;
 import org.daisy.pipeline.webserviceutils.xml.ClientXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.ClientsXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.XmlValidator;
@@ -25,6 +24,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import com.google.common.base.Optional;
 
 public class ClientsResource extends AdminResource {
 
@@ -101,11 +102,11 @@ public class ClientsResource extends AdminResource {
 	    }
 
 	    Element root = doc.getDocumentElement();
-	    Client newClient = new SimpleClient(root.getAttribute("id"),
+	    Optional<Client> newClient = webservice().getStorage().getClientStorage().addClient(root.getAttribute("id"),
 			    root.getAttribute("secret"), Client.Role.valueOf(root
 				    .getAttribute("role")), root.getAttribute("contact"));
 
-	    if (!webservice().getStorage().getClientStorage().add(newClient)) {
+	    if (!newClient.isPresent()) {
 		    // the client ID was probably not unique
 		    logger.debug("Client id not unique");
 		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
@@ -113,7 +114,7 @@ public class ClientsResource extends AdminResource {
 	    }
 
 	    setStatus(Status.SUCCESS_CREATED);
-	    ClientXmlWriter writer = XmlWriterFactory.createXmlWriterForClient(newClient);
+	    ClientXmlWriter writer = XmlWriterFactory.createXmlWriterForClient(newClient.get());
 	    DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
 	    return dom;
     }
