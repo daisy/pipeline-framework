@@ -10,15 +10,13 @@ import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.common.properties.PropertyTracker;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.clients.ClientStorage;
-import org.daisy.pipeline.clients.SimpleClient;
 import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobManager;
+import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.webserviceutils.Properties;
 import org.daisy.pipeline.webserviceutils.Routes;
 import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
-import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -171,7 +169,7 @@ public class PipelineWebService extends Application {
 				}else{
 					//new admin client via configuration properties
 					logger.debug("Inserting new client: "+conf.getClientKey());
-					this.webserviceStorage.getClientStorage().add(new SimpleClient(conf.getClientKey(),conf.getClientSecret(),Client.Role.ADMIN,"from configuration"));
+					this.webserviceStorage.getClientStorage().addClient(conf.getClientKey(),conf.getClientSecret(),Client.Role.ADMIN,"from configuration",Priority.HIGH);
 
 				}
 
