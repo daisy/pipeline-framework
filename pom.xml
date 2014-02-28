@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
-    <version>2</version>
+    <version>3</version>
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-parent</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Framework Parent POM</name>
   <description>The DAISY Pipeline 2 is an open source framework for the automated processing of various digital formats efficiently and economically. It intends to facilitate the production and maintenance of accessible content for people with print disabilities.</description>
@@ -142,7 +142,7 @@
     <daisy.persistence-derby.version>1.0.1-SNAPSHOT</daisy.persistence-derby.version>
     <daisy.persistence-mysql.version>1.0.1-SNAPSHOT</daisy.persistence-mysql.version>
     <daisy.push-notifier.version>1.0.1-SNAPSHOT</daisy.push-notifier.version>
-    <daisy.webservice.version>1.0.1-SNAPSHOT</daisy.webservice.version>
+    <daisy.webservice.version>1.0.2-SNAPSHOT</daisy.webservice.version>
     <daisy.webservice-utils.version>1.0.1-SNAPSHOT</daisy.webservice-utils.version>
     <daisy.woodstox-osgi-adapter.version>1.0.1-SNAPSHOT</daisy.woodstox-osgi-adapter.version>
     <daisy.xmlcatalog.version>1.0.1-SNAPSHOT</daisy.xmlcatalog.version>
