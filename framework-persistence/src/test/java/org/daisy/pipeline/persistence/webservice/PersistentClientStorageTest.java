@@ -15,20 +15,21 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 
 @RunWith(MockitoJUnitRunner.class)
 public class PersistentClientStorageTest {
 
-	Database db;
+    Database db;
     PersistentClientStorage storage;
     String secret="secret";
     String contact="name@server.com";
     List<Client> toDel;
     @Before
     public void setUp(){
-		db=Mockito.spy(DatabaseProvider.getDatabase());
+        db=Mockito.spy(DatabaseProvider.getDatabase());
         storage=new PersistentClientStorage(db);
         toDel= Lists.newLinkedList();
     }
@@ -40,13 +41,22 @@ public class PersistentClientStorageTest {
         }
     }
 
+
+    @Test
+    public void listWithDefault(){
+        Client c= storage.defaultClient();
+        toDel.add(c);
+        Assert.assertEquals("Default should not be in the list",0,storage.getAll().size());
+
+    }
+
     @Test
     public void addClient(){
         String id="cli"; 
-        Client c=storage.addClient(id,secret,Role.ADMIN,contact,Priority.HIGH);
-        toDel.add(c);
-        Client res=storage.get(id);
-        Assert.assertNotNull(res);
+        Optional<Client> c=storage.addClient(id,secret,Role.ADMIN,contact,Priority.HIGH);
+        Assert.assertTrue(c.isPresent());
+        toDel.add(c.get());
+        Client res=storage.get(id).get();
         Assert.assertEquals("id",id,res.getId());
         Assert.assertEquals("secret",secret,res.getSecret());
         Assert.assertEquals("contact",contact,res.getContactInfo());
@@ -54,14 +64,22 @@ public class PersistentClientStorageTest {
         Assert.assertEquals("priority",Priority.HIGH,res.getPriority());
     }
 
+    @Test 
+    public void addDefault(){
+        Client c= storage.defaultClient();
+        Optional<Client>def=storage.update(PersistentClientStorage.DEFAULT,"",Role.ADMIN,"",Priority.LOW);
+        //make sure is in the db
+        toDel.add(c);
+        Assert.assertFalse(def.isPresent());
+    }
     @Test
     public void addClientDefaultPriority(){
         String id="cli"; 
-        Client c=storage.addClient(id,secret,Role.ADMIN,contact,Priority.MEDIUM);
-        toDel.add(c);
-        Client res=storage.get(id);
-        Assert.assertNotNull(res);
-        Assert.assertEquals("priority",Priority.MEDIUM,res.getPriority());
+        Optional<Client>c =storage.addClient(id,secret,Role.ADMIN,contact,Priority.MEDIUM);
+        toDel.add(c.get());
+        Optional<Client> res=storage.get(id);
+        Assert.assertTrue(res.isPresent());
+        Assert.assertEquals("priority",Priority.MEDIUM,res.get().getPriority());
     }
 
     @Test
