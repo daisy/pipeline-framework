@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.script.BoundXProcScript;
 
-final class MappingJobContext extends AbstractJobContext {
+class MappingJobContext extends AbstractJobContext {
 
 	public MappingJobContext(Client client,JobId id, String niceName,BoundXProcScript boundScript,ResourceCollection collection) throws IOException{
 		super(client,id,niceName,boundScript,JobURIUtils.newURIMapper(id));
