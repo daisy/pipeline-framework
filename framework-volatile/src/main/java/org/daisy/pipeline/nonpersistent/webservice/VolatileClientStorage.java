@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 
 public class VolatileClientStorage implements ClientStorage {
 
@@ -47,8 +48,8 @@ public class VolatileClientStorage implements ClientStorage {
         }
 
         @Override
-        public boolean delete(Client client) {
-                return this.clients.remove(client.getId()) != null;
+        public boolean delete(String id) {
+                return this.clients.remove(id) != null;
         }
 
 
@@ -64,6 +65,8 @@ public class VolatileClientStorage implements ClientStorage {
         @Override
         public Optional<Client> addClient(String id, String secret, Role role,
                         String contactInfo, Priority priority) {
+                Preconditions.checkArgument(id!=null,"Client id can't be null");
+
                 Client cli=new VolatileClient(id,secret,role,contactInfo,priority);
                 return Optional.fromNullable(this.add(cli));
         }
@@ -81,21 +84,23 @@ public class VolatileClientStorage implements ClientStorage {
         }
 
         @Override
-        public Optional<Client> update(Client client, String secret, Role role,
+        public Optional<Client> update(String id, String secret, Role role,
                         String contactInfo, Priority priority) {
-                if(client.getId().equals(DEFAULT.getId())){
+
+                if(DEFAULT.getId().equals(id)){
                         return Optional.absent();
                 }
 
-                Optional<Client> toUpdate = this.get(client.getId());
-                if ( toUpdate.isPresent()) {
-                        VolatileClient vol=(VolatileClient)toUpdate.get();
-                        vol.setSecret(secret);
-                        vol.setRole(role);
-                        vol.setContactInfo(contactInfo);
-                        vol.setPriority(priority);
-                } 
-                return toUpdate;
+                Optional<Client> toUpdate = this.get(id);
+                if ( !toUpdate.isPresent()) {
+                        return Optional.absent();
+                }
+                VolatileClient vol=(VolatileClient)toUpdate.get();
+                vol.setSecret(secret);
+                vol.setRole(role);
+                vol.setContactInfo(contactInfo);
+                vol.setPriority(priority);
+                return Optional.of((Client) vol);
 
         }
 

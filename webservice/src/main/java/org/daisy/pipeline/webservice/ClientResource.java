@@ -84,7 +84,7 @@ public class ClientResource extends AdminResource {
 		}
 
 
-		if (webservice().getStorage().getClientStorage().delete(client.get())) {
+		if (webservice().getStorage().getClientStorage().delete(client.get().getId())) {
 			setStatus(Status.SUCCESS_NO_CONTENT);
 		}
 		else {
@@ -150,7 +150,7 @@ public class ClientResource extends AdminResource {
 
 		Element root = doc.getDocumentElement();
 		// TODO SET PRIORITY 
-		Optional<Client> updated=webservice().getStorage().getClientStorage().update(this.client.get(),root.getAttribute("secret"),Client.Role.valueOf(root.getAttribute("role")),root.getAttribute("contact"),Priority.MEDIUM);
+		Optional<Client> updated=webservice().getStorage().getClientStorage().update(this.client.get().getId(),root.getAttribute("secret"),Client.Role.valueOf(root.getAttribute("role")),root.getAttribute("contact"),Priority.MEDIUM);
                 if(!updated.isPresent()){
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return this.getErrorRepresentation("Something prevented this client to be updated");

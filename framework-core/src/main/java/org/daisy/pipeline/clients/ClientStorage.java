@@ -33,7 +33,7 @@ public interface  ClientStorage {
          * @param client
          * @return
          */
-        public boolean delete(Client client);
+        public boolean delete(String id);
 
         /**
          * Updates the client using the new values. Returns the updated client or absent if the client couldn't 
@@ -41,7 +41,7 @@ public interface  ClientStorage {
          * @param client
          * @return
          */
-        public Optional<Client> update(Client client, String secret, Role role, String contactInfo,Priority priority);
+        public Optional<Client> update(String id, String secret, Role role, String contactInfo,Priority priority);
 
         /**
          * Adds a new client to the storage using the provided details. Returns the created client or absent if the client 
