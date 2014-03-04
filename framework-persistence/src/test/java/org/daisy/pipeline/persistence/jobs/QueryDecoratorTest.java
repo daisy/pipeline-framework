@@ -2,6 +2,7 @@ package org.daisy.pipeline.persistence.jobs;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -78,10 +79,9 @@ public class QueryDecoratorTest {
         @SuppressWarnings({"unchecked"})
         public void getSelect(){
                 QueryDecorator<PersistentJob> dec=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager()));
-                CriteriaQuery<PersistentJob> cq=dec.getSelect(PersistentJob.class); 
+                TypedQuery<PersistentJob> query=dec.getQuery(PersistentJob.class); 
                 Mockito.verify(dec,Mockito.times(1)).getPredicate(Mockito.any(QueryHolder.class));
-                Query q=db.getEntityManager().createQuery(cq);
-                Assert.assertEquals("Finds the job",1,q.getResultList().size());
+                Assert.assertEquals("Finds the job",1,query.getResultList().size());
         }
         
 }

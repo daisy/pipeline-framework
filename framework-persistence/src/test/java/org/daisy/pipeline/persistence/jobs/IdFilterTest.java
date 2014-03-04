@@ -2,6 +2,7 @@
 package org.daisy.pipeline.persistence.jobs;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.daisy.pipeline.job.Job;
@@ -44,8 +45,7 @@ public class IdFilterTest   {
         @Test
         public void getSelect(){
                 QueryDecorator<PersistentJob> dec=new IdFilter(db.getEntityManager(),job2.getId());
-                CriteriaQuery<PersistentJob> cq=dec.getSelect(PersistentJob.class); 
-                Query q=db.getEntityManager().createQuery(cq);
+                TypedQuery<PersistentJob> q=dec.getQuery(PersistentJob.class); 
                 Job fromDb=(Job)q.getSingleResult();
                 Assert.assertEquals("Finds the appropriate job",fromDb.getId(),job2.getId());
         }
@@ -53,8 +53,7 @@ public class IdFilterTest   {
         @Test
         public void getSelectIsUnique(){
                 QueryDecorator<PersistentJob> dec=new IdFilter(db.getEntityManager(),job2.getId());
-                CriteriaQuery<PersistentJob> cq=dec.getSelect(PersistentJob.class); 
-                Query q=db.getEntityManager().createQuery(cq);
+                TypedQuery<PersistentJob> q=dec.getQuery(PersistentJob.class); 
                 Assert.assertEquals("Only one result",1,q.getResultList().size());
         }
         
