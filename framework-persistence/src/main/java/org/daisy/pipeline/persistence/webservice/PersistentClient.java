@@ -1,8 +1,6 @@
 package org.daisy.pipeline.persistence.webservice;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -13,19 +11,8 @@ import org.daisy.pipeline.job.priority.Priority;
 // @NoSql(dataFormat=DataFormatType.MAPPED)
 public class PersistentClient implements Client {
 
+        public static final String MODEL_CLIENT_ID="id";
         @Id
-        @GeneratedValue
-        private String internalId;
-
-        public String getInternalId() {
-                return internalId;
-        }
-
-        //public enum PersistentRole {
-                //ADMIN, CLIENTAPP
-        //}
-
-        // the fields for each client object
         private String id;
         private String secret;
         private Role role ;

@@ -13,7 +13,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.MapsId;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -42,7 +42,7 @@ import com.google.common.eventbus.EventBus;
 @Access(value=AccessType.FIELD)
 public class PersistentJob  extends Job implements Serializable {
 
-
+        public static final String MODEL_JOB_CONTEXT="context";
 	public static class PersistentJobBuilder extends JobBuilder{
 		private Database db;
 
@@ -133,8 +133,9 @@ public class PersistentJob  extends Job implements Serializable {
 	/**
 	 * @return the pCtxt
 	 */
+        //@Column(name="job_contexts")
 	@OneToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-	@MapsId("job_id")
+	//@MapsId("job_id")
 	@Access(value=AccessType.PROPERTY)
 	public PersistentJobContext getContext() {
 		return (PersistentJobContext)super.getContext();
