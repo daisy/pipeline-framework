@@ -55,6 +55,6 @@ public interface JobManager {
                 public JobBuilder isMapping(boolean mapping);
                 public JobBuilder withResources(ResourceCollection resources);
                 public JobBuilder withNiceName(String niceName);
-                public Job build();
+                public Optional<Job> build();
         }
 }
