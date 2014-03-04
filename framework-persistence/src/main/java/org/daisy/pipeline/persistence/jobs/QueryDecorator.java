@@ -1,6 +1,7 @@
 package org.daisy.pipeline.persistence.jobs;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -36,7 +37,7 @@ public abstract class QueryDecorator<T> {
          * @param clazz
          * @return
          */
-        public final CriteriaQuery<T> getSelect(Class<T> clazz){
+        public final TypedQuery<T> getQuery(Class<T> clazz){
                 //TODO: Is it possible to get rid of the clazz parameter?
                 CriteriaBuilder cb = this.em.getCriteriaBuilder();
                 CriteriaQuery<T> query=cb.createQuery(clazz);
@@ -45,7 +46,7 @@ public abstract class QueryDecorator<T> {
                 Predicate pred=cb.conjunction();
                 pred=this.decorateWhere(this.holder(cb,root,query),pred);
                 query.where(pred);
-                return query;
+                return this.em.createQuery(query);
         }
 
 
@@ -111,5 +112,17 @@ public abstract class QueryDecorator<T> {
                         this.query = query;
                 }
                 
+        }
+
+        public static <T>  QueryDecorator<T> empty(EntityManager em){
+                return new QueryDecorator<T>(em) {
+
+                        @Override
+                        Predicate getPredicate(
+                                        QueryDecorator<T>.QueryHolder holder) {
+                                //always returns true;
+                                return holder.cb.conjunction();
+                        }
+                };
         }
 }

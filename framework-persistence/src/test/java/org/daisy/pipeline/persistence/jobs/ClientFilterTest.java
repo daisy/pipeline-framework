@@ -2,8 +2,7 @@
 
 package org.daisy.pipeline.persistence.jobs;
 
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.TypedQuery;
 
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.Job;
@@ -51,18 +50,14 @@ public class ClientFilterTest{
         @Test
         public void getEmpty(){
                 QueryDecorator<PersistentJob> dec=new ClientFilter(db.getEntityManager(),client);
-                CriteriaQuery<PersistentJob> cq=dec.getSelect(PersistentJob.class); 
-                Query q=db.getEntityManager().createQuery(cq);
-                System.out.println(q.toString());
+                TypedQuery<PersistentJob> q=dec.getQuery(PersistentJob.class); 
                 Assert.assertEquals("No jobs should be found",0,q.getResultList().size());
         }
 
         @Test
         public void getByClient(){
                 QueryDecorator<PersistentJob> dec=new ClientFilter(db.getEntityManager(),job.getContext().getClient());
-                CriteriaQuery<PersistentJob> cq=dec.getSelect(PersistentJob.class); 
-                Query q=db.getEntityManager().createQuery(cq);
-                System.out.println(q.toString());
+                TypedQuery<PersistentJob> q=dec.getQuery(PersistentJob.class); 
                 Assert.assertEquals("One job should match",1,q.getResultList().size());
                 Assert.assertEquals("And it should be this one",job.getId().toString(),((Job)q.getSingleResult()).getId().toString());
         }
