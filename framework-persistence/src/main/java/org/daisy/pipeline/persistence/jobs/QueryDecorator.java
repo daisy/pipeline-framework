@@ -12,7 +12,7 @@ import javax.persistence.criteria.Root;
  *
  */
 public abstract class QueryDecorator<T> {
-        private final EntityManager em;//needed to get CriteriaBuilders
+        final EntityManager em;//needed to get CriteriaBuilders
         private QueryDecorator<T> next;//next decorator in the chain
 
         public QueryDecorator(EntityManager em){
