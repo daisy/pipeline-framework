@@ -1,5 +1,6 @@
 package org.daisy.pipeline.persistence.jobs;
 
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -10,6 +11,7 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.JobBuilder;
 import org.daisy.pipeline.persistence.Database;
 import org.daisy.pipeline.persistence.jobs.PersistentJob.PersistentJobBuilder;
+import org.daisy.pipeline.persistence.jobs.QueryDecorator.QueryHolder;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,25 +23,22 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QueryDecoratorTest {
-        static class QueryDecoratorImpl extends QueryDecorator {
-
-                public QueryDecoratorImpl(CriteriaBuilder cb) {
-                        super(cb);
-                        // TODO Auto-generated constructor stub
+        static class QueryDecoratorImpl extends QueryDecorator<PersistentJob> {
+                public QueryDecoratorImpl(EntityManager em) {
+                        super(em);
                 }
 
 
                 @Override
-                <T> Predicate doDecorateWhere(Predicate pred, Root<T> root,
-                                CriteriaQuery<T> query) {
-                        return pred;
+                Predicate getPredicate(QueryDecorator<PersistentJob>.QueryHolder holder) {
+                        return holder.cb.conjunction();
                 }
         }
         @Mock
         CriteriaBuilder cb;
 
-        QueryDecorator dec1;
-        QueryDecorator dec2;
+        QueryDecorator<PersistentJob> dec1;
+        QueryDecorator<PersistentJob> dec2;
         @Mock Root<PersistentJob> root;
         @Mock CriteriaQuery<PersistentJob> cq;
         @Mock Predicate pred;
@@ -47,9 +46,9 @@ public class QueryDecoratorTest {
         Database db;
         @Before
         public void setUp(){
-                dec1=Mockito.spy(new QueryDecoratorImpl(cb));
-                dec2=Mockito.spy(new QueryDecoratorImpl(cb));
 		db=DatabaseProvider.getDatabase();
+                dec1=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager()));
+                dec2=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager()));
 
 		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
@@ -65,25 +64,22 @@ public class QueryDecoratorTest {
 
 
         @Test
-        @SuppressWarnings({"unchecked"})
         public void decorate(){
-                //Mockito.doCallRealMethod().when(dec1).decorateWhere(pred,root,cq);
-                //Mockito.doCallRealMethod().when(dec2).decorateWhere(pred,root,cq);
-                //Mockito.doCallRealMethod().when(dec1).setNext(Mockito.any(QueryDecorator.class));
                 Mockito.when(cb.and((Predicate)Mockito.anyVararg())).thenReturn(pred);
                 dec1.setNext(dec2);
-                dec1.decorateWhere(pred,root,cq);
-                Mockito.verify(dec1,Mockito.times(1)).doDecorateWhere(pred,root,cq);
-                Mockito.verify(dec2,Mockito.times(1)).doDecorateWhere(pred,root,cq);
+                QueryDecorator<PersistentJob>.QueryHolder holder=dec1.holder(cb,root,cq);
+                dec1.decorateWhere(holder,pred);
+                Mockito.verify(dec1,Mockito.times(1)).getPredicate(holder);
+                Mockito.verify(dec2,Mockito.times(1)).getPredicate(holder);
                 
         }
 
         @Test
         @SuppressWarnings({"unchecked"})
         public void getSelect(){
-                QueryDecorator dec=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager().getCriteriaBuilder()));
+                QueryDecorator<PersistentJob> dec=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager()));
                 CriteriaQuery<PersistentJob> cq=dec.getSelect(PersistentJob.class); 
-                Mockito.verify(dec,Mockito.times(1)).doDecorateWhere(Mockito.any(Predicate.class),Mockito.any(Root.class),Mockito.any(CriteriaQuery.class));
+                Mockito.verify(dec,Mockito.times(1)).getPredicate(Mockito.any(QueryHolder.class));
                 Query q=db.getEntityManager().createQuery(cq);
                 Assert.assertEquals("Finds the job",1,q.getResultList().size());
         }
