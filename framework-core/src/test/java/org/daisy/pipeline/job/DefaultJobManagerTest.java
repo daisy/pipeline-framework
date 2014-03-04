@@ -8,6 +8,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.google.common.base.Optional;
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultJobManagerTest{
         @Mock JobStorage storage; 
@@ -30,9 +32,9 @@ public class DefaultJobManagerTest{
         public void builderOptions(){
                 JobBuilder builder= Mockito.spy(jobManager.newJob(script));
                 Mockito.when(factory.newJobContext(Mockito.anyBoolean(),Mockito.anyString(),Mockito.any(BoundXProcScript.class),Mockito.any(ResourceCollection.class))).thenReturn(ctxt);
-                Mockito.doReturn(job).when(jobManager).newJob(ctxt);
+                Mockito.doReturn(Optional.of(job)).when(jobManager).newJob(ctxt);
                 //by default
-                Job job=builder.build();
+                builder.build();
                 Mockito.verify(factory,Mockito.times(1)).newJobContext(false,"",script,null);
                 Mockito.verify(jobManager,Mockito.times(1)).newJob(ctxt);
                 Mockito.when(factory.newJobContext(false,"",script,null)).thenReturn(ctxt);

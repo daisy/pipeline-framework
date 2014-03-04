@@ -35,20 +35,16 @@ public class DefaultJobManager implements JobManager {
                 this.jobContextFactory= jobContextFactory;
         }
 
-        protected Job newJob(JobContext ctxt) {
+        protected Optional<Job> newJob(JobContext ctxt) {
                 //store it
-                Job job = this.storage.add(ctxt);
-                //execute it
-                executionService.submit(job);
+                Optional<Job> job = this.storage.add(ctxt);
+                if(job.isPresent()){
+                        //execute it
+                        executionService.submit(job.get());
+                }
                 return job;
         }
 
-
-        private void checkStorage() {
-                if (this.storage == null)
-                        throw new IllegalStateException(
-                                        "No JobStorage in AbstractJobManager");
-        }
 
         /**
          * This method allows to do some after job creation hook-ups if needed.
@@ -88,7 +84,7 @@ public class DefaultJobManager implements JobManager {
          */
         @Override
         public Optional<Job> getJob(JobId id) {
-                return Optional.fromNullable(this.storage.get(id));
+                return this.storage.get(id);
         }
 
         @Override
@@ -150,14 +146,12 @@ public class DefaultJobManager implements JobManager {
 
                 }
 
-                public Job build(){
+                public Optional<Job> build(){
                         //use the context factory
                         JobContext ctxt=DefaultJobManager.this.jobContextFactory.
                                 newJobContext(this.isMapping,this.niceName,this.script,this.resources);
                         //send to the JobManager
-                        Job job=DefaultJobManager.this.newJob(ctxt);
-                        //return 
-                        return job;
+                        return DefaultJobManager.this.newJob(ctxt);
                 }
 
 
