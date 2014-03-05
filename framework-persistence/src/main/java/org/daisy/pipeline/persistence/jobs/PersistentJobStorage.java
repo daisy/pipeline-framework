@@ -2,19 +2,25 @@ package org.daisy.pipeline.persistence.jobs;
 
 import java.util.Iterator;
 
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.JobBuilder;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
+import org.daisy.pipeline.job.RuntimeConfigurator;
 import org.daisy.pipeline.persistence.Database;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 import com.google.common.eventbus.EventBus;
 
@@ -24,19 +30,29 @@ public class PersistentJobStorage implements JobStorage {
                         .getLogger(PersistentJobStorage.class);
 
         private Database db;
-        private EventBus eventBus;
+
+        private RuntimeConfigurator configurator;
+
+        private QueryDecorator<PersistentJob> filter;
+
+        public PersistentJobStorage(){}
+
+        PersistentJobStorage(Database db,QueryDecorator<PersistentJob> filter,
+                        RuntimeConfigurator configurator){
+                this.db=db;
+                this.filter=filter;
+                this.configurator=configurator;
+        }
 
         public void setDatabase(Database db) {
                 this.db = db;
+                this.filter=QueryDecorator.empty(db.getEntityManager());
         }
 
         public void setRegistry(ScriptRegistry scriptRegistry) {
                 PersistentJobContext.setScriptRegistry(scriptRegistry);
         }
 
-        public void setEventBus(EventBusProvider provider) {
-                this.eventBus= provider.get();
-        }
 
         private void checkDatabase() {
                 if (db == null) {
@@ -48,60 +64,76 @@ public class PersistentJobStorage implements JobStorage {
         @Override
         public Iterator<Job> iterator() {
                 checkDatabase();
-                //sets the event bus for all the jobs returned
-                return Collections2.transform(PersistentJob.getAllJobs(this.db),
+                TypedQuery<PersistentJob> query=this.filter.getQuery(PersistentJob.class);
+                return Collections2.transform(query.getResultList(),
                                 new Function<Job, Job>() {
                                         @Override
                                         public Job apply(Job job) {
-                                                job.setEventBus(PersistentJobStorage.this.eventBus);
+                                                PersistentJobStorage.this.configurator.configure(job);
                                                 return job;
                                         }
                                 }).iterator();
         }
 
         @Override
-        public Job add(JobContext ctxt) {
+        public Optional<Job> add(JobContext ctxt) {
                 checkDatabase();
                 logger.debug("Adding job to db:" + ctxt.getId());
                 JobBuilder builder = new PersistentJob.PersistentJobBuilder(db)
-                                .withContext(ctxt).withEventBus(this.eventBus);
+                                .withContext(ctxt).withEventBus(this.configurator.getEventBus());
                 Job pjob = builder.build();
-                //TODO:this has to be fixed, we have to configure the context!
-                System.out.println("BEFORE COMMITING FIX THIS");
-                //this.ctxtFactory.configure((PersistentJobContext) pjob.getContext());
-                return pjob;
+                this.configurator.configure( pjob.getContext());
+                return Optional.of(pjob);
         }
 
         @Override
-        public Job remove(JobId jobId) {
+        public Optional<Job> remove(JobId jobId) {
                 checkDatabase();
-                Job job = db.getEntityManager().find(PersistentJob.class,
-                                jobId.toString());
-                if (job != null) {
-                        db.deleteObject(job);
+                Optional<Job> stored=this.get(jobId);
+                if (stored.isPresent()) {
+                        db.deleteObject(stored.get());
                         logger.debug(String.format("Job with id %s deleted", jobId));
                 }
-                return job;
+                return stored;
         }
 
         @Override
-        public Job get(JobId id) {
+        public Optional<Job> get(JobId id) {
                 checkDatabase();
+                IdFilter idFilter=new IdFilter(this.db.getEntityManager(),id);
+                idFilter.setNext(this.filter);
+
                 PersistentJob job = null;
-                job = db.getEntityManager().find(PersistentJob.class, id.toString());
+                try{
+                       job= idFilter.getQuery(PersistentJob.class).getSingleResult();
+                }catch(NoResultException nre){
+                        return Optional.absent();
+                }
+
                 if (job != null) {
                         job.setDatabase(db);
-                        job.setEventBus(this.eventBus);
-                        //todo FIXTHIS
-                        //this.ctxtFactory.configure((PersistentJobContext) job.getContext());
+                        this.configurator.configure(job);
+                        this.configurator.configure( job.getContext());
                 }
-                return job;
+                return Optional.fromNullable((Job)job);
         }
 
         @Override
         public JobStorage filterBy(Client client) {
-                // TODO Auto-generated method stub
-                return null;
+                if (client.getRole()==Role.ADMIN){
+                        return this;
+                }else{
+                        QueryDecorator<PersistentJob> byClient= new ClientFilter(this.db.getEntityManager(),client);
+                        return new PersistentJobStorage(this.db,byClient,this.configurator);
+                }
+        }
+
+        /**
+         * @param configurator the configurator to set
+         */
+        public void setConfigurator(RuntimeConfigurator configurator) {
+                this.configurator = configurator;
+                PersistentJobContext.setConfigurator(configurator);
         }
         
 }

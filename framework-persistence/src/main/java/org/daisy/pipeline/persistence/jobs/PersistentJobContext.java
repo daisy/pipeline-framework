@@ -1,6 +1,5 @@
 package org.daisy.pipeline.persistence.jobs;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,6 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
@@ -27,7 +25,7 @@ import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.ResultSet;
-import org.daisy.pipeline.job.RuntimeConfigurable;
+import org.daisy.pipeline.job.RuntimeConfigurator;
 import org.daisy.pipeline.persistence.webservice.PersistentClient;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -47,7 +45,7 @@ import org.slf4j.LoggerFactory;
 @Entity
 @Table(name="job_contexts")
 @Access(AccessType.FIELD)
-public final class PersistentJobContext extends AbstractJobContext implements Serializable,RuntimeConfigurable{
+public final class PersistentJobContext extends AbstractJobContext {
         public static final long serialVersionUID=1L;
         public static final String MODEL_CLIENT="client";
         private static final Logger logger = LoggerFactory.getLogger(PersistentJobContext.class);
@@ -137,8 +135,8 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
                 this.setResults(rBuilder.build());
 
                 //so the context is configured once it leaves to the real world.
-                if (ctxtFactory!=null)
-                        ctxtFactory.configure(this);
+                if (configurator!=null)
+                        configurator.configure(this);
                 
         }
 
@@ -262,8 +260,8 @@ public final class PersistentJobContext extends AbstractJobContext implements Se
                 registry=sregistry;
         }
         @Transient
-        static JobContextFactory ctxtFactory;
-        public static void setJobContextFactory(JobContextFactory jobContextFactory){
-                PersistentJobContext.ctxtFactory=jobContextFactory;
+        private static RuntimeConfigurator configurator;
+        public static void setConfigurator(RuntimeConfigurator configurator){
+                PersistentJobContext.configurator=configurator;
         }
 }

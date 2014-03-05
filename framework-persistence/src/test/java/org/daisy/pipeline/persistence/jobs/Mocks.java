@@ -122,6 +122,10 @@ public class Mocks   {
 	}
 
 	public static AbstractJobContext buildContext(){  
+                return buildContext(null);
+	}
+
+	public static AbstractJobContext buildContext(Client client){  
                 //new RuntimeException().printStackTrace();
 		final XProcScript script = Mocks.buildScript();
 		//ScriptRegistryHolder.setScriptRegistry(new Mocks.DummyScriptService(script));
@@ -132,21 +136,22 @@ public class Mocks   {
 		final URIMapper mapper= new URIMapper(in,out);
 		final ResultSet rSet=new ResultSet.Builder().addResult(portResult,res1).addResult(opt1Qname,res2).build();
                 //add to the db
-                final PersistentClient client=new PersistentClient("Client_"+Math.random(),"b",Role.ADMIN,"a@a",Priority.LOW);
-                DatabaseProvider.getDatabase().addObject(client);
+                if ( client ==null){
+                        client=new PersistentClient("Client_"+Math.random(),"b",Role.ADMIN,"a@a",Priority.LOW);
+                        DatabaseProvider.getDatabase().addObject(client);
+                }
 		//inception!
-		class MyHiddenContext extends AbstractJobContext{
-			public MyHiddenContext(){
+		return new MyHiddenContext(rSet,script,input,mapper,client,id);
+	}
+
+	static class MyHiddenContext extends AbstractJobContext{
+			public MyHiddenContext(ResultSet set,XProcScript script,XProcInput input,URIMapper mapper, Client client,JobId id){
 				super(client,id,"hidden",BoundXProcScript.from(script,input,null),mapper);
-				this.setResults(rSet);
+				this.setResults(set);
 				this.generateResults=true;
 			}
 
 
 		};
-		
-	
-		return new MyHiddenContext();
-	}
 
 }
