@@ -18,15 +18,15 @@ import com.google.common.eventbus.EventBus;
  */
 public class JobContextFactory {
 
-        private static final Logger logger = LoggerFactory.getLogger(JobContextFactory.class);
-
-        private JobMonitorFactory monitorFactory;
+//        private static final Logger logger = LoggerFactory.getLogger(JobContextFactory.class);
 
         private Client client;
 
+        private RuntimeConfigurator configurator;
 
-        public JobContextFactory(JobMonitorFactory monitorFactory,Client client) {
-                this.monitorFactory=monitorFactory;
+
+        public JobContextFactory(RuntimeConfigurator configurator,Client client) {
+                this.configurator=configurator;
                 this.client=client;
         }
 
@@ -49,7 +49,7 @@ public class JobContextFactory {
                 }catch (IOException ex){
                         throw new RuntimeException("Error while creating MappingJobContext",ex);
                 }
-                this.configure(ctxt);
+                this.configurator.configure(ctxt);
                 return ctxt;
 
         }
@@ -61,14 +61,10 @@ public class JobContextFactory {
         public JobContext newJobContext(String niceName,BoundXProcScript boundScript){
                 JobId id = JobIdFactory.newId();
                 AbstractJobContext ctxt=new SimpleJobContext(this.client,id,niceName,boundScript);
-                this.configure(ctxt);
+                this.configurator.configure(ctxt);
                 return ctxt;
 
         }
 
-        public void configure(RuntimeConfigurable runtimeObj){
-                logger.debug(String.format("configuring object %s",runtimeObj));
-                runtimeObj.setMonitorFactory(this.monitorFactory);
-        }
 
 }

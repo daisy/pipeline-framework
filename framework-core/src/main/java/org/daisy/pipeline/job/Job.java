@@ -15,12 +15,10 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Function;
 import com.google.common.eventbus.EventBus;
 
-// TODO: Auto-generated Javadoc
-//TODO check thread safety
 /**
  * The Class Job defines the execution unit.
  */
-public class Job {
+public class Job implements RuntimeConfigurator.EventBusable{
 
         private static final Logger logger = LoggerFactory
                         .getLogger(Job.class);

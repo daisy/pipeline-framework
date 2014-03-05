@@ -7,12 +7,11 @@ import org.daisy.pipeline.clients.Client;
 public class JobManagerFactory {
         private JobStorage storage;
         private JobExecutionService executionService;
-        private JobMonitorFactory monitorFactory;
+        private RuntimeConfigurator runtimeConfigurator;
         
-        public JobManager having(Client client){
-                //JobContextFactory with client
-                //JobStorage withClient
-                return null;
+        public JobManager createFor(Client client){
+                return new DefaultJobManager(this.storage.filterBy(client),
+                                executionService,new JobContextFactory(this.runtimeConfigurator,client));
         }
 
         /**
@@ -31,10 +30,10 @@ public class JobManagerFactory {
                 this.executionService = executionService;
         }
 
-        public void setJobMonitorFactory(JobMonitorFactory monitorFactory){
+        public void setRuntimeConfigurator(RuntimeConfigurator configurator){
                 //TODO: check null
                 //              logger.debug("setting monitor factory");
-                this.monitorFactory=monitorFactory;
+                this.runtimeConfigurator=configurator;
         }
 
         //FIXME: probably move these two methods somewhere else, maybe a dummy class for the framework just tu publish this.

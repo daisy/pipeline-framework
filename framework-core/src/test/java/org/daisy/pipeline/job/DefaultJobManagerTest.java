@@ -25,7 +25,7 @@ public class DefaultJobManagerTest{
         DefaultJobManager jobManager;
         @Before
         public void setUp(){
-                jobManager=Mockito.spy(new DefaultJobManager(client,storage,service,factory));
+                jobManager=Mockito.spy(new DefaultJobManager(storage,service,factory));
         }
 
         @Test
