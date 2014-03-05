@@ -25,9 +25,7 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
-import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.ResourceCollection;
 import org.daisy.pipeline.job.ZipResourceContext;
@@ -59,6 +57,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.google.common.base.Optional;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class JobsResource.
@@ -86,7 +86,7 @@ public class JobsResource extends AuthenticatedResource {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
                 }
-                JobManager jobMan = webservice().getJobManager();
+                JobManager jobMan = webservice().getJobManager(this.getClient());
                 JobsXmlWriter writer = XmlWriterFactory.createXmlWriterForJobs(jobMan.getJobs());
                 Document doc = writer.getXmlDocument();
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
@@ -168,7 +168,7 @@ public class JobsResource extends AuthenticatedResource {
                         return this.getErrorRepresentation("Job Request XML is not valid");
                 }
 
-                Job job;
+                Optional<Job> job;
                 try {
                         job = createJob(doc, zipfile );
                 } catch (LocalInputException e) {
@@ -179,16 +179,16 @@ public class JobsResource extends AuthenticatedResource {
                         return this.getErrorRepresentation(iea.getMessage());
                 }
 
-                if (job == null) {
+                if (!job.isPresent()) {
                         setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                        return this.getErrorRepresentation("Could not create job (job was null)");
+                        return this.getErrorRepresentation("Could not create job ");
                 }
                 
                 //store the config
                 webservice().getStorage().getJobConfigurationStorage()
-                        .add(job.getId(),XmlUtils.DOMToString(doc));
+                        .add(job.get().getId(),XmlUtils.DOMToString(doc));
 
-                JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
+                JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job.get());
                 Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
                 setStatus(Status.SUCCESS_CREATED);
@@ -311,7 +311,7 @@ public class JobsResource extends AuthenticatedResource {
          * @return the job
          * @throws LocalInputException
          */
-        private Job createJob(Document doc, ZipFile zip)
+        private Optional<Job> createJob(Document doc, ZipFile zip)
                         throws LocalInputException {
 
                 Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
@@ -334,7 +334,7 @@ public class JobsResource extends AuthenticatedResource {
                 XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptId);
                 if (unfilteredScript == null) {
                         logger.error("Script not found");
-                        return null;
+                        return Optional.absent();
                 }
                 XProcScript script = unfilteredScript.load();
                 XProcInput.Builder inBuilder = new XProcInput.Builder();
@@ -352,19 +352,17 @@ public class JobsResource extends AuthenticatedResource {
 
                 BoundXProcScript bound= BoundXProcScript.from(script,inBuilder.build(),outBuilder.build());
 
-                JobManager jobMan = webservice().getJobManager();
-                JobContext ctxt=null;
+                JobManager jobMan = webservice().getJobManager(this.getClient());
                 ResourceCollection resourceCollection=null;
                 if (zip != null){
                         resourceCollection = new ZipResourceContext(zip);
                 }
-                if(webservice().getConfiguration().isLocalFS()){
-                        ctxt=webservice().getJobContextFactory().newMappingJobContext(this.getClient(),niceName,bound);  
-
-                }else{
-                        ctxt=webservice().getJobContextFactory().newMappingJobContext(this.getClient(),niceName,bound,resourceCollection);
+                boolean mapping=webservice().getConfiguration().isLocalFS();
+                Optional<Job> newJob= jobMan.newJob(bound).isMapping(mapping).withNiceName(niceName)
+                        .withResources(resourceCollection).build();
+                if(!newJob.isPresent()){
+                        return Optional.absent();
                 }
-                Job job = jobMan.newJob(ctxt);
 
                 NodeList callbacks = doc.getElementsByTagName("callback");
                 for (int i = 0; i<callbacks.getLength(); i++) {
@@ -379,7 +377,7 @@ public class JobsResource extends AuthenticatedResource {
                         }
 
                         try {
-                                callback = new Callback(job.getId(), this.getClient(), new URI(href), type, freq);
+                                callback = new Callback(newJob.get().getId(), this.getClient(), new URI(href), type, freq);
                         } catch (URISyntaxException e) {
                                 logger.warn("Cannot create callback: " + e.getMessage());
                         }
@@ -388,7 +386,7 @@ public class JobsResource extends AuthenticatedResource {
                                 webservice().getCallbackRegistry().addCallback(callback);
                         }
                 }
-                return job;
+                return newJob;
         }
 
         /**
