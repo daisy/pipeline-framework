@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * The subclasses of JobContext MUST define some fine grained behaviour regarding how the job interacts with the fs and 
  * input,output,option redirections.
  */
-public abstract class AbstractJobContext implements JobContext,RuntimeConfigurable{
+public abstract class AbstractJobContext implements JobContext{
         private static final Logger logger = LoggerFactory.getLogger(AbstractJobContext.class);
         /** The input. */
         private XProcInput input;
@@ -174,11 +174,6 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
         }
 
         @Override
-        public void setMonitorFactory(JobMonitorFactory monitor) {
-                this.monitor=monitor.newJobMonitor(this.id);
-        }
-
-        @Override
         public void writeResult(XProcResult result) {
                 result.writeTo(this.output);
                 if(this.generateResults){
@@ -218,6 +213,12 @@ public abstract class AbstractJobContext implements JobContext,RuntimeConfigurab
 
         protected void setClient(Client client) {
                 this.client=client;
+        }
+
+        @Override
+        public void setJobMonitorFactory(JobMonitorFactory factory) {
+                this.monitor=factory.newJobMonitor(this.getId());
+
         }
 
 }

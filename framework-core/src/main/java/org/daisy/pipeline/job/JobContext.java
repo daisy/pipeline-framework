@@ -10,7 +10,8 @@ import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.script.XProcScript;
 
 
-public interface JobContext{
+public interface JobContext extends RuntimeConfigurator.Monitorable{
+
 	public XProcInput getInputs() ;
 	public XProcOutput getOutputs();
 	public URI getLogFile() ;
