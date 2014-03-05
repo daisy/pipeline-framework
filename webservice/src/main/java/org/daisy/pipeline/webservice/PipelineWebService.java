@@ -12,6 +12,7 @@ import org.daisy.common.properties.PropertyTracker;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobManager;
+import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.webserviceutils.Properties;
@@ -44,7 +45,7 @@ public class PipelineWebService extends Application {
 	PipelineWebServiceConfiguration conf = new PipelineWebServiceConfiguration();
 	
 	/** The job manager. */
-	private JobManager jobManager;
+	private JobManagerFactory jobManagerFactory;
 
 	private JobContextFactory ctxtFactory;
 	/** The script registry. */
@@ -219,8 +220,8 @@ public class PipelineWebService extends Application {
 	 *
 	 * @return the job manager
 	 */
-	public JobManager getJobManager() {
-		return jobManager;
+	public JobManager getJobManager(Client client) {
+		return jobManagerFactory.createFor(client);
 	}
 
 	/**
@@ -228,8 +229,8 @@ public class PipelineWebService extends Application {
 	 *
 	 * @param jobManager the new job manager
 	 */
-	public void setJobManager(JobManager jobManager) {
-		this.jobManager = jobManager;
+	public void setJobManagerFactory(JobManagerFactory jobManagerFactory) {
+		this.jobManagerFactory = jobManagerFactory;
 	}
 
 	/**

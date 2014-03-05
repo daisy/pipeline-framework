@@ -15,6 +15,8 @@ import org.restlet.resource.Get;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Optional;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class LogResource.
@@ -22,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 public class LogResource extends AuthenticatedResource {
 	/** The job. */
-	private Job job;
+	private Optional<Job> job=Optional.absent();
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(LogResource.class.getName());
 
@@ -36,7 +38,7 @@ public class LogResource extends AuthenticatedResource {
 			return;
 		}
 
-		JobManager jobMan = webservice().getJobManager();
+		JobManager jobMan = webservice().getJobManager(this.getClient());
 		String idParam = (String) getRequestAttributes().get("id");
 
 		try {
@@ -45,7 +47,6 @@ public class LogResource extends AuthenticatedResource {
 		}
 		catch(Exception e) {
 			logger.error(e.getMessage());
-			job = null;
 		}
 
 	}
@@ -73,7 +74,7 @@ public class LogResource extends AuthenticatedResource {
 		setStatus(Status.SUCCESS_OK);
 
 		FileRepresentation logfile;
-		URI logfileUri = job.getContext().getLogFile();
+		URI logfileUri = job.get().getContext().getLogFile();
 		if (logfileUri != null) {
 			logfile = new FileRepresentation(new File(logfileUri), MediaType.TEXT_PLAIN);
 			return logfile;

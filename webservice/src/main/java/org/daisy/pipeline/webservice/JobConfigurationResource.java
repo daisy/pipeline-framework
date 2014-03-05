@@ -22,9 +22,11 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.google.common.base.Optional;
+
 public class JobConfigurationResource extends AuthenticatedResource{
 	/** The job. */
-	private Job job;
+	private Optional<Job> job=Optional.absent();
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(JobConfigurationResource.class.getName());
 
@@ -38,16 +40,15 @@ public class JobConfigurationResource extends AuthenticatedResource{
 			return;
 		}
 
-		JobManager jobMan = webservice().getJobManager();
+		JobManager jobMan = webservice().getJobManager(this.getClient());
 		String idParam = (String) getRequestAttributes().get("id");
 
 		try {
 			JobId id = JobIdFactory.newIdFromString(idParam);
-			job = jobMan.getJob(id);
-		}
+			job = jobMan.getJob(id); 
+                }
 		catch(Exception e) {
 			logger.error(e.getMessage());
-			job = null;
 		}
 
 	}
@@ -67,12 +68,12 @@ public class JobConfigurationResource extends AuthenticatedResource{
 			return null;
 		}
 
-		if (job == null) {
+		if (!job.isPresent()) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return this.getErrorRepresentation("Job not found");
 		}
 		
-		String xml = webservice().getStorage().getJobConfigurationStorage().get(job.getId());
+		String xml = webservice().getStorage().getJobConfigurationStorage().get(job.get().getId());
 		Document doc;
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
