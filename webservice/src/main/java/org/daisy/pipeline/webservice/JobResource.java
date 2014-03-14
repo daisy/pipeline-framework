@@ -108,7 +108,7 @@ public class JobResource extends AuthenticatedResource {
                 } else {
 
                         JobManager jobMan = webservice().getJobManager(this.getClient());
-                        if (!jobMan.deleteJob(job.get().getId()).isPresent() ) {
+                        if (jobMan.deleteJob(job.get().getId()).isPresent() ) {
                                 webservice().getStorage().
                                         getJobConfigurationStorage().delete(job.get().getId());
                                 setStatus(Status.SUCCESS_NO_CONTENT);
