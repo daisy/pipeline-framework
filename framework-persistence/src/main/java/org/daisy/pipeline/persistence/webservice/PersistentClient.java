@@ -1,7 +1,8 @@
 package org.daisy.pipeline.persistence.webservice;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
 import org.daisy.pipeline.clients.Client;
@@ -24,6 +25,7 @@ public class PersistentClient implements Client {
 
         //client's priority
 
+	@Enumerated(EnumType.ORDINAL)
         private Priority priority;
 
         public PersistentClient() {
