@@ -17,7 +17,7 @@ public class JobManagerFactory {
         /**
          * @param storage the storage to set
          */
-        public void setStorage(JobStorage storage) {
+        public void setJobStorage(JobStorage storage) {
                 //TODO: check null
                 this.storage = storage;
         }
