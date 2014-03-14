@@ -4,5 +4,5 @@
    <reference name="event-bus-provider" interface="org.daisy.pipeline.event.EventBusProvider"  bind="setEventBusProvider" cardinality="1..1" policy="static"/>
    <reference name="callback-registry" interface="org.daisy.pipeline.webserviceutils.callback.CallbackRegistry" cardinality="1..1" policy="static" bind="setCallbackRegistry"/>
    <reference name="job-manager-factory" interface="org.daisy.pipeline.job.JobManagerFactory" cardinality="1..1" policy="static" bind="setJobManagerFactory"/>
-   <reference name="client-storage" interface="org.daisy.pipeline.client.ClientStorage" cardinality="1..1" policy="static" bind="setClientStorage"/>
+   <reference name="webservice-storage" interface="org.daisy.pipeline.webserviceutils.storage.WebserviceStorage" cardinality="1..1" policy="static" bind="setWebserviceStorage"/>
 </scr:component>

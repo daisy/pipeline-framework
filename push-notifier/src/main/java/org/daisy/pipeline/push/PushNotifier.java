@@ -23,6 +23,7 @@ import org.daisy.pipeline.job.StatusMessage;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
 import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
+import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,8 +96,9 @@ public class PushNotifier {
         /**
          * @param clientStorage the clientStorage to set
          */
-        public void setClientStorage(ClientStorage clientStorage) {
-                this.clientStorage = clientStorage;
+        public void setWebserviceStorage(WebserviceStorage storage) {
+                this.clientStorage = storage.getClientStorage();
+                
         }
 
         public void setCallbackRegistry(CallbackRegistry callbackRegistry) {
