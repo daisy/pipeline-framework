@@ -103,7 +103,7 @@ public class PushNotifier {
                 this.callbackRegistry = callbackRegistry;
         }
 
-        public void setJobManager(JobManagerFactory jobManagerFactory) {
+        public void setJobManagerFactory(JobManagerFactory jobManagerFactory) {
                 this.jobManagerFactory = jobManagerFactory;
         }
 
