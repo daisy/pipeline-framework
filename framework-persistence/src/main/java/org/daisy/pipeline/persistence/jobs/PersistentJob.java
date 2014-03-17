@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +12,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -31,12 +29,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.eventbus.EventBus;
 
 @Entity
-//This plus the correct configuration 
-//of the pu should be enough to ensure that jobs 
-//with the same id will return true to
-//job1==job2
-//namely, only one object wandering around per JobId
-@Cacheable
 @Table(name="jobs")
 @NamedQuery ( name="Job.getAll", query="select j from PersistentJob j")
 @Access(value=AccessType.FIELD)
@@ -165,6 +157,10 @@ public class PersistentJob  extends Job implements Serializable {
 		if(this.db!=null){
 			logger.debug("Updating object");	
 			db.updateObject(this);
+                        //this should be the proper way to invalidate the object 
+                        //in the cache, it simply won't work
+                        //db.getCache().evict(PersistentJob.class,this.getId());
+
 		}else{
 			logger.warn("Object not updated as the Database is null");
 		}
