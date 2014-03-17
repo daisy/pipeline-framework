@@ -2,12 +2,12 @@ package org.daisy.pipeline.persistence.jobs;
 
 import java.util.Iterator;
 
+import javax.persistence.CacheStoreMode;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
-import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.JobBuilder;
 import org.daisy.pipeline.job.JobContext;
@@ -22,10 +22,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
-import com.google.common.eventbus.EventBus;
 
 public class PersistentJobStorage implements JobStorage {
-
+        private final static String STORE_MODE="javax.persistence.cache.storeMode";
         private static final Logger logger = LoggerFactory
                         .getLogger(PersistentJobStorage.class);
 
@@ -65,6 +64,9 @@ public class PersistentJobStorage implements JobStorage {
         public Iterator<Job> iterator() {
                 checkDatabase();
                 TypedQuery<PersistentJob> query=this.filter.getQuery(PersistentJob.class);
+                //make sure that we have the data from the db, 
+                query.setHint(STORE_MODE, CacheStoreMode.REFRESH);
+
                 return Collections2.transform(query.getResultList(),
                                 new Function<Job, Job>() {
                                         @Override
@@ -79,6 +81,7 @@ public class PersistentJobStorage implements JobStorage {
         public Optional<Job> add(JobContext ctxt) {
                 checkDatabase();
                 logger.debug("Adding job to db:" + ctxt.getId());
+                logger.debug("Adding eventbus:" + this.configurator.getEventBus());
                 JobBuilder builder = new PersistentJob.PersistentJobBuilder(db)
                                 .withContext(ctxt).withEventBus(this.configurator.getEventBus());
                 Job pjob = builder.build();
@@ -112,6 +115,7 @@ public class PersistentJobStorage implements JobStorage {
 
                 if (job != null) {
                         job.setDatabase(db);
+                        job.setEventBus(this.configurator.getEventBus());
                         this.configurator.configure(job);
                         this.configurator.configure( job.getContext());
                 }
