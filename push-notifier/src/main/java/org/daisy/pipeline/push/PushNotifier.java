@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.google.common.eventbus.Subscribe;
 
 // notify clients whenever there are new messages or a change in status
@@ -113,7 +114,9 @@ public class PushNotifier {
         public synchronized void handleMessage(Message msg) {
                 JobUUIDGenerator gen = new JobUUIDGenerator();
                 JobId jobId = gen.generateIdFromString(msg.getJobId());
-                messages.addMessage(jobId, msg);
+                synchronized(this.messages){
+                        messages.addMessage(jobId, msg);
+                }
         }
 
         @Subscribe
@@ -151,7 +154,7 @@ public class PushNotifier {
                                 logger.debug("Posting status for "+holder.job.getId());
                                 Job job = holder.job;
 
-                                for (Callback callback : callbackRegistry.getCallbacks(job.getContext().getId())) {
+                                for (Callback callback :callbackRegistry.getCallbacks(job.getContext().getId())) {
                                         if (callback.getType() == CallbackType.STATUS) {
                                                 Poster.postStatusUpdate(job, holder.status, callback);
                                         }
@@ -160,7 +163,7 @@ public class PushNotifier {
 
                 }
                 private synchronized void postMessages() {
-                        synchronized(PushNotifier.this){
+                        synchronized(PushNotifier.this.messages){
                                 for (JobId jobId : messages.getJobs()) {
                                         Optional<Job> job = jobManager.get().getJob(jobId);
                                         if(!job.isPresent()){
@@ -214,7 +217,7 @@ public class PushNotifier {
                         list.add(msg);
                 }
                 public synchronized Set<JobId> getJobs() {
-                        return messages.keySet();
+                        return Sets.newHashSet(messages.keySet());
                 }
 
                 public synchronized void removeJob(JobId jobId) {
