@@ -4,15 +4,14 @@ import java.util.Collection;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.daisy.pipeline.job.priority.timetracking.TimeFunctionFactory;
 import org.daisy.pipeline.job.priority.timetracking.TimeTracker;
 import org.daisy.pipeline.job.priority.timetracking.TimeTrackerFactory;
 /**
  * Thread pool excutor that the underlying queue supports the PriorityService interface
  * methods. It also allows to perform automatic priority updates through a time tracker .
  */
-public class PriorityThreadPoolExecutor extends ThreadPoolExecutor implements
-                PriorityService {
+public class PriorityThreadPoolExecutor extends ThreadPoolExecutor 
+                {
         private UpdatablePriorityBlockingQueue queue;
         private TimeTracker tracker;
 
@@ -48,28 +47,29 @@ public class PriorityThreadPoolExecutor extends ThreadPoolExecutor implements
         @Override
         protected void beforeExecute(Thread t, Runnable r) {
                 super.beforeExecute(t, r);
-                this.tracker.executing((PrioritizedRunnable)r);
+                this.tracker.executing((PrioritizableRunnable)r);
         }
 
         /*
          * Just wrap the priority queue
          */
 
-        @Override
-        public void moveUp(PrioritizedRunnable item) {
+        public void moveUp(PrioritizableRunnable item) {
                 this.queue.moveUp(item);
 
         }
 
-        @Override
-        public void moveDown(PrioritizedRunnable item) {
+        public void moveDown(PrioritizableRunnable item) {
                 this.queue.moveUp(item);
 
         }
 
-        @Override
-        public Collection<PrioritizedRunnable> asOrderedCollection() {
+        public Collection<PrioritizableRunnable> asOrderedCollection() {
                 return this.queue.asOrderedCollection();
+        }
+
+        public Collection<PrioritizableRunnable> asCollection(){
+                return this.queue.asCollection();
         }
 
 }

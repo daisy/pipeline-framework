@@ -19,9 +19,9 @@ import com.google.common.util.concurrent.Monitor;
  *
  * <h2>Updating the priorities</h2>
  * <ul>
- *      <li>{@link #update(Function<Void,PriorityBlockingQueue> function)}:  Updates the priorities by applying the given function sequentually to the different priorities. The function has update the {@link PrioritizedRunnable} by reference. This function is threadsafe</li>
- *      <li>{@link #moveUp(PrioritizedRunnable runnable)} allows to move up in the queue the given runnable (or a runnable inside the queue that is naturally equals to the paramater)</li>
- *      <li>{@link #moveDown(PrioritizedRunnable runnable)} allows to move up in the queue the given runnable (or a runnable inside the queue that is naturally equals to the paramater)</li>
+ *      <li>{@link #update(Function<Void,PriorityBlockingQueue> function)}:  Updates the priorities by applying the given function sequentually to the different priorities. The function has update the {@link PrioritizableRunnable} by reference. This function is threadsafe</li>
+ *      <li>{@link #moveUp(PrioritizableRunnable runnable)} allows to move up in the queue the given runnable (or a runnable inside the queue that is naturally equals to the paramater)</li>
+ *      <li>{@link #moveDown(PrioritizableRunnable runnable)} allows to move up in the queue the given runnable (or a runnable inside the queue that is naturally equals to the paramater)</li>
  *
  * </ul>
  * This class is threadsafe
@@ -34,7 +34,7 @@ public class UpdatablePriorityBlockingQueue extends
         /**
          * The forwarded priority queue
          */
-        private PriorityBlockingQueue<PrioritizedRunnable> delegate;
+        private PriorityBlockingQueue<PrioritizableRunnable> delegate;
 
         /**
          * Monitor that controls {@link #take()} and other blocking aspects of this class
@@ -81,9 +81,9 @@ public class UpdatablePriorityBlockingQueue extends
         /**
          * @return a brand new queue, it does not set it as delegate
          */
-        private PriorityBlockingQueue<PrioritizedRunnable> buildQueue() {
-                return new PriorityBlockingQueue<PrioritizedRunnable>(20,
-                                new PrioritizedComparator());
+        private PriorityBlockingQueue<PrioritizableRunnable> buildQueue() {
+                return new PriorityBlockingQueue<PrioritizableRunnable>(20,
+                                new PrioritizableComparator());
         }
 
 
@@ -116,7 +116,7 @@ public class UpdatablePriorityBlockingQueue extends
          */
         private void doUpdate() {
                 //re-add the elements of the queue to re-sort them
-                Collection<PrioritizedRunnable> aux = ImmutableList
+                Collection<PrioritizableRunnable> aux = ImmutableList
                                 .copyOf(this.delegate);
                 this.delegate.clear();
                 this.delegate.addAll(aux);
@@ -126,17 +126,17 @@ public class UpdatablePriorityBlockingQueue extends
          * Moves the task (or an object naturally equal to the task) up in queue
          * @param runnable
          */
-        public synchronized void moveUp(PrioritizedRunnable runnable) {
+        public synchronized void moveUp(PrioritizableRunnable runnable) {
                 //first element doesn't move up
                 if (runnable.equals(delegate.element())) {
                         return;
                 }
                 this.enterUpdate();
                 //get element and previous elements
-                PrioritizedRunnable iter, prev, prevToPrev;
+                PrioritizableRunnable iter, prev, prevToPrev;
                 iter = prev = prevToPrev = null;
                 //no random access to queues...
-                for (PrioritizedRunnable p : this.delegate) {
+                for (PrioritizableRunnable p : this.delegate) {
                         prevToPrev = prev;
                         prev = iter;
                         iter = p;
@@ -164,13 +164,13 @@ public class UpdatablePriorityBlockingQueue extends
          * Moves the task (or an object naturally equal to the task) down in queue
          * @param runnable
          */
-        public synchronized void moveDown(PrioritizedRunnable runnable) {
+        public synchronized void moveDown(PrioritizableRunnable runnable) {
                 this.enterUpdate();
                 //get element and next 2 elements
-                PrioritizedRunnable iter, next, nextToNext;
+                PrioritizableRunnable iter, next, nextToNext;
                 iter = next = nextToNext = null;
                 //no random access to queues...
-                for (PrioritizedRunnable p : this.delegate) {
+                for (PrioritizableRunnable p : this.delegate) {
                         iter = next;
                         next = nextToNext;
                         nextToNext = p;
@@ -190,13 +190,13 @@ public class UpdatablePriorityBlockingQueue extends
                         //runnable is the second last
                         //next->nextToNext  (next is acutally the element we are looking for)
                         //=> next.p= nextToNext.p-1 so now is the last
-                        forcedPriority = ((PrioritizedRunnable) nextToNext).getPriority() + 1;
+                        forcedPriority = ((PrioritizableRunnable) nextToNext).getPriority() + 1;
                 } else {
                         //no update is necesary
                         return;
                 }
 
-                ((PrioritizedRunnable) iter).forcePriority(forcedPriority);
+                ((PrioritizableRunnable) iter).forcePriority(forcedPriority);
 
                 this.leaveUpdate();
         }
@@ -216,9 +216,9 @@ public class UpdatablePriorityBlockingQueue extends
          * This function is threadsafe
          * @param function
          */
-        public synchronized void update(Function<PrioritizedRunnable, Void> function) {
+        public synchronized void update(Function<PrioritizableRunnable, Void> function) {
                 this.enterUpdate();
-                for (PrioritizedRunnable runnable : this.delegate) {
+                for (PrioritizableRunnable runnable : this.delegate) {
                         function.apply(runnable);
                 }
                 this.leaveUpdate();
@@ -227,21 +227,21 @@ public class UpdatablePriorityBlockingQueue extends
         /**
          * Returns the runnables as an immutable {@link java.util.Collection} <b>maintaining</b> the order given by the priority
          */
-        public Collection<PrioritizedRunnable> asOrderedCollection() {
+        public Collection<PrioritizableRunnable> asOrderedCollection() {
                 //TODO use Collections
-                PrioritizedRunnable[] arr;
+                PrioritizableRunnable[] arr;
                 synchronized (this.delegate) {
-                        arr = new PrioritizedRunnable[this.delegate.size()];
+                        arr = new PrioritizableRunnable[this.delegate.size()];
                         this.delegate.toArray(arr);
                 }
-                Arrays.sort(arr, new PrioritizedComparator());
+                Arrays.sort(arr, new PrioritizableComparator());
                 return ImmutableList.copyOf(Arrays.asList(arr));
         }
 
         /**
          * Returns the runnables as an immutable {@link java.util.Collection} <b>without maintaining</b> the order given by the priority
          */
-        public Collection<PrioritizedRunnable> asCollection() {
+        public Collection<PrioritizableRunnable> asCollection() {
                 return ImmutableList.copyOf(this.delegate);
         }
 
@@ -269,7 +269,7 @@ public class UpdatablePriorityBlockingQueue extends
                         throw new RuntimeException(e);
                 }
                 //System.out.println("offer: entered monitor");
-                res = this.delegate.offer((PrioritizedRunnable) o);
+                res = this.delegate.offer((PrioritizableRunnable) o);
                 //System.out.println("offer: left monitor");
                 monitor.leave();
                 return res;
@@ -289,7 +289,7 @@ public class UpdatablePriorityBlockingQueue extends
                         throw new RuntimeException(e);
                 }
                 //System.out.println("add: entered monitor");
-                res=this.delegate.add((PrioritizedRunnable)element);
+                res=this.delegate.add((PrioritizableRunnable)element);
                 //System.out.println("add: left monitor");
                 monitor.leave();
                 return res;

@@ -1,6 +1,6 @@
 package org.daisy.pipeline.job.priority.timetracking;
 
-import org.daisy.pipeline.job.priority.PrioritizedRunnable;
+import org.daisy.pipeline.job.priority.PrioritizableRunnable;
 import org.daisy.pipeline.job.priority.UpdatablePriorityBlockingQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +60,7 @@ public class TimeTracker{
          * This function is threadsafe
          * @param runnable
          */
-        public synchronized void executing(PrioritizedRunnable runnable){
+        public synchronized void executing(PrioritizableRunnable runnable){
                 //update counter and buff
                 this.times[this.counter]=runnable.getTimestamp();
                 this.counter++;
@@ -82,9 +82,9 @@ public class TimeTracker{
                 //get a new updater function
                 final Function<Long,Double> timeUpdater=TimeTracker.this.functionFactory.getFunction(stats);
                 //Let the queue do the work
-                this.queue.update(new Function<PrioritizedRunnable, Void>() {
+                this.queue.update(new Function<PrioritizableRunnable, Void>() {
                         @Override
-                        public Void apply(PrioritizedRunnable runnable) {
+                        public Void apply(PrioritizableRunnable runnable) {
                                 runnable.setRelativeWaitingTime(timeUpdater);
                                 //ugly as hell but you can't intantiate void, go figure.
                                 return null;

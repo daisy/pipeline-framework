@@ -1,17 +1,14 @@
 package org.daisy.pipeline.job.fuzzy;
 
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.PrioritizedJob;
 
 /**
  * Wraps a job into a fuzzy runnable computing its final priority
  * using the job's priority and its client priority
  */
-public class FuzzyJobRunnable extends FuzzyRunnable {
+public class FuzzyJobRunnable extends FuzzyRunnable implements PrioritizedJob {
         final private Job job;
-        /**
-         *Delegated task
-         */
-        final private Runnable runnable;
         /**
          * Says if the priority of this runnable has been forced
          */
@@ -28,15 +25,8 @@ public class FuzzyJobRunnable extends FuzzyRunnable {
          * @param infereneceEngine
          */
         public FuzzyJobRunnable(Job job, Runnable jobTask,InferenceEngine infereneceEngine) {
-                super(infereneceEngine);
+                super(jobTask,infereneceEngine);
                 this.job=job;
-                this.runnable=jobTask;
-        }
-
-        @Override
-        public void run() {
-                this.runnable.run();
-
         }
 
         /**
@@ -64,6 +54,11 @@ public class FuzzyJobRunnable extends FuzzyRunnable {
                 this.forced=true;
                 this.priority=priority;
                 return this.priority;
+        }
+
+        @Override
+        public Job get() {
+                return this.job;
         }
         
 }

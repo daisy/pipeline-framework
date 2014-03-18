@@ -1,6 +1,6 @@
 package org.daisy.pipeline.job.fuzzy;
 
-import org.daisy.pipeline.job.priority.PrioritizedRunnable;
+import org.daisy.pipeline.job.priority.PrioritizableRunnable;
 
 import com.google.common.base.Function;
 import com.google.common.primitives.Doubles;
@@ -12,7 +12,7 @@ import com.google.common.primitives.Doubles;
  * using a fuzzy {@link InferenceEngine}.
  *
  */
-public abstract class FuzzyRunnable extends PrioritizedRunnable{
+public abstract class FuzzyRunnable extends PrioritizableRunnable{
         /**
          * Inference engine used to compute the final priority
          */
@@ -25,7 +25,8 @@ public abstract class FuzzyRunnable extends PrioritizedRunnable{
         /**
          * @param infereneceEngine
          */
-        public FuzzyRunnable(InferenceEngine infereneceEngine) {
+        public FuzzyRunnable(Runnable runnable,InferenceEngine infereneceEngine) {
+                super(runnable);
                 this.infereneceEngine = infereneceEngine;
         }
 
