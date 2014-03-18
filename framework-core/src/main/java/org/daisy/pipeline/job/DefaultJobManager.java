@@ -1,5 +1,6 @@
 package org.daisy.pipeline.job;
 
+import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +34,9 @@ public class DefaultJobManager implements JobManager {
                 this.jobContextFactory= jobContextFactory;
         }
 
-        protected Optional<Job> newJob(JobContext ctxt) {
+        protected Optional<Job> newJob(Priority priority, JobContext ctxt) {
                 //store it
-                Optional<Job> job = this.storage.add(ctxt);
+                Optional<Job> job = this.storage.add(priority,ctxt);
                 if(job.isPresent()){
                         //execute it
                         executionService.submit(job.get());
@@ -109,6 +110,7 @@ public class DefaultJobManager implements JobManager {
                 private boolean isMapping;
                 private ResourceCollection resources;
                 private String niceName="";
+                private Priority priority=Priority.MEDIUM;
 
                 /**
                  *
@@ -149,9 +151,14 @@ public class DefaultJobManager implements JobManager {
                         JobContext ctxt=DefaultJobManager.this.jobContextFactory.
                                 newJobContext(this.isMapping,this.niceName,this.script,this.resources);
                         //send to the JobManager
-                        return DefaultJobManager.this.newJob(ctxt);
+                        return DefaultJobManager.this.newJob(this.priority,ctxt);
                 }
 
+                @Override
+                public JobBuilder withPriority(Priority priority) {
+                        this.priority=priority;
+                        return this;
+                }
 
         }
 

@@ -12,6 +12,7 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
+import org.daisy.pipeline.job.priority.Priority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,11 +58,11 @@ public final class VolatileJobStorage implements JobStorage {
         }
 
         @Override
-        public synchronized Optional<Job> add(final JobContext ctxt) {
+        public synchronized Optional<Job> add(final Priority priority, final JobContext ctxt) {
 
                 if (!this.jobs.containsKey(ctxt.getId())) {
                         //Store the job before its status gets broadcasted
-                        Job job = new Job.JobBuilder().withEventBus(this.bus)
+                        Job job = new Job.JobBuilder().withEventBus(this.bus).withPriority(priority)
                                         .withContext(ctxt).build(new Function<Job, Job>() {
                                                 @Override
                                                 public Job apply(Job job) {

@@ -50,7 +50,7 @@ public class VolatileJobStorageTest {
 
         @Test
         public void add() {
-                Optional<Job> job=this.storage.add(ctxt1);
+                Optional<Job> job=this.storage.add(Priority.MEDIUM,ctxt1);
                 Assert.assertTrue("The job has been inserted",job.isPresent());
                 Assert.assertEquals("And has the expected id",ctxt1.getId(),job.get().getId());
 
@@ -59,7 +59,7 @@ public class VolatileJobStorageTest {
 
         @Test
         public void get() {
-                this.storage.add(ctxt1);
+                this.storage.add(Priority.MEDIUM,ctxt1);
                 Optional<Job> job = this.storage.get(ctxt1.getId());
                 Assert.assertTrue("The job has been inserted",job.isPresent());
                 Assert.assertEquals("And has the expected id",ctxt1.getId(),job.get().getId());
@@ -73,8 +73,8 @@ public class VolatileJobStorageTest {
 
         @Test
         public void iterator() {
-                this.storage.add(ctxt1);
-                this.storage.add(ctxt2);
+                this.storage.add(Priority.MEDIUM,ctxt1);
+                this.storage.add(Priority.MEDIUM,ctxt2);
                 Set<JobId> jobs=new HashSet<JobId>();
                 for(Job j: this.storage){
                         jobs.add(j.getId());
@@ -86,7 +86,7 @@ public class VolatileJobStorageTest {
 
         @Test
         public void remove() {
-                this.storage.add(ctxt1);
+                this.storage.add(Priority.MEDIUM,ctxt1);
                 this.storage.remove(ctxt1.getId());
                 Optional<Job> job = this.storage.get(ctxt1.getId());
                 Assert.assertFalse("The job has been removed",job.isPresent());
@@ -108,8 +108,8 @@ public class VolatileJobStorageTest {
 
         @Test
         public void getByClient() {
-                this.storage.add(ctxt1);
-                this.storage.add(ctxt1OtherCli);
+                this.storage.add(Priority.MEDIUM,ctxt1);
+                this.storage.add(Priority.MEDIUM,ctxt1OtherCli);
                 Optional<Job> job = this.storage.filterBy(this.cl).get(ctxt1.getId());
                 Assert.assertTrue("My job has been inserted",job.isPresent());
                 Assert.assertEquals("And has the expected id",ctxt1.getId(),job.get().getId());
@@ -120,8 +120,8 @@ public class VolatileJobStorageTest {
 
         @Test
         public void removeByClient() {
-                this.storage.add(ctxt1);
-                this.storage.add(ctxt1OtherCli);
+                this.storage.add(Priority.MEDIUM,ctxt1);
+                this.storage.add(Priority.MEDIUM,ctxt1OtherCli);
                 Optional<Job> job = this.storage.filterBy(this.cl).remove(ctxt1OtherCli.getId());
                 Assert.assertFalse("Can't delete a job that is not mine",job.isPresent());
                 job = this.storage.filterBy(this.clAdmin).remove(ctxt1OtherCli.getId());
@@ -133,10 +133,10 @@ public class VolatileJobStorageTest {
 
         @Test
         public void iteratorByClient() {
-                this.storage.add(ctxt1);
-                this.storage.add(ctxt2);
-                this.storage.add(ctxt1OtherCli);
-                this.storage.add(ctxt2OtherCli);
+                this.storage.add(Priority.MEDIUM,ctxt1);
+                this.storage.add(Priority.MEDIUM,ctxt2);
+                this.storage.add(Priority.MEDIUM,ctxt1OtherCli);
+                this.storage.add(Priority.MEDIUM,ctxt2OtherCli);
                 Assert.assertEquals("From a cli perspective there are 2 jobs",2,Iterables.size(this.storage.filterBy(this.cl)));
                 Assert.assertEquals("From an admin perspective there are 4 jobs",4,Iterables.size(this.storage.filterBy(this.clAdmin)));
         }

@@ -74,7 +74,7 @@ public class PersistentJobStorageTest {
         @Test
         public void addJob() throws Exception{
                 JobContext ctxt=Mocks.buildContext((Client)cl);
-                Optional<Job> job=this.storage.add(ctxt);
+                Optional<Job> job=this.storage.add(Priority.MEDIUM,ctxt);
                 this.jobsToDel.add(job.get());
                 Assert.assertTrue("Job was created",job.isPresent());
         }
@@ -82,7 +82,7 @@ public class PersistentJobStorageTest {
         @Test
         public void getJob() throws Exception{
                 JobContext ctxt=Mocks.buildContext((Client)cl);
-                Optional<Job> job=this.storage.add(ctxt);
+                Optional<Job> job=this.storage.add(Priority.MEDIUM,ctxt);
                 this.jobsToDel.add(job.get());
 
                 Optional<Job> fromDatabase=this.storage.get(ctxt.getId());
@@ -103,7 +103,7 @@ public class PersistentJobStorageTest {
 
 
                 JobContext ctxt=Mocks.buildContext((Client)cl);
-                Optional<Job> job=this.storage.add(ctxt);
+                Optional<Job> job=this.storage.add(Priority.MEDIUM,ctxt);
                 this.jobsToDel.add(job.get());
 
                 Optional<Job> deleted=this.storage.remove(ctxt.getId());
@@ -129,11 +129,11 @@ public class PersistentJobStorageTest {
         public void iterate() throws Exception{
 
                 JobContext ctxt=Mocks.buildContext((Client)cl);
-                Optional<Job> job=this.storage.add(ctxt);
+                Optional<Job> job=this.storage.add(Priority.MEDIUM,ctxt);
                 this.jobsToDel.add(job.get());
 
                 ctxt=Mocks.buildContext((Client)cl);
-                job=this.storage.add(ctxt);
+                job=this.storage.add(Priority.MEDIUM,ctxt);
                 this.jobsToDel.add(job.get());
 
                 Assert.assertEquals("Two jobs is what we have in store",2,Iterables.size(this.storage));
@@ -146,11 +146,11 @@ public class PersistentJobStorageTest {
                 //my client
 
                 JobContext ctxtMine=Mocks.buildContext((Client)cl);
-                Optional<Job> job=this.storage.add(ctxtMine);
+                Optional<Job> job=this.storage.add(Priority.MEDIUM,ctxtMine);
                 this.jobsToDel.add(job.get());
 
                 JobContext ctxtOther=Mocks.buildContext();
-                job=this.storage.add(ctxtOther);
+                job=this.storage.add(Priority.MEDIUM,ctxtOther);
                 this.jobsToDel.add(job.get());
                 this.clientsToDel.add(ctxtOther.getClient());
 
@@ -166,11 +166,11 @@ public class PersistentJobStorageTest {
         public void byClientRemoveJob() throws Exception{
 
                 JobContext ctxtMine=Mocks.buildContext((Client)cl);
-                Optional<Job> job=this.storage.add(ctxtMine);
+                Optional<Job> job=this.storage.add(Priority.MEDIUM,ctxtMine);
                 this.jobsToDel.add(job.get());
 
                 JobContext ctxtOther=Mocks.buildContext();
-                job=this.storage.add(ctxtOther);
+                job=this.storage.add(Priority.MEDIUM,ctxtOther);
                 this.jobsToDel.add(job.get());
                 this.clientsToDel.add(ctxtOther.getClient());
 
@@ -192,20 +192,20 @@ public class PersistentJobStorageTest {
         public void byClientIterate() throws Exception{
 
                 JobContext ctxtMine=Mocks.buildContext((Client)cl);
-                Optional<Job> job=this.storage.add(ctxtMine);
+                Optional<Job> job=this.storage.add(Priority.MEDIUM,ctxtMine);
                 this.jobsToDel.add(job.get());
 
                 ctxtMine=Mocks.buildContext((Client)cl);
-                job=this.storage.add(ctxtMine);
+                job=this.storage.add(Priority.MEDIUM,ctxtMine);
                 this.jobsToDel.add(job.get());
 
                 JobContext ctxtOther=Mocks.buildContext();
-                job=this.storage.add(ctxtOther);
+                job=this.storage.add(Priority.MEDIUM,ctxtOther);
                 this.jobsToDel.add(job.get());
                 this.clientsToDel.add(ctxtOther.getClient());
 
                 ctxtOther=Mocks.buildContext();
-                job=this.storage.add(ctxtOther);
+                job=this.storage.add(Priority.MEDIUM,ctxtOther);
                 this.jobsToDel.add(job.get());
                 this.clientsToDel.add(ctxtOther.getClient());
 
