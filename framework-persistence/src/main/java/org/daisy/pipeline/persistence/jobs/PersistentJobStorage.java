@@ -14,6 +14,7 @@ import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.job.RuntimeConfigurator;
+import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.persistence.Database;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.slf4j.Logger;
@@ -77,12 +78,13 @@ public class PersistentJobStorage implements JobStorage {
                                 }).iterator();
         }
 
+
         @Override
-        public Optional<Job> add(JobContext ctxt) {
+        public Optional<Job> add(Priority priority,JobContext ctxt) {
                 checkDatabase();
                 logger.debug("Adding job to db:" + ctxt.getId());
                 logger.debug("Adding eventbus:" + this.configurator.getEventBus());
-                JobBuilder builder = new PersistentJob.PersistentJobBuilder(db)
+                JobBuilder builder = new PersistentJob.PersistentJobBuilder(db).withPriority(priority)
                                 .withContext(ctxt).withEventBus(this.configurator.getEventBus());
                 Job pjob = builder.build();
                 this.configurator.configure( pjob.getContext());

@@ -1,5 +1,6 @@
 package org.daisy.pipeline.job;
 
+import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.script.BoundXProcScript;
 
 import com.google.common.base.Optional;
@@ -55,6 +56,7 @@ public interface JobManager {
                 public JobBuilder isMapping(boolean mapping);
                 public JobBuilder withResources(ResourceCollection resources);
                 public JobBuilder withNiceName(String niceName);
+                public JobBuilder withPriority(Priority priority);
                 public Optional<Job> build();
         }
 }
