@@ -9,5 +9,5 @@ public interface ExecutionQueue {
 
         public void cancel(JobId id);
 
-        public Collection<PrioritizedJob> getQueue();
+        public Collection<PrioritizedJob> asCollection();
 }
