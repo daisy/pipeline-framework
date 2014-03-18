@@ -165,7 +165,7 @@ public class DefaultJobExecutionService implements JobExecutionService,
         }
 
         @Override
-        public Collection<PrioritizedJob> getQueue() {
+        public Collection<PrioritizedJob> asCollection() {
 
                 return Collections2.transform(this.getExecutor().asOrderedCollection(),
                                 new Function<PrioritizableRunnable, PrioritizedJob>() {
