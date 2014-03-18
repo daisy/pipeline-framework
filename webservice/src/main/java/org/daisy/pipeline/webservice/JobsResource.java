@@ -373,7 +373,7 @@ public class JobsResource extends AuthenticatedResource {
                 }
                 boolean mapping=webservice().getConfiguration().isLocalFS();
                 Optional<Job> newJob= jobMan.newJob(bound).isMapping(mapping).withNiceName(niceName)
-                        .withResources(resourceCollection).build();
+                        .withPriority(priority).withResources(resourceCollection).build();
                 if(!newJob.isPresent()){
                         return Optional.absent();
                 }
