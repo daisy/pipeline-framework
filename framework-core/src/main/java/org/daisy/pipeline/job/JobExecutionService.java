@@ -1,5 +1,8 @@
 package org.daisy.pipeline.job;
 
+import java.util.Collection;
+
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -13,4 +16,7 @@ public interface JobExecutionService {
 	 * @param job the job
 	 */
 	public void submit(Job job);
+
+        
 }
+

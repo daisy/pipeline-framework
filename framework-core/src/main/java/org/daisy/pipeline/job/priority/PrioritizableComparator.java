@@ -6,12 +6,12 @@ import java.util.Comparator;
 /**
  * Comparator for PrioritizedRunnables based on their priorities
  */
-public final class PrioritizedComparator implements
-                Comparator<PrioritizedRunnable> {
+public final class PrioritizableComparator implements
+                Comparator<PrioritizableRunnable> {
 
        
         @Override
-        public int compare(PrioritizedRunnable arg0, PrioritizedRunnable arg1) {
+        public int compare(PrioritizableRunnable arg0, PrioritizableRunnable arg1) {
                 return Double.compare(arg0.getPriority(),arg1.getPriority());
         }
         

@@ -23,6 +23,7 @@ public class Job implements RuntimeConfigurator.EventBusable{
         private static final Logger logger = LoggerFactory
                         .getLogger(Job.class);
 
+
         public static class  JobBuilder{
                 protected JobContext ctxt;
                 protected EventBus bus;
@@ -234,4 +235,10 @@ public class Job implements RuntimeConfigurator.EventBusable{
                 return JobUtils.checkValidPort(this.getContext().getResults());
         }
 
+        @Override
+        public boolean equals(Object object) {
+                return (object instanceof Job)   && 
+                        this.getId().equals(((Job) object).getId());
+        }
+        
 }

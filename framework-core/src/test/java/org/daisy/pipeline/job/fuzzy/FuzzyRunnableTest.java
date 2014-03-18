@@ -20,15 +20,11 @@ import com.google.common.base.Function;
 public class FuzzyRunnableTest   {
 
         @Mock private InferenceEngine engine;
-        FuzzyRunnable runnable;
+        @Mock Runnable runnable;
+        FuzzyRunnable fuzzyRunnable;
         @Before
         public void setUp(){
-                runnable = spy(new FuzzyRunnable(engine) {
-
-                        @Override
-                        public void run() {
-
-                        }
+                fuzzyRunnable = spy(new FuzzyRunnable(runnable,engine) {
 
                         @Override
                         public double[] getPriorities() {
@@ -53,11 +49,11 @@ public class FuzzyRunnableTest   {
         public void getScore(){
                 double vals[]= new double[]{1.0};
                 when(engine.getScore(anyDouble())).thenReturn(1.0);
-                when(runnable.getPriorities()).thenReturn(vals);
+                when(fuzzyRunnable.getPriorities()).thenReturn(vals);
 
-                runnable.getScore();
+                fuzzyRunnable.getScore();
                 verify(engine,times(1)).getScore(0.0,1.0);
-                runnable.getScore();
+                fuzzyRunnable.getScore();
                 verify(engine,times(1)).getScore(0.0,1.0);
 
         }
@@ -66,12 +62,12 @@ public class FuzzyRunnableTest   {
         public void setDirty(){
                 double vals[]= new double[]{1.0};
                 when(engine.getScore(anyDouble())).thenReturn(1.0);
-                when(runnable.getPriorities()).thenReturn(vals);
+                when(fuzzyRunnable.getPriorities()).thenReturn(vals);
 
-                runnable.getScore();
+                fuzzyRunnable.getScore();
                 verify(engine,times(1)).getScore(0.0,1.0);
-                runnable.markDirty();
-                runnable.getScore();
+                fuzzyRunnable.markDirty();
+                fuzzyRunnable.getScore();
                 verify(engine,times(2)).getScore(0.0,1.0);
 
         }
@@ -80,8 +76,8 @@ public class FuzzyRunnableTest   {
         public void updateRelativeTime(){
                 double vals[]= new double[]{1.0};
                 when(engine.getScore(anyDouble())).thenReturn(1.0);
-                when(runnable.getPriorities()).thenReturn(vals);
-                when(runnable.getTimestamp()).thenReturn(0L);
+                when(fuzzyRunnable.getPriorities()).thenReturn(vals);
+                when(fuzzyRunnable.getTimestamp()).thenReturn(0L);
 
                 Function<Long,Double> normaliser= new Function<Long,Double>(){
 
@@ -90,10 +86,10 @@ public class FuzzyRunnableTest   {
                                                 return 0.5;
                                         }
                 };
-                runnable.getScore();
+                fuzzyRunnable.getScore();
                 verify(engine,times(1)).getScore(0.0,1.0);
-                runnable.setRelativeWaitingTime(normaliser);
-                runnable.getScore();
+                fuzzyRunnable.setRelativeWaitingTime(normaliser);
+                fuzzyRunnable.getScore();
                 verify(engine,times(1)).getScore(0.5,1.0);
 
         }

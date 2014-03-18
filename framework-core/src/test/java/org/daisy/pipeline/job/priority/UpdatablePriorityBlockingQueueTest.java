@@ -14,9 +14,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UpdatablePriorityBlockingQueueTest{
-       @Mock private PrioritizedRunnable  task1; 
-       @Mock private PrioritizedRunnable  task2; 
-       @Mock private PrioritizedRunnable  task3; 
+       @Mock private PrioritizableRunnable  task1; 
+       @Mock private PrioritizableRunnable  task2; 
+       @Mock private PrioritizableRunnable  task3; 
 
        @Before
        public void setUp(){
@@ -184,7 +184,7 @@ public class UpdatablePriorityBlockingQueueTest{
                queue.offer(task1);
                queue.offer(task2);
                queue.offer(task3);
-               Collection<PrioritizedRunnable> col=queue.asOrderedCollection();
+               Collection<PrioritizableRunnable> col=queue.asOrderedCollection();
 
                Assert.assertEquals("First is task 2",task2,col.toArray()[0]);
                Assert.assertEquals("Second is task 1",task1,col.toArray()[1]);

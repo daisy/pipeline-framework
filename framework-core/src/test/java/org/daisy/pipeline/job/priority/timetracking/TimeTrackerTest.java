@@ -1,6 +1,6 @@
 package org.daisy.pipeline.job.priority.timetracking;
 
-import org.daisy.pipeline.job.priority.PrioritizedRunnable;
+import org.daisy.pipeline.job.priority.PrioritizableRunnable;
 import org.daisy.pipeline.job.priority.UpdatablePriorityBlockingQueue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,9 +10,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TimeTrackerTest {
-        @Mock PrioritizedRunnable r1;
-        @Mock PrioritizedRunnable r2;
-        @Mock PrioritizedRunnable r3;
+        @Mock PrioritizableRunnable r1;
+        @Mock PrioritizableRunnable r2;
+        @Mock PrioritizableRunnable r3;
        
         @Test
         public void maximum(){

@@ -9,7 +9,7 @@ import com.google.common.base.Function;
  * This object also has a timestamp and relative waiting time.
  *
  */
-public abstract class PrioritizedRunnable implements Runnable{
+public abstract class PrioritizableRunnable implements Prioritizable,Runnable{
 
         /**
          * Instant when this runnable was created.
@@ -26,20 +26,24 @@ public abstract class PrioritizedRunnable implements Runnable{
          */
         protected double relativeWaitingTime;
 
+        private Runnable runnable;
 
         /**
          * Creats the object and timestamps it.
          * {@inheritDoc}
          * @see Object#PrioritizedRunnable()
          */
-        public PrioritizedRunnable(){
-                timestamp=System.nanoTime();
+        public PrioritizableRunnable(Runnable runnable){
+                this.timestamp=System.nanoTime();
+                this.runnable=runnable;
         }
 
-       /**
-        * Returns the priority.
-        */
-        public abstract double getPriority();
+        @Override
+        public void run() {
+                this.runnable.run();
+
+        }
+
 
 
         /** 
@@ -50,6 +54,7 @@ public abstract class PrioritizedRunnable implements Runnable{
         /**
          * @return the timestamp
          */
+        @Override
         public long getTimestamp() {
                 return timestamp;
         }
