@@ -10,6 +10,8 @@ element job {
 
 	& attribute status { job.status }
 
+	& attribute priority { job.priority}
+
 	& script?
 
 		& element messages {
@@ -45,5 +47,7 @@ element result{
 }
 
 job.status = "IDLE" | "RUNNING" | "DONE" | "ERROR" | "VALIDATION_FAIL"
+
+job.priority= "high" | "medium" | "low" 
 
 message.level = "WARNING" | "ERROR" | "INFO" | "DEBUG" | "TRACE"
