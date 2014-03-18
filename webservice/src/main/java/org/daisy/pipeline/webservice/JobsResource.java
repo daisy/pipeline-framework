@@ -29,6 +29,7 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.ResourceCollection;
 import org.daisy.pipeline.job.ZipResourceContext;
+import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
@@ -312,11 +313,24 @@ public class JobsResource extends AuthenticatedResource {
                         throws LocalInputException {
 
                 Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
+                Priority priority=Priority.MEDIUM;
                 String niceName="";
+                //get nice name
                 NodeList elems=doc.getElementsByTagName("nicename"); 
                 if(elems.getLength()!=0)
                         niceName=elems.item(0).getTextContent();
                 logger.debug(String.format("Job's nice name: %s",niceName));
+
+                //get priority
+                elems=doc.getElementsByTagName("priority"); 
+                if(elems.getLength()!=0){
+                        String prioString=elems.item(0).getTextContent();
+                        priority=Priority.valueOf(prioString.toUpperCase());
+                }
+                
+                logger.debug(String.format("Jobs priority: %s",priority));
+
+
                 // TODO eventually we might want to have an href-script ID lookup table
                 // but for now, we'll get the script ID from the last part of the URL
                 String scriptId = scriptElm.getAttribute("href");

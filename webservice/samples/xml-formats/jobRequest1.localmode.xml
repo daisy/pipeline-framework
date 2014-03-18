@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
     <script href='http://example.org/ws/scripts/dtbook-to-zedai'/>
+    <priority>high</priority>
     <input name='source'>
         <!-- file @src is referring to a file inside a separate folder or archive -->
         <item value='./dtbook-basic.xml'/>
