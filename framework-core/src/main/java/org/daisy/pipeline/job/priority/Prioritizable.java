@@ -10,4 +10,6 @@ public interface Prioritizable  {
         * Returns the timestamp.
         */
         public long getTimestamp();
+
+        public double getRelativeWaitingTime();
 }

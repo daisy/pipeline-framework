@@ -59,4 +59,6 @@ public interface JobManager {
                 public JobBuilder withPriority(Priority priority);
                 public Optional<Job> build();
         }
+
+        public ExecutionQueue getExecutionQueue();
 }
