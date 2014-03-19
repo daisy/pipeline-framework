@@ -17,19 +17,19 @@ public class TimeTrackerTest {
         @Test
         public void maximum(){
                 TimeTracker tracker = Mockito.spy(new TimeTracker(3,new UpdatablePriorityBlockingQueue(),TimeFunctions.newLinearTimeFunctionFactory())); 
-                Mockito.doNothing().when(tracker).update();
-                tracker.executing(r1);
-                tracker.executing(r2);
-                tracker.executing(r3);
-                Mockito.verify(tracker,Mockito.times(1)).update();
+                Mockito.doNothing().when(tracker).update(Mockito.any(long[].class));
+                tracker.executing();
+                tracker.executing();
+                tracker.executing();
+                Mockito.verify(tracker,Mockito.times(1)).update(Mockito.any(long[].class));
         }
 
         @Test
         public void noUpdate(){
                 TimeTracker tracker = Mockito.spy(new TimeTracker(3,new UpdatablePriorityBlockingQueue(),TimeFunctions.newLinearTimeFunctionFactory())); 
-                Mockito.doNothing().when(tracker).update();
-                tracker.executing(r1);
-                tracker.executing(r2);
-                Mockito.verify(tracker,Mockito.times(0)).update();
+                Mockito.doNothing().when(tracker).update(Mockito.any(long[].class));
+                tracker.executing();
+                tracker.executing();
+                Mockito.verify(tracker,Mockito.times(0)).update(Mockito.any(long[].class));
         }
 }

@@ -1,5 +1,7 @@
 package org.daisy.pipeline.job.priority.timetracking;
 
+import java.util.Collection;
+
 import org.daisy.pipeline.job.priority.PrioritizableRunnable;
 import org.daisy.pipeline.job.priority.UpdatablePriorityBlockingQueue;
 import org.slf4j.Logger;
@@ -15,17 +17,13 @@ import com.google.common.base.Function;
  */
 public class TimeTracker{
         /**
-         * Buffer of waiting times.
-         */
-        private long[] times;
-        /**
          *Buffer possition
          */
         private int counter=0;
         /**
          *Size of the buffer
          */
-        final private int size;
+        final private int frequency;
         /**
          *Execution queue to be updated peridically
          */
@@ -46,28 +44,29 @@ public class TimeTracker{
          * @param size
          * @param queue
          */
-        public TimeTracker(int size, UpdatablePriorityBlockingQueue queue, TimeFunctionFactory functionFactory) {
-                this.size = size;
+        public TimeTracker(int frequency, UpdatablePriorityBlockingQueue queue, TimeFunctionFactory functionFactory) {
+                this.frequency= frequency;
                 this.queue = queue;
                 this.functionFactory=functionFactory;
-                this.times= new long[size];
         }
 
         /**
          * Stores the waiting time of the given runnable in the buffer
          * if the buffer is full the queue is updated.
          * <br/>
-         * This function is threadsafe
-         * @param runnable
          */
-        public synchronized void executing(PrioritizableRunnable runnable){
-                //update counter and buff
-                this.times[this.counter]=runnable.getTimestamp();
+        public synchronized void executing(){
+                //update counter 
                 this.counter++;
-                //if the buffer if full 
-                //send a runnable to update the queue
-                if( this.counter == size){
-                        this.update();                                 
+                if( this.counter == this.frequency){
+                        //get the waiting times
+                        Collection<PrioritizableRunnable> waiting=this.queue.asCollection();
+                        long times[] = new long[waiting.size()]; 
+                        int i=0;
+                        for( PrioritizableRunnable r:waiting){
+                                times[i++]=r.getTimestamp(); 
+                        }
+                        this.update(times);                                 
                         this.counter=0;
                 }
         }
@@ -75,10 +74,11 @@ public class TimeTracker{
         /**
          * Updates the queue 
          */
-        void update(){
+        void update(long []times){
                 logger.debug("Updating queue");
+
                 //new stats
-                TimeStats stats= new TimeStats(System.nanoTime(),TimeTracker.this.times);
+                TimeStats stats= new TimeStats(System.nanoTime(),times);
                 //get a new updater function
                 final Function<Long,Double> timeUpdater=TimeTracker.this.functionFactory.getFunction(stats);
                 //Let the queue do the work

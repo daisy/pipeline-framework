@@ -49,17 +49,17 @@ public class TimeTrackingTest {
         @Test 
         public void trackerNotFull(){
                 TimeTracker tracker=new TimeTracker(3,queue, functionFactory);
-                tracker.executing(r1);
-                tracker.executing(r2);
+                tracker.executing();
+                tracker.executing();
                 verify(queue,times(0)).update(any(Function.class));
         }
 
         @Test 
         public void trackerUpdating(){
                 TimeTracker tracker=new TimeTracker(3,queue, functionFactory);
-                tracker.executing(r1);
-                tracker.executing(r2);
-                tracker.executing(r3);
+                tracker.executing();
+                tracker.executing();
+                tracker.executing();
                 verify(queue,times(1)).update(any(Function.class));
         }
 
@@ -67,12 +67,12 @@ public class TimeTrackingTest {
         public void trackerAfterUpdatingNotFull(){
                 //given a tracker of size 3 with two already executed tasks
                 TimeTracker tracker=new TimeTracker(3,queue, functionFactory);
-                tracker.executing(r1);
-                tracker.executing(r2);
-                tracker.executing(r3);
+                tracker.executing();
+                tracker.executing();
+                tracker.executing();
                 verify(queue,times(1)).update(any(Function.class));
-                tracker.executing(r1);
-                tracker.executing(r2);
+                tracker.executing();
+                tracker.executing();
                 verify(queue,times(1)).update(any(Function.class));
                 //
         }
@@ -81,13 +81,13 @@ public class TimeTrackingTest {
         public void trackerAfterUpdatingFull(){
                 //given a tracker of size 3 with two already executed tasks
                 TimeTracker tracker=new TimeTracker(3,queue, functionFactory);
-                tracker.executing(r1);
-                tracker.executing(r2);
-                tracker.executing(r3);
+                tracker.executing();
+                tracker.executing();
+                tracker.executing();
                 verify(queue,times(1)).update(any(Function.class));
-                tracker.executing(r1);
-                tracker.executing(r2);
-                tracker.executing(r3);
+                tracker.executing();
+                tracker.executing();
+                tracker.executing();
                 verify(queue,times(2)).update(any(Function.class));
                 //
         }
@@ -108,9 +108,9 @@ public class TimeTrackingTest {
                 TimeTracker tracker=new TimeTracker(3,queue, functionFactory);
 
                 //when executing to the maximum size
-                tracker.executing(r1);
-                tracker.executing(r2);
-                tracker.executing(r3);
+                tracker.executing();
+                tracker.executing();
+                tracker.executing();
 
                 //the relative times have to be updated 
                 verify(r1,times(1)).setRelativeWaitingTime(any(Function.class));

@@ -19,6 +19,10 @@ public class LinearTimeNormalizer implements TimeFunctionFactory {
 
                         @Override
                         public Double apply(Long l) {
+                                long referencedTime=stats.reference(l);
+                                if(referencedTime<minMax[0]){
+                                        return 0.0;
+                                }
                                 return ((double)(stats.reference(l)-minMax[0]))/((double)minMax[1]-minMax[0]);
                         }};
         }
