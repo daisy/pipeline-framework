@@ -51,7 +51,7 @@ public class PriorityThreadPoolExecutor extends ThreadPoolExecutor
         protected void beforeExecute(Thread t, Runnable r) {
                 logger.debug("before execution "+this.queue.hashCode()+" "+this.queue.size());
                 super.beforeExecute(t, r);
-                this.tracker.executing((PrioritizableRunnable)r);
+                this.tracker.executing();
         }
 
         /*
