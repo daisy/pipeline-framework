@@ -77,11 +77,4 @@ public class PriorityThreadPoolExecutor extends ThreadPoolExecutor
                 return this.queue.asCollection();
         }
 
-        @Override
-        public void execute(Runnable arg0) {
-                logger.debug("++++++++++    Exectute 1: "+this.queue.hashCode()+" "+this.queue.size());
-                super.execute(arg0);
-                logger.debug("++++++++++    Exectute 2: "+this.queue.hashCode()+" "+this.queue.size());
-        }
-
 }

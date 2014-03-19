@@ -25,6 +25,7 @@ public class Routes {
 	public static final String CLIENT_ROUTE = "/admin/clients/{id}";
 	public static final String PROPERTIES_ROUTE = "/admin/properties";
 	public static final String SIZES_ROUTE = "/admin/sizes";
+	public static final String QUEUE_ROUTE= "/admin/queue";
 	
 	
 	

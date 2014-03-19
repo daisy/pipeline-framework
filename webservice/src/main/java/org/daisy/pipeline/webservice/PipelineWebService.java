@@ -12,6 +12,7 @@ import org.daisy.common.properties.PropertyTracker;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.ExecutionQueue;
 import org.daisy.pipeline.job.JobContextFactory;
+import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.job.priority.Priority;
@@ -63,7 +64,7 @@ public class PipelineWebService extends Application {
 
         private Component component;
 
-        private ExecutionQueue executionQueue;
+        private JobExecutionService executionQueue;
         /* (non-Javadoc)
          * @see org.restlet.Application#createInboundRoot()
          */
@@ -97,6 +98,7 @@ public class PipelineWebService extends Application {
                 router.attach(Routes.HALT_ROUTE, HaltResource.class);
                 router.attach(Routes.PROPERTIES_ROUTE, PropertiesResource.class  );
                 router.attach(Routes.SIZES_ROUTE, SizesResource.class  );
+                router.attach(Routes.QUEUE_ROUTE, QueueResource.class  );
                 return router;
         }
 
@@ -297,11 +299,11 @@ public class PipelineWebService extends Application {
         /**
          * @param ExecutionQueue 
          */
-        public void setExecutionQueue(ExecutionQueue executionQueue) {
+        public void setExecutionQueue(JobExecutionService executionQueue) {
                 this.executionQueue= executionQueue;
         }
 
-        public ExecutionQueue getExecutionQueue() {
+        public JobExecutionService getExecutionQueue() {
                 return this.executionQueue;
         }
 
