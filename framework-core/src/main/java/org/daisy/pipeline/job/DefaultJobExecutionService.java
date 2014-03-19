@@ -19,8 +19,8 @@ import com.google.common.collect.Collections2;
 /**
  * DefaultJobExecutionService is the defualt way to execute jobs
  */
-public class DefaultJobExecutionService implements JobExecutionService,
-                ExecutionQueue {
+public class DefaultJobExecutionService implements JobExecutionService
+                {
 
         /** The Constant logger. */
         private static final Logger logger = LoggerFactory
@@ -32,7 +32,7 @@ public class DefaultJobExecutionService implements JobExecutionService,
         private PriorityThreadPoolExecutor executor = PriorityThreadPoolExecutor
                         .newFixedSizeThreadPoolExecutor(
                                         2,
-                                        TimeTrackerFactory.newFactory(5,
+                                        TimeTrackerFactory.newFactory(3,
                                                         TimeFunctions.newLinearTimeFunctionFactory()));
 
         /** Creates fuzzy jobs out of jobs and runnables */
@@ -167,6 +167,7 @@ public class DefaultJobExecutionService implements JobExecutionService,
         @Override
         public Collection<PrioritizedJob> asCollection() {
 
+                logger.debug("In the service queue size "+this.getExecutor().asOrderedCollection().size());
                 return Collections2.transform(this.getExecutor().asOrderedCollection(),
                                 new Function<PrioritizableRunnable, PrioritizedJob>() {
 

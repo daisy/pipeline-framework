@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.daisy.pipeline.job.priority.timetracking.TimeTracker;
 import org.daisy.pipeline.job.priority.timetracking.TimeTrackerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Thread pool excutor that the underlying queue supports the PriorityService interface
  * methods. It also allows to perform automatic priority updates through a time tracker .
@@ -14,6 +16,7 @@ public class PriorityThreadPoolExecutor extends ThreadPoolExecutor
                 {
         private UpdatablePriorityBlockingQueue queue;
         private TimeTracker tracker;
+        private static final Logger logger = LoggerFactory.getLogger(PriorityThreadPoolExecutor.class);
 
         /**
          * Creates a new instance this class, see {@link java.util.concurrent.ThreadPoolExecutor}.
@@ -46,6 +49,7 @@ public class PriorityThreadPoolExecutor extends ThreadPoolExecutor
         
         @Override
         protected void beforeExecute(Thread t, Runnable r) {
+                logger.debug("before execution "+this.queue.hashCode()+" "+this.queue.size());
                 super.beforeExecute(t, r);
                 this.tracker.executing((PrioritizableRunnable)r);
         }
@@ -65,11 +69,19 @@ public class PriorityThreadPoolExecutor extends ThreadPoolExecutor
         }
 
         public Collection<PrioritizableRunnable> asOrderedCollection() {
+                logger.debug("In the pool "+this.queue.hashCode()+" "+this.queue.size());
                 return this.queue.asOrderedCollection();
         }
 
         public Collection<PrioritizableRunnable> asCollection(){
                 return this.queue.asCollection();
+        }
+
+        @Override
+        public void execute(Runnable arg0) {
+                logger.debug("++++++++++    Exectute 1: "+this.queue.hashCode()+" "+this.queue.size());
+                super.execute(arg0);
+                logger.debug("++++++++++    Exectute 2: "+this.queue.hashCode()+" "+this.queue.size());
         }
 
 }

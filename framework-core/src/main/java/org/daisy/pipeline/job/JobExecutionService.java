@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * The Interface JobExecutionService.
  */
-public interface JobExecutionService {
+public interface JobExecutionService extends ExecutionQueue{
 
 	/**
 	 * Submits a new job to execute.

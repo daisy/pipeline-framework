@@ -162,4 +162,9 @@ public class DefaultJobManager implements JobManager {
 
         }
 
+        @Override
+        public ExecutionQueue getExecutionQueue() {
+                return this.executionService;
+        }
+
 }
