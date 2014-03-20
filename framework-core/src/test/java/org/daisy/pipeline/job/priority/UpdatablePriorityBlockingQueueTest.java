@@ -1,6 +1,5 @@
 package org.daisy.pipeline.job.priority;
 
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collection;
@@ -40,137 +39,70 @@ public class UpdatablePriorityBlockingQueueTest{
        }
 
        @Test
-       public void update(){
-               when(task1.getPriority()).thenReturn(-5.0).thenReturn(-20.0);
-               when(task2.getPriority()).thenReturn(-10.0).thenReturn(-10.0);
-               when(task3.getPriority()).thenReturn(-1.0).thenReturn(-5.0);
-              
-               UpdatablePriorityBlockingQueue queue = 
-                       new UpdatablePriorityBlockingQueue(); 
-               queue.offer(task1);
-               queue.offer(task2);
-               queue.offer(task3);
-               queue.update();
-
-               Assert.assertEquals("First is task 1",task1,queue.poll());
-               Assert.assertEquals("Second is task 2",task2,queue.poll());
-               Assert.assertEquals("Third is task 3",task3,queue.poll());
-       }
-       @Test
-       public void moveUp(){
+       public void swap(){
                when(task1.getPriority()).thenReturn(-5.0);
                when(task2.getPriority()).thenReturn(-10.0);
-               when(task3.getPriority()).thenReturn(-1.0).thenReturn(-7.5);
 
-               when(task1.toString()).thenReturn("task1");
-               when(task2.toString()).thenReturn("task 2");
-               when(task3.toString()).thenReturn("task 3");
-              
                UpdatablePriorityBlockingQueue queue = 
                        new UpdatablePriorityBlockingQueue(); 
                queue.offer(task1);
                queue.offer(task2);
-               queue.offer(task3);
+               queue.swap(task1,task2);
 
-               queue.moveUp(task3);
-               verify(task3).forcePriority(-7.5); 
-               Assert.assertEquals("First is task 2",task2,queue.poll());
-               Assert.assertEquals("Second is task 3",task3,queue.poll());
-               Assert.assertEquals("Third is task 1",task1,queue.poll());
+               Assert.assertEquals("First is task 1",task1,((ForwardingPrioritableRunnable)queue.poll()).getDelegate());
+               Assert.assertEquals("Second is task 2",task2,((ForwardingPrioritableRunnable)queue.poll()).getDelegate());
        }
 
        @Test
-       public void moveUpFirst(){
+       public void swapNonExistent(){
                when(task1.getPriority()).thenReturn(-5.0);
                when(task2.getPriority()).thenReturn(-10.0);
                when(task3.getPriority()).thenReturn(-1.0);
-              
+
                UpdatablePriorityBlockingQueue queue = 
                        new UpdatablePriorityBlockingQueue(); 
                queue.offer(task1);
                queue.offer(task2);
-               queue.offer(task3);
-
-               queue.moveUp(task2);
+               queue.swap(task1,task3);
 
                Assert.assertEquals("First is task 2",task2,queue.poll());
                Assert.assertEquals("Second is task 1",task1,queue.poll());
-               Assert.assertEquals("Third is task 3",task3,queue.poll());
-       }
-
-       @Test
-       public void moveUpSecond(){
-               when(task1.getPriority()).thenReturn(-5.0).thenReturn(-11.0);
-               when(task2.getPriority()).thenReturn(-10.0);
-               when(task3.getPriority()).thenReturn(-1.0);
-
-               UpdatablePriorityBlockingQueue queue = 
-                       new UpdatablePriorityBlockingQueue(); 
+           
                queue.offer(task1);
                queue.offer(task2);
-               queue.offer(task3);
+               queue.swap(task3,task2);
 
-               queue.moveUp(task1);
-               verify(task1).forcePriority(-11.0); 
-               Assert.assertEquals("First is task 1",task1,queue.poll());
-               Assert.assertEquals("Second is task 2",task2,queue.poll());
-               Assert.assertEquals("Third is task 3",task3,queue.poll());
-       }
-
-       @Test
-       public void moveDown(){
-               when(task1.getPriority()).thenReturn(-5.0);
-               when(task2.getPriority()).thenReturn(-10.0).thenReturn(-3.0);
-               when(task3.getPriority()).thenReturn(-1.0);
-
-               UpdatablePriorityBlockingQueue queue = 
-                       new UpdatablePriorityBlockingQueue(); 
-               queue.offer(task1);
-               queue.offer(task2);
-               queue.offer(task3);
-
-               queue.moveDown(task2);
-               verify(task2).forcePriority(-3.0); 
-               Assert.assertEquals("First is task 1",task1,queue.poll());
-               Assert.assertEquals("Second is task 2",task2,queue.poll());
-               Assert.assertEquals("Third is task 3",task3,queue.poll());
-       }
-
-       @Test
-       public void moveSecondDown(){
-               when(task1.getPriority()).thenReturn(-5.0).thenReturn(0.0);
-               when(task2.getPriority()).thenReturn(-10.0);
-               when(task3.getPriority()).thenReturn(-1.0);
-
-               UpdatablePriorityBlockingQueue queue = 
-                       new UpdatablePriorityBlockingQueue(); 
-               queue.offer(task1);
-               queue.offer(task2);
-               queue.offer(task3);
-
-               queue.moveDown(task1);
-               verify(task2).forcePriority(0.0); 
-               Assert.assertEquals("First is task 2",task2,queue.poll());
-               Assert.assertEquals("Second is task 3",task3,queue.poll());
-               Assert.assertEquals("Third is task 1",task1,queue.poll());
-       }
-
-       @Test
-       public void moveLastDown(){
-               when(task1.getPriority()).thenReturn(-5.0);
-               when(task2.getPriority()).thenReturn(-10.0);
-               when(task3.getPriority()).thenReturn(-1.0);
-
-               UpdatablePriorityBlockingQueue queue = 
-                       new UpdatablePriorityBlockingQueue(); 
-               queue.offer(task1);
-               queue.offer(task2);
-               queue.offer(task3);
-
-               queue.moveDown(task3);//nothing happens
                Assert.assertEquals("First is task 2",task2,queue.poll());
                Assert.assertEquals("Second is task 1",task1,queue.poll());
+       }
+
+       @Test
+       public void swapNoNestingImpersonation(){
+               when(task1.getPriority()).thenReturn(-5.0);
+               when(task2.getPriority()).thenReturn(-10.0);
+               when(task3.getPriority()).thenReturn(-1.0);
+
+               UpdatablePriorityBlockingQueue queue = 
+                       new UpdatablePriorityBlockingQueue(); 
+               queue.offer(task1);
+               queue.offer(task2);
+               queue.offer(task3);
+               queue.swap(task1,task2);
+
+               ForwardingPrioritableRunnable first=((ForwardingPrioritableRunnable)queue.poll());
+               Assert.assertEquals("First is task 1",task1,first.getDelegate());
+               Assert.assertEquals("Second is task 2",task2,((ForwardingPrioritableRunnable)queue.poll()).getDelegate());
                Assert.assertEquals("Third is task 3",task3,queue.poll());
+
+               queue.offer(first);
+               queue.offer(task2);
+               queue.offer(task3);
+               queue.swap(task2,first);
+
+               Assert.assertEquals("First is task 1",task1,((ForwardingPrioritableRunnable)queue.poll()).getDelegate());
+               Assert.assertEquals("Second is task 2",task2,((ForwardingPrioritableRunnable)queue.poll()).getDelegate());
+               Assert.assertEquals("Third is task 3",task3,queue.poll());
+           
        }
 
        @Test

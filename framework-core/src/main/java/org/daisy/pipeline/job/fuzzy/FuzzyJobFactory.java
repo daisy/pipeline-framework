@@ -1,28 +1,38 @@
 package org.daisy.pipeline.job.fuzzy;
 
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.PrioritizedJob;
+import org.daisy.pipeline.job.priority.ForwardingPrioritableRunnable;
+import org.daisy.pipeline.job.priority.PrioritizableRunnable;
+
+import com.google.common.base.Supplier;
 
 public class FuzzyJobFactory {
         
-        private InferenceEngine engine;
-        /**
-         *
-         */
-        protected FuzzyJobFactory(InferenceEngine engine) {
-                this.engine=engine;
+
+
+        public static PrioritizableRunnable newFuzzyRunnable(final Job job,Runnable runnable){
+                return new PrioritizableRunnable(runnable,
+                                new FuzzyPriorityCalculator(ENGINE,
+                                        new Supplier<double[]>() {
+                                                @Override
+                                                public double[] get() {
+                                                        return new double[]{
+                                                                job.getContext().getClient().getPriority().asDouble(),
+                                                                job.getPriority().asDouble()};
+                                                }
+
+                                        }));
+
+
         }
 
-        public static FuzzyJobFactory newFuzzyJobFactory(){
-                InferenceEngine engine = buildEngine();
-                return new FuzzyJobFactory(engine);
-        }
 
 
-        public FuzzyJobRunnable newFuzzyJob(Job job,Runnable runnable){
-                return new FuzzyJobRunnable(job,runnable,engine);
-        }
 
-        static InferenceEngine buildEngine() {
+
+        static final InferenceEngine ENGINE;
+        static{
                 //The weight values are set so that there will be no starvation
                 //a very old task with low prios will exectute a brand new task with the higest prios
                 //time is the real fuzzy deal here
@@ -41,12 +51,11 @@ public class FuzzyJobFactory {
                 jobPriority.add(new FuzzySet("medium priority",20,MembershipFunctions.newEqualsFunction(0.5)));
                 jobPriority.add(new FuzzySet("high priority",30,MembershipFunctions.newEqualsFunction(1.0)));
         
-                InferenceEngine engine=new InferenceEngine();
+                ENGINE=new InferenceEngine();
                 //add the fuzzy variables
-                engine.add(time);
-                engine.add(clientPriority);
-                engine.add(jobPriority);
+                ENGINE.add(time);
+                ENGINE.add(clientPriority);
+                ENGINE.add(jobPriority);
 
-                return engine;
         }
 }

@@ -6,9 +6,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ForwardingBlockingQueue;
 import com.google.common.util.concurrent.Monitor;
@@ -20,15 +19,14 @@ import com.google.common.util.concurrent.Monitor;
  * <h2>Updating the priorities</h2>
  * <ul>
  *      <li>{@link #update(Function<Void,PriorityBlockingQueue> function)}:  Updates the priorities by applying the given function sequentually to the different priorities. The function has update the {@link PrioritizableRunnable} by reference. This function is threadsafe</li>
- *      <li>{@link #moveUp(PrioritizableRunnable runnable)} allows to move up in the queue the given runnable (or a runnable inside the queue that is naturally equals to the paramater)</li>
- *      <li>{@link #moveDown(PrioritizableRunnable runnable)} allows to move up in the queue the given runnable (or a runnable inside the queue that is naturally equals to the paramater)</li>
+ *      <li>{@link #swap(PrioritizableRunnable runnable)} allows to swap two elements in the queue</li>
  *
  * </ul>
  * This class is threadsafe
  * @version 1.0
  */
 public class UpdatablePriorityBlockingQueue extends
-                ForwardingBlockingQueue<Runnable> {
+ForwardingBlockingQueue<Runnable> {
 
 
         /**
@@ -117,97 +115,39 @@ public class UpdatablePriorityBlockingQueue extends
         private void doUpdate() {
                 //re-add the elements of the queue to re-sort them
                 Collection<PrioritizableRunnable> aux = ImmutableList
-                                .copyOf(this.delegate);
+                        .copyOf(this.delegate);
                 this.delegate.clear();
                 this.delegate.addAll(aux);
         }
 
         /**
-         * Moves the task (or an object naturally equal to the task) up in queue
+         * Swap the priorities of both PrioritizableRunnable to change the 
+         * order in the queue
          * @param runnable
          */
-        public synchronized void moveUp(PrioritizableRunnable runnable) {
-                //first element doesn't move up
-                if (runnable.equals(delegate.element())) {
-                        return;
-                }
+        public synchronized void swap(PrioritizableRunnable runnable1,PrioritizableRunnable runnable2) {
                 this.enterUpdate();
-                //get element and previous elements
-                PrioritizableRunnable iter, prev, prevToPrev;
-                iter = prev = prevToPrev = null;
-                //no random access to queues...
-                for (PrioritizableRunnable p : this.delegate) {
-                        prevToPrev = prev;
-                        prev = iter;
-                        iter = p;
-                        if (p.equals(runnable)) {//done
-                                break;
-                        }
-
-                }
-                double forcedPriority = 0;
-                //not found
-                if (!iter.equals(runnable)) {
+                //one of them doesn't exsist
+                if (!this.contains(runnable1) ||  !this.contains(runnable2)){
+                        this.leaveUpdate();
                         return;
-                } else if (prevToPrev == null) {//force the priority upper than next
-                        forcedPriority = prev.getPriority() - 1;
-                } else { //put it before prio2+(prio2-prio1)/2
-                        forcedPriority = prev.getPriority()
-                                        + (prevToPrev.getPriority() - prev.getPriority()) / 2;
                 }
-                iter.forcePriority(forcedPriority);
+                this.delegate().remove(runnable1);
+                this.delegate().remove(runnable2);
+                //avoid previous impersonations
+                if( runnable1 instanceof ImpersonatingPrioritizableRunnable){
+                        runnable1=((ImpersonatingPrioritizableRunnable)runnable1).getDelegate();
+                }
+                if( runnable2 instanceof ImpersonatingPrioritizableRunnable){
+                        runnable2=((ImpersonatingPrioritizableRunnable)runnable2).getDelegate();
+                }
+                this.delegate().offer(new ImpersonatingPrioritizableRunnable(runnable1,runnable2));
+                this.delegate().offer(new ImpersonatingPrioritizableRunnable(runnable2,runnable1));
+
                 this.leaveUpdate();
 
         }
 
-        /**
-         * Moves the task (or an object naturally equal to the task) down in queue
-         * @param runnable
-         */
-        public synchronized void moveDown(PrioritizableRunnable runnable) {
-                this.enterUpdate();
-                //get element and next 2 elements
-                PrioritizableRunnable iter, next, nextToNext;
-                iter = next = nextToNext = null;
-                //no random access to queues...
-                for (PrioritizableRunnable p : this.delegate) {
-                        iter = next;
-                        next = nextToNext;
-                        nextToNext = p;
-                        if (iter != null && iter.equals(runnable)) {
-                                break;
-                        }
-                }
-
-                double forcedPriority = 0;
-                //not found
-                if (iter != null && iter.equals(runnable)) {
-                        //iter->next->nextToNext
-                        //=> iter.p= next.p+(next.p-nextToNext.p/2)
-                        forcedPriority = next.getPriority()
-                                        - (next.getPriority() - nextToNext.getPriority()) / 2;
-                } else if (next != null && next.equals(runnable)) {
-                        //runnable is the second last
-                        //next->nextToNext  (next is acutally the element we are looking for)
-                        //=> next.p= nextToNext.p-1 so now is the last
-                        forcedPriority = ((PrioritizableRunnable) nextToNext).getPriority() + 1;
-                } else {
-                        //no update is necesary
-                        return;
-                }
-
-                ((PrioritizableRunnable) iter).forcePriority(forcedPriority);
-
-                this.leaveUpdate();
-        }
-
-        /**
-         * Reevaluates the priorities
-         */
-        protected synchronized void update() {
-                this.enterUpdate();
-                this.leaveUpdate();
-        }
 
         /**
          * Applies the function to all the elements in the queue. The function
@@ -311,8 +251,27 @@ public class UpdatablePriorityBlockingQueue extends
                 return res;
         }
 
+        static class ImpersonatingPrioritizableRunnable extends
+                ForwardingPrioritableRunnable {
 
+                        private PrioritizableRunnable overrider;
 
+                        public ImpersonatingPrioritizableRunnable(PrioritizableRunnable delegate,PrioritizableRunnable overrider) {
+                                super(delegate);
+                                this.overrider=overrider;
+                        }
 
+                        @Override
+                        public double getPriority() {
+                                //return the overriden priority if its present and is not the same 
+                                //object (to avoid stack overfloooowwwss)
+                                if (this.overrider!=this.getDelegate()){
+                                        return this.overrider.getPriority();
+                                }else{
+                                        return this.getDelegate().getPriority();
 
+                                }
+                        }
+
+                }
 }

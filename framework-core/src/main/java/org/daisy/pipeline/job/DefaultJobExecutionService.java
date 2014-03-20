@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.job.fuzzy.FuzzyJobFactory;
+import org.daisy.pipeline.job.priority.ForwardingPrioritableRunnable;
 import org.daisy.pipeline.job.priority.PrioritizableRunnable;
 import org.daisy.pipeline.job.priority.PriorityThreadPoolExecutor;
 import org.daisy.pipeline.job.priority.timetracking.TimeFunctions;
@@ -19,8 +20,7 @@ import com.google.common.collect.Collections2;
 /**
  * DefaultJobExecutionService is the defualt way to execute jobs
  */
-public class DefaultJobExecutionService implements JobExecutionService
-                {
+public class DefaultJobExecutionService implements JobExecutionService {
 
         /** The Constant logger. */
         private static final Logger logger = LoggerFactory
@@ -35,10 +35,6 @@ public class DefaultJobExecutionService implements JobExecutionService
                                         TimeTrackerFactory.newFactory(3,
                                                         TimeFunctions.newLinearTimeFunctionFactory()));
 
-        /** Creates fuzzy jobs out of jobs and runnables */
-        private FuzzyJobFactory fuzzyJobFactory = FuzzyJobFactory
-                        .newFuzzyJobFactory();
-
         /**
          * Sets the x proc engine.
          *
@@ -49,12 +45,6 @@ public class DefaultJobExecutionService implements JobExecutionService
                 this.xprocEngine = xprocEngine;
         }
 
-        /**
-         * Activate (OSGI)
-         */
-        public void activate() {
-                logger.trace("Activating job execution service");
-        }
 
         /*
          * (non-Javadoc)
@@ -67,8 +57,10 @@ public class DefaultJobExecutionService implements JobExecutionService
         public void submit(final Job job) {
                 //logger.info("Submitting job");
                 //Make the runnable ready to submit to the fuzzy-prioritized thread pool
-                this.executor.execute(this.fuzzyJobFactory.newFuzzyJob(job,
-                                this.getRunnable(job)));
+                PrioritizableRunnable runnable=FuzzyJobFactory.newFuzzyRunnable(job,
+                                this.getRunnable(job));
+                //Conviniently wrap it in a PrioritizedJob for later access
+                this.executor.execute(new RunnablePrioritizedJob(runnable, job));
         }
 
         Runnable getRunnable(final Job job) {
@@ -128,15 +120,16 @@ public class DefaultJobExecutionService implements JobExecutionService
         }
 
         protected static Optional<PrioritizableRunnable> find(JobId id,Collection<PrioritizableRunnable> tasks){
-                PrioritizedJob job;
-                for(PrioritizableRunnable r:tasks){
-                        job=(PrioritizedJob) r;
-                        if(job.get().getId().equals(id)){
-                                return Optional.of(r);
-                        }
+                //PrioritizedJob job;
+                //for(PrioritizableRunnable r:tasks){
+                        //job=(PrioritizedJob) r;
+                        //if(job.get().getId().equals(id)){
+                                //return Optional.of(r);
+                        //}
 
-                }
+                //}
                 return Optional.absent();
+                
         }
         @Override
         public void moveUp(JobId id) {
@@ -180,5 +173,31 @@ public class DefaultJobExecutionService implements JobExecutionService
 
         protected PriorityThreadPoolExecutor getExecutor(){
                 return this.executor;
+        }
+
+        /**
+         * Wrapps the runnable with the associated job to expose the PrioritizedJob interface
+         */
+        static class RunnablePrioritizedJob extends ForwardingPrioritableRunnable implements PrioritizedJob{
+                private Job job;
+                public RunnablePrioritizedJob (PrioritizableRunnable delegate,Job job) {
+                        super(delegate);
+                        this.job=job;
+                }
+                /**
+                 * @return the job
+                 */
+                @Override
+                public Job getJob() {
+                        return job;
+                }
+
+                public PrioritizableRunnable asPrioritizableRunnable(){
+                        return this;
+                }
+
+                public PrioritizableRunnable asPrioritizedJob(){
+                        return this;
+                }
         }
 }

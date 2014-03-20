@@ -1,8 +1,6 @@
 package org.daisy.pipeline.job.fuzzy;
 
-import org.daisy.pipeline.job.fuzzy.FuzzyJobFactory;
-import org.daisy.pipeline.job.fuzzy.FuzzyRunnable;
-import org.daisy.pipeline.job.fuzzy.InferenceEngine;
+import org.daisy.pipeline.job.priority.PrioritizableRunnable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,11 +8,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.common.base.Supplier;
+
 @RunWith(MockitoJUnitRunner.class)
 public class FuzzyJobFactoryTest   {
 
-        InferenceEngine engine=FuzzyJobFactory.buildEngine();
-        FuzzyRunnable [][] jobs;
+        InferenceEngine engine=FuzzyJobFactory.ENGINE;
+        FuzzyPriorityCalculator[][] calculators;
         double scores[][][];
         double []waitingTimes;
 
@@ -22,16 +22,20 @@ public class FuzzyJobFactoryTest   {
         @Before
         public void setUp(){
 
-                jobs=new FuzzyRunnable[3][];
+                calculators=new FuzzyPriorityCalculator[3][];
                 //generate all the possible options
                 for (int i=0; i<3;i++){
-                        jobs[i]=new FuzzyRunnable[3];
+                        calculators[i]=new FuzzyPriorityCalculator[3];
                         for (int j=0; j<3;j++){
-                                jobs[i][j]=Mockito.mock(FuzzyRunnable.class);
-                                Mockito.when(jobs[i][j].getPriorities()).thenReturn(new double[]{i/2.0,j/2.0});
-                                Mockito.when(jobs[i][j].getInfereneceEngine()).thenReturn(engine);
-                                Mockito.doCallRealMethod().when(jobs[i][j]).getScore();
-                                Mockito.doCallRealMethod().when(jobs[i][j]).markDirty();
+                                final double[] prios=new double[]{i/2.0,j/2.0};
+                                calculators[i][j] = new FuzzyPriorityCalculator(engine,
+                                                new Supplier<double[]>() {
+
+                                                        @Override
+                                                        public double[] get() {
+                                                                return prios;
+                                                        }
+                                                });
                         }
                 }
 
@@ -58,7 +62,7 @@ public class FuzzyJobFactoryTest   {
                         for (int j=0; j<3;j++){
                                 for (int k=0; k<3;k++){
                                         for (int i=1; i<waitingTimes.length;i++){
-                                                Assert.assertTrue("The older, the more score",scores[j][k][i-1]<=scores[j][k][i]);
+                                                Assert.assertTrue("The older, the more prio",scores[j][k][i-1]<=scores[j][k][i]);
                                         }
                                 }
                         }
@@ -70,8 +74,8 @@ public class FuzzyJobFactoryTest   {
                         for (int i=1; i<waitingTimes.length;i++){
                                 for (int j=0; j<3;j++){
                                         for (int k=j+1; k<3;k++){
-                                                Assert.assertTrue("The higher prio (job), the more score",scores[j][k-1][i]<=scores[j][k][i]);
-                                                Assert.assertTrue("The higher prio (client), the more score",scores[k-1][j][i]<=scores[k-1][j][i]);
+                                                Assert.assertTrue("The higher prio (job), the more prio",scores[j][k-1][i]<=scores[j][k][i]);
+                                                Assert.assertTrue("The higher prio (client), the more prio",scores[k-1][j][i]<=scores[k-1][j][i]);
                                         }
                                 }
                         }
@@ -80,12 +84,14 @@ public class FuzzyJobFactoryTest   {
 
         private double[][][] getScores(double times[]){
                 double[][][] scores= new double[3][3][times.length];
+                PrioritizableRunnable runnable = Mockito.mock(PrioritizableRunnable.class);
                 for (int i=0; i<3;i++){
                         for (int j=0; j<3;j++){
                                 for (int k=0;k<times.length;k++){
-                                        Mockito.doReturn(times[k]).when(jobs[i][j]).getRelativeWaitingTime();
-                                        jobs[i][j].markDirty();
-                                        scores[i][j][k]=jobs[i][j].getScore();
+                                        Mockito.doReturn(times[k]).when(runnable).getRelativeWaitingTime();
+                                        Mockito.doReturn(true).when(runnable).isDirty();
+                                        //as prios are negative
+                                        scores[i][j][k]=-1*calculators[i][j].getPriority(runnable);
                                 }
                         }
                 }
