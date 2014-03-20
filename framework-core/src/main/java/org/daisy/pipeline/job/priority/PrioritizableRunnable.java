@@ -9,7 +9,7 @@ import com.google.common.base.Function;
  * This object also has a timestamp and relative waiting time.
  *
  */
-public abstract class PrioritizableRunnable implements Prioritizable,Runnable{
+public class PrioritizableRunnable implements Prioritizable,Runnable{
 
         /**
          * Instant when this runnable was created.
@@ -28,14 +28,18 @@ public abstract class PrioritizableRunnable implements Prioritizable,Runnable{
 
         private Runnable runnable;
 
+        private PriorityCalculator priorityCalculator;
+
+
         /**
          * Creats the object and timestamps it.
          * {@inheritDoc}
          * @see Object#PrioritizedRunnable()
          */
-        public PrioritizableRunnable(Runnable runnable){
-                this.timestamp=System.nanoTime();
+        public PrioritizableRunnable(Runnable runnable,PriorityCalculator calculator){
+                this.timestamp=System.currentTimeMillis();
                 this.runnable=runnable;
+                this.priorityCalculator=calculator;
         }
 
         @Override
@@ -45,11 +49,14 @@ public abstract class PrioritizableRunnable implements Prioritizable,Runnable{
         }
 
 
+        public PriorityCalculator getPriorityCalculator(){
+                return this.priorityCalculator;
+        }
 
         /** 
          * Forces the priority of this task to be a certain value
          */
-        public abstract double forcePriority(double priority);
+//        public abstract double forcePriority(double priority);
 
         /**
          * @return the timestamp
@@ -71,18 +78,26 @@ public abstract class PrioritizableRunnable implements Prioritizable,Runnable{
          *  marks this runnable as dirty so the priority should be recalculated 
          *  if necessary.
          */
-        public void markDirty() {
-                this.dirty = true;
+        public void markDirty(boolean dirty) {
+                this.dirty = dirty;
+        }
+
+        public boolean isDirty() {
+                return this.dirty;
         }
 
         /**
          * Uses the normaliser to set the relative waiting time of this 
          * runnable and marks it as dirty
          */
-        public synchronized void setRelativeWaitingTime(Function<Long,Double> normalizer){
-                
+        public void setRelativeWaitingTime(Function<Long,Double> normalizer){
                 this.relativeWaitingTime=normalizer.apply(this.getTimestamp());
-                this.markDirty();
+                this.markDirty(true);
         }
-       
+
+        @Override
+        public double getPriority() {
+                return this.priorityCalculator.getPriority(this);
+        }
+
 }

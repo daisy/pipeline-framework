@@ -38,10 +38,10 @@ public class QueueXmlWriter{
         private void addElementData(PrioritizedJob job, Element parent) {
 		String baseUri = new Routes().getBaseUri();
                 Element element= parent.getOwnerDocument().createElementNS(XmlUtils.NS_PIPELINE_DATA, "task");
-                element.setAttribute("job",job.get().getId().toString());
+                element.setAttribute("job",job.getJob().getId().toString());
                 element.setAttribute("score",String.valueOf(job.getPriority()));
-                element.setAttribute("job",String.valueOf(job.get().getPriority()));
-                element.setAttribute("client",String.valueOf(job.get().getContext().getClient().getPriority()));
+                element.setAttribute("job",String.valueOf(job.getJob().getPriority()));
+                element.setAttribute("client",String.valueOf(job.getJob().getContext().getClient().getPriority()));
                 element.setAttribute("time",String.valueOf(job.getRelativeWaitingTime()));
                 
                 parent.appendChild(element);

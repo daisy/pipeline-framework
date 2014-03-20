@@ -59,12 +59,12 @@ public class PriorityThreadPoolExecutor extends ThreadPoolExecutor
          */
 
         public void moveUp(PrioritizableRunnable item) {
-                this.queue.moveUp(item);
+                //this.queue.moveUp(item);
 
         }
 
         public void moveDown(PrioritizableRunnable item) {
-                this.queue.moveUp(item);
+                //this.queue.moveUp(item);
 
         }
 
