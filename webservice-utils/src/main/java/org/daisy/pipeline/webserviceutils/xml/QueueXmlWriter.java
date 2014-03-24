@@ -1,11 +1,9 @@
 package org.daisy.pipeline.webserviceutils.xml;
 
-import java.util.Collection;
-
 import org.daisy.pipeline.webserviceutils.Routes;
-import org.daisy.pipeline.job.PrioritizedJob;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.daisy.pipeline.job.PrioritizedJob;
 
 public class QueueXmlWriter{
                 
@@ -38,11 +36,12 @@ public class QueueXmlWriter{
         private void addElementData(PrioritizedJob job, Element parent) {
 		String baseUri = new Routes().getBaseUri();
                 Element element= parent.getOwnerDocument().createElementNS(XmlUtils.NS_PIPELINE_DATA, "task");
-                element.setAttribute("job",job.getJob().getId().toString());
-                element.setAttribute("score",String.valueOf(job.getPriority()));
-                element.setAttribute("job",String.valueOf(job.getJob().getPriority()));
-                element.setAttribute("client",String.valueOf(job.getJob().getContext().getClient().getPriority()));
-                element.setAttribute("time",String.valueOf(job.getRelativeWaitingTime()));
+                element.setAttribute("job",new Routes().getBaseUri()+"/jobs/"+job.getJob().getId().toString());
+                element.setAttribute("computedPriority",String.valueOf(job.getPriority()));
+                element.setAttribute("jobPriority",String.valueOf(job.getJob().getPriority()).toLowerCase());
+                element.setAttribute("clientPriority",String.valueOf(job.getJob().getContext().getClient().getPriority()).toLowerCase());
+                element.setAttribute("relativeTime",String.valueOf(job.getRelativeWaitingTime()));
+                element.setAttribute("timestamp",String.valueOf(job.getTimestamp()));
                 
                 parent.appendChild(element);
 

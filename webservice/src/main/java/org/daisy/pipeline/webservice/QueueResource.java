@@ -13,17 +13,14 @@ import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
-public class QueueResource extends AdminResource {
+public class QueueResource extends AuthenticatedResource {
 
-        private static final Logger logger = LoggerFactory.getLogger(QueueResource.class);
 	@Override
 	public void doInit() {
 		super.doInit();
-		if (!isAuthorized()) {
+		if (!isAuthenticated()) {
 			return;
 		}
 	}
@@ -35,14 +32,13 @@ public class QueueResource extends AdminResource {
 	 */
 	@Get("xml")
 	public Representation getResource() {
-		if (!isAuthorized()) {
+		if (!isAuthenticated()) {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
 		}
 
 		setStatus(Status.SUCCESS_OK);
                 Collection<PrioritizedJob> jobs=webservice().getJobManager(this.getClient()).getExecutionQueue().asCollection();
-                logger.debug("Queue size: "+jobs.size());
 		QueueXmlWriter writer = XmlWriterFactory.createXmlWriterForQueue(jobs);
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
                                 writer.getXmlDocument());
