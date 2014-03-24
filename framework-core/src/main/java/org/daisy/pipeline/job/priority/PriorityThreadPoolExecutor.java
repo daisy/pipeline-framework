@@ -1,21 +1,20 @@
 package org.daisy.pipeline.job.priority;
 
-import java.util.Collection;
+
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.daisy.pipeline.job.priority.timetracking.TimeTracker;
 import org.daisy.pipeline.job.priority.timetracking.TimeTrackerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 /**
  * Thread pool excutor that the underlying queue supports the PriorityService interface
  * methods. It also allows to perform automatic priority updates through a time tracker .
  */
-public class PriorityThreadPoolExecutor extends ThreadPoolExecutor 
+public class PriorityThreadPoolExecutor<T> extends ThreadPoolExecutor 
                 {
         private TimeTracker tracker;
-        private static final Logger logger = LoggerFactory.getLogger(PriorityThreadPoolExecutor.class);
+        //private static final Logger logger = LoggerFactory.getLogger(PriorityThreadPoolExecutor.class);
 
         /**
          * Creates a new instance this class, see {@link java.util.concurrent.ThreadPoolExecutor}.
@@ -29,7 +28,7 @@ public class PriorityThreadPoolExecutor extends ThreadPoolExecutor
          */
         PriorityThreadPoolExecutor(int corePoolSize, int maximumPoolSize,
                         long keepAliveTime, TimeUnit unit,
-                        UpdatablePriorityBlockingQueue workQueue, TimeTracker tracker) {
+                        UpdatablePriorityBlockingQueue<T> workQueue, TimeTracker tracker) {
                 super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
                 this.tracker=tracker;
         }
@@ -38,10 +37,10 @@ public class PriorityThreadPoolExecutor extends ThreadPoolExecutor
          * Creates a new PriorityThreadPoolExecutor of a fixed size and uses the {@link TimeTrackerFactory}
          * As time tracking mehod.
          * */
-        public static  PriorityThreadPoolExecutor newFixedSizeThreadPoolExecutor(int poolSize,TimeTrackerFactory trackerFactory) {
-                UpdatablePriorityBlockingQueue queue = new UpdatablePriorityBlockingQueue(); 
+        public static <T> PriorityThreadPoolExecutor<T> newFixedSizeThreadPoolExecutor(int poolSize,TimeTrackerFactory trackerFactory) {
+                UpdatablePriorityBlockingQueue<T> queue = new UpdatablePriorityBlockingQueue<T>(); 
                 TimeTracker tracker=trackerFactory.newTimeTracker(queue); 
-                return new PriorityThreadPoolExecutor(poolSize,poolSize,0L,TimeUnit.MICROSECONDS,queue,tracker);
+                return new PriorityThreadPoolExecutor<T>(poolSize,poolSize,0L,TimeUnit.MICROSECONDS,queue,tracker);
         }
 
         
@@ -51,8 +50,9 @@ public class PriorityThreadPoolExecutor extends ThreadPoolExecutor
                 this.tracker.executing();
         }
 
-        public UpdatablePriorityBlockingQueue getUpdatableQueue(){
-                return (UpdatablePriorityBlockingQueue) this.getQueue();
+        @SuppressWarnings("unchecked")
+		public UpdatablePriorityBlockingQueue<T> getUpdatableQueue(){
+                return (UpdatablePriorityBlockingQueue<T>) this.getQueue();
         }
 
 }

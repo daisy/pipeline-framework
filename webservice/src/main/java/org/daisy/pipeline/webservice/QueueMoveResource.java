@@ -9,7 +9,7 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
-import org.daisy.pipeline.job.PrioritizedJob;
+import org.daisy.pipeline.job.priority.Prioritizable;
 import org.daisy.pipeline.webserviceutils.xml.QueueXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
 import org.restlet.data.MediaType;
@@ -57,7 +57,7 @@ public abstract class QueueMoveResource extends AuthenticatedResource {
 
                 setStatus(Status.SUCCESS_OK);
                 this.move(this.queue,this.job.get().getId());
-                Collection<PrioritizedJob> jobs=this.queue.asCollection();
+                Collection<? extends Prioritizable< Job>> jobs=this.queue.asCollection();
                 QueueXmlWriter writer = XmlWriterFactory.createXmlWriterForQueue(jobs);
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
                                 writer.getXmlDocument());

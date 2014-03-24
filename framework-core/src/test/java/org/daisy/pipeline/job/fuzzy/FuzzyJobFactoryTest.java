@@ -35,7 +35,7 @@ public class FuzzyJobFactoryTest   {
                                                         public double[] get() {
                                                                 return prios;
                                                         }
-                                                });
+                                                },null);
                         }
                 }
 

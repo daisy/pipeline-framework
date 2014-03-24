@@ -1,8 +1,6 @@
 package org.daisy.pipeline.job.fuzzy;
 
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.PrioritizedJob;
-import org.daisy.pipeline.job.priority.ForwardingPrioritableRunnable;
 import org.daisy.pipeline.job.priority.PrioritizableRunnable;
 
 import com.google.common.base.Supplier;
@@ -11,9 +9,9 @@ public class FuzzyJobFactory {
         
 
 
-        public static PrioritizableRunnable newFuzzyRunnable(final Job job,Runnable runnable){
-                return new PrioritizableRunnable(runnable,
-                                new FuzzyPriorityCalculator(ENGINE,
+        public static PrioritizableRunnable<Job> newFuzzyRunnable(final Job job,Runnable runnable){
+                return new PrioritizableRunnable<Job>(runnable,
+                                new FuzzyPriorityCalculator<Job>(ENGINE,
                                         new Supplier<double[]>() {
                                                 @Override
                                                 public double[] get() {
@@ -22,7 +20,16 @@ public class FuzzyJobFactory {
                                                                 job.getPriority().asDouble()};
                                                 }
 
-                                        }));
+                                        }
+                                        ,
+                                        new Supplier<Job>() {
+                                                @Override
+                                                public Job get() {
+                                                        return job;
+                                                }
+                                        })
+
+                );
 
 
         }

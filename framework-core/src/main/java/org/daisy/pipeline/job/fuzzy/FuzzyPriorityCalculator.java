@@ -14,7 +14,7 @@ import com.google.common.primitives.Doubles;
  * using a fuzzy {@link InferenceEngine}.
  *
  */
-public class FuzzyPriorityCalculator implements PriorityCalculator{
+public class FuzzyPriorityCalculator<T> implements PriorityCalculator<T>{
         /**
          * Inference engine used to compute the final priority
          */
@@ -26,19 +26,22 @@ public class FuzzyPriorityCalculator implements PriorityCalculator{
 
         private Supplier<double[]> crispsSupplier;
 
+        private Supplier<T> prioritySourceSupplier;
+
         /**
          * @param infereneceEngine
          */
-        public FuzzyPriorityCalculator(InferenceEngine infereneceEngine, Supplier<double[]> crispsSupplier) {
+        public FuzzyPriorityCalculator(InferenceEngine infereneceEngine, Supplier<double[]> crispsSupplier,Supplier<T> prioritySourceSupplier) {
                 this.infereneceEngine = infereneceEngine;
                 this.crispsSupplier=crispsSupplier;
+                this.prioritySourceSupplier=prioritySourceSupplier;
         }
 
         /**
          * Returns the score of this FuzzyRunnable computed with InfereneceEngine
          */
         @Override
-        public double getPriority(PrioritizableRunnable runnable) {
+        public double getPriority(PrioritizableRunnable<T> runnable) {
                 //Lazy score calcualtion and caching
                 if(runnable.isDirty()){
                         double[] crispValues=Doubles.concat(new double[]{runnable.getRelativeWaitingTime()},this.crispsSupplier.get());
@@ -53,5 +56,11 @@ public class FuzzyPriorityCalculator implements PriorityCalculator{
          */
         public Supplier<double[]> getCrispsSupplier() {
                 return crispsSupplier;
+        }
+
+
+        @Override
+        public T prioritySource() {
+                return this.prioritySourceSupplier.get();
         }
 }

@@ -1,14 +1,17 @@
 package org.daisy.pipeline.job.priority;
 
-import java.util.Arrays;
+
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ForwardingBlockingQueue;
 import com.google.common.util.concurrent.Monitor;
 
@@ -25,14 +28,14 @@ import com.google.common.util.concurrent.Monitor;
  * This class is threadsafe
  * @version 1.0
  */
-public class UpdatablePriorityBlockingQueue extends
+public class UpdatablePriorityBlockingQueue<T> extends
 ForwardingBlockingQueue<Runnable> {
 
 
         /**
          * The forwarded priority queue
          */
-        private PriorityBlockingQueue<PrioritizableRunnable> delegate;
+        private PriorityBlockingQueue<PrioritizableRunnable<T>> delegate;
 
         /**
          * Monitor that controls {@link #take()} and other blocking aspects of this class
@@ -79,8 +82,8 @@ ForwardingBlockingQueue<Runnable> {
         /**
          * @return a brand new queue, it does not set it as delegate
          */
-        private PriorityBlockingQueue<PrioritizableRunnable> buildQueue() {
-                return new PriorityBlockingQueue<PrioritizableRunnable>(20,
+        private PriorityBlockingQueue<PrioritizableRunnable<T>> buildQueue() {
+                return new PriorityBlockingQueue<PrioritizableRunnable<T>>(20,
                                 new PrioritizableComparator());
         }
 
@@ -114,7 +117,7 @@ ForwardingBlockingQueue<Runnable> {
          */
         private void doUpdate() {
                 //re-add the elements of the queue to re-sort them
-                Collection<PrioritizableRunnable> aux = ImmutableList
+                Collection<PrioritizableRunnable<T>> aux = ImmutableList
                         .copyOf(this.delegate);
                 this.delegate.clear();
                 this.delegate.addAll(aux);
@@ -125,7 +128,7 @@ ForwardingBlockingQueue<Runnable> {
          * order in the queue
          * @param runnable
          */
-        public synchronized void swap(PrioritizableRunnable runnable1,PrioritizableRunnable runnable2) {
+        public synchronized void swap(PrioritizableRunnable<T> runnable1,PrioritizableRunnable<T> runnable2) {
                 this.enterUpdate();
                 //one of them doesn't exsist
                 if (!this.contains(runnable1) ||  !this.contains(runnable2)){
@@ -136,13 +139,13 @@ ForwardingBlockingQueue<Runnable> {
                 this.delegate().remove(runnable2);
                 //avoid previous impersonations
                 if( runnable1 instanceof ImpersonatingPrioritizableRunnable){
-                        runnable1=((ImpersonatingPrioritizableRunnable)runnable1).getDelegate();
+                        runnable1=((ImpersonatingPrioritizableRunnable<T>)runnable1).getDelegate();
                 }
                 if( runnable2 instanceof ImpersonatingPrioritizableRunnable){
-                        runnable2=((ImpersonatingPrioritizableRunnable)runnable2).getDelegate();
+                        runnable2=((ImpersonatingPrioritizableRunnable<T>)runnable2).getDelegate();
                 }
-                this.delegate().offer(new ImpersonatingPrioritizableRunnable(runnable1,runnable2));
-                this.delegate().offer(new ImpersonatingPrioritizableRunnable(runnable2,runnable1));
+                this.delegate().offer(new ImpersonatingPrioritizableRunnable<T>(runnable1,runnable2));
+                this.delegate().offer(new ImpersonatingPrioritizableRunnable<T>(runnable2,runnable1));
 
                 this.leaveUpdate();
 
@@ -156,9 +159,9 @@ ForwardingBlockingQueue<Runnable> {
          * This function is threadsafe
          * @param function
          */
-        public synchronized void update(Function<PrioritizableRunnable, Void> function) {
+        public synchronized void update(Function<PrioritizableRunnable<T>, Void> function) {
                 this.enterUpdate();
-                for (PrioritizableRunnable runnable : this.delegate) {
+                for (PrioritizableRunnable<T> runnable : this.delegate) {
                         function.apply(runnable);
                 }
                 this.leaveUpdate();
@@ -167,21 +170,16 @@ ForwardingBlockingQueue<Runnable> {
         /**
          * Returns the runnables as an immutable {@link java.util.Collection} <b>maintaining</b> the order given by the priority
          */
-        public Collection<PrioritizableRunnable> asOrderedCollection() {
-                //TODO use Collections
-                PrioritizableRunnable[] arr;
-                synchronized (this.delegate) {
-                        arr = new PrioritizableRunnable[this.delegate.size()];
-                        this.delegate.toArray(arr);
-                }
-                Arrays.sort(arr, new PrioritizableComparator());
-                return ImmutableList.copyOf(Arrays.asList(arr));
+        public Collection<PrioritizableRunnable<T>> asOrderedCollection() {
+                List<PrioritizableRunnable<T>> list= Lists.newLinkedList(this.delegate);
+                Collections.sort(list, new PrioritizableComparator());
+                return ImmutableList.copyOf(list);
         }
 
         /**
          * Returns the runnables as an immutable {@link java.util.Collection} <b>without maintaining</b> the order given by the priority
          */
-        public Collection<PrioritizableRunnable> asCollection() {
+        public Collection<PrioritizableRunnable<T>> asCollection() {
                 return ImmutableList.copyOf(this.delegate);
         }
 
@@ -199,7 +197,8 @@ ForwardingBlockingQueue<Runnable> {
          * See {@link java.util.concurrent.BlockingQueue#offer()}, This method may block if the queue 
          * is being updated.
          */
-        @Override
+        @SuppressWarnings("unchecked")
+		@Override
         public synchronized boolean offer(Runnable o) {
                 boolean res;
                 try {
@@ -209,7 +208,7 @@ ForwardingBlockingQueue<Runnable> {
                         throw new RuntimeException(e);
                 }
                 //System.out.println("offer: entered monitor");
-                res = this.delegate.offer((PrioritizableRunnable) o);
+                res = this.delegate.offer((PrioritizableRunnable<T>) o);
                 //System.out.println("offer: left monitor");
                 monitor.leave();
                 return res;
@@ -219,7 +218,8 @@ ForwardingBlockingQueue<Runnable> {
          * See {@link java.util.concurrent.BlockingQueue#add()}, This method may block if the queue 
          * is being updated.
          */
-        @Override
+        @SuppressWarnings("unchecked")
+		@Override
         public synchronized boolean add(Runnable element) {
                 boolean res;
                 try {
@@ -229,7 +229,7 @@ ForwardingBlockingQueue<Runnable> {
                         throw new RuntimeException(e);
                 }
                 //System.out.println("add: entered monitor");
-                res=this.delegate.add((PrioritizableRunnable)element);
+                res=this.delegate.add((PrioritizableRunnable<T>)element);
                 //System.out.println("add: left monitor");
                 monitor.leave();
                 return res;
@@ -251,12 +251,12 @@ ForwardingBlockingQueue<Runnable> {
                 return res;
         }
 
-        static class ImpersonatingPrioritizableRunnable extends
-                ForwardingPrioritableRunnable {
+        static class ImpersonatingPrioritizableRunnable<T> extends
+                ForwardingPrioritableRunnable<T> {
 
-                        private PrioritizableRunnable overrider;
+                        private PrioritizableRunnable<T> overrider;
 
-                        public ImpersonatingPrioritizableRunnable(PrioritizableRunnable delegate,PrioritizableRunnable overrider) {
+                        public ImpersonatingPrioritizableRunnable(PrioritizableRunnable<T> delegate,PrioritizableRunnable<T> overrider) {
                                 super(delegate);
                                 this.overrider=overrider;
                         }
