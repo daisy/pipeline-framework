@@ -35,13 +35,16 @@ public class QueueXmlWriter{
 
         private void addElementData(PrioritizedJob job, Element parent) {
 		String baseUri = new Routes().getBaseUri();
-                Element element= parent.getOwnerDocument().createElementNS(XmlUtils.NS_PIPELINE_DATA, "task");
-                element.setAttribute("job",new Routes().getBaseUri()+"/jobs/"+job.getJob().getId().toString());
+                Element element= parent.getOwnerDocument().createElementNS(XmlUtils.NS_PIPELINE_DATA, "job");
+                element.setAttribute("id",job.getJob().getId().toString());
+                element.setAttribute("jobHref",new Routes().getBaseUri()+"/jobs/"+job.getJob().getId().toString());
                 element.setAttribute("computedPriority",String.valueOf(job.getPriority()));
                 element.setAttribute("jobPriority",String.valueOf(job.getJob().getPriority()).toLowerCase());
                 element.setAttribute("clientPriority",String.valueOf(job.getJob().getContext().getClient().getPriority()).toLowerCase());
                 element.setAttribute("relativeTime",String.valueOf(job.getRelativeWaitingTime()));
                 element.setAttribute("timestamp",String.valueOf(job.getTimestamp()));
+                element.setAttribute("moveUp",new Routes().getBaseUri()+"/queue/up/"+job.getJob().getId().toString());
+                element.setAttribute("moveDown",new Routes().getBaseUri()+"/queue/down/"+job.getJob().getId().toString());
                 
                 parent.appendChild(element);
 
