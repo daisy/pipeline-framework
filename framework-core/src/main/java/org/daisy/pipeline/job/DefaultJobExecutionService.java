@@ -4,7 +4,7 @@ import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.fuzzy.FuzzyJobFactory;
-import org.daisy.pipeline.job.priority.ForwardingPrioritableRunnable;
+import org.daisy.pipeline.job.priority.Prioritizable;
 import org.daisy.pipeline.job.priority.PrioritizableRunnable;
 import org.daisy.pipeline.job.priority.PriorityThreadPoolExecutor;
 import org.daisy.pipeline.job.priority.timetracking.TimeFunctions;
@@ -26,7 +26,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
         /** The xproc engine. */
         private XProcEngine xprocEngine;
 
-        private PriorityThreadPoolExecutor executor = PriorityThreadPoolExecutor
+        private PriorityThreadPoolExecutor<Job> executor = PriorityThreadPoolExecutor
                         .newFixedSizeThreadPoolExecutor(
                                         2,
                                         TimeTrackerFactory.newFactory(3,
@@ -42,7 +42,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
          * @param executionQueue
          */
         public DefaultJobExecutionService(XProcEngine xprocEngine,
-                        PriorityThreadPoolExecutor executor, ExecutionQueue executionQueue) {
+                        PriorityThreadPoolExecutor<Job> executor, ExecutionQueue executionQueue) {
                 this.xprocEngine = xprocEngine;
                 this.executor = executor;
                 this.executionQueue = executionQueue;
@@ -69,10 +69,10 @@ public class DefaultJobExecutionService implements JobExecutionService {
         public void submit(final Job job) {
                 //logger.info("Submitting job");
                 //Make the runnable ready to submit to the fuzzy-prioritized thread pool
-                PrioritizableRunnable runnable = FuzzyJobFactory.newFuzzyRunnable(job,
+                PrioritizableRunnable<Job> runnable = FuzzyJobFactory.newFuzzyRunnable(job,
                                 this.getRunnable(job));
                 //Conviniently wrap it in a PrioritizedJob for later access
-                this.executor.execute(new RunnablePrioritizedJob(runnable, job));
+                this.executor.execute(runnable);
         }
 
         Runnable getRunnable(final Job job) {
@@ -131,39 +131,14 @@ public class DefaultJobExecutionService implements JobExecutionService {
 
         }
 
-        protected PriorityThreadPoolExecutor getExecutor() {
+        protected PriorityThreadPoolExecutor<Job> getExecutor() {
                 return this.executor;
         }
 
-        /**
-         * Wrapps the runnable with the associated job to expose the PrioritizedJob interface
-         */
-        static class RunnablePrioritizedJob extends ForwardingPrioritableRunnable
-                        implements PrioritizedJob {
-                private Job job;
-
-                public RunnablePrioritizedJob(PrioritizableRunnable delegate, Job job) {
-                        super(delegate);
-                        this.job = job;
-                }
-
-                /**
-                 * @return the job
-                 */
-                @Override
-                public Job getJob() {
-                        return job;
-                }
-
-                public PrioritizableRunnable asPrioritizableRunnable() {
-                        return this;
-                }
-
-        }
-
+        
         @Override
         public ExecutionQueue getExecutionQueue() {
-                return new DefaultExecutionQueue(this.executor);
+                return this.executionQueue;
 
         }
 
@@ -174,10 +149,10 @@ public class DefaultJobExecutionService implements JobExecutionService {
                 }else{
                         return new DefaultJobExecutionService(this.xprocEngine, this.executor, 
                                         new FilteredExecutionQueue(this.executor,
-                                                new Predicate<PrioritizedJob>() {
+                                                new Predicate<Prioritizable<Job>>() {
                                                         @Override
-                                                        public boolean apply(PrioritizedJob pJob) {
-                                                                return pJob.getJob().getContext()
+                                                        public boolean apply(Prioritizable<Job> pJob) {
+                                                                return pJob.prioritySource().getContext()
                                                 .getClient().getId().equals(client.getId());
                                                         }
                                                 }

@@ -1,11 +1,9 @@
 package org.daisy.pipeline.job;
 
-import static org.junit.Assert.*;
-
 import java.util.Collection;
 import java.util.List;
 
-import org.daisy.pipeline.job.DefaultJobExecutionService.RunnablePrioritizedJob;
+import org.daisy.pipeline.job.priority.Prioritizable;
 import org.daisy.pipeline.job.priority.PrioritizableRunnable;
 import org.daisy.pipeline.job.priority.PriorityThreadPoolExecutor;
 import org.daisy.pipeline.job.priority.UpdatablePriorityBlockingQueue;
@@ -23,15 +21,15 @@ import com.google.common.collect.Lists;
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultExecutionQueueTest {
 
-        @Mock PriorityThreadPoolExecutor pool;
-        @Mock UpdatablePriorityBlockingQueue queue;
-        @Mock RunnablePrioritizedJob pj1; 
-        @Mock RunnablePrioritizedJob pj2; 
-        @Mock RunnablePrioritizedJob pj3; 
-        @Mock RunnablePrioritizedJob pj4; 
+        @Mock PriorityThreadPoolExecutor<Job> pool;
+        @Mock UpdatablePriorityBlockingQueue<Job> queue;
+        @Mock PrioritizableRunnable<Job> pj1; 
+        @Mock PrioritizableRunnable<Job> pj2; 
+        @Mock PrioritizableRunnable<Job> pj3; 
+        @Mock PrioritizableRunnable<Job> pj4; 
 
-        List<PrioritizableRunnable> runnables; 
-        Collection<RunnablePrioritizedJob> pJobs; 
+        List<PrioritizableRunnable<Job>> runnables; 
+        Collection<PrioritizableRunnable<Job>> pJobs; 
         List <JobId> ids; 
         DefaultExecutionQueue exQ;
 
@@ -50,11 +48,11 @@ public class DefaultExecutionQueueTest {
                 pJobs.add(pj4);
 
                 ids=Lists.newLinkedList();
-                for (RunnablePrioritizedJob pj : pJobs){
+                for (PrioritizableRunnable<Job> pj : pJobs){
                         JobId id=JobIdFactory.newId();
                         ids.add(id);
-                        Mockito.when(pj.getJob()).thenReturn(Mockito.mock(Job.class));
-                        Mockito.when(pj.getJob().getId()).thenReturn(id);
+                        Mockito.when(pj.prioritySource()).thenReturn(Mockito.mock(Job.class));
+                        Mockito.when(pj.prioritySource().getId()).thenReturn(id);
                 }
 
                 exQ=new DefaultExecutionQueue(this.pool);
@@ -65,16 +63,16 @@ public class DefaultExecutionQueueTest {
         }
         @Test
         public void find() {
-                Optional<PrioritizedJob> res=exQ.find(ids.get(2));
+                Optional<? extends Prioritizable<Job>> res=exQ.find(ids.get(2));
                 Assert.assertTrue("We found the job",res.isPresent());
         }
 
         @Test
         public void findNext() {
-                PrioritizedJob reference=exQ.find(ids.get(2)).get();
+                Prioritizable<Job> reference=exQ.find(ids.get(2)).get();
 
-                Optional<PrioritizedJob> next=exQ.findNext(reference);
-                Assert.assertEquals("We got the correct next job",pj4.getJob().getId(),next.get().getJob().getId());
+                Optional<? extends Prioritizable<Job>> next=exQ.findNext(reference);
+                Assert.assertEquals("We got the correct next job",pj4.prioritySource().getId(),next.get().prioritySource().getId());
 
                 next=exQ.findNext(next.get());
                 Assert.assertFalse("There is no next after the last",next.isPresent());
@@ -82,10 +80,10 @@ public class DefaultExecutionQueueTest {
 
         @Test
         public void findPrevious() {
-                PrioritizedJob reference=exQ.find(ids.get(1)).get();
+                Prioritizable<Job> reference=exQ.find(ids.get(1)).get();
 
-                Optional<PrioritizedJob> previous=exQ.findPrevious(reference);
-                Assert.assertEquals("We got the correct previous job",pj1.getJob().getId(),previous.get().getJob().getId());
+                Optional<? extends Prioritizable<Job>> previous=exQ.findPrevious(reference);
+                Assert.assertEquals("We got the correct previous job",pj1.prioritySource().getId(),previous.get().prioritySource().getId());
 
                 previous=exQ.findPrevious(previous.get());
                 Assert.assertFalse("There is no previous before the first",previous.isPresent());

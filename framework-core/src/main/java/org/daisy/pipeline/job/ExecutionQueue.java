@@ -2,6 +2,8 @@ package org.daisy.pipeline.job;
 
 import java.util.Collection;
 
+import org.daisy.pipeline.job.priority.Prioritizable;
+
 public interface ExecutionQueue {
         public void moveUp(JobId id);
 
@@ -9,5 +11,5 @@ public interface ExecutionQueue {
 
         public void cancel(JobId id);
 
-        public Collection<PrioritizedJob> asCollection();
+        public Collection<? extends Prioritizable<Job>> asCollection();
 }

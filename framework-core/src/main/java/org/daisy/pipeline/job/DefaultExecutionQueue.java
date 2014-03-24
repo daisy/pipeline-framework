@@ -5,130 +5,118 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.daisy.pipeline.job.priority.Prioritizable;
 import org.daisy.pipeline.job.priority.PrioritizableRunnable;
 import org.daisy.pipeline.job.priority.PriorityThreadPoolExecutor;
 import org.daisy.pipeline.job.priority.UpdatablePriorityBlockingQueue;
 
-import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 public class DefaultExecutionQueue implements ExecutionQueue {
 
-        PriorityThreadPoolExecutor executor;
+        PriorityThreadPoolExecutor<Job> executor;
 
         /**
          * @param queue
          */
-        public DefaultExecutionQueue(PriorityThreadPoolExecutor executor) {
+        public DefaultExecutionQueue(PriorityThreadPoolExecutor<Job> executor) {
                 this.executor= executor;
         }
 
         @Override
         public void moveUp(JobId id) {
-                Optional<PrioritizedJob> ided=this.find(id);
+                Optional<? extends Prioritizable<Job>> ided=this.find(id);
                 if(!ided.isPresent()){
                         return;
                 }
-                Optional<PrioritizedJob> prev=this.findPrevious(ided.get());
+                Optional<? extends Prioritizable<Job>> prev=this.findPrevious(ided.get());
                 if(!prev.isPresent()){
                         return;
                 }
                 this.getQueue()
-                        .swap((PrioritizableRunnable)ided.get(),(PrioritizableRunnable)prev.get());
+                        .swap((PrioritizableRunnable<Job>)ided.get(),(PrioritizableRunnable<Job>)prev.get());
 
         }
 
         @Override
         public void moveDown(JobId id) {
-                Optional<PrioritizedJob> ided=this.find(id);
+                Optional<? extends Prioritizable<Job>> ided=this.find(id);
                 if(!ided.isPresent()){
                         return;
                 }
-                Optional<PrioritizedJob> next=this.findNext(ided.get());
+                Optional<? extends Prioritizable<Job>> next=this.findNext(ided.get());
                 if(!next.isPresent()){
                         return;
                 }
                 this.getQueue()
-                        .swap((PrioritizableRunnable)ided.get(),(PrioritizableRunnable)next.get());
+                        .swap((PrioritizableRunnable<Job>)ided.get(),(PrioritizableRunnable<Job>)next.get());
         }
 
         @Override
         public void cancel(JobId id) {
-                Optional<PrioritizedJob> ided=this.find(id);
+                Optional<? extends Prioritizable<Job>> ided=this.find(id);
                 if(!ided.isPresent()){
                         return;
                 }
-                this.executor.remove((PrioritizableRunnable)ided.get());
+                this.executor.remove((PrioritizableRunnable<Job>)ided.get());
         }
 
         @Override
-        public Collection<PrioritizedJob> asCollection(){
-                return Collections2.transform(this.getQueue().asOrderedCollection(),
-                                new Function<PrioritizableRunnable, PrioritizedJob>() {
-                                        @Override
-                                        public PrioritizedJob apply(PrioritizableRunnable runnable) {
-                                                return (PrioritizedJob)runnable;
-                                        }
-                });
+        public Collection<? extends Prioritizable<Job>> asCollection(){
+                return (Collection<? extends Prioritizable<Job>>)
+                        this.getQueue().asOrderedCollection();
 
         }
 
         //faster
-        protected Collection<PrioritizedJob> nonOrdered(){
-                return Collections2.transform(this.getQueue().asCollection(),
-                                new Function<PrioritizableRunnable, PrioritizedJob>() {
-                                        @Override
-                                        public PrioritizedJob apply(PrioritizableRunnable runnable) {
-                                                return (PrioritizedJob)runnable;
-                                        }
-                });
+        protected Collection<? extends Prioritizable<Job>> nonOrdered(){
+               return this.getQueue().asCollection();
 
         }
 
-        Optional<PrioritizedJob> find(final JobId id){
+        Optional<? extends Prioritizable<Job>> find(final JobId id){
                 return Iterables.tryFind(this.nonOrdered(),
-                                new Predicate<PrioritizedJob>() {
+                                new Predicate<Prioritizable<Job>>() {
                                         @Override
-                                        public boolean apply(PrioritizedJob pJob) {
-                                                return pJob.getJob().getId().equals(id);
+                                        public boolean apply(Prioritizable<Job> pJob) {
+                                                return pJob.prioritySource().getId().equals(id);
                                         }
                 });
         }
 
-        Optional<PrioritizedJob> findNext(PrioritizedJob job){
-                return this.findNext(job.getJob().getId(),this.asCollection());
+        Optional<? extends Prioritizable<Job>> findNext(Prioritizable<Job> job){
+                return this.findNext(job.prioritySource().getId(),this.asCollection());
         }
 
-        private Optional<PrioritizedJob> findNext(final  JobId id, Collection<PrioritizedJob> jobs){
+        private Optional<? extends Prioritizable<Job>> findNext(final  JobId id, Collection<? extends Prioritizable<Job>> jobs){
                 return Iterables.tryFind(jobs,
-                                new Predicate<PrioritizedJob>() {
+                                new Predicate<Prioritizable<Job>>() {
                                         boolean isNext=false; 
                                         @Override
-                                        public boolean apply(PrioritizedJob pJob) {
+                                        public boolean apply(Prioritizable<Job> pJob) {
                                                 if(isNext){
                                                         return true;
                                                 }
-                                                isNext=pJob.getJob().getId().equals(id);
+                                                isNext=pJob.prioritySource().getId().equals(id);
                                                 return false;
 
                                         }
                 });
         }
 
-        Optional<PrioritizedJob> findPrevious(PrioritizedJob job){
-                List<PrioritizedJob> reverse=Lists.newLinkedList(this.asCollection());
+        Optional<? extends Prioritizable<Job>> findPrevious(Prioritizable<Job> job){
+                List<Prioritizable<Job>> reverse=Lists.newLinkedList(this.asCollection());
                 Collections.reverse(reverse);
-                return this.findNext(job.getJob().getId(),reverse);
+                return this.findNext(job.prioritySource().getId(),reverse);
         }
 
         /**
          * @return the executor
          */
-        protected UpdatablePriorityBlockingQueue getQueue() {
+        protected UpdatablePriorityBlockingQueue<Job> getQueue() {
                 return executor.getUpdatableQueue();
         }
 

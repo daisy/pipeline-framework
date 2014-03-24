@@ -1,16 +1,9 @@
 package org.daisy.pipeline.job;
 
 import java.io.IOException;
-
-import org.daisy.common.properties.PropertyPublisher;
-import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.script.BoundXProcScript;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.google.common.eventbus.EventBus;
 
 /**
  *

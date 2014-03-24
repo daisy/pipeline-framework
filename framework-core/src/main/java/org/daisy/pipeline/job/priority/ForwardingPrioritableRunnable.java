@@ -2,22 +2,27 @@ package org.daisy.pipeline.job.priority;
 
 import com.google.common.base.Function;
 
-public class ForwardingPrioritableRunnable extends PrioritizableRunnable {
+public class ForwardingPrioritableRunnable<T> extends PrioritizableRunnable<T> {
 
-        private PrioritizableRunnable delegate;
+        private PrioritizableRunnable<T> delegate;
 
-        public ForwardingPrioritableRunnable(PrioritizableRunnable delegate) {
+        public ForwardingPrioritableRunnable(PrioritizableRunnable<T> delegate) {
                 super(null,null);
                 this.delegate = delegate;
         }
 
         @Override
+        public T prioritySource() {
+                return this.delegate.prioritySource();
+        }
+
+		@Override
         public void run() {
                 this.delegate.run();
         }
 
         @Override
-        public PriorityCalculator getPriorityCalculator() {
+        public PriorityCalculator<T> getPriorityCalculator() {
                 return this.delegate.getPriorityCalculator();
         }
 
@@ -42,20 +47,20 @@ public class ForwardingPrioritableRunnable extends PrioritizableRunnable {
         }
 
         @Override
-        public synchronized void setRelativeWaitingTime(
-                        Function<Long, Double> normalizer) {
-                this.delegate.setRelativeWaitingTime(normalizer);
-        }
-
-        @Override
         public synchronized double getPriority() {
                 return this.delegate.getPriority();
         }
 
+        @Override
+        public void setRelativeWaitingTime(Function<Long, Double> normalizer) {
+                this.delegate.setRelativeWaitingTime(normalizer);
+        }
+
+	
         /**
          * @return the delegate
          */
-        public PrioritizableRunnable getDelegate() {
+        public PrioritizableRunnable<T> getDelegate() {
                 return delegate;
         }
 

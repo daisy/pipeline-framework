@@ -31,7 +31,7 @@ public class FuzzyPriorityCalculatorTest   {
                         }
 
                 };
-                calculator= new FuzzyPriorityCalculator(engine,supplier);
+                calculator= new FuzzyPriorityCalculator(engine,supplier,null);
         }
 
         @Test

@@ -1,6 +1,6 @@
 package org.daisy.pipeline.job.priority;
 
-public interface Prioritizable  {
+public interface Prioritizable<T>  {
        /**
         * Returns the priority.
         */
@@ -12,4 +12,6 @@ public interface Prioritizable  {
         public long getTimestamp();
 
         public double getRelativeWaitingTime();
+        
+        public T prioritySource();
 }

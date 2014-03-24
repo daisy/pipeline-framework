@@ -11,7 +11,6 @@ public class QueueDownResource extends QueueMoveResource {
         @Override
         public void move(ExecutionQueue queue, JobId id) {
                 queue.moveDown(id);
-
         }
 
 }

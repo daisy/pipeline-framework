@@ -9,7 +9,7 @@ import com.google.common.base.Function;
  * This object also has a timestamp and relative waiting time.
  *
  */
-public class PrioritizableRunnable implements Prioritizable,Runnable{
+public class PrioritizableRunnable<T> implements Prioritizable<T>,Runnable{
 
         /**
          * Instant when this runnable was created.
@@ -28,15 +28,14 @@ public class PrioritizableRunnable implements Prioritizable,Runnable{
 
         private Runnable runnable;
 
-        private PriorityCalculator priorityCalculator;
-
+        private PriorityCalculator<T> priorityCalculator;
 
         /**
          * Creats the object and timestamps it.
          * {@inheritDoc}
          * @see Object#PrioritizedRunnable()
          */
-        public PrioritizableRunnable(Runnable runnable,PriorityCalculator calculator){
+        public PrioritizableRunnable(Runnable runnable,PriorityCalculator<T> calculator){
                 this.timestamp=System.currentTimeMillis();
                 this.runnable=runnable;
                 this.priorityCalculator=calculator;
@@ -98,6 +97,11 @@ public class PrioritizableRunnable implements Prioritizable,Runnable{
         @Override
         public double getPriority() {
                 return this.priorityCalculator.getPriority(this);
+        }
+
+        @Override
+        public T prioritySource() {
+                return this.priorityCalculator.prioritySource();
         }
 
 }

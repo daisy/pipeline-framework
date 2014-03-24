@@ -1,7 +1,8 @@
 package org.daisy.pipeline.job.priority;
 
-public interface PriorityCalculator {
+public interface PriorityCalculator<T> {
 
-	double getPriority(PrioritizableRunnable runnable); 
+	public double getPriority(PrioritizableRunnable<T> runnable); 
+	public T prioritySource(); 
         
 }
