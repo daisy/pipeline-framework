@@ -26,6 +26,8 @@ public class Routes {
 	public static final String PROPERTIES_ROUTE = "/admin/properties";
 	public static final String SIZES_ROUTE = "/admin/sizes";
 	public static final String QUEUE_ROUTE= "/queue";
+	public static final String QUEUE_UP_ROUTE= "/queue/up/{jobId}";
+	public static final String QUEUE_DOWN_ROUTE= "/queue/down/{jobId}";
 	
 	
 	
