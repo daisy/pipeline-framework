@@ -17,7 +17,6 @@ public class DefaultJobManager implements JobManager {
                         .getLogger(DefaultJobManager.class);
 
         private JobStorage storage;
-        //use it to submit and cancel jobs
         private JobExecutionService executionService;
         private JobContextFactory jobContextFactory;
 
@@ -164,7 +163,7 @@ public class DefaultJobManager implements JobManager {
 
         @Override
         public ExecutionQueue getExecutionQueue() {
-                return this.executionService;
+                return this.executionService.getExecutionQueue();
         }
 
 }

@@ -1,8 +1,8 @@
 package org.daisy.pipeline.job;
 
-import java.util.Collection;
-
 import org.daisy.common.xproc.XProcEngine;
+import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.fuzzy.FuzzyJobFactory;
 import org.daisy.pipeline.job.priority.ForwardingPrioritableRunnable;
 import org.daisy.pipeline.job.priority.PrioritizableRunnable;
@@ -13,9 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.Collections2;
+import com.google.common.base.Predicate;
 
 /**
  * DefaultJobExecutionService is the defualt way to execute jobs
@@ -28,12 +26,27 @@ public class DefaultJobExecutionService implements JobExecutionService {
         /** The xproc engine. */
         private XProcEngine xprocEngine;
 
-        //TODO: get these sizes from properties
         private PriorityThreadPoolExecutor executor = PriorityThreadPoolExecutor
                         .newFixedSizeThreadPoolExecutor(
                                         2,
                                         TimeTrackerFactory.newFactory(3,
                                                         TimeFunctions.newLinearTimeFunctionFactory()));
+        private ExecutionQueue executionQueue;
+
+        public DefaultJobExecutionService(){
+                this.executionQueue=new DefaultExecutionQueue(executor); 
+        }
+        /**
+         * @param xprocEngine
+         * @param executor
+         * @param executionQueue
+         */
+        public DefaultJobExecutionService(XProcEngine xprocEngine,
+                        PriorityThreadPoolExecutor executor, ExecutionQueue executionQueue) {
+                this.xprocEngine = xprocEngine;
+                this.executor = executor;
+                this.executionQueue = executionQueue;
+        }
 
         /**
          * Sets the x proc engine.
@@ -44,7 +57,6 @@ public class DefaultJobExecutionService implements JobExecutionService {
         public void setXProcEngine(XProcEngine xprocEngine) {
                 this.xprocEngine = xprocEngine;
         }
-
 
         /*
          * (non-Javadoc)
@@ -57,7 +69,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
         public void submit(final Job job) {
                 //logger.info("Submitting job");
                 //Make the runnable ready to submit to the fuzzy-prioritized thread pool
-                PrioritizableRunnable runnable=FuzzyJobFactory.newFuzzyRunnable(job,
+                PrioritizableRunnable runnable = FuzzyJobFactory.newFuzzyRunnable(job,
                                 this.getRunnable(job));
                 //Conviniently wrap it in a PrioritizedJob for later access
                 this.executor.execute(new RunnablePrioritizedJob(runnable, job));
@@ -119,71 +131,22 @@ public class DefaultJobExecutionService implements JobExecutionService {
 
         }
 
-        protected static Optional<PrioritizableRunnable> find(JobId id,Collection<PrioritizableRunnable> tasks){
-                //PrioritizedJob job;
-                //for(PrioritizableRunnable r:tasks){
-                        //job=(PrioritizedJob) r;
-                        //if(job.get().getId().equals(id)){
-                                //return Optional.of(r);
-                        //}
-
-                //}
-                return Optional.absent();
-                
-        }
-        @Override
-        public void moveUp(JobId id) {
-                Optional<PrioritizableRunnable> r=find(id,this.getExecutor().asCollection());
-                if(r.isPresent()){
-                        this.getExecutor().moveUp(r.get());
-                }
-        }
-
-        @Override
-        public void moveDown(JobId id) {
-                Optional<PrioritizableRunnable> r=find(id,this.getExecutor().asCollection());
-                if(r.isPresent()){
-                        this.getExecutor().moveDown(r.get());
-                }
-
-        }
-
-        @Override
-        public void cancel(JobId id) {
-                Optional<PrioritizableRunnable> r=find(id,this.getExecutor().asCollection());
-                if(r.isPresent()){
-                        this.getExecutor().remove(r.get());
-                }
-
-        }
-
-        @Override
-        public Collection<PrioritizedJob> asCollection() {
-
-                logger.debug("In the service queue size "+this.getExecutor().asOrderedCollection().size());
-                return Collections2.transform(this.getExecutor().asOrderedCollection(),
-                                new Function<PrioritizableRunnable, PrioritizedJob>() {
-
-                                        @Override
-                                        public PrioritizedJob apply(PrioritizableRunnable runnable) {
-                                                return (PrioritizedJob)runnable;
-                                        }
-                });
-        }
-
-        protected PriorityThreadPoolExecutor getExecutor(){
+        protected PriorityThreadPoolExecutor getExecutor() {
                 return this.executor;
         }
 
         /**
          * Wrapps the runnable with the associated job to expose the PrioritizedJob interface
          */
-        static class RunnablePrioritizedJob extends ForwardingPrioritableRunnable implements PrioritizedJob{
+        static class RunnablePrioritizedJob extends ForwardingPrioritableRunnable
+                        implements PrioritizedJob {
                 private Job job;
-                public RunnablePrioritizedJob (PrioritizableRunnable delegate,Job job) {
+
+                public RunnablePrioritizedJob(PrioritizableRunnable delegate, Job job) {
                         super(delegate);
-                        this.job=job;
+                        this.job = job;
                 }
+
                 /**
                  * @return the job
                  */
@@ -192,12 +155,33 @@ public class DefaultJobExecutionService implements JobExecutionService {
                         return job;
                 }
 
-                public PrioritizableRunnable asPrioritizableRunnable(){
+                public PrioritizableRunnable asPrioritizableRunnable() {
                         return this;
                 }
 
-                public PrioritizableRunnable asPrioritizedJob(){
+        }
+
+        @Override
+        public ExecutionQueue getExecutionQueue() {
+                return new DefaultExecutionQueue(this.executor);
+
+        }
+
+        @Override
+        public JobExecutionService filterBy(final Client client) {
+                if (client.getRole()==Role.ADMIN){
                         return this;
+                }else{
+                        return new DefaultJobExecutionService(this.xprocEngine, this.executor, 
+                                        new FilteredExecutionQueue(this.executor,
+                                                new Predicate<PrioritizedJob>() {
+                                                        @Override
+                                                        public boolean apply(PrioritizedJob pJob) {
+                                                                return pJob.getJob().getContext()
+                                                .getClient().getId().equals(client.getId());
+                                                        }
+                                                }
+                        ));
                 }
         }
 }

@@ -1,14 +1,14 @@
 package org.daisy.pipeline.job;
 
-import java.util.Collection;
+import org.daisy.pipeline.clients.Client;
 
 
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Interface JobExecutionService.
  */
-public interface JobExecutionService extends ExecutionQueue{
+public interface JobExecutionService {
 
 	/**
 	 * Submits a new job to execute.
@@ -16,6 +16,11 @@ public interface JobExecutionService extends ExecutionQueue{
 	 * @param job the job
 	 */
 	public void submit(Job job);
+
+        public ExecutionQueue getExecutionQueue();
+
+        public JobExecutionService filterBy(Client client);
+
 
         
 }

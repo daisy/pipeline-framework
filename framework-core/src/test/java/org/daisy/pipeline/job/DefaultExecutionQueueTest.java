@@ -1,0 +1,127 @@
+package org.daisy.pipeline.job;
+
+import static org.junit.Assert.*;
+
+import java.util.Collection;
+import java.util.List;
+
+import org.daisy.pipeline.job.DefaultJobExecutionService.RunnablePrioritizedJob;
+import org.daisy.pipeline.job.priority.PrioritizableRunnable;
+import org.daisy.pipeline.job.priority.PriorityThreadPoolExecutor;
+import org.daisy.pipeline.job.priority.UpdatablePriorityBlockingQueue;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
+
+@RunWith(MockitoJUnitRunner.class)
+public class DefaultExecutionQueueTest {
+
+        @Mock PriorityThreadPoolExecutor pool;
+        @Mock UpdatablePriorityBlockingQueue queue;
+        @Mock RunnablePrioritizedJob pj1; 
+        @Mock RunnablePrioritizedJob pj2; 
+        @Mock RunnablePrioritizedJob pj3; 
+        @Mock RunnablePrioritizedJob pj4; 
+
+        List<PrioritizableRunnable> runnables; 
+        Collection<RunnablePrioritizedJob> pJobs; 
+        List <JobId> ids; 
+        DefaultExecutionQueue exQ;
+
+        @Before
+        public void setUp() {
+                runnables=Lists.newLinkedList();
+                runnables.add(pj1);
+                runnables.add(pj2);
+                runnables.add(pj3);
+                runnables.add(pj4);
+
+                pJobs=Lists.newLinkedList();
+                pJobs.add(pj1);
+                pJobs.add(pj2);
+                pJobs.add(pj3);
+                pJobs.add(pj4);
+
+                ids=Lists.newLinkedList();
+                for (RunnablePrioritizedJob pj : pJobs){
+                        JobId id=JobIdFactory.newId();
+                        ids.add(id);
+                        Mockito.when(pj.getJob()).thenReturn(Mockito.mock(Job.class));
+                        Mockito.when(pj.getJob().getId()).thenReturn(id);
+                }
+
+                exQ=new DefaultExecutionQueue(this.pool);
+                Mockito.when(pool.getUpdatableQueue()).thenReturn(queue);
+                Mockito.when(queue.asCollection()).thenReturn(runnables);
+                Mockito.when(queue.asOrderedCollection()).thenReturn(runnables);
+                
+        }
+        @Test
+        public void find() {
+                Optional<PrioritizedJob> res=exQ.find(ids.get(2));
+                Assert.assertTrue("We found the job",res.isPresent());
+        }
+
+        @Test
+        public void findNext() {
+                PrioritizedJob reference=exQ.find(ids.get(2)).get();
+
+                Optional<PrioritizedJob> next=exQ.findNext(reference);
+                Assert.assertEquals("We got the correct next job",pj4.getJob().getId(),next.get().getJob().getId());
+
+                next=exQ.findNext(next.get());
+                Assert.assertFalse("There is no next after the last",next.isPresent());
+        }
+
+        @Test
+        public void findPrevious() {
+                PrioritizedJob reference=exQ.find(ids.get(1)).get();
+
+                Optional<PrioritizedJob> previous=exQ.findPrevious(reference);
+                Assert.assertEquals("We got the correct previous job",pj1.getJob().getId(),previous.get().getJob().getId());
+
+                previous=exQ.findPrevious(previous.get());
+                Assert.assertFalse("There is no previous before the first",previous.isPresent());
+        }
+
+        @Test
+        public void moveUp() {
+                //no effect after moving up a id that doesnt exsist
+                exQ.moveUp(JobIdFactory.newId());
+                Mockito.verify(queue, Mockito.times(0)).swap( Mockito.any(PrioritizableRunnable.class),Mockito.any(PrioritizableRunnable.class));
+                //the first shouldent be moved
+                exQ.moveUp(this.ids.get(0));
+                Mockito.verify(queue, Mockito.times(0)).swap( Mockito.any(PrioritizableRunnable.class),Mockito.any(PrioritizableRunnable.class));
+                //otherwise move it up
+                exQ.moveUp(this.ids.get(1));
+                Mockito.verify(queue, Mockito.times(1)).swap(this.runnables.get(1),this.runnables.get(0));
+        }
+
+        @Test
+        public void moveDown() {
+                //no effect after moving up a id that doesnt exsist
+                exQ.moveUp(JobIdFactory.newId());
+                //the first shouldent be moved
+                exQ.moveDown(this.ids.get(3));
+                Mockito.verify(queue, Mockito.times(0)).swap( Mockito.any(PrioritizableRunnable.class),Mockito.any(PrioritizableRunnable.class));
+                //otherwise move it up
+                exQ.moveDown(this.ids.get(2));
+                Mockito.verify(queue, Mockito.times(1)).swap(this.runnables.get(2),this.runnables.get(3));
+        }
+
+        @Test
+        public void cancel() {
+                exQ.moveUp(JobIdFactory.newId());
+                Mockito.verify(pool, Mockito.times(0)).remove(this.runnables.get(3));
+
+                exQ.cancel(this.ids.get(3));
+                Mockito.verify(pool, Mockito.times(1)).remove(this.runnables.get(3));
+        }
+}
