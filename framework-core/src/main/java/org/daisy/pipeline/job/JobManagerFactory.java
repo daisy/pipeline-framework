@@ -11,7 +11,8 @@ public class JobManagerFactory {
         
         public JobManager createFor(Client client){
                 return new DefaultJobManager(this.storage.filterBy(client),
-                                executionService,new JobContextFactory(this.runtimeConfigurator,client));
+                                this.executionService.filterBy(client),
+                                new JobContextFactory(this.runtimeConfigurator,client));
         }
 
         /**

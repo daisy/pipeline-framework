@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
  */
 public class PriorityThreadPoolExecutor extends ThreadPoolExecutor 
                 {
-        private UpdatablePriorityBlockingQueue queue;
         private TimeTracker tracker;
         private static final Logger logger = LoggerFactory.getLogger(PriorityThreadPoolExecutor.class);
 
@@ -33,7 +32,6 @@ public class PriorityThreadPoolExecutor extends ThreadPoolExecutor
                         UpdatablePriorityBlockingQueue workQueue, TimeTracker tracker) {
                 super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
                 this.tracker=tracker;
-                this.queue = workQueue;
         }
 
         /** 
@@ -49,32 +47,12 @@ public class PriorityThreadPoolExecutor extends ThreadPoolExecutor
         
         @Override
         protected void beforeExecute(Thread t, Runnable r) {
-                logger.debug("before execution "+this.queue.hashCode()+" "+this.queue.size());
                 super.beforeExecute(t, r);
                 this.tracker.executing();
         }
 
-        /*
-         * Just wrap the priority queue
-         */
-
-        public void moveUp(PrioritizableRunnable item) {
-                //this.queue.moveUp(item);
-
-        }
-
-        public void moveDown(PrioritizableRunnable item) {
-                //this.queue.moveUp(item);
-
-        }
-
-        public Collection<PrioritizableRunnable> asOrderedCollection() {
-                logger.debug("In the pool "+this.queue.hashCode()+" "+this.queue.size());
-                return this.queue.asOrderedCollection();
-        }
-
-        public Collection<PrioritizableRunnable> asCollection(){
-                return this.queue.asCollection();
+        public UpdatablePriorityBlockingQueue getUpdatableQueue(){
+                return (UpdatablePriorityBlockingQueue) this.getQueue();
         }
 
 }
