@@ -24,11 +24,17 @@ import com.google.common.util.concurrent.Monitor;
  *
  * <h2>Updating the priorities</h2>
  * <ul>
- *      <li>{@link #update(Function<Void,PriorityBlockingQueue> function)}:  Updates the priorities by applying the given function sequentually to the different priorities. The function has update the {@link PrioritizableRunnable} by reference. This function is threadsafe</li>
+ *      <li>{@link #update(Function<Void,PriorityBlockingQueue> function)}:  Updates the priorities by applying the given function sequentially to the different priorities. The function has update the {@link PrioritizableRunnable} by reference. This function is threadsafe</li>
  *      <li>{@link #swap(PrioritizableRunnable runnable)} allows to swap two elements in the queue</li>
  *
  * </ul>
- * This class is threadsafe
+ *
+ * The internal design might seem a bit over-engineered but there are some reasons for that. ThreadPoolExecutorSevice needs a queue which has to be
+ * of type <i>Runnable</i>. Our needs are a bit more complex than that, so we have to "hide" the actual internal type of our 
+ * objects a give a Runnable view to the superclass. This forces some unchecked type conversions that are safe ONLY when interacting with <i>PrioritizableRunnables</i>.
+ *
+ * Also we have to cope with the possibility of swapping elements in the queue. This is done more or less elegantly by the tuple SwappingPriority and WrappingPriorityQueue, which allow to hide the element wrapping process and return priorities of other elements as if they were its own.
+ * <b>This class is threadsafe</b>
  * @version 1.0
  */
 public class UpdatablePriorityBlockingQueue<T> extends ForwardingBlockingQueue<Runnable> { 
@@ -66,6 +72,9 @@ public class UpdatablePriorityBlockingQueue<T> extends ForwardingBlockingQueue<R
                 }
         };
 
+        /**
+         * Unwraps the SwappingPriority by returning the delegate
+         */
         private Function<SwappingPriority<T>, PrioritizableRunnable<T>> unwrapFunction = new Function<SwappingPriority<T>, PrioritizableRunnable<T>>() {
                 @Override
                 public PrioritizableRunnable<T> apply(SwappingPriority<T> arg) {
@@ -73,6 +82,9 @@ public class UpdatablePriorityBlockingQueue<T> extends ForwardingBlockingQueue<R
                 }
         };
 
+        /**
+         * Wraps the PrioritizableRunnable into a SwappingPriority 
+         */
         private Function<PrioritizableRunnable<T>,SwappingPriority<T> > wrapFunction = new Function<PrioritizableRunnable<T>,SwappingPriority<T>>() {
                 @Override
                 public SwappingPriority<T> apply(PrioritizableRunnable<T> arg) {
@@ -137,6 +149,9 @@ public class UpdatablePriorityBlockingQueue<T> extends ForwardingBlockingQueue<R
         }
 
 
+        /**
+         * Tries to find the runnable among the elements in the queue.
+         */
         protected Optional<SwappingPriority<T>> tryFind(final PrioritizableRunnable<T> runnable){
                 return Iterables.tryFind(this.delegate.wrapped(), new Predicate<SwappingPriority<T>>() {
 
@@ -147,25 +162,23 @@ public class UpdatablePriorityBlockingQueue<T> extends ForwardingBlockingQueue<R
                         }});
         }
         /**
-         * Swap the priorities of both PrioritizableRunnable to change the 
+         * Swap the priorities of both PrioritizableRunnable objects to change the 
          * order in the queue
-         * @param runnable
          */
         public synchronized void swap(PrioritizableRunnable<T> runnable1,PrioritizableRunnable<T> runnable2) {
-                this.enterUpdate();
+                this.enterUpdate();//in monitor
                 Optional<SwappingPriority<T>> node1=this.tryFind(runnable1);
                 Optional<SwappingPriority<T>> node2=this.tryFind(runnable2);
-                //one of them doesn't exsist
+                //one of them doesn't exist, get out
                 if (!node1.isPresent() ||  !node2.isPresent()){
-                        this.leaveUpdate();
+                        this.leaveUpdate();//out monitor
                         return;
                 }
                 //swap the overriders 
                 PrioritizableRunnable<T> aux=node1.get().getOverrider();
                 node1.get().setOverrider(node2.get().getOverrider());
                 node2.get().setOverrider(aux);
-
-                this.leaveUpdate();
+                this.leaveUpdate();//out monitor
 
         }
 
@@ -219,7 +232,7 @@ public class UpdatablePriorityBlockingQueue<T> extends ForwardingBlockingQueue<R
          * is being updated.
          */
         @SuppressWarnings("unchecked")
-                @Override
+        @Override
         public synchronized boolean offer(Runnable o) {
                 boolean res;
                 try {
@@ -240,7 +253,7 @@ public class UpdatablePriorityBlockingQueue<T> extends ForwardingBlockingQueue<R
          * is being updated.
          */
         @SuppressWarnings("unchecked")
-		@Override
+        @Override
         public synchronized boolean add(Runnable element) {
                 boolean res;
                 try {
@@ -272,6 +285,11 @@ public class UpdatablePriorityBlockingQueue<T> extends ForwardingBlockingQueue<R
 
 
 }
+
+/**
+ * This class allows to return the priority of another PrioritizableRunnable while forwarding the rest
+ * of the calls to another object.
+ */
 class SwappingPriority<T> extends
 ForwardingPrioritableRunnable<T> {
 
