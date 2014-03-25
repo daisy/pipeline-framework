@@ -166,6 +166,8 @@
     <logback.version>1.0.11</logback.version>
     <woodstox.core.version>4.1.2</woodstox.core.version>
     <woodstox.stax2-api.version>3.1.1</woodstox.stax2-api.version>
+    <mockito.version>1.9.5</mockito.version>
+    <benchmark.version>0.7.2</benchmark.version>
   </properties>
   <dependencyManagement>
     <!-- Framework Modules -->
@@ -271,16 +273,16 @@
         <version>${daisy.xproc-api.version}</version>
       </dependency>
       <!-- Third-Party Libraries -->
-    <dependency>
-      <groupId>org.apache.derby</groupId>
-      <artifactId>javax.persistence</artifactId>
-      <version>10.5.3.0</version>
-    </dependency>
-   <dependency>
-	<groupId>org.apache.derby</groupId>
-	<artifactId>derby</artifactId>
-	<version>10.9.1.0</version>
-</dependency> 
+      <dependency>
+        <groupId>org.apache.derby</groupId>
+        <artifactId>javax.persistence</artifactId>
+        <version>10.5.3.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.derby</groupId>
+        <artifactId>derby</artifactId>
+        <version>10.9.1.0</version>
+      </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
@@ -462,9 +464,9 @@
         <version>${slf4j.version}</version>
       </dependency>
       <dependency>
-                  <groupId>ch.qos.logback</groupId>
-                  <artifactId>logback-classic</artifactId>
-		  <version>${logback.version}</version>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -475,6 +477,16 @@
         <groupId>org.slf4j</groupId>
         <artifactId>jcl-over-slf4j</artifactId>
         <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.carrotsearch</groupId>
+        <artifactId>junit-benchmarks</artifactId>
+        <version>${benchmark.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-all</artifactId>
+        <version>${mockito.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
