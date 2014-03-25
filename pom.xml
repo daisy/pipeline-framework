@@ -127,26 +127,26 @@
     <!-- Targeted Java Version -->
     <java.version>1.6</java.version>
     <!-- Modules Versions -->
-    <daisy.calabash-adapter.version>1.0-SNAPSHOT</daisy.calabash-adapter.version>
-    <daisy.calabash-custom-steps.version>1.0-SNAPSHOT</daisy.calabash-custom-steps.version>
-    <daisy.common-stax.version>1.0-SNAPSHOT</daisy.common-stax.version>
-    <daisy.common-utils.version>1.0-SNAPSHOT</daisy.common-utils.version>
-    <daisy.framework-core.version>1.0-SNAPSHOT</daisy.framework-core.version>
-    <daisy.framework-persistence.version>1.0-SNAPSHOT</daisy.framework-persistence.version>
-    <daisy.framework-volatile.version>1.0-SNAPSHOT</daisy.framework-volatile.version>
-    <daisy.logging-activator.version>1.0-SNAPSHOT</daisy.logging-activator.version>
-    <daisy.logging-appender.version>1.0-SNAPSHOT</daisy.logging-appender.version>
-    <daisy.modules-api.version>1.0-SNAPSHOT</daisy.modules-api.version>
-    <daisy.modules-registry.version>1.0-SNAPSHOT</daisy.modules-registry.version>
-    <daisy.persistence-derby.version>1.0-SNAPSHOT</daisy.persistence-derby.version>
-    <daisy.persistence-mysql.version>1.0-SNAPSHOT</daisy.persistence-mysql.version>
-    <daisy.push-notifier.version>1.0-SNAPSHOT</daisy.push-notifier.version>
-    <daisy.webservice.version>1.0-SNAPSHOT</daisy.webservice.version>
-    <daisy.webservice-utils.version>1.0-SNAPSHOT</daisy.webservice-utils.version>
-    <daisy.woodstox-osgi-adapter.version>1.0-SNAPSHOT</daisy.woodstox-osgi-adapter.version>
-    <daisy.xmlcatalog.version>1.0-SNAPSHOT</daisy.xmlcatalog.version>
-    <daisy.xpath-registry.version>1.0-SNAPSHOT</daisy.xpath-registry.version>
-    <daisy.xproc-api.version>1.0-SNAPSHOT</daisy.xproc-api.version>
+    <daisy.calabash-adapter.version>1.0.1-SNAPSHOT</daisy.calabash-adapter.version>
+    <daisy.calabash-custom-steps.version>1.0.1-SNAPSHOT</daisy.calabash-custom-steps.version>
+    <daisy.common-stax.version>1.0.1-SNAPSHOT</daisy.common-stax.version>
+    <daisy.common-utils.version>1.0.1-SNAPSHOT</daisy.common-utils.version>
+    <daisy.framework-core.version>1.0.2-SNAPSHOT</daisy.framework-core.version>
+    <daisy.framework-persistence.version>1.0.2-SNAPSHOT</daisy.framework-persistence.version>
+    <daisy.framework-volatile.version>1.0.1-SNAPSHOT</daisy.framework-volatile.version>
+    <daisy.logging-activator.version>1.0.1-SNAPSHOT</daisy.logging-activator.version>
+    <daisy.logging-appender.version>1.0.1-SNAPSHOT</daisy.logging-appender.version>
+    <daisy.modules-api.version>1.0.1-SNAPSHOT</daisy.modules-api.version>
+    <daisy.modules-registry.version>1.0.1-SNAPSHOT</daisy.modules-registry.version>
+    <daisy.persistence-derby.version>1.0.1-SNAPSHOT</daisy.persistence-derby.version>
+    <daisy.persistence-mysql.version>1.0.1-SNAPSHOT</daisy.persistence-mysql.version>
+    <daisy.push-notifier.version>1.0.1-SNAPSHOT</daisy.push-notifier.version>
+    <daisy.webservice.version>1.0.2-SNAPSHOT</daisy.webservice.version>
+    <daisy.webservice-utils.version>1.0.1-SNAPSHOT</daisy.webservice-utils.version>
+    <daisy.woodstox-osgi-adapter.version>1.0.1-SNAPSHOT</daisy.woodstox-osgi-adapter.version>
+    <daisy.xmlcatalog.version>1.0.1-SNAPSHOT</daisy.xmlcatalog.version>
+    <daisy.xpath-registry.version>1.0.1-SNAPSHOT</daisy.xpath-registry.version>
+    <daisy.xproc-api.version>1.0.1-SNAPSHOT</daisy.xproc-api.version>
     <!-- Dependencies Versions -->
     <calabash.version>1.0.8</calabash.version>
     <commons.codec.version>1.6</commons.codec.version>
@@ -165,6 +165,8 @@
     <logback.version>1.0.11</logback.version>
     <woodstox.core.version>4.1.2</woodstox.core.version>
     <woodstox.stax2-api.version>3.1.1</woodstox.stax2-api.version>
+    <mockito.version>1.9.5</mockito.version>
+    <benchmark.version>0.7.2</benchmark.version>
   </properties>
   <dependencyManagement>
     <!-- Framework Modules -->
@@ -270,16 +272,16 @@
         <version>${daisy.xproc-api.version}</version>
       </dependency>
       <!-- Third-Party Libraries -->
-    <dependency>
-      <groupId>org.apache.derby</groupId>
-      <artifactId>javax.persistence</artifactId>
-      <version>10.5.3.0</version>
-    </dependency>
-   <dependency>
-	<groupId>org.apache.derby</groupId>
-	<artifactId>derby</artifactId>
-	<version>10.9.1.0</version>
-</dependency> 
+      <dependency>
+        <groupId>org.apache.derby</groupId>
+        <artifactId>javax.persistence</artifactId>
+        <version>10.5.3.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.derby</groupId>
+        <artifactId>derby</artifactId>
+        <version>10.9.1.0</version>
+      </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
@@ -461,9 +463,9 @@
         <version>${slf4j.version}</version>
       </dependency>
       <dependency>
-                  <groupId>ch.qos.logback</groupId>
-                  <artifactId>logback-classic</artifactId>
-		  <version>${logback.version}</version>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -474,6 +476,16 @@
         <groupId>org.slf4j</groupId>
         <artifactId>jcl-over-slf4j</artifactId>
         <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.carrotsearch</groupId>
+        <artifactId>junit-benchmarks</artifactId>
+        <version>${benchmark.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-all</artifactId>
+        <version>${mockito.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
