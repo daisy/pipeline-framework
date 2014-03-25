@@ -31,14 +31,11 @@ import com.google.common.util.concurrent.Monitor;
  * This class is threadsafe
  * @version 1.0
  */
-public class UpdatablePriorityBlockingQueue<T> extends
-ForwardingBlockingQueue<Runnable> {
-
-
+public class UpdatablePriorityBlockingQueue<T> extends ForwardingBlockingQueue<Runnable> { 
         /**
          * The forwarded priority queue
          */
-        private PriorityBlockingQueue<Node<T>> delegate;
+        private WrappingPriorityQueue<PrioritizableRunnable<T>,SwappingPriority<T>> delegate;
 
         /**
          * Monitor that controls {@link #take()} and other blocking aspects of this class
@@ -69,6 +66,20 @@ ForwardingBlockingQueue<Runnable> {
                 }
         };
 
+        private Function<SwappingPriority<T>, PrioritizableRunnable<T>> unwrapFunction = new Function<SwappingPriority<T>, PrioritizableRunnable<T>>() {
+                @Override
+                public PrioritizableRunnable<T> apply(SwappingPriority<T> arg) {
+                        return arg.getDelegate();
+                }
+        };
+
+        private Function<PrioritizableRunnable<T>,SwappingPriority<T> > wrapFunction = new Function<PrioritizableRunnable<T>,SwappingPriority<T>>() {
+                @Override
+                public SwappingPriority<T> apply(PrioritizableRunnable<T> arg) {
+                        return new SwappingPriority<T>(arg);
+                }
+        };
+
         /**
          * flag controlling the updating processes
          */
@@ -85,9 +96,10 @@ ForwardingBlockingQueue<Runnable> {
         /**
          * @return a brand new queue, it does not set it as delegate
          */
-        private PriorityBlockingQueue<Node<T>> buildQueue() {
-                return new PriorityBlockingQueue<Node<T>>(20,
+        private WrappingPriorityQueue<PrioritizableRunnable<T>,SwappingPriority<T>> buildQueue() {
+                PriorityBlockingQueue<SwappingPriority<T>> queue= new PriorityBlockingQueue<SwappingPriority<T>>(20,
                                 new PrioritizableComparator());
+                return new WrappingPriorityQueue<PrioritizableRunnable<T>,SwappingPriority<T>>(queue,wrapFunction,unwrapFunction);
         }
 
 
@@ -118,18 +130,18 @@ ForwardingBlockingQueue<Runnable> {
          */
         private void doUpdate() {
                 //re-add the elements of the queue to re-sort them
-                Collection<Node<T>> aux = ImmutableList
-                        .copyOf(this.delegate);
+                Collection<SwappingPriority<T>> aux = ImmutableList
+                        .copyOf(this.delegate.wrapped());
                 this.delegate.clear();
-                this.delegate.addAll(aux);
+                this.delegate.addAllBypass(aux);
         }
 
 
-        protected Optional<Node<T>> tryFind(final PrioritizableRunnable<T> runnable){
-                return Iterables.tryFind(this.delegate, new Predicate<Node<T>>() {
+        protected Optional<SwappingPriority<T>> tryFind(final PrioritizableRunnable<T> runnable){
+                return Iterables.tryFind(this.delegate.wrapped(), new Predicate<SwappingPriority<T>>() {
 
                         @Override
-                        public boolean apply(Node<T> e) {
+                        public boolean apply(SwappingPriority<T> e) {
                                return e.getDelegate().equals(runnable); 
 
                         }});
@@ -141,8 +153,8 @@ ForwardingBlockingQueue<Runnable> {
          */
         public synchronized void swap(PrioritizableRunnable<T> runnable1,PrioritizableRunnable<T> runnable2) {
                 this.enterUpdate();
-                Optional<Node<T>> node1=this.tryFind(runnable1);
-                Optional<Node<T>> node2=this.tryFind(runnable2);
+                Optional<SwappingPriority<T>> node1=this.tryFind(runnable1);
+                Optional<SwappingPriority<T>> node2=this.tryFind(runnable2);
                 //one of them doesn't exsist
                 if (!node1.isPresent() ||  !node2.isPresent()){
                         this.leaveUpdate();
@@ -177,26 +189,17 @@ ForwardingBlockingQueue<Runnable> {
          * Returns the runnables as an immutable {@link java.util.Collection} <b>maintaining</b> the order given by the priority
          */
         public Collection<PrioritizableRunnable<T>> asOrderedCollection() {
-                List<Node<T>> list= Lists.newLinkedList(this.delegate);
+                List<SwappingPriority<T>> list= Lists.newLinkedList(this.delegate.wrapped());
                 Collections.sort(list, new PrioritizableComparator());
-                return this.cast(list);
+                return Collections2.transform(list,this.unwrapFunction);
         }
 
-        protected Collection<PrioritizableRunnable<T>> cast(Collection<Node<T>> nodes){
-                return Collections2.transform(nodes,
-                                new Function<Node<T>, PrioritizableRunnable<T>>() {
-
-                                        @Override
-                                        public PrioritizableRunnable<T> apply(Node<T> arg0) {
-                                                return  arg0.getDelegate();
-                                        }});
-        }
 
         /**
          * Returns the runnables as an immutable {@link java.util.Collection} <b>without maintaining</b> the order given by the priority
          */
         public Collection<PrioritizableRunnable<T>> asCollection() {
-                return ImmutableList.copyOf(this.cast(this.delegate));
+                return ImmutableList.copyOf(this.delegate.unwrap());
         }
 
         /**
@@ -204,9 +207,11 @@ ForwardingBlockingQueue<Runnable> {
          * @return
          */
         @Override
-        @SuppressWarnings({ "unchecked" })
+        @SuppressWarnings({ "unchecked" }) //controlled environment not (terribly) dangerous
         protected BlockingQueue<Runnable> delegate() {
-                return (BlockingQueue<Runnable>) (BlockingQueue<? extends Runnable>) this.delegate;
+                return (BlockingQueue<Runnable>) 
+                        (BlockingQueue<? extends Runnable>)
+                        this.delegate;
         }
 
         /**
@@ -224,7 +229,7 @@ ForwardingBlockingQueue<Runnable> {
                         throw new RuntimeException(e);
                 }
                 //System.out.println("offer: entered monitor");
-                res = this.delegate.offer(new Node<T>((PrioritizableRunnable<T>) o));
+                res = this.delegate.offer((PrioritizableRunnable<T>) o);
                 //System.out.println("offer: left monitor");
                 monitor.leave();
                 return res;
@@ -235,7 +240,7 @@ ForwardingBlockingQueue<Runnable> {
          * is being updated.
          */
         @SuppressWarnings("unchecked")
-                @Override
+		@Override
         public synchronized boolean add(Runnable element) {
                 boolean res;
                 try {
@@ -244,9 +249,7 @@ ForwardingBlockingQueue<Runnable> {
                         monitor.leave();
                         throw new RuntimeException(e);
                 }
-                //System.out.println("add: entered monitor");
-                res=this.delegate.add(new Node<T>((PrioritizableRunnable<T>)element));
-                //System.out.println("add: left monitor");
+                res=this.delegate.add((PrioritizableRunnable<T>)element);
                 monitor.leave();
                 return res;
         }
@@ -268,58 +271,38 @@ ForwardingBlockingQueue<Runnable> {
         }
 
 
-        @Override
-        public Runnable poll() {
-                Runnable elem=this.delegate.poll();
-                if (elem instanceof Node<?>){
-                        elem=((Node<?>) elem).getDelegate();
-                }
-                return elem;
-        }
-
-        @Override
-        public void put(Runnable e) throws InterruptedException {
-                this.delegate.put(new Node<T>((PrioritizableRunnable<T>)e));
-        }
-
-
-        @Override
-        public Runnable peek() {
-                return this.delegate.peek().getDelegate();
-        }
-
-        private static class Node<T> extends
-                ForwardingPrioritableRunnable<T> {
-
-                        PrioritizableRunnable<T> overrider;
-
-                        public Node(PrioritizableRunnable<T> delegate,PrioritizableRunnable<T> overrider) {
-                                super(delegate);
-                                this.overrider=overrider;
-                        }
-                        public Node(PrioritizableRunnable<T> delegate) {
-                                super(delegate);
-                                this.overrider=delegate;
-                        }
-
-                        @Override
-                        public double getPriority() {
-                                return this.overrider.getPriority();
-                        }
-
-                        /**
-                         * @return the overrider
-                         */
-                        public PrioritizableRunnable<T> getOverrider() {
-                                return overrider;
-                        }
-
-                        /**
-                         * @param overrider the overrider to set
-                         */
-                        public void setOverrider(PrioritizableRunnable<T> overrider) {
-                                this.overrider = overrider;
-                        }
-                }
-
 }
+class SwappingPriority<T> extends
+ForwardingPrioritableRunnable<T> {
+
+        PrioritizableRunnable<T> overrider;
+
+        public SwappingPriority(PrioritizableRunnable<T> delegate,PrioritizableRunnable<T> overrider) {
+                super(delegate);
+                this.overrider=overrider;
+        }
+        public SwappingPriority(PrioritizableRunnable<T> delegate) {
+                super(delegate);
+                this.overrider=delegate;
+        }
+
+        @Override
+        public double getPriority() {
+                return this.overrider.getPriority();
+        }
+
+        /**
+         * @return the overrider
+         */
+        public PrioritizableRunnable<T> getOverrider() {
+                return overrider;
+        }
+
+        /**
+         * @param overrider the overrider to set
+         */
+        public void setOverrider(PrioritizableRunnable<T> overrider) {
+                this.overrider = overrider;
+        }
+}
+

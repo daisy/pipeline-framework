@@ -53,13 +53,13 @@ public class UpdatablePriorityBlockingQueueTest{
                queue.offer(task2);
                queue.offer(task3);
                queue.swap(task1,task2);
-               Assert.assertEquals("Order is 1,2,3",new PrioritizableRunnable[]{task1,task2,task3},queue.asOrderedCollection().toArray());
+               Assert.assertArrayEquals("Order is 1,2,3",new PrioritizableRunnable[]{task1,task2,task3},queue.asOrderedCollection().toArray());
                queue.swap(task2,task3);
-               Assert.assertEquals("Order is 1,3,2",new PrioritizableRunnable[]{task1,task3,task2},queue.asOrderedCollection().toArray());
+               Assert.assertArrayEquals("Order is 1,3,2",new PrioritizableRunnable[]{task1,task3,task2},queue.asOrderedCollection().toArray());
                queue.swap(task1,task3);
-               Assert.assertEquals("Order is 3,1,2",new PrioritizableRunnable[]{task3,task1,task2},queue.asOrderedCollection().toArray());
+               Assert.assertArrayEquals("Order is 3,1,2",new PrioritizableRunnable[]{task3,task1,task2},queue.asOrderedCollection().toArray());
                queue.swap(task2,task3);
-               Assert.assertEquals("Order is 3,1,2",new PrioritizableRunnable[]{task2,task1,task3},queue.asOrderedCollection().toArray());
+               Assert.assertArrayEquals("Order is 3,1,2",new PrioritizableRunnable[]{task2,task1,task3},queue.asOrderedCollection().toArray());
        }
 
        @Test
