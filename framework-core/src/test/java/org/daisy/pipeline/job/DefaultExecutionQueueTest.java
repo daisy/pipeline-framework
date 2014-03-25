@@ -115,6 +115,15 @@ public class DefaultExecutionQueueTest {
         }
 
         @Test
+        public void moveUpDown() {
+                exQ.moveDown(this.ids.get(2));
+                Mockito.verify(queue, Mockito.times(1)).swap(this.runnables.get(2),this.runnables.get(3));
+                //otherwise move it up
+                exQ.moveUp(this.ids.get(3));
+                Mockito.verify(queue, Mockito.times(1)).swap(this.runnables.get(3),this.runnables.get(2));
+        }
+
+        @Test
         public void cancel() {
                 exQ.moveUp(JobIdFactory.newId());
                 Mockito.verify(pool, Mockito.times(0)).remove(this.runnables.get(3));
