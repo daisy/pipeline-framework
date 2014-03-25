@@ -9,7 +9,12 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.util.concurrent.ForwardingBlockingQueue;
-
+/**
+ * This class takes care of wrapping and unwrapping elements when they are 
+ * added to the queue. The main restriction is that K has to be a subtype of T
+ * in order to be able to hide the actual to the forwarded queue.
+ *
+ */
 public class WrappingPriorityQueue<T, K extends T> extends ForwardingBlockingQueue<T> {
 
         private PriorityBlockingQueue<K> delegate;
@@ -29,20 +34,40 @@ public class WrappingPriorityQueue<T, K extends T> extends ForwardingBlockingQue
         public PriorityBlockingQueue<T> delegate(){
                 return (PriorityBlockingQueue<T>)this.delegate;
         }
-
+        /**
+         * Returns an iterable with the unwrapped elements.
+         */
         public Iterable<T> unwrap(){
                 return Collections2.transform(this.delegate,unwrapFunction);
         }
+        /**
+         * Returns an iterable with the wrapped elements.
+         */
 
         public Iterable<K> wrapped(){
                 return this.delegate;
         }
 
+        /**
+         * Convinience method
+         */
         private K wrap( T element ){
                 return this.wrapFunction.apply(element);
         }
-        public T unwrap( K element ){
+
+        /**
+         * Convinience method
+         */
+        private T unwrap( K element ){
                 return this.unwrapFunction.apply(element);
+        }
+
+        /**
+         * Allows to add a set of elements that are already 
+         * wrapped. Useful when updating the queue.
+         */
+        public boolean addAllBypass(Collection<K> collection) {
+                return this.delegate.addAll(collection);
         }
 
         @Override
@@ -112,9 +137,6 @@ public class WrappingPriorityQueue<T, K extends T> extends ForwardingBlockingQue
                 return true;
         }
 
-        public boolean addAllBypass(Collection<K> collection) {
-                return this.delegate.addAll(collection);
-        }
 
         @Override
         public Iterator<T> iterator() {
