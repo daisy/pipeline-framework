@@ -1,13 +1,15 @@
 package org.daisy.pipeline.webserviceutils.xml;
 
+import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.priority.Prioritizable;
 import org.daisy.pipeline.webserviceutils.Routes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.daisy.pipeline.job.priority.Prioritizable;
-import org.daisy.pipeline.job.Job;
 
 public class QueueXmlWriter{
-                
+        private static final Logger logger = LoggerFactory.getLogger(QueueXmlWriter.class); 
         Iterable<? extends Prioritizable<Job>> jobs;
         /**
          * @param size
@@ -26,19 +28,18 @@ public class QueueXmlWriter{
 
                 }
                 
-                // for debugging only
-                //if (!XmlValidator.validate(doc, XmlValidator.JOBSIZE_SCHEMA_URL)) {
-                        //logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
-                //}
+		// for debugging only
+		if (!XmlValidator.validate(doc, XmlValidator.QUEUE_SCHEMA_URL)) {
+			logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
+		}
 
                 return doc;
         }
 
         private void addElementData(Prioritizable<Job> job, Element parent) {
-		String baseUri = new Routes().getBaseUri();
                 Element element= parent.getOwnerDocument().createElementNS(XmlUtils.NS_PIPELINE_DATA, "job");
                 element.setAttribute("id",job.prioritySource().getId().toString());
-                element.setAttribute("jobHref",new Routes().getBaseUri()+"/jobs/"+job.prioritySource().getId().toString());
+                element.setAttribute("href",new Routes().getBaseUri()+"/jobs/"+job.prioritySource().getId().toString());
                 element.setAttribute("computedPriority",String.valueOf(job.getPriority()));
                 element.setAttribute("jobPriority",String.valueOf(job.prioritySource().getPriority()).toLowerCase());
                 element.setAttribute("clientPriority",String.valueOf(job.prioritySource().getContext().getClient().getPriority()).toLowerCase());
