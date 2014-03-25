@@ -175,9 +175,7 @@ public class UpdatablePriorityBlockingQueue<T> extends ForwardingBlockingQueue<R
                         return;
                 }
                 //swap the overriders 
-                PrioritizableRunnable<T> aux=node1.get().getOverrider();
-                node1.get().setOverrider(node2.get().getOverrider());
-                node2.get().setOverrider(aux);
+                node1.get().swapWith(node2.get());
                 this.leaveUpdate();//out monitor
 
         }
@@ -321,6 +319,16 @@ ForwardingPrioritableRunnable<T> {
          */
         public void setOverrider(PrioritizableRunnable<T> overrider) {
                 this.overrider = overrider;
+        }
+
+        /**
+         * Swap priorities
+         */
+
+        public void swapWith(SwappingPriority<T> other){
+                PrioritizableRunnable<T> aux=this.getOverrider();
+                this.setOverrider(other.getOverrider());
+                other.setOverrider(aux);
         }
 }
 
