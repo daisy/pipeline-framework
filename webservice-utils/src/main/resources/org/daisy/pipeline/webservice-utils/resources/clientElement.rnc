@@ -7,4 +7,5 @@ client =
         & attribute secret { text }
         & attribute role { text }
         & attribute contact { text }
+        & attribute priority { "low" | "medium" | "high"}
     }
