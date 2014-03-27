@@ -48,7 +48,7 @@ public class PrioritizableRunnable<T> implements Prioritizable<T>,Runnable{
         }
 
 
-        public PriorityCalculator getPriorityCalculator(){
+        public PriorityCalculator<T> getPriorityCalculator(){
                 return this.priorityCalculator;
         }
 

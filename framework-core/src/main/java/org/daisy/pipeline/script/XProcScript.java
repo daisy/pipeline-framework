@@ -13,8 +13,6 @@ import javax.xml.namespace.QName;
 
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -155,7 +153,7 @@ public final class XProcScript {
 					optionsMetadata,descriptor,inputFilesets,outputFilesets);
 		}
 	}
-	private static Logger logger = LoggerFactory.getLogger(XProcScript.class);
+	//private static Logger logger = LoggerFactory.getLogger(XProcScript.class);
 
 	/** The pipeline info. */
 	private final XProcPipelineInfo pipelineInfo;

@@ -90,6 +90,7 @@ public class DefaultExecutionQueueTest {
         }
 
         @Test
+        @SuppressWarnings({"unchecked"})
         public void moveUp() {
                 //no effect after moving up a id that doesnt exsist
                 exQ.moveUp(JobIdFactory.newId());
@@ -103,6 +104,7 @@ public class DefaultExecutionQueueTest {
         }
 
         @Test
+        @SuppressWarnings({"unchecked"})
         public void moveDown() {
                 //no effect after moving up a id that doesnt exsist
                 exQ.moveUp(JobIdFactory.newId());

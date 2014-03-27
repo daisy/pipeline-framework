@@ -84,9 +84,6 @@ public class JobResult {
         //media type
         private String mediaType;
 
-        //size in kb
-        private long size;
-
         /**
          * Constructs a new instance.
          *

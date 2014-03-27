@@ -1,7 +1,6 @@
 package org.daisy.pipeline.job.fuzzy;
 
 import com.google.common.base.Function;
-import com.google.common.base.Supplier;
 
 /**
 * A fuzzy set is defined by a name which describes the intensity (high, low , very cold, hot, etc.), a weight and a memebership function, the memebership function should define behaviuors in the range (0,1) and return values from (0,1). 
