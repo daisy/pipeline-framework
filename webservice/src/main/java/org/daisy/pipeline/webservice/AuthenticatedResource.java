@@ -19,6 +19,7 @@ public abstract class AuthenticatedResource extends GenericResource {
                 super.doInit();
                 if (webservice().getConfiguration().isAuthenticationEnabled() == false) {
                         // if authentication is not enabled, then all requests can be considered automatically authenticated
+                        System.out.println("Apparently i'm here");
                         client=webservice().getStorage().getClientStorage().defaultClient();
                         isAuthenticated = true;
                 } else {
@@ -32,9 +33,10 @@ public abstract class AuthenticatedResource extends GenericResource {
                                 .getMaxRequestTime();
                 String authid = getQuery().getFirstValue("authid");
                 Optional<Client> optionalClient= webservice().getStorage().getClientStorage().get(authid);
+                System.out.println(webservice().getStorage().getClientStorage());
                 // make sure the client exists
-                if (optionalClient.isPresent()) {
-                        logger.error(String.format("Client with auth ID %s not found", authid));
+                if (!optionalClient.isPresent()) {
+                        logger.error(String.format("Client with auth ID '%s' not found", authid));
                         return false;
                 }
                 this.client=optionalClient.get();
