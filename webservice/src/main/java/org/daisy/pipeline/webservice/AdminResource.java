@@ -1,6 +1,7 @@
 package org.daisy.pipeline.webservice;
 
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.clients.Client.Role;
 
 import com.google.common.base.Optional;
 
@@ -19,7 +20,7 @@ public class AdminResource extends AuthenticatedResource {
         private boolean authorizeAsAdmin() {
                 String id = getQuery().getFirstValue("authid");
                 Optional<Client> client = webservice().getStorage().getClientStorage().get(id);
-                return client.isPresent();
+                return client.isPresent()&&client.get().getRole()==Role.ADMIN;
         }
 
         public boolean isAuthorized() {
