@@ -19,7 +19,6 @@ public abstract class AuthenticatedResource extends GenericResource {
                 super.doInit();
                 if (webservice().getConfiguration().isAuthenticationEnabled() == false) {
                         // if authentication is not enabled, then all requests can be considered automatically authenticated
-                        System.out.println("Apparently i'm here");
                         client=webservice().getStorage().getClientStorage().defaultClient();
                         isAuthenticated = true;
                 } else {
