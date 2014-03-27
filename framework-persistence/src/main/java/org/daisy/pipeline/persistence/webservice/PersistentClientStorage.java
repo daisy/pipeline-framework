@@ -50,6 +50,7 @@ public class PersistentClientStorage implements ClientStorage {
                 try {
                         return Optional.of((Client)database.getFirst(q, PersistentClient.class));
                 } catch (NoResultException e) {
+                        logger.debug(String.format("Client with id %s not found",id))
                         return Optional.absent();
                 }
         }
