@@ -13,7 +13,7 @@ import org.daisy.pipeline.job.priority.timetracking.TimeTrackerFactory;
  */
 public class PriorityThreadPoolExecutor<T> extends ThreadPoolExecutor 
                 {
-        private TimeTracker tracker;
+        private TimeTracker<T> tracker;
         //private static final Logger logger = LoggerFactory.getLogger(PriorityThreadPoolExecutor.class);
 
         /**
@@ -28,7 +28,7 @@ public class PriorityThreadPoolExecutor<T> extends ThreadPoolExecutor
          */
         PriorityThreadPoolExecutor(int corePoolSize, int maximumPoolSize,
                         long keepAliveTime, TimeUnit unit,
-                        UpdatablePriorityBlockingQueue<T> workQueue, TimeTracker tracker) {
+                        UpdatablePriorityBlockingQueue<T> workQueue, TimeTracker<T> tracker) {
                 super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
                 this.tracker=tracker;
         }
@@ -39,7 +39,7 @@ public class PriorityThreadPoolExecutor<T> extends ThreadPoolExecutor
          * */
         public static <T> PriorityThreadPoolExecutor<T> newFixedSizeThreadPoolExecutor(int poolSize,TimeTrackerFactory trackerFactory) {
                 UpdatablePriorityBlockingQueue<T> queue = new UpdatablePriorityBlockingQueue<T>(); 
-                TimeTracker tracker=trackerFactory.newTimeTracker(queue); 
+                TimeTracker<T> tracker=trackerFactory.newTimeTracker(queue); 
                 return new PriorityThreadPoolExecutor<T>(poolSize,poolSize,0L,TimeUnit.MICROSECONDS,queue,tracker);
         }
 

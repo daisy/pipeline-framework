@@ -3,9 +3,6 @@ package org.daisy.pipeline.job.fuzzy;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.base.Supplier;
-
 
 /**
  * A fuzzy variable is just a group of fuzzy sets

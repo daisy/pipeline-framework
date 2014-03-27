@@ -11,14 +11,16 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.google.common.base.Supplier;
 
 @RunWith(MockitoJUnitRunner.class)
+
 public class FuzzyJobFactoryTest   {
 
         InferenceEngine engine=FuzzyJobFactory.ENGINE;
-        FuzzyPriorityCalculator[][] calculators;
+        FuzzyPriorityCalculator<Object>[][] calculators;
         double scores[][][];
         double []waitingTimes;
 
 
+        @SuppressWarnings("unchecked")
         @Before
         public void setUp(){
 
@@ -28,7 +30,7 @@ public class FuzzyJobFactoryTest   {
                         calculators[i]=new FuzzyPriorityCalculator[3];
                         for (int j=0; j<3;j++){
                                 final double[] prios=new double[]{i/2.0,j/2.0};
-                                calculators[i][j] = new FuzzyPriorityCalculator(engine,
+                                calculators[i][j] = new FuzzyPriorityCalculator<Object>(engine,
                                                 new Supplier<double[]>() {
 
                                                         @Override
@@ -82,9 +84,10 @@ public class FuzzyJobFactoryTest   {
 
         }
 
+        @SuppressWarnings({"unchecked"})
         private double[][][] getScores(double times[]){
                 double[][][] scores= new double[3][3][times.length];
-                PrioritizableRunnable runnable = Mockito.mock(PrioritizableRunnable.class);
+                PrioritizableRunnable<Object> runnable = Mockito.mock(PrioritizableRunnable.class);
                 for (int i=0; i<3;i++){
                         for (int j=0; j<3;j++){
                                 for (int k=0;k<times.length;k++){

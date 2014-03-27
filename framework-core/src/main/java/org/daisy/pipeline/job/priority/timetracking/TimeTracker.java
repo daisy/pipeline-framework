@@ -15,7 +15,7 @@ import com.google.common.base.Function;
  * @version
  *
  */
-public class TimeTracker{
+public class TimeTracker<T>{
         /**
          *Buffer possition
          */
@@ -27,7 +27,7 @@ public class TimeTracker{
         /**
          *Execution queue to be updated peridically
          */
-        final private UpdatablePriorityBlockingQueue queue;
+        final private UpdatablePriorityBlockingQueue<T> queue;
         /**
          *Factory of normalising functions
          */
@@ -44,7 +44,7 @@ public class TimeTracker{
          * @param size
          * @param queue
          */
-        public TimeTracker(int frequency, UpdatablePriorityBlockingQueue queue, TimeFunctionFactory functionFactory) {
+        public TimeTracker(int frequency, UpdatablePriorityBlockingQueue<T> queue, TimeFunctionFactory functionFactory) {
                 this.frequency= frequency;
                 this.queue = queue;
                 this.functionFactory=functionFactory;
@@ -60,10 +60,10 @@ public class TimeTracker{
                 this.counter++;
                 if( this.counter == this.frequency){
                         //get the waiting times
-                        Collection<PrioritizableRunnable> waiting=this.queue.asCollection();
+                        Collection<PrioritizableRunnable<T>> waiting=this.queue.asCollection();
                         long times[] = new long[waiting.size()]; 
                         int i=0;
-                        for( PrioritizableRunnable r:waiting){
+                        for( PrioritizableRunnable<T> r:waiting){
                                 times[i++]=r.getTimestamp(); 
                         }
                         this.update(times);                                 
@@ -82,9 +82,9 @@ public class TimeTracker{
                 //get a new updater function
                 final Function<Long,Double> timeUpdater=TimeTracker.this.functionFactory.getFunction(stats);
                 //Let the queue do the work
-                this.queue.update(new Function<PrioritizableRunnable, Void>() {
+                this.queue.update(new Function<PrioritizableRunnable<T>, Void>() {
                         @Override
-                        public Void apply(PrioritizableRunnable runnable) {
+                        public Void apply(PrioritizableRunnable<T> runnable) {
                                 runnable.setRelativeWaitingTime(timeUpdater);
                                 //ugly as hell but you can't intantiate void, go figure.
                                 return null;

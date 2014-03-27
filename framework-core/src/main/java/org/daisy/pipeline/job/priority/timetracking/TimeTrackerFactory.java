@@ -41,8 +41,8 @@ public final class TimeTrackerFactory{
          * @param queue
          * @return
          */
-        public TimeTracker newTimeTracker(UpdatablePriorityBlockingQueue queue){
-                return new TimeTracker(this.size,queue,this.functionFactory);
+        public <T> TimeTracker<T> newTimeTracker(UpdatablePriorityBlockingQueue<T> queue){
+                return new TimeTracker<T>(this.size,queue,this.functionFactory);
         }
 
 }
