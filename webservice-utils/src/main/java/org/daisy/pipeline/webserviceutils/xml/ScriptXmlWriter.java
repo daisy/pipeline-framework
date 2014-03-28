@@ -107,6 +107,7 @@ public class ScriptXmlWriter {
 
 			Element inputElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "input");
 			inputElm.setAttribute("name", input.getName());
+	                inputElm.setAttribute("nicename", meta.getNiceName());
 			inputElm.setAttribute("required", Boolean.toString(meta.isRequired()));
 			inputElm.setAttribute("sequence", Boolean.toString(input.isSequence()));
 			if (meta.getMediaType() != null && !meta.getMediaType().isEmpty()) {
@@ -125,6 +126,7 @@ public class ScriptXmlWriter {
 			
 			Element optionElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "option");
 			optionElm.setAttribute("name", option.getName().toString());
+	                optionElm.setAttribute("nicename", meta.getNiceName());
 			optionElm.setAttribute("required", Boolean.toString(option.isRequired()));
 			
 			optionElm.setAttribute("type", meta.getType());
@@ -150,6 +152,7 @@ public class ScriptXmlWriter {
 			XProcPortMetadata meta = script.getPortMetadata(output.getName());
 			Element outputElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "output");
 			outputElm.setAttribute("name", output.getName());
+	                outputElm.setAttribute("nicename", meta.getNiceName());
 			outputElm.setAttribute("sequence", Boolean.toString(output.isSequence()));
 			if (meta.getMediaType() != null && !meta.getMediaType().isEmpty()) {
 				outputElm.setAttribute("mediaType", meta.getMediaType());

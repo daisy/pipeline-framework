@@ -8,10 +8,10 @@
     <input
         desc="One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed."
         mediaType="application/x-dtbook+xml" name="source" sequence="true"/>
-    <option desc="Filename for the generated MODS file" mediaType="" name="opt-mods-filename"
+    <option desc="Filename for the generated MODS file" mediaType="" name="opt-mods-filename" nicename="Mods File"
         required="false" type="string" ordered="false" sequence="false"/>
-    <option desc="Filename for the generated CSS file" mediaType="" name="opt-css-filename"
+    <option desc="Filename for the generated CSS file" mediaType="" name="opt-css-filename" nicename="CSS File"
         required="false" type="string" ordered="false" sequence="false"/>
-    <option desc="Filename for the generated ZedAI file" mediaType="" name="opt-zedai-filename"
+    <option desc="Filename for the generated ZedAI file" mediaType="" name="opt-zedai-filename" nicename="ZedAI File"
         required="false" type="string" ordered="false" sequence="false"/>
 </script>

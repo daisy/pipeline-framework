@@ -4,11 +4,19 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
+<<<<<<< HEAD
     <version>1.0.2-SNAPSHOT</version>
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-persistence</artifactId>
   <version>1.0.2-SNAPSHOT</version>
+=======
+    <version>1.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>org.daisy.pipeline</groupId>
+  <artifactId>framework-persistence</artifactId>
+  <version>1.0.1-SNAPSHOT</version>
+>>>>>>> master
   <packaging>bundle</packaging>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

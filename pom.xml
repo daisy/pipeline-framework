@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
-    <version>2</version>
+    <version>3</version>
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-parent</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Framework Parent POM</name>
   <description>The DAISY Pipeline 2 is an open source framework for the automated processing of various digital formats efficiently and economically. It intends to facilitate the production and maintenance of accessible content for people with print disabilities.</description>
@@ -115,9 +115,10 @@
     <module>xproc-api</module>
   </modules>
   <scm>
-    <connection>scm:hg:https://code.google.com/p/daisy-pipeline/</connection>
-    <developerConnection>scm:hg:https://code.google.com/p/daisy-pipeline/</developerConnection>
-    <url>https://code.google.com/p/daisy-pipeline/source/browse/</url>
+    <connection>scm:git:git@github.com:daisy-consortium/pipeline-framework.git</connection>
+    <url>scm:git:git@github.com:daisy-consortium/pipeline-framework.git</url>
+    <developerConnection>scm:git:git@github.com:daisy-consortium/pipeline-framework.git</developerConnection>
+    <tag>HEAD</tag>
   </scm>
   <issueManagement>
     <system>Google Code Issue Tracker</system>
@@ -572,7 +573,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
               </pluginExecutions>

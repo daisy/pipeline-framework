@@ -37,12 +37,13 @@ element job {
 result= 
 element result{
 	attribute href { xsd:anyURI }
-	& attribute mime-type { text }
+	& attribute mime-type { text }?
 	& (attribute file { text }) ?
+	& attribute size { xsd:long }?
 	& ( 	
 			attribute from { text }
 			& attribute name { text }
-			& attribute size { xsd:long }
+			& attribute nicename{ text } 
 	  )?
 		& result*
 }
