@@ -1,4 +1,5 @@
 default namespace = "http://www.daisy.org/ns/pipeline/data"
+include "priority.rnc"
 start =
 element queue {
 	attribute href { xsd:anyURI }
@@ -18,4 +19,3 @@ element queue {
 
 
 
-priority= "high" | "medium" | "low" 

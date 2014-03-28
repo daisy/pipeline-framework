@@ -1,6 +1,7 @@
 default namespace = "http://www.daisy.org/ns/pipeline/data"
 
 include "scriptElement.rnc"
+include "priority.rnc"
 
 job = 
 element job {
@@ -10,7 +11,7 @@ element job {
 
 	& attribute status { job.status }
 
-	& attribute priority { job.priority}
+	& attribute priority { priority}
 
 	& script?
 
@@ -49,6 +50,5 @@ element result{
 
 job.status = "IDLE" | "RUNNING" | "DONE" | "ERROR" | "VALIDATION_FAIL"
 
-job.priority= "high" | "medium" | "low" 
 
 message.level = "WARNING" | "ERROR" | "INFO" | "DEBUG" | "TRACE"
