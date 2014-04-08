@@ -13,7 +13,6 @@ import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
-import org.daisy.pipeline.clients.SimpleClient;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
