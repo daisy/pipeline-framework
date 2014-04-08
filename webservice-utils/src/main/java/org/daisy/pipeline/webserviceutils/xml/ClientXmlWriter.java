@@ -1,8 +1,8 @@
 package org.daisy.pipeline.webserviceutils.xml;
 
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.webserviceutils.Routes;
 import org.daisy.pipeline.webserviceutils.xml.XmlValidator;
-import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;

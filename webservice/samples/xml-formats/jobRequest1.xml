@@ -2,6 +2,7 @@
 <jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
 	<!-- nice name is optional -->
 	<nicename>basic-job-1</nicename>
+        <priority>medium</priority>
 	<script href='http://example.org/ws/scripts/dtbook-to-zedai'/>
 	<input name='source'>
 		<!-- file @src is referring to a file inside a separate folder or archive -->

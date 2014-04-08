@@ -13,6 +13,7 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.URIMapper;
+import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.persistence.Database;
 import org.junit.After;
 import org.junit.Assert;
@@ -40,7 +41,15 @@ public class PersistentJobContextTest  {
 	@After
 	public void tearDown(){
 		db.deleteObject(ctxt);
+                db.deleteObject(ctxt.getClient());
 	}	
+
+        @Test
+        public void getClientPriority(){
+		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
+                Assert.assertEquals("Check priority is low",Priority.LOW,jCtxt.getClient().getPriority());
+
+        }
 
 	@Test
 	public void generateResults(){

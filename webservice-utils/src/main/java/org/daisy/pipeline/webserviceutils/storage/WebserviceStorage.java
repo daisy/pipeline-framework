@@ -1,6 +1,6 @@
 package org.daisy.pipeline.webserviceutils.storage;
 
-import org.daisy.pipeline.webserviceutils.clients.ClientStorage;
+import org.daisy.pipeline.clients.ClientStorage;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 
 public interface WebserviceStorage {

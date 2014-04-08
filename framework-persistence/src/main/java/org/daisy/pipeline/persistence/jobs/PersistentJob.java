@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,11 +12,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.MapsId;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
@@ -25,6 +21,7 @@ import javax.persistence.TypedQuery;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;
+import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.persistence.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,18 +29,12 @@ import org.slf4j.LoggerFactory;
 import com.google.common.eventbus.EventBus;
 
 @Entity
-//This plus the correct configuration 
-//of the pu should be enough to ensure that jobs 
-//with the same id will return true to
-//job1==job2
-//namely, only one object wandering around per JobId
-@Cacheable
 @Table(name="jobs")
 @NamedQuery ( name="Job.getAll", query="select j from PersistentJob j")
 @Access(value=AccessType.FIELD)
 public class PersistentJob  extends Job implements Serializable {
 
-
+        public static final String MODEL_JOB_CONTEXT="context";
 	public static class PersistentJobBuilder extends JobBuilder{
 		private Database db;
 
@@ -56,7 +47,7 @@ public class PersistentJob  extends Job implements Serializable {
 
 		@Override
 		protected Job initJob(){
-			Job pjob=new PersistentJob(this.ctxt,this.bus,this.db);
+			Job pjob=new PersistentJob(this.ctxt,this.bus,this.priority,this.db);
 			this.db.addObject(pjob);	
 			return pjob;
 		}
@@ -81,8 +72,8 @@ public class PersistentJob  extends Job implements Serializable {
 	Database db=null;
 
 
-	private PersistentJob(JobContext ctxt,EventBus bus,Database db) {
-		super(new PersistentJobContext((AbstractJobContext)ctxt),bus);
+	private PersistentJob(JobContext ctxt,EventBus bus,Priority priority,Database db) {
+		super(new PersistentJobContext((AbstractJobContext)ctxt),bus,priority);
 		this.db=db;
 		this.sJobId=ctxt.getId().toString();
 	}
@@ -92,7 +83,7 @@ public class PersistentJob  extends Job implements Serializable {
 	 * Constructs a new instance.
 	 */
 	private PersistentJob() {
-		super(null,null);
+		super(null,null,null);
 	}
 
 	/**
@@ -114,10 +105,29 @@ public class PersistentJob  extends Job implements Serializable {
 	}
 
 	/**
+	 * @return the currentStatus
+	 */
+	@Enumerated(EnumType.ORDINAL)
+	@Access(value=AccessType.PROPERTY)
+	@Override
+	public Priority getPriority() {
+		return super.getPriority();
+	}
+
+	/**
+	 * @param currentStatus the currentStatus to set
+	 */
+	@Override
+	public void setPriority(Priority priority) {
+		super.setPriority(priority);
+	}
+
+	/**
 	 * @return the pCtxt
 	 */
+        //@Column(name="job_contexts")
 	@OneToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-	@MapsId("job_id")
+	//@MapsId("job_id")
 	@Access(value=AccessType.PROPERTY)
 	public PersistentJobContext getContext() {
 		return (PersistentJobContext)super.getContext();
@@ -147,6 +157,10 @@ public class PersistentJob  extends Job implements Serializable {
 		if(this.db!=null){
 			logger.debug("Updating object");	
 			db.updateObject(this);
+                        //this should be the proper way to invalidate the object 
+                        //in the cache, it simply won't work
+                        //db.getCache().evict(PersistentJob.class,this.getId());
+
 		}else{
 			logger.warn("Object not updated as the Database is null");
 		}

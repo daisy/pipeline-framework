@@ -122,6 +122,7 @@ public class JobXmlWriter {
                 element.setAttribute("id", job.getId().toString());
                 element.setAttribute("href", jobHref);
                 element.setAttribute("status", status.toString());
+                element.setAttribute("priority", job.getPriority().toString().toLowerCase());
 
                 if(!job.getContext().getName().isEmpty()){
                         Element nicenameElem= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "nicename");

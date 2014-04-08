@@ -25,7 +25,7 @@ import org.daisy.pipeline.script.XProcScript;
 
 class Mock   {
         public static JobContext mockContext(JobId id){
-                return new AbstractJobContext(id,"",null,null){
+                return new AbstractJobContext(null,id,"",null,null){
 
 
                 };

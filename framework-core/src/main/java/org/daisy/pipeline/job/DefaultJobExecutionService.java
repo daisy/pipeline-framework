@@ -1,108 +1,162 @@
 package org.daisy.pipeline.job;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.daisy.common.xproc.XProcEngine;
+import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.clients.Client.Role;
+import org.daisy.pipeline.job.fuzzy.FuzzyJobFactory;
+import org.daisy.pipeline.job.priority.Prioritizable;
+import org.daisy.pipeline.job.priority.PrioritizableRunnable;
+import org.daisy.pipeline.job.priority.PriorityThreadPoolExecutor;
+import org.daisy.pipeline.job.priority.timetracking.TimeFunctions;
+import org.daisy.pipeline.job.priority.timetracking.TimeTrackerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-// TODO: Auto-generated Javadoc
+import com.google.common.base.Predicate;
+
 /**
  * DefaultJobExecutionService is the defualt way to execute jobs
  */
 public class DefaultJobExecutionService implements JobExecutionService {
 
-	/** The Constant logger. */
-	private static final Logger logger = LoggerFactory
-			.getLogger(DefaultJobExecutionService.class);
+        /** The Constant logger. */
+        private static final Logger logger = LoggerFactory
+                        .getLogger(DefaultJobExecutionService.class);
+        /** The xproc engine. */
+        private XProcEngine xprocEngine;
 
-	/** The xproc engine. */
-	private XProcEngine xprocEngine;
+        private PriorityThreadPoolExecutor<Job> executor = PriorityThreadPoolExecutor
+                        .newFixedSizeThreadPoolExecutor(
+                                        2,
+                                        TimeTrackerFactory.newFactory(1,
+                                                        TimeFunctions.newLinearTimeFunctionFactory()));
+        private ExecutionQueue executionQueue;
 
-	private  ExecutorService executor=Executors.newFixedThreadPool(2);
+        public DefaultJobExecutionService(){
+                this.executionQueue=new DefaultExecutionQueue(executor); 
+        }
+        /**
+         * @param xprocEngine
+         * @param executor
+         * @param executionQueue
+         */
+        public DefaultJobExecutionService(XProcEngine xprocEngine,
+                        PriorityThreadPoolExecutor<Job> executor, ExecutionQueue executionQueue) {
+                this.xprocEngine = xprocEngine;
+                this.executor = executor;
+                this.executionQueue = executionQueue;
+        }
 
+        /**
+         * Sets the x proc engine.
+         *
+         * @param xprocEngine
+         *            the new x proc engine
+         */
+        public void setXProcEngine(XProcEngine xprocEngine) {
+                this.xprocEngine = xprocEngine;
+        }
 
-	/**
-	 * Sets the x proc engine.
-	 * 
-	 * @param xprocEngine
-	 *            the new x proc engine
-	 */
-	public void setXProcEngine(XProcEngine xprocEngine) {
-		// TODO make it dynamic
-		this.xprocEngine = xprocEngine;
-	}
+        /*
+         * (non-Javadoc)
+         *
+         * @see
+         * org.daisy.pipeline.job.JobExecutionService#submit(org.daisy.pipeline.
+         * job.Job)
+         */
+        @Override
+        public void submit(final Job job) {
+                //logger.info("Submitting job");
+                //Make the runnable ready to submit to the fuzzy-prioritized thread pool
+                PrioritizableRunnable<Job> runnable = FuzzyJobFactory.newFuzzyRunnable(job,
+                                this.getRunnable(job));
+                //Conviniently wrap it in a PrioritizedJob for later access
+                this.executor.execute(runnable);
+        }
 
-	
-	/**
-	 * Activate (OSGI)
-	 */
-	public void activate() {
-		logger.trace("Activating job execution service");
-	}
+        Runnable getRunnable(final Job job) {
+                return new ThreadWrapper(new Runnable() {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.daisy.pipeline.job.JobExecutionService#submit(org.daisy.pipeline.
-	 * job.Job)
-	 */
-	@Override
-	public void submit(final Job job) {
-		logger.info("Submitting job");
-		executor.submit(new ThreadWrapper(new Runnable() {
+                        @Override
+                        public void run() {
 
-			@Override
-			public void run() {
-				
-				try {
-					logger.info("Starting to log to job's log file too:"
-							+ job.getId().toString());
-					MDC.put("jobid", job.getId().toString());
-					job.run(xprocEngine);
-					MDC.remove("jobid");
-					logger.info("Stopping logging to job's log file");
-				} catch (Exception e) {
-					throw new RuntimeException(e.getCause());
-				}
+                                try {
+                                        logger.info("Starting to log to job's log file too:"
+                                                        + job.getId().toString());
+                                        MDC.put("jobid", job.getId().toString());
+                                        job.run(xprocEngine);
+                                        MDC.remove("jobid");
+                                        logger.info("Stopping logging to job's log file");
+                                } catch (Exception e) {
+                                        throw new RuntimeException(e.getCause());
+                                }
 
-			}
-		}));
-	}
-	/**
-	 * This class offers a solution to avoid memory leaks due to 
-	 * the missuse of ThreadLocal variables. 
-	 * The actual run implementation may be a little bit naive regarding the interrupt handling
-	 * 
-	 */
-	private static class ThreadWrapper implements Runnable{
+                        }
+                });
+        }
 
-			private static final Logger logger = LoggerFactory
-			.getLogger(ThreadWrapper.class);
-			private Runnable runnable;
+        /**
+         * This class offers a solution to avoid memory leaks due to
+         * the missuse of ThreadLocal variables.
+         * The actual run implementation may be a little bit naive regarding the interrupt handling
+         *
+         */
+        private static class ThreadWrapper implements Runnable {
 
-		/**
-		 * Constructs a new instance.
-		 *
-		 * @param runnable The runnable for this instance.
-		 */
-		public ThreadWrapper(Runnable runnable) {
-			this.runnable = runnable;
-		}
+                private static final Logger logger = LoggerFactory
+                                .getLogger(ThreadWrapper.class);
+                private Runnable runnable;
 
-		public void run() {
-			logger.info("Starting wrappedThread :"+ Thread.currentThread().getName());	
-			Thread t = new Thread(this.runnable);
-			t.start();
-			try {
-				t.join();
-			} catch (InterruptedException e) {
-				logger.warn("ThreadWrapper was interrupted...");
-			}
-		}
-		
-	}
+                /**
+                 * Constructs a new instance.
+                 *
+                 * @param runnable The runnable for this instance.
+                 */
+                public ThreadWrapper(Runnable runnable) {
+                        this.runnable = runnable;
+                }
+
+                public void run() {
+                        logger.info("Starting wrappedThread :"
+                                        + Thread.currentThread().getName());
+                        Thread t = new Thread(this.runnable);
+                        t.start();
+                        try {
+                                t.join();
+                        } catch (InterruptedException e) {
+                                logger.warn("ThreadWrapper was interrupted...");
+                        }
+                }
+
+        }
+
+        protected PriorityThreadPoolExecutor<Job> getExecutor() {
+                return this.executor;
+        }
+
+        
+        @Override
+        public ExecutionQueue getExecutionQueue() {
+                return this.executionQueue;
+
+        }
+
+        @Override
+        public JobExecutionService filterBy(final Client client) {
+                if (client.getRole()==Role.ADMIN){
+                        return this;
+                }else{
+                        return new DefaultJobExecutionService(this.xprocEngine, this.executor, 
+                                        new FilteredExecutionQueue(this.executor,
+                                                new Predicate<Prioritizable<Job>>() {
+                                                        @Override
+                                                        public boolean apply(Prioritizable<Job> pJob) {
+                                                                return pJob.prioritySource().getContext()
+                                                .getClient().getId().equals(client.getId());
+                                                        }
+                                                }
+                        ));
+                }
+        }
 }

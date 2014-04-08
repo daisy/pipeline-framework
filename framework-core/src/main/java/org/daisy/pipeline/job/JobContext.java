@@ -6,11 +6,12 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.script.XProcScript;
 
-import com.google.common.eventbus.EventBus;
 
-public interface JobContext{
+public interface JobContext extends RuntimeConfigurator.Monitorable{
+
 	public XProcInput getInputs() ;
 	public XProcOutput getOutputs();
 	public URI getLogFile() ;
@@ -21,4 +22,5 @@ public interface JobContext{
 	public void writeResult(XProcResult result) ;
 	public String getName();
 	public boolean isGeneratingResults();
+        public Client getClient();
 }

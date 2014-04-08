@@ -1,4 +1,6 @@
-package org.daisy.pipeline.webserviceutils.clients;
+package org.daisy.pipeline.clients;
+
+import org.daisy.pipeline.job.priority.Priority;
 
 
 public interface Client {
@@ -16,6 +18,8 @@ public interface Client {
 	public Role getRole();
 
 	public String getContactInfo();
+
+        public Priority getPriority();
 
 
 }

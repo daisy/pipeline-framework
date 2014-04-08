@@ -1,6 +1,7 @@
 default namespace = "http://www.daisy.org/ns/pipeline/data"
 
 include "scriptElement.rnc"
+include "priority.rnc"
 
 job = 
 element job {
@@ -9,6 +10,8 @@ element job {
 	& attribute href { xsd:anyURI }
 
 	& attribute status { job.status }
+
+	& attribute priority { priority}
 
 	& script?
 
@@ -46,5 +49,6 @@ element result{
 }
 
 job.status = "IDLE" | "RUNNING" | "DONE" | "ERROR" | "VALIDATION_FAIL"
+
 
 message.level = "WARNING" | "ERROR" | "INFO" | "DEBUG" | "TRACE"

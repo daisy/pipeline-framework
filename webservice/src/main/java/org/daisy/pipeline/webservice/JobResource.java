@@ -16,12 +16,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
+import com.google.common.base.Optional;
+
 /**
  * The Class JobResource.
  */
 public class JobResource extends AuthenticatedResource {
         /** The job. */
-        private Job job;
+        private Optional<Job> job;
         private int msgSeq = -1;
 
         /** The logger. */
@@ -39,7 +41,7 @@ public class JobResource extends AuthenticatedResource {
                 if (!isAuthenticated()) {
                         return;
                 }
-                JobManager jobMan = webservice().getJobManager();
+                JobManager jobMan = webservice().getJobManager(this.getClient());
                 String idParam = (String) getRequestAttributes().get("id");
                 String msgSeqParam = getQuery().getFirstValue("msgSeq");
 
@@ -51,7 +53,7 @@ public class JobResource extends AuthenticatedResource {
                         job = jobMan.getJob(id);
                 } catch (Exception e) {
                         logger.error(e.getMessage());
-                        job = null;
+                        job = Optional.absent();
                 }
         }
 
@@ -66,13 +68,13 @@ public class JobResource extends AuthenticatedResource {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
                 }
-                if (job == null) {
+                if (!job.isPresent()) {
                         setStatus(Status.CLIENT_ERROR_NOT_FOUND);
                         return this.getErrorRepresentation("Job not found");
                 }
 
                 setStatus(Status.SUCCESS_OK);
-                JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
+                JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job.get());
         
                 writer.withFullResults(true);
                 if(this.webservice().getConfiguration().isLocalFS()){
@@ -105,10 +107,10 @@ public class JobResource extends AuthenticatedResource {
 
                 } else {
 
-                        JobManager jobMan = webservice().getJobManager();
-                        if (jobMan.deleteJob(job.getId()) != null) {
+                        JobManager jobMan = webservice().getJobManager(this.getClient());
+                        if (jobMan.deleteJob(job.get().getId()).isPresent() ) {
                                 webservice().getStorage().
-                                        getJobConfigurationStorage().delete(job.getId());
+                                        getJobConfigurationStorage().delete(job.get().getId());
                                 setStatus(Status.SUCCESS_NO_CONTENT);
                         } else {
                                 setStatus(Status.CLIENT_ERROR_NOT_FOUND);
