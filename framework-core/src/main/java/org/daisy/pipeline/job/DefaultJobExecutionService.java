@@ -29,7 +29,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
         private PriorityThreadPoolExecutor<Job> executor = PriorityThreadPoolExecutor
                         .newFixedSizeThreadPoolExecutor(
                                         2,
-                                        TimeTrackerFactory.newFactory(3,
+                                        TimeTrackerFactory.newFactory(1,
                                                         TimeFunctions.newLinearTimeFunctionFactory()));
         private ExecutionQueue executionQueue;
 
