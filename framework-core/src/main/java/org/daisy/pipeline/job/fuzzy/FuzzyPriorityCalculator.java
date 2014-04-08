@@ -18,7 +18,7 @@ public class FuzzyPriorityCalculator<T> implements PriorityCalculator<T>{
         /**
          * Inference engine used to compute the final priority
          */
-        private final InferenceEngine infereneceEngine;
+        private final InferenceEngine inferenceEngine;
         /**
          * score given by the engine for the current runnable status 
          */
@@ -29,10 +29,10 @@ public class FuzzyPriorityCalculator<T> implements PriorityCalculator<T>{
         private Supplier<T> prioritySourceSupplier;
 
         /**
-         * @param infereneceEngine
+         * @param inferenceEngine
          */
-        public FuzzyPriorityCalculator(InferenceEngine infereneceEngine, Supplier<double[]> crispsSupplier,Supplier<T> prioritySourceSupplier) {
-                this.infereneceEngine = infereneceEngine;
+        public FuzzyPriorityCalculator(InferenceEngine inferenceEngine, Supplier<double[]> crispsSupplier,Supplier<T> prioritySourceSupplier) {
+                this.inferenceEngine = inferenceEngine;
                 this.crispsSupplier=crispsSupplier;
                 this.prioritySourceSupplier=prioritySourceSupplier;
         }
@@ -45,7 +45,7 @@ public class FuzzyPriorityCalculator<T> implements PriorityCalculator<T>{
                 //Lazy score calcualtion and caching
                 if(runnable.isDirty()){
                         double[] crispValues=Doubles.concat(new double[]{runnable.getRelativeWaitingTime()},this.crispsSupplier.get());
-                        this.score=-1*this.infereneceEngine.getScore(crispValues);
+                        this.score=-1*this.inferenceEngine.getScore(crispValues);
                         runnable.markDirty(false);
                 }
                 return this.score;
