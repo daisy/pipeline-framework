@@ -142,8 +142,7 @@ public class UpdatablePriorityBlockingQueue<T> extends ForwardingBlockingQueue<R
          */
         private void doUpdate() {
                 //re-add the elements of the queue to re-sort them
-                Collection<SwappingPriority<T>> aux = ImmutableList
-                        .copyOf(this.delegate.wrapped());
+                Collection<SwappingPriority<T>> aux = Lists.newLinkedList(this.delegate.wrapped());
                 this.delegate.clear();
                 this.delegate.addAllBypass(aux);
         }
@@ -202,7 +201,7 @@ public class UpdatablePriorityBlockingQueue<T> extends ForwardingBlockingQueue<R
         public Collection<PrioritizableRunnable<T>> asOrderedCollection() {
                 List<SwappingPriority<T>> list= Lists.newLinkedList(this.delegate.wrapped());
                 Collections.sort(list, new PrioritizableComparator());
-                return Collections2.transform(list,this.unwrapFunction);
+                return ImmutableList.copyOf(Collections2.transform(list,this.unwrapFunction));
         }
 
 
