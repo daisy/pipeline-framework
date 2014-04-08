@@ -120,8 +120,8 @@ public class UpdatablePriorityBlockingQueue<T> extends ForwardingBlockingQueue<R
          * a updating process is starting.
          */
         private void enterUpdate() {
-                this.updating.set(true);
                 this.monitor.enter();
+                this.updating.set(true);
         }
 
         /**
