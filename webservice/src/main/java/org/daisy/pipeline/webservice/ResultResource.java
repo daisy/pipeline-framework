@@ -22,12 +22,14 @@ import org.restlet.resource.Get;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Optional;
+
 /**
  * The Class ResultResource.
  */
 public class ResultResource extends AuthenticatedResource {
         /** The job. */
-        private Job job;
+        private Optional<Job> job=Optional.absent();
         private static Logger logger = LoggerFactory.getLogger(ResultResource.class
                         .getName());
 
@@ -42,14 +44,13 @@ public class ResultResource extends AuthenticatedResource {
                 if (!isAuthenticated()) {
                         return;
                 }
-                JobManager jobMan = webservice().getJobManager();
+                JobManager jobMan = webservice().getJobManager(this.getClient());
                 String idParam = (String) getRequestAttributes().get("id");
                 try {
                         JobId id = JobIdFactory.newIdFromString(idParam);
                         job = jobMan.getJob(id);
                 } catch (Exception e) {
                         logger.debug("Job Id malformed - Job not found: " + idParam);
-                        job = null;
                 }
         }
 
@@ -65,24 +66,24 @@ public class ResultResource extends AuthenticatedResource {
                         return null;
                 }
 
-                if (job == null) {
+                if (!job.isPresent()) {
                         setStatus(Status.CLIENT_ERROR_NOT_FOUND);
                         return this.getErrorRepresentation("Job not found");
                 }
 
-        		if (!(job.getStatus().equals(Job.Status.DONE) || job.getStatus().equals(Job.Status.VALIDATION_FAIL))) {
-		          	setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-			        return this.getErrorRepresentation("Job status differnt to DONE");
-		        }
+                if (!(job.get().getStatus().equals(Job.Status.DONE) || job.get().getStatus().equals(Job.Status.VALIDATION_FAIL))) {
+                        setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+                        return this.getErrorRepresentation("Job status differnt to DONE");
+                }
 
-                Collection<JobResult> results = job.getContext().getResults()
+                Collection<JobResult> results = job.get().getContext().getResults()
                                 .getResults();
                 if (results.size() == 0) {
                         setStatus(Status.SERVER_ERROR_INTERNAL);
                         return this.getErrorRepresentation("No results available");
                 }
                 try {
-                        return getZippedRepresentation(results, job);
+                        return getZippedRepresentation(results, job.get());
                 } catch (Exception e) {
                         setStatus(Status.SERVER_ERROR_INTERNAL);
                         return this.getErrorRepresentation(e);

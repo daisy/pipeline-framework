@@ -7,10 +7,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.pipeline.webserviceutils.xml.XmlValidator;
-import org.daisy.pipeline.webserviceutils.clients.Client;
-import org.daisy.pipeline.webserviceutils.clients.SimpleClient;
+import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.webserviceutils.xml.ClientXmlWriter;
+import org.daisy.pipeline.webserviceutils.xml.XmlValidator;
 import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -26,8 +26,10 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.google.common.base.Optional;
+
 public class ClientResource extends AdminResource {
-	private Client client;
+	private Optional<Client> client;
 
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(ClientResource.class.getName());
@@ -54,13 +56,13 @@ public class ClientResource extends AdminResource {
 			return null;
 		}
 
-		if (client == null) {
+		if (!this.client.isPresent()) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return this.getErrorRepresentation("Client not found");	
 		}
 
 		setStatus(Status.SUCCESS_OK);
-		ClientXmlWriter writer = XmlWriterFactory.createXmlWriterForClient(client);
+		ClientXmlWriter writer = XmlWriterFactory.createXmlWriterForClient(client.get());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
 		return dom;
@@ -76,13 +78,13 @@ public class ClientResource extends AdminResource {
 			return;
 		}
 
-		if (client == null) {
+		if (!client.isPresent()) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return;
 		}
 
 
-		if (webservice().getStorage().getClientStorage().delete(client)) {
+		if (webservice().getStorage().getClientStorage().delete(client.get().getId())) {
 			setStatus(Status.SUCCESS_NO_CONTENT);
 		}
 		else {
@@ -100,7 +102,7 @@ public class ClientResource extends AdminResource {
 		}
 
 		// our PUT method won't create a client, just replace information for an existing client
-		if (client == null) {
+		if (!client.isPresent()) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return this.getErrorRepresentation("Client not found, put method won't create a new client, it will just update an exisiting one");
 		}
@@ -147,12 +149,16 @@ public class ClientResource extends AdminResource {
 		}
 
 		Element root = doc.getDocumentElement();
-		// TODO add setters to the Client interface instead ?
-		Client newClient = new SimpleClient(root.getAttribute("id"),root.getAttribute("secret"),Client.Role.valueOf(root.getAttribute("role")),root.getAttribute("contact"));
-		webservice().getStorage().getClientStorage().update(newClient);
+		// TODO SET PRIORITY 
+		Optional<Client> updated=webservice().getStorage().getClientStorage().update(this.client.get().getId(),root.getAttribute("secret"),Client.Role.valueOf(root.getAttribute("role")),root.getAttribute("contact"),Priority.MEDIUM);
+                if(!updated.isPresent()){
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return this.getErrorRepresentation("Something prevented this client to be updated");
+
+                }
 
 		setStatus(Status.SUCCESS_OK);
-		ClientXmlWriter writer = XmlWriterFactory.createXmlWriterForClient(newClient);
+		ClientXmlWriter writer = XmlWriterFactory.createXmlWriterForClient(updated.get());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
 		return dom;

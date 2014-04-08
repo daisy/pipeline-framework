@@ -3,7 +3,7 @@ package org.daisy.pipeline.script;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 
-public final class BoundXProcScript {
+public class BoundXProcScript {
 	private final XProcScript script;
 	private final XProcInput input;
 	private final XProcOutput output;

@@ -14,7 +14,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-import org.daisy.pipeline.webserviceutils.clients.Client;
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLogEntry;
 import org.daisy.pipeline.webserviceutils.requestlog.SimpleRequestLogEntry;

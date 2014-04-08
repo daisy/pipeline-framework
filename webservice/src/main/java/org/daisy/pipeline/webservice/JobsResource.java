@@ -26,10 +26,10 @@ import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.ResourceCollection;
 import org.daisy.pipeline.job.ZipResourceContext;
+import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
@@ -37,7 +37,6 @@ import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
-import org.daisy.pipeline.webserviceutils.clients.Client;
 import org.daisy.pipeline.webserviceutils.xml.JobXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.JobsXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.XmlUtils;
@@ -58,6 +57,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import com.google.common.base.Optional;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -86,7 +87,7 @@ public class JobsResource extends AuthenticatedResource {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
                 }
-                JobManager jobMan = webservice().getJobManager();
+                JobManager jobMan = webservice().getJobManager(this.getClient());
                 JobsXmlWriter writer = XmlWriterFactory.createXmlWriterForJobs(jobMan.getJobs());
                 Document doc = writer.getXmlDocument();
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
@@ -107,11 +108,6 @@ public class JobsResource extends AuthenticatedResource {
                 if (!isAuthenticated()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
-                }
-                Client client = null;
-                if (webservice().getConfiguration().isAuthenticationEnabled()) {
-                        String clientId = getQuery().getFirstValue("authid");
-                        client = webservice().getStorage().getClientStorage().get(clientId);
                 }
 
                 if (representation == null) {
@@ -173,9 +169,9 @@ public class JobsResource extends AuthenticatedResource {
                         return this.getErrorRepresentation("Job Request XML is not valid");
                 }
 
-                Job job;
+                Optional<Job> job;
                 try {
-                        job = createJob(doc, zipfile, client);
+                        job = createJob(doc, zipfile );
                 } catch (LocalInputException e) {
                         setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
                         return this.getErrorRepresentation("WS does not allow local inputs but a href starting with 'file:' was found");
@@ -184,16 +180,16 @@ public class JobsResource extends AuthenticatedResource {
                         return this.getErrorRepresentation(iea.getMessage());
                 }
 
-                if (job == null) {
+                if (!job.isPresent()) {
                         setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                        return this.getErrorRepresentation("Could not create job (job was null)");
+                        return this.getErrorRepresentation("Could not create job ");
                 }
                 
                 //store the config
                 webservice().getStorage().getJobConfigurationStorage()
-                        .add(job.getId(),XmlUtils.DOMToString(doc));
+                        .add(job.get().getId(),XmlUtils.DOMToString(doc));
 
-                JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
+                JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job.get());
                 Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
                 setStatus(Status.SUCCESS_CREATED);
@@ -316,15 +312,28 @@ public class JobsResource extends AuthenticatedResource {
          * @return the job
          * @throws LocalInputException
          */
-        private Job createJob(Document doc, ZipFile zip, Client client)
+        private Optional<Job> createJob(Document doc, ZipFile zip)
                         throws LocalInputException {
 
                 Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
+                Priority priority=Priority.MEDIUM;
                 String niceName="";
+                //get nice name
                 NodeList elems=doc.getElementsByTagName("nicename"); 
                 if(elems.getLength()!=0)
                         niceName=elems.item(0).getTextContent();
                 logger.debug(String.format("Job's nice name: %s",niceName));
+
+                //get priority
+                elems=doc.getElementsByTagName("priority"); 
+                if(elems.getLength()!=0){
+                        String prioString=elems.item(0).getTextContent();
+                        priority=Priority.valueOf(prioString.toUpperCase());
+                }
+                
+                logger.debug(String.format("Jobs priority: %s",priority));
+
+
                 // TODO eventually we might want to have an href-script ID lookup table
                 // but for now, we'll get the script ID from the last part of the URL
                 String scriptId = scriptElm.getAttribute("href");
@@ -339,7 +348,7 @@ public class JobsResource extends AuthenticatedResource {
                 XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptId);
                 if (unfilteredScript == null) {
                         logger.error("Script not found");
-                        return null;
+                        return Optional.absent();
                 }
                 XProcScript script = unfilteredScript.load();
                 XProcInput.Builder inBuilder = new XProcInput.Builder();
@@ -357,19 +366,17 @@ public class JobsResource extends AuthenticatedResource {
 
                 BoundXProcScript bound= BoundXProcScript.from(script,inBuilder.build(),outBuilder.build());
 
-                JobManager jobMan = webservice().getJobManager();
-                JobContext ctxt=null;
+                JobManager jobMan = webservice().getJobManager(this.getClient());
                 ResourceCollection resourceCollection=null;
                 if (zip != null){
                         resourceCollection = new ZipResourceContext(zip);
                 }
-                if(webservice().getConfiguration().isLocalFS()){
-                        ctxt=webservice().getJobContextFactory().newMappingJobContext(niceName,bound);  
-
-                }else{
-                        ctxt=webservice().getJobContextFactory().newMappingJobContext(niceName,bound,resourceCollection);
+                boolean mapping=webservice().getConfiguration().isLocalFS();
+                Optional<Job> newJob= jobMan.newJob(bound).isMapping(mapping).withNiceName(niceName)
+                        .withPriority(priority).withResources(resourceCollection).build();
+                if(!newJob.isPresent()){
+                        return Optional.absent();
                 }
-                Job job = jobMan.newJob(ctxt);
 
                 NodeList callbacks = doc.getElementsByTagName("callback");
                 for (int i = 0; i<callbacks.getLength(); i++) {
@@ -384,7 +391,7 @@ public class JobsResource extends AuthenticatedResource {
                         }
 
                         try {
-                                callback = new Callback(job.getId(), client, new URI(href), type, freq);
+                                callback = new Callback(newJob.get().getId(), this.getClient(), new URI(href), type, freq);
                         } catch (URISyntaxException e) {
                                 logger.warn("Cannot create callback: " + e.getMessage());
                         }
@@ -393,7 +400,7 @@ public class JobsResource extends AuthenticatedResource {
                                 webservice().getCallbackRegistry().addCallback(callback);
                         }
                 }
-                return job;
+                return newJob;
         }
 
         /**

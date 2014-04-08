@@ -11,12 +11,17 @@ import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
+import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.clients.Client.Role;
+import org.daisy.pipeline.clients.SimpleClient;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.ResultSet;
 import org.daisy.pipeline.job.URIMapper;
+import org.daisy.pipeline.job.priority.Priority;
+import org.daisy.pipeline.persistence.webservice.PersistentClient;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
@@ -117,6 +122,11 @@ public class Mocks   {
 	}
 
 	public static AbstractJobContext buildContext(){  
+                return buildContext(null);
+	}
+
+	public static AbstractJobContext buildContext(Client client){  
+                //new RuntimeException().printStackTrace();
 		final XProcScript script = Mocks.buildScript();
 		//ScriptRegistryHolder.setScriptRegistry(new Mocks.DummyScriptService(script));
 		//Input setup
@@ -125,19 +135,23 @@ public class Mocks   {
 		final JobId id = JobIdFactory.newId();
 		final URIMapper mapper= new URIMapper(in,out);
 		final ResultSet rSet=new ResultSet.Builder().addResult(portResult,res1).addResult(opt1Qname,res2).build();
+                //add to the db
+                if ( client ==null){
+                        client=new PersistentClient("Client_"+Math.random(),"b",Role.ADMIN,"a@a",Priority.LOW);
+                        DatabaseProvider.getDatabase().addObject(client);
+                }
 		//inception!
-		class MyHiddenContext extends AbstractJobContext{
-			public MyHiddenContext(){
-				super(id,"hidden",BoundXProcScript.from(script,input,null),mapper);
-				this.setResults(rSet);
+		return new MyHiddenContext(rSet,script,input,mapper,client,id);
+	}
+
+	static class MyHiddenContext extends AbstractJobContext{
+			public MyHiddenContext(ResultSet set,XProcScript script,XProcInput input,URIMapper mapper, Client client,JobId id){
+				super(client,id,"hidden",BoundXProcScript.from(script,input,null),mapper);
+				this.setResults(set);
 				this.generateResults=true;
 			}
 
 
 		};
-		
-	
-		return new MyHiddenContext();
-	}
 
 }

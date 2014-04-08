@@ -3,11 +3,11 @@ package org.daisy.pipeline.webserviceutils.xml;
 import java.util.List;
 
 import org.daisy.common.properties.Property;
-
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.priority.Prioritizable;
 import org.daisy.pipeline.job.JobSize;
 import org.daisy.pipeline.script.XProcScript;
-import org.daisy.pipeline.webserviceutils.clients.Client;
 
 public class XmlWriterFactory {
 	
@@ -24,6 +24,11 @@ public class XmlWriterFactory {
 	public static JobsSizeXmlWriter createXmlWriterForJobSizes(Iterable<JobSize> sizes) {
 		return new JobsSizeXmlWriter(sizes);
 	}
+
+	public static QueueXmlWriter createXmlWriterForQueue(Iterable<? extends Prioritizable<Job>> jobs) {
+		return new QueueXmlWriter(jobs);
+	}
+
 	public static ScriptXmlWriter createXmlWriterForScript(XProcScript script) {
 		return new ScriptXmlWriter(script);
 	}

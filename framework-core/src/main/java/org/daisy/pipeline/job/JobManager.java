@@ -1,11 +1,17 @@
 package org.daisy.pipeline.job;
 
+import org.daisy.pipeline.job.priority.Priority;
+import org.daisy.pipeline.script.BoundXProcScript;
+
+import com.google.common.base.Optional;
+
 
 
 /**
  * The Interface JobManager offers a simple way of managing jobs.
  */
 public interface JobManager {
+
 
 	/**
 	 * creates a job attached to the resource collection that will be used as context to the job.
@@ -14,8 +20,9 @@ public interface JobManager {
 	 * @return the job
 	 * @throws IllegalArgumentException if the jobId inside the context already exists in the manager
 	 */
-	public Job newJob(JobContext ctxt);
+//	public Job newJob(JobContext ctxt);
 
+	public JobManager.JobBuilder newJob(BoundXProcScript boundScript);
 
 	/**
 	 * Gets the jobs.
@@ -30,7 +37,7 @@ public interface JobManager {
 	 * @param id the id
 	 * @return the job
 	 */
-	public Job deleteJob(JobId id);
+	public Optional<Job> deleteJob(JobId id);
 
 	/**
 	 * Deletes all jobs.
@@ -43,5 +50,15 @@ public interface JobManager {
 	 * @param id the id
 	 * @return the job
 	 */
-	public Job getJob(JobId id);
+	public Optional<Job> getJob(JobId id);
+
+        public interface JobBuilder{
+                public JobBuilder isMapping(boolean mapping);
+                public JobBuilder withResources(ResourceCollection resources);
+                public JobBuilder withNiceName(String niceName);
+                public JobBuilder withPriority(Priority priority);
+                public Optional<Job> build();
+        }
+
+        public ExecutionQueue getExecutionQueue();
 }

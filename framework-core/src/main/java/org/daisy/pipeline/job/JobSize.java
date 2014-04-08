@@ -2,12 +2,7 @@ package org.daisy.pipeline.job;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.LinkedList;
-
-import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobURIUtils;
 
 import com.google.common.io.Files;
 

@@ -3,7 +3,6 @@ package org.daisy.pipeline.webservice;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLDecoder;
 import java.util.Collection;
 
 import org.daisy.pipeline.job.Job;
@@ -21,6 +20,7 @@ import org.restlet.resource.Get;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -32,7 +32,7 @@ import com.google.common.io.Files;
  */
 public abstract class NamedResultResource extends AuthenticatedResource {
         /** The job. */
-        private Job job;
+        private Optional<Job> job=Optional.absent();
         private String idx;
         private String name;
         private static Logger logger = LoggerFactory
@@ -49,14 +49,13 @@ public abstract class NamedResultResource extends AuthenticatedResource {
                 if (!isAuthenticated()) {
                         return;
                 }
-                JobManager jobMan = webservice().getJobManager();
+                JobManager jobMan = webservice().getJobManager(this.getClient());
                 String idParam = (String) getRequestAttributes().get("id");
                 try {
                         JobId id = JobIdFactory.newIdFromString(idParam);
                         job = jobMan.getJob(id);
                 } catch (Exception e) {
                         logger.warn("Job Id malformed - Job not found: " + idParam);
-                        job = null;
                 }
                 if (getRequestAttributes().get("name")!=null){
                         name = NamedResultResource.decode((String) getRequestAttributes().get("name"));
@@ -78,12 +77,12 @@ public abstract class NamedResultResource extends AuthenticatedResource {
                         return null;
                 }
 
-                if (job == null) {
+                if (!job.isPresent()) {
                         setStatus(Status.CLIENT_ERROR_NOT_FOUND);
                         return this.getErrorRepresentation("Job not found");
                 }
 
-                if (!(job.getStatus().equals(Job.Status.DONE) || job.getStatus().equals(Job.Status.VALIDATION_FAIL))) {
+                if (!(job.get().getStatus().equals(Job.Status.DONE) || job.get().getStatus().equals(Job.Status.VALIDATION_FAIL))) {
                         setStatus(Status.CLIENT_ERROR_NOT_FOUND);
                         return this.getErrorRepresentation("Job status differnt to DONE or VALIDATION_FAIL");
                 }
@@ -100,7 +99,7 @@ public abstract class NamedResultResource extends AuthenticatedResource {
         }
 
         private Representation singleResult(){
-                Collection<JobResult> results=this.gatherResults(this.job,this.name);
+                Collection<JobResult> results=this.gatherResults(this.job.get(),this.name);
                 logger.debug(String.format("Getting single result for %s idx: %s",this.name,this.idx));
                 results=Collections2.filter(results, new Predicate<JobResult>(){
                         @Override
@@ -134,14 +133,14 @@ public abstract class NamedResultResource extends AuthenticatedResource {
         }
 
         private Representation zippedResult(){
-                Collection<JobResult> results=this.gatherResults(this.job,this.name);
+                Collection<JobResult> results=this.gatherResults(this.job.get(),this.name);
                 logger.debug(String.format("Getting port result for %s ",this.name));
                 if (results.size() == 0) {
                         setStatus(Status.SERVER_ERROR_INTERNAL);
                         return this.getErrorRepresentation("No results available");
                 }
                 try{
-                        return ResultResource.getZippedRepresentation(results,this.job);
+                        return ResultResource.getZippedRepresentation(results,this.job.get());
                 }catch(Exception e){
                                 setStatus(Status.SERVER_ERROR_INTERNAL);
                                 return this.getErrorRepresentation(e);

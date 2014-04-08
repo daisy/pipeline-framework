@@ -1,4 +1,4 @@
-<job xmlns="http://www.daisy.org/ns/pipeline/data" id="job-id-01" href="http://example.org/ws/jobs/job-id-01" status="DONE">
+<job xmlns="http://www.daisy.org/ns/pipeline/data" id="job-id-01" href="http://example.org/ws/jobs/job-id-01" status="DONE" priority="low">
 	<!-- nicename is optional -->
 	<nicename>simple-dtbook-1</nicename>
 	<script id="dtbook-to-zedai" href="http://example.org/ws/scripts/dtbook-to-zedai">
