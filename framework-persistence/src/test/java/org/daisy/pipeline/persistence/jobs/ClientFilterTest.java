@@ -4,10 +4,10 @@ package org.daisy.pipeline.persistence.jobs;
 
 import javax.persistence.TypedQuery;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.JobBuilder;
-import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.persistence.Database;
 import org.daisy.pipeline.persistence.jobs.PersistentJob.PersistentJobBuilder;
 import org.daisy.pipeline.persistence.webservice.PersistentClient;

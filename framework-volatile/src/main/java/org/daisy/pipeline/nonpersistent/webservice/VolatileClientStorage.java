@@ -6,10 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.clients.ClientStorage;
-import org.daisy.pipeline.job.priority.Priority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

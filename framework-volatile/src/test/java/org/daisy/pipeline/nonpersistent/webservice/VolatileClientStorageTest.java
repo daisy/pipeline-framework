@@ -1,8 +1,8 @@
 package org.daisy.pipeline.nonpersistent.webservice;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
-import org.daisy.pipeline.job.priority.Priority;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

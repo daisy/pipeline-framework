@@ -4,12 +4,12 @@ package org.daisy.pipeline.webservice;
 
 import java.util.Collection;
 
+import org.daisy.common.priority.Prioritizable;
 import org.daisy.pipeline.job.ExecutionQueue;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
-import org.daisy.pipeline.job.priority.Prioritizable;
 import org.daisy.pipeline.webserviceutils.xml.QueueXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
 import org.restlet.data.MediaType;

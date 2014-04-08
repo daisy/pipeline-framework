@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Random;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.common.properties.PropertyTracker;
@@ -15,7 +16,6 @@ import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
-import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.webserviceutils.Properties;
 import org.daisy.pipeline.webserviceutils.Routes;

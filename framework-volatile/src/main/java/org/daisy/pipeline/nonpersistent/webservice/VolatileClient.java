@@ -1,7 +1,7 @@
 package org.daisy.pipeline.nonpersistent.webservice;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.job.priority.Priority;
 
 public final class VolatileClient implements Client {
 

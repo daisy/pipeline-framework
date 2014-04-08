@@ -1,6 +1,6 @@
 package org.daisy.pipeline.job;
 
-import org.daisy.pipeline.job.priority.Priority;
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

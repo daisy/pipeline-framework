@@ -2,8 +2,8 @@ package org.daisy.pipeline.job;
 
 import java.util.Collection;
 
-import org.daisy.pipeline.job.priority.Prioritizable;
-import org.daisy.pipeline.job.priority.PriorityThreadPoolExecutor;
+import org.daisy.common.priority.Prioritizable;
+import org.daisy.common.priority.PriorityThreadPoolExecutor;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;

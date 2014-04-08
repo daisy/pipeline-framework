@@ -1,7 +1,7 @@
 package org.daisy.pipeline.webserviceutils.xml;
 
+import org.daisy.common.priority.Prioritizable;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.priority.Prioritizable;
 import org.daisy.pipeline.webserviceutils.Routes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

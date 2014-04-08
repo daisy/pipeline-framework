@@ -4,10 +4,10 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.clients.ClientStorage;
-import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.persistence.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

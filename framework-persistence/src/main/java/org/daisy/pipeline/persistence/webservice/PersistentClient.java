@@ -5,8 +5,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.job.priority.Priority;
 
 @Entity
 // @NoSql(dataFormat=DataFormatType.MAPPED)

@@ -2,7 +2,7 @@ package org.daisy.pipeline.job;
 
 import java.util.Collection;
 
-import org.daisy.pipeline.job.priority.Prioritizable;
+import org.daisy.common.priority.Prioritizable;
 
 public interface ExecutionQueue {
         public void moveUp(JobId id);

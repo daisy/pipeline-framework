@@ -3,10 +3,10 @@ package org.daisy.pipeline.job;
 import java.util.Collection;
 import java.util.List;
 
-import org.daisy.pipeline.job.priority.Prioritizable;
-import org.daisy.pipeline.job.priority.PrioritizableRunnable;
-import org.daisy.pipeline.job.priority.PriorityThreadPoolExecutor;
-import org.daisy.pipeline.job.priority.UpdatablePriorityBlockingQueue;
+import org.daisy.common.priority.Prioritizable;
+import org.daisy.common.priority.PrioritizableRunnable;
+import org.daisy.common.priority.PriorityThreadPoolExecutor;
+import org.daisy.common.priority.UpdatablePriorityBlockingQueue;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

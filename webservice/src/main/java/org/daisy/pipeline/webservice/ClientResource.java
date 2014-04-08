@@ -7,8 +7,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.webserviceutils.xml.ClientXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.XmlValidator;
 import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;

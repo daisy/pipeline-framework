@@ -1,7 +1,7 @@
 package org.daisy.pipeline.job;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.job.priority.Priority;
 
 import com.google.common.base.Optional;
 

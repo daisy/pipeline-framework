@@ -6,11 +6,11 @@ import static org.hamcrest.CoreMatchers.not;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.nonpersistent.webservice.VolatileClient;
 import org.junit.After;
 import org.junit.Assert;

@@ -1,7 +1,8 @@
 package org.daisy.pipeline.job.fuzzy;
 
-import org.daisy.pipeline.job.priority.PrioritizableRunnable;
-import org.daisy.pipeline.job.priority.PriorityCalculator;
+import org.daisy.common.fuzzy.InferenceEngine;
+import org.daisy.common.priority.PrioritizableRunnable;
+import org.daisy.common.priority.PriorityCalculator;
 
 import com.google.common.base.Supplier;
 import com.google.common.primitives.Doubles;

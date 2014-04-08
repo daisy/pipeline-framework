@@ -5,12 +5,12 @@ import static org.hamcrest.CoreMatchers.not;
 
 import java.util.List;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.RuntimeConfigurator;
-import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.persistence.Database;
 import org.daisy.pipeline.persistence.webservice.PersistentClient;
 import org.daisy.pipeline.script.ScriptRegistry;

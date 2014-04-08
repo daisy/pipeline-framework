@@ -5,10 +5,10 @@ import java.util.Properties;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.Message.MessageBuilder;
+import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
-import org.daisy.pipeline.job.priority.Priority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -5,10 +5,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.daisy.pipeline.job.priority.Prioritizable;
-import org.daisy.pipeline.job.priority.PrioritizableRunnable;
-import org.daisy.pipeline.job.priority.PriorityThreadPoolExecutor;
-import org.daisy.pipeline.job.priority.UpdatablePriorityBlockingQueue;
+import org.daisy.common.priority.Prioritizable;
+import org.daisy.common.priority.PrioritizableRunnable;
+import org.daisy.common.priority.PriorityThreadPoolExecutor;
+import org.daisy.common.priority.UpdatablePriorityBlockingQueue;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;

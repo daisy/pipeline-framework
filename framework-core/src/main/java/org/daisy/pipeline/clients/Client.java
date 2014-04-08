@@ -1,6 +1,6 @@
 package org.daisy.pipeline.clients;
 
-import org.daisy.pipeline.job.priority.Priority;
+import org.daisy.common.priority.Priority;
 
 
 public interface Client {

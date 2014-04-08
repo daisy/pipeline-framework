@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.event.EventBusProvider;
@@ -12,7 +13,6 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
-import org.daisy.pipeline.job.priority.Priority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

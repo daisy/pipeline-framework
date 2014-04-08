@@ -18,10 +18,10 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;
-import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.persistence.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,14 +1,14 @@
 package org.daisy.pipeline.job;
 
+import org.daisy.common.priority.Prioritizable;
+import org.daisy.common.priority.PrioritizableRunnable;
+import org.daisy.common.priority.PriorityThreadPoolExecutor;
+import org.daisy.common.priority.timetracking.TimeFunctions;
+import org.daisy.common.priority.timetracking.TimeTrackerFactory;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.fuzzy.FuzzyJobFactory;
-import org.daisy.pipeline.job.priority.Prioritizable;
-import org.daisy.pipeline.job.priority.PrioritizableRunnable;
-import org.daisy.pipeline.job.priority.PriorityThreadPoolExecutor;
-import org.daisy.pipeline.job.priority.timetracking.TimeFunctions;
-import org.daisy.pipeline.job.priority.timetracking.TimeTrackerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;

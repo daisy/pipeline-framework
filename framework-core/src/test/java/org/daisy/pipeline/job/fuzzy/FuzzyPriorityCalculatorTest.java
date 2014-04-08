@@ -1,6 +1,7 @@
 package org.daisy.pipeline.job.fuzzy;
 
-import org.daisy.pipeline.job.priority.PrioritizableRunnable;
+import org.daisy.common.fuzzy.InferenceEngine;
+import org.daisy.common.priority.PrioritizableRunnable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

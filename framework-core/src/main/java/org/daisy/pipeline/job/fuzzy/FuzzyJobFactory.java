@@ -1,7 +1,11 @@
 package org.daisy.pipeline.job.fuzzy;
 
+import org.daisy.common.fuzzy.FuzzySet;
+import org.daisy.common.fuzzy.FuzzyVariable;
+import org.daisy.common.fuzzy.InferenceEngine;
+import org.daisy.common.fuzzy.MembershipFunctions;
+import org.daisy.common.priority.PrioritizableRunnable;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.priority.PrioritizableRunnable;
 
 import com.google.common.base.Supplier;
 

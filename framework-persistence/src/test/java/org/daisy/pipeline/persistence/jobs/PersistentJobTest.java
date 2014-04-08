@@ -3,9 +3,9 @@ package org.daisy.pipeline.persistence.jobs;
 import java.util.HashSet;
 import java.util.List;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.JobBuilder;
-import org.daisy.pipeline.job.priority.Priority;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.persistence.Database;
 import org.daisy.pipeline.persistence.jobs.PersistentJob.PersistentJobBuilder;
