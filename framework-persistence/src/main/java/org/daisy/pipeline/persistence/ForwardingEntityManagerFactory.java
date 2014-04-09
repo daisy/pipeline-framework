@@ -1,4 +1,4 @@
-package org.daisy.common.persistence;
+package org.daisy.pipeline.persistence;
 
 import java.util.Map;
 

@@ -3,10 +3,9 @@ package org.daisy.pipeline.persistence.derby;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.common.persistence.ForwardingEntityManagerFactory;
-
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
+import org.daisy.pipeline.persistence.ForwardingEntityManagerFactory;
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
