@@ -16,19 +16,19 @@ public class DynamicResultProviderTest {
 
 	@Test
 	public void testGenerateFirst(){
-		Result result=provider.provide();
+		Result result=provider.get();
 		Assert.assertEquals("/tmp/file.xml",result.getSystemId());
 	}
 
 	@Test
 	public void testGenerateSecond(){
-		Result result=provider.provide();
-		result=provider.provide();
+		Result result=provider.get();
+		result=provider.get();
 		Assert.assertEquals("/tmp/file-1.xml",result.getSystemId());
 	}
 
 	@Test(expected=UnsupportedOperationException.class)
 	public void testModifyResultObject(){
-		provider.provide().setSystemId("sth");
+		provider.get().setSystemId("sth");
 	}
 }

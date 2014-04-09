@@ -11,7 +11,6 @@ import java.util.List;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
 
-import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.script.BoundXProcScript;
@@ -21,6 +20,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 
 public class ResultSetFactoryTest {
@@ -69,8 +69,8 @@ public class ResultSetFactoryTest {
         public void ouputPort() throws Exception{
 
                 String outName = Mock.ScriptGenerator.getOutputName(0);
-                Provider<Result> res=output.getResultProvider(outName);
-                res.provide();
+                Supplier<Result> res=output.getResultProvider(outName);
+                res.get();
                 
                 ResultSetFactory.collectOutputs(script,output,mapper,builder);
                 ResultSet rSet=builder.build();
@@ -97,9 +97,9 @@ public class ResultSetFactoryTest {
         public void ouputPortSequence() throws Exception{
 
                 String outName = Mock.ScriptGenerator.getOutputName(1);
-                Provider<Result> res=output.getResultProvider(outName);
-                res.provide();
-                res.provide();
+                Supplier<Result> res=output.getResultProvider(outName);
+                res.get();
+                res.get();
                 
                 ResultSetFactory.collectOutputs(script,output,mapper,builder);
                 ResultSet rSet=builder.build();
@@ -113,8 +113,8 @@ public class ResultSetFactoryTest {
 
                 String outName = Mock.ScriptGenerator.getOutputName(0);
                 DynamicResultProvider res=(DynamicResultProvider) output.getResultProvider(outName);
-                res.provide();
-                res.provide();
+                res.get();
+                res.get();
                 List<JobResult> jobs=ResultSetFactory.buildJobResult(res,mapper,"xml");
                 Assert.assertEquals(jobs.size(),2);
                 Assert.assertEquals(mapper.mapOutput(URI.create(sysId)),jobs.get(0).getPath());
@@ -126,7 +126,7 @@ public class ResultSetFactoryTest {
         @Test
         public void nonDynamicProviderResults() throws Exception{
                 String outName = Mock.ScriptGenerator.getOutputName(0);
-                Provider<Result> res= output.getResultProvider(outName);
+                Supplier<Result> res= output.getResultProvider(outName);
                 List<JobResult> jobs=ResultSetFactory.buildJobResult(res,mapper,"xml");
                 Assert.assertEquals(mapper.mapOutput(URI.create(sysId)),jobs.get(0).getPath());
                 Assert.assertEquals(sysId,jobs.get(0).getIdx());
@@ -195,8 +195,8 @@ public class ResultSetFactoryTest {
         @Test
         public void newResultSet() throws Exception{
                 String outName = Mock.ScriptGenerator.getOutputName(0);
-                Provider<Result> res=output.getResultProvider(outName);
-                res.provide();
+                Supplier<Result> res=output.getResultProvider(outName);
+                res.get();
                 AbstractJobContext ctxt= new AbstractJobContext(null,JobIdFactory.newId(),"name",bound,mapper){};
                 ResultSet rSet=ResultSetFactory.newResultSet(ctxt,mapper);
                 Assert.assertEquals(5,rSet.getResults().size());

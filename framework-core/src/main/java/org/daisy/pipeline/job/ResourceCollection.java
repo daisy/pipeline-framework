@@ -2,7 +2,7 @@ package org.daisy.pipeline.job;
 
 import java.io.InputStream;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
 
 
 // TODO: Auto-generated Javadoc
@@ -16,7 +16,7 @@ public interface ResourceCollection {
 	 *
 	 * @return the resources
 	 */
-	Iterable<Provider<InputStream>> getResources();
+	Iterable<Supplier<InputStream>> getResources();
 
 	/**
 	 * Gets the names.
@@ -31,5 +31,5 @@ public interface ResourceCollection {
 	 * @param name the name
 	 * @return the resource
 	 */
-	Provider<InputStream> getResource(String name);
+	Supplier<InputStream> getResource(String name);
 }

@@ -6,13 +6,13 @@ import java.util.List;
 
 import javax.xml.transform.Result;
 
-import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.XProcScript;
 
+import com.google.common.base.Supplier;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
@@ -38,7 +38,7 @@ public class ResultSetFactory {
 
 		for (XProcPortInfo info: script.getXProcPipelineInfo().getOutputPorts()){
 
-			Provider<Result> prov= outputs.getResultProvider(info.getName());
+			Supplier<Result> prov= outputs.getResultProvider(info.getName());
 			
 			if(prov==null)
 				continue;
@@ -55,9 +55,9 @@ public class ResultSetFactory {
 	}
 
 	//Non dymamic just one result will be returned in fact
-	static List<JobResult> buildJobResult(Provider<Result> provider,URIMapper mapper,String mediaType){
+	static List<JobResult> buildJobResult(Supplier<Result> provider,URIMapper mapper,String mediaType){
 		List<JobResult> jobs= Lists.newLinkedList();
-		URI path=URI.create(provider.provide().getSystemId());
+		URI path=URI.create(provider.get().getSystemId());
 		jobs.add(singleResult(path,mapper,mediaType));
 		return jobs;
 	}

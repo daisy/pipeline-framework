@@ -5,13 +5,13 @@ import java.util.List;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
-import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.ResultSet;
 
+import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 
 class ContextHydrator {
@@ -52,8 +52,8 @@ class ContextHydrator {
 		List<PersistentInputPort> inputPorts = Lists.newLinkedList();
 		for( XProcPortInfo portName:ctxt.getScript().getXProcPipelineInfo().getInputPorts()){
 			PersistentInputPort anon=new PersistentInputPort(ctxt.getId(),portName.getName());
-			for (Provider<Source> src:ctxt.getInputs().getInputs(portName.getName())){
-				anon.addSource(new PersistentSource(src.provide().getSystemId()));
+			for (Supplier<Source> src:ctxt.getInputs().getInputs(portName.getName())){
+				anon.addSource(new PersistentSource(src.get().getSystemId()));
 			}
 			inputPorts.add(anon);
 		}

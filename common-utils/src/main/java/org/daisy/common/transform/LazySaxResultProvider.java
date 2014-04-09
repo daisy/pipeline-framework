@@ -1,9 +1,10 @@
 package org.daisy.common.transform;
 import javax.xml.transform.Result;
 import javax.xml.transform.sax.SAXResult;
-import org.daisy.common.base.Provider;
 
-public class LazySaxResultProvider implements Provider<Result>{
+import com.google.common.base.Supplier;
+
+public class LazySaxResultProvider implements Supplier<Result>{
 
 	private String systemId;
 
@@ -19,7 +20,7 @@ public class LazySaxResultProvider implements Provider<Result>{
 
 
 	@Override
-	public Result provide() {
+	public Result get() {
 		SAXResult src=new ProxiedSAXResult();
 		src.setSystemId(this.systemId);
 		return src;

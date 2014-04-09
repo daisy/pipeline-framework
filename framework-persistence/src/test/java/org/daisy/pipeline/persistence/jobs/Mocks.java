@@ -7,7 +7,6 @@ import java.util.List;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
-import org.daisy.common.base.Provider;
 import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipelineInfo;
@@ -25,6 +24,8 @@ import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
+
+import com.google.common.base.Supplier;
 
 public class Mocks   {
 	
@@ -83,7 +84,7 @@ public class Mocks   {
 	}
 
 
-	static class SimpleSourceProvider implements Source,Provider<Source>{
+	static class SimpleSourceProvider implements Source,Supplier<Source>{
 		String sysId;
 
 		/**
@@ -96,7 +97,7 @@ public class Mocks   {
 		}
 
 		@Override
-		public Source provide() {
+		public Source get() {
 			return this;
 		}
 

@@ -15,13 +15,14 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 
-import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
+
+import com.google.common.base.Supplier;
 
 class Mock   {
         public static JobContext mockContext(JobId id){
@@ -31,7 +32,7 @@ class Mock   {
                 };
         }
 
-        public static class MockSource implements Source,Provider<Source>{
+        public static class MockSource implements Source,Supplier<Source>{
                 String sId;
 
                 /**
@@ -55,12 +56,12 @@ class Mock   {
                 }
 
                 @Override
-                public Source provide() {
+                public Source get() {
                         return this;
                 }
         }
 
-        public static class MockResult implements Result,Provider<Result>{
+        public static class MockResult implements Result,Supplier<Result>{
                 String sId;
 
                 /**
@@ -84,15 +85,15 @@ class Mock   {
                 }
 
                 @Override
-                public Result provide() {
+                public Result get() {
                         return this;
                 }
         }
-        public static Provider<Source> getSourceProvider(String systemId){
+        public static Supplier<Source> getSourceProvider(String systemId){
                 return new MockSource(systemId);
 
         }
-        public static Provider<Result> getResultProvider(String systemId){
+        public static Supplier<Result> getResultProvider(String systemId){
                 return new MockResult(systemId);
 
         }

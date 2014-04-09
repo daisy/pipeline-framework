@@ -13,7 +13,6 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
-import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOptionInfo;
@@ -197,8 +196,8 @@ public class CalabashXProcPipeline implements XProcPipeline {
 				.getMessageListener()).add(new EventBusMessageListener(eventBusProvider,props));
 		// bind inputs
 		for (String name : pipeline.xpipe.getInputs()) {
-			for (Provider<Source> sourceProvider : data.getInputs(name)) {
-				Source source = sourceProvider.provide();
+			for (Supplier<Source> sourceProvider : data.getInputs(name)) {
+				Source source = sourceProvider.get();
 				// TODO hack to set the entity resolver
 				if (source instanceof SAXSource) {
 					XMLReader reader = ((SAXSource) source).getXMLReader();

@@ -8,15 +8,16 @@ import java.util.HashMap;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-import org.daisy.common.base.Provider;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.base.Supplier;
+
 public class ZipResourceContextTest {
 	ZipFile mFile;
 	private ZipResourceContext ctxt;
-	private Provider<InputStream> res;
+	private Supplier<InputStream> res;
 
 	@Before
 	public void setUp() throws ZipException, IOException, URISyntaxException {
@@ -45,7 +46,7 @@ public class ZipResourceContextTest {
 	@Test
 	public void resourceAsInputStream() throws IOException {
 
-		InputStream is = res.provide();
+		InputStream is = res.get();
 		byte buff[] = new byte[256];
 		int read = is.read(buff);
 		Assert.assertTrue(read > 0);

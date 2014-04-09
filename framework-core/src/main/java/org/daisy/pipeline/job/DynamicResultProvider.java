@@ -4,16 +4,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.daisy.common.base.Provider;
 import javax.xml.transform.Result;
 
+import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 
 /**
  * This class is not thread-safe if several threads are generating results at the same time.
  * not that likely use case
  */
-public final class DynamicResultProvider implements Provider<Result>{
+public final class DynamicResultProvider implements Supplier<Result>{
 
 	private final String prefix;
 	private final String suffix;
@@ -29,7 +29,7 @@ public final class DynamicResultProvider implements Provider<Result>{
 	 * The results returned by this method will not support setting the systemId and a expcetion will be thrown
 	 */
 	@Override
-	public Result provide() {
+	public Result get() {
 		String sysId=null;
 		if ( count==0){
 			sysId=String.format("%s%s",prefix,suffix);

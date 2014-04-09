@@ -7,9 +7,8 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
-import org.daisy.common.base.Provider;
-
 import com.google.common.base.Predicates;
+import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -30,7 +29,7 @@ public final class XProcInput {
 		private final XProcPipelineInfo info;
 
 		/** The inputs. */
-		private final HashMap<String, List<Provider<Source>>> inputs = Maps
+		private final HashMap<String, List<Supplier<Source>>> inputs = Maps
 				.newHashMap();
 
 		/** The parameters. */
@@ -63,12 +62,12 @@ public final class XProcInput {
 		 * @param source the source
 		 * @return the builder
 		 */
-		public Builder withInput(String port, Provider<Source> source) {
+		public Builder withInput(String port, Supplier<Source> source) {
 			// TODO check if compatible with info
 			if (inputs.containsKey(port)) {
 				inputs.get(port).add(source);
 			} else {
-				List<Provider<Source>> resources = Lists.newLinkedList();
+				List<Supplier<Source>> resources = Lists.newLinkedList();
 				resources.add(source);
 				inputs.put(port, resources);
 			}
@@ -119,14 +118,14 @@ public final class XProcInput {
 	}
 
 	/** The Constant emptySources. */
-	private final static List<Provider<Source>> emptySources = ImmutableList
+	private final static List<Supplier<Source>> emptySources = ImmutableList
 			.of();
 
 	/** The Constant emptyParams. */
 	private final static Map<QName, String> emptyParams = ImmutableMap.of();
 
 	/** The inputs. */
-	private final Map<String, List<Provider<Source>>> inputs;
+	private final Map<String, List<Supplier<Source>>> inputs;
 
 	/** The parameters. */
 	private final Map<String, Map<QName, String>> parameters;
@@ -141,10 +140,10 @@ public final class XProcInput {
 	 * @param parameters the parameters
 	 * @param options the options
 	 */
-	private XProcInput(Map<String, List<Provider<Source>>> inputs,
+	private XProcInput(Map<String, List<Supplier<Source>>> inputs,
 			Map<String, Map<QName, String>> parameters,
 			Map<QName, String> options) {
-		ImmutableMap.Builder<String, List<Provider<Source>>> inputsBuilder = ImmutableMap
+		ImmutableMap.Builder<String, List<Supplier<Source>>> inputsBuilder = ImmutableMap
 				.builder();
 		for (String key : inputs.keySet()) {
 			inputsBuilder.put(key, ImmutableList.copyOf(inputs.get(key)));
@@ -166,7 +165,7 @@ public final class XProcInput {
 	 * @param port the port
 	 * @return the inputs
 	 */
-	public Iterable<Provider<Source>> getInputs(String port) {
+	public Iterable<Supplier<Source>> getInputs(String port) {
 		return inputs.containsKey(port) ? ImmutableList
 				.copyOf(inputs.get(port)) : emptySources;
 	}

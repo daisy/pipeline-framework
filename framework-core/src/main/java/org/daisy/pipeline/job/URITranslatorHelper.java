@@ -5,7 +5,6 @@ import java.util.LinkedList;
 
 import javax.xml.transform.Result;
 
-import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
@@ -16,6 +15,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.base.Splitter;
+import com.google.common.base.Supplier;
 
 final class URITranslatorHelper   {
 
@@ -93,19 +93,19 @@ final class URITranslatorHelper   {
 	 * TODO: At some point it would be nice to generate the names based on the mime-type, ask jostein where 
 	 * he got the list of mime-types for the webui
 	 */
-	public static final String[] getDynamicResultProviderParts(String name,Provider<Result> result,String mimetype){
+	public static final String[] getDynamicResultProviderParts(String name,Supplier<Result> result,String mimetype){
 		String parts[]=null;
 		//on the result/result.xml way
-		if (result==null || result.provide().getSystemId().isEmpty()){
+		if (result==null || result.get().getSystemId().isEmpty()){
 			parts= new String[]{String.format("%s/%s",name,name),".xml"};
 		//directory-> dir/name, .xml
 		//the first part is the last char of the sysId
-		}else if(result.provide().getSystemId().charAt(result.provide().getSystemId().length()-1)=='/'){
-			parts= new String[]{String.format("%s%s",result.provide().getSystemId(),name),".xml"};
+		}else if(result.get().getSystemId().charAt(result.get().getSystemId().length()-1)=='/'){
+			parts= new String[]{String.format("%s%s",result.get().getSystemId(),name),".xml"};
 		//file name/name, (".???"|"")
 		}else{
 			String ext="";
-			String path=result.provide().getSystemId();
+			String path=result.get().getSystemId();
 			int idx;
 
 			//get the extension if there is one

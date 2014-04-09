@@ -8,7 +8,6 @@ import java.util.LinkedList;
 
 import javax.xml.transform.Source;
 
-import org.daisy.common.base.Provider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
@@ -18,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicates;
+import com.google.common.base.Supplier;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -134,11 +134,11 @@ class XProcDecorator {
 		for (XProcPortInfo portInfo : inputInfos){
 			//number of inputs for this port
 			int inputCnt = 0;
-			for (Provider<Source> prov : input.getInputs(portInfo.getName())) {
+			for (Supplier<Source> prov : input.getInputs(portInfo.getName())) {
 				URI relUri = null;
-				if (prov.provide().getSystemId() != null) {
+				if (prov.get().getSystemId() != null) {
 					try {
-						relUri = URI.create(prov.provide().getSystemId());
+						relUri = URI.create(prov.get().getSystemId());
 					} catch (Exception e) {
 						throw new RuntimeException(
 								"Error parsing uri when building the input port"
@@ -151,7 +151,7 @@ class XProcDecorator {
 							+ ".xml");
 				}
 				URI uri = mapper.mapInput(relUri);//contextDir.toURI().resolve(relUri);
-				prov.provide().setSystemId(uri.toString());
+				prov.get().setSystemId(uri.toString());
 				builder.withInput(portInfo.getName(), prov);
 				inputCnt++;
 			}

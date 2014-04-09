@@ -18,7 +18,6 @@ import javax.xml.transform.sax.SAXSource;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.daisy.common.base.Provider;
 import org.daisy.common.priority.Priority;
 import org.daisy.common.transform.LazySaxResultProvider;
 import org.daisy.common.transform.LazySaxSourceProvider;
@@ -59,6 +58,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Supplier;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -453,9 +453,9 @@ public class JobsResource extends AuthenticatedResource {
                                                         String xml = XmlUtils.nodeToString(content);
                                                         InputSource is = new org.xml.sax.InputSource(new java.io.StringReader(xml));
                                                         source.setInputSource(is);
-                                                        Provider<Source> prov= new Provider<Source>(){
+                                                        Supplier<Source> prov= new Supplier<Source>(){
                                                                 @Override
-                                                                public Source provide(){
+                                                                public Source get(){
                                                                         return source;
                                                                 }
                                                         };

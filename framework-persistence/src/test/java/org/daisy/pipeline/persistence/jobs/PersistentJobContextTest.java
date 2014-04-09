@@ -8,7 +8,6 @@ import java.util.List;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
-import org.daisy.common.base.Provider;
 import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.job.JobId;
@@ -19,6 +18,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.google.common.base.Supplier;
 
 
 public class PersistentJobContextTest  {
@@ -68,8 +69,8 @@ public class PersistentJobContextTest  {
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
 		XProcInput inputs=jCtxt.getInputs();
 		HashSet<String> expectedSrcs=new HashSet<String>();
-		for ( Provider<Source> psrc:inputs.getInputs("source")){
-			expectedSrcs.add(psrc.provide().getSystemId());	
+		for ( Supplier<Source> psrc:inputs.getInputs("source")){
+			expectedSrcs.add(psrc.get().getSystemId());	
 		}
 		Assert.assertTrue(expectedSrcs.contains(Mocks.file1));
 		Assert.assertTrue(expectedSrcs.contains(Mocks.file2));

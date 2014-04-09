@@ -77,7 +77,7 @@ public class IOHelper {
 	 */
 	public static void dump(ResourceCollection resources,URIMapper mapper) throws IOException {
 		for (String path : resources.getNames()) {
-			IOHelper.dump(resources.getResource(path).provide(),mapper.getInputBase() 
+			IOHelper.dump(resources.getResource(path).get(),mapper.getInputBase() 
 					, URI.create(path.replace("\\", "/")));
 		}
 	}
