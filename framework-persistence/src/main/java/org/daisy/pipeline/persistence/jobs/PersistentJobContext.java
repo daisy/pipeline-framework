@@ -22,7 +22,6 @@ import javax.persistence.Transient;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.ResultSet;
 import org.daisy.pipeline.job.RuntimeConfigurator;
