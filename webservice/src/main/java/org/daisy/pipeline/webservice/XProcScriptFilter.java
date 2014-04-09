@@ -1,6 +1,5 @@
 package org.daisy.pipeline.webservice;
 
-import org.daisy.common.base.Filter;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
@@ -12,7 +11,7 @@ import org.daisy.pipeline.script.XProcScript;
 /**
  * The Class XProcScriptFilter.
  */
-public final class XProcScriptFilter implements Filter<XProcScript> {
+public final class XProcScriptFilter {
 
 	/** The Constant INSTANCE. */
 	public static final XProcScriptFilter INSTANCE = new XProcScriptFilter();
@@ -36,7 +35,6 @@ public final class XProcScriptFilter implements Filter<XProcScript> {
 	/* (non-Javadoc)
 	 * @see org.daisy.common.base.Filter#filter(java.lang.Object)
 	 */
-	@Override
 	public XProcScript filter(XProcScript script) {
 		XProcPipelineInfo xproc = script.getXProcPipelineInfo();
 		// create the script builder
