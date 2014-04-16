@@ -1,4 +1,4 @@
-package org.daisy.common.xproc.calabash;
+package org.daisy.common.xproc.calabash.impl;
 
 import java.io.File;
 import java.io.IOException;

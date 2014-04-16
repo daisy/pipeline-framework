@@ -1,4 +1,4 @@
-package org.daisy.common.xproc.calabash;
+package org.daisy.common.xproc.calabash.impl;
 
 import java.net.URI;
 
@@ -6,12 +6,12 @@ import javax.xml.transform.URIResolver;
 
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
-
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcResult;
+import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

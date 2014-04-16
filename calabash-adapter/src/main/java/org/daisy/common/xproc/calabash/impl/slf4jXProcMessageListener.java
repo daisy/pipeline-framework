@@ -1,4 +1,4 @@
-package org.daisy.common.xproc.calabash;
+package org.daisy.common.xproc.calabash.impl;
 
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;

@@ -1,4 +1,4 @@
-package org.daisy.common.xproc.calabash;
+package org.daisy.common.xproc.calabash.impl;
 
 import java.io.File;
 import java.util.HashMap;
@@ -13,6 +13,9 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.calabash.XProcStepRegistry;
 import org.daisy.pipeline.xpath.XPathFunctionRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

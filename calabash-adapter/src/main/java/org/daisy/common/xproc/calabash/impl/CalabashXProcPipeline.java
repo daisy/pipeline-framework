@@ -1,4 +1,4 @@
-package org.daisy.common.xproc.calabash;
+package org.daisy.common.xproc.calabash.impl;
 
 import java.net.URI;
 import java.util.Properties;
@@ -20,6 +20,7 @@ import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcResult;
+import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;

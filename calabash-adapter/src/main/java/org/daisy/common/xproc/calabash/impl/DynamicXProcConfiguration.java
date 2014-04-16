@@ -1,4 +1,6 @@
-package org.daisy.common.xproc.calabash;
+package org.daisy.common.xproc.calabash.impl;
+
+import org.daisy.common.xproc.calabash.XProcStepRegistry;
 
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
