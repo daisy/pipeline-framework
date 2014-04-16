@@ -1,4 +1,4 @@
-package org.daisy.common.xproc.calabash.steps;
+package org.daisy.common.xproc.calabash.steps.impl;
 
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
