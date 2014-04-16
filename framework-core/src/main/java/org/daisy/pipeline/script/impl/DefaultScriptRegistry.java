@@ -1,12 +1,16 @@
 /*
  *
  */
-package org.daisy.pipeline.script;
+package org.daisy.pipeline.script.impl;
 
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.daisy.pipeline.script.ScriptRegistry;
+import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.XProcScriptParser;
+import org.daisy.pipeline.script.XProcScriptService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

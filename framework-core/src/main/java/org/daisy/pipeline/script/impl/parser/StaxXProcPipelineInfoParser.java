@@ -1,4 +1,4 @@
-package org.daisy.converter.parser.stax;
+package org.daisy.pipeline.script.impl.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,9 +20,9 @@ import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPipelineInfo.Builder;
 import org.daisy.common.xproc.XProcPortInfo;
-import org.daisy.converter.parser.XProcScriptConstants.Attributes;
-import org.daisy.converter.parser.XProcScriptConstants.Elements;
-import org.daisy.converter.parser.XProcScriptConstants.Values;
+import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Attributes;
+import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Elements;
+import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Values;
 
 // TODO: Auto-generated Javadoc
 /**

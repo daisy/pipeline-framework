@@ -1,4 +1,4 @@
-package org.daisy.converter.parser;
+package org.daisy.pipeline.script.impl.parser;
 
 import java.util.HashSet;
 import java.util.Set;
