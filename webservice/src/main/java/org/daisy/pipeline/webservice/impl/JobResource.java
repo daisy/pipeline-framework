@@ -1,4 +1,4 @@
-package org.daisy.pipeline.webservice;
+package org.daisy.pipeline.webservice.impl;
 
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;

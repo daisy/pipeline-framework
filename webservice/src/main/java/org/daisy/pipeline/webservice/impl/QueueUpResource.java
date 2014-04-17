@@ -1,4 +1,4 @@
-package org.daisy.pipeline.webservice;
+package org.daisy.pipeline.webservice.impl;
 
 
 
@@ -6,11 +6,12 @@ import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.JobId;
 
 
-public class QueueDownResource extends QueueMoveResource {
+public class QueueUpResource extends QueueMoveResource {
 
         @Override
         public void move(JobQueue queue, JobId id) {
-                queue.moveDown(id);
+                queue.moveUp(id);
+
         }
 
 }

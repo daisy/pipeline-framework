@@ -1,11 +1,13 @@
-package org.daisy.pipeline.webservice;
+
+package org.daisy.pipeline.webservice.impl;
 
 
-//import static org.daisy.pipeline.webservice.AuthenticatedResource.logger;
 
-import org.daisy.pipeline.job.JobSize;
-import org.daisy.pipeline.webserviceutils.xml.JobsSizeXmlWriter;
-import org.daisy.pipeline.webserviceutils.xml.XmlUtils;
+import java.util.Collection;
+
+import org.daisy.common.priority.Prioritizable;
+import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.webserviceutils.xml.QueueXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -14,30 +16,31 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 
 
-public class SizesResource extends AdminResource {
+public class QueueResource extends AuthenticatedResource {
+
 	@Override
 	public void doInit() {
 		super.doInit();
-		if (!isAuthorized()) {
+		if (!isAuthenticated()) {
 			return;
 		}
 	}
 
 	/**
-	 * Gets the resource.
+	 * List the jobs, their final priorities and their times
 	 *
 	 * @return the resource
 	 */
 	@Get("xml")
 	public Representation getResource() {
-		if (!isAuthorized()) {
+		if (!isAuthenticated()) {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
 		}
 
 		setStatus(Status.SUCCESS_OK);
-
-		JobsSizeXmlWriter writer = XmlWriterFactory.createXmlWriterForJobSizes(JobSize.getSizes(webservice().getJobManager(this.getClient()).getJobs()));
+                Collection<? extends Prioritizable<Job>> jobs=webservice().getJobManager(this.getClient()).getExecutionQueue().asCollection();
+		QueueXmlWriter writer = XmlWriterFactory.createXmlWriterForQueue(jobs);
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
                                 writer.getXmlDocument());
 		return dom;

@@ -1,4 +1,4 @@
-package org.daisy.pipeline.webservice;
+package org.daisy.pipeline.webservice.impl;
 
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.webserviceutils.Authenticator;

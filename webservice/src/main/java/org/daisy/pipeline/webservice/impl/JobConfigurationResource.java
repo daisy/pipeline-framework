@@ -1,4 +1,4 @@
-package org.daisy.pipeline.webservice;
+package org.daisy.pipeline.webservice.impl;
 
 import java.io.IOException;
 import java.io.StringReader;

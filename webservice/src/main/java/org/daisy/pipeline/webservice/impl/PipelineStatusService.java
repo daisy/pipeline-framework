@@ -1,4 +1,4 @@
-package org.daisy.pipeline.webservice;
+package org.daisy.pipeline.webservice.impl;
 
 import org.daisy.pipeline.webserviceutils.xml.ErrorWriter.ErrorWriterBuilder;
 import org.restlet.Request;
