@@ -9,6 +9,7 @@ import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
+import org.daisy.pipeline.job.impl.JobUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -11,7 +11,7 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobResult;
-import org.daisy.pipeline.job.ResultSet;
+import org.daisy.pipeline.job.JobResultSet;
 import org.restlet.data.Digest;
 import org.restlet.data.Disposition;
 import org.restlet.data.MediaType;
@@ -93,7 +93,7 @@ public class ResultResource extends AuthenticatedResource {
         public static Representation getZippedRepresentation(
                         Collection<JobResult> results, Job job) throws IOException,
                         NoSuchAlgorithmException {
-                        byte[] zip =ResultSet.asZippedByteArray(results);
+                        byte[] zip =JobResultSet.asZippedByteArray(results);
                         //DigesterRepresentation doesn't add the header
                         Representation rep = new InputRepresentation(new ByteArrayInputStream(zip),
                                         MediaType.APPLICATION_ZIP);

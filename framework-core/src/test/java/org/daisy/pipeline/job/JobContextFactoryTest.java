@@ -3,6 +3,10 @@ package org.daisy.pipeline.job;
 import java.io.File;
 
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.job.JobContext;
+import org.daisy.pipeline.job.JobContextFactory;
+import org.daisy.pipeline.job.RuntimeConfigurator;
+import org.daisy.pipeline.job.impl.JobURIUtils;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.junit.After;
 import org.junit.Before;

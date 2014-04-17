@@ -1,7 +1,10 @@
 package org.daisy.pipeline.job;
 
 import java.io.IOException;
+
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.job.impl.MappingJobContext;
+import org.daisy.pipeline.job.impl.SimpleJobContext;
 import org.daisy.pipeline.script.BoundXProcScript;
 
 
@@ -24,7 +27,7 @@ public class JobContextFactory {
         }
 
          
-        public JobContext newJobContext(boolean mapping,String niceName,BoundXProcScript boundScript,ResourceCollection collection){
+        public JobContext newJobContext(boolean mapping,String niceName,BoundXProcScript boundScript,JobResources collection){
                 //if mapping create a new mapping context
                 if(mapping){
                         return this.newMappingJobContext(niceName,boundScript,collection);
@@ -34,7 +37,7 @@ public class JobContextFactory {
                 }
         }
 
-        public JobContext newMappingJobContext(String niceName,BoundXProcScript boundScript,ResourceCollection collection){
+        public JobContext newMappingJobContext(String niceName,BoundXProcScript boundScript,JobResources collection){
                 JobId id = JobIdFactory.newId();
                 AbstractJobContext ctxt=null;
                 try{

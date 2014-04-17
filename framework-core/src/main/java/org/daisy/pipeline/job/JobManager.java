@@ -54,11 +54,11 @@ public interface JobManager {
 
         public interface JobBuilder{
                 public JobBuilder isMapping(boolean mapping);
-                public JobBuilder withResources(ResourceCollection resources);
+                public JobBuilder withResources(JobResources resources);
                 public JobBuilder withNiceName(String niceName);
                 public JobBuilder withPriority(Priority priority);
                 public Optional<Job> build();
         }
 
-        public ExecutionQueue getExecutionQueue();
+        public JobQueue getExecutionQueue();
 }

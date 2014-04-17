@@ -9,7 +9,7 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobResult;
-import org.daisy.pipeline.job.ResultSet;
+import org.daisy.pipeline.job.JobResultSet;
 
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
@@ -36,13 +36,13 @@ class ContextHydrator {
 		}
 	}
 
-	static void hydrateResultPorts(ResultSet.Builder builder,List<PersistentPortResult> portResults){
+	static void hydrateResultPorts(JobResultSet.Builder builder,List<PersistentPortResult> portResults){
 		for(PersistentPortResult pRes: portResults){
 			builder.addResult(pRes.getPortName(),pRes.getJobResult());
 		}
 	}
 
-	static void hydrateResultOptions(ResultSet.Builder builder,List<PersistentOptionResult> optionResults){
+	static void hydrateResultOptions(JobResultSet.Builder builder,List<PersistentOptionResult> optionResults){
 		for(PersistentOptionResult pRes: optionResults){
 			builder.addResult(pRes.getOptionName(),pRes.getJobResult());
 		}
@@ -80,7 +80,7 @@ class ContextHydrator {
 
 	static List<PersistentPortResult> dehydratePortResults(JobContext ctxt){
 		List<PersistentPortResult> portResults= Lists.newLinkedList();
-		ResultSet rSet= ctxt.getResults();
+		JobResultSet rSet= ctxt.getResults();
 		for(String port:rSet.getPorts()){
 			for(JobResult res:rSet.getResults(port)){
 				portResults.add(new PersistentPortResult(ctxt.getId(),res,port));
@@ -91,7 +91,7 @@ class ContextHydrator {
 
 	static List<PersistentOptionResult> dehydrateOptionResults(JobContext ctxt){
 		List<PersistentOptionResult> optionResults= Lists.newLinkedList();
-		ResultSet rSet= ctxt.getResults();
+		JobResultSet rSet= ctxt.getResults();
 		for(QName option:rSet.getOptions()){
 			for(JobResult res:rSet.getResults(option)){
 				optionResults.add(new PersistentOptionResult(ctxt.getId(),res,option));

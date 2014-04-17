@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.LinkedList;
 
+import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobIdFactory;
+import org.daisy.pipeline.job.JobSize;
+import org.daisy.pipeline.job.impl.JobURIUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

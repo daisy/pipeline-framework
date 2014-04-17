@@ -27,8 +27,8 @@ import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
-import org.daisy.pipeline.job.ResourceCollection;
-import org.daisy.pipeline.job.ZipResourceContext;
+import org.daisy.pipeline.job.JobResources;
+import org.daisy.pipeline.job.ZippedJobResources;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
@@ -367,9 +367,9 @@ public class JobsResource extends AuthenticatedResource {
                 BoundXProcScript bound= BoundXProcScript.from(script,inBuilder.build(),outBuilder.build());
 
                 JobManager jobMan = webservice().getJobManager(this.getClient());
-                ResourceCollection resourceCollection=null;
+                JobResources resourceCollection=null;
                 if (zip != null){
-                        resourceCollection = new ZipResourceContext(zip);
+                        resourceCollection = new ZippedJobResources(zip);
                 }
                 boolean mapping=webservice().getConfiguration().isLocalFS();
                 Optional<Job> newJob= jobMan.newJob(bound).isMapping(mapping).withNiceName(niceName)

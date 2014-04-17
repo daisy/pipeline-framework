@@ -7,17 +7,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-
 import java.net.URI;
-
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.daisy.pipeline.job.JobResult;
+import org.daisy.pipeline.job.JobResultSet;
+import org.daisy.pipeline.job.impl.IOHelper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,7 +56,7 @@ public class ResultSetTest   {
 		List<JobResult> results= new LinkedList<JobResult>();
 		results.add(jres1);
 		results.add(jres2);
-		InputStream is=ResultSet.asZippedInputStream(results);
+		InputStream is=JobResultSet.asZippedInputStream(results);
 		tmpFile=File.createTempFile("diasy_test",".zip");
 		IOHelper.dump(is,new FileOutputStream(tmpFile));
 	}

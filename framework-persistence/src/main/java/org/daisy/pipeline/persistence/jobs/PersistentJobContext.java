@@ -23,7 +23,7 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobIdFactory;
-import org.daisy.pipeline.job.ResultSet;
+import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.RuntimeConfigurator;
 import org.daisy.pipeline.persistence.webservice.PersistentClient;
 import org.daisy.pipeline.script.BoundXProcScript;
@@ -128,7 +128,7 @@ public final class PersistentJobContext extends AbstractJobContext {
                 this.setMapper(this.pMapper.getMapper());
                 this.setClient(this.client);
 
-                ResultSet.Builder rBuilder=new ResultSet.Builder();
+                JobResultSet.Builder rBuilder=new JobResultSet.Builder();
                 ContextHydrator.hydrateResultPorts(rBuilder,portResults);
                 ContextHydrator.hydrateResultOptions(rBuilder,optionResults);
                 this.setResults(rBuilder.build());
@@ -140,7 +140,7 @@ public final class PersistentJobContext extends AbstractJobContext {
         }
 
         private void updateResults(){
-                ResultSet rSet= this.getResults();
+                JobResultSet rSet= this.getResults();
                 if(this.portResults.size()==0)
                         this.portResults=ContextHydrator.dehydratePortResults(this);
                 if(this.optionResults.size()==0)

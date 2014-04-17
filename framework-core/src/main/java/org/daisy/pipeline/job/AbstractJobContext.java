@@ -7,6 +7,8 @@ import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.job.impl.JobURIUtils;
+import org.daisy.pipeline.job.impl.ResultSetBuilder;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScript;
 import org.slf4j.Logger;
@@ -37,7 +39,7 @@ public abstract class AbstractJobContext implements JobContext{
 
         private URIMapper mapper;  
 
-        private ResultSet results;
+        private JobResultSet results;
                 
         private String niceName;
 
@@ -62,7 +64,7 @@ public abstract class AbstractJobContext implements JobContext{
                 else
                         this.logFile=URI.create("");
 
-                this.results=new ResultSet.Builder().build();
+                this.results=new JobResultSet.Builder().build();
                 
         }
 
@@ -111,7 +113,7 @@ public abstract class AbstractJobContext implements JobContext{
          *
          * @param results The results.
          */
-        protected void setResults(ResultSet results) {
+        protected void setResults(JobResultSet results) {
                 this.results = results;
         }
 
@@ -169,7 +171,7 @@ public abstract class AbstractJobContext implements JobContext{
         }
 
         @Override
-        public ResultSet getResults() {
+        public JobResultSet getResults() {
                 return this.results;
         }
 
@@ -177,7 +179,7 @@ public abstract class AbstractJobContext implements JobContext{
         public void writeResult(XProcResult result) {
                 result.writeTo(this.output);
                 if(this.generateResults){
-                        this.results=ResultSetFactory.newResultSet(this,this.mapper);
+                        this.results=ResultSetBuilder.newResultSet(this,this.mapper);
                 }
                                 
         }

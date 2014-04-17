@@ -5,7 +5,7 @@ package org.daisy.pipeline.webservice;
 import java.util.Collection;
 
 import org.daisy.common.priority.Prioritizable;
-import org.daisy.pipeline.job.ExecutionQueue;
+import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
@@ -22,7 +22,7 @@ import com.google.common.base.Optional;
 
 
 public abstract class QueueMoveResource extends AuthenticatedResource {
-        ExecutionQueue queue;
+        JobQueue queue;
         Optional<Job> job;
         @Override
         public void doInit() {
@@ -37,7 +37,7 @@ public abstract class QueueMoveResource extends AuthenticatedResource {
 
         }
 
-        public abstract void move(ExecutionQueue queue,JobId id);
+        public abstract void move(JobQueue queue,JobId id);
 
         /**
          * List the jobs, their final priorities and their times

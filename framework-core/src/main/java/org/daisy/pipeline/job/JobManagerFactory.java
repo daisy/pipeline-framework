@@ -3,6 +3,7 @@ package org.daisy.pipeline.job;
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.job.impl.DefaultJobManager;
 
 public class JobManagerFactory {
         private JobStorage storage;
