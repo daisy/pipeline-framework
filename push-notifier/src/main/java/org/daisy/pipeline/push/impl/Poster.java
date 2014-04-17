@@ -1,4 +1,4 @@
-package org.daisy.pipeline.push;
+package org.daisy.pipeline.push.impl;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
