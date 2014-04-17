@@ -1,4 +1,4 @@
-package org.daisy.pipeline.persistence.mysql;
+package org.daisy.pipeline.persistence.impl.mysql;
 
 import java.util.HashMap;
 import java.util.Map;

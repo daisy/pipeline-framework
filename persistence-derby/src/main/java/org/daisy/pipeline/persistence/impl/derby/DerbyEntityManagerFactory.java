@@ -1,4 +1,4 @@
-package org.daisy.pipeline.persistence.derby;
+package org.daisy.pipeline.persistence.impl.derby;
 
 import java.util.HashMap;
 import java.util.Map;
