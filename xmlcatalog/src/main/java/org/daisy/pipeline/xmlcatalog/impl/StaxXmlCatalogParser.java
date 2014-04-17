@@ -1,4 +1,4 @@
-package org.daisy.pipeline.xmlcatalog.stax;
+package org.daisy.pipeline.xmlcatalog.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,8 +17,8 @@ import org.daisy.common.stax.StaxEventHelper;
 import org.daisy.common.stax.StaxEventHelper.EventPredicates;
 import org.daisy.pipeline.xmlcatalog.XmlCatalog;
 import org.daisy.pipeline.xmlcatalog.XmlCatalogParser;
-import org.daisy.pipeline.xmlcatalog.stax.XmlCatalogConstants.Attributes;
-import org.daisy.pipeline.xmlcatalog.stax.XmlCatalogConstants.Elements;
+import org.daisy.pipeline.xmlcatalog.impl.XmlCatalogConstants.Attributes;
+import org.daisy.pipeline.xmlcatalog.impl.XmlCatalogConstants.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

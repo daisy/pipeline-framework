@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="catalog-parser">
-   <implementation class="org.daisy.pipeline.xmlcatalog.stax.StaxXmlCatalogParser"/>
+   <implementation class="org.daisy.pipeline.xmlcatalog.impl.StaxXmlCatalogParser"/>
    <service>
       <provide interface="org.daisy.pipeline.xmlcatalog.XmlCatalogParser"/>
    </service>

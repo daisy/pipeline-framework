@@ -1,4 +1,4 @@
-package org.daisy.pipeline.xmlcatalog.stax;
+package org.daisy.pipeline.xmlcatalog.impl;
 
 import java.net.URI;
 import java.util.Map;
@@ -8,6 +8,7 @@ import javax.xml.stream.XMLInputFactory;
 import junit.framework.Assert;
 
 import org.daisy.pipeline.xmlcatalog.XmlCatalog;
+import org.daisy.pipeline.xmlcatalog.impl.StaxXmlCatalogParser;
 import org.junit.Before;
 import org.junit.Test;
 

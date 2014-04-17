@@ -1,4 +1,4 @@
 /**
  *   Stax based xml catalog parser 
  */
-package org.daisy.pipeline.xmlcatalog.stax;
+package org.daisy.pipeline.xmlcatalog.impl;

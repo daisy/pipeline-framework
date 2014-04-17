@@ -1,4 +1,4 @@
-package org.daisy.pipeline.xmlcatalog.stax;
+package org.daisy.pipeline.xmlcatalog.impl;
 
 import javax.xml.namespace.QName;
 
