@@ -1,4 +1,4 @@
-package org.daisy.pipeline.logging;
+package org.daisy.pipeline.logging.impl;
 
 import java.util.logging.Handler;
 import java.util.logging.LogManager;
