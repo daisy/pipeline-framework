@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.jobs;
+package org.daisy.pipeline.nonpersistent.impl.job;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -11,7 +11,8 @@ import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.nonpersistent.webservice.VolatileClient;
+import org.daisy.pipeline.nonpersistent.impl.job.VolatileJobStorage;
+import org.daisy.pipeline.nonpersistent.impl.webservice.VolatileClient;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

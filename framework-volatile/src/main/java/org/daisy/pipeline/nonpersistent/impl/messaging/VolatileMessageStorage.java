@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.messaging;
+package org.daisy.pipeline.nonpersistent.impl.messaging;
 
 import java.util.Collections;
 import java.util.List;

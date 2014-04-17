@@ -1,9 +1,10 @@
-package org.daisy.pipeline.nonpersistent.messaging;
+package org.daisy.pipeline.nonpersistent.impl.messaging;
 
 import java.util.List;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
+import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageStorage;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

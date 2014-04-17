@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="deactivator">
-   <implementation class="org.daisy.pipeline.nonpersistent.Deactivator"/>
-   <service>
-      <provide interface="org.daisy.pipeline.nonpersistent.messaging.Deactivator"/>
-   </service>
-   <reference name="job-manager" interface="org.daisy.pipeline.job.JobManager"  bind="setJobManager" cardinality="1..1" policy="static"/>    
-   
-</scr:component>

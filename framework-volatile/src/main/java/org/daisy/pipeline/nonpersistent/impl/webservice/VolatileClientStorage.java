@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.webservice;
+package org.daisy.pipeline.nonpersistent.impl.webservice;
 
 import java.util.Collections;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.webservice;
+package org.daisy.pipeline.nonpersistent.impl.webservice;
 
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;

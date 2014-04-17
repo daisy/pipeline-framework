@@ -1,10 +1,10 @@
-package org.daisy.pipeline.nonpersistent;
+package org.daisy.pipeline.nonpersistent.impl.job;
 
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobMonitor;
 import org.daisy.pipeline.job.JobMonitorFactory;
-import org.daisy.pipeline.nonpersistent.messaging.VolatileMessageAccessor;
+import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageAccessor;
 
 public final class VolatileJobMonitorFactory implements JobMonitorFactory{
 

@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.messaging;
+package org.daisy.pipeline.nonpersistent.impl.messaging;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.event.EventBusProvider;

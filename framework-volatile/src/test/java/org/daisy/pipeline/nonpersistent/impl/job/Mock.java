@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.jobs;
+package org.daisy.pipeline.nonpersistent.impl.job;
 
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.AbstractJobContext;

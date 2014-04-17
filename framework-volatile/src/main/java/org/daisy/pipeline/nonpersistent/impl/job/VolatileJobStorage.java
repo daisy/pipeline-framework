@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.jobs;
+package org.daisy.pipeline.nonpersistent.impl.job;
 
 import java.util.Collections;
 import java.util.HashMap;
