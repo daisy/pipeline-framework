@@ -9,9 +9,11 @@ public class DatabaseProvider {
 	private static EntityManagerFactory entityManagerFactory=Persistence.createEntityManagerFactory("pipeline-pu-test");
 
 	public static Database getDatabase(){
-		Database db= new Database();
-		db.setEntityManagerFactory(entityManagerFactory);
-		return db;
+		return new Database(entityManagerFactory);
+	}
+	
+	public static EntityManagerFactory getEMF() {
+		return entityManagerFactory;
 	}
 
 }

@@ -5,6 +5,6 @@
       <provide interface="org.daisy.pipeline.job.JobStorage"/>
    </service>
    <reference  name="script-registry" interface="org.daisy.pipeline.script.ScriptRegistry" bind="setRegistry" cardinality="1..1" policy="static"/> 
-   <reference bind="setDatabase" interface="org.daisy.pipeline.persistence.Database" name="database" policy="static" cardinality="1..1"/>
+   <reference bind="setEntityManagerFactory" cardinality="1..1" interface="javax.persistence.EntityManagerFactory" name="entity-manager-factory" policy="static" target="(osgi.unit.name=pipeline-pu)"/>
    <reference bind="setConfigurator" interface="org.daisy.pipeline.job.RuntimeConfigurator" name="runtime-configurator" policy="static" cardinality="1..1"/>
 </scr:component>

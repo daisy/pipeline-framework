@@ -3,6 +3,7 @@ package org.daisy.pipeline.persistence.impl.job;
 import java.util.Iterator;
 
 import javax.persistence.CacheStoreMode;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
@@ -44,8 +45,8 @@ public class PersistentJobStorage implements JobStorage {
                 this.configurator=configurator;
         }
 
-        public void setDatabase(Database db) {
-                this.db = db;
+        public void setEntityManagerFactory(EntityManagerFactory emf) {
+                this.db = new Database(emf);
                 this.filter=QueryDecorator.empty(db.getEntityManager());
         }
 

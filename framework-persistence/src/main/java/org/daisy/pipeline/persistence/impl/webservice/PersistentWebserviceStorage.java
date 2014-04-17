@@ -1,5 +1,7 @@
 package org.daisy.pipeline.persistence.impl.webservice;
 
+import javax.persistence.EntityManagerFactory;
+
 import org.daisy.pipeline.clients.ClientStorage;
 import org.daisy.pipeline.persistence.impl.Database;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
@@ -16,8 +18,8 @@ public class PersistentWebserviceStorage implements WebserviceStorage {
 	private JobConfigurationStorage jobCnfStorage;
 	private Database database;
 
-	public void setDatabase(Database database) {
-		this.database = database;
+	public void setEntityManagerFactory(EntityManagerFactory emf) {
+		this.database = new Database(emf);
 	}
 
 	public void activate() {

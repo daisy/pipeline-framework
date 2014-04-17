@@ -48,7 +48,7 @@ public class PersistentJobStorageTest {
 		db=DatabaseProvider.getDatabase();
 		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
                 storage=new PersistentJobStorage();
-                storage.setDatabase(db);
+                storage.setEntityManagerFactory(DatabaseProvider.getEMF());
                 storage.setRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
                 storage.setConfigurator(configurator);
                 Mockito.when(configurator.getEventBus()).thenReturn(bus);

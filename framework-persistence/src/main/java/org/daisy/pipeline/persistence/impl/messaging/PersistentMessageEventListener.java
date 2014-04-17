@@ -1,5 +1,7 @@
 package org.daisy.pipeline.persistence.impl.messaging;
 
+import javax.persistence.EntityManagerFactory;
+
 import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.persistence.impl.Database;
@@ -22,11 +24,8 @@ public class PersistentMessageEventListener {
 		this.eventBusProvider.get().register(this);
 	}
 
-	public synchronized void setDatabase(Database database) {
-		this.datbase = database;
-	}
-	public synchronized void unsetDatabase() {
-		this.datbase = null;
+	public synchronized void setEntityManagerFactory(EntityManagerFactory emf) {
+		this.datbase = new Database(emf);
 	}
 
 	@Subscribe
