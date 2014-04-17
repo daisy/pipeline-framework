@@ -1,4 +1,4 @@
-package org.daisy.common.stax.woodstox.osgi;
+package org.daisy.common.stax.woodstox.osgi.impl;
 import java.util.Properties;
 
 import org.codehaus.stax2.osgi.Stax2InputFactoryProvider;

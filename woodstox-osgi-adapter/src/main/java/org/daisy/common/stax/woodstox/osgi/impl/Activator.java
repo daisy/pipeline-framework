@@ -1,4 +1,4 @@
-package org.daisy.common.stax.woodstox.osgi;
+package org.daisy.common.stax.woodstox.osgi.impl;
 import javax.xml.stream.XMLInputFactory;
 
 import org.osgi.framework.BundleActivator;
