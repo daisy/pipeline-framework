@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="persistent-job-storage">
-   <implementation class="org.daisy.pipeline.persistence.jobs.PersistentJobStorage"/>
+   <implementation class="org.daisy.pipeline.persistence.impl.job.PersistentJobStorage"/>
    <service>
       <provide interface="org.daisy.pipeline.job.JobStorage"/>
    </service>
