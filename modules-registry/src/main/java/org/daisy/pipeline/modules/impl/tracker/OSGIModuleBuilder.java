@@ -1,4 +1,4 @@
-package org.daisy.pipeline.modules.tracker;
+package org.daisy.pipeline.modules.impl.tracker;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -12,7 +12,6 @@ import java.util.Map;
 import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Entity;
 import org.daisy.pipeline.modules.Module;
-import org.daisy.pipeline.modules.ModuleBuilder;
 import org.daisy.pipeline.modules.ResourceLoader;
 import org.daisy.pipeline.xmlcatalog.XmlCatalog;
 import org.osgi.framework.Bundle;
@@ -21,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
-public class OSGIModuleBuilder implements ModuleBuilder {
+public class OSGIModuleBuilder {
 
         private ResourceLoader loader;
         private String name;
@@ -31,44 +30,37 @@ public class OSGIModuleBuilder implements ModuleBuilder {
         private final List<Entity> entities = new ArrayList<Entity>();
         private final Logger mLogger = LoggerFactory.getLogger(getClass());
 
-        @Override
         public Module build() {
                 return new Module(name, version, title, components, entities);
         }
 
-        @Override
-        public ModuleBuilder withName(String name) {
+        public OSGIModuleBuilder withName(String name) {
                 this.name = name;
                 return this;
         }
 
-        @Override
-        public ModuleBuilder withLoader(ResourceLoader loader) {
+        public OSGIModuleBuilder withLoader(ResourceLoader loader) {
                 this.loader = loader;
                 return this;
         }
 
-        @Override
-        public ModuleBuilder withVersion(String version) {
+        public OSGIModuleBuilder withVersion(String version) {
                 this.version = version;
                 return this;
         }
 
-        @Override
-        public ModuleBuilder withTitle(String title) {
+        public OSGIModuleBuilder withTitle(String title) {
                 this.title = title;
                 return this;
         }
 
-        @Override
-        public ModuleBuilder withComponents(
+        public OSGIModuleBuilder withComponents(
                         Collection<? extends Component> components) {
                 this.components.addAll(components);
                 return this;
         }
 
-        @Override
-        public ModuleBuilder withComponent(URI uri, String path) {
+        public OSGIModuleBuilder withComponent(URI uri, String path) {
                 mLogger.trace("withComponent:" + uri.toString() + ", path: " + path);
                 components.add(new Component(uri, path, loader));
                 return this;
@@ -137,12 +129,12 @@ public class OSGIModuleBuilder implements ModuleBuilder {
                 return this;
         }
 
-        @Override
-        public ModuleBuilder withEntities(Collection<? extends Entity> entities) {
+        public OSGIModuleBuilder withEntities(Collection<? extends Entity> entities) {
                 this.entities.addAll(entities);
                 return this;
         }
-        public ModuleBuilder withEntity(String publicId, String path) {
+        
+        public OSGIModuleBuilder withEntity(String publicId, String path) {
                 mLogger.trace("withEntity:" + publicId.toString() + ", path: " + path);
                 entities.add(new Entity(publicId, path, loader));
                 return this;

@@ -1,4 +1,4 @@
-package org.daisy.pipeline.modules.resolver;
+package org.daisy.pipeline.modules.impl.resolver;
 
 import java.io.IOException;
 import java.net.URI;
