@@ -1,9 +1,11 @@
-package org.daisy.pipeline.webserviceutils.callback;
+package org.daisy.pipeline.webserviceutils.callback.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.webserviceutils.callback.Callback;
+import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

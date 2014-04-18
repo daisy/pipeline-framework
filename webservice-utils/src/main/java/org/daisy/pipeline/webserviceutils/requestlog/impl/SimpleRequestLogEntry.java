@@ -1,4 +1,6 @@
-package org.daisy.pipeline.webserviceutils.requestlog;
+package org.daisy.pipeline.webserviceutils.requestlog.impl;
+
+import org.daisy.pipeline.webserviceutils.requestlog.RequestLogEntry;
 
 public final class SimpleRequestLogEntry implements RequestLogEntry {
 

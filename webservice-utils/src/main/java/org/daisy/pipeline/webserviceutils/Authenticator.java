@@ -17,7 +17,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLogEntry;
-import org.daisy.pipeline.webserviceutils.requestlog.SimpleRequestLogEntry;
+import org.daisy.pipeline.webserviceutils.requestlog.impl.SimpleRequestLogEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
