@@ -4,17 +4,17 @@
   <persistence-unit name="pipeline-pu-test" transaction-type="RESOURCE_LOCAL">
 
 
-    <class>org.daisy.pipeline.persistence.jobs.PersistentSource</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentInputPort</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentOption</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentParameter</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentJobContext</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentJob</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentPortResult</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentOptionResult</class>
-    <class>org.daisy.pipeline.persistence.jobs.PersistentMapper</class>
-    <class>org.daisy.pipeline.persistence.webservice.PersistentJobConfiguration</class>  
-    <class>org.daisy.pipeline.persistence.webservice.PersistentClient</class>
+    <class>org.daisy.pipeline.persistence.impl.job.PersistentSource</class>
+    <class>org.daisy.pipeline.persistence.impl.job.PersistentInputPort</class>
+    <class>org.daisy.pipeline.persistence.impl.job.PersistentOption</class>
+    <class>org.daisy.pipeline.persistence.impl.job.PersistentParameter</class>
+    <class>org.daisy.pipeline.persistence.impl.job.PersistentJobContext</class>
+    <class>org.daisy.pipeline.persistence.impl.job.PersistentJob</class>
+    <class>org.daisy.pipeline.persistence.impl.job.PersistentPortResult</class>
+    <class>org.daisy.pipeline.persistence.impl.job.PersistentOptionResult</class>
+    <class>org.daisy.pipeline.persistence.impl.job.PersistentMapper</class>
+    <class>org.daisy.pipeline.persistence.impl.webservice.PersistentJobConfiguration</class>  
+    <class>org.daisy.pipeline.persistence.impl.webservice.PersistentClient</class>
     <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 
     <properties>

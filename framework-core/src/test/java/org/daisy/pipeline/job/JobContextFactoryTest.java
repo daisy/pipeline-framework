@@ -2,7 +2,13 @@ package org.daisy.pipeline.job;
 
 import java.io.File;
 
+import junit.framework.Assert;
+
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.job.JobContext;
+import org.daisy.pipeline.job.JobContextFactory;
+import org.daisy.pipeline.job.RuntimeConfigurator;
+import org.daisy.pipeline.job.impl.JobURIUtils;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.junit.After;
 import org.junit.Before;
@@ -37,10 +43,12 @@ public class JobContextFactoryTest   {
         public void mappingContext(){
                 String name="nice name";
                 JobContextFactory factory=Mockito.spy(new JobContextFactory(runtimeConfigurator,client));
-                Mockito.doReturn(mCtxt).when(factory).newMappingJobContext(name,boundScript,null);
-
-                JobContext ctxt=factory.newJobContext(true,name,boundScript,null);
-                Mockito.verify(factory,Mockito.times(1)).newMappingJobContext(name,boundScript,null);
+                Mockito.doReturn(mCtxt).when(factory).newJobContext(true,name,boundScript,null);
+                
+                JobContext ctxt = factory.newMappingJobContext(name,boundScript,null);
+                
+                Mockito.verify(factory,Mockito.times(1)).newJobContext(true,name,boundScript,null);
+                Assert.assertEquals(mCtxt, ctxt);
 
         }
 
@@ -48,10 +56,12 @@ public class JobContextFactoryTest   {
         public void nonMappingContext(){
                 String name="nice name";
                 JobContextFactory factory=Mockito.spy(new JobContextFactory(runtimeConfigurator,client));
-                Mockito.doReturn(mCtxt).when(factory).newJobContext(name,boundScript);
+                Mockito.doReturn(mCtxt).when(factory).newJobContext(false,name,boundScript,null);
 
-                JobContext ctxt=factory.newJobContext(false,name,boundScript,null);
-                Mockito.verify(factory,Mockito.times(1)).newJobContext(name,boundScript);
+                JobContext ctxt=factory.newJobContext(name,boundScript);
+                
+                Mockito.verify(factory,Mockito.times(1)).newJobContext(false,name,boundScript,null);
+                Assert.assertEquals(mCtxt, ctxt);
 
         }
 }

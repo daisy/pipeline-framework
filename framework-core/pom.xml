@@ -4,9 +4,8 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.8-SNAPSHOT</version>
   </parent>
-  <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-core</artifactId>
   <version>2.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
@@ -19,10 +18,6 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>common-stax</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>

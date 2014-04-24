@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0"  name="job-execution-service">
-   <implementation class="org.daisy.pipeline.job.DefaultJobExecutionService"/>
+   <implementation class="org.daisy.pipeline.job.impl.DefaultJobExecutionService"/>
    <service>
       <provide interface="org.daisy.pipeline.job.JobExecutionService"/>
    </service>

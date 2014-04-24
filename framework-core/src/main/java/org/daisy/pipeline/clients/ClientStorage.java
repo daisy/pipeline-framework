@@ -2,8 +2,8 @@ package org.daisy.pipeline.clients;
 
 import java.util.List;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client.Role;
-import org.daisy.pipeline.job.priority.Priority;
 
 import com.google.common.base.Optional;
 
