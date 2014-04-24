@@ -24,7 +24,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-class XProcDecorator {
+public class XProcDecorator {
 	
 
 	private static final Logger logger = LoggerFactory.getLogger(XProcDecorator.class);
