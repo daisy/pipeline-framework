@@ -174,7 +174,7 @@ public class DefaultJobManager implements JobManager {
 
         @Override
         public JobQueue getExecutionQueue() {
-                return this.executionService.getExecutionQueue();
+                return this.executionService.getQueue();
         }
 
 }

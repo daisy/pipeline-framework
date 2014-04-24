@@ -9,7 +9,7 @@ import org.daisy.pipeline.job.Job;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
-public class FilteredExecutionQueue extends DefaultJobQueue {
+public class FilteredJobQueue extends DefaultJobQueue {
 
         public PriorityThreadPoolExecutor<Job> executor;
 
@@ -19,7 +19,7 @@ public class FilteredExecutionQueue extends DefaultJobQueue {
          * @param queue
          * @param filter
          */
-        public FilteredExecutionQueue(PriorityThreadPoolExecutor<Job> executor,
+        public FilteredJobQueue(PriorityThreadPoolExecutor<Job> executor,
                         Predicate<Prioritizable<Job>> filter) {
                 super(executor);
                 this.filter = filter;

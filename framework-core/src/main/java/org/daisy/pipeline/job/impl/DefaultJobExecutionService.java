@@ -140,7 +140,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
 
         
         @Override
-        public JobQueue getExecutionQueue() {
+        public JobQueue getQueue() {
                 return this.executionQueue;
 
         }
@@ -151,7 +151,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
                         return this;
                 }else{
                         return new DefaultJobExecutionService(this.xprocEngine, this.executor, 
-                                        new FilteredExecutionQueue(this.executor,
+                                        new FilteredJobQueue(this.executor,
                                                 new Predicate<Prioritizable<Job>>() {
                                                         @Override
                                                         public boolean apply(Prioritizable<Job> pJob) {
