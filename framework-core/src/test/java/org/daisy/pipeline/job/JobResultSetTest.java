@@ -22,7 +22,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ResultSetTest   {
+public class JobResultSetTest   {
 
 	JobResult jres1;
 	JobResult jres2;

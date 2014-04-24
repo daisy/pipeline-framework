@@ -14,14 +14,13 @@ import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.URIMapper;
-import org.daisy.pipeline.job.JobResult.Builder;
 import org.daisy.pipeline.script.XProcScript;
 
 import com.google.common.base.Supplier;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
-public class ResultSetBuilder {
+public class JobResultSetBuilder {
 
 
 	public static JobResultSet newResultSet(JobContext ctxt,URIMapper mapper){
@@ -29,13 +28,13 @@ public class ResultSetBuilder {
 		//go through the outputs write them add the uri's to the 
 		//result object
 
-		ResultSetBuilder.collectOutputs(ctxt.getScript(),ctxt.getOutputs(), mapper,builder);
+		JobResultSetBuilder.collectOutputs(ctxt.getScript(),ctxt.getOutputs(), mapper,builder);
 
 		//go through the output options and add them, this is a bit more tricky 
 		//as you have to check if the files exist
 		//if your working with an anyURIDir then scan the directory to 
 		//get all the files inside.
-		ResultSetBuilder.collectOptions(ctxt.getScript(), ctxt.getInputs(), mapper,builder);
+		JobResultSetBuilder.collectOptions(ctxt.getScript(), ctxt.getInputs(), mapper,builder);
 		return builder.build();
 	}
 

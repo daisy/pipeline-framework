@@ -8,7 +8,7 @@ import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.impl.JobURIUtils;
-import org.daisy.pipeline.job.impl.ResultSetBuilder;
+import org.daisy.pipeline.job.impl.JobResultSetBuilder;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScript;
 import org.slf4j.Logger;
@@ -179,7 +179,7 @@ public abstract class AbstractJobContext implements JobContext{
         public void writeResult(XProcResult result) {
                 result.writeTo(this.output);
                 if(this.generateResults){
-                        this.results=ResultSetBuilder.newResultSet(this,this.mapper);
+                        this.results=JobResultSetBuilder.newResultSet(this,this.mapper);
                 }
                                 
         }

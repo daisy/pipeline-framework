@@ -32,7 +32,7 @@ import org.junit.Test;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 
-public class ResultSetBuilderTest {
+public class JobResultSetBuilderTest {
         URIMapper mapper;       
         XProcScript script;
         JobResultSet.Builder builder ;
@@ -81,7 +81,7 @@ public class ResultSetBuilderTest {
                 Supplier<Result> res=output.getResultProvider(outName);
                 res.get();
                 
-                ResultSetBuilder.collectOutputs(script,output,mapper,builder);
+                JobResultSetBuilder.collectOutputs(script,output,mapper,builder);
                 JobResultSet rSet=builder.build();
                 List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(outName));
                 Assert.assertEquals(mapper.mapOutput(URI.create(sysId)),jobs.get(0).getPath());
@@ -95,7 +95,7 @@ public class ResultSetBuilderTest {
                 String outName = Mock.ScriptGenerator.getOutputName(0);
                 XProcOutput output = new XProcOutput.Builder().build();
                 
-                ResultSetBuilder.collectOutputs(script,output,mapper,builder);
+                JobResultSetBuilder.collectOutputs(script,output,mapper,builder);
                 JobResultSet rSet=builder.build();
                 List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(outName));
                 Assert.assertEquals(jobs.size(),0);
@@ -110,7 +110,7 @@ public class ResultSetBuilderTest {
                 res.get();
                 res.get();
                 
-                ResultSetBuilder.collectOutputs(script,output,mapper,builder);
+                JobResultSetBuilder.collectOutputs(script,output,mapper,builder);
                 JobResultSet rSet=builder.build();
                 List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(outName));
                 Assert.assertEquals(jobs.size(),2);
@@ -124,7 +124,7 @@ public class ResultSetBuilderTest {
                 DynamicResultProvider res=(DynamicResultProvider) output.getResultProvider(outName);
                 res.get();
                 res.get();
-                List<JobResult> jobs=ResultSetBuilder.buildJobResult(res,mapper,"xml");
+                List<JobResult> jobs=JobResultSetBuilder.buildJobResult(res,mapper,"xml");
                 Assert.assertEquals(jobs.size(),2);
                 Assert.assertEquals(mapper.mapOutput(URI.create(sysId)),jobs.get(0).getPath());
                 Assert.assertEquals(sysId,jobs.get(0).getIdx());
@@ -136,7 +136,7 @@ public class ResultSetBuilderTest {
         public void nonDynamicProviderResults() throws Exception{
                 String outName = Mock.ScriptGenerator.getOutputName(0);
                 Supplier<Result> res= output.getResultProvider(outName);
-                List<JobResult> jobs=ResultSetBuilder.buildJobResult(res,mapper,"xml");
+                List<JobResult> jobs=JobResultSetBuilder.buildJobResult(res,mapper,"xml");
                 Assert.assertEquals(mapper.mapOutput(URI.create(sysId)),jobs.get(0).getPath());
                 Assert.assertEquals(sysId,jobs.get(0).getIdx());
                 Assert.assertEquals("xml",jobs.get(0).getMediaType());
@@ -146,7 +146,7 @@ public class ResultSetBuilderTest {
         @Test
         public void optionsOutputFile() throws Exception{
                 QName optName=Mock.ScriptGenerator.getOptionOutputFileName(0);
-                ResultSetBuilder.collectOptions(script,input,mapper,builder);
+                JobResultSetBuilder.collectOptions(script,input,mapper,builder);
                 JobResultSet rSet=builder.build();
                 List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName));
                 Assert.assertEquals(mapper.mapOutput(URI.create(sysId)),jobs.get(0).getPath());
@@ -157,7 +157,7 @@ public class ResultSetBuilderTest {
         @Test
         public void optionsOutputDirSize() throws Exception{
                 QName optName=Mock.ScriptGenerator.getOptionOutputDirName(0);
-                ResultSetBuilder.collectOptions(script,input,mapper,builder);
+                JobResultSetBuilder.collectOptions(script,input,mapper,builder);
                 JobResultSet rSet=builder.build();
                 List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName));
                 Assert.assertEquals(3,jobs.size());
@@ -168,7 +168,7 @@ public class ResultSetBuilderTest {
         @Test
         public void optionsOutputURIS() throws Exception{
                 QName optName=Mock.ScriptGenerator.getOptionOutputDirName(0);
-                ResultSetBuilder.collectOptions(script,input,mapper,builder);
+                JobResultSetBuilder.collectOptions(script,input,mapper,builder);
                 JobResultSet rSet=builder.build();
                 List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName));
                 HashSet<URI> uris= new HashSet<URI>();
@@ -186,7 +186,7 @@ public class ResultSetBuilderTest {
         @Test
         public void optionsOutputIdx() throws Exception{
                 QName optName=Mock.ScriptGenerator.getOptionOutputDirName(0);
-                ResultSetBuilder.collectOptions(script,input,mapper,builder);
+                JobResultSetBuilder.collectOptions(script,input,mapper,builder);
                 JobResultSet rSet=builder.build();
                 List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName));
                 HashSet<String> uris= new HashSet<String>();
@@ -207,7 +207,7 @@ public class ResultSetBuilderTest {
                 Supplier<Result> res=output.getResultProvider(outName);
                 res.get();
                 AbstractJobContext ctxt= new AbstractJobContext(null,JobIdFactory.newId(),"name",bound,mapper){};
-                JobResultSet rSet=ResultSetBuilder.newResultSet(ctxt,mapper);
+                JobResultSet rSet=JobResultSetBuilder.newResultSet(ctxt,mapper);
                 Assert.assertEquals(5,rSet.getResults().size());
         }
         @Test
@@ -222,7 +222,7 @@ public class ResultSetBuilderTest {
                         fw.close();
                         //write 1024 bytes
                         //get size == 1024
-                        JobResult res = ResultSetBuilder.singleResult(tmp.toURI(),new URIMapper(URI.create(""),URI.create("")),"");
+                        JobResult res = JobResultSetBuilder.singleResult(tmp.toURI(),new URIMapper(URI.create(""),URI.create("")),"");
 
                         Assert.assertEquals("wrong result size",1024l,res.getSize());
                 }catch(Exception e){
@@ -236,7 +236,7 @@ public class ResultSetBuilderTest {
         @Test(expected = RuntimeException.class) 
         public void getSizeNonExistingFile() throws Exception{
                         URL fake= new URL("file:/Idontexist.txt");
-                        JobResult res = ResultSetBuilder.singleResult(fake.toURI(),new URIMapper(URI.create(""),URI.create("")),"");
+                        JobResult res = JobResultSetBuilder.singleResult(fake.toURI(),new URIMapper(URI.create(""),URI.create("")),"");
                         res.getSize();
         }
 }
