@@ -1,7 +1,7 @@
 DAISY Pipeline 2 Framework
 ==========================
 
-[![Build Status](https://travis-ci.org/daisy-consortium/pipeline-framework.png?branch=master)](https://travis-ci.org/daisy-consortium/pipeline-framework)
+[![Build Status](https://travis-ci.org/daisy/pipeline-framework.png?branch=master)](https://travis-ci.org/daisy/pipeline-framework)
 
 Core projects for the DAISY Pipeline 2 runtime framework.
 
