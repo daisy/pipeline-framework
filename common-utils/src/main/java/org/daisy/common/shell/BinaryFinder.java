@@ -2,14 +2,17 @@ package org.daisy.common.shell;
 
 import java.io.File;
 
+import com.google.common.base.Optional;
+
 public class BinaryFinder {
 
 	/**
 	 * Look for a given executable in the PATH environment variable.
 	 * 
-	 * @return null if @param executableName cannot be found.
+	 * @return the absolute path of the executable if it exists, an absent
+	 *         optional otherwise.
 	 */
-	public static String find(String executableName) {
+	public static Optional<String> find(String executableName) {
 		String os = System.getProperty("os.name");
 		String[] extensions;
 		if (os != null && os.startsWith("Windows"))
@@ -17,18 +20,25 @@ public class BinaryFinder {
 		else
 			extensions = nixExtensions;
 
-		String systemPath = System.getenv("PATH");
-		String[] pathDirs = systemPath.split(File.pathSeparator);
+		return find(executableName, extensions, System.getenv("PATH"), File.pathSeparator);
+	}
+
+	static Optional<String> find(String executableName, String[] extensions,
+	        String systemPath, String pathSeparator) {
+		if (systemPath == null || pathSeparator == null)
+			return Optional.absent();
+
+		String[] pathDirs = systemPath.split(pathSeparator);
 		for (String ext : extensions) {
 			String fullname = executableName + ext;
 			for (String pathDir : pathDirs) {
 				File file = new File(pathDir, fullname);
 				if (file.isFile()) {
-					return file.getAbsolutePath();
+					return Optional.of(file.getAbsolutePath());
 				}
 			}
 		}
-		return null;
+		return Optional.absent();
 	}
 
 	private static final String[] winExtensions = {
