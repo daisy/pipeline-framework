@@ -4,10 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Routes {
-	
+
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(Routes.class.getName());
-	
+
 	public static final String SCRIPTS_ROUTE = "/scripts";
 	public static final String SCRIPT_ROUTE = "/scripts/{id}";
 	public static final String JOBS_ROUTE = "/jobs";
@@ -28,18 +28,19 @@ public class Routes {
 	public static final String QUEUE_ROUTE= "/queue";
 	public static final String QUEUE_UP_ROUTE= "/queue/up/{jobId}";
 	public static final String QUEUE_DOWN_ROUTE= "/queue/down/{jobId}";
-	
-	
-	
+
+
+
 	private String path = "/ws";
 	private static final int PORT=8181;
 	private int portNumber = 0;
 	private String host = "localhost";
-	
+	private String proto="http://";
+
 	public Routes() {
 		readOptions();
 	}
-	
+
 	public String getHost() {
 		return host;
 	}
@@ -50,9 +51,9 @@ public class Routes {
 		return portNumber;
 	}
 	public String getBaseUri() {
-		return host + ":" + String.valueOf(portNumber) + path;
+		return proto+host + ":" + String.valueOf(portNumber) + path;
 	}
-	
+
 	private void readOptions() {
 		String path = System.getProperty(Properties.PATH);
 		if (path != null) {
@@ -61,12 +62,15 @@ public class Routes {
 			}
 			this.path = path;
 		}
-		
+
 		String hostname = System.getProperty(Properties.HOST);
 		if (hostname != null) {
 			host = hostname;
 		}
-		
+		if (System.getProperty(Properties.SSL)!=null&&System.getProperty(Properties.SSL).equalsIgnoreCase("true")){
+			proto="https://";
+		}
+
 		String port = System.getProperty(Properties.PORT);
 		if (port != null) {
 			try {
@@ -89,6 +93,6 @@ public class Routes {
 		}
 
 	}
-	
-	
+
+
 }
