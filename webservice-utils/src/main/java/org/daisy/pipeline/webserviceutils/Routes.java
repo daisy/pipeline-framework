@@ -34,7 +34,7 @@ public class Routes {
 	private String path = "/ws";
 	private static final int PORT=8181;
 	private int portNumber = 0;
-	private String host = "http://localhost";
+	private String host = "localhost";
 	
 	public Routes() {
 		readOptions();
