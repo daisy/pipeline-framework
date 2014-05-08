@@ -3,9 +3,8 @@ package org.daisy.pipeline.webservice;
 import java.io.File;
 
 import org.daisy.common.properties.PropertyPublisher;
-
 import org.daisy.pipeline.webserviceutils.Properties;
-
+import org.daisy.pipeline.webserviceutils.Routes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,6 +104,10 @@ public class PipelineWebServiceConfiguration {
                 //tmp dir
                 propPublisher.publish(Properties.TMPDIR,this.getTmpDir(),this.getClass());      
                 propPublisher.publish(Properties.AUTHENTICATION,this.isAuthenticationEnabled()+"",this.getClass());     
+                Routes routes=new Routes();
+                propPublisher.publish(Properties.HOST,routes.getHost()+"",this.getClass());     
+                propPublisher.publish(Properties.PATH,routes.getPath()+"",this.getClass());     
+                propPublisher.publish(Properties.PORT,routes.getPort()+"",this.getClass());     
 
         }
 

@@ -126,10 +126,10 @@ public class PipelineWebService extends Application {
                 component = new Component();
                 
                 if (!conf.isSsl()){
-                        component.getServers().add(Protocol.HTTP, routes.getPort());
+                        component.getServers().add(Protocol.HTTP, routes.getHost(),routes.getPort());
                         logger.debug("Using HTTP");
                 }else{
-                        Server server = component.getServers().add(Protocol.HTTPS, routes.getPort());
+                        Server server = component.getServers().add(Protocol.HTTPS, routes.getHost(),routes.getPort());
                         server.getContext().getParameters().add("keystorePath",conf.getSslKeystore()); 
                         server.getContext().getParameters().add("keystorePassword",conf.getSslKeystorePassword());
                         server.getContext().getParameters().add("keyPassword",conf.getSslKeyPassword());
