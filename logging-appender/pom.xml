@@ -7,6 +7,7 @@
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
     <version>1.8-SNAPSHOT</version>
+    <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>logging-appender</artifactId>
@@ -17,8 +18,9 @@
 
   <dependencies>
     <dependency>
-	    <groupId>ch.qos.logback</groupId>
-	    <artifactId>logback-classic</artifactId>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
   <build>
@@ -28,8 +30,8 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-		 <Fragment-Host>ch.qos.logback.classic</Fragment-Host> 
-		 <!--<Export-Package>org.daisy.pipeline.logging</Export-Package> -->
+            <Fragment-Host>ch.qos.logback.classic</Fragment-Host>
+           <!--<Export-Package>org.daisy.pipeline.logging</Export-Package> -->
           </instructions>
         </configuration>
       </plugin>

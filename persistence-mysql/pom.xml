@@ -5,6 +5,7 @@
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
     <version>1.8-SNAPSHOT</version>
+    <relativePath>../parent</relativePath>
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>persistence-mysql</artifactId>
