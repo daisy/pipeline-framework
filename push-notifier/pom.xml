@@ -7,6 +7,7 @@
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
     <version>1.8-SNAPSHOT</version>
+    <relativePath>../parent</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline</groupId>
@@ -15,7 +16,7 @@
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Push Notifier</name>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.osgi</groupId>

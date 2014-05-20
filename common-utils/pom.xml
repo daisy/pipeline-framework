@@ -5,6 +5,7 @@
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
     <version>1.8-SNAPSHOT</version>
+    <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>common-utils</artifactId>
@@ -12,10 +13,6 @@
 
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Common Utilities</name>
-
-  <properties>
-    <powermock.version>1.5.4</powermock.version>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -43,13 +40,11 @@
     <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-module-junit4</artifactId>
-      <version>${powermock.version}</version>
       <scope>test</scope>
    </dependency>
    <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-api-mockito</artifactId>
-      <version>${powermock.version}</version>
       <scope>test</scope>
    </dependency>
   </dependencies>
