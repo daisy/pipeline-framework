@@ -1,5 +1,6 @@
 package org.daisy.maven.xproc.pipeline;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
@@ -32,6 +33,10 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 	}
 	
 	protected void activate() {}
+	
+	public void setCatalog(File catalog) {
+		throw new UnsupportedOperationException("Setting catalog file not supported.");
+	}
 	
 	public void run(String pipeline,
 	                Map<String,List<String>> inputs,
