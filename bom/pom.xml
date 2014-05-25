@@ -45,6 +45,7 @@
     <commons.codec.version>1.6</commons.codec.version>
     <commons.fileupload.version>1.2.2</commons.fileupload.version>
     <commons.io.version>2.3</commons.io.version>
+    <eclipse.persistence.version>2.3.2</eclipse.persistence.version>
     <guava.version>15.0</guava.version>
     <javax.persistence.version>2.0.0</javax.persistence.version>
     <javax.servlet-api.version>2.5</javax.servlet-api.version>
@@ -262,6 +263,17 @@
         <groupId>org.eclipse.persistence</groupId>
         <artifactId>javax.persistence</artifactId>
         <version>${javax.persistence.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.persistence</groupId>
+        <artifactId>org.eclipse.persistence.core</artifactId>
+        <version>${eclipse.persistence.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.persistence</groupId>
+        <artifactId>org.eclipse.persistence.jpa</artifactId>
+        <version>${eclipse.persistence.version}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.osgi</groupId>

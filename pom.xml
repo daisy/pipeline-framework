@@ -45,5 +45,4 @@
     <module>xpath-registry</module>
     <module>xproc-api</module>
   </modules>
-
 </project>
