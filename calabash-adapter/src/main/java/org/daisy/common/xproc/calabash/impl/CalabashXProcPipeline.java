@@ -112,7 +112,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 							.getDeclareStep();
 					// input and parameter ports
 					for (Input input : declaration.inputs()) {
-						if (input.getParameterInput()) {
+						if (!input.getParameterInput()) {
 							builder.withPort(XProcPortInfo.newInputPort(
 									input.getPort(), input.getSequence(),
 									input.getPrimary()));
