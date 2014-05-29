@@ -12,7 +12,8 @@ import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamResult;
 
-import org.daisy.common.base.Provider;
+import com.google.common.base.Supplier;
+
 import org.daisy.common.transform.LazySaxResultProvider;
 import org.daisy.common.transform.LazySaxSourceProvider;
 import org.daisy.common.xproc.XProcEngine;
@@ -35,7 +36,8 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 	protected void activate() {}
 	
 	public void setCatalog(File catalog) {
-		throw new UnsupportedOperationException("Setting catalog file not supported.");
+		if (catalog != null)
+			throw new UnsupportedOperationException("Setting catalog file not supported.");
 	}
 	
 	public void run(String pipeline,
@@ -70,13 +72,13 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 			throw new XProcExecutionException("DAISY Pipeline failed to execute XProc", e); }
 	}
 	
-	private static class DevNullStreamResultProvider implements Provider<Result> {
+	private static class DevNullStreamResultProvider implements Supplier<Result> {
 		private static final Result result = new StreamResult(
 			new OutputStream() {
 				@Override public void write(byte[] b, int off, int len) throws IOException {}
 				@Override public void write(byte[] b) throws IOException {}
 				@Override public void write(int b) throws IOException {}});
-		public Result provide() {
+		public Result get() {
 			return result;
 		}
 	}
