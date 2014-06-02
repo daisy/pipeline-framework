@@ -92,7 +92,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			XPipeline xpipeline = null;
 
 			try {
-				xpipeline = runtime.load(uri.toString());
+				xpipeline = runtime.load(new com.xmlcalabash.util.Input(uri.toString()));
 			} catch (SaxonApiException e) {
 				throw new RuntimeException(e.getMessage(), e);
 			}

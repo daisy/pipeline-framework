@@ -41,7 +41,7 @@
 
     <!-- Dependencies Versions -->
     <benchmark.version>0.7.2</benchmark.version>
-    <calabash.version>1.0.8</calabash.version>
+    <calabash.version>1.0.18</calabash.version>
     <commons.codec.version>1.6</commons.codec.version>
     <commons.fileupload.version>1.2.2</commons.fileupload.version>
     <commons.io.version>2.3</commons.io.version>
@@ -57,7 +57,7 @@
     <osgi.version>4.2.0</osgi.version>
     <powermock.version>1.5.4</powermock.version>
     <restlet.version>2.1-RC6</restlet.version>
-    <saxon-he.version>9.4.0.7</saxon-he.version>
+    <saxon-he.version>9.5.1-5</saxon-he.version>
     <slf4j.version>1.7.2</slf4j.version>
     <woodstox.core.version>4.1.2</woodstox.core.version>
     <woodstox.stax2-api.version>3.1.1</woodstox.stax2-api.version>
