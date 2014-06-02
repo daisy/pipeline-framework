@@ -48,7 +48,7 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
-      <version>9.5.1.5-SNAPSHOT</version>
+      <version>9.5.1.5</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
