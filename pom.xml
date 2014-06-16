@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.maven</groupId>
     <artifactId>xproc-maven-plugin-parent</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.0</version>
   </parent>
   
   <artifactId>xproc-engine-daisy-pipeline</artifactId>
@@ -19,7 +19,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.8-SNAPSHOT</version>
+        <version>1.8</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -29,7 +29,7 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-api</artifactId>
-      <version>1.0.1-SNAPSHOT</version>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
