@@ -13,6 +13,8 @@ element job {
 
 	& attribute priority { priority}
 
+        &element nicename{ text }&
+
 	& script?
 
 		& element messages {
