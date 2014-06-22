@@ -2,6 +2,8 @@ default namespace = "http://www.daisy.org/ns/pipeline/data"
 
 include "../script/scriptElement.rnc"
 
+include "priority.rnc"
+
 job = 
 element job {
 	attribute id { text }
@@ -9,6 +11,14 @@ element job {
 	& attribute href { xsd:anyURI }
 
 	& attribute status { job.status }
+
+        & attribute priority{ priority }
+
+
+	& element nicename { 
+                text         
+        }?
+
 
 	& script?
 
