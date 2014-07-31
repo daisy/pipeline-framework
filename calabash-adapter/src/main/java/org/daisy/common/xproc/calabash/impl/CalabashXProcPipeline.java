@@ -93,10 +93,11 @@ public class CalabashXProcPipeline implements XProcPipeline {
 
 			try {
 				xpipeline = runtime.load(new com.xmlcalabash.util.Input(uri.toString()));
+                                
 			} catch (SaxonApiException e) {
 				throw new RuntimeException(e.getMessage(), e);
 			}
-			return new PipelineInstance(xpipeline, config);
+			return new PipelineInstance(xpipeline, config,runtime);
 		}
 	};
 
@@ -108,8 +109,8 @@ public class CalabashXProcPipeline implements XProcPipeline {
 				public XProcPipelineInfo get() {
 					XProcPipelineInfo.Builder builder = new XProcPipelineInfo.Builder();
 					builder.withURI(uri);
-					DeclareStep declaration = pipelineSupplier.get().xpipe
-							.getDeclareStep();
+                                        PipelineInstance instance=pipelineSupplier.get();
+					DeclareStep declaration = instance.xpipe.getDeclareStep();
 					// input and parameter ports
 					for (Input input : declaration.inputs()) {
 						if (!input.getParameterInput()) {
@@ -134,6 +135,8 @@ public class CalabashXProcPipeline implements XProcPipeline {
 								.getLocalName(), option.getName().getPrefix()),
 								option.getRequired(), option.getSelect()));
 					}
+                                        instance.runtime.close();
+
 					return builder.build();
 				}
 			});
@@ -239,7 +242,9 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			pipeline.xpipe.run();
 		} catch (SaxonApiException e) {
 			e.printStackTrace();
-		}
+		}finally{
+                        pipeline.runtime.close();
+                }
 		return CalabashXProcResult.newInstance( pipeline.xpipe ,
 				pipeline.config);
 	}
@@ -277,6 +282,9 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		/** The config. */
 		private final XProcConfiguration config;
 
+		/** The config. */
+		private final XProcRuntime runtime;
+
 		/**
 		 * Instantiates a new pipeline instance.
 		 *
@@ -285,9 +293,10 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		 * @param config
 		 *            the config
 		 */
-		private PipelineInstance(XPipeline xpipe, XProcConfiguration config) {
+		private PipelineInstance(XPipeline xpipe, XProcConfiguration config,XProcRuntime runtime) {
 			this.xpipe = xpipe;
 			this.config = config;
+			this.runtime= runtime;
 
 		}
 	}
