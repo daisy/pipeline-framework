@@ -1,5 +1,6 @@
 default namespace = "http://www.daisy.org/ns/pipeline/data"
 
+include "../base/common.rnc"
 script = 
     element script {
         attribute id { text } 
@@ -10,9 +11,10 @@ script =
 
         & attribute output-filesets{ text }? 
         
-        & element nicename { text } 
         
         & element description { text }  
+
+        & nicename
         
         & element homepage { xsd:anyURI }?  
         

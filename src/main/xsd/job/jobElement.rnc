@@ -1,5 +1,6 @@
 default namespace = "http://www.daisy.org/ns/pipeline/data"
 
+#the nicename inclusion is defined in script element
 include "../script/scriptElement.rnc"
 
 include "priority.rnc"
@@ -15,20 +16,17 @@ element job {
         & attribute priority{ priority }
 
 
-	& element nicename { 
-                text         
-        }?
-
+	& nicename ?
 
 	& script?
 
-		& element messages {
-			element message { 
-				attribute level { message.level }
-				& attribute sequence { text }
-				& text
-			}*
-		}?
+        & element messages {
+                element message { 
+                        attribute level { message.level }
+                        & attribute sequence { text }
+                        & text
+                }*
+        }?
 
 	& element log {
 		attribute href { xsd:anyURI }
