@@ -82,6 +82,17 @@
                             </configuration>
                     </execution>
                     <execution>
+                            <id>queue</id>
+                            <goals>
+                                    <goal>xjc</goal>
+                            </goals>
+                            <configuration>
+                                    <clearOutputDir>false</clearOutputDir>
+                                    <schemaDirectory>${project.build.directory}/trang/queue</schemaDirectory>
+                                    <packageName>org.daisy.pipeline.webservice.jabx.queue</packageName>
+                            </configuration>
+                    </execution>
+                    <execution>
                             <id>request</id>
                             <goals>
                                     <goal>xjc</goal>
