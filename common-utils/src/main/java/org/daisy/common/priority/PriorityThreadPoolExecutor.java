@@ -44,14 +44,19 @@ public class PriorityThreadPoolExecutor<T> extends ThreadPoolExecutor
         }
 
         
+        //@Override
+        //protected void beforeExecute(Thread t, Runnable r) {
+                //super.beforeExecute(t, r);
+                //this.tracker.executing();
+        //}
         @Override
-        protected void beforeExecute(Thread t, Runnable r) {
-                super.beforeExecute(t, r);
+        public void execute(Runnable runnable) {
+                super.execute(runnable);
                 this.tracker.executing();
         }
 
         @SuppressWarnings("unchecked")
-		public UpdatablePriorityBlockingQueue<T> getUpdatableQueue(){
+	public UpdatablePriorityBlockingQueue<T> getUpdatableQueue(){
                 return (UpdatablePriorityBlockingQueue<T>) this.getQueue();
         }
 
