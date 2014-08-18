@@ -15,13 +15,15 @@ import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XsltTransformer;
 
 /**
- * Transform a given XML tree, with optional XSLT parameters. The methods must
- * not be called within multiple threads.
+ * Transform a given XML tree or sub-tree, with optional XSLT parameters. The
+ * methods must not be called within multiple threads.
  */
 public class ThreadUnsafeXslTransformer {
 
+	private XsltTransformer transformer;
+
 	public ThreadUnsafeXslTransformer(XsltTransformer transformer) {
-		mTransformer = transformer;
+		this.transformer = transformer;
 	}
 
 	public XdmNode transform(XdmNode xml) throws SaxonApiException {
@@ -60,25 +62,23 @@ public class ThreadUnsafeXslTransformer {
 
 		if (parameters != null) {
 			for (Map.Entry<String, Object> param : parameters.entrySet()) {
-				mTransformer.setParameter(new QName(null, param.getKey()), new XdmAtomicValue(
-				        param.getValue().toString()));
+				this.transformer.setParameter(new QName(null, param.getKey()),
+				        new XdmAtomicValue(param.getValue().toString()));
 			}
 		}
-		mTransformer.setSource(input.asSource());
-		mTransformer.setDestination(dest);
-		mTransformer.transform();
+		this.transformer.setSource(input.asSource());
+		this.transformer.setDestination(dest);
+		this.transformer.transform();
 
 		if (parameters != null) {
 			//cancel the parameters
 			for (Map.Entry<String, Object> param : parameters.entrySet()) {
-				mTransformer.setParameter(new QName(null, param.getKey()), null);
+				this.transformer.setParameter(new QName(null, param.getKey()), null);
 			}
 		}
 	}
 
 	public void setURIResolver(URIResolver uriResolver) {
-		mTransformer.setURIResolver(uriResolver);
+		this.transformer.setURIResolver(uriResolver);
 	}
-
-	private XsltTransformer mTransformer;
 }

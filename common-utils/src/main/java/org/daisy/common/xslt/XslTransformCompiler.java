@@ -17,6 +17,9 @@ import com.xmlcalabash.core.XProcConfiguration;
  */
 public class XslTransformCompiler {
 
+	private URIResolver uriResolver;
+	private XsltCompiler xsltCompiler;
+
 	public XslTransformCompiler(Configuration config) {
 		setConfiguration(config);
 	}
@@ -27,22 +30,22 @@ public class XslTransformCompiler {
 
 	public XslTransformCompiler(Configuration config, URIResolver uriResolver) {
 		setConfiguration(config);
-		mURIresolver = uriResolver;
+		this.uriResolver = uriResolver;
 	}
 
 	public XslTransformCompiler(XProcConfiguration config, URIResolver uriResolver) {
 		setConfiguration(config);
-		mURIresolver = uriResolver;
+		this.uriResolver = uriResolver;
 	}
 
 	public CompiledStylesheet compileStylesheet(InputStream stylesheet)
 	        throws SaxonApiException {
 
-		CompiledStylesheet cs = new CompiledStylesheet(mXsltCompiler.compile(new StreamSource(
-		        stylesheet)));
+		CompiledStylesheet cs = new CompiledStylesheet(this.xsltCompiler
+		        .compile(new StreamSource(stylesheet)));
 
-		if (mURIresolver != null)
-			cs.setURIResolver(mURIresolver);
+		if (this.uriResolver != null)
+			cs.setURIResolver(this.uriResolver);
 
 		return cs;
 	}
@@ -56,9 +59,6 @@ public class XslTransformCompiler {
 	}
 
 	private void initCompiler(Configuration config) {
-		mXsltCompiler = new Processor(config).newXsltCompiler();
+		this.xsltCompiler = new Processor(config).newXsltCompiler();
 	}
-
-	private URIResolver mURIresolver;
-	private XsltCompiler mXsltCompiler;
 }

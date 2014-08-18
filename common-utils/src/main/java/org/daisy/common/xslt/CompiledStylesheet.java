@@ -11,21 +11,21 @@ import net.sf.saxon.s9api.XsltExecutable;
  */
 public class CompiledStylesheet {
 
+	private XsltExecutable sheet;
+	private URIResolver uriResolver;
+
 	public CompiledStylesheet(XsltExecutable exec) {
-		mSheet = exec;
+		this.sheet = exec;
 	}
 
 	public void setURIResolver(URIResolver uriResolver) {
-		mURIResolver = uriResolver;
+		this.uriResolver = uriResolver;
 	}
 
 	public ThreadUnsafeXslTransformer newTransformer() {
-		ThreadUnsafeXslTransformer res = new ThreadUnsafeXslTransformer(mSheet.load());
-		if (mURIResolver != null)
-			res.setURIResolver(mURIResolver);
+		ThreadUnsafeXslTransformer res = new ThreadUnsafeXslTransformer(this.sheet.load());
+		if (this.uriResolver != null)
+			res.setURIResolver(this.uriResolver);
 		return res;
 	}
-
-	private XsltExecutable mSheet;
-	private URIResolver mURIResolver;
 }
