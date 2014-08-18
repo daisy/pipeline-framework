@@ -103,6 +103,17 @@
                                     <packageName>org.daisy.pipeline.webservice.jabx.request</packageName>
                             </configuration>
                     </execution>
+                    <execution>
+                            <id>client</id>
+                            <goals>
+                                    <goal>xjc</goal>
+                            </goals>
+                            <configuration>
+                                    <clearOutputDir>false</clearOutputDir>
+                                    <schemaDirectory>${project.build.directory}/trang/client</schemaDirectory>
+                                    <packageName>org.daisy.pipeline.webservice.jabx.client</packageName>
+                            </configuration>
+                    </execution>
             </executions>
     </plugin>
 

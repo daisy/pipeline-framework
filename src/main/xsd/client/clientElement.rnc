@@ -1,5 +1,5 @@
 default namespace = "http://www.daisy.org/ns/pipeline/data"
-
+include "../base/priority.rnc"
 client = 
     element client {
         attribute id { text }
@@ -7,4 +7,5 @@ client =
         & attribute secret { text }
         & attribute role { text }
         & attribute contact { text }
+        & attribute priority {priority}
     }
