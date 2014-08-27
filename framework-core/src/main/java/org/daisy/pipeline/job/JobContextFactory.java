@@ -62,8 +62,9 @@ public class JobContextFactory {
         private final class SimpleJobContext extends AbstractJobContext {
 
         	public SimpleJobContext(Client client,JobId id,String niceName,BoundXProcScript boundScript) throws IOException {
-        		super(client,id,niceName, boundScript,JobURIUtils.newURIMapper());
+        		super(client,id,niceName, boundScript,JobURIUtils.newOutputURIMapper(id));
         		XProcDecorator decorator=XProcDecorator.from(this.getScript(),this.getMapper());
+        		this.setInput(decorator.decorate(this.getInputs()));
         		this.setOutput(decorator.decorate(this.getOutputs()));
         		this.generateResults=false;
         	}

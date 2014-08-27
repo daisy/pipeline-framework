@@ -228,6 +228,7 @@ public class JobsResource extends AuthenticatedResource {
                         while (it.hasNext()) {
                                 FileItem fi = it.next();
                                 if (fi.getFieldName().equals(JOB_DATA_FIELD)) {
+                                        logger.debug("Reading zip file");
                                         File file = File.createTempFile(tempfilePrefix, tempfileSuffix, new File(tmpdir));
                                         fi.write(file);
 
@@ -371,7 +372,8 @@ public class JobsResource extends AuthenticatedResource {
                 if (zip != null){
                         resourceCollection = new ZippedJobResources(zip);
                 }
-                boolean mapping=webservice().getConfiguration().isLocalFS();
+                boolean mapping=!webservice().getConfiguration().isLocalFS();
+                //logger.debug("MAPPING "+mapping);
                 Optional<Job> newJob= jobMan.newJob(bound).isMapping(mapping).withNiceName(niceName)
                         .withPriority(priority).withResources(resourceCollection).build();
                 if(!newJob.isPresent()){
