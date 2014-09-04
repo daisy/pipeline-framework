@@ -33,10 +33,11 @@ public class JobURIUtilsTest   {
 	}
 
 	@Test
-	public void emtpyUriMapper() throws Exception{
-		URIMapper mapper = JobURIUtils.newURIMapper();
+	public void outputUriMapper() throws Exception{
+		URIMapper mapper = JobURIUtils.newOutputURIMapper(id);
 		Assert.assertEquals(URI.create(""),mapper.getInputBase());
-		Assert.assertEquals(URI.create(""),mapper.getOutputBase());
+		String commonBase=tmpdir.toURI().toString()+id.toString()+"/";
+		Assert.assertEquals(URI.create(commonBase+JobURIUtils.IO_OUTPUT_SUBDIR+"/"),mapper.getOutputBase());
 
 	}
 	
@@ -44,7 +45,6 @@ public class JobURIUtilsTest   {
 	public void idBasedUriMapper() throws Exception{
 		URIMapper mapper = JobURIUtils.newURIMapper(id);
 		String commonBase=tmpdir.toURI().toString()+id.toString()+"/";
-		System.out.println(commonBase+JobURIUtils.IO_DATA_SUBDIR+"/");
 		Assert.assertEquals(URI.create(commonBase+JobURIUtils.IO_DATA_SUBDIR+"/"),mapper.getInputBase());
 		Assert.assertEquals(URI.create(commonBase+JobURIUtils.IO_OUTPUT_SUBDIR+"/"),mapper.getOutputBase());
 

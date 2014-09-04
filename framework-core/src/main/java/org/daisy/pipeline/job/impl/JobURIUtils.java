@@ -18,8 +18,9 @@ public class JobURIUtils   {
          * Returns an idle uri mapping, in case we are expecting absolute uris 
          * all the time
          */
-        public static URIMapper newURIMapper(){
-                return new URIMapper(URI.create(""),URI.create(""));
+        public static URIMapper newOutputURIMapper(JobId id) throws IOException{
+                File outputDir = IOHelper.makeDirs(JobURIUtils.getJobOutputDir(id));
+                return new URIMapper(URI.create(""),outputDir.toURI());
         }
 
 
