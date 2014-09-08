@@ -111,7 +111,18 @@
                             <configuration>
                                     <clearOutputDir>false</clearOutputDir>
                                     <schemaDirectory>${project.build.directory}/trang/client</schemaDirectory>
-                                    <packageName>org.daisy.pipeline.webservice.jabx.client</packageName>
+                                    <packageName>org.daisy.pipeline.webservice.jabx.clients</packageName>
+                            </configuration>
+                    </execution>
+                    <execution>
+                            <id>properties</id>
+                            <goals>
+                                    <goal>xjc</goal>
+                            </goals>
+                            <configuration>
+                                    <clearOutputDir>false</clearOutputDir>
+                                    <schemaDirectory>${project.build.directory}/trang/properties</schemaDirectory>
+                                    <packageName>org.daisy.pipeline.webservice.jabx.properties</packageName>
                             </configuration>
                     </execution>
             </executions>
