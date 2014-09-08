@@ -8,7 +8,11 @@ import org.daisy.pipeline.webserviceutils.Routes;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PropertiesXmlWriter {
+        private static final Logger logger = LoggerFactory.getLogger(PropertyXmlWriter.class);
 	private List<? extends Property> properties;
 
 	/**
@@ -32,10 +36,9 @@ public class PropertiesXmlWriter {
 			PropertyXmlWriter writer = XmlWriterFactory.createXmlWriterForProperty(prop);
 			writer.addAsElementChild(propsElm);
 		}
-		// for debugging only
-//		if (!XmlValidator.validate(doc, XmlValidator.CLIENTS_SCHEMA_URL)) {
-//			logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
-//		}
+                if (!XmlValidator.validate(doc, XmlValidator.PROPERTIES_SCHEMA_URL)) {
+                        logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
+                }
 		return doc;
 	}
 
