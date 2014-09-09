@@ -3,8 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.daisy.pipeline</groupId>
-    <artifactId>framework-parent</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <artifactId>framework-aggregator</artifactId>
+    <version>1.8.1-SNAPSHOT</version>
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>webservice-jabx</artifactId>
