@@ -5,6 +5,6 @@ include "jobElement.rnc"
 start = 
     element jobs {
         attribute href { xsd:anyURI }?,
-        job*
+        job *
     }
 

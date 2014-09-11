@@ -13,7 +13,7 @@ element job {
 
 	& attribute priority { priority}
 
-        &element nicename{ text }&
+    &element nicename{ text }?
 
 	& script?
 
