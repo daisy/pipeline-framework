@@ -8,13 +8,15 @@ import org.daisy.common.priority.timetracking.TimeTrackerFactory;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
-import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobExecutionService;
+import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.impl.fuzzy.FuzzyJobFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import ch.qos.logback.classic.ClassicConstants;
+
 
 import com.google.common.base.Predicate;
 
@@ -89,8 +91,8 @@ public class DefaultJobExecutionService implements JobExecutionService {
                                                         + job.getId().toString());
                                         MDC.put("jobid", job.getId().toString());
                                         job.run(xprocEngine);
+                                        logger.info(ClassicConstants.FINALIZE_SESSION_MARKER,"Stopping logging to job's log file");
                                         MDC.remove("jobid");
-                                        logger.info("Stopping logging to job's log file");
                                 } catch (Exception e) {
                                         throw new RuntimeException(e.getCause());
                                 }
