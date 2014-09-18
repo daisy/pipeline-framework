@@ -45,7 +45,6 @@ public abstract class AbstractJobContext implements JobContext{
 
         private Client client;
         
-        protected boolean generateResults;
 
         public AbstractJobContext(Client client,JobId id,String niceName,BoundXProcScript boundScript,URIMapper mapper){
                 if(boundScript!=null){
@@ -178,9 +177,7 @@ public abstract class AbstractJobContext implements JobContext{
         @Override
         public void writeResult(XProcResult result) {
                 result.writeTo(this.output);
-                if(this.generateResults){
-                        this.results=JobResultSetBuilder.newResultSet(this,this.mapper);
-                }
+                this.results=JobResultSetBuilder.newResultSet(this,this.mapper);
                                 
         }
 
@@ -200,13 +197,6 @@ public abstract class AbstractJobContext implements JobContext{
                 this.niceName=name;
         }
 
-        /**
-         * @return if this context will generate a result set 
-         */
-        @Override
-        public boolean isGeneratingResults() {
-                return this.generateResults;
-        }
 
         @Override
         public Client getClient() {

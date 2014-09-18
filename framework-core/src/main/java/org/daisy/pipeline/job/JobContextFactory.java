@@ -54,7 +54,6 @@ public class JobContextFactory {
         		XProcDecorator decorator=XProcDecorator.from(this.getScript(),this.getMapper(),collection);
         		this.setInput(decorator.decorate(this.getInputs()));
         		this.setOutput(decorator.decorate(this.getOutputs()));
-        		this.generateResults=true;
         	}
 
         }
@@ -66,7 +65,6 @@ public class JobContextFactory {
         		XProcDecorator decorator=XProcDecorator.from(this.getScript(),this.getMapper());
         		this.setInput(decorator.decorate(this.getInputs()));
         		this.setOutput(decorator.decorate(this.getOutputs()));
-        		this.generateResults=false;
         	}
 
         }
