@@ -83,7 +83,6 @@ public final class PersistentJobContext extends AbstractJobContext {
         public PersistentJobContext(AbstractJobContext ctxt) {
                 super(ctxt.getClient(),ctxt.getId(),ctxt.getName(),BoundXProcScript.from(ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs()),ctxt.getMapper());
                 this.setResults(ctxt.getResults());
-                this.generateResults=ctxt.isGeneratingResults();
                 this.load();
         }
 
@@ -140,7 +139,6 @@ public final class PersistentJobContext extends AbstractJobContext {
         }
 
         private void updateResults(){
-                JobResultSet rSet= this.getResults();
                 if(this.portResults.size()==0)
                         this.portResults=ContextHydrator.dehydratePortResults(this);
                 if(this.optionResults.size()==0)
@@ -201,14 +199,6 @@ public final class PersistentJobContext extends AbstractJobContext {
 
         }
 
-        @Column(name= "generate_results")
-        @Access(AccessType.PROPERTY)
-        public boolean getGenerateResults(){
-                return this.generateResults;
-        }
-        public void setGenerateResults(boolean generate){
-                this.generateResults=generate;
-        }
 
         @SuppressWarnings("unused") //used by jpa
         private void setScriptUri(String uri) {

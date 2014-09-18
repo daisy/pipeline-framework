@@ -21,6 +21,5 @@ public interface JobContext extends RuntimeConfigurator.Monitorable{
 	public JobResultSet getResults();
 	public void writeResult(XProcResult result) ;
 	public String getName();
-	public boolean isGeneratingResults();
         public Client getClient();
 }
