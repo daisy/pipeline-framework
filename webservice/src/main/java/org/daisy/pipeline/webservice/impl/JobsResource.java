@@ -174,7 +174,7 @@ public class JobsResource extends AuthenticatedResource {
                         job = createJob(doc, zipfile );
                 } catch (LocalInputException e) {
                         setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                        return this.getErrorRepresentation("WS does not allow local inputs but a href starting with 'file:' was found");
+                        return this.getErrorRepresentation(e.getMessage());
                 } catch (IllegalArgumentException iea) {
                         setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
                         return this.getErrorRepresentation(iea.getMessage());
@@ -355,14 +355,14 @@ public class JobsResource extends AuthenticatedResource {
                 XProcInput.Builder inBuilder = new XProcInput.Builder();
                 XProcOutput.Builder outBuilder = new XProcOutput.Builder();
 
-                addInputsToJob(doc.getElementsByTagName("input"), script.getXProcPipelineInfo().getInputPorts(), inBuilder);
+                addInputsToJob(doc.getElementsByTagName("input"), script.getXProcPipelineInfo().getInputPorts(), inBuilder,zip!=null);
 
                 /*Iterable<XProcOptionInfo> filteredOptions = null;
                   if (!((PipelineWebService) getApplication()).isLocal()) {
                   filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
                   }*/
 
-                addOptionsToJob(doc.getElementsByTagName("option"), script, inBuilder);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
+                addOptionsToJob(doc.getElementsByTagName("option"), script, inBuilder,zip==null);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
                 addOutputsToJob(doc.getElementsByTagName("output"), script.getXProcPipelineInfo().getOutputPorts(), outBuilder);
 
                 BoundXProcScript bound= BoundXProcScript.from(script,inBuilder.build(),outBuilder.build());
@@ -414,7 +414,7 @@ public class JobsResource extends AuthenticatedResource {
          * @throws LocalInputException
          */
         private void addInputsToJob(NodeList nodes,
-                        Iterable<XProcPortInfo> inputPorts, XProcInput.Builder builder)
+                        Iterable<XProcPortInfo> inputPorts, XProcInput.Builder builder,boolean zippedContext)
                         throws LocalInputException {
 
                 Iterator<XProcPortInfo> it = inputPorts.iterator();
@@ -431,7 +431,7 @@ public class JobsResource extends AuthenticatedResource {
                                         if (fileNodes.getLength() > 0) {
                                                 for (int j = 0; j < fileNodes.getLength(); j++) {
                                                         String src = ((Element)fileNodes.item(j)).getAttribute("value");
-                                                        this.checkInput(src);
+                                                        this.checkInput(src,zippedContext);
                                                         LazySaxSourceProvider prov= new LazySaxSourceProvider(src);
                                                         builder.withInput(name, prov);
                                                 }
@@ -507,7 +507,7 @@ public class JobsResource extends AuthenticatedResource {
          */
         //private void addOptionsToJob(NodeList nodes, Iterable<XProcOptionInfo> allOptions, XProcInput.Builder builder, Iterable<XProcOptionInfo> filteredOptions) {
         private void addOptionsToJob(NodeList nodes, XProcScript script,
-                        XProcInput.Builder builder) throws LocalInputException {
+                        XProcInput.Builder builder,boolean zippedContext) throws LocalInputException {
 
                 Iterable<XProcOptionInfo> allOptions = script.getXProcPipelineInfo().getOptions();
 
@@ -561,7 +561,7 @@ public class JobsResource extends AuthenticatedResource {
                                                 for (int j = 1; j<items.getLength(); j++) {
                                                         Element e = (Element)items.item(j);
                                                         if(isInput){
-                                                                checkInput(e.getAttribute("value"));
+                                                                checkInput(e.getAttribute("value"),zippedContext);
                                                         }
                                                         val += metadata.getSeparator() + e.getAttribute("value");
                                                 }
@@ -570,7 +570,7 @@ public class JobsResource extends AuthenticatedResource {
                                         else {
                                                 String val = optionElm.getTextContent();
                                                 if(isInput){
-                                                        checkInput(val);
+                                                        checkInput(val,zippedContext);
                                                 }
                                                 builder.withOption(new QName(name), val);
                                                 break;
@@ -580,11 +580,14 @@ public class JobsResource extends AuthenticatedResource {
                         }
                 }
         }
-        private void checkInput(String uri) throws LocalInputException{ 
+        private void checkInput(String uri,boolean zipFileSupplied) throws LocalInputException{ 
                 //if the uri file starts with "file" but we're not executing in
                 //localfs mode send exception
                 if (uri.contains("file:") && ! this.webservice().getConfiguration().isLocalFS()){
-                        throw new LocalInputException(uri);
+                        throw new LocalInputException("WS does not allow local inputs but a href starting with 'file:' was found "+uri);
+                }
+                if (uri.contains("file:") && zipFileSupplied){
+                        throw new LocalInputException("You can't supply the data uri "+uri);
                 }
         }
 
