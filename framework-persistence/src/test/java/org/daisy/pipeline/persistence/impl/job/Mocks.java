@@ -148,7 +148,6 @@ public class Mocks   {
 			public MyHiddenContext(JobResultSet set,XProcScript script,XProcInput input,URIMapper mapper, Client client,JobId id){
 				super(client,id,"hidden",BoundXProcScript.from(script,input,null),mapper);
 				this.setResults(set);
-				this.generateResults=true;
 			}
 
 

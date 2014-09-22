@@ -53,11 +53,6 @@ public class PersistentJobContextTest  {
         }
 
 	@Test
-	public void generateResults(){
-		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
-		Assert.assertTrue(jCtxt.getGenerateResults());
-	}
-	@Test
 	public void storeInput(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
 		Assert.assertEquals(jCtxt.getId(),id);
