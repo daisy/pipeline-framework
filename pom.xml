@@ -44,5 +44,6 @@
     <module>xmlcatalog</module>
     <module>xpath-registry</module>
     <module>xproc-api</module>
+    <module>launcher</module>
   </modules>
 </project>
