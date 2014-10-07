@@ -28,7 +28,7 @@
     <module>parent</module>
     <!-- <module>calabash-adapter</module> -->
     <!-- <module>calabash-custom-steps</module> -->
-    <!-- <module>common-utils</module> -->
+    <module>common-utils</module>
     <!-- <module>framework-core</module> -->
     <!-- <module>framework-persistence</module> -->
     <!-- <module>framework-volatile</module> -->

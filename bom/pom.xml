@@ -22,7 +22,7 @@
     <!-- Modules Versions -->
     <daisy.calabash-adapter.version>2.0.2</daisy.calabash-adapter.version>
     <daisy.calabash-custom-steps.version>2.0.0</daisy.calabash-custom-steps.version>
-    <daisy.common-utils.version>2.1.1</daisy.common-utils.version>
+    <daisy.common-utils.version>2.1.2-SNAPSHOT</daisy.common-utils.version>
     <daisy.framework-core.version>2.2.0</daisy.framework-core.version>
     <daisy.framework-persistence.version>2.0.2</daisy.framework-persistence.version>
     <daisy.framework-volatile.version>2.0.0</daisy.framework-volatile.version>
