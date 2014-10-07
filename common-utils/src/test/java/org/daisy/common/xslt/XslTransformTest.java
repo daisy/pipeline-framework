@@ -6,7 +6,11 @@ import java.io.StringReader;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamSource;
 
 import net.sf.saxon.Configuration;
 import net.sf.saxon.s9api.DocumentBuilder;
@@ -14,16 +18,27 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
-public class XslTransformTest {
+public class XslTransformTest implements URIResolver {
 
 	private static class Env {
 		XdmNode source;
 		InputStream stylesheet;
 		Configuration config;
+	}
+
+	@After
+	public void cleanUp() {
+		xsltTarget = null;
+	}
+
+	@Override
+	public Source resolve(String href, String base) throws TransformerException {
+		return new StreamSource(new StringReader(xsltTarget));
 	}
 
 	private Processor Proc = new Processor(false);
@@ -212,4 +227,27 @@ public class XslTransformTest {
 			        .replaceAll("\\s", ""));
 		}
 	}
+
+	@Test
+	public void identityInclude() throws SaxonApiException {
+		xsltTarget = "<xsl:stylesheet version=\"2.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">"
+		        + "<xsl:template match=\"/\">"
+		        + "<xsl:copy-of select=\".\"/>"
+		        + "</xsl:template>" + "</xsl:stylesheet>";
+
+		String xmlstr = "<root>text1<span a=\"attr\">text2</span>text3</root>";
+		String identity = "<xsl:stylesheet version=\"2.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">"
+		        + "<xsl:include href=\"identity.xsl\"/></xsl:stylesheet>";
+
+		Env env = initEnv(xmlstr, identity);
+
+		XslTransformCompiler compiler = new XslTransformCompiler(env.config, this);
+		ThreadUnsafeXslTransformer tr = compiler.compileStylesheet(env.stylesheet)
+		        .newTransformer();
+
+		Assert.assertEquals(xmlstr.replaceAll("\\s", ""), tr.transform(env.source).toString()
+		        .replaceAll("\\s", ""));
+	}
+
+	private String xsltTarget;
 }

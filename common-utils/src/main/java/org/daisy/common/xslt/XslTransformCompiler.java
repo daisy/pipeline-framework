@@ -29,13 +29,13 @@ public class XslTransformCompiler {
 	}
 
 	public XslTransformCompiler(Configuration config, URIResolver uriResolver) {
-		setConfiguration(config);
 		this.uriResolver = uriResolver;
+		setConfiguration(config);
 	}
 
 	public XslTransformCompiler(XProcConfiguration config, URIResolver uriResolver) {
-		setConfiguration(config);
 		this.uriResolver = uriResolver;
+		setConfiguration(config);
 	}
 
 	public CompiledStylesheet compileStylesheet(InputStream stylesheet)
@@ -60,5 +60,9 @@ public class XslTransformCompiler {
 
 	private void initCompiler(Configuration config) {
 		this.xsltCompiler = new Processor(config).newXsltCompiler();
+		if (this.uriResolver != null) {
+			//this resolver is used for xsl:include and xsl:import
+			this.xsltCompiler.setURIResolver(this.uriResolver);
+		}
 	}
 }
