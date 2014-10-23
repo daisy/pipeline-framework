@@ -190,6 +190,7 @@ public class JobXmlWriter {
                         }
                 }
 
+
                 for(QName option: this.job.getContext().getResults().getOptions()){
                         Element optionResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
                         optionResultElm.setAttribute("href", String.format("%s/option/%s",resultHref,option));

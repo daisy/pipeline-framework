@@ -89,6 +89,9 @@ public class JobsResource extends AuthenticatedResource {
                 }
                 JobManager jobMan = webservice().getJobManager(this.getClient());
                 JobsXmlWriter writer = XmlWriterFactory.createXmlWriterForJobs(jobMan.getJobs());
+                if(this.webservice().getConfiguration().isLocalFS()){
+                	writer.withLocalPaths();
+                }
                 Document doc = writer.getXmlDocument();
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
                 setStatus(Status.SUCCESS_OK);
