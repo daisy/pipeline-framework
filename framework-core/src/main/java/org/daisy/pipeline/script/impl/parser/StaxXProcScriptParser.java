@@ -366,6 +366,8 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			Attribute separator = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_SEPARATOR);
 
+			Attribute primary = optionElement
+					.getAttributeByName(XProcScriptConstants.Attributes.PX_PRIMARY);
 			if (mediaType != null) {
 				optionBuilder.withMediaType(mediaType.getValue());
 			}
@@ -387,6 +389,11 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			if (separator != null) {
 				optionBuilder.withSeparator(separator.getValue());
 			}
+                        if (primary !=null && primary.getValue().equals("false")){
+                                optionBuilder.withPrimary(false);
+                        }else{
+                                optionBuilder.withPrimary(true);
+                        }
 		}
 
 		/**
@@ -511,7 +518,15 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			if (mediaType != null) {
 				portBuilder.withMediaType(mediaType.getValue());
 			}
+			Attribute primary= portElement
+					.getAttributeByName(XProcScriptConstants.Attributes.PRIMARY);
 
+                        if (primary !=null && primary.getValue().equals("false")){
+                                portBuilder.withPrimary(false);
+                        }else{
+
+                                portBuilder.withPrimary(true);
+                        }
 		}
 	}
 
