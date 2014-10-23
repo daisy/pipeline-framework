@@ -22,6 +22,8 @@ public class JobXmlWriter {
         private boolean scriptDetails = false;
         private boolean fullResult=false;
         private boolean localPaths=false; 
+        private boolean onlyPrimaries=false; 
+
         private Job.Status statusOverWrite=null;
         private static Logger logger = LoggerFactory.getLogger(JobXmlWriter.class
                         .getName());
@@ -97,6 +99,9 @@ public class JobXmlWriter {
                 this.fullResult =fullResult;
         }
         
+        public void withOnlyPrimaries(boolean primaries) {
+                this.onlyPrimaries=primaries;
+        }
         public void overwriteStatus(Job.Status status) {
                 this.statusOverWrite=status;
         }
@@ -168,6 +173,9 @@ public class JobXmlWriter {
                 jobElem.appendChild(resultsElm);
                 //ports
                 for (String port : this.job.getContext().getResults().getPorts()) {
+                        if (this.onlyPrimaries && !job.getContext().getScript().getPortMetadata(port).isPrimary()){
+                                continue;
+                        }
                         Element portResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
                         portResultElm.setAttribute("href", String.format("%s/port/%s",resultHref,port));
                         portResultElm.setAttribute("mime-type", "application/zip");
@@ -192,6 +200,9 @@ public class JobXmlWriter {
 
 
                 for(QName option: this.job.getContext().getResults().getOptions()){
+                        if (this.onlyPrimaries&& !job.getContext().getScript().getOptionMetadata(option).isPrimary()){
+                                continue;
+                        }
                         Element optionResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
                         optionResultElm.setAttribute("href", String.format("%s/option/%s",resultHref,option));
                         optionResultElm.setAttribute("mime-type", "application/zip");

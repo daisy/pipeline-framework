@@ -27,7 +27,7 @@ public class JobsXmlWriter {
 		return jobsToXml(jobs);
 	}
 	
-	private static Document jobsToXml(Iterable<? extends Job> jobs) {
+	private Document jobsToXml(Iterable<? extends Job> jobs) {
 		String baseUri = new Routes().getBaseUri();
 		Document doc = XmlUtils.createDom("jobs");
 		Element jobsElm = doc.getDocumentElement();
@@ -36,7 +36,10 @@ public class JobsXmlWriter {
 		for (Job job : jobs) {
 			JobXmlWriter writer = new JobXmlWriter(job);
                         writer.withFullResults(true);
-                        writer.withLocalPaths();
+                        writer.withOnlyPrimaries(true);
+                        if(this.localPaths){
+                                writer.withLocalPaths();
+                        }
 			writer.addAsElementChild(jobsElm);
 		}
 		
