@@ -24,6 +24,8 @@ public class XProcScriptService {
 
 	/** The Constant SCRIPT_ID. */
 	public static final String SCRIPT_ID = "script.id";
+	/** The Constant SCRIPT_ID. */
+	public static final String SCRIPT_VERSION = "script.version";
 
 	/** The uri. */
 	private URI uri;
@@ -33,6 +35,9 @@ public class XProcScriptService {
 
 	/** The description. */
 	private String description;
+
+	/** The version. */
+	private String version;
 
 	/** The script. */
 	private Supplier<XProcScript> script;
@@ -65,6 +70,11 @@ public class XProcScriptService {
 			throw new IllegalArgumentException(SCRIPT_URL
 					+ " property must not be empty");
 		}
+		if (properties.get(SCRIPT_VERSION) == null
+				|| properties.get(SCRIPT_VERSION).toString().isEmpty()) {
+			throw new IllegalArgumentException(SCRIPT_VERSION
+					+ " property must not be empty");
+		}
 		try {
 			uri = new URI(properties.get(SCRIPT_URL).toString());
 		} catch (URISyntaxException e) {
@@ -73,6 +83,7 @@ public class XProcScriptService {
 		}
 		id = properties.get(SCRIPT_ID).toString();
 		description = properties.get(SCRIPT_DESCRIPTION).toString();
+                version= properties.get(SCRIPT_VERSION).toString();
 	}
 
 	/**
@@ -100,6 +111,14 @@ public class XProcScriptService {
 	 */
 	public String getDescription() {
 		return description;
+	}
+	/**
+	 * Gets the script version.
+	 *
+	 * @return the description
+	 */
+	public String getVersion() {
+		return version;
 	}
 
 	/**
@@ -143,6 +162,7 @@ public class XProcScriptService {
 		buf.append("Id: " + id);
 		buf.append(", desc: " + description);
 		buf.append(", uri: " + uri.toString());
+		buf.append(", version: " + version.toString());
 		return buf.toString();
 	}
 }

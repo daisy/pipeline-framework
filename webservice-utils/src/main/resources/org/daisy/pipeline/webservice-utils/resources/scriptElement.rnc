@@ -13,6 +13,8 @@ script =
         & element nicename { text } 
         
         & element description { text }  
+
+        & element version { text }  
         
         & element homepage { xsd:anyURI }?  
         
