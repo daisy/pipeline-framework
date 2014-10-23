@@ -39,20 +39,35 @@
     
     <p:input port="parameters" kind="parameter"/>
     
-    <p:output port="result" primary="true" sequence="true" px:media-type="application/x-dtbook+xml">
+    <p:output port="result" primary="true" sequence="true" px:media-type="application/x-dtbook+xml" >
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p px:role="name">result name</p>
             <p px:role="desc">result description</p>
         </p:documentation>
     </p:output>
     
-    <p:output port="result2">
+    <p:output port="result2" primary="false">
+            <p:empty/>
+    </p:output>
+    <p:output port="result3" >
             <p:empty/>
     </p:output>
 
-    <p:option name="option1" select="." required="true" px:dir="output" px:type="anyDirURI">
+    <p:option name="option1" select="." required="true" px:dir="output" px:type="anyDirURI" px:primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p px:role="name">Option 1</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="option2" select="." required="true" px:dir="output2" px:type="anyDirURI" px:primary="false">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p px:role="name">Option 2</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="option3" select="." required="true" px:dir="output3" px:type="anyDirURI">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p px:role="name">Option 3</p>
         </p:documentation>
     </p:option>
     

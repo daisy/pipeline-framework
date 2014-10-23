@@ -118,6 +118,7 @@ public class XProcScriptParserTest {
                  Assert.assertFalse(port.isRequired());
 	 
 	 }
+
 	 /**
 	  * Test missing input metadata.
 	  */
@@ -153,6 +154,16 @@ public class XProcScriptParserTest {
 		 assertNull(meta.getMediaType());
 		 assertNull(meta.getNiceName());
 		 assertNull(meta.getDescription());
+	 }
+
+	 /**
+	  * Test missing output metadata.
+	  */
+	 @Test
+	 public void testOutputPortPrimary() {
+                 assertTrue("when primary is given true it's set", scp.getPortMetadata("result").isPrimary());
+                 assertTrue("when primary is given false it's set", !scp.getPortMetadata("result2").isPrimary());
+                 assertTrue("when primary is not given is set to true", scp.getPortMetadata("result3").isPrimary());
 	 }
 	 
 	 /**
@@ -219,4 +230,16 @@ public class XProcScriptParserTest {
 		assertEquals(2,Iterables.size(this.scp.getOutputFilesets()));
 		 
 	}
+	 /**
+	  * Test primary options.
+	  */
+	 @Test
+	 public void testOptionPrimary() {
+		 XProcOptionMetadata opt = scp.getOptionMetadata(new QName("option1"));
+                 assertTrue("when primary is given true it's set", opt.isPrimary());
+		 opt = scp.getOptionMetadata(new QName("option2"));
+                 assertTrue("when primary is given false it's set", !opt.isPrimary());
+		 opt = scp.getOptionMetadata(new QName("option3"));
+                 assertTrue("when primary is not given is set to true",opt.isPrimary() );
+	 }
 }

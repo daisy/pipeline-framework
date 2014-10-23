@@ -42,6 +42,9 @@ public class XProcOptionMetadata {
 	/** The media type. */
 	final private String mediaType;
 
+	/** if the option is a primary output. */
+	final private boolean primary;
+
 	/** The direction. */
 	//final private Direction direction;
 
@@ -66,7 +69,7 @@ public class XProcOptionMetadata {
 	 */
 	private XProcOptionMetadata(String niceName, String description,
 			String type, String mediaType, /*Direction direction,*/ Output output,
-			boolean sequence, boolean ordered, String separator) {
+			boolean sequence, boolean ordered, String separator,boolean primary) {
 		super();
 		this.niceName = niceName;
 		this.description = description;
@@ -74,9 +77,10 @@ public class XProcOptionMetadata {
 		this.mediaType = mediaType;
 		//this.direction = direction;
 		this.output = output;
-		isSequence = sequence;
-		isOrdered = ordered;
+		this.isSequence = sequence;
+		this.isOrdered = ordered;
 		this.separator=separator;
+                this.primary=primary;
 	}
 
 	/**
@@ -132,6 +136,9 @@ public class XProcOptionMetadata {
 		return isOrdered;
 	}
 
+	public boolean isPrimary() {
+		return this.primary;
+	}
 	public boolean isSequence() {
 		return isSequence;
 	}
@@ -174,6 +181,7 @@ public class XProcOptionMetadata {
 		/** The separator for a sequence */
 		private String separator = XProcOptionMetadata.DEFAULT_SEPARATOR;
 
+                private boolean primary;
 		/**
 		 * With description.
 		 *
@@ -279,6 +287,10 @@ public class XProcOptionMetadata {
 			return this;
 		}
 
+		public Builder withPrimary(boolean primary) {
+                        this.primary=primary;
+			return this;
+		}
 		/**
 		 * Builds instance
 		 *
@@ -286,7 +298,7 @@ public class XProcOptionMetadata {
 		 */
 		public XProcOptionMetadata build() {
 			return new XProcOptionMetadata(niceName, description, type,
-					mediaType, /*direction,*/ output, sequence, ordered, separator);
+					mediaType, /*direction,*/ output, sequence, ordered, separator,primary);
 		}
 
 
