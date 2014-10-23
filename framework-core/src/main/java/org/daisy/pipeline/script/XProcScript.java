@@ -240,6 +240,14 @@ public final class XProcScript {
 	public final String getDescription() {
 		return description;
 	}
+	/**
+	 * Gets the version.
+	 *
+	 * @return the version
+	 */
+	public final String getVersion() {
+		return descriptor.getVersion();
+	}
 
 	/**
 	 * Gets the homepage.

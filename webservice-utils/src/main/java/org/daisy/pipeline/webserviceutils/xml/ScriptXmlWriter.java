@@ -86,6 +86,10 @@ public class ScriptXmlWriter {
 		descriptionElm.setTextContent(script.getDescription());
 		element.appendChild(descriptionElm);
 
+		Element versionElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "version");
+		versionElm.setTextContent(script.getVersion());
+		element.appendChild(versionElm);
+
 		if (details) {
 			String homepage = script.getHomepage();
 			if (homepage != null && homepage.trim().length() > 0) {
