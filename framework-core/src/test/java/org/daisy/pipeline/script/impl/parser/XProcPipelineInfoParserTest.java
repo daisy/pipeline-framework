@@ -72,7 +72,7 @@ public class XProcPipelineInfoParserTest {
 	public void testOutputPorts() {
 		Iterable<XProcPortInfo> ports = xproc.getOutputPorts();
 		assertNotNull(ports);
-		assertEquals(2, Iterables.size(ports));
+		assertEquals(3, Iterables.size(ports));
 	}
 
 	/**
