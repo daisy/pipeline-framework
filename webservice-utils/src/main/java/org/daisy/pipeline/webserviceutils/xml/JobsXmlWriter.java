@@ -11,10 +11,13 @@ public class JobsXmlWriter {
 	
 	Iterable<? extends Job> jobs = null;
 	private static Logger logger = LoggerFactory.getLogger(JobsXmlWriter.class.getName());
+        private boolean localPaths=false; 
 	
 	public JobsXmlWriter(Iterable<? extends Job> jobs) {
 		this.jobs = jobs;
 	}
+
+
 	
 	public Document getXmlDocument() {
 		if (jobs == null) {
@@ -24,7 +27,7 @@ public class JobsXmlWriter {
 		return jobsToXml(jobs);
 	}
 	
-	private static Document jobsToXml(Iterable<? extends Job> jobs) {
+	private Document jobsToXml(Iterable<? extends Job> jobs) {
 		String baseUri = new Routes().getBaseUri();
 		Document doc = XmlUtils.createDom("jobs");
 		Element jobsElm = doc.getDocumentElement();
@@ -32,6 +35,11 @@ public class JobsXmlWriter {
 		
 		for (Job job : jobs) {
 			JobXmlWriter writer = new JobXmlWriter(job);
+                        writer.withFullResults(true);
+                        writer.withOnlyPrimaries(true);
+                        if(this.localPaths){
+                                writer.withLocalPaths();
+                        }
 			writer.addAsElementChild(jobsElm);
 		}
 		
@@ -43,4 +51,7 @@ public class JobsXmlWriter {
 		return doc;
 	}
 
+        public void withLocalPaths(){
+                this.localPaths=true;
+        }
 }

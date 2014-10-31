@@ -130,6 +130,8 @@ public final class XProcScriptConstants {
 		/** The Constant PX_SEPARATOR */
 		public static final QName PX_SEPARATOR = new QName(PX_NS, "separator");
 
+		public static final QName PX_PRIMARY = new QName(PX_NS, "primary");
+
 		/**
 		 * Instantiates a new attributes.
 		 */

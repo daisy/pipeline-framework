@@ -25,6 +25,8 @@ public class XProcPortMetadata {
 		/** If it is required **/
 		private boolean required;
 
+		/** If it is required **/
+		private boolean primary=true;
 		/**
 		 * With nice name.
 		 * 
@@ -72,13 +74,24 @@ public class XProcPortMetadata {
 		}
 
 		/**
+		 *  Set the port as primary.
+		 * 
+		 * @param mediaType
+		 *            the media type
+		 * @return the builder
+		 */
+		public Builder withPrimary(boolean primary) {
+			this.primary= primary;
+			return this;
+		}
+		/**
 		 * Builds the instance.
 		 * 
 		 * @return the x proc port metadata
 		 */
 		public XProcPortMetadata build() {
 			return new XProcPortMetadata(niceName, description, mediaType,
-					required);
+					required,primary);
 		}
 
 	}
@@ -94,6 +107,8 @@ public class XProcPortMetadata {
 
 	/** required port */
 	private boolean required;
+	/** primary port*/
+	private boolean primary;
 
 	/**
 	 * Instantiates a new x proc port metadata.
@@ -106,12 +121,13 @@ public class XProcPortMetadata {
 	 *            the media type
 	 */
 	public XProcPortMetadata(String niceName, String description,
-			String mediaType, boolean required) {
+			String mediaType, boolean required,boolean primary) {
 		super();
 		this.niceName = niceName;
 		this.description = description;
 		this.mediaType = mediaType;
 		this.required = required;
+                this.primary=primary;
 	}
 
 	/**
@@ -149,6 +165,16 @@ public class XProcPortMetadata {
 	 */
 	public boolean isRequired() {
 		return required;
+	}
+
+	/**
+         * The port is primary
+	 * 
+	 * @return the required
+	 */
+
+	public boolean isPrimary() {
+		return primary;
 	}
 
 }
