@@ -45,6 +45,7 @@ public class JobManagerFactory {
                 propertyPublisher.publish("org.daisy.pipeline.iobase" ,System.getProperty("org.daisy.pipeline.iobase","" ),this.getClass());
                 propertyPublisher.publish("org.daisy.pipeline.home" ,System.getProperty("org.daisy.pipeline.home","" ),this.getClass());
                 propertyPublisher.publish("org.daisy.pipeline.logdir",System.getProperty("org.daisy.pipeline.logdir","" ),this.getClass());
+                propertyPublisher.publish("org.daisy.pipeline.procs",System.getProperty("org.daisy.pipeline.procs","" ),this.getClass());
         }
 
         public void unsetPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
