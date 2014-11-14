@@ -5,11 +5,11 @@ import java.util.concurrent.TimeUnit;
 
 import org.daisy.common.fuzzy.InferenceEngine;
 import org.daisy.common.priority.Priority;
+import org.daisy.common.priority.PriorityThreadPoolExecutor;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.impl.DefaultJobExecutionService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -83,72 +83,72 @@ public class DefaultJobExecutionServiceTest {
 
         }
 
-        @Test
-        public void simpleJobSubmission() {
-                service.submit(jobs[0]);
-                int executed = waitForSize(1, 100);
-                Assert.assertEquals("One task wasn't executed", 1, executed);
+        //@Test
+        //public void simpleJobSubmission() {
+                //service.submit(jobs[0]);
+                //int executed = waitForSize(1, 100);
+                //Assert.assertEquals("One task wasn't executed", 1, executed);
 
-        }
+        //}
         
-        @Test
-        @BenchmarkOptions(benchmarkRounds = 50, warmupRounds = 0)
-        public void submitALot() {
-                System.out.print(getChar());
-                for (int i = 0; i < 100; i++) {
-                        service.submit(jobs[i]);
-                }
-                int executed = waitForSize(100, 2000);
-                System.out.print("\b");
-                Assert.assertEquals("One hundred tasks weren't executed", 100, executed);
+        //@Test
+        //@BenchmarkOptions(benchmarkRounds = 50, warmupRounds = 0)
+        //public void submitALot() {
+                //System.out.print(getChar());
+                //for (int i = 0; i < 100; i++) {
+                        //service.submit(jobs[i]);
+                //}
+                //int executed = waitForSize(100, 2000);
+                //System.out.print("\b");
+                //Assert.assertEquals("One hundred tasks weren't executed", 100, executed);
 
-        }
+        //}
 
-        @Test
-        @BenchmarkOptions(benchmarkRounds = 50, warmupRounds = 0)
-        public void submitALotAsynch() {
-                System.out.print(getChar());
-                for (int i = 0; i < 100; i++) {
-                        final int j = i;
-                        new Thread() {
-                                @Override
-                                public void run() {
-                                        service.submit(jobs[j]);
-                                }
-                        }.start();
-                }
-                int executed = waitForSize(100, 2000);
-                System.out.print("\b");
-                Assert.assertEquals("One hundred async tasks weren't executed", 100, executed);
+        //@Test
+        //@BenchmarkOptions(benchmarkRounds = 50, warmupRounds = 0)
+        //public void submitALotAsynch() {
+                //System.out.print(getChar());
+                //for (int i = 0; i < 100; i++) {
+                        //final int j = i;
+                        //new Thread() {
+                                //@Override
+                                //public void run() {
+                                        //service.submit(jobs[j]);
+                                //}
+                        //}.start();
+                //}
+                //int executed = waitForSize(100, 2000);
+                //System.out.print("\b");
+                //Assert.assertEquals("One hundred async tasks weren't executed", 100, executed);
 
-        }
+        //}
 
 
-        public int waitForSize(final int size, long micro) {
-                 guard = new Monitor.Guard(mon) {
+        //public int waitForSize(final int size, long micro) {
+                 //guard = new Monitor.Guard(mon) {
 
-                        @Override
-                        public boolean isSatisfied() {
-                                return tracker.visited().size() == size;
+                        //@Override
+                        //public boolean isSatisfied() {
+                                //return tracker.visited().size() == size;
 
-                        }
+                        //}
 
-                };
-                boolean done=false;
-                try {
-                        done=mon.enterWhen(guard,2,TimeUnit.SECONDS);
-                } catch (InterruptedException e) {
+                //};
+                //boolean done=false;
+                //try {
+                        //done=mon.enterWhen(guard,2,TimeUnit.SECONDS);
+                //} catch (InterruptedException e) {
 
-                        throw new RuntimeException(e);
-                }finally{
-                        mon.leave();
-                        if(!done){
-                                throw new RuntimeException("Waited for too long");
-                        }
-                }
+                        //throw new RuntimeException(e);
+                //}finally{
+                        //mon.leave();
+                        //if(!done){
+                                //throw new RuntimeException("Waited for too long");
+                        //}
+                //}
 
-                return tracker.visited().size();
-        }
+                //return tracker.visited().size();
+        //}
 
         class RunnableTracker {
 
@@ -176,88 +176,27 @@ public class DefaultJobExecutionServiceTest {
                         }
                 }
         }
+        @Test
+        public void buildExecutor() {
+                String old=System.getProperty(DefaultJobExecutionService.NUM_PROCS);
+                //No config 
+                System.setProperty(DefaultJobExecutionService.NUM_PROCS,"");
+                PriorityThreadPoolExecutor<Job> res=DefaultJobExecutionService.configureExecutor();
+                Assert.assertEquals("2 threads by default",res.getMaximumPoolSize(),2);
+                //configured to other value
+                System.setProperty(DefaultJobExecutionService.NUM_PROCS,"5");
+                res=DefaultJobExecutionService.configureExecutor();
+                Assert.assertEquals("configured for 5 threads",res.getMaximumPoolSize(),5);
+                //nonsense 
+                System.setProperty(DefaultJobExecutionService.NUM_PROCS,"gimme chocolate!!");
+                res=DefaultJobExecutionService.configureExecutor();
+                Assert.assertEquals("non int is trated as 2",res.getMaximumPoolSize(),2);
 
-        //@Test
-        //@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0)
-        //public void findBingo() {
 
-                //LinkedList <PrioritizableRunnable> collection= Lists.newLinkedList();
-                //for (Job j: this.jobs){
-                        //collection.add(new FuzzyJobRunnable(j,runnable,engine));
-                //}
-                
-                //Optional<PrioritizableRunnable> res=DefaultJobExecutionService.find(this.jobs[0].getId(),collection);
-                //Assert.assertTrue("We found a job",res.isPresent());
-                //Assert.assertEquals("And the ids are the same",this.jobs[0].getId().toString(),((PrioritizedJob)res.get()).get().getId().toString());
 
-        //}
 
-        //@Test
-        //@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0)
-        //public void findFail() {
 
-                //LinkedList <PrioritizableRunnable> collection= Lists.newLinkedList();
-                //for (Job j: this.jobs){
-                        //collection.add(new FuzzyJobRunnable(j,runnable,engine));
-                //}
-                //JobId id = Mockito.mock(JobId.class);
-                //Mockito.when(id.toString()).thenReturn(
-                                        //String.format("%d",0));
-                 
-                //Optional<PrioritizableRunnable> res=DefaultJobExecutionService.find(id,collection);
-                //Assert.assertFalse("We did not found the job",res.isPresent());
+        }
 
-        //}
-
-        //@Test
-        //@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0)
-        //public void moveUp() {
-                //LinkedList <PrioritizableRunnable> collection= Lists.newLinkedList();
-                //for (Job j: this.jobs){
-                        //collection.add(new FuzzyJobRunnable(j,runnable,engine));
-                //}
-                //PriorityThreadPoolExecutor executor=Mockito.mock(PriorityThreadPoolExecutor.class);
-                //Mockito.when(service.getExecutor()).thenReturn(executor);
-                //Mockito.when(executor.asCollection()).thenReturn(collection);
-
-                //this.service.moveUp(this.jobs[0].getId());
-                //Mockito.verify(executor,Mockito.times(1)).moveUp(collection.get(0));
-                //this.service.moveUp(Mockito.mock(JobId.class));
-                //Mockito.verify(executor,Mockito.times(1)).moveUp(Mockito.any(PrioritizableRunnable.class));
-        //}
-
-        //@Test
-        //@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0)
-        //public void moveDown() {
-                //LinkedList <PrioritizableRunnable> collection= Lists.newLinkedList();
-                //for (Job j: this.jobs){
-                        //collection.add(new FuzzyJobRunnable(j,runnable,engine));
-                //}
-                //PriorityThreadPoolExecutor executor=Mockito.mock(PriorityThreadPoolExecutor.class);
-                //Mockito.when(service.getExecutor()).thenReturn(executor);
-                //Mockito.when(executor.asCollection()).thenReturn(collection);
-
-                //this.service.moveDown(this.jobs[0].getId());
-                //Mockito.verify(executor,Mockito.times(1)).moveDown(collection.get(0));
-                //this.service.moveDown(Mockito.mock(JobId.class));
-                //Mockito.verify(executor,Mockito.times(1)).moveDown(Mockito.any(PrioritizableRunnable.class));
-        //}
-
-        //@Test
-        //@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0)
-        //public void cancel() {
-                //LinkedList <PrioritizableRunnable> collection= Lists.newLinkedList();
-                //for (Job j: this.jobs){
-                        //collection.add(new FuzzyJobRunnable(j,runnable,engine));
-                //}
-                //PriorityThreadPoolExecutor executor=Mockito.mock(PriorityThreadPoolExecutor.class);
-                //Mockito.when(service.getExecutor()).thenReturn(executor);
-                //Mockito.when(executor.asCollection()).thenReturn(collection);
-
-                //this.service.cancel(this.jobs[0].getId());
-                //Mockito.verify(executor,Mockito.times(1)).remove(collection.get(0));
-                //this.service.cancel(Mockito.mock(JobId.class));
-                //Mockito.verify(executor,Mockito.times(1)).remove(Mockito.any(PrioritizableRunnable.class));
-        //}
 
 }
