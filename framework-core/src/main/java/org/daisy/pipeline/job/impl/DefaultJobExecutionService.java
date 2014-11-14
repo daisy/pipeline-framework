@@ -38,12 +38,11 @@ public class DefaultJobExecutionService implements JobExecutionService {
         static PriorityThreadPoolExecutor<Job> configureExecutor(){
                 int procs=2;
 
-                String confProcs=System.getProperty(NUM_PROCS,"2");
                 try{
+                        String confProcs=System.getProperty(NUM_PROCS,"2");
                         procs=Integer.parseInt(confProcs);
                 }catch(NumberFormatException e){
                         logger.info(String.format("Error parsing %s %s",NUM_PROCS,procs));
-
                 }
                 logger.info(String.format("Initialising number of processors to %s",procs));
                 PriorityThreadPoolExecutor<Job> executor = PriorityThreadPoolExecutor
