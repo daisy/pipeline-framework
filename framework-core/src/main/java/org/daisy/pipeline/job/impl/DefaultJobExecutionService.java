@@ -55,7 +55,8 @@ public class DefaultJobExecutionService implements JobExecutionService {
         }
 
         public DefaultJobExecutionService(){
-                this.executionQueue=new DefaultJobQueue(DefaultJobExecutionService.configureExecutor()); 
+                this.executor=DefaultJobExecutionService.configureExecutor();
+                this.executionQueue=new DefaultJobQueue(this.executor); 
         }
         /**
          * @param xprocEngine
