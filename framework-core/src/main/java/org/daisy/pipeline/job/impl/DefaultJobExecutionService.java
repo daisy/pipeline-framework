@@ -15,8 +15,8 @@ import org.daisy.pipeline.job.impl.fuzzy.FuzzyJobFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import ch.qos.logback.classic.ClassicConstants;
 
+import ch.qos.logback.classic.ClassicConstants;
 
 import com.google.common.base.Predicate;
 
@@ -25,21 +25,38 @@ import com.google.common.base.Predicate;
  */
 public class DefaultJobExecutionService implements JobExecutionService {
 
+        static final String NUM_PROCS="org.daisy.pipeline.procs";
         /** The Constant logger. */
         private static final Logger logger = LoggerFactory
                         .getLogger(DefaultJobExecutionService.class);
         /** The xproc engine. */
         private XProcEngine xprocEngine;
 
-        private PriorityThreadPoolExecutor<Job> executor = PriorityThreadPoolExecutor
-                        .newFixedSizeThreadPoolExecutor(
-                                        2,
-                                        TimeTrackerFactory.newFactory(1,
-                                                        TimeFunctions.newLinearTimeFunctionFactory()));
+        private PriorityThreadPoolExecutor<Job> executor;
         private JobQueue executionQueue;
+        //Get the executor configured by the system property
+        static PriorityThreadPoolExecutor<Job> configureExecutor(){
+                int procs=2;
+
+                String confProcs=System.getProperty(NUM_PROCS,"2");
+                try{
+                        procs=Integer.parseInt(confProcs);
+                }catch(NumberFormatException e){
+                        logger.info(String.format("Error parsing %s %s",NUM_PROCS,procs));
+
+                }
+                logger.info(String.format("Initialising number of processors to %s",procs));
+                PriorityThreadPoolExecutor<Job> executor = PriorityThreadPoolExecutor
+                        .newFixedSizeThreadPoolExecutor(
+                                        procs,
+                                        TimeTrackerFactory.newFactory(1,
+                                                TimeFunctions.newLinearTimeFunctionFactory()));
+
+                return executor;
+        }
 
         public DefaultJobExecutionService(){
-                this.executionQueue=new DefaultJobQueue(executor); 
+                this.executionQueue=new DefaultJobQueue(DefaultJobExecutionService.configureExecutor()); 
         }
         /**
          * @param xprocEngine
