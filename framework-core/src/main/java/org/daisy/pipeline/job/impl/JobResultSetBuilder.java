@@ -10,6 +10,7 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
+import org.daisy.pipeline.job.Index;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
@@ -77,7 +78,7 @@ public class JobResultSetBuilder {
 
 	static JobResult singleResult(URI path, URIMapper mapper,String mediaType){
 		return new JobResult.Builder().withPath(path)
-			.withIdx(mapper.unmapOutput(path).toString())
+			.withIdx(new Index(mapper.unmapOutput(path).toString()))
 			.withMediaType(mediaType).build();
 	};
 

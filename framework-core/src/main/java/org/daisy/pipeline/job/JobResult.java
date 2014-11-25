@@ -11,7 +11,7 @@ public class JobResult {
 
         @Override
         public int hashCode() {
-                return this.idx.hashCode()+this.path.hashCode();
+                return this.idx.toString().hashCode()+this.path.hashCode();
         }
 
         @Override
@@ -19,7 +19,7 @@ public class JobResult {
                 if(obj==null || !(obj instanceof JobResult))
                         return false;
                 JobResult other=(JobResult) obj;
-                return this.idx.equals(other.idx)&&this.path.equals(other.path);
+                return this.idx.toString().equals(other.idx.toString())&&this.path.equals(other.path);
 
         }
 
@@ -30,7 +30,7 @@ public class JobResult {
 
 
         public static class Builder{
-                private String idx;
+                private Index idx;
                 private URI path;
                 private String mediaType;
 
@@ -45,8 +45,17 @@ public class JobResult {
                  *
                  * @param idx The idx.
                  */
-                public Builder withIdx(String idx) {
+                public Builder withIdx(Index idx) {
                         this.idx = idx;
+                        return this;
+                }
+                /**
+                 * Sets the idx for this instance.
+                 *
+                 * @param idx The idx.
+                 */
+                public Builder withIdx(String idx) {
+                        this.idx = new Index(idx);
                         return this;
                 }
 
@@ -76,7 +85,7 @@ public class JobResult {
         }
 
         //short index for the result 
-        private String idx;
+        private Index idx;
 
         // path to the actual file
         private URI path;
@@ -91,10 +100,19 @@ public class JobResult {
          * @param path The path for this instance.
          * @param mediaType The mediaType for this instance.
          */
-        private JobResult(String idx, URI path, String mediaType) {
+        private JobResult(Index idx, URI path, String mediaType) {
                 this.idx = idx;
                 this.path = path;
                 this.mediaType = mediaType;
+        }
+
+        /**
+         * Gets a result without the first index level 
+         *
+         *
+         */
+        public JobResult strip(){
+                return new  JobResult(this.idx.stripPrefix(),this.path,this.mediaType);
         }
 
         /**
@@ -102,7 +120,7 @@ public class JobResult {
          *
          * @return The idx.
          */
-        public String getIdx() {
+        public Index getIdx() {
                 return this.idx;
         }
 

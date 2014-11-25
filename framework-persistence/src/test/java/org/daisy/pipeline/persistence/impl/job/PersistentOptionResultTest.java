@@ -4,11 +4,11 @@ import java.net.URI;
 
 import javax.xml.namespace.QName;
 
+import org.daisy.pipeline.job.Index;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobUUIDGenerator;
 import org.daisy.pipeline.persistence.impl.Database;
-import org.daisy.pipeline.persistence.impl.job.PersistentOptionResult;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -39,13 +39,13 @@ public class PersistentOptionResultTest {
 
 	@Test
 	public void optionName() throws Exception{
-		PersistentOptionResult stored=db.getEntityManager().find(PersistentOptionResult.class,new PersistentOptionResult.PK(id1,idx));
+		PersistentOptionResult stored=db.getEntityManager().find(PersistentOptionResult.class,new PersistentOptionResult.PK(id1,new Index(idx)));
 		Assert.assertEquals(name,stored.getOptionName().toString());
 	}
 	
 	@Test
 	public void jobResult() throws Exception{
-		PersistentOptionResult stored=db.getEntityManager().find(PersistentOptionResult.class,new PersistentOptionResult.PK(id1,idx));
+		PersistentOptionResult stored=db.getEntityManager().find(PersistentOptionResult.class,new PersistentOptionResult.PK(id1,new Index(idx)));
 		Assert.assertEquals(result,stored.getJobResult());
 	}
 	

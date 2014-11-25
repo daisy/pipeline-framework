@@ -9,6 +9,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.daisy.pipeline.job.Index;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
@@ -123,9 +124,9 @@ public class PersistentPortResult   {
 		 * @param jobId The jobId for this instance.
 		 * @param name The name for this instance.
 		 */
-		public PK(JobId jobId, String idx) {
+		public PK(JobId jobId, Index idx) {
 			this.jobId = jobId.toString();
-			this.idx = idx;
+			this.idx = idx.toString();
 		}
 
 		/**
