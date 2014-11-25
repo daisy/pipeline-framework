@@ -81,7 +81,7 @@ public final class JobResultSet {
                 ByteArrayOutputStream buf=new ByteArrayOutputStream();
                 ZipOutputStream zout= new ZipOutputStream(buf);
                 for(JobResult res: results){
-                        ZipEntry entry=new ZipEntry(res.getIdx());      
+                        ZipEntry entry=new ZipEntry(res.getIdx().toString());      
                         zout.putNextEntry(entry);
                         InputStream is= res.getPath().toURL().openStream();
                         IOHelper.dump(is,zout);

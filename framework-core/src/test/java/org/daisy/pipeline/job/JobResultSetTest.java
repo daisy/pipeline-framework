@@ -51,8 +51,8 @@ public class JobResultSetTest   {
 		pw2.append(content2);
 		pw2.close();
 		
-		jres1= new JobResult.Builder().withPath(res1).withIdx(uri1.toString()).build();
-		jres2= new JobResult.Builder().withPath(res2).withIdx(uri2.toString()).build();
+		jres1= new JobResult.Builder().withPath(res1).withIdx(new Index(uri1.toString())).build();
+		jres2= new JobResult.Builder().withPath(res2).withIdx(new Index(uri2.toString())).build();
 		List<JobResult> results= new LinkedList<JobResult>();
 		results.add(jres1);
 		results.add(jres2);

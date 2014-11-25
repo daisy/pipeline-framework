@@ -85,7 +85,7 @@ public class JobResultSetBuilderTest {
                 JobResultSet rSet=builder.build();
                 List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(outName));
                 Assert.assertEquals(mapper.mapOutput(URI.create(sysId)),jobs.get(0).getPath());
-                Assert.assertEquals(sysId,jobs.get(0).getIdx());
+                Assert.assertEquals(sysId,jobs.get(0).getIdx().toString());
 
         }
 
@@ -127,7 +127,7 @@ public class JobResultSetBuilderTest {
                 List<JobResult> jobs=JobResultSetBuilder.buildJobResult(res,mapper,"xml");
                 Assert.assertEquals(jobs.size(),2);
                 Assert.assertEquals(mapper.mapOutput(URI.create(sysId)),jobs.get(0).getPath());
-                Assert.assertEquals(sysId,jobs.get(0).getIdx());
+                Assert.assertEquals(sysId,jobs.get(0).getIdx().toString());
                 Assert.assertEquals("xml",jobs.get(0).getMediaType());
                 
         }
@@ -138,7 +138,7 @@ public class JobResultSetBuilderTest {
                 Supplier<Result> res= output.getResultProvider(outName);
                 List<JobResult> jobs=JobResultSetBuilder.buildJobResult(res,mapper,"xml");
                 Assert.assertEquals(mapper.mapOutput(URI.create(sysId)),jobs.get(0).getPath());
-                Assert.assertEquals(sysId,jobs.get(0).getIdx());
+                Assert.assertEquals(sysId,jobs.get(0).getIdx().toString());
                 Assert.assertEquals("xml",jobs.get(0).getMediaType());
                 
         }
@@ -150,7 +150,7 @@ public class JobResultSetBuilderTest {
                 JobResultSet rSet=builder.build();
                 List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName));
                 Assert.assertEquals(mapper.mapOutput(URI.create(sysId)),jobs.get(0).getPath());
-                Assert.assertEquals(sysId,jobs.get(0).getIdx());
+                Assert.assertEquals(sysId,jobs.get(0).getIdx().toString());
                 
         }
 
@@ -194,9 +194,9 @@ public class JobResultSetBuilderTest {
                 uris.add(dir+"uno.xml");
                 uris.add(dir+"tres.xml");
 
-                Assert.assertTrue(uris.contains(jobs.get(0).getIdx()));
-                Assert.assertTrue(uris.contains(jobs.get(1).getIdx()));
-                Assert.assertTrue(uris.contains(jobs.get(2).getIdx()));
+                Assert.assertTrue(uris.contains(jobs.get(0).getIdx().toString()));
+                Assert.assertTrue(uris.contains(jobs.get(1).getIdx().toString()));
+                Assert.assertTrue(uris.contains(jobs.get(2).getIdx().toString()));
 
                 
         }
