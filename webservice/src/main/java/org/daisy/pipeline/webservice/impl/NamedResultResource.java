@@ -20,6 +20,7 @@ import org.restlet.resource.Get;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -104,7 +105,7 @@ public abstract class NamedResultResource extends AuthenticatedResource {
                 results=Collections2.filter(results, new Predicate<JobResult>(){
                         @Override
                         public boolean apply(JobResult res) {
-                                return res.getIdx().equals(NamedResultResource.this.idx);
+                                return res.getIdx().toString().equals(NamedResultResource.this.idx);
                         }
                 });
                 if(results.size()==0){
@@ -120,7 +121,7 @@ public abstract class NamedResultResource extends AuthenticatedResource {
                         rep.setDigest(new Digest(Files.hash(file,Hashing.md5()).asBytes()));//TODO update to guava 1.5
                         //rep.setDigest(new Digest(Files.getDigest(file,MessageDigest.getInstance("MD5"))));
                         Disposition disposition = new Disposition();
-                        disposition.setFilename(res.getIdx());
+                        disposition.setFilename(res.getIdx().toString());
                         disposition.setSize(file.length());
                         disposition.setType(Disposition.TYPE_ATTACHMENT);
                         rep.setDisposition(disposition);
@@ -134,6 +135,11 @@ public abstract class NamedResultResource extends AuthenticatedResource {
 
         private Representation zippedResult(){
                 Collection<JobResult> results=this.gatherResults(this.job.get(),this.name);
+                results=Collections2.transform(results,new Function<JobResult,JobResult>(){
+                        public JobResult apply(JobResult result){
+                                return result.strip();
+                        }
+                });
                 logger.debug(String.format("Getting port result for %s ",this.name));
                 if (results.size() == 0) {
                         setStatus(Status.SERVER_ERROR_INTERNAL);
