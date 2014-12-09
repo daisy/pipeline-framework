@@ -222,9 +222,9 @@ public class Job implements RuntimeConfigurator.EventBusable{
                                 changeStatus( Status.DONE );
                         }
                 }catch(Exception e){
+                        changeStatus( Status.ERROR);
                         broadcastError(e.getMessage());
                         logger.error("job finished with error state",e);
-                        changeStatus( Status.ERROR);
                 }
 
         }
