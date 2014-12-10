@@ -3,14 +3,11 @@ package org.daisy.pipeline.felix;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.Future;
 
 import org.apache.felix.framework.FrameworkFactory;
-import org.apache.felix.main.AutoProcessor;
+import org.daisy.pipeline.job.JobManagerFactory;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
-import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.launch.Framework;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -53,79 +50,16 @@ public class Main extends org.apache.felix.main.Main{
          * Name of the configuration directory.
          */
         public static final String CONFIG_DIRECTORY = "conf";
-        private static Framework m_fwk = null;
 
         public static void main(String[] args) throws Exception {
-                // Look for bundle directory and/or cache directory.
-                // We support at most one argument, which is the bundle
-                // cache directory.
-                String bundleDir = null;
-                String cacheDir = null;
-                boolean expectBundleDir = false;
-                for (int i = 0; i < args.length; i++) {
-                        if (args[i].equals(BUNDLE_DIR_SWITCH)) {
-                                expectBundleDir = true;
-                        } else if (expectBundleDir) {
-                                bundleDir = args[i];
-                                expectBundleDir = false;
-                        } else {
-                                cacheDir = args[i];
-                        }
-                }
-                if ((args.length > 3) || (expectBundleDir && bundleDir == null)) {
-                        System.out
-                                        .println("Usage: [-b <bundle-deploy-dir>] [<bundle-cache-dir>]");
-                        System.exit(0);
-                }
-                // Load system properties.
-                Main.loadSystemProperties();
-                // Read configuration properties.
-                Map<String, String> configProps = Main.loadConfigProperties();
-                // If no configuration properties were found, then create
-                // an empty properties object.
-                if (configProps == null) {
-                        System.err
-                                        .println("No " + CONFIG_PROPERTIES_FILE_VALUE + " found.");
-                        configProps = new HashMap<String, String>();
-                }
-                // Copy framework properties from the system properties.
-                Main.copySystemProperties(configProps);
-                // If there is a passed in bundle auto-deploy directory, then
-                // that overwrites anything in the config file.
-                if (bundleDir != null) {
-                        configProps.put(AutoProcessor.AUTO_DEPLOY_DIR_PROPERY, bundleDir);
-                }
-                // If there is a passed in bundle cache directory, then
-                // that overwrites anything in the config file.
-                if (cacheDir != null) {
-                        configProps.put(Constants.FRAMEWORK_STORAGE, cacheDir);
-                }
-                try {
-                        // Create an instance of the framework.
-                        FrameworkFactory factory = getFrameworkFactory();
-                        m_fwk = factory.newFramework(configProps);
-                        // Initialize the framework, but don't start it yet.
-                        m_fwk.init();
-                        // Use the system bundle context to process the auto-deploy
-                        // and auto-install/auto-start properties.
-                        AutoProcessor.process(configProps, m_fwk.getBundleContext());
-                        FrameworkEvent event;
-                        do {
-                                // Start the framework.
-                                m_fwk.start();
-                                waitForSWT(m_fwk);
-                                // Wait for framework to stop to exit the VM.
-                                event = m_fwk.waitForStop(0);
-                        }
-                        // If the framework was updated, then restart it.
-                        while (event.getType() == FrameworkEvent.STOPPED_UPDATE);
-                        // Otherwise, exit.
-                        System.exit(0);
-                } catch (Exception ex) {
-                        System.err.println("Could not create framework: " + ex);
-                        ex.printStackTrace();
-                        System.exit(0);
-                }
+                System.out.println("In main");
+                PipelineFramework pf=new PipelineFramework();
+                pf.init();
+                System.out.println("Getting the futurible");
+                Future<JobManagerFactory> future= pf.getService(JobManagerFactory.class);
+                System.out.println("Calling get...");
+                future.get();
+                System.out.println("I got the service!");
         }
 
         /**
@@ -159,7 +93,7 @@ public class Main extends org.apache.felix.main.Main{
          * @return The created <tt>FrameworkFactory</tt> instance.
          * @throws Exception if any errors occur.
          **/
-        private static FrameworkFactory getFrameworkFactory() throws Exception
+        static FrameworkFactory getFrameworkFactory() throws Exception
         {
                 URL url = Main.class.getClassLoader().getResource(
                                 "META-INF/services/org.osgi.framework.launch.FrameworkFactory");
