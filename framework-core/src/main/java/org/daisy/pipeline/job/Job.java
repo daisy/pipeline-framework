@@ -181,11 +181,12 @@ public class Job implements RuntimeConfigurator.EventBusable{
         private synchronized final void changeStatus(Status to){
                 logger.info(String.format("Changing job status to: %s",to));
                 this.status=to;
+                this.onStatusChanged(to);
+                System.out.println("CHANGING STATUS IN THE DB BEFORE POSTING IT!");
                 if (this.eventBus!=null)
                         this.eventBus.post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
                 else
                         logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? " the context ": " event bus ") + "is null");
-                this.onStatusChanged(to);
         }
         private final void broadcastError(String text){
                 Message msg= new MessageBuilder()
