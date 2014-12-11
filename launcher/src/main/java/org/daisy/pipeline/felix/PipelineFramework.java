@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.felix.framework.FrameworkFactory;
 import org.apache.felix.main.AutoProcessor;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -53,13 +54,21 @@ public class PipelineFramework extends org.apache.felix.main.Main{
                         // Use the system bundle context to process the auto-deploy
                         // and auto-install/auto-start properties.
                         AutoProcessor.process(configProps, fwk.getBundleContext());
-                                // Start the framework.
-                                fwk.start();
+                        // Start the framework.
+                        fwk.start();
                 } catch (Exception ex) {
                         System.err.println("Could not create framework: " + ex);
                         throw new RuntimeException(ex);
                 }
 
+        }
+
+        public void stop(){
+                try {
+                        this.fwk.stop();
+                } catch (BundleException e) {
+                        throw new RuntimeException(e);
+                }
         }
 
         public <T> Future<T>  getService(final Class<T> serviceClass){
