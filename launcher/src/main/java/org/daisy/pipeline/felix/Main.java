@@ -6,6 +6,7 @@ import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
+import org.daisy.pipeline.gui.Gui;
 
 /**
  * Main that waits for a Runnable service to arrive it can be run in the main thread.
@@ -20,22 +21,26 @@ public class Main {
                 System.out.println("In main");
                 PipelineFramework pf=new PipelineFramework();
                 pf.init();
-                System.out.println("Getting the futuribles");
-                Future<JobManagerFactory> jManFactorySupplier= pf.getService(JobManagerFactory.class);
-                Future<EventBusProvider> eventBusProviderSuppiler=pf.getService(EventBusProvider.class);
-                Future<WebserviceStorage> webServiceStorageSuppiler=pf.getService(WebserviceStorage.class);
-                Future<ScriptRegistry> scriptRegistrySuppiler=pf.getService(ScriptRegistry.class);
-                System.out.println("Doing time comsuming things....");
-                System.out.println("Calling gets...");
-                jManFactorySupplier.get();
-                System.out.println("job manager factory");
-                eventBusProviderSuppiler.get();
-                System.out.println("event bus supplier");
-                webServiceStorageSuppiler.get();
-                System.out.println("web service storage");
-                scriptRegistrySuppiler.get();
-                System.out.println("script registry");
-                System.out.println("I got the services!");
+                // System.out.println("Getting the futuribles");
+                // Future<JobManagerFactory> jManFactorySupplier= pf.getService(JobManagerFactory.class);
+                // Future<EventBusProvider> eventBusProviderSuppiler=pf.getService(EventBusProvider.class);
+                // Future<WebserviceStorage> webServiceStorageSuppiler=pf.getService(WebserviceStorage.class);
+                // Future<ScriptRegistry> scriptRegistrySuppiler=pf.getService(ScriptRegistry.class);
+                // System.out.println("Doing time comsuming things....");
+                // System.out.println("Calling gets...");
+                // jManFactorySupplier.get();
+                // System.out.println("job manager factory");
+                // eventBusProviderSuppiler.get();
+                // System.out.println("event bus supplier");
+                // webServiceStorageSuppiler.get();
+                // System.out.println("web service storage");
+                // scriptRegistrySuppiler.get();
+                // System.out.println("script registry");
+                // System.out.println("I got the services!");
+
+                Gui gui = new Gui();
+                gui.startGui(pf);
+
         }
 
 

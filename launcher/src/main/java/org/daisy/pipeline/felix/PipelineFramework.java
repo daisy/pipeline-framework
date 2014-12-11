@@ -130,5 +130,10 @@ public class PipelineFramework extends org.apache.felix.main.Main{
                 }
                 throw new Exception("Could not find framework factory.");
         }
+        
+        public ClassLoader getClassLoader(){
+        	return BundleDelegatingClassLoader.createBundleClassLoaderFor(this.fwk.getBundleContext().getBundle());
+        
+        }
 
 }
