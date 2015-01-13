@@ -17,7 +17,16 @@ public class JobIdFactory {
 		//TODO: based on config
 		return new JobUUIDGenerator().generateId();
 	}
+	/**
+	 * New batch id object.
+	 *
+	 * @return the job batch id
+	 */
+	public static JobBatchId newBatchId(){
+		return new JobUUIDGenerator().generateBatchId();
+	}
 
+	
 	/**
 	 * New id using a string object as base.
 	 *
@@ -27,5 +36,10 @@ public class JobIdFactory {
 	public static JobId newIdFromString(String base){
 		//TODO: based on config
 		return new JobUUIDGenerator().generateIdFromString(base);
+	}
+
+	public static JobBatchId newBatchIdFromString(String base){
+		//TODO: based on config
+		return new JobUUIDGenerator().generateBatchIdFromString(base);
 	}
 }

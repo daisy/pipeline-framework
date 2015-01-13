@@ -1,5 +1,7 @@
 package org.daisy.pipeline.job;
 
+import java.util.Collection;
+
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 
@@ -10,7 +12,10 @@ public interface JobStorage  extends Iterable<Job>{
 	 * the object itself maybe changed by the implementation
 	 */
 	public Optional<Job> add(Priority priority,JobContext ctxt); 	
+	public Optional<Job> add(Priority priority,JobBatchId batch,JobContext ctxt); 	
 	public Optional<Job> remove(JobId jobId); 	
 	public Optional<Job> get(JobId id); 	
+	public Collection<Job> getBatch(JobBatchId id); 	
+	public Collection<Job> removeBatch(JobBatchId id); 	
         public JobStorage filterBy(Client client);
 }

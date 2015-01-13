@@ -2,6 +2,7 @@ package org.daisy.pipeline.job.impl;
 
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.job.AbstractJobContext;
+import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;
@@ -11,7 +12,6 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.job.JobResources;
-import org.daisy.pipeline.job.JobManager.JobBuilder;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,6 +108,15 @@ public class DefaultJobManager implements JobManager {
                 }
 
         }
+        @Override
+        public Iterable<Job> getJobs(JobBatchId id) {
+                return this.storage.getBatch(id);
+        }
+
+        @Override
+        public Iterable<Job> deleteJobs(JobBatchId id) {
+                return this.storage.removeBatch(id);
+        }
 
 
         @Override
@@ -118,6 +127,7 @@ public class DefaultJobManager implements JobManager {
         class DefaultJobBuilder implements JobBuilder{
                 private BoundXProcScript script;
                 private boolean isMapping;
+                private JobBatchId batchId;
                 private JobResources resources;
                 private String niceName="";
                 private Priority priority=Priority.MEDIUM;
@@ -159,7 +169,7 @@ public class DefaultJobManager implements JobManager {
                 public Optional<Job> build(){
                         //use the context factory
                         JobContext ctxt=DefaultJobManager.this.jobContextFactory.
-                                newJobContext(this.isMapping,this.niceName,this.script,this.resources);
+                                newJobContext(this.isMapping,this.niceName,this.batchId,this.script,this.resources);
                         //send to the JobManager
                         return DefaultJobManager.this.newJob(this.priority,ctxt);
                 }
@@ -170,11 +180,18 @@ public class DefaultJobManager implements JobManager {
                         return this;
                 }
 
+                @Override
+                public JobBuilder withBatchId(JobBatchId id) {
+                        this.batchId=id;
+                        return this;
+                }
+
         }
 
         @Override
         public JobQueue getExecutionQueue() {
                 return this.executionService.getQueue();
         }
+
 
 }
