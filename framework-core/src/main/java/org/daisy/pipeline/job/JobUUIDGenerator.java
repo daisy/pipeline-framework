@@ -16,6 +16,9 @@ public class JobUUIDGenerator implements JobIdGenerator {
 	public JobId generateId() {
 		return new JobUUID();
 	}
+	public JobBatchId generateBatchId() {
+		return new JobUUID();
+	}
 
 	/* (non-Javadoc)
 	 * @see org.daisy.pipeline.job.JobIdGenerator#generateIdFromString(java.lang.String)
@@ -24,11 +27,14 @@ public class JobUUIDGenerator implements JobIdGenerator {
 	public JobId generateIdFromString(String base) {
 		return new JobUUID(base);
 	}
+	public JobBatchId generateBatchIdFromString(String base) {
+		return new JobUUID(base);
+	}
 
 	/**
 	 * The Class JobUUID.
 	 */
-	private static class JobUUID implements JobId {
+	private static class JobUUID implements JobId,JobBatchId {
 
 		/**
 		 *

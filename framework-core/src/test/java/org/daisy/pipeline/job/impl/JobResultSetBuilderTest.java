@@ -206,7 +206,7 @@ public class JobResultSetBuilderTest {
                 String outName = Mock.ScriptGenerator.getOutputName(0);
                 Supplier<Result> res=output.getResultProvider(outName);
                 res.get();
-                AbstractJobContext ctxt= new AbstractJobContext(null,JobIdFactory.newId(),"name",bound,mapper){};
+                AbstractJobContext ctxt= new AbstractJobContext(null,JobIdFactory.newId(),null,"name",bound,mapper){};
                 JobResultSet rSet=JobResultSetBuilder.newResultSet(ctxt,mapper);
                 Assert.assertEquals(5,rSet.getResults().size());
         }

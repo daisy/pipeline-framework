@@ -42,12 +42,13 @@ public class JobContextFactoryTest   {
         @Test
         public void mappingContext(){
                 String name="nice name";
+                
                 JobContextFactory factory=Mockito.spy(new JobContextFactory(runtimeConfigurator,client));
-                Mockito.doReturn(mCtxt).when(factory).newJobContext(true,name,boundScript,null);
+                Mockito.doReturn(mCtxt).when(factory).newJobContext(true,name,null,boundScript,null);
                 
-                JobContext ctxt = factory.newMappingJobContext(name,boundScript,null);
+                JobContext ctxt = factory.newMappingJobContext(name,null,boundScript,null);
                 
-                Mockito.verify(factory,Mockito.times(1)).newJobContext(true,name,boundScript,null);
+                Mockito.verify(factory,Mockito.times(1)).newJobContext(true,name,null,boundScript,null);
                 Assert.assertEquals(mCtxt, ctxt);
 
         }
@@ -56,11 +57,11 @@ public class JobContextFactoryTest   {
         public void nonMappingContext(){
                 String name="nice name";
                 JobContextFactory factory=Mockito.spy(new JobContextFactory(runtimeConfigurator,client));
-                Mockito.doReturn(mCtxt).when(factory).newJobContext(false,name,boundScript,null);
+                Mockito.doReturn(mCtxt).when(factory).newJobContext(false,name,null,boundScript,null);
 
-                JobContext ctxt=factory.newJobContext(name,boundScript);
+                JobContext ctxt=factory.newJobContext(name,null,boundScript);
                 
-                Mockito.verify(factory,Mockito.times(1)).newJobContext(false,name,boundScript,null);
+                Mockito.verify(factory,Mockito.times(1)).newJobContext(false,name,null,boundScript,null);
                 Assert.assertEquals(mCtxt, ctxt);
 
         }
