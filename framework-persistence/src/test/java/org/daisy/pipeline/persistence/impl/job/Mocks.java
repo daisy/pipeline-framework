@@ -14,6 +14,7 @@ import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.AbstractJobContext;
+import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
@@ -122,10 +123,13 @@ public class Mocks   {
 	}
 
 	public static AbstractJobContext buildContext(){  
-                return buildContext(null);
+                return buildContext(null,null);
 	}
 
 	public static AbstractJobContext buildContext(Client client){  
+                return buildContext(client,null);
+        }
+	public static AbstractJobContext buildContext(Client client,JobBatchId batchId){  
                 //new RuntimeException().printStackTrace();
 		final XProcScript script = Mocks.buildScript();
 		//ScriptRegistryHolder.setScriptRegistry(new Mocks.DummyScriptService(script));
@@ -141,12 +145,12 @@ public class Mocks   {
                         DatabaseProvider.getDatabase().addObject(client);
                 }
 		//inception!
-		return new MyHiddenContext(rSet,script,input,mapper,client,id);
+		return new MyHiddenContext(rSet,script,input,mapper,client,id,batchId);
 	}
 
 	static class MyHiddenContext extends AbstractJobContext{
-			public MyHiddenContext(JobResultSet set,XProcScript script,XProcInput input,URIMapper mapper, Client client,JobId id){
-				super(client,id,"hidden",BoundXProcScript.from(script,input,null),mapper);
+			public MyHiddenContext(JobResultSet set,XProcScript script,XProcInput input,URIMapper mapper, Client client,JobId id,JobBatchId batchId){
+				super(client,id,batchId,"hidden",BoundXProcScript.from(script,input,null),mapper);
 				this.setResults(set);
 			}
 
