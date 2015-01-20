@@ -1,23 +1,26 @@
 package org.daisy.pipeline.job.impl;
 
+import java.util.List;
+
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.JobBatchId;
-import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobManager;
-import org.daisy.pipeline.job.JobStorage;
+import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.JobResources;
+import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * DefaultJobManager allows to manage the jobs submitted to the daisy pipeline 2
@@ -97,15 +100,18 @@ public class DefaultJobManager implements JobManager {
         }
 
         @Override
-        public void deleteAll() {
+        public Iterable<Job> deleteAll() {
                 logger.info("deleting all jobs");
+                List<Job> jobs=Lists.newLinkedList();
+                Iterables.addAll(jobs,this.getJobs());
                 //iterate over a copy of the jobs, to make sure
                 //that we clean the context up
-                for (Job job : Iterables.toArray(this.storage, Job.class)) {
+                for (Job job : jobs) {
                         logger.debug(String.format("Deleting job %s", job));
                         ((AbstractJobContext) job.getContext()).cleanUp();
                         this.storage.remove(job.getId());
                 }
+                return jobs;
 
         }
 
