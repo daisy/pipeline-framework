@@ -44,7 +44,7 @@ public interface JobManager {
 	 * Deletes all jobs.
 	 *
 	 */
-	public void deleteAll();
+	public Iterable<Job> deleteAll();
 	/**
 	 * Gets the job.
 	 *
