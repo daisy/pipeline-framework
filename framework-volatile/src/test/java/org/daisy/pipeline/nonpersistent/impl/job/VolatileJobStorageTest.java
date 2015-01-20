@@ -9,9 +9,10 @@ import java.util.Set;
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.nonpersistent.impl.job.VolatileJobStorage;
+import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.nonpersistent.impl.webservice.VolatileClient;
 import org.junit.After;
 import org.junit.Assert;
@@ -31,6 +32,8 @@ public class VolatileJobStorageTest {
         VolatileClient clOther = new VolatileClient("pepe","asdf",Role.CLIENTAPP,"afasd",Priority.LOW);
         VolatileClient clAdmin = new VolatileClient("power_paco","asdf",Role.ADMIN,"afasd",Priority.LOW);
         String oldBase = "";
+        JobBatchId batchId1=JobIdFactory.newBatchId();
+        JobBatchId batchId2=JobIdFactory.newBatchId();
 
         @Before
         public void setUp() {
@@ -38,10 +41,10 @@ public class VolatileJobStorageTest {
                 System.setProperty("org.daisy.pipeline.iobase",
                                 System.getProperty("java.io.tmpdir"));
                 storage = new VolatileJobStorage();
-                ctxt1 = Mock.newJobContext(cl);
-                ctxt2 = Mock.newJobContext(cl);
-                ctxt1OtherCli = Mock.newJobContext(clOther);
-                ctxt2OtherCli = Mock.newJobContext(clOther);
+                ctxt1 = Mock.newJobContext(cl,batchId1);
+                ctxt2 = Mock.newJobContext(cl,batchId2);
+                ctxt1OtherCli = Mock.newJobContext(clOther,batchId1);
+                ctxt2OtherCli = Mock.newJobContext(clOther,batchId2);
         }
 
         @After
@@ -140,6 +143,31 @@ public class VolatileJobStorageTest {
                 this.storage.add(Priority.MEDIUM,ctxt2OtherCli);
                 Assert.assertEquals("From a cli perspective there are 2 jobs",2,Iterables.size(this.storage.filterBy(this.cl)));
                 Assert.assertEquals("From an admin perspective there are 4 jobs",4,Iterables.size(this.storage.filterBy(this.clAdmin)));
+        }
+        @Test
+        public void getByBatchId() {
+                this.storage.add(Priority.MEDIUM,ctxt1);
+                this.storage.add(Priority.MEDIUM,ctxt2);
+                this.storage.add(Priority.MEDIUM,ctxt1OtherCli);
+                Optional<Job> job = this.storage.filterBy(this.batchId1).get(ctxt1.getId());
+                Assert.assertTrue("My job has been inserted",job.isPresent());
+                Assert.assertEquals("And has the expected id",ctxt1.getId(),job.get().getId());
+
+                job = this.storage.filterBy(this.batchId2).get(ctxt2.getId());
+                Assert.assertTrue("My job 2 has been inserted",job.isPresent());
+                Assert.assertEquals("And has the expected batch id (2)",ctxt2.getId(),job.get().getId());
+
+                job = this.storage.filterBy(this.batchId2).get(ctxt1.getId());
+                Assert.assertFalse("But I can't see other batch jobs",job.isPresent());
+        }
+
+        @Test
+        public void iteratorByBatchId() {
+                this.storage.add(Priority.MEDIUM,ctxt1);
+                this.storage.add(Priority.MEDIUM,ctxt2);
+                this.storage.add(Priority.MEDIUM,ctxt1OtherCli);
+                this.storage.add(Priority.MEDIUM,ctxt2OtherCli);
+                Assert.assertEquals("From a batch perspective there are 2 jobs",2,Iterables.size(this.storage.filterBy(this.batchId1)));
         }
 
 }
