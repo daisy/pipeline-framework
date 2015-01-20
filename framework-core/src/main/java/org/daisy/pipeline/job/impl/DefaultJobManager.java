@@ -108,15 +108,6 @@ public class DefaultJobManager implements JobManager {
                 }
 
         }
-        @Override
-        public Iterable<Job> getJobs(JobBatchId id) {
-                return this.storage.getBatch(id);
-        }
-
-        @Override
-        public Iterable<Job> deleteJobs(JobBatchId id) {
-                return this.storage.removeBatch(id);
-        }
 
 
         @Override

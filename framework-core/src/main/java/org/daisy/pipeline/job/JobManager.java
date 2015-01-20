@@ -30,12 +30,6 @@ public interface JobManager {
 	 * @return the jobs
 	 */
 	public Iterable<Job> getJobs();
-	/**
-	 * Gets the jobs from a batch.
-	 *
-	 * @return the jobs
-	 */
-	public Iterable<Job> getJobs(JobBatchId id);
 
 	/**
 	 * Deletes a job.
@@ -45,13 +39,6 @@ public interface JobManager {
 	 */
 	public Optional<Job> deleteJob(JobId id);
 
-	/**
-	 * Deletes a job batch.
-	 *
-	 * @param id the id
-	 * @return the job
-	 */
-	public Iterable<Job> deleteJobs(JobBatchId id);
 
 	/**
 	 * Deletes all jobs.

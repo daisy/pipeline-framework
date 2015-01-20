@@ -219,5 +219,8 @@ public abstract class AbstractJobContext implements JobContext{
         public JobBatchId getBatchId() {
                 return this.batchId;
         }
+        public void setBatchId(JobBatchId id) {
+                this.batchId=id;
+        }
 
 }
