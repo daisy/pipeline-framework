@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-bom</artifactId>
-  <version>1.9-SNAPSHOT</version>
+  <version>1.9</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework BoM</name>
@@ -20,21 +20,21 @@
   <properties>
 
     <!-- Modules Versions -->
-    <daisy.calabash-adapter.version>2.0.2-SNAPSHOT</daisy.calabash-adapter.version>
+    <daisy.calabash-adapter.version>2.0.2</daisy.calabash-adapter.version>
     <daisy.calabash-custom-steps.version>2.0.0</daisy.calabash-custom-steps.version>
-    <daisy.common-utils.version>2.1.1-SNAPSHOT</daisy.common-utils.version>
-    <daisy.framework-core.version>2.2.0-SNAPSHOT</daisy.framework-core.version>
-    <daisy.framework-persistence.version>2.0.2-SNAPSHOT</daisy.framework-persistence.version>
+    <daisy.common-utils.version>2.1.1</daisy.common-utils.version>
+    <daisy.framework-core.version>2.2.0</daisy.framework-core.version>
+    <daisy.framework-persistence.version>2.0.2</daisy.framework-persistence.version>
     <daisy.framework-volatile.version>2.0.0</daisy.framework-volatile.version>
-    <daisy.launcher.version>1.0.0-SNAPSHOT</daisy.launcher.version>
+    <daisy.launcher.version>1.0.0</daisy.launcher.version>
     <daisy.logging-activator.version>2.0.0</daisy.logging-activator.version>
-    <daisy.logging-appender.version>1.0.3-SNAPSHOT</daisy.logging-appender.version>
+    <daisy.logging-appender.version>1.0.3</daisy.logging-appender.version>
     <daisy.modules-registry.version>2.0.0</daisy.modules-registry.version>
     <daisy.persistence-derby.version>2.0.0</daisy.persistence-derby.version>
     <daisy.persistence-mysql.version>2.0.0</daisy.persistence-mysql.version>
     <daisy.push-notifier.version>2.0.0</daisy.push-notifier.version>
-    <daisy.webservice.version>2.0.2-SNAPSHOT</daisy.webservice.version>
-    <daisy.webservice-utils.version>2.1.0-SNAPSHOT</daisy.webservice-utils.version>
+    <daisy.webservice.version>2.0.2</daisy.webservice.version>
+    <daisy.webservice-utils.version>2.1.0</daisy.webservice-utils.version>
     <daisy.woodstox-osgi-adapter.version>2.0.0</daisy.woodstox-osgi-adapter.version>
     <daisy.xmlcatalog.version>2.0.0</daisy.xmlcatalog.version>
     <daisy.xpath-registry.version>1.0.1</daisy.xpath-registry.version>
@@ -439,4 +439,8 @@
 
     </dependencies>
   </dependencyManagement>
+
+  <scm>
+    <tag>v1.9</tag>
+  </scm>
 </project>
