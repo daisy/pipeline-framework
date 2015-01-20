@@ -12,7 +12,7 @@
   
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>saxon-adapter</artifactId>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   <name>DAISY Pipeline 2 :: Adapter for Saxon</name>
@@ -124,9 +124,4 @@
       <url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
     </repository>
   </repositories>
-
-
-  <scm>
-    <tag>saxon-adapter-1.1</tag>
-  </scm>
 </project>
