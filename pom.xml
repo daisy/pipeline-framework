@@ -19,7 +19,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.8.1</version>
+        <version>1.9</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -39,6 +39,9 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>xproc-api</artifactId>
     </dependency>
+    <!--
+        FIXME: this belongs in modules-registry/calabash-adapter POMs (versions belong in framework-bom)
+    -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
