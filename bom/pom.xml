@@ -42,7 +42,7 @@
 
     <!-- Dependencies Versions -->
     <benchmark.version>0.7.2</benchmark.version>
-    <calabash.version>1.0.18</calabash.version>
+    <calabash.version>1.0.23</calabash.version>
     <commons.codec.version>1.6</commons.codec.version>
     <commons.fileupload.version>1.2.2</commons.fileupload.version>
     <commons.io.version>2.3</commons.io.version>
@@ -55,7 +55,7 @@
     <junit.version>4.10</junit.version>
     <logback.version>1.0.11</logback.version>
     <mockito.version>1.9.5</mockito.version>
-    <osgi.version>4.2.0</osgi.version>
+    <osgi.version>4.3.1</osgi.version>
     <powermock.version>1.5.4</powermock.version>
     <restlet.version>2.1-RC6</restlet.version>
     <saxon-he.version>9.5.1-5</saxon-he.version>
