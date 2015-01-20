@@ -10,7 +10,9 @@ import javax.xml.transform.Source;
 
 import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcInput;
+import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.persistence.impl.Database;
@@ -27,15 +29,18 @@ public class PersistentJobContextTest  {
 	Database db;
 	PersistentJobContext ctxt;
 	JobId id;
+	JobBatchId batchId;
 	URI logFile;
 	@Before	
 	public void setUp(){
 		//script setup
 		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
-		ctxt=new PersistentJobContext(Mocks.buildContext());
+		ctxt=new PersistentJobContext(Mocks.buildContext(null,JobIdFactory.newBatchId()));
 		logFile=ctxt.getLogFile();
 		id=ctxt.getId();
+		batchId=ctxt.getBatchId();
+                System.out.println("batchID "+batchId);
 		db=DatabaseProvider.getDatabase();
 		db.addObject(ctxt);
 	}
@@ -106,6 +111,11 @@ public class PersistentJobContextTest  {
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
 		List<JobResult> l=new LinkedList<JobResult>(jCtxt.getResults().getResults(Mocks.opt1Qname));
 		Assert.assertEquals(l.get(0),Mocks.res2);
+	}
+	@Test
+	public void batchIdTest(){
+		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
+		Assert.assertEquals(jCtxt.getBatchId().toString(),batchId.toString());
 	}
 
 }

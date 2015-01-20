@@ -47,6 +47,7 @@ import org.slf4j.LoggerFactory;
 public final class PersistentJobContext extends AbstractJobContext {
         public static final long serialVersionUID=1L;
         public static final String MODEL_CLIENT="client";
+        public static final String MODEL_BATCH_ID="batch_id";
         private static final Logger logger = LoggerFactory.getLogger(PersistentJobContext.class);
 
 
@@ -81,7 +82,7 @@ public final class PersistentJobContext extends AbstractJobContext {
         private List<PersistentOptionResult> optionResults= new ArrayList<PersistentOptionResult>();
 
         public PersistentJobContext(AbstractJobContext ctxt) {
-                super(ctxt.getClient(),ctxt.getId(),ctxt.getName(),BoundXProcScript.from(ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs()),ctxt.getMapper());
+                super(ctxt.getClient(),ctxt.getId(),ctxt.getBatchId(),ctxt.getName(),BoundXProcScript.from(ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs()),ctxt.getMapper());
                 this.setResults(ctxt.getResults());
                 this.load();
         }
@@ -90,7 +91,7 @@ public final class PersistentJobContext extends AbstractJobContext {
          * Constructs a new instance.
          */
         private PersistentJobContext() {
-                super(null,null,"",null,null);
+                super(null,null,null,"",null,null);
         }
 
         /**
@@ -154,13 +155,28 @@ public final class PersistentJobContext extends AbstractJobContext {
         private String getStringId() {
                 return this.getId().toString();
         }
-
-        /**
-         * @param sId the sId to set
-         */
         @SuppressWarnings("unused") //used by jpa
         private void setStringId(String sId) {
                 super.setId(JobIdFactory.newIdFromString(sId));
+        }
+
+        /**
+         * @return the sId
+         */
+        @Column(name="batch_id")
+        @Access(AccessType.PROPERTY)
+        private String getStringBatchId() {
+                if (this.getBatchId()!=null){
+                        return this.getBatchId().toString();
+                }else{
+                        return null;
+                }
+        }
+        @SuppressWarnings("unused") //used by jpa
+        private void setStringBatchId(String batchId) {
+                if(batchId!=null){
+                        super.setBatchId(JobIdFactory.newBatchIdFromString(batchId));
+                }
         }
 
 
