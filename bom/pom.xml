@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-bom</artifactId>
-  <version>1.9-SNAPSHOT</version>
+  <version>1.9.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework BoM</name>
@@ -20,20 +20,21 @@
   <properties>
 
     <!-- Modules Versions -->
-    <daisy.calabash-adapter.version>2.0.2-SNAPSHOT</daisy.calabash-adapter.version>
+    <daisy.calabash-adapter.version>2.0.3-SNAPSHOT</daisy.calabash-adapter.version>
     <daisy.calabash-custom-steps.version>2.0.0</daisy.calabash-custom-steps.version>
-    <daisy.common-utils.version>2.1.1-SNAPSHOT</daisy.common-utils.version>
-    <daisy.framework-core.version>2.1.1-SNAPSHOT</daisy.framework-core.version>
-    <daisy.framework-persistence.version>2.0.2-SNAPSHOT</daisy.framework-persistence.version>
+    <daisy.common-utils.version>2.1.2-SNAPSHOT</daisy.common-utils.version>
+    <daisy.framework-core.version>2.2.1-SNAPSHOT</daisy.framework-core.version>
+    <daisy.framework-persistence.version>2.0.3-SNAPSHOT</daisy.framework-persistence.version>
     <daisy.framework-volatile.version>2.0.0</daisy.framework-volatile.version>
+    <daisy.launcher.version>1.0.1-SNAPSHOT</daisy.launcher.version>
     <daisy.logging-activator.version>2.0.0</daisy.logging-activator.version>
-    <daisy.logging-appender.version>1.0.3-SNAPSHOT</daisy.logging-appender.version>
+    <daisy.logging-appender.version>1.0.4-SNAPSHOT</daisy.logging-appender.version>
     <daisy.modules-registry.version>2.0.0</daisy.modules-registry.version>
     <daisy.persistence-derby.version>2.0.0</daisy.persistence-derby.version>
     <daisy.persistence-mysql.version>2.0.0</daisy.persistence-mysql.version>
     <daisy.push-notifier.version>2.0.0</daisy.push-notifier.version>
-    <daisy.webservice.version>2.0.2-SNAPSHOT</daisy.webservice.version>
-    <daisy.webservice-utils.version>2.0.2-SNAPSHOT</daisy.webservice-utils.version>
+    <daisy.webservice.version>2.0.3-SNAPSHOT</daisy.webservice.version>
+    <daisy.webservice-utils.version>2.1.1-SNAPSHOT</daisy.webservice-utils.version>
     <daisy.woodstox-osgi-adapter.version>2.0.0</daisy.woodstox-osgi-adapter.version>
     <daisy.xmlcatalog.version>2.0.0</daisy.xmlcatalog.version>
     <daisy.xpath-registry.version>1.0.1</daisy.xpath-registry.version>
@@ -41,7 +42,7 @@
 
     <!-- Dependencies Versions -->
     <benchmark.version>0.7.2</benchmark.version>
-    <calabash.version>1.0.18</calabash.version>
+    <calabash.version>1.0.23</calabash.version>
     <commons.codec.version>1.6</commons.codec.version>
     <commons.fileupload.version>1.2.2</commons.fileupload.version>
     <commons.io.version>2.3</commons.io.version>
@@ -54,7 +55,7 @@
     <junit.version>4.10</junit.version>
     <logback.version>1.0.11</logback.version>
     <mockito.version>1.9.5</mockito.version>
-    <osgi.version>4.2.0</osgi.version>
+    <osgi.version>4.3.1</osgi.version>
     <powermock.version>1.5.4</powermock.version>
     <restlet.version>2.1-RC6</restlet.version>
     <saxon-he.version>9.5.1-5</saxon-he.version>
@@ -96,6 +97,11 @@
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-volatile</artifactId>
         <version>${daisy.framework-volatile.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>launcher</artifactId>
+        <version>${daisy.launcher.version}</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
