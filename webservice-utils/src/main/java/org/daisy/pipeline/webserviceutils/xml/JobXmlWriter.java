@@ -134,6 +134,11 @@ public class JobXmlWriter {
                         nicenameElem.setTextContent(job.getContext().getName());
                         element.appendChild(nicenameElem);
                 }
+                if(!job.getContext().getBatchId().toString().isEmpty()){
+                        Element batchId= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "batchId");
+                        batchId.setTextContent(job.getContext().getBatchId().toString());
+                        element.appendChild(batchId);
+                }
 
                 if (scriptDetails) {
                         ScriptXmlWriter writer = XmlWriterFactory.createXmlWriterForScript(job.getContext().getScript());

@@ -7,6 +7,7 @@ start =
         }
 	& element nicename {text}?
 	& element priority{priority.type}?
+        & element batchId{ text }?
         
         & element input {
             attribute name { text } 

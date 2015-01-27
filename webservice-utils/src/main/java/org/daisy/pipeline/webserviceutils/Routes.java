@@ -28,6 +28,7 @@ public class Routes {
 	public static final String QUEUE_ROUTE= "/queue";
 	public static final String QUEUE_UP_ROUTE= "/queue/up/{jobId}";
 	public static final String QUEUE_DOWN_ROUTE= "/queue/down/{jobId}";
+	public static final String BATCH_ROUTE= "/batch/{id}";
 
 
 
