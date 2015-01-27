@@ -14,7 +14,6 @@ public class JobIdFactory {
 	 * @return the job id
 	 */
 	public static JobId newId(){
-		//TODO: based on config
 		return new JobUUIDGenerator().generateId();
 	}
 	/**
@@ -23,7 +22,7 @@ public class JobIdFactory {
 	 * @return the job batch id
 	 */
 	public static JobBatchId newBatchId(){
-		return new JobUUIDGenerator().generateBatchId();
+		return new  JobBatchId(new JobUUIDGenerator().generateBatchId().toString());
 	}
 
 	
@@ -34,12 +33,10 @@ public class JobIdFactory {
 	 * @return the job id
 	 */
 	public static JobId newIdFromString(String base){
-		//TODO: based on config
 		return new JobUUIDGenerator().generateIdFromString(base);
 	}
 
 	public static JobBatchId newBatchIdFromString(String base){
-		//TODO: based on config
-		return new JobUUIDGenerator().generateBatchIdFromString(base);
+		return new JobBatchId(base); 
 	}
 }
