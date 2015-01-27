@@ -47,16 +47,16 @@ public class Validator {
 	 * @param application the application
 	 * @return true, if successful
 	 */
-	public static boolean validateJobRequest(Document doc, PipelineWebService application) {
+	public static ValidationStatus validateJobRequest(Document doc, PipelineWebService application) {
 
 		// validate against the schema
 		boolean xmlValid = validateXmlAgainstSchema(doc, XmlValidator.JOB_REQUEST_SCHEMA_URL);
+
 		if (xmlValid == false) {
-			return false;
+			return new ValidationStatus(false,"The request is not valid");
 		}
 
-		boolean argsValid = validateJobRequestArguments(doc, application);
-		return argsValid;
+		return validateJobRequestArguments(doc, application);
 	}
 
 	// check that there is a value for each required argument
@@ -68,7 +68,7 @@ public class Validator {
 	 * @param application the application
 	 * @return true, if successful
 	 */
-	private static boolean validateJobRequestArguments(Document doc, PipelineWebService application) {
+	private static ValidationStatus validateJobRequestArguments(Document doc, PipelineWebService application) {
 		
 		Element scriptElm = (Element)doc.getElementsByTagName("script").item(0);
 		// get the ID from the href attr value
@@ -83,17 +83,21 @@ public class Validator {
 		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptId);
 
 		if (unfilteredScript == null) {
-			logger.error("Script not found");
-			return false;
+                        String message="Script not found";
+		        logger.error(message);
+			return new ValidationStatus(false,message);
 		}
 
 		XProcScript script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
 
 		// inputs
-		boolean hasAllRequiredInputs = validateJobRequestInputPortData(script.getXProcPipelineInfo().getInputPorts(),
+		ValidationStatus hasAllRequiredInputs = validateJobRequestInputPortData(script.getXProcPipelineInfo().getInputPorts(),
 				doc.getElementsByTagName("input"), script);
+                if (!hasAllRequiredInputs.isValid()){
+                        return hasAllRequiredInputs;
+                }
 		// options
-		boolean hasAllRequiredOptions = validateJobRequestOptionData(script.getXProcPipelineInfo().getOptions(),
+		ValidationStatus hasAllRequiredOptions = validateJobRequestOptionData(script.getXProcPipelineInfo().getOptions(),
 				doc.getElementsByTagName("option"), script);
 		
 		// at the moment (dec 2012), we never require outputs to be specified
@@ -110,7 +114,7 @@ public class Validator {
 			return hasAllRequiredInputs & hasAllRequiredOptions;
 		}*/
 		
-		return hasAllRequiredInputs & hasAllRequiredOptions;
+		return hasAllRequiredOptions;
 	}
 
 	/**
@@ -121,7 +125,7 @@ public class Validator {
 	 * @param script the script
 	 * @return true, if successful
 	 */
-	private static boolean validateJobRequestOptionData(Iterable<XProcOptionInfo> options, NodeList nodes, XProcScript script) {
+	private static ValidationStatus validateJobRequestOptionData(Iterable<XProcOptionInfo> options, NodeList nodes, XProcScript script) {
 		Iterator<XProcOptionInfo>it = options.iterator();
 		boolean hasAllRequiredArgs = true;
 		List<String> missingArgs = new ArrayList<String>();
@@ -158,9 +162,12 @@ public class Validator {
 			for (String s : missingArgs){
 			    missingArgsStr += s + ",";
 			}
-			logger.error("Required JobRequest option(s) missing: " + missingArgsStr);
+
+                        String message="Required JobRequest option(s) missing: " + missingArgsStr;
+		        logger.error(message);
+			return new ValidationStatus(false,message);
 		}
-		return hasAllRequiredArgs;
+		return new ValidationStatus(true);
 	}
 
 	/**
@@ -171,7 +178,7 @@ public class Validator {
 	 * @param script the script
 	 * @return true, if successful
 	 */
-	private static boolean validateJobRequestInputPortData(Iterable<XProcPortInfo> ports, NodeList nodes, XProcScript script) {
+	private static ValidationStatus validateJobRequestInputPortData(Iterable<XProcPortInfo> ports, NodeList nodes, XProcScript script) {
 
 		Iterator<XProcPortInfo>it = ports.iterator();
 		boolean hasAllRequiredArgs = true;
@@ -232,9 +239,11 @@ public class Validator {
 			for (String s : missingArgs){
 			    missingArgsStr += s + ",";
 			}
-			logger.error("Required jobRequest input port arg(s) missing: " + missingArgsStr);
+                        String message="Required jobRequest input port arg(s) missing: " + missingArgsStr;
+		        logger.error(message);
+			return new ValidationStatus(false,message);
 		}
-		return hasAllRequiredArgs;
+		return new ValidationStatus(true);
 	}
 
 	/**
