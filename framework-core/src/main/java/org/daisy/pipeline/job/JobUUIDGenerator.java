@@ -17,7 +17,7 @@ public class JobUUIDGenerator implements JobIdGenerator {
 		return new JobUUID();
 	}
 	public JobBatchId generateBatchId() {
-		return new JobUUID();
+		return new JobBatchId(new JobUUID().toString());
 	}
 
 	/* (non-Javadoc)
@@ -27,14 +27,11 @@ public class JobUUIDGenerator implements JobIdGenerator {
 	public JobId generateIdFromString(String base) {
 		return new JobUUID(base);
 	}
-	public JobBatchId generateBatchIdFromString(String base) {
-		return new JobUUID(base);
-	}
 
 	/**
 	 * The Class JobUUID.
 	 */
-	private static class JobUUID implements JobId,JobBatchId {
+	private static class JobUUID implements JobId{
 
 		/**
 		 *
