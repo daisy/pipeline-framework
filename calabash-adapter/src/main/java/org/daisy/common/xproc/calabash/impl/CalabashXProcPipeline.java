@@ -240,8 +240,14 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		// run
 		try {
 			pipeline.xpipe.run();
-		} catch (SaxonApiException e) {
-			e.printStackTrace();
+                //propagate possible errors
+		} catch (Exception e) {
+                        pipeline.runtime.close();
+                        throw new RuntimeException(e);
+
+		} catch (OutOfMemoryError e) {//this one needs it's own catch!
+                        pipeline.runtime.close();
+                        throw new RuntimeException(e);
 		}finally{
                         pipeline.runtime.close();
                 }
