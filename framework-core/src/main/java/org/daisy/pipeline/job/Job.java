@@ -225,6 +225,10 @@ public class Job implements RuntimeConfigurator.EventBusable{
                         changeStatus( Status.ERROR);
                         broadcastError(e.getMessage());
                         logger.error("job finished with error state",e);
+		} catch (OutOfMemoryError e) {//this one needs it's own catch!
+                        changeStatus( Status.ERROR);
+                        broadcastError(e.getMessage());
+                        logger.error("job consumed all heap space",e);
                 }
 
         }
