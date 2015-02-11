@@ -49,6 +49,45 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>xproc-api</artifactId>
     </dependency>
+    <!--
+        OSGi runtime dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--
+        OSGi runtime dependencies for com.xmlcalabash
+    -->
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient-osgi</artifactId>
+      <scope>runtime</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpcore-osgi</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>jing</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+    
   </dependencies>
 
   <build>
