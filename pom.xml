@@ -41,7 +41,7 @@
     <module>webservice</module>
     <module>webservice-utils</module>
     <!-- <module>woodstox-osgi-adapter</module> -->
-    <!-- <module>xmlcatalog</module> -->
+    <module>xmlcatalog</module>
     <!-- <module>xpath-registry</module> -->
     <!-- <module>xproc-api</module> -->
     <module>launcher</module>

@@ -36,7 +36,7 @@
     <daisy.webservice.version>2.0.3-SNAPSHOT</daisy.webservice.version>
     <daisy.webservice-utils.version>2.1.1-SNAPSHOT</daisy.webservice-utils.version>
     <daisy.woodstox-osgi-adapter.version>2.0.0</daisy.woodstox-osgi-adapter.version>
-    <daisy.xmlcatalog.version>2.0.0</daisy.xmlcatalog.version>
+    <daisy.xmlcatalog.version>2.0.1-SNAPSHOT</daisy.xmlcatalog.version>
     <daisy.xpath-registry.version>1.0.1</daisy.xpath-registry.version>
     <daisy.xproc-api.version>2.0.0</daisy.xproc-api.version>
 
@@ -436,6 +436,32 @@
         <version>${powermock.version}</version>
         <scope>test</scope>
      </dependency>
+
+      <!-- OSGi runtime dependencies -->
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>saxon-he</artifactId>
+        <version>9.5.1.5</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient-osgi</artifactId>
+        <version>4.2.5</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpcore-osgi</artifactId>
+        <version>4.2.4</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>jing</artifactId>
+        <version>20120724.0.0</version>
+        <scope>runtime</scope>
+      </dependency>
 
     </dependencies>
   </dependencyManagement>
