@@ -368,6 +368,9 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 
 			Attribute primary = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_PRIMARY);
+
+			Attribute datatype= optionElement
+					.getAttributeByName(XProcScriptConstants.Attributes.PX_DATATYPE);
 			if (mediaType != null) {
 				optionBuilder.withMediaType(mediaType.getValue());
 			}
@@ -388,6 +391,9 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			}
 			if (separator != null) {
 				optionBuilder.withSeparator(separator.getValue());
+			}
+			if (datatype!= null) {
+				optionBuilder.withDataType(datatype.getValue());
 			}
                         if (primary !=null && primary.getValue().equals("false")){
                                 optionBuilder.withPrimary(false);

@@ -29,6 +29,7 @@ script =
             & attribute type { text } # XSD type
             & mediatype.attr? # use if option references a file
             & attribute outputType { output.type }?
+            & attribute data-type {text}?
         }*
         
         & element output {

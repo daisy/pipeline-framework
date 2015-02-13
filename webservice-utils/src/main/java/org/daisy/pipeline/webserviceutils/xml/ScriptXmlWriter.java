@@ -13,6 +13,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 
 public class ScriptXmlWriter {
@@ -137,6 +138,9 @@ public class ScriptXmlWriter {
 			if (meta.getMediaType() != null && !meta.getMediaType().isEmpty()) {
 				optionElm.setAttribute("mediaType", meta.getMediaType());
 			}
+                        if(!Strings.isNullOrEmpty(meta.getDatatype())){
+				optionElm.setAttribute("data-type", meta.getDatatype());
+                        }
 			optionElm.setAttribute("desc", meta.getDescription());
 			optionElm.setAttribute("ordered", Boolean.toString(meta.isOrdered()));
 			optionElm.setAttribute("sequence", Boolean.toString(meta.isSequence()));
