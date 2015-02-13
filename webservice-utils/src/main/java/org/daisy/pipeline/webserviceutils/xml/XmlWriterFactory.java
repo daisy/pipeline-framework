@@ -5,6 +5,7 @@ import java.util.List;
 import org.daisy.common.priority.Prioritizable;
 import org.daisy.common.properties.Property;
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.datatypes.DatatypeService;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobSize;
 import org.daisy.pipeline.script.XProcScript;
@@ -55,6 +56,9 @@ public class XmlWriterFactory {
 
 	public static AliveXmlWriter createXmlWriter() {
 		return new AliveXmlWriter();
+	}
+	public static DatatypesXmlWriter createXmlWriterForDatatypes(Iterable<DatatypeService> datatypes) {
+		return new DatatypesXmlWriter(datatypes);
 	}
 	
  }
