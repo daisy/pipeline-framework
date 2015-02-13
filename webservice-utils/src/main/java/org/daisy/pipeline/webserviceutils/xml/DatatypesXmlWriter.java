@@ -38,6 +38,10 @@ public class DatatypesXmlWriter {
                         datatypesElem.appendChild(dsElem);
                 }
 
+		// for debugging only
+		if (!XmlValidator.validate(doc, XmlValidator.DATATYPES_SCHEMA_URL)) {
+			logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
+		}
                 return doc;
         }
 }
