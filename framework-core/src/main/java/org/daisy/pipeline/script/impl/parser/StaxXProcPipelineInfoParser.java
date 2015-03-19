@@ -169,7 +169,7 @@ public class StaxXProcPipelineInfoParser {
 			while (reader.hasNext()) {
 				XMLEvent event = readNext(reader);
 				if (event.isStartElement()) {
-					if (event.asStartElement().getName()
+					if (isFirstChild() && event.asStartElement().getName()
 							.equals(Elements.P_OPTION)) {
 						parseOption(event, infoBuilder);
 					} else if (isFirstChild()

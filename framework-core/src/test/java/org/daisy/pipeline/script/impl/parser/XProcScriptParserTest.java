@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 
+import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.XProcOptionMetadata;
@@ -241,5 +242,12 @@ public class XProcScriptParserTest {
                  assertTrue("when primary is given false it's set", !opt.isPrimary());
 		 opt = scp.getOptionMetadata(new QName("option3"));
                  assertTrue("when primary is not given is set to true",opt.isPrimary() );
+	 }
+	 /**
+	  * Test number of options.
+	  */
+	 @Test
+	 public void testOptionsCount() {
+                 assertEquals("There are 3 options",3,Iterables.size(scp.getXProcPipelineInfo().getOptions()));
 	 }
 }

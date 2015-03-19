@@ -280,7 +280,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 					portBuilder.withRequired(true);
 					parsePort(event.asStartElement(), portBuilder);
 
-				} else if (event.isStartElement()
+				} else if (isFirstChild() && event.isStartElement()
 						&& event.asStartElement().getName()
 								.equals(Elements.P_OPTION)) {
 					XProcOptionMetadata.Builder optBuilder = new XProcOptionMetadata.Builder();
