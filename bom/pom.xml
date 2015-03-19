@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-bom</artifactId>
-  <version>1.9</version>
+  <version>1.10-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework BoM</name>
@@ -48,7 +48,7 @@
     <commons.io.version>2.3</commons.io.version>
     <eclipse.persistence.version>2.3.2</eclipse.persistence.version>
     <guava.version>15.0</guava.version>
-    <javax.persistence.version>2.0.0</javax.persistence.version>
+    <javax.persistence.version>2.0.3</javax.persistence.version>
     <javax.servlet-api.version>2.5</javax.servlet-api.version>
     <jing.version>20091111</jing.version>
     <jetty.version>7.6.5.v20120716</jetty.version>
@@ -198,6 +198,11 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.libs</groupId>
+        <artifactId>jing</artifactId>
+        <version>20120724.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
         <artifactId>com.xmlcalabash</artifactId>
         <version>${calabash.version}</version>
         <exclusions>
@@ -206,6 +211,16 @@
             <artifactId>commons-logging</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient-osgi</artifactId>
+        <version>4.2.5</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpcore-osgi</artifactId>
+        <version>4.2.4</version>
       </dependency>
       <dependency>
         <groupId>commons-codec</groupId>
@@ -247,6 +262,11 @@
             <artifactId>dom4j</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>saxon-he</artifactId>
+        <version>9.5.1.5</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.woodstox</groupId>
@@ -294,7 +314,7 @@
       <dependency>
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.enterprise</artifactId>
-        <version>${osgi.version}</version>
+        <version>4.2.0</version>
       </dependency>
 
 
@@ -373,6 +393,11 @@
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-core</artifactId>
         <version>${logback.version}</version>
       </dependency>
       <dependency>
