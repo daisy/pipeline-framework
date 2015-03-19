@@ -45,7 +45,7 @@ element result{
 	& ( 	
 			attribute from { text }
 			& attribute name { text }
-			& attribute nicename{ text } 
+			& attribute nicename{ text } ?
 	  )?
 		& result*
 }

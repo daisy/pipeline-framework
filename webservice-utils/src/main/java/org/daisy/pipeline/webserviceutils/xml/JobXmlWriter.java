@@ -9,6 +9,8 @@ import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobResult;
+import org.daisy.pipeline.script.XProcOptionMetadata;
+import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.webserviceutils.Routes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -136,8 +138,12 @@ public class JobXmlWriter {
                 }
 
                 if (scriptDetails) {
-                        ScriptXmlWriter writer = XmlWriterFactory.createXmlWriterForScript(job.getContext().getScript());
-                        writer.addAsElementChild(element);
+                        XProcScript script=job.getContext().getScript();
+                        //return if no script was loadeded
+                        if(script.getDescriptor()!=null){
+                                ScriptXmlWriter writer = XmlWriterFactory.createXmlWriterForScript(script);
+                                writer.addAsElementChild(element);
+                        }
                 }
                 
                 if (messages != null && messages.size() > 0) {
@@ -164,6 +170,10 @@ public class JobXmlWriter {
         }       
 
         private void addResults(Element jobElem) {
+                //check if there are actual results
+                if (this.job.getContext().getResults()==null){
+                        return;
+                }
                 Document doc = jobElem.getOwnerDocument();
                 String baseUri = new Routes().getBaseUri();
                 Element resultsElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "results");
@@ -200,7 +210,8 @@ public class JobXmlWriter {
 
 
                 for(QName option: this.job.getContext().getResults().getOptions()){
-                        if (this.onlyPrimaries&& !job.getContext().getScript().getOptionMetadata(option).isPrimary()){
+                        XProcOptionMetadata meta=job.getContext().getScript().getOptionMetadata(option);
+                        if ( this.onlyPrimaries&&  (meta==null || !meta.isPrimary())){
                                 continue;
                         }
                         Element optionResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
@@ -208,7 +219,10 @@ public class JobXmlWriter {
                         optionResultElm.setAttribute("mime-type", "application/zip");
                         optionResultElm.setAttribute("from", "option");
                         optionResultElm.setAttribute("name", option.toString());
-                        optionResultElm.setAttribute("nicename", job.getContext().getScript().getOptionMetadata(option).getNiceName());
+                        //in case the script was deleted
+                        if (meta!=null){
+                                optionResultElm.setAttribute("nicename", job.getContext().getScript().getOptionMetadata(option).getNiceName());
+                        }
                         resultsElm.appendChild(optionResultElm);
                         for(JobResult result: this.job.getContext().getResults().getResults(option)){
                                 Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
