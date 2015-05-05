@@ -191,6 +191,7 @@ public class XProcScriptParserTest {
 		 assertEquals("anyDirURI", opt.getType());
 		 //assertEquals(Direction.OUTPUT, opt.getDirection());
 		 assertEquals("Option 1", opt.getNiceName());
+		 assertEquals("dtbook:mydatatype", opt.getDatatype());
 	 }
 	 
 	 /**
