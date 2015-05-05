@@ -13,6 +13,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 
 public class ScriptXmlWriter {
@@ -140,6 +141,7 @@ public class ScriptXmlWriter {
 			optionElm.setAttribute("desc", meta.getDescription());
 			optionElm.setAttribute("ordered", Boolean.toString(meta.isOrdered()));
 			optionElm.setAttribute("sequence", Boolean.toString(meta.isSequence()));
+                        setDefault(option,optionElm);
 			
 			if (meta.getOutput() != Output.NA) {
 				optionElm.setAttribute("outputType", meta.getOutput().toString().toLowerCase());
@@ -147,6 +149,29 @@ public class ScriptXmlWriter {
 			parent.appendChild(optionElm);
 		}
 	}
+
+        private void setDefault(XProcOptionInfo info,Element element ){
+                
+                String select=info.getSelect();
+                if (Strings.isNullOrEmpty(select)){
+                        return;
+                }
+                char quote=select.charAt(0);
+                //check that those are quotes
+                if (quote!='"' && quote!='\''){
+                        return;//no quote
+                }
+                //starts and ends by quote
+                if (select.charAt(select.length()-1)!=quote){
+                        return;
+                }
+
+                String def=select.substring(1,select.length()-1);
+                //set whatever is in the select
+                if (def.length()>0){
+                        element.setAttribute("default",def);
+                }
+        }
 	
 	private void addOutputPorts(Iterable<XProcPortInfo> outputs, Element parent) {
 		logger.debug("Adding output ports");
