@@ -34,7 +34,7 @@
     <daisy.persistence-mysql.version>2.0.0</daisy.persistence-mysql.version>
     <daisy.push-notifier.version>2.0.0</daisy.push-notifier.version>
     <daisy.webservice.version>2.0.2</daisy.webservice.version>
-    <daisy.webservice-utils.version>2.1.0</daisy.webservice-utils.version>
+    <daisy.webservice-utils.version>2.1.1-SNAPSHOT</daisy.webservice-utils.version>
     <daisy.woodstox-osgi-adapter.version>2.0.0</daisy.woodstox-osgi-adapter.version>
     <daisy.xmlcatalog.version>2.0.0</daisy.xmlcatalog.version>
     <daisy.xpath-registry.version>1.0.1</daisy.xpath-registry.version>
