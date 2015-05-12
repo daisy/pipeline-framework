@@ -168,9 +168,7 @@ public class ScriptXmlWriter {
 
                 String def=select.substring(1,select.length()-1);
                 //set whatever is in the select
-                if (def.length()>0){
-                        element.setAttribute("default",def);
-                }
+                element.setAttribute("default",def);
         }
 	
 	private void addOutputPorts(Iterable<XProcPortInfo> outputs, Element parent) {
