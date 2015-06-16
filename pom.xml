@@ -39,13 +39,17 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>xproc-api</artifactId>
     </dependency>
-    <!--
-        FIXME: this belongs in modules-registry/calabash-adapter POMs (versions belong in framework-bom)
-    -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
     </dependency>
+    <!--
+        FIXME: this belongs in modules-registry/calabash-adapter POMs (versions belong in framework-bom)
+    -->
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>jing</artifactId>
