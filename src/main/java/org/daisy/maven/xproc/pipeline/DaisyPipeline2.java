@@ -25,14 +25,32 @@ import org.daisy.common.xproc.XProcResult;
 
 import org.daisy.maven.xproc.api.XProcExecutionException;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+@Component(
+	name = "org.daisy.maven.xproc.pipeline.DaisyPipeline2",
+	service = { org.daisy.maven.xproc.api.XProcEngine.class }
+)
 public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 	
 	private XProcEngine engine;
 	
+	@Reference(
+		name = "XProcEngine",
+		unbind = "-",
+		service = XProcEngine.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	protected void setXProcEngine(XProcEngine engine) {
 		this.engine = engine;
 	}
 	
+	@Activate
 	protected void activate() {}
 	
 	public void setCatalog(File catalog) {
