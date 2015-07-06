@@ -464,13 +464,13 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 									else if (role.equals(Values.NAME)) {
 										reader.next();
 										dHolder.mShort = reader.peek()
-												.asCharacters().getData();
+												.asCharacters().getData().replaceAll("\\s+"," ");
 									}
 
 									else if (role.equals(Values.DESC)) {
 										reader.next();
 										dHolder.mDetail = reader.peek()
-												.asCharacters().getData();
+												.asCharacters().getData().replaceAll("\\s+"," ");
 									} else if (role.equals(Values.HOMEPAGE)) {
 										reader.next();
 										// if @href is present, use that
@@ -478,12 +478,12 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 											dHolder.mHomepage = elm
 													.getAttributeByName(
 															Attributes.HREF)
-													.getValue();
+													.getValue().replaceAll("\\s+"," ");
 										}
 										// otherwise just use the text contents
 										else {
 											dHolder.mHomepage = reader.peek()
-													.asCharacters().getData();
+													.asCharacters().getData().replaceAll("\\s+"," ");
 										}
 									}
 

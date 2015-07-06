@@ -29,7 +29,7 @@
     <!-- <module>calabash-adapter</module> -->
     <!-- <module>calabash-custom-steps</module> -->
     <module>common-utils</module>
-    <!-- <module>framework-core</module> -->
+    <module>framework-core</module>
     <!-- <module>framework-persistence</module> -->
     <!-- <module>framework-volatile</module> -->
     <!-- <module>logging-activator</module> -->
