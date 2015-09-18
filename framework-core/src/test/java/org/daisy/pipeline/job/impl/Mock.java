@@ -30,7 +30,7 @@ import com.google.common.base.Supplier;
 
 class Mock   {
         public static JobContext mockContext(JobId id){
-                return new AbstractJobContext(null,id,"",null,null){
+                return new AbstractJobContext(null,id,null,"",null,null){
 
 
                 };

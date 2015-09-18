@@ -39,11 +39,12 @@ public interface JobManager {
 	 */
 	public Optional<Job> deleteJob(JobId id);
 
+
 	/**
 	 * Deletes all jobs.
 	 *
 	 */
-	public void deleteAll();
+	public Iterable<Job> deleteAll();
 	/**
 	 * Gets the job.
 	 *
@@ -57,6 +58,7 @@ public interface JobManager {
                 public JobBuilder withResources(JobResources resources);
                 public JobBuilder withNiceName(String niceName);
                 public JobBuilder withPriority(Priority priority);
+                public JobBuilder withBatchId(JobBatchId id);
                 public Optional<Job> build();
         }
 

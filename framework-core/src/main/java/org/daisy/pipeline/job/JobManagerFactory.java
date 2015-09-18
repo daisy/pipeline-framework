@@ -15,6 +15,11 @@ public class JobManagerFactory {
                                 this.executionService.filterBy(client),
                                 new JobContextFactory(this.runtimeConfigurator,client));
         }
+        public JobManager createFor(Client client,JobBatchId batchId){
+                return new DefaultJobManager(this.storage.filterBy(client).filterBy(batchId),
+                                this.executionService.filterBy(client),
+                                new JobContextFactory(this.runtimeConfigurator,client));
+        }
 
         /**
          * @param storage the storage to set

@@ -9,10 +9,11 @@ import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobContext;
+import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.RuntimeConfigurator;
 import org.daisy.pipeline.persistence.impl.Database;
-import org.daisy.pipeline.persistence.impl.job.PersistentJobStorage;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScriptService;
@@ -222,4 +223,27 @@ public class PersistentJobStorageTest {
                 Assert.assertThat("Filter by client app gives another storage",this.storage,is(not(this.storage.filterBy(this.cl))));
 
         }
+        @Test
+        public void byClientAndBatchIdGetJob() throws Exception{
+                //my client
+
+                JobBatchId id1=JobIdFactory.newBatchId();
+                JobBatchId id2=JobIdFactory.newBatchId();
+                JobContext ctxtMineId1=Mocks.buildContext((Client)cl,id1);
+                Optional<Job> job=this.storage.add(Priority.MEDIUM,ctxtMineId1);
+                this.jobsToDel.add(job.get());
+
+                JobContext ctxtOtherId2=Mocks.buildContext((Client)cl,id2);
+                job=this.storage.add(Priority.MEDIUM,ctxtOtherId2);
+                this.jobsToDel.add(job.get());
+                this.clientsToDel.add(ctxtOtherId2.getClient());
+
+                Optional<Job> fromDatabase=this.storage.filterBy(this.cl).filterBy(id1).get(ctxtMineId1.getId());
+                Assert.assertTrue("A job was found",fromDatabase.isPresent());
+                Assert.assertEquals("And it's from my batch",ctxtMineId1.getId(),fromDatabase.get().getId());
+
+                fromDatabase=this.storage.filterBy(this.cl).filterBy(id1).get(ctxtOtherId2.getId());
+                Assert.assertFalse("Someone else's job is not found",fromDatabase.isPresent());
+        }
+
 }
