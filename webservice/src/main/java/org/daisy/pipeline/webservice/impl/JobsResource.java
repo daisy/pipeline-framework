@@ -165,11 +165,11 @@ public class JobsResource extends AuthenticatedResource {
                         }
                 }
 
-                boolean isValid = Validator.validateJobRequest(doc, webservice());
+                ValidationStatus status= Validator.validateJobRequest(doc, webservice());
 
-                if (!isValid) {
+                if (!status.isValid()) {
                         setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                        return this.getErrorRepresentation("Job Request XML is not valid");
+                        return this.getErrorRepresentation(status.getMessage());
                 }
 
                 Optional<Job> job;
