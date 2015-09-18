@@ -11,6 +11,7 @@ import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.common.properties.PropertyTracker;
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
@@ -62,6 +63,9 @@ public class PipelineWebService extends Application {
         private Component component;
 
         private JobExecutionService executionQueue;
+
+        private DatatypeRegistry datatypeRegistry;
+
         /* (non-Javadoc)
          * @see org.restlet.Application#createInboundRoot()
          */
@@ -98,6 +102,8 @@ public class PipelineWebService extends Application {
                 router.attach(Routes.QUEUE_ROUTE, QueueResource.class  );
                 router.attach(Routes.QUEUE_UP_ROUTE, QueueUpResource.class  );
                 router.attach(Routes.QUEUE_DOWN_ROUTE, QueueDownResource.class  );
+                router.attach(Routes.DATATYPE_ROUTE, DatatypeResource.class);
+                router.attach(Routes.DATATYPES_ROUTE, DatatypesResource.class);
                 return router;
         }
 
@@ -311,6 +317,13 @@ public class PipelineWebService extends Application {
                 if(this.propertyPublisher == null)
                         return null;
                 return this.propertyPublisher.getTracker();
+        }
+
+        public void setDatatypeRegistry(DatatypeRegistry datatypeRegistry){
+                this.datatypeRegistry=datatypeRegistry;
+        }
+        public DatatypeRegistry getDatatypeRegistry(){
+                return this.datatypeRegistry;
         }
 
 }
