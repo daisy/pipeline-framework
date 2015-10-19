@@ -32,7 +32,7 @@
     <!-- <module>framework-core</module> -->
     <!-- <module>framework-persistence</module> -->
     <!-- <module>framework-volatile</module> -->
-    <!-- <module>logging-activator</module> -->
+    <module>logging-activator</module>
     <!-- <module>logging-appender</module> -->
     <!-- <module>modules-registry</module> -->
     <!-- <module>persistence-derby</module> -->
