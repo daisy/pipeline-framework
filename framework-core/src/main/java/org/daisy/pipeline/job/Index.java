@@ -1,5 +1,10 @@
 package org.daisy.pipeline.job;
 
+/**
+ *  The index allows to identify a single result among a set of outputs from a single port or option.
+ *
+ *
+ */
 public class Index {
         private String index;
 
