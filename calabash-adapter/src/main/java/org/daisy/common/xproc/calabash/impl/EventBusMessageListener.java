@@ -21,6 +21,7 @@ import com.xmlcalabash.core.XProcRunnable;
  */
 public class EventBusMessageListener implements XProcMessageListener {
 
+        private static boolean LOG_DEBUG = Boolean.parseBoolean(System.getProperty("org.daisy.pipeline.calabash.logDebug","false"));
 	/** The listener. */
 	EventBusProvider eventBus;
 	MessageBuliderFactory messageBuilderFactory;
@@ -85,8 +86,10 @@ public class EventBusMessageListener implements XProcMessageListener {
 	public void fine(XProcRunnable step, XdmNode node, String message) {
 		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
 				.withLevel(Level.DEBUG);
-		builder = XprocMessageHelper.message(step, node, message, builder);
-//		post(builder);
+                builder = XprocMessageHelper.message(step, node, message, builder);
+                if (LOG_DEBUG){
+                        post(builder);
+                }
 	}
 
 	/*
@@ -101,7 +104,9 @@ public class EventBusMessageListener implements XProcMessageListener {
 		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
 				.withLevel(Level.TRACE);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-		//post(builder);
+                if (LOG_DEBUG){
+                        post(builder);
+                }
 
 	}
 
@@ -117,7 +122,9 @@ public class EventBusMessageListener implements XProcMessageListener {
 		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
 				.withLevel(Level.TRACE);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-		//post(builder);
+                if (LOG_DEBUG){
+                        post(builder);
+                }
 
 	}
 
@@ -129,10 +136,12 @@ public class EventBusMessageListener implements XProcMessageListener {
 	 */
 	@Override
 	public void info(XProcRunnable step, XdmNode node, String message) {
+          
 		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
 				.withLevel(Level.INFO);
 		builder = XprocMessageHelper.message(step, node, message, builder);
 		post(builder);
+                
 
 	}
 
