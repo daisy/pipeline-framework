@@ -2,11 +2,11 @@ package org.daisy.pipeline.persistence.impl.job;
 
 import java.net.URI;
 
+import org.daisy.pipeline.job.Index;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobUUIDGenerator;
 import org.daisy.pipeline.persistence.impl.Database;
-import org.daisy.pipeline.persistence.impl.job.PersistentPortResult;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,14 +38,14 @@ public class PersistentPortResultTest {
 
 	@Test
 	public void portName() throws Exception{
-		PersistentPortResult stored=db.getEntityManager().find(PersistentPortResult.class,new PersistentPortResult.PK(id1,idx));
+		PersistentPortResult stored=db.getEntityManager().find(PersistentPortResult.class,new PersistentPortResult.PK(id1,new Index(idx)));
 		Assert.assertEquals(name,stored.getPortName());
 		
 	}
 
 	@Test
 	public void result() throws Exception{
-		PersistentPortResult stored=db.getEntityManager().find(PersistentPortResult.class,new PersistentPortResult.PK(id1,idx));
+		PersistentPortResult stored=db.getEntityManager().find(PersistentPortResult.class,new PersistentPortResult.PK(id1,new Index(idx)));
 		Assert.assertEquals(result,stored.getJobResult());
 		
 	}
