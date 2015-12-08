@@ -320,11 +320,11 @@ public class JobsResource extends AuthenticatedResource {
         private Optional<Job> createJob(Document doc, ZipFile zip)
                         throws LocalInputException {
 
-                Element scriptElm = (Element) doc.getElementsByTagName("script").item(0);
+                Element scriptElm = (Element) doc.getElementsByTagNameNS(Validator.NS_DAISY, "script").item(0);
                 Priority priority=Priority.MEDIUM;
                 String niceName="";
                 //get nice name
-                NodeList elems=doc.getElementsByTagName("nicename"); 
+                NodeList elems=doc.getElementsByTagNameNS(Validator.NS_DAISY,"nicename"); 
                 if(elems.getLength()!=0)
                         niceName=elems.item(0).getTextContent();
                 logger.debug(String.format("Job's nice name: %s",niceName));
@@ -336,7 +336,7 @@ public class JobsResource extends AuthenticatedResource {
                 logger.debug(String.format("Job's batch id: %s",batchId));
 
                 //get priority
-                elems=doc.getElementsByTagName("priority"); 
+                elems=doc.getElementsByTagNameNS(Validator.NS_DAISY,"priority"); 
                 if(elems.getLength()!=0){
                         String prioString=elems.item(0).getTextContent();
                         priority=Priority.valueOf(prioString.toUpperCase());
@@ -365,15 +365,15 @@ public class JobsResource extends AuthenticatedResource {
                 XProcInput.Builder inBuilder = new XProcInput.Builder();
                 XProcOutput.Builder outBuilder = new XProcOutput.Builder();
 
-                addInputsToJob(doc.getElementsByTagName("input"), script.getXProcPipelineInfo().getInputPorts(), inBuilder,zip!=null);
+                addInputsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"input"), script.getXProcPipelineInfo().getInputPorts(), inBuilder,zip!=null);
 
                 /*Iterable<XProcOptionInfo> filteredOptions = null;
                   if (!((PipelineWebService) getApplication()).isLocal()) {
                   filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
                   }*/
 
-                addOptionsToJob(doc.getElementsByTagName("option"), script, inBuilder,zip==null);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
-                addOutputsToJob(doc.getElementsByTagName("output"), script.getXProcPipelineInfo().getOutputPorts(), outBuilder);
+                addOptionsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"option"), script, inBuilder,zip==null);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
+                addOutputsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"output"), script.getXProcPipelineInfo().getOutputPorts(), outBuilder);
 
                 BoundXProcScript bound= BoundXProcScript.from(script,inBuilder.build(),outBuilder.build());
 
@@ -391,7 +391,7 @@ public class JobsResource extends AuthenticatedResource {
                         return Optional.absent();
                 }
 
-                NodeList callbacks = doc.getElementsByTagName("callback");
+                NodeList callbacks = doc.getElementsByTagNameNS(Validator.NS_DAISY,"callback");
                 for (int i = 0; i<callbacks.getLength(); i++) {
                         Element elm = (Element)callbacks.item(i);
                         String href = elm.getAttribute("href");
@@ -436,8 +436,8 @@ public class JobsResource extends AuthenticatedResource {
                                 Element inputElm = (Element) nodes.item(i);
                                 String name = inputElm.getAttribute("name");
                                 if (name.equals(inputName)) {
-                                        NodeList fileNodes = inputElm.getElementsByTagName("item");
-                                        NodeList docwrapperNodes = inputElm.getElementsByTagName("docwrapper");
+                                        NodeList fileNodes = inputElm.getElementsByTagNameNS(Validator.NS_DAISY,"item");
+                                        NodeList docwrapperNodes = inputElm.getElementsByTagNameNS(Validator.NS_DAISY,"docwrapper");
 
                                         if (fileNodes.getLength() > 0) {
                                                 for (int j = 0; j < fileNodes.getLength(); j++) {
@@ -499,7 +499,7 @@ public class JobsResource extends AuthenticatedResource {
                                 Element outputElm = (Element) nodes.item(i);
                                 String name = outputElm.getAttribute("name");
                                 if (name.equals(outputName)) {
-                                        NodeList fileNodes = outputElm.getElementsByTagName("item");
+                                        NodeList fileNodes = outputElm.getElementsByTagNameNS(Validator.NS_DAISY,"item");
 
                                         for (int j = 0; j < fileNodes.getLength(); j++) {
                                                 String res = ((Element)fileNodes.item(j)).getAttribute("value");
@@ -564,7 +564,7 @@ public class JobsResource extends AuthenticatedResource {
                                         boolean isInput = metadata.getType()== "anyDirURI" ||metadata.getType()== "anyFileURI";
                                         //eventhough the option is a sequence it may happen that 
                                         //there are no item elements, just one value
-                                        NodeList items = optionElm.getElementsByTagName("item");
+                                        NodeList items = optionElm.getElementsByTagNameNS(Validator.NS_DAISY,"item");
                                         if (metadata.isSequence() && items.getLength()>0) {
                                                 // concat items
                                                 String val = ((Element)items.item(0)).getAttribute("value");

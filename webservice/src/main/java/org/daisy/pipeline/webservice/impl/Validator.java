@@ -39,6 +39,7 @@ public class Validator {
 	public static boolean validateXmlAgainstSchema(Document document, URL schema) {
 		return XmlValidator.validate(document, schema);
 	}
+        public static String NS_DAISY = "http://www.daisy.org/ns/pipeline/data";
 
 	/**
 	 * Validate job request.
@@ -70,7 +71,7 @@ public class Validator {
 	 */
 	private static ValidationStatus validateJobRequestArguments(Document doc, PipelineWebService application) {
 		
-		Element scriptElm = (Element)doc.getElementsByTagName("script").item(0);
+		Element scriptElm = (Element)doc.getElementsByTagNameNS(NS_DAISY,"script").item(0);
 		// get the ID from the href attr value
 				String scriptId = scriptElm.getAttribute("href");
 				if (scriptId.endsWith("/")) {
@@ -92,20 +93,20 @@ public class Validator {
 
 		// inputs
 		ValidationStatus hasAllRequiredInputs = validateJobRequestInputPortData(script.getXProcPipelineInfo().getInputPorts(),
-				doc.getElementsByTagName("input"), script);
+				doc.getElementsByTagNameNS(NS_DAISY,"input"), script);
                 if (!hasAllRequiredInputs.isValid()){
                         return hasAllRequiredInputs;
                 }
 		// options
 		ValidationStatus hasAllRequiredOptions = validateJobRequestOptionData(script.getXProcPipelineInfo().getOptions(),
-				doc.getElementsByTagName("option"), script);
+				doc.getElementsByTagNameNS(NS_DAISY,"option"), script);
 		
 		// at the moment (dec 2012), we never require outputs to be specified
 		
 		// outputs (if run in local mode)
 		/*boolean hasAllRequiredOutputs = validateJobRequestOutputPortData(script
 				.getXProcPipelineInfo().getOutputPorts(),
-				doc.getElementsByTagName("output"), script);
+				doc.getElementsByTagNameNS(NS_DAISY,"output"), script);
 		*/
 		/*if (application.getConfiguration().isLocal()) {
 			return hasAllRequiredInputs & hasAllRequiredOutputs & hasAllRequiredOptions;
@@ -210,8 +211,8 @@ public class Validator {
 				// find the <input> XML element that matches this input arg name
 				if (elm.getAttribute("name").equals(arg.getName())) {
 					// <input> elements will have either <item> element children or <docwrapper> element children
-					NodeList itemNodes = elm.getElementsByTagName("item");
-					NodeList docwrapperNodes = elm.getElementsByTagName("docwrapper");
+					NodeList itemNodes = elm.getElementsByTagNameNS(NS_DAISY,"item");
+					NodeList docwrapperNodes = elm.getElementsByTagNameNS(NS_DAISY,"docwrapper");
 
 					if (itemNodes.getLength() == 0 && docwrapperNodes.getLength() == 0) {
 						validArg = false;
@@ -267,7 +268,7 @@ public class Validator {
 				Element elm = (Element)nodes.item(i);
 				if (elm.getAttribute("name").equals(arg.getName())) {
 					// this didn't match what the schema specified for <output> elements
-					/*NodeList itemNodes = elm.getElementsByTagName("item");
+					/*NodeList itemNodes = elm.getElementsByTagNameNS(NS_DAISY,"item");
 
 					if (itemNodes.getLength() == 0) {
 						validArg = false;
