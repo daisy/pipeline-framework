@@ -66,7 +66,7 @@ public class LogResource extends AuthenticatedResource {
 			return null;
 		}
 
-		if (job == null) {
+		if (!job.isPresent()) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return this.getErrorRepresentation("Job not found");
 		}
