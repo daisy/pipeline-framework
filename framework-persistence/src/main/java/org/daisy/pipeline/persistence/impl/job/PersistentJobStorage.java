@@ -1,5 +1,6 @@
 package org.daisy.pipeline.persistence.impl.job;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 import javax.persistence.CacheStoreMode;
@@ -12,6 +13,7 @@ import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.JobBuilder;
+import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
@@ -131,6 +133,7 @@ public class PersistentJobStorage implements JobStorage {
                         return this;
                 }else{
                         QueryDecorator<PersistentJob> byClient= new ClientFilter(this.db.getEntityManager(),client);
+                        byClient.setNext(filter);
                         return new PersistentJobStorage(this.db,byClient,this.configurator);
                 }
         }
@@ -141,6 +144,13 @@ public class PersistentJobStorage implements JobStorage {
         public void setConfigurator(RuntimeConfigurator configurator) {
                 this.configurator = configurator;
                 PersistentJobContext.setConfigurator(configurator);
+        }
+
+        @Override
+        public JobStorage filterBy(JobBatchId id) {
+                QueryDecorator<PersistentJob> byBatchId= new BatchFilter(this.db.getEntityManager(),id);
+                byBatchId.setNext(filter);
+                return new PersistentJobStorage(this.db,byBatchId,this.configurator);
         }
         
 }

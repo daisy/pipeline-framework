@@ -32,6 +32,7 @@ public abstract class AbstractJobContext implements JobContext{
 
         private JobId id;
 
+        private JobBatchId batchId;
         /** monitor */
         private XProcMonitor monitor;
 
@@ -46,7 +47,7 @@ public abstract class AbstractJobContext implements JobContext{
         private Client client;
         
 
-        public AbstractJobContext(Client client,JobId id,String niceName,BoundXProcScript boundScript,URIMapper mapper){
+        public AbstractJobContext(Client client,JobId id,JobBatchId batchId, String niceName,BoundXProcScript boundScript,URIMapper mapper){
                 if(boundScript!=null){
                         this.input=boundScript.getInput();
                         this.script=boundScript.getScript();
@@ -55,6 +56,7 @@ public abstract class AbstractJobContext implements JobContext{
 
                 this.client=client;
                 this.id=id;
+                this.batchId=batchId;
                 this.niceName=niceName;
                 this.mapper=mapper;
 
@@ -211,6 +213,14 @@ public abstract class AbstractJobContext implements JobContext{
         public void setJobMonitorFactory(JobMonitorFactory factory) {
                 this.monitor=factory.newJobMonitor(this.getId());
 
+        }
+
+        @Override
+        public JobBatchId getBatchId() {
+                return this.batchId;
+        }
+        public void setBatchId(JobBatchId id) {
+                this.batchId=id;
         }
 
 }

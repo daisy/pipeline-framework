@@ -1,5 +1,6 @@
 package org.daisy.pipeline.job;
 
+
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 
@@ -13,4 +14,5 @@ public interface JobStorage  extends Iterable<Job>{
 	public Optional<Job> remove(JobId jobId); 	
 	public Optional<Job> get(JobId id); 	
         public JobStorage filterBy(Client client);
+        public JobStorage filterBy(JobBatchId id);
 }

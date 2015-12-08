@@ -26,6 +26,7 @@ import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.ZippedJobResources;
@@ -327,6 +328,12 @@ public class JobsResource extends AuthenticatedResource {
                 if(elems.getLength()!=0)
                         niceName=elems.item(0).getTextContent();
                 logger.debug(String.format("Job's nice name: %s",niceName));
+                String batchId="";
+                //get the batch name 
+                elems=doc.getElementsByTagName("batchId"); 
+                if(elems.getLength()!=0)
+                        batchId=elems.item(0).getTextContent();
+                logger.debug(String.format("Job's batch id: %s",batchId));
 
                 //get priority
                 elems=doc.getElementsByTagName("priority"); 
@@ -377,7 +384,8 @@ public class JobsResource extends AuthenticatedResource {
                 }
                 boolean mapping=!webservice().getConfiguration().isLocalFS();
                 //logger.debug("MAPPING "+mapping);
-                Optional<Job> newJob= jobMan.newJob(bound).isMapping(mapping).withNiceName(niceName)
+                Optional<Job> newJob= jobMan.newJob(bound).isMapping(mapping)
+                        .withNiceName(niceName).withBatchId(JobIdFactory.newBatchIdFromString(batchId))
                         .withPriority(priority).withResources(resourceCollection).build();
                 if(!newJob.isPresent()){
                         return Optional.absent();

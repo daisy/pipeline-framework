@@ -30,6 +30,7 @@ public class Routes {
 	public static final String QUEUE_DOWN_ROUTE= "/queue/down/{jobId}";
 	public static final String DATATYPE_ROUTE= "/datatypes/{id}";
 	public static final String DATATYPES_ROUTE= "/datatypes";
+	public static final String BATCH_ROUTE= "/batch/{id}";
 
 
 

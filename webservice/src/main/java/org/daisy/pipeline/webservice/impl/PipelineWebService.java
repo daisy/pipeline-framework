@@ -12,6 +12,7 @@ import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.common.properties.PropertyTracker;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
+import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
@@ -76,6 +77,7 @@ public class PipelineWebService extends Application {
                 router.attach(Routes.SCRIPT_ROUTE, ScriptResource.class);
                 router.attach(Routes.JOBS_ROUTE, JobsResource.class);
                 router.attach(Routes.JOB_ROUTE, JobResource.class);
+                router.attach(Routes.BATCH_ROUTE, JobBatchResource.class);
                 router.attach(Routes.JOB_CONF_ROUTE, JobConfigurationResource.class);
                 router.attach(Routes.LOG_ROUTE, LogResource.class);
                 router.attach(Routes.RESULT_ROUTE, ResultResource.class);
@@ -232,6 +234,9 @@ public class PipelineWebService extends Application {
          */
         public JobManager getJobManager(Client client) {
                 return jobManagerFactory.createFor(client);
+        }
+        public JobManager getJobManager(Client client,JobBatchId batchId) {
+                return jobManagerFactory.createFor(client,batchId);
         }
 
         /**

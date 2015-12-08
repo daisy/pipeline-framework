@@ -18,6 +18,7 @@ public interface JobContext extends RuntimeConfigurator.Monitorable{
 	public XProcMonitor getMonitor() ;
 	public XProcScript getScript(); 
 	public JobId getId();
+	public JobBatchId getBatchId();
 	public JobResultSet getResults();
 	public void writeResult(XProcResult result) ;
 	public String getName();

@@ -10,6 +10,7 @@ import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
@@ -88,6 +89,9 @@ public final class VolatileJobStorage implements JobStorage {
         @Override
         public synchronized Optional<Job> get(JobId jobId) {
                 Job job=this.jobs.get(jobId);
+                if (job==null){
+                        return Optional.absent();
+                }
                 if(this.filter.apply(job)){
                         return Optional.fromNullable(job);
                 }
@@ -95,18 +99,30 @@ public final class VolatileJobStorage implements JobStorage {
         }
 
         @Override
+        public JobStorage filterBy(final JobBatchId batchId) {
+                return new VolatileJobStorage(this.jobs,this.bus,Predicates.and(this.filter, new Predicate<Job>(){
+
+                        @Override
+                        public boolean apply(Job job) {
+                                JobBatchId bId=job.getContext().getBatchId();
+                                //check if the client id is the one we're filtering by
+                                return bId!=null && bId.toString().equals(batchId.toString());
+                        }
+                }));
+        }
+        @Override
         public JobStorage filterBy(final Client client) {
                 if (client.getRole().equals(Role.ADMIN)){
                         return this;
                 }else{
-                        return new VolatileJobStorage(this.jobs,this.bus,new Predicate<Job>(){
+                        return new VolatileJobStorage(this.jobs,this.bus,Predicates.and(this.filter, new Predicate<Job>(){
 
                                 @Override
                                 public boolean apply(Job job) {
                                         //check if the client id is the one we're filtering by
                                         return job.getContext().getClient().getId().equals(client.getId());
                                 }
-                        });
+                        }));
                 }
         }
         

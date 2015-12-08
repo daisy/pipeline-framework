@@ -24,12 +24,12 @@ public class JobContextFactory {
         }
 
          
-        public JobContext newJobContext(boolean mapping,String niceName,BoundXProcScript boundScript,JobResources collection){
+        public JobContext newJobContext(boolean mapping,String niceName,JobBatchId batchId,BoundXProcScript boundScript,JobResources collection){
         	try{
         		JobId id = JobIdFactory.newId();
         		AbstractJobContext ctxt = (mapping)?
-        			new MappingJobContext(client,id,niceName,boundScript,collection):
-        			new SimpleJobContext(client,id,niceName,boundScript);
+        			new MappingJobContext(client,id,batchId,niceName,boundScript,collection):
+        			new SimpleJobContext(client,id,batchId,niceName,boundScript);
         		this.configurator.configure(ctxt);
         		return ctxt;
         	}catch (IOException e){
@@ -37,20 +37,20 @@ public class JobContextFactory {
         	}
         }
 
-        public JobContext newMappingJobContext(String niceName,BoundXProcScript boundScript,JobResources collection){
-                return newJobContext(true, niceName, boundScript, collection);
+        public JobContext newMappingJobContext(String niceName,JobBatchId batchId,BoundXProcScript boundScript,JobResources collection){
+                return newJobContext(true, niceName, batchId, boundScript, collection);
         }
 
 
-        public JobContext newJobContext(String niceName,BoundXProcScript boundScript){
-                return newJobContext(false, niceName, boundScript, null);
+        public JobContext newJobContext(String niceName,JobBatchId batchId,BoundXProcScript boundScript){
+                return newJobContext(false, niceName, batchId,boundScript, null);
 
         }
         
         private static class MappingJobContext extends AbstractJobContext {
 
-        	public MappingJobContext(Client client,JobId id, String niceName,BoundXProcScript boundScript,JobResources collection) throws IOException{
-        		super(client,id,niceName,boundScript,JobURIUtils.newURIMapper(id));
+        	public MappingJobContext(Client client,JobId id, JobBatchId batchId,String niceName,BoundXProcScript boundScript,JobResources collection) throws IOException{
+        		super(client,id,batchId,niceName,boundScript,JobURIUtils.newURIMapper(id));
         		XProcDecorator decorator=XProcDecorator.from(this.getScript(),this.getMapper(),collection);
         		this.setInput(decorator.decorate(this.getInputs()));
         		this.setOutput(decorator.decorate(this.getOutputs()));
@@ -60,8 +60,8 @@ public class JobContextFactory {
         
         private final class SimpleJobContext extends AbstractJobContext {
 
-        	public SimpleJobContext(Client client,JobId id,String niceName,BoundXProcScript boundScript) throws IOException {
-        		super(client,id,niceName, boundScript,JobURIUtils.newOutputURIMapper(id));
+        	public SimpleJobContext(Client client,JobId id, JobBatchId batchId,String niceName,BoundXProcScript boundScript) throws IOException {
+        		super(client,id,batchId,niceName, boundScript,JobURIUtils.newOutputURIMapper(id));
         		XProcDecorator decorator=XProcDecorator.from(this.getScript(),this.getMapper());
         		this.setInput(decorator.decorate(this.getInputs()));
         		this.setOutput(decorator.decorate(this.getOutputs()));
