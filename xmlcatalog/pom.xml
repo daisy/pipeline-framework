@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.8.1-SNAPSHOT</version>
+    <version>1.9.1-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
@@ -28,6 +28,14 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <!--
+        OSGi runtime dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>woodstox-osgi-adapter</artifactId>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
 

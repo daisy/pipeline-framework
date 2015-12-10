@@ -55,6 +55,14 @@
       <artifactId>powermock-api-mockito</artifactId>
       <scope>test</scope>
    </dependency>
+    <!--
+        OSGi runtime dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
 
   <build>
