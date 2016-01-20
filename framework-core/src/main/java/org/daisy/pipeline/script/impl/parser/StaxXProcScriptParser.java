@@ -457,6 +457,10 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 											.getAttributeByName(Attributes.PX_ROLE);
 									String role = (attr != null ? attr
 											.getValue() : "");
+                                                                        Attribute spaceAttr =  elm.getAttributeByName(Attributes.XML_SPACES);
+                                                                        String spaces =(spaceAttr!= null ? spaceAttr 
+											.getValue() : "");
+ 
 
 									// ignore blocks of author and maintainer
 									// data
@@ -473,10 +477,16 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 												.asCharacters().getData().replaceAll("\\s+"," ");
 									}
 
-									else if (role.equals(Values.DESC)) {
+									else if (role.equals(Values.DESC)  ){
 										reader.next();
-										dHolder.mDetail = reader.peek()
-												.asCharacters().getData().replaceAll("\\s+"," ");
+                                                                                //if not preserve spaces stript out \s repetitions
+                                                                                if (!spaces.equals(XProcScriptConstants.Values.PRESERVE)){
+                                                                                        dHolder.mDetail = reader.peek()
+                                                                                        .asCharacters().getData().replaceAll("\\s+"," ");
+                                                                                }else{
+                                                                                        dHolder.mDetail = reader.peek()
+                                                                                        .asCharacters().getData();
+                                                                                }
 									} else if (role.equals(Values.HOMEPAGE)) {
 										reader.next();
 										// if @href is present, use that

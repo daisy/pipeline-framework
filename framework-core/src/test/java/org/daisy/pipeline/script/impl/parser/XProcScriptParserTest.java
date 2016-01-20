@@ -251,4 +251,19 @@ public class XProcScriptParserTest {
 	 public void testOptionsCount() {
                  assertEquals("There are 3 options",3,Iterables.size(scp.getXProcPipelineInfo().getOptions()));
 	 }
+
+
+         /***
+          * Test how the description is processed in terms of allowing or not multiple \s elements
+          */
+         @Test
+         public void testPreserveSapces(){
+		 XProcOptionMetadata opt = scp.getOptionMetadata(new QName("option1"));
+                 //For option 1 several spaces are reduced to one 
+                 assertEquals( opt.getDescription()," With several lines result description ");
+		 opt = scp.getOptionMetadata(new QName("option2"));
+                 //When xml:spaces="preserve" is present in the task
+                 assertEquals( opt.getDescription(),"   With    more spaces   than allowed\nwithout preserve      .");
+
+         }
 }

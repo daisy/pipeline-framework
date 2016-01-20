@@ -56,12 +56,18 @@
     <p:option name="option1" select="." required="true" px:dir="output" px:type="anyDirURI" px:primary="true" px:data-type="dtbook:mydatatype">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p px:role="name">Option 1</p>
+            <p px:role="desc">
+                    With several lines 
+                    result description
+            </p>
         </p:documentation>
     </p:option>
 
     <p:option name="option2" select="." required="true" px:dir="output2" px:type="anyDirURI" px:primary="false">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p px:role="name">Option 2</p>
+            <p px:role="desc" xml:space="preserve">   With    more spaces   than allowed
+without preserve      .</p>
         </p:documentation>
     </p:option>
 

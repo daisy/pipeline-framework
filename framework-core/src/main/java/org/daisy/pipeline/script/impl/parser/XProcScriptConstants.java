@@ -3,6 +3,7 @@ package org.daisy.pipeline.script.impl.parser;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
 /**
@@ -134,6 +135,8 @@ public final class XProcScriptConstants {
 
 		public static final QName PX_DATATYPE= new QName(PX_NS, "data-type");
 
+		public static final QName XML_SPACES = new QName(XMLConstants.XML_NS_URI, "space");
+
 		/**
 		 * Instantiates a new attributes.
 		 */
@@ -167,6 +170,8 @@ public final class XProcScriptConstants {
 
 		/** The Constant MAINTAINER */
 		public static final String MAINTAINER = "maintainer";
+
+		public static final String PRESERVE = "preserve";
 
 		/**
 		 * Instantiates a new values.
