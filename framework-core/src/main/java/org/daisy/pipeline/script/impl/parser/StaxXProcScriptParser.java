@@ -457,6 +457,8 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 											.getAttributeByName(Attributes.PX_ROLE);
 									String role = (attr != null ? attr
 											.getValue() : "");
+                                    attr = elm.getAttributeByName(Attributes.XML_SPACE);
+                                    String xmlSpace = (attr != null ? attr.getValue() : "default");
 
 									// ignore blocks of author and maintainer
 									// data
@@ -466,19 +468,29 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 										processChildren = false;
 										return;
 									}
-
-									else if (role.equals(Values.NAME)) {
+                                    
+                                    if (role.equals(Values.NAME)) {
 										reader.next();
-										dHolder.mShort = reader.peek()
-												.asCharacters().getData().replaceAll("\\s+"," ");
+                                        String data = reader.peek().asCharacters().getData();
+                                        if (!"preserve".equals(xmlSpace)) {
+                                            data = data.replaceAll("\\s+"," ");
+                                        }
+                                        dHolder.mShort = data;
 									}
 
 									else if (role.equals(Values.DESC)) {
 										reader.next();
-										dHolder.mDetail = reader.peek()
-												.asCharacters().getData().replaceAll("\\s+"," ");
+                                        String data = reader.peek().asCharacters().getData();
+                                        if (!"preserve".equals(xmlSpace)) {
+                                            data = data.replaceAll("\\s+"," ");
+                                        }
+										dHolder.mDetail = data;
 									} else if (role.equals(Values.HOMEPAGE)) {
 										reader.next();
+                                        String data = reader.peek().asCharacters().getData();
+                                        if (!"preserve".equals(xmlSpace)) {
+                                            data = data.replaceAll("\\s+"," ");
+                                        }
 										// if @href is present, use that
 										if (elm.getAttributeByName(Attributes.HREF) != null) {
 											dHolder.mHomepage = elm
@@ -488,8 +500,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 										}
 										// otherwise just use the text contents
 										else {
-											dHolder.mHomepage = reader.peek()
-													.asCharacters().getData().replaceAll("\\s+"," ");
+											dHolder.mHomepage = data;
 										}
 									}
 

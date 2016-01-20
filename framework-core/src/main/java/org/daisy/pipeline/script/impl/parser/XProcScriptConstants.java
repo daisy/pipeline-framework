@@ -22,6 +22,9 @@ public final class XProcScriptConstants {
 
 	/** PX namespace. */
 	public static String PX_NS = "http://www.daisy.org/ns/pipeline/xproc";
+	
+	/** XML namespace. */
+	public static String XML_NS = "http://www.w3.org/XML/1998/namespace";
 
 	/**
 	 * Elements.
@@ -114,6 +117,9 @@ public final class XProcScriptConstants {
 
 		/** The Constant PX_ROLE */
 		public static final QName PX_ROLE = new QName(PX_NS, "role");
+
+		/** The Constant XML_SPACE */
+		public static final QName XML_SPACE = new QName(XML_NS, "space");
 
 		/** The Constant HREF */
 		public static final QName HREF = new QName("href");
