@@ -107,6 +107,8 @@ public class JobResource extends AuthenticatedResource {
                         getClientStorage().defaultClient();
                 Collection<? extends Prioritizable<Job>> queue = webservice().getJobManager(client).getExecutionQueue().asCollection();
                 int pos = 0;
+
+                //As this is targeted for end-usures the position starts at 1
                 for (Prioritizable<Job> pJob: queue){
                         pos++;
                         if (pJob.prioritySource().getId().equals(job.getId())){
