@@ -2,7 +2,9 @@ package org.daisy.pipeline.updater;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Launcher {
 
@@ -16,6 +18,7 @@ public class Launcher {
         private static final String VERSION_FLAG="-version=";
         private static final String INSTALL_DIR_FLAG="-install-dir=";
         private static final String LOCAL_DESCRIPTOR="-descriptor=";
+        private static final Logger logger = LoggerFactory.getLogger(Launcher.class);
 
 
         /**
@@ -41,6 +44,9 @@ public class Launcher {
                                 String.format("%s%s",LOCAL_DESCRIPTOR,this.localReleaseDescriptor),
                                 String.format("%s%s",INSTALL_DIR_FLAG,this.deployPath)
                                 );
+                for (String arg:pb.command()){
+                        logger.debug(arg);
+                }
                 pb.redirectErrorStream(true);
                 Process p=pb.start();
                 return p.getInputStream();
