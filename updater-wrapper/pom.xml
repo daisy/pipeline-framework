@@ -7,7 +7,7 @@
     <version>1.10.1-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
-  <artifactId>updater</artifactId>
+  <artifactId>updater-wrapper</artifactId>
   <version>1.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Updater</name>
