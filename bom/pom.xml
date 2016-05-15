@@ -33,7 +33,7 @@
     <daisy.persistence-derby.version>2.0.0</daisy.persistence-derby.version>
     <daisy.persistence-mysql.version>2.0.0</daisy.persistence-mysql.version>
     <daisy.push-notifier.version>2.0.0</daisy.push-notifier.version>
-    <daisy.updater.version>1.0.1-SNAPSHOT</daisy.updater.version>
+    <daisy.updater-wrapper.version>1.0.1-SNAPSHOT</daisy.updater-wrapper.version>
     <daisy.webservice.version>2.1.1-SNAPSHOT</daisy.webservice.version>
     <daisy.webservice-utils.version>2.2.1-SNAPSHOT</daisy.webservice-utils.version>
     <daisy.woodstox-osgi-adapter.version>2.0.0</daisy.woodstox-osgi-adapter.version>
@@ -136,8 +136,8 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
-        <artifactId>updater</artifactId>
-        <version>${daisy.updater.version}</version>
+        <artifactId>updater-wrapper</artifactId>
+        <version>${daisy.updater-wrapper.version}</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
