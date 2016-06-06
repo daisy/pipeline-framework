@@ -26,7 +26,6 @@ public class EventBusMessageListener implements XProcMessageListener {
 	EventBusProvider eventBus;
 	MessageBuliderFactory messageBuilderFactory;
 	Properties props;
-	int sequence = 0;
 
 	public EventBusMessageListener(EventBusProvider eventBus,
 			 Properties props) {
@@ -40,7 +39,6 @@ public class EventBusMessageListener implements XProcMessageListener {
 		if (props != null && props.getProperty("JOB_ID")!=null) {
 			builder.withJobId(props.getProperty("JOB_ID"));
 		}
-		builder.withSequence(sequence++);
 		builder.withTimeStamp(new Date());
 		eventBus.get().post(builder.build());
 	}

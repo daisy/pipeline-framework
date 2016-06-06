@@ -32,14 +32,14 @@ public class VolatileMessageAccessorTest   {
 	public void setUp() {
 		String id = JobIdFactory.newId().toString();
 		m1 = new Message.MessageBuilder().withText("message1")
-				.withLevel(Level.INFO).withSequence(0).withJobId(id).build();
+				.withLevel(Level.INFO).withJobId(id).build();
 
 		m2 = new Message.MessageBuilder().withText("message2")
-				.withLevel(Level.ERROR).withSequence(1).withJobId(id)
+				.withLevel(Level.ERROR).withJobId(id)
 				.build();
 
 		m3 = new Message.MessageBuilder().withText("message3")
-				.withLevel(Level.WARNING).withSequence(2).withJobId(id)
+				.withLevel(Level.WARNING).withJobId(id)
 				.build();
 
 
