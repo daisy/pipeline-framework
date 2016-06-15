@@ -35,8 +35,6 @@ public class ThresholdFilter extends Filter<ILoggingEvent> {
 	
 	@Override
 	public void start() {
-		if (loggerLevels == null)
-			return;
 		if (rootLevel == null)
 			rootLevel = Level.ALL;
 		cache = new TreeMap<String,Level>();
@@ -51,10 +49,11 @@ public class ThresholdFilter extends Filter<ILoggingEvent> {
 		Level threshold = cache.get(logger);
 		if (threshold == null) {
 			threshold = rootLevel; {
-				for (String l : loggerLevels.keySet())
-					if (logger.startsWith(l)) {
-						threshold = loggerLevels.get(l);
-						break; }}
+				if (loggerLevels != null)
+					for (String l : loggerLevels.keySet())
+						if (logger.startsWith(l)) {
+							threshold = loggerLevels.get(l);
+							break; }}
 			cache.put(logger, threshold); }
 		Level level = event.getLevel();
 		if (level.isGreaterOrEqual(threshold))
