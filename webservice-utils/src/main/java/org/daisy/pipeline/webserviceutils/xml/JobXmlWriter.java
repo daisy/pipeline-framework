@@ -159,6 +159,7 @@ public class JobXmlWriter {
                         Element messageElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "message");
                         messageElm.setAttribute("level", message.getLevel().toString());
                         messageElm.setAttribute("sequence", Integer.toString(message.getSequence()));
+                        messageElm.setAttribute("timeStamp", Long.toString(message.getTimeStamp().getTime()));
                         messageElm.setTextContent(message.getText());
                         messagesElm.appendChild(messageElm);
                     }
