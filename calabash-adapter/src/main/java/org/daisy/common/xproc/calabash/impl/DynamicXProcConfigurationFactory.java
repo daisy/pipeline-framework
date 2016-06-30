@@ -26,10 +26,23 @@ import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.runtime.XAtomicStep;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
 /**
  * Mainly thought to be used throught OSGI this class creates configuration
  * objects used with the calabash engine wrapper.
  */
+@Component(
+	name = "Dynamic Calabash Configuration Factory",
+	service = {
+		XProcConfigurationFactory.class,
+		XProcStepRegistry.class
+	}
+)
 public class DynamicXProcConfigurationFactory implements
 		XProcConfigurationFactory, XProcStepRegistry {
 
@@ -66,6 +79,7 @@ public class DynamicXProcConfigurationFactory implements
 	/**
 	 * Activate (OSGI)
 	 */
+	@Activate
 	public void activate() {
 		logger.trace("Activating XProc Configuration Factory");
 	}
@@ -112,6 +126,13 @@ public class DynamicXProcConfigurationFactory implements
 	 * @param properties
 	 *            the properties
 	 */
+	@Reference(
+		name = "XProcStepProvider",
+		unbind = "removeStep",
+		service = XProcStepProvider.class,
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC
+	)
 	public void addStep(XProcStepProvider stepProvider, Map<?, ?> properties) {
 		QName type = QName.fromClarkName((String) properties.get("type"));
 		logger.debug("Adding step to registry: {}", type.toString());
@@ -190,10 +211,23 @@ public class DynamicXProcConfigurationFactory implements
 		}
 	}
 
+	@Reference(
+		name = "FunctionLibary",
+		unbind = "unsetXPathFunctionRegistry",
+		service = XPathFunctionRegistry.class,
+		cardinality = ReferenceCardinality.OPTIONAL,
+		policy = ReferencePolicy.DYNAMIC
+	)
 	public void setXPathFunctionRegistry(XPathFunctionRegistry xpathFunctions) {
 		logger.debug("Setting function registry");
 		// mFunctionLibrary.addFunctionLibrary(xpathFunctions);
 		mXPathRegistry = xpathFunctions;
+	}
+
+	public void unsetXPathFunctionRegistry(XPathFunctionRegistry xpathFunctions) {
+		logger.debug("Unsetting function registry");
+		if (mXPathRegistry == xpathFunctions)
+			mXPathRegistry = null;
 	}
 
 	private void registerExtensionFunctions(XProcConfiguration config) {

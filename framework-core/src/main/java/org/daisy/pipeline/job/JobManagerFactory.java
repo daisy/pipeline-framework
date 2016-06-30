@@ -5,6 +5,15 @@ import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.impl.DefaultJobManager;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+@Component(
+    name = "job-manager-factory",
+    service = { JobManagerFactory.class }
+)
 public class JobManagerFactory {
         private JobStorage storage;
         private JobExecutionService executionService;
@@ -24,6 +33,13 @@ public class JobManagerFactory {
         /**
          * @param storage the storage to set
          */
+        @Reference(
+            name = "job-storage",
+            unbind = "-",
+            service = JobStorage.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.STATIC
+        )
         public void setJobStorage(JobStorage storage) {
                 //TODO: check null
                 this.storage = storage;
@@ -32,11 +48,25 @@ public class JobManagerFactory {
         /**
          * @param executionService the executionService to set
          */
+        @Reference(
+            name = "execution-service",
+            unbind = "-",
+            service = JobExecutionService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.STATIC
+        )
         public void setExecutionService(JobExecutionService executionService) {
                 //TODO:check null
                 this.executionService = executionService;
         }
 
+        @Reference(
+            name = "runtime-configurator",
+            unbind = "-",
+            service = RuntimeConfigurator.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.STATIC
+        )
         public void setRuntimeConfigurator(RuntimeConfigurator configurator){
                 //TODO: check null
                 //              logger.debug("setting monitor factory");

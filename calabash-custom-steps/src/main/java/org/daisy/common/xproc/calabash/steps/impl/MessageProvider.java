@@ -15,10 +15,17 @@ import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.runtime.XAtomicStep;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * This class offers a reimplementation of calabash's Message step (cx:message) which uses internal message throwing mechanisms instead of dumping the messages to stdout.
  */
+@Component(
+	name = "Message Step",
+	service = { XProcStepProvider.class },
+	property = { "type:String={http://xmlcalabash.com/ns/extensions}message" }
+)
 public class MessageProvider implements XProcStepProvider {
 
 	/** The logger. */
@@ -35,6 +42,7 @@ public class MessageProvider implements XProcStepProvider {
 	/**
 	 * Activate (OSGI)
 	 */
+	@Activate
 	public void activate() {
 		logger.trace("Activating cx:message provider");
 	}

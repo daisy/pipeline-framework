@@ -20,6 +20,16 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+@org.osgi.service.component.annotations.Component(
+	name = "module-registry",
+	service = { ModuleRegistry.class }
+)
 public class DefaultModuleRegistry implements ModuleRegistry {
 
 	private final class ModuleTracker implements BundleTrackerCustomizer {
@@ -80,6 +90,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	public DefaultModuleRegistry() {
 	}
 
+	@Activate
 	public void init(BundleContext context) {
 		logger.trace("Activating module registry");
 		tracker = new BundleTracker(context, Bundle.ACTIVE,
@@ -95,10 +106,18 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 		logger.trace("Module registry up");
 	}
 
+	@Deactivate
 	public void close() {
 		tracker.close();
 	}
 
+	@Reference(
+		name = "XmlCatalogParser",
+		unbind = "-",
+		service = XmlCatalogParser.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setParser(XmlCatalogParser parser) {
 		mParser = parser;
 	}
