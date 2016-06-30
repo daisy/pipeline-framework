@@ -1,6 +1,8 @@
 package org.daisy.common.stax.woodstox.osgi.impl;
 import java.util.Properties;
 
+import javax.xml.stream.XMLInputFactory;
+
 import org.codehaus.stax2.osgi.Stax2InputFactoryProvider;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceFactory;
@@ -9,10 +11,17 @@ import org.osgi.framework.ServiceRegistration;
 import com.ctc.wstx.api.ReaderConfig;
 import com.ctc.wstx.stax.WstxInputFactory;
 
+import org.osgi.service.component.annotations.Component;
+
 // TODO: Auto-generated Javadoc
 /**
  * A factory for creating StaxInputFactoryService objects.
  */
+@Component(
+    name = "stax-input-factory",
+    service = { XMLInputFactory.class },
+    servicefactory = true
+)
 public class StaxInputFactoryServiceFactory implements ServiceFactory {
 
 

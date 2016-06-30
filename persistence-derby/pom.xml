@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.8.1-SNAPSHOT</version>
+    <version>1.10.1-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
@@ -22,13 +22,15 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-persistence</artifactId>
     </dependency>
-    <!-- <dependency>
+    <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
-    </dependency> -->
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.enterprise</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -43,8 +45,8 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Service-Component>OSGI-INF/daisy-derby-emf.xml</Service-Component>
             <Require-Bundle>org.apache.derby;bundle-version="10.5"</Require-Bundle>
+            <_dsannotations>*</_dsannotations>
           </instructions>
         </configuration>
       </plugin>

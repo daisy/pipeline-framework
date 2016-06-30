@@ -35,9 +35,19 @@ import org.restlet.routing.Variable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
 /**
  * The Class PipelineWebService.
  */
+@org.osgi.service.component.annotations.Component(
+    name = "org.daisy.pipeline.webservice",
+    immediate = true
+)
 public class PipelineWebService extends Application {
 
         /** The logger. */
@@ -112,6 +122,7 @@ public class PipelineWebService extends Application {
         /**
          * Inits the WS.
          */
+        @Activate
         public void init(BundleContext ctxt) {
                 bundleCtxt=ctxt;
                 this.conf.publishConfiguration(this.propertyPublisher);
@@ -218,6 +229,7 @@ public class PipelineWebService extends Application {
          * @throws Exception
          * @throws Throwable
          */
+        @Deactivate
         public void close() throws Exception {
                 if (this.component!=null)
                         this.component.stop();
@@ -244,6 +256,13 @@ public class PipelineWebService extends Application {
          *
          * @param jobManager the new job manager
          */
+        @Reference(
+           name = "job-manager-factory",
+           unbind = "-",
+           service = JobManagerFactory.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setJobManagerFactory(JobManagerFactory jobManagerFactory) {
                 this.jobManagerFactory = jobManagerFactory;
         }
@@ -266,10 +285,24 @@ public class PipelineWebService extends Application {
          *
          * @param scriptRegistry the new script registry
          */
+        @Reference(
+           name = "script-registry",
+           unbind = "-",
+           service = ScriptRegistry.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setScriptRegistry(ScriptRegistry scriptRegistry) {
                 this.scriptRegistry = scriptRegistry;
         }
 
+        @Reference(
+           name = "callback-registry",
+           unbind = "-",
+           service = CallbackRegistry.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setCallbackRegistry(CallbackRegistry callbackRegistry) {
                 this.callbackRegistry = callbackRegistry;
         }
@@ -285,6 +318,13 @@ public class PipelineWebService extends Application {
         /**
          * @param webserviceStorage the webserviceStorage to set
          */
+        @Reference(
+           name = "webservice-storage",
+           unbind = "-",
+           service = WebserviceStorage.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setWebserviceStorage(WebserviceStorage webserviceStorage) {
                 this.webserviceStorage = webserviceStorage;
         }
@@ -304,6 +344,13 @@ public class PipelineWebService extends Application {
                 return callbackRegistry;
         }
 
+        @Reference(
+           name = "",
+           unbind = "unsetPropertyPublisherFactory",
+           service = PropertyPublisherFactory.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.DYNAMIC
+        )
         public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
                 this.propertyPublisher=propertyPublisherFactory.newPropertyPublisher(); 
         }
@@ -324,6 +371,13 @@ public class PipelineWebService extends Application {
                 return this.propertyPublisher.getTracker();
         }
 
+        @Reference(
+           name = "datatype-registry",
+           unbind = "-",
+           service = DatatypeRegistry.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setDatatypeRegistry(DatatypeRegistry datatypeRegistry){
                 this.datatypeRegistry=datatypeRegistry;
         }

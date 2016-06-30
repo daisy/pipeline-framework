@@ -6,6 +6,13 @@ import org.daisy.pipeline.job.JobMonitor;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageAccessor;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "volatile-job-monitor",
+	immediate = true,
+	service = { JobMonitorFactory.class }
+)
 public final class VolatileJobMonitorFactory implements JobMonitorFactory{
 
 

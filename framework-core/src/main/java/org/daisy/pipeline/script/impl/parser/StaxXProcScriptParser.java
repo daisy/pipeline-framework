@@ -33,11 +33,21 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
 // TODO: Auto-generated Javadoc
 /**
  * StaxXProcScriptParser parses the xpl file extracting the metadata and buiding
  * the XProcScript object
  */
+@Component(
+	name = "converter-parser",
+	service = { XProcScriptParser.class }
+)
 public class StaxXProcScriptParser implements XProcScriptParser {
 
 	/** The Constant logger. */
@@ -55,6 +65,13 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 	 * @param uriResolver
 	 *            the new uri resolver
 	 */
+	@Reference(
+		name = "resolver",
+		unbind = "-",
+		service = URIResolver.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setUriResolver(URIResolver uriResolver) {
 		mUriResolver = uriResolver;
 	}
@@ -65,6 +82,13 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 	 * @param factory
 	 *            the new factory
 	 */
+	@Reference(
+		name = "xml-input-factory",
+		unbind = "-",
+		service = XMLInputFactory.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setFactory(XMLInputFactory factory) {
 		mFactory = factory;
 	}
@@ -72,6 +96,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 	/**
 	 * Activate (OSGI)
 	 */
+	@Activate
 	public void activate() {
 		logger.trace("Activating XProc script parser");
 	}
