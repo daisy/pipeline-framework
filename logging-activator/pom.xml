@@ -26,6 +26,10 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>
       <scope>compile</scope>
@@ -40,6 +44,7 @@
         <configuration>
           <instructions>
             <Bundle-Activator>org.daisy.pipeline.logging.impl.Activator</Bundle-Activator>
+            <Import-Package>org.daisy.common.spi;resolution:=optional,*</Import-Package>
           </instructions>
         </configuration>
       </plugin>

@@ -70,6 +70,22 @@
           </instructions>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>modules-build-helper</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-classes</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-spi-classes</goal>
+            </goals>
+            <configuration>
+              <includes>*</includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>
