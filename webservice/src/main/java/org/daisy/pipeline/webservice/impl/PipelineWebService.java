@@ -345,7 +345,7 @@ public class PipelineWebService extends Application {
         }
 
         @Reference(
-           name = "",
+           name = "PropertyPublisherFactory",
            unbind = "unsetPropertyPublisherFactory",
            service = PropertyPublisherFactory.class,
            cardinality = ReferenceCardinality.MANDATORY,

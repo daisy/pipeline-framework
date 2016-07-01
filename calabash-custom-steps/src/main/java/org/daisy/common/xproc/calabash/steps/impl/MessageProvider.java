@@ -22,7 +22,7 @@ import org.osgi.service.component.annotations.Component;
  * This class offers a reimplementation of calabash's Message step (cx:message) which uses internal message throwing mechanisms instead of dumping the messages to stdout.
  */
 @Component(
-	name = "Message Step",
+	name = "message-step-provider",
 	service = { XProcStepProvider.class },
 	property = { "type:String={http://xmlcalabash.com/ns/extensions}message" }
 )

@@ -37,7 +37,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
  * objects used with the calabash engine wrapper.
  */
 @Component(
-	name = "Dynamic Calabash Configuration Factory",
+	name = "calabash-config-factory",
 	service = {
 		XProcConfigurationFactory.class,
 		XProcStepRegistry.class
