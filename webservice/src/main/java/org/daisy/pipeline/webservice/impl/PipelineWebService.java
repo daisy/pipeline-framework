@@ -21,7 +21,6 @@ import org.daisy.pipeline.webserviceutils.Properties;
 import org.daisy.pipeline.webserviceutils.Routes;
 import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
 import org.restlet.Application;
@@ -44,9 +43,13 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 /**
  * The Class PipelineWebService.
  */
+//@org.osgi.service.component.annotations.Component(
+    //name = "org.daisy.pipeline.webservice",
+    //immediate = true
+//)
 @org.osgi.service.component.annotations.Component(
-    name = "org.daisy.pipeline.webservice",
-    immediate = true
+    name = "webservice",
+    service = { PipelineWebService.class }
 )
 public class PipelineWebService extends Application {
 
@@ -68,7 +71,7 @@ public class PipelineWebService extends Application {
         private PropertyPublisher propertyPublisher;
         private long shutDownKey=0L;
 
-        private BundleContext bundleCtxt;
+        //private BundleContext bundleCtxt;
 
 
         private Component component;
@@ -123,8 +126,8 @@ public class PipelineWebService extends Application {
          * Inits the WS.
          */
         @Activate
-        public void init(BundleContext ctxt) {
-                bundleCtxt=ctxt;
+        public void init() {
+                //bundleCtxt=ctxt;
                 this.conf.publishConfiguration(this.propertyPublisher);
                 if (!checkAuthenticationSanity()){
 
@@ -222,7 +225,7 @@ public class PipelineWebService extends Application {
 
         }
         private void halt() throws BundleException{
-                        ((Framework)bundleCtxt.getBundle(0)).stop();
+                        //((Framework)bundleCtxt.getBundle(0)).stop();
         }
         /**
          * Close.
@@ -265,6 +268,7 @@ public class PipelineWebService extends Application {
         )
         public void setJobManagerFactory(JobManagerFactory jobManagerFactory) {
                 this.jobManagerFactory = jobManagerFactory;
+                System.out.println(this.jobManagerFactory);
         }
         
         public PipelineWebServiceConfiguration getConfiguration(){

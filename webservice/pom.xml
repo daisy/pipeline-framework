@@ -79,6 +79,22 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>modules-build-helper</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-classes</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-spi-classes</goal>
+            </goals>
+            <configuration>
+              <includes>*</includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
