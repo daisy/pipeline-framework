@@ -22,9 +22,7 @@ import org.daisy.pipeline.webserviceutils.Properties;
 import org.daisy.pipeline.webserviceutils.Routes;
 import org.daisy.pipeline.webserviceutils.callback.CallbackHandler;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.launch.Framework;
+
 import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Restlet;
@@ -33,17 +31,24 @@ import org.restlet.data.Protocol;
 import org.restlet.routing.Router;
 import org.restlet.routing.TemplateRoute;
 import org.restlet.routing.Variable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
+import org.osgi.framework.BundleException;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.launch.Framework;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+
+// FIXME: For some reason, without OSGi, this class does not support stopping an instance and then
+// starting another.
 
 /**
  * The Class PipelineWebService.
@@ -71,9 +76,6 @@ public class PipelineWebService extends Application {
 
         private PropertyPublisher propertyPublisher;
         private long shutDownKey=0L;
-
-        private BundleContext bundleCtxt;
-
 
         private Component component;
 
@@ -127,14 +129,13 @@ public class PipelineWebService extends Application {
          * Inits the WS.
          */
         @Activate
-        public void init(BundleContext ctxt) {
-                bundleCtxt=ctxt;
+        public void init() {
                 this.conf.publishConfiguration(this.propertyPublisher);
                 if (!checkAuthenticationSanity()){
 
                         try {
                                 this.halt();
-                        } catch (BundleException e) {
+                        } catch (Exception e) {
                                 logger.error("Error shutting down:"+e.getMessage());
                         }
                         return;
@@ -227,7 +228,6 @@ public class PipelineWebService extends Application {
                 return true;
 
         }
-                
 
         private void generateStopKey() throws IOException {
                 shutDownKey = new Random().nextLong();
@@ -238,17 +238,21 @@ public class PipelineWebService extends Application {
                 logger.info("Shutdown key stored to: "+System.getProperty("java.io.tmpdir")+File.separator+KEY_FILE_NAME);
         }
 
-        public boolean shutDown(long key) throws BundleException{
+        public boolean shutDown(long key) {
                 if(key==shutDownKey){
                         halt();
                         return true;
                 }
                 return false;
+        }
 
+        private void halt() {
+                if (OSGiHelper.inOSGiContext())
+                        OSGiHelper.stopFramework();
+                else
+                        System.exit();
         }
-        private void halt() throws BundleException{
-                        ((Framework)bundleCtxt.getBundle(0)).stop();
-        }
+
         /**
          * Close.
          * @throws Exception
@@ -260,9 +264,7 @@ public class PipelineWebService extends Application {
                         this.component.stop();
                 this.stop();
                 logger.info("Webservice stopped.");
-
         }
-
 
         /**
          * Gets the job manager.
@@ -410,4 +412,24 @@ public class PipelineWebService extends Application {
                 return this.datatypeRegistry;
         }
 
+        // static nested class in order to delay class loading
+        private static abstract class OSGiHelper {
+
+                static boolean inOSGiContext() {
+                        try {
+                                return FrameworkUtil.getBundle(OSGiHelper.class) != null;
+                        } catch (NoClassDefFoundError e) {
+                                return false;
+                        }
+                }
+
+                /* Stop Felix */
+                static void stopFramework() {
+                        try {
+                                ((Framework)FrameworkUtil.getBundle(OSGiHelper.class).getBundleContext().getBundle(0)).stop();
+                        } catch (BundleException e) {
+                                throw new RuntimeException(e);
+                        }
+                }
+        }
 }

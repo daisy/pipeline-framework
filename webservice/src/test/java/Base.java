@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
@@ -15,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 
 import org.daisy.pipeline.client.PipelineClient;
 import org.daisy.pipeline.junit.AbstractTest;
+import org.daisy.pipeline.junit.OSGiLessConfiguration;
 
 import org.daisy.pipeline.webservice.jaxb.clients.Client;
 import org.daisy.pipeline.webservice.jaxb.job.Job;
@@ -50,18 +49,6 @@ import org.slf4j.LoggerFactory;
 
 public abstract class Base extends AbstractTest {
 	
-	// This is a trick to make sure a PipelineWebService is instantiated. We can't inject
-	// PipelineWebService directly because this would result in a "java.net.BindException: Address
-	// already in use" error because two instances would be created, so we inject its dependencies.
-	// Normally this is not needed but it can help with debugging.
-	@Inject org.daisy.pipeline.script.ScriptRegistry dep1;
-	@Inject org.daisy.pipeline.job.JobManagerFactory dep2;
-	@Inject org.daisy.pipeline.webserviceutils.storage.WebserviceStorage dep3;
-	@Inject org.daisy.pipeline.webserviceutils.callback.CallbackHandler dep4;
-	@Inject org.daisy.pipeline.datatypes.DatatypeRegistry dep5;
-	@Inject org.daisy.common.properties.PropertyPublisherFactory dep6;
-	// @Inject org.restlet.Application webserver;
-	
 	@Override
 	protected String[] testDependencies() {
 		return new String[]{
@@ -88,10 +75,6 @@ public abstract class Base extends AbstractTest {
 	
 	@Override @Configuration
 	public Option[] config() {
-		
-		// framework started once per class, so initialize only once per class
-		// calling this code from config() is the only way to achieve this (@BeforeClass does not
-		// work, nor does a static {} block)
 		setupClass();
 		return options(
 			composite(super.config()),
@@ -115,7 +98,8 @@ public abstract class Base extends AbstractTest {
 	private static final File PIPELINE_BASE = new File(new File(PathUtils.getBaseDir()), "target/tmp");
 	protected static final File PIPELINE_DATA = new File(PIPELINE_BASE, "data");
 	
-	protected void setupClass() {
+	@OSGiLessConfiguration
+	public void setupClass() {
 		try {
 			FileUtils.deleteDirectory(PIPELINE_BASE);
 		} catch (IOException e) {
@@ -123,6 +107,7 @@ public abstract class Base extends AbstractTest {
 		}
 	}
 	
+	@Override
 	protected Properties systemProperties() {
 		Properties p = new Properties();
 		p.setProperty("org.daisy.pipeline.iobase", new File(PIPELINE_DATA, "jobs").getAbsolutePath());

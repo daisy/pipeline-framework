@@ -24,7 +24,7 @@ import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
 import org.daisy.pipeline.webserviceutils.callback.CallbackHandler;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
-import org.osgi.framework.BundleContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +71,7 @@ public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor
         }
 
         @Activate
-        public void init(BundleContext context) {
+        public void init() {
                 logger = LoggerFactory.getLogger(Poster.class.getName());
                 logger.debug("Activating push notifier");
                 jobManager = jobManagerFactory.createFor(clientStorage.defaultClient());
