@@ -1,20 +1,23 @@
 import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 
 import org.daisy.pipeline.junit.AbstractTest;
+import org.daisy.pipeline.junit.OSGiLessConfiguration;
 
 import org.ops4j.pax.exam.Configuration;
-import static org.ops4j.pax.exam.CoreOptions.composite;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.ProbeBuilder;
 import org.ops4j.pax.exam.TestProbeBuilder;
 import org.ops4j.pax.exam.util.PathUtils;
 
-public abstract class OSGiTestBase extends AbstractTest {
+// The following errors (present when run with PaxExam) can be ignored:
+// - Predeployment of PersistenceUnit [pipeline-pu] failed
+// - No Persistence provider for EntityManager named pipeline-pu
+
+public abstract class TestBase extends AbstractTest {
 	
 	@Override
 	public String[] testDependencies() {
@@ -35,7 +38,12 @@ public abstract class OSGiTestBase extends AbstractTest {
 	private static final File PIPELINE_BASE = new File(new File(PathUtils.getBaseDir()), "target/tmp");
 	protected static final File PIPELINE_DATA = new File(PIPELINE_BASE, "data");
 	
-	protected void setup() {
+	// Apparently deleting the database folder and creating a new EntityManagerFactory is not enough
+	// to start with a clean database. We can also not use a different base folder for every test
+	// class because we do not handle changes in system properties. We therefore set reuseForks to
+	// false in the Surefire configuration (so that each test class is run in a new process).
+	@OSGiLessConfiguration
+	public void setup() {
 		try {
 			FileUtils.deleteDirectory(PIPELINE_BASE);
 			new File(PIPELINE_BASE, "log").mkdirs();
@@ -44,20 +52,19 @@ public abstract class OSGiTestBase extends AbstractTest {
 		}
 	}
 
-	// Note that "Predeployment of PersistenceUnit [pipeline-pu] failed" errors can be ignored
 	@Override @Configuration
 	public Option[] config() {
-		
-		// framework started once per class, so initialize once per class
-		// calling this code from config() is the only way to achieve this (@BeforeClass does not
-		// work, nor does a static {} block)
 		setup();
-		return options(
-			composite(super.config()),
-			systemProperty("org.daisy.pipeline.iobase").value(new File(PIPELINE_DATA, "jobs").getAbsolutePath()),
-			systemProperty("org.daisy.pipeline.data").value(PIPELINE_DATA.getAbsolutePath()),
-			systemProperty("derby.stream.error.file").value(new File(PIPELINE_BASE, "log/derby.log").getAbsolutePath())
-		);
+		return super.config();
+	}
+	
+	@Override
+	protected Properties systemProperties() {
+		Properties props = new Properties();
+		props.setProperty("org.daisy.pipeline.iobase", new File(PIPELINE_DATA, "jobs").getAbsolutePath());
+		props.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
+		props.setProperty("derby.stream.error.file", new File(PIPELINE_BASE, "log/derby.log").getAbsolutePath());
+		return props;
 	}
 	
 	@ProbeBuilder

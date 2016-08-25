@@ -44,6 +44,11 @@
       <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!--
         test dependencies
     -->
@@ -82,9 +87,34 @@
           <instructions>
             <Meta-Persistence>META-INF/persistence.xml</Meta-Persistence>
             <DynamicImport-Package>*</DynamicImport-Package>
-            <_dsannotations>*</_dsannotations>
+            <_dsannotations>
+              org.daisy.pipeline.persistence.impl.job.PersistentJobStorage,
+              org.daisy.pipeline.persistence.impl.messaging.PersistentMessageStorage,
+              org.daisy.pipeline.persistence.impl.webservice.PersistentWebserviceStorage
+            </_dsannotations>
+            <Import-Package>!org.daisy.common.spi,*</Import-Package>
           </instructions>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-classes</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-spi-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                org.daisy.pipeline.persistence.impl.job.PersistentJobStorage,
+                org.daisy.pipeline.persistence.impl.messaging.PersistentMessageStorage,
+                org.daisy.pipeline.persistence.impl.webservice.PersistentWebserviceStorage
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
