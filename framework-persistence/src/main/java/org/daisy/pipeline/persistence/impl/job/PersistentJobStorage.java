@@ -61,7 +61,7 @@ public class PersistentJobStorage implements JobStorage {
            name = "entity-manager-factory",
            unbind = "-",
            service = EntityManagerFactory.class,
-           target = "(osgi.unit.name=pipeline-pu)",
+           //target = "(osgi.unit.name=pipeline-pu)",
            cardinality = ReferenceCardinality.MANDATORY,
            policy = ReferencePolicy.STATIC
         )

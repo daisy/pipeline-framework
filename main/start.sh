@@ -4,6 +4,7 @@ export DP2_HOME=~/daisy/pipeline-assembly/target/pipeline2-1.9.9-SNAPSHOT_linux/
 export DP2_DATA=/tmp/daisy
 
 java  -Dorg.daisy.pipeline.ws.authentication=false \
+      -Dorg.daisy.pipeline.ws.localfs=true \
       -Dorg.daisy.pipeline.home=$DP2_HOME \
-      -Dorg.daisy.pipeline.data=$DP_DATA \
+      -Dorg.daisy.pipeline.data=$DP2_DATA \
       -jar target/osgi-less-1.0-SNAPSHOT-jar-with-dependencies.jar
