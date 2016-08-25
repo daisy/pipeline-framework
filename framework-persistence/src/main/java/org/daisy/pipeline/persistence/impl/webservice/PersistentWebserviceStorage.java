@@ -33,7 +33,7 @@ public class PersistentWebserviceStorage implements WebserviceStorage {
 		name = "entity-manager-factory",
 		unbind = "-",
 		service = EntityManagerFactory.class,
-		target = "(osgi.unit.name=pipeline-pu)",
+		//target = "(osgi.unit.name=pipeline-pu)",
 		cardinality = ReferenceCardinality.MANDATORY,
 		policy = ReferencePolicy.STATIC
 	)

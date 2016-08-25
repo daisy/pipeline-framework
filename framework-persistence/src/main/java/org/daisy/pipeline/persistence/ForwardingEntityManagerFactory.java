@@ -1,15 +1,17 @@
 package org.daisy.pipeline.persistence;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Cache;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.metamodel.Metamodel;
 
-public class ForwardingEntityManagerFactory implements EntityManagerFactory {
+public abstract class ForwardingEntityManagerFactory implements EntityManagerFactory {
 
 
 	public static final String JAVAX_PERSISTENCE_JDBC_PASSWORD = "javax.persistence.jdbc.password";
@@ -17,11 +19,13 @@ public class ForwardingEntityManagerFactory implements EntityManagerFactory {
 	public static final String JAVAX_PERSISTENCE_JDBC_URL = "javax.persistence.jdbc.url";
 	public static final String JAVAX_PERSISTENCE_JDBC_DRIVER = "javax.persistence.jdbc.driver";
 	
+        public static final String PU_UNIT = "pipeline-pu"; 
+	private Map<String,Object> props = new HashMap<String, Object>();
 	private EntityManagerFactory emf;
 
-	protected void setEntityManagerFactory(EntityManagerFactory emf) {
-		this.emf = emf;
-	}
+        public ForwardingEntityManagerFactory(Map<String,Object> props){
+                emf = Persistence.createEntityManagerFactory("pipeline-pu",props);
+        }
 
 	@Override
 	public void close() {
