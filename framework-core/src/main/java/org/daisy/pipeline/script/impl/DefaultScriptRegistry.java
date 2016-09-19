@@ -29,6 +29,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
  */
 @Component(
 	name = "script-registry",
+        immediate = true,
 	service = { ScriptRegistry.class }
 )
 public class DefaultScriptRegistry implements ScriptRegistry {
@@ -65,6 +66,7 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	)
 	public void register(final XProcScriptService script) {
 		logger.trace("registering script {}",script.getURI());
+                System.out.println("Registering script" + script.getURI());
 		if (!script.hasParser()){
 			script.setParser(parser);
 		}
@@ -112,8 +114,13 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 		policy = ReferencePolicy.STATIC
 	)
 	public void setParser(XProcScriptParser parser) {
+                System.out.println("Setting parser in dsr" + parser);
 		// TODO check
 		this.parser = parser;
+                //TODO Hack to reset all parsers
+                for( XProcScriptService svr:this.descriptors.values()){
+                        svr.setParser(this.parser);
+                }
 	}
 
 	/**

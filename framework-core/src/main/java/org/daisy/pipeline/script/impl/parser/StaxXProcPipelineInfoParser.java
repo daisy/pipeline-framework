@@ -95,6 +95,7 @@ public class StaxXProcPipelineInfoParser {
 				// if we have a url resolver resolve the
 				if (mUriResolver != null) {
 					Source src = mUriResolver.resolve(descUrl.toString(), "");
+                                        System.out.println("Source is "+src);
 					descUrl = new URL(src.getSystemId());
 
 				}

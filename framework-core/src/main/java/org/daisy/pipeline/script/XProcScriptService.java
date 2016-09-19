@@ -136,6 +136,7 @@ public class XProcScriptService {
 	 * @param parser the new parser
 	 */
 	public void setParser(final XProcScriptParser parser) {
+                System.out.println("Setting parser "+parser);
 		script = Suppliers.memoize(new Supplier<XProcScript>() {
 			@Override
 			public XProcScript get() {

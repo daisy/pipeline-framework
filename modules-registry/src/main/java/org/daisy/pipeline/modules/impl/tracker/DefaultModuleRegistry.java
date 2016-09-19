@@ -28,6 +28,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @org.osgi.service.component.annotations.Component(
 	name = "module-registry",
+        immediate = true,
 	service = { ModuleRegistry.class }
 )
 public class DefaultModuleRegistry implements ModuleRegistry {
@@ -91,19 +92,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	}
 
 	@Activate
-	public void init(BundleContext context) {
-		logger.trace("Activating module registry");
-		tracker = new BundleTracker(context, Bundle.ACTIVE,
-				new ModuleTracker());
-		tracker.open();
-		//TODO open the tracker in a separate thread ?
-		// new Thread() {
-		// @Override
-		// public void run() {
-		// tracker.open();
-		// }
-		// }.start();
-		logger.trace("Module registry up");
+	public void init() {
 	}
 
 	@Deactivate
