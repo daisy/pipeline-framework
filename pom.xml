@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
-    <version>3</version>
+    <version>4</version>
   </parent>
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-aggregator</artifactId>
-  <version>1.10.1-SNAPSHOT</version>
+  <version>1.10.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework Aggregator</name>
@@ -25,7 +25,7 @@
 
   <modules>
     <module>bom</module>
-    <!-- <module>parent</module> -->
+    <module>parent</module>
     <!-- <module>xmlcatalog</module> -->
     <!-- <module>calabash-adapter</module> -->
     <!-- <module>calabash-custom-steps</module> -->
@@ -60,13 +60,6 @@
         <artifactId>maven-deploy-plugin</artifactId>
         <configuration>
           <skip>true</skip>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <configuration>
-          <tagNameFormat>v@{project.version}</tagNameFormat>
         </configuration>
       </plugin>
     </plugins>
