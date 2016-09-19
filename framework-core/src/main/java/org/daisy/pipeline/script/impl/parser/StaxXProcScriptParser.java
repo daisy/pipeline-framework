@@ -46,6 +46,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
  */
 @Component(
 	name = "converter-parser",
+        immediate = true,
 	service = { XProcScriptParser.class }
 )
 public class StaxXProcScriptParser implements XProcScriptParser {
