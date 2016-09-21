@@ -15,10 +15,23 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
 /**
  * ModuleUriResolver resolves uris taking into account the components from the
  * modules loaded.
  */
+@Component(
+	name = "module-uri-resolver",
+	service = {
+		URIResolver.class,
+		EntityResolver.class
+	}
+)
 public class ModuleUriResolver implements URIResolver, EntityResolver {
 
 	/** The m logger. */
@@ -31,6 +44,7 @@ public class ModuleUriResolver implements URIResolver, EntityResolver {
 	/**
 	 * Activate.
 	 */
+	@Activate
 	public void activate() {
 		mLogger.trace("Activating module URI resolver");
 	}
@@ -41,6 +55,13 @@ public class ModuleUriResolver implements URIResolver, EntityResolver {
 	 * @param reg
 	 *            the new module registry
 	 */
+	@Reference(
+		name = "module-registry",
+		unbind = "-",
+		service = ModuleRegistry.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setModuleRegistry(ModuleRegistry reg) {
 		mRegistry = reg;
 	}

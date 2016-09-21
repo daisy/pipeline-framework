@@ -18,9 +18,16 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalNotification;
 import com.google.common.collect.Lists;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * Singleton
  */
+@Component(
+    name = "volatile-message-storage",
+    immediate = true,
+    service = { MessageStorage.class }
+)
 public final class VolatileMessageStorage implements MessageStorage {
 
 	private static final VolatileMessageStorage INSTANCE = new VolatileMessageStorage();

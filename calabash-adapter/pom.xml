@@ -174,7 +174,7 @@
               *,
               etc
             </Import-Package>
-            <Service-Component>OSGI-INF/config-factory.xml, OSGI-INF/xproc-engine.xml</Service-Component>
+            <_dsannotations>*</_dsannotations>
           </instructions>
         </configuration>
         <executions>

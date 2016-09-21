@@ -71,17 +71,7 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Service-Component>
-              OSGI-INF/event-provider.xml,
-              OSGI-INF/job-execution-service.xml,
-              OSGI-INF/runtime-configurator.xml,
-              OSGI-INF/job-manager-factory.xml,
-              OSGI-INF/parser.xml,
-              OSGI-INF/registry.xml,
-              OSGI-INF/datatype-registry.xml,
-              OSGI-INF/monitor.xml,
-              OSGI-INF/event-listener.xml
-            </Service-Component>
+            <_dsannotations>*</_dsannotations>
             <!--
                 compatible with versions >= 20120724
             -->
