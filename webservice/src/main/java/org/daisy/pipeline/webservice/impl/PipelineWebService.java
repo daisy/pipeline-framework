@@ -22,9 +22,6 @@ import org.daisy.pipeline.webserviceutils.Properties;
 import org.daisy.pipeline.webserviceutils.Routes;
 import org.daisy.pipeline.webserviceutils.callback.CallbackHandler;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.launch.Framework;
 import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Restlet;
@@ -71,9 +68,6 @@ public class PipelineWebService extends Application {
 
         private PropertyPublisher propertyPublisher;
         private long shutDownKey=0L;
-
-        private BundleContext bundleCtxt;
-
 
         private Component component;
 
@@ -127,14 +121,13 @@ public class PipelineWebService extends Application {
          * Inits the WS.
          */
         @Activate
-        public void init(BundleContext ctxt) {
-                bundleCtxt=ctxt;
+        public void init() {
                 this.conf.publishConfiguration(this.propertyPublisher);
                 if (!checkAuthenticationSanity()){
 
                         try {
                                 this.halt();
-                        } catch (BundleException e) {
+                        } catch (Exception e) {
                                 logger.error("Error shutting down:"+e.getMessage());
                         }
                         return;
@@ -238,7 +231,7 @@ public class PipelineWebService extends Application {
                 logger.info("Shutdown key stored to: "+System.getProperty("java.io.tmpdir")+File.separator+KEY_FILE_NAME);
         }
 
-        public boolean shutDown(long key) throws BundleException{
+        public boolean shutDown(long key) {
                 if(key==shutDownKey){
                         halt();
                         return true;
@@ -246,8 +239,7 @@ public class PipelineWebService extends Application {
                 return false;
 
         }
-        private void halt() throws BundleException{
-                        ((Framework)bundleCtxt.getBundle(0)).stop();
+        private void halt() {
         }
         /**
          * Close.
