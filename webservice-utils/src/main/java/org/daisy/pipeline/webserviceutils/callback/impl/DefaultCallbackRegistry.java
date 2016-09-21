@@ -10,6 +10,14 @@ import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+
+@Component(
+	name = "org.daisy.pipeline.webserviceutils.callback.callback-registry",
+	service = { CallbackRegistry.class }
+)
 public class DefaultCallbackRegistry implements CallbackRegistry {
 
 	/** The Constant logger. */
@@ -20,10 +28,12 @@ public class DefaultCallbackRegistry implements CallbackRegistry {
 		logger.debug("activated!");
 	}
 	
+	@Activate
 	public void init(BundleContext context) {
 		callbacks = new ArrayList<Callback>();
 	}
 
+	@Deactivate
 	public void close() {
 	}
 

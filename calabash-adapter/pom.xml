@@ -49,6 +49,11 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>xproc-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!--
         runtime dependencies (for javax.xml.transform.URIResolver)
     -->
@@ -86,7 +91,7 @@
         <configuration>
           <instructions>
             <Import-Package>*, etc</Import-Package>
-            <Service-Component>OSGI-INF/config-factory.xml, OSGI-INF/xproc-engine.xml</Service-Component>
+            <_dsannotations>*</_dsannotations>
           </instructions>
         </configuration>
       </plugin>

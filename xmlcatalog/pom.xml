@@ -29,6 +29,11 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!--
         runtime dependencies (for javax.xml.stream.XMLInputFactory)
     -->
@@ -54,7 +59,7 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Service-Component>OSGI-INF/parser.xml</Service-Component>
+            <_dsannotations>*</_dsannotations>
           </instructions>
         </configuration>
       </plugin>

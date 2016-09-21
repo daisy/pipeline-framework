@@ -34,10 +34,21 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.Subscribe;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
 // notify clients whenever there are new messages or a change in status
 // this class could evolve into a general notification utility
 // e.g. it could also trigger email notifications
 // TODO: be sure to only do this N times per second
+@Component(
+    name = "push-notifier",
+    immediate = true
+)
 public class PushNotifier {
 
 
@@ -68,12 +79,14 @@ public class PushNotifier {
         public PushNotifier() {
         }
 
+        @Activate
         public void init(BundleContext context) {
                 logger = LoggerFactory.getLogger(Poster.class.getName());
                 this.startTimer();
 
         }
 
+        @Deactivate
         public void close() {
                 cancelTimer();
         }
@@ -89,6 +102,13 @@ public class PushNotifier {
                 }
         }
 
+        @Reference(
+           name = "event-bus-provider",
+           unbind = "-",
+           service = EventBusProvider.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setEventBusProvider(EventBusProvider eventBusProvider) {
                 this.eventBusProvider = eventBusProvider;
                 this.eventBusProvider.get().register(this);
@@ -97,15 +117,36 @@ public class PushNotifier {
         /**
          * @param clientStorage the clientStorage to set
          */
+        @Reference(
+           name = "webservice-storage",
+           unbind = "-",
+           service = WebserviceStorage.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setWebserviceStorage(WebserviceStorage storage) {
                 this.clientStorage = storage.getClientStorage();
                 
         }
 
+        @Reference(
+           name = "callback-registry",
+           unbind = "-",
+           service = CallbackRegistry.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setCallbackRegistry(CallbackRegistry callbackRegistry) {
                 this.callbackRegistry = callbackRegistry;
         }
 
+        @Reference(
+           name = "job-manager-factory",
+           unbind = "-",
+           service = JobManagerFactory.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setJobManagerFactory(JobManagerFactory jobManagerFactory) {
                 this.jobManagerFactory = jobManagerFactory;
         }
