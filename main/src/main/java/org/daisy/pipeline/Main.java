@@ -61,7 +61,9 @@ public class Main {
                 for (CreateOnStart c : ServiceLoader.load(CreateOnStart.class));
 
                 //new JobManagerFactory_SPI();
+                //new org.daisy.pipeline.dtbooktoepub3.DtbookToEpub3_SPI();
                 new PipelineWebService_SPI();
+
                 //ServiceLoader<PipelineWebService> sl =  ServiceLoader.load(PipelineWebService.class);
 
         }
