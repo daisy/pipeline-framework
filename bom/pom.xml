@@ -23,7 +23,7 @@
     <daisy.calabash-adapter.version>2.0.3</daisy.calabash-adapter.version>
     <daisy.calabash-custom-steps.version>2.0.0</daisy.calabash-custom-steps.version>
     <daisy.common-utils.version>2.1.2</daisy.common-utils.version>
-    <daisy.framework-core.version>3.0.2-SNAPSHOT</daisy.framework-core.version>
+    <daisy.framework-core.version>3.1.0-SNAPSHOT</daisy.framework-core.version>
     <daisy.framework-persistence.version>2.0.3</daisy.framework-persistence.version>
     <daisy.framework-volatile.version>2.0.1</daisy.framework-volatile.version>
     <daisy.launcher.version>1.0.0</daisy.launcher.version>
@@ -33,9 +33,9 @@
     <daisy.persistence-derby.version>2.0.0</daisy.persistence-derby.version>
     <daisy.persistence-mysql.version>2.0.0</daisy.persistence-mysql.version>
     <daisy.push-notifier.version>2.0.0</daisy.push-notifier.version>
-    <daisy.updater-wrapper.version>1.0.2-SNAPSHOT</daisy.updater-wrapper.version>
-    <daisy.webservice.version>2.1.2-SNAPSHOT</daisy.webservice.version>
-    <daisy.webservice-utils.version>2.2.2-SNAPSHOT</daisy.webservice-utils.version>
+    <daisy.updater-wrapper.version>1.0.1</daisy.updater-wrapper.version>
+    <daisy.webservice.version>2.1.1</daisy.webservice.version>
+    <daisy.webservice-utils.version>2.2.1</daisy.webservice-utils.version>
     <daisy.woodstox-osgi-adapter.version>2.0.0</daisy.woodstox-osgi-adapter.version>
     <daisy.xmlcatalog.version>2.0.1</daisy.xmlcatalog.version>
     <daisy.xpath-registry.version>1.0.1</daisy.xpath-registry.version>
@@ -441,58 +441,27 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${junit.version}</version>
-        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>com.carrotsearch</groupId>
         <artifactId>junit-benchmarks</artifactId>
         <version>${benchmark.version}</version>
-        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-all</artifactId>
         <version>${mockito.version}</version>
-        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.powermock</groupId>
         <artifactId>powermock-module-junit4</artifactId>
         <version>${powermock.version}</version>
-        <scope>test</scope>
      </dependency>
      <dependency>
         <groupId>org.powermock</groupId>
         <artifactId>powermock-api-mockito</artifactId>
         <version>${powermock.version}</version>
-        <scope>test</scope>
      </dependency>
-
-      <!-- OSGi runtime dependencies -->
-      <dependency>
-        <groupId>org.daisy.libs</groupId>
-        <artifactId>saxon-he</artifactId>
-        <version>9.5.1.5</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpclient-osgi</artifactId>
-        <version>4.2.5</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpcore-osgi</artifactId>
-        <version>4.2.4</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.libs</groupId>
-        <artifactId>jing</artifactId>
-        <version>20120724.0.0</version>
-        <scope>runtime</scope>
-      </dependency>
 
     </dependencies>
   </dependencyManagement>
