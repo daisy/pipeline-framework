@@ -45,6 +45,11 @@
       <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!--
         test dependencies
     -->
@@ -91,6 +96,7 @@
             <Meta-Persistence>META-INF/persistence.xml</Meta-Persistence>
             <DynamicImport-Package>*</DynamicImport-Package>
             <_dsannotations>*</_dsannotations>
+            <Import-Package>!org.daisy.common.spi,*</Import-Package>
           </instructions>
         </configuration>
       </plugin>
