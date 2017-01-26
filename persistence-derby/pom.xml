@@ -148,7 +148,7 @@
       </plugin>
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
-        <artifactId>modules-build-helper</artifactId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
         <executions>
           <execution>
             <id>generate-spi-classes</id>
