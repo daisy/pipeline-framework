@@ -1,4 +1,4 @@
-package org.daisy.pipeline.modules.impl.tracker;
+package org.daisy.pipeline.modules;
 
 import java.net.URL;
 import java.util.Iterator;
@@ -23,9 +23,12 @@ public class OSGIModuleBuilder extends AbstractModuleBuilder<OSGIModuleBuilder> 
 
                         @Override
                         public URL loadResource(String path) {
-                                //catalog is placed on the meta-inf folder, all the paths are relative to it
-                                //url getResource or getEntry does not support relative paths then get rid of the starting ../
-                                URL url = bundle.getResource(path.replace("../", ""));
+                                // Paths are assumed to be relative to META-INF
+                                if (!path.startsWith("../")) {
+                                        throw new RuntimeException("Paths must start with '../' but got '" + path + "'");
+                                }
+                                path = path.substring(3);
+                                URL url = bundle.getResource(path);
                                 return url;
                         }
 

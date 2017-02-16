@@ -1,5 +1,6 @@
 package org.daisy.pipeline.modules;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -13,6 +14,9 @@ import org.daisy.pipeline.modules.Entity;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ResourceLoader;
 import org.daisy.pipeline.xmlcatalog.XmlCatalog;
+import org.daisy.pipeline.xmlcatalog.XmlCatalogParser;
+
+import org.osgi.framework.FrameworkUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,5 +102,55 @@ public abstract class AbstractModuleBuilder<T extends AbstractModuleBuilder> {
 			}
 		}
 		return self();
+	}
+	
+	/*
+	 * Use loader to find catalog.xml file
+	 */
+	public T withCatalogParser(XmlCatalogParser parser) {
+		if (loader == null)
+			throw new UnsupportedOperationException("Resource loader not set");
+		URL catalogURL = loader.loadResource("../META-INF/catalog.xml");
+		if (catalogURL == null)
+			throw new RuntimeException("/META-INF/catalog.xml file not found");
+		try {
+			return withCatalog(parser.parse(asURI(catalogURL)));
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/*
+	 * Return either a JarModuleBuilder or a OSGIModuleBuilder
+	 */
+	public static AbstractModuleBuilder fromContainedClass(Class<?> clazz) {
+		try {
+			URI jarFileURI = clazz.getProtectionDomain().getCodeSource().getLocation().toURI();
+			try {
+				File jarFile = new File(jarFileURI);
+				return new JarModuleBuilder().withJarFile(jarFile);
+			} catch (IllegalArgumentException e) {
+				// Could be because we are running in OSGi context
+				return OSGiHelper.getOSGiModuleBuilder(clazz);
+			}
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	private static URI asURI(URL url) throws URISyntaxException {
+		if (url.getProtocol().equals("jar"))
+			return new URI("jar:" + new URI(null, url.getAuthority(), url.getPath(), url.getQuery(), url.getRef()).toASCIIString());
+		String authority = (url.getPort() != -1) ?
+			url.getHost() + ":" + url.getPort() :
+			url.getHost();
+		return new URI(url.getProtocol(), authority, url.getPath(), url.getQuery(), url.getRef());
+	}
+	
+	// static nested class in order to delay class loading
+	private static abstract class OSGiHelper {
+		static AbstractModuleBuilder getOSGiModuleBuilder(Class<?> clazz) {
+			return new OSGIModuleBuilder().withBundle(FrameworkUtil.getBundle(clazz));
+		}
 	}
 }
