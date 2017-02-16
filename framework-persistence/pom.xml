@@ -95,7 +95,12 @@
           <instructions>
             <Meta-Persistence>META-INF/persistence.xml</Meta-Persistence>
             <DynamicImport-Package>*</DynamicImport-Package>
-            <_dsannotations>*</_dsannotations>
+            <_dsannotations>
+              org.daisy.pipeline.persistence.impl.job.PersistentJobMonitorFactory,
+              org.daisy.pipeline.persistence.impl.job.PersistentJobStorage,
+              org.daisy.pipeline.persistence.impl.messaging.PersistentMessageEventListener,
+              org.daisy.pipeline.persistence.impl.webservice.PersistentWebserviceStorage
+            </_dsannotations>
             <Import-Package>!org.daisy.common.spi,*</Import-Package>
           </instructions>
         </configuration>
@@ -111,7 +116,12 @@
               <goal>generate-spi-classes</goal>
             </goals>
             <configuration>
-              <includes>*</includes>
+              <includes>
+                org.daisy.pipeline.persistence.impl.job.PersistentJobMonitorFactory,
+                org.daisy.pipeline.persistence.impl.job.PersistentJobStorage,
+                org.daisy.pipeline.persistence.impl.messaging.PersistentMessageEventListener,
+                org.daisy.pipeline.persistence.impl.webservice.PersistentWebserviceStorage
+              </includes>
             </configuration>
           </execution>
         </executions>

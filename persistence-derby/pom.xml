@@ -109,7 +109,9 @@
         <configuration>
           <instructions>
             <Require-Bundle>org.apache.derby;bundle-version="10.5"</Require-Bundle>
-            <_dsannotations>*</_dsannotations>
+            <_dsannotations>
+              org.daisy.pipeline.persistence.impl.derby.DerbyEntityManagerFactory
+            </_dsannotations>
             <Import-Package>!org.daisy.common.spi,*</Import-Package>
           </instructions>
         </configuration>
@@ -157,7 +159,9 @@
               <goal>generate-spi-classes</goal>
             </goals>
             <configuration>
-              <includes>*</includes>
+              <includes>
+                org.daisy.pipeline.persistence.impl.derby.DerbyEntityManagerFactory
+              </includes>
             </configuration>
           </execution>
         </executions>
