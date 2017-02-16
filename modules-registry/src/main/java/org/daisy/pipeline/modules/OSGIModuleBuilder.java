@@ -1,4 +1,4 @@
-package org.daisy.pipeline.modules.impl.tracker;
+package org.daisy.pipeline.modules;
 
 import java.net.URL;
 import java.util.Iterator;
