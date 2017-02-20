@@ -26,6 +26,7 @@
         <version>1.1</version>
         <executions>
           <execution>
+            <phase>generate-sources</phase>
             <goals>
               <goal>trang</goal>
             </goals>
@@ -39,7 +40,16 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>jaxb2-maven-plugin</artifactId>
-        <version>1.6</version>
+        <version>2.3</version>
+        <configuration>
+          <xjcSourceExcludeFilters>
+            <filter implementation="org.codehaus.mojo.jaxb2.shared.filters.pattern.PatternFileFilter">
+              <patterns>
+                <pattern>\.rng</pattern>
+              </patterns>
+            </filter>
+          </xjcSourceExcludeFilters>
+        </configuration>
         <executions>
           <execution>
             <id>script</id>
@@ -48,7 +58,9 @@
             </goals>
             <configuration>
               <clearOutputDir>false</clearOutputDir>
-              <schemaDirectory>${project.build.directory}/trang/script</schemaDirectory>
+              <sources>
+                <source>${project.build.directory}/trang/script</source>
+              </sources>
               <packageName>org.daisy.pipeline.webservice.jabx.script</packageName>
               <!--<outputDirectory>${project.basedir}/src/main/java</outputDirectory>-->
             </configuration>
@@ -60,7 +72,9 @@
             </goals>
             <configuration>
               <clearOutputDir>false</clearOutputDir>
-              <schemaDirectory>${project.build.directory}/trang/base</schemaDirectory>
+              <sources>
+                <source>${project.build.directory}/trang/base</source>
+              </sources>
               <packageName>org.daisy.pipeline.webservice.jabx.base</packageName>
             </configuration>
           </execution>
@@ -71,7 +85,9 @@
             </goals>
             <configuration>
               <clearOutputDir>false</clearOutputDir>
-              <schemaDirectory>${project.build.directory}/trang/job</schemaDirectory>
+              <sources>
+                <source>${project.build.directory}/trang/job</source>
+              </sources>
               <packageName>org.daisy.pipeline.webservice.jabx.job</packageName>
             </configuration>
           </execution>
@@ -82,7 +98,9 @@
             </goals>
             <configuration>
               <clearOutputDir>false</clearOutputDir>
-              <schemaDirectory>${project.build.directory}/trang/queue</schemaDirectory>
+              <sources>
+                <source>${project.build.directory}/trang/queue</source>
+              </sources>
               <packageName>org.daisy.pipeline.webservice.jabx.queue</packageName>
             </configuration>
           </execution>
@@ -93,7 +111,9 @@
             </goals>
             <configuration>
               <clearOutputDir>false</clearOutputDir>
-              <schemaDirectory>${project.build.directory}/trang/request</schemaDirectory>
+              <sources>
+                <source>${project.build.directory}/trang/request</source>
+              </sources>
               <packageName>org.daisy.pipeline.webservice.jabx.request</packageName>
             </configuration>
           </execution>
@@ -104,7 +124,9 @@
             </goals>
             <configuration>
               <clearOutputDir>false</clearOutputDir>
-              <schemaDirectory>${project.build.directory}/trang/client</schemaDirectory>
+              <sources>
+                <source>${project.build.directory}/trang/client</source>
+              </sources>
               <packageName>org.daisy.pipeline.webservice.jabx.clients</packageName>
             </configuration>
           </execution>
@@ -115,7 +137,9 @@
             </goals>
             <configuration>
               <clearOutputDir>false</clearOutputDir>
-              <schemaDirectory>${project.build.directory}/trang/properties</schemaDirectory>
+              <sources>
+                <source>${project.build.directory}/trang/properties</source>
+              </sources>
               <packageName>org.daisy.pipeline.webservice.jabx.properties</packageName>
             </configuration>
           </execution>
