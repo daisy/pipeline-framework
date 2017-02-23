@@ -372,7 +372,7 @@ public class JobsResource extends AuthenticatedResource {
                   filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
                   }*/
 
-                addOptionsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"option"), script, inBuilder,zip==null);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
+                addOptionsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"option"), script, inBuilder,zip!=null);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
                 addOutputsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"output"), script.getXProcPipelineInfo().getOutputPorts(), outBuilder);
 
                 BoundXProcScript bound= BoundXProcScript.from(script,inBuilder.build(),outBuilder.build());
@@ -561,20 +561,21 @@ public class JobsResource extends AuthenticatedResource {
 
                                 //if input we have to check
                                 if (name.equals(optionName)) {
-                                        boolean isInput = metadata.getType()== "anyDirURI" ||metadata.getType()== "anyFileURI";
+                                        boolean isInput = "anyDirURI".equals(metadata.getType()) || "anyFileURI".equals(metadata.getType());
                                         //eventhough the option is a sequence it may happen that 
                                         //there are no item elements, just one value
                                         NodeList items = optionElm.getElementsByTagNameNS(Validator.NS_DAISY,"item");
                                         if (metadata.isSequence() && items.getLength()>0) {
                                                 // concat items
-                                                String val = ((Element)items.item(0)).getAttribute("value");
-
-                                                for (int j = 1; j<items.getLength(); j++) {
+                                                String val = "";
+                                                for (int j = 0; j<items.getLength(); j++) {
                                                         Element e = (Element)items.item(j);
                                                         if(isInput){
                                                                 checkInput(e.getAttribute("value"),zippedContext);
                                                         }
-                                                        val += metadata.getSeparator() + e.getAttribute("value");
+                                                        if (j > 0)
+                                                                val += metadata.getSeparator();
+                                                        val += e.getAttribute("value");
                                                 }
                                                 builder.withOption(new QName(name), val);
                                         }
