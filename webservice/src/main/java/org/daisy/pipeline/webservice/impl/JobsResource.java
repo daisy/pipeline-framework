@@ -131,8 +131,7 @@ public class JobsResource extends AuthenticatedResource {
                         try{
                                 data = processMultipart(request);
                         }catch(Exception e){
-                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                                return this.getErrorRepresentation(e);
+                                return badRequest(e);
                         }
                         if (data == null) {
                                 setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
@@ -152,17 +151,11 @@ public class JobsResource extends AuthenticatedResource {
                                 InputSource is = new InputSource(new StringReader(s));
                                 doc = builder.parse(is);
                         } catch (IOException e) {
-                                logger.error(e.getMessage());
-                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                                return this.getErrorRepresentation(e);
+                                return badRequest(e);
                         } catch (ParserConfigurationException e) {
-                                logger.error(e.getMessage());
-                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                                return this.getErrorRepresentation(e);
+                                return badRequest(e);
                         } catch (SAXException e) {
-                                logger.error(e.getMessage());
-                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                                return this.getErrorRepresentation(e);
+                                return badRequest(e);
                         }
                 }
 
@@ -177,11 +170,9 @@ public class JobsResource extends AuthenticatedResource {
                 try {
                         job = createJob(doc, zipfile );
                 } catch (LocalInputException e) {
-                        setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                        return this.getErrorRepresentation(e.getMessage());
-                } catch (IllegalArgumentException iea) {
-                        setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                        return this.getErrorRepresentation(iea.getMessage());
+                        return badRequest(e);
+                } catch (IllegalArgumentException e) {
+                        return badRequest(e);
                 }
 
                 if (!job.isPresent()) {
@@ -201,6 +192,12 @@ public class JobsResource extends AuthenticatedResource {
 
         }
 
+        private Representation badRequest(Exception e) {
+                logger.error("bad request:", e);
+                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                return this.getErrorRepresentation(e.getMessage());
+        }
+        
         /*
          * taken from an example at:
          * http://wiki.restlet.org/docs_2.0/13-restlet/28-restlet/64-restlet.html
