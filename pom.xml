@@ -39,14 +39,26 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>xproc-api</artifactId>
+      <!--
+          dependency of calabash-adapter
+      -->
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
+      <!--
+          dependency of calabash-adapter
+      -->
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
+      <!--
+          dependency of calabash-adapter
+      -->
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
@@ -61,11 +73,17 @@
     <!--
         runtime dependencies (for org.daisy.common.xproc.XProcEngine)
     -->
+    <!--
+        disabled in order to force users of xproc-engine-daisy-pipeline to also explicitely include
+        (a specific version of) calabash-adapter
+    -->
+    <!--
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
       <scope>runtime</scope>
     </dependency>
+    -->
   </dependencies>
   <build>
     <plugins>
