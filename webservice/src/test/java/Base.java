@@ -48,6 +48,10 @@ public abstract class Base extends AbstractTest {
 	@Override
 	protected String[] testDependencies() {
 		return new String[]{
+			"org.daisy.pipeline:clientlib-java-jaxb:?",
+			"org.daisy.pipeline:webservice-jaxb:?",
+			// for some reason logging-activator needs to start before restlet but after jersey (clientlib-java-jaxb)
+			"org.daisy.pipeline:logging-activator:?",
 			"commons-codec:commons-codec:?",
 			"commons-fileupload:commons-fileupload:?",
 			"commons-io:commons-io:?",
@@ -62,8 +66,6 @@ public abstract class Base extends AbstractTest {
 			"org.daisy.pipeline:webservice-utils:?",
 			"org.daisy.pipeline:framework-volatile:?",
 			"org.daisy.pipeline:calabash-adapter:?",
-			"org.daisy.pipeline:clientlib-java-jaxb:?",
-			"org.daisy.pipeline:webservice-jaxb:?"
 		};
 	}
 	
