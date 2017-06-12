@@ -22,16 +22,16 @@ import com.google.common.base.Strings;
 
 import org.apache.commons.codec.binary.Base64;
 
-import org.daisy.pipeline.webservice.jabx.base.Alive;
-import org.daisy.pipeline.webservice.jabx.clients.Client;
-import org.daisy.pipeline.webservice.jabx.clients.Clients;
-import org.daisy.pipeline.webservice.jabx.job.Job;
-import org.daisy.pipeline.webservice.jabx.job.JobSizes;
-import org.daisy.pipeline.webservice.jabx.job.Jobs;
-import org.daisy.pipeline.webservice.jabx.properties.Properties;
-import org.daisy.pipeline.webservice.jabx.queue.Queue;
-import org.daisy.pipeline.webservice.jabx.request.JobRequest;
-import org.daisy.pipeline.webservice.jabx.script.Scripts;
+import org.daisy.pipeline.webservice.jaxb.base.Alive;
+import org.daisy.pipeline.webservice.jaxb.clients.Client;
+import org.daisy.pipeline.webservice.jaxb.clients.Clients;
+import org.daisy.pipeline.webservice.jaxb.job.Job;
+import org.daisy.pipeline.webservice.jaxb.job.JobSizes;
+import org.daisy.pipeline.webservice.jaxb.job.Jobs;
+import org.daisy.pipeline.webservice.jaxb.properties.Properties;
+import org.daisy.pipeline.webservice.jaxb.queue.Queue;
+import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
+import org.daisy.pipeline.webservice.jaxb.script.Scripts;
 
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
