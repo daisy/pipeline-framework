@@ -33,19 +33,26 @@ public class BinaryFinder {
 	 */
 	public static Optional<String> find(String executableName) {
 		String os = System.getProperty("os.name");
-		String[] extensions;
-		List<Iterable<String>> path = new ArrayList<>();
-		path.add(pathFromEnv());
-		if (os != null && os.startsWith("Windows"))
-			extensions = winExtensions;
-		else {
-			extensions = nixExtensions;
-			path.add(pathFromPathHelper());
-			path.add(pathFromShell());
-			path.add(asList(nixUltimateFallbackPath));
+		return find(executableName,
+		            (os != null && os.startsWith("Windows")) ? winExtensions : nixExtensions,
+		            getPath());
+	}
+	
+	private static Iterable<String> path;
+	
+	private static Iterable<String> getPath() {
+		if (path == null) {
+			List<Iterable<String>> paths = new ArrayList<>();
+			paths.add(pathFromEnv());
+			String os = System.getProperty("os.name");
+			if (os == null || !os.startsWith("Windows")) {
+				paths.add(pathFromPathHelper());
+				paths.add(pathFromShell());
+				paths.add(asList(nixUltimateFallbackPath));
+			}
+			path = memoize(removeDuplicates(concat(paths)));
 		}
-
-		return find(executableName, extensions, removeDuplicates(concat(path)));
+		return path;
 	}
 
 	static Optional<String> find(String executableName, String[] extensions, Iterable<String> path) {
