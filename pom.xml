@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>clientlib-java-jaxb</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <properties>
     <jersey.version>2.9</jersey.version>
@@ -82,8 +82,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <scm>
-    <tag>clientlib-java-jaxb-1.0.0</tag>
-  </scm>
 </project>
