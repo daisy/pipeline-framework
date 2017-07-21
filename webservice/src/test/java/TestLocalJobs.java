@@ -13,6 +13,7 @@ import org.daisy.pipeline.webservice.jaxb.base.Alive;
 import org.daisy.pipeline.webservice.jaxb.job.Job;
 import org.daisy.pipeline.webservice.jaxb.job.Result;
 import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
+import org.daisy.pipeline.webservice.jaxb.request.Priority;
 import org.daisy.pipeline.webservice.jaxb.script.Scripts;
 
 import org.junit.Assert;
@@ -84,6 +85,15 @@ public class TestLocalJobs extends Base {
 		checkLog(job);
 		checkDelete(job);
 		logger.info("{} testAfterJob OUT", TestLocalJobs.class);
+	}
+	
+	@Test
+	public void testErrorInJob() throws Exception {
+		Optional<JobRequest> req = newJobRequest(client(), Priority.LOW, "mock-error-script", getResource("hello.xml").toURI().toString());
+		Assert.assertTrue("The request is present", req.isPresent());
+		Job job = client().sendJob(req.get());
+		deleteAfterTest(job);
+		job = waitForStatus("ERROR", job, 10000);
 	}
 	
 	private void checkDelete(Job in) throws Exception {

@@ -90,7 +90,10 @@
     <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
-      <version>1.0.0</version>
+      <!--
+          depends on latest master
+      -->
+      <version>1.0.1-SNAPSHOT</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>

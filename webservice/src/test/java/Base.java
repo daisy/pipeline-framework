@@ -221,18 +221,18 @@ public abstract class Base extends AbstractTest {
 	}
 	
 	protected static Optional<JobRequest> newJobRequest(PipelineClient client, Priority priority) {
-		return newJobRequest(client, priority, getResource("hello.xml").toURI().toString());
+		return newJobRequest(client, priority, DEFAULT_SCRIPT, getResource("hello.xml").toURI().toString());
 	}
 	
 	protected Optional<JobRequest> newJobRequest(Priority priority, String sourcePath) {
-		return newJobRequest(client(), priority, sourcePath);
+		return newJobRequest(client(), priority, DEFAULT_SCRIPT, sourcePath);
 	}
 	
-	protected static Optional<JobRequest> newJobRequest(PipelineClient client, Priority priority, String sourcePath) {
+	protected static Optional<JobRequest> newJobRequest(PipelineClient client, Priority priority, String scriptId, String sourcePath) {
 		ObjectFactory reqFactory = new ObjectFactory();
 		JobRequest req = reqFactory.createJobRequest();
 		Script script = reqFactory.createScript();
-		Optional<String> href = getScriptHref(client, DEFAULT_SCRIPT);
+		Optional<String> href = getScriptHref(client, scriptId);
 		if (!href.isPresent()) {
 			return Optional.absent();
 		}
@@ -271,7 +271,7 @@ public abstract class Base extends AbstractTest {
 		return new File(new File(new File(PIPELINE_DATA, "jobs"), jobId), jobId + ".log");
 	}
 	
-	private static File getResource(String path) {
+	protected static File getResource(String path) {
 		return new File(new File(PathUtils.getBaseDir(), "src/test/resources"), path);
 	}
 	
