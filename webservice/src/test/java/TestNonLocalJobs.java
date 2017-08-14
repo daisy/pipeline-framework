@@ -89,6 +89,7 @@ public class TestNonLocalJobs extends Base {
 		ris.close();
 	}
 	
+	// This test actually belongs to framework-core but calabash-adapter is needed to execute it
 	@Test
 	public void testSpacesInZip() throws Exception {
 		Optional<JobRequest> req = newJobRequest(Priority.LOW, "hello.xml");
