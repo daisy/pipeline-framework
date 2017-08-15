@@ -4,9 +4,9 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data">
     
-    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
+    <p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
         <p:inline>
-            <d:validation-status result="error"/>
+            <d:status result="error"/>
         </p:inline>
     </p:output>
     

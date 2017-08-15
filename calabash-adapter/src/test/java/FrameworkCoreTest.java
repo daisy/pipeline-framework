@@ -57,7 +57,7 @@ public class FrameworkCoreTest extends AbstractTest {
 	EventBusProvider eventBusProvider;
 	
 	@Test
-	public void testValidationFail() {
+	public void testFail() {
 		Object eventBusListener = new Object() {
 			@Subscribe
 			public void handleMessage(Message msg) {
@@ -79,7 +79,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			                    .isMapping(true)
 			                    .withNiceName("nice")
 			                    .build().get();
-			waitForStatus(Job.Status.VALIDATION_FAIL, job, 1000);
+			waitForStatus(Job.Status.FAIL, job, 1000);
 		} finally {
 			bus.unregister(eventBusListener);
 		}

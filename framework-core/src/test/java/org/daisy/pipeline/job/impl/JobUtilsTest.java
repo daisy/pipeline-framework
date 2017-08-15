@@ -13,9 +13,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class JobUtilsTest {
-        private static final String XML_ERR = "<d:validation-status xmlns:d='http://www.daisy.org/ns/pipeline/data' result='error'/>";
-        private static final String XML_OK = "<d:validation-status xmlns:d='http://www.daisy.org/ns/pipeline/data' result='ok'/>";
-        private static final String XML_INVALID = "<d:validation-status xmlns:d='http://www.daisy.org/ns/pipeline/data' invalid='ok'/>";
+        private static final String XML_ERR = "<d:status xmlns:d='http://www.daisy.org/ns/pipeline/data' result='error'/>";
+        private static final String XML_OK = "<d:status xmlns:d='http://www.daisy.org/ns/pipeline/data' result='ok'/>";
+        private static final String XML_INVALID = "<d:status xmlns:d='http://www.daisy.org/ns/pipeline/data' invalid='ok'/>";
 
         File ok;
         File err;
@@ -48,53 +48,49 @@ public class JobUtilsTest {
         }
 
         @Test
-        public void withoutValidationPort(){
-                //should return valid when no validation port is present
+        public void withoutStatusPort(){
                 JobResultSet results=new JobResultSet.Builder().build();
-                boolean valid=JobUtils.checkValidPort(results);
-                Assert.assertTrue("should return valid when no validation port is present",valid);
+                boolean ok=JobUtils.checkStatusPort(results);
+                Assert.assertTrue("should return true when no status port is present",ok);
         }
         
         @Test
-        public void validationPortOk(){
-                //should return valid when no validation port is present
-                JobResultSet results=new JobResultSet.Builder().addResult("validation-status",new JobResult.Builder().withPath(ok.toURI()).build()).build();
-                boolean valid=JobUtils.checkValidPort(results);
-                Assert.assertTrue("contents are ok but t'is not valid",valid);
+        public void statusPortOk(){
+                JobResultSet results=new JobResultSet.Builder().addResult("status",new JobResult.Builder().withPath(ok.toURI()).build()).build();
+                boolean ok=JobUtils.checkStatusPort(results);
+                Assert.assertTrue("should return true when status document says 'ok'",ok);
         }
 
         @Test
-        public void validationPortError(){
-                //should return valid when no validation port is present
-                JobResultSet results=new JobResultSet.Builder().addResult("validation-status",new JobResult.Builder().withPath(err.toURI()).build()).build();
-                boolean valid=JobUtils.checkValidPort(results);
-                Assert.assertFalse("contents are err but it's valid",valid);
+        public void statusPortError(){
+                JobResultSet results=new JobResultSet.Builder().addResult("status",new JobResult.Builder().withPath(err.toURI()).build()).build();
+                boolean ok=JobUtils.checkStatusPort(results);
+                Assert.assertFalse("should return false when status document says 'error'",ok);
         }
 
         @Test(expected =RuntimeException.class)
-        public void invalidValidationXml(){
-               //should return valid when no validation port is present
-                JobResultSet results=new JobResultSet.Builder().addResult("validation-status",new JobResult.Builder().withPath(invalid.toURI()).build()).build();
-                JobUtils.checkValidPort(results);
+        public void invalidStatusXml(){
+                JobResultSet results=new JobResultSet.Builder().addResult("status",new JobResult.Builder().withPath(invalid.toURI()).build()).build();
+                JobUtils.checkStatusPort(results);
         }
         @Test
-        public void multipleValidationOk(){
+        public void multipleStatusOk(){
                 
                 JobResultSet results=new JobResultSet.Builder()
-                        .addResult("validation-status",new JobResult.Builder().withPath(ok.toURI()).build())
-                        .addResult("validation-status",new JobResult.Builder().withPath(ok.toURI()).build())
+                        .addResult("status",new JobResult.Builder().withPath(ok.toURI()).build())
+                        .addResult("status",new JobResult.Builder().withPath(ok.toURI()).build())
                         .build();
-                boolean valid=JobUtils.checkValidPort(results);
-                Assert.assertTrue("contents are ok but t'is not valid",valid);
+                boolean ok=JobUtils.checkStatusPort(results);
+                Assert.assertTrue("should return true if all status documents say 'ok'",ok);
         }
         @Test
-        public void multipleValidationErr(){
+        public void multipleStatusErr(){
                 
                 JobResultSet results=new JobResultSet.Builder()
-                        .addResult("validation-status",new JobResult.Builder().withPath(ok.toURI()).build())
-                        .addResult("validation-status",new JobResult.Builder().withPath(err.toURI()).build())
+                        .addResult("status",new JobResult.Builder().withPath(ok.toURI()).build())
+                        .addResult("status",new JobResult.Builder().withPath(err.toURI()).build())
                         .build();
-                boolean valid=JobUtils.checkValidPort(results);
-                Assert.assertFalse("contents are err but it is valid",valid);
+                boolean ok=JobUtils.checkStatusPort(results);
+                Assert.assertFalse("should return false if at least one status documents say 'error'",ok);
         }
 }

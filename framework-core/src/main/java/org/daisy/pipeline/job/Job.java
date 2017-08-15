@@ -87,8 +87,8 @@ public class Job implements RuntimeConfigurator.EventBusable{
                 DONE,
                 /** The ERROR. */
                 ERROR,
-                /** The VALIDATION_FAIL */
-                VALIDATION_FAIL
+                /** The FAIL */
+                FAIL
         }
 
 
@@ -216,8 +216,8 @@ public class Job implements RuntimeConfigurator.EventBusable{
                         XProcResult results = pipeline.run(this.ctxt.getInputs(),this.ctxt.getMonitor(),props);
                         this.ctxt.writeResult(results);
                         //if the validation fails set the job status
-                        if (!this.checkValid()){
-                                changeStatus(Status.VALIDATION_FAIL);
+                        if (!this.checkStatus()){
+                                changeStatus(Status.FAIL);
                         }else{
                                 changeStatus( Status.DONE );
                         }
@@ -236,9 +236,9 @@ public class Job implements RuntimeConfigurator.EventBusable{
         protected void onStatusChanged(Status newStatus){
                 //for subclasses
         }
-        //checks if the internal validations are ok
-        private boolean checkValid(){
-                return JobUtils.checkValidPort(this.getContext().getResults());
+        //checks the status returned by the script
+        private boolean checkStatus(){
+                return JobUtils.checkStatusPort(this.getContext().getResults());
         }
 
         @Override

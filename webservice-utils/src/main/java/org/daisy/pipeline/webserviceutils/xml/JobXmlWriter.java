@@ -168,7 +168,7 @@ public class JobXmlWriter {
                     }
                 }
                 
-                if (job.getStatus() == Job.Status.DONE || job.getStatus() == Job.Status.VALIDATION_FAIL) {
+                if (job.getStatus() == Job.Status.DONE || job.getStatus() == Job.Status.FAIL) {
                         Element logElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "log");
                         String logHref = baseUri + Routes.LOG_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
                         logElm.setAttribute("href", logHref);
