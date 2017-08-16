@@ -39,7 +39,7 @@
     <daisy.woodstox-osgi-adapter.version>2.0.1</daisy.woodstox-osgi-adapter.version>
     <daisy.xmlcatalog.version>2.0.2</daisy.xmlcatalog.version>
     <daisy.xpath-registry.version>1.0.2</daisy.xpath-registry.version>
-    <daisy.xproc-api.version>2.0.1</daisy.xproc-api.version>
+    <daisy.xproc-api.version>2.1.0-SNAPSHOT</daisy.xproc-api.version>
 
     <!-- Dependencies Versions -->
     <benchmark.version>0.7.2</benchmark.version>
