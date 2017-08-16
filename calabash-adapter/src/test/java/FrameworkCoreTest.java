@@ -19,6 +19,7 @@ import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -113,10 +114,9 @@ public class FrameworkCoreTest extends AbstractTest {
 			String id = job.getId().toString();
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			Iterator<Message> messages = collectMessages.get(id);
-			Assert.assertTrue(messages.hasNext());
-			Assert.assertEquals("FOO:foobar", messages.next().getText());
-			Assert.assertTrue(messages.hasNext());
-			Assert.assertEquals("com.xmlcalabash.core.XProcException: foobar", messages.next().getText());
+			int seq = 0;
+			assertMessage(seq++, "FOO:foobar", next(messages));
+			assertMessage(seq++, "com.xmlcalabash.core.XProcException: foobar", next(messages));
 			Assert.assertFalse(messages.hasNext());
 		} finally {
 			bus.unregister(collectMessages);
@@ -133,15 +133,11 @@ public class FrameworkCoreTest extends AbstractTest {
 			String id = job.getId().toString();
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			Iterator<Message> messages = collectMessages.get(id);
-			Assert.assertTrue(messages.hasNext());
-			Assert.assertEquals("Runtime Error", messages.next().getText());
-			Assert.assertTrue(messages.hasNext());
-			Assert.assertEquals("XTMM9000:Processing terminated by xsl:message at line -1 in null", messages.next().getText());
-			Assert.assertTrue(messages.hasNext());
-			Assert.assertEquals("Processing terminated by xsl:message at line -1 in null", messages.next().getText());
-			Assert.assertTrue(messages.hasNext());
-			Assert.assertEquals("net.sf.saxon.s9api.SaxonApiException: Processing terminated by xsl:message at line -1 in null",
-			                    messages.next().getText());
+			int seq = 0;
+			assertMessage(seq++, "Runtime Error", next(messages));
+			assertMessage(seq++, "XTMM9000:Processing terminated by xsl:message at line -1 in null", next(messages));
+			assertMessage(seq++, "Processing terminated by xsl:message at line -1 in null", next(messages));
+			assertMessage(seq++, "net.sf.saxon.s9api.SaxonApiException: Processing terminated by xsl:message at line -1 in null", next(messages));
 			Assert.assertFalse(messages.hasNext());
 		} finally {
 			bus.unregister(collectMessages);
@@ -158,8 +154,8 @@ public class FrameworkCoreTest extends AbstractTest {
 			String id = job.getId().toString();
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			Iterator<Message> messages = collectMessages.get(id);
-			Assert.assertTrue(messages.hasNext());
-			Assert.assertEquals("java.lang.RuntimeException: foobar", messages.next().getText());
+			int seq = 0;
+			assertMessage(seq++, "java.lang.RuntimeException: foobar", next(messages));
 			Assert.assertFalse(messages.hasNext());
 		} finally {
 			bus.unregister(collectMessages);
@@ -198,6 +194,20 @@ public class FrameworkCoreTest extends AbstractTest {
 				throw new RuntimeException("waitForStatus " + status + " timed out (last status was " + job.getStatus() + ")");
 			}
 		}
+	}
+	
+	static <T> Optional<T> next(Iterator<T> iterator) {
+		if (iterator.hasNext())
+			return Optional.<T>of(iterator.next());
+		else
+			return Optional.<T>absent();
+	}
+	
+	static void assertMessage(int expectedSequence, String expectedText, Optional<Message> message) {
+		Assert.assertTrue("message does not exist", message.isPresent());
+		Message m = message.get();
+		Assert.assertEquals("message sequence number does not match", expectedSequence, m.getSequence());
+		Assert.assertEquals("message text does not match", expectedText, m.getText());
 	}
 	
 	// FIXME: can dependencies on modules-registry, webservice-utils and framework-volatile be eliminated?

@@ -193,7 +193,6 @@ public class Job implements RuntimeConfigurator.EventBusable{
                         .withJobId(this.getId().toString())
                         .withLevel(Level.ERROR)
                         .withText(text)
-                        .withSequence(1)
                         .build();
                 if (this.eventBus!=null)
                         this.eventBus.post(msg);

@@ -1,6 +1,8 @@
 package org.daisy.common.messaging;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Message {
 	/**
@@ -28,6 +30,8 @@ public class Message {
 	protected int sequence;
 	protected String jobId;
 	protected String file;
+
+	private final static Map<String,Integer> messageCounts = new HashMap<String,Integer>();
 
 	protected Message(Throwable throwable, String text, Level level,
 			int line, int column, Date timeStamp, int sequence, String jobId,
@@ -86,7 +90,6 @@ public class Message {
 		int line;
 		int column;
 		Date timeStamp;
-		int sequence;
 		String jobId;
 		String file;
 
@@ -127,12 +130,6 @@ public class Message {
 		}
 
 
-		public MessageBuilder withSequence(int sequence) {
-			this.sequence = sequence;
-			return this;
-		}
-
-
 		public MessageBuilder withJobId(String jobId) {
 			this.jobId = jobId;
 			return this;
@@ -145,6 +142,16 @@ public class Message {
 		}
 
 		public Message build() {
+			Integer sequence; {
+				if (jobId == null)
+					sequence = 0;
+				else {
+					sequence = messageCounts.get(jobId);
+					if (sequence == null)
+						sequence = 0;
+					messageCounts.put(jobId, sequence + 1);
+				}
+			}
 			return new Message(throwable, text, level, line, column,
 					timeStamp, sequence, jobId, file);
 		}
