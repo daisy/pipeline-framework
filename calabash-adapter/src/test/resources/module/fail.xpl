@@ -10,16 +10,24 @@
         </p:inline>
     </p:output>
     
-    <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI"/>
-
-    <p:store>
-        <p:input port="source">
-            <p:inline>
-                <hello world=""/>
-            </p:inline>
-        </p:input>
-        <p:with-option name="href" select="concat($output-dir,'/hello.xml')"/>
-    </p:store>
+    <p:output port="result" primary="true"/>
+    
+    <p:try>
+        <p:group>
+            <p:error code="FOO">
+                <p:input port="source">
+                    <p:inline><message>foobar</message></p:inline>
+                </p:input>
+            </p:error>
+        </p:group>
+        <p:catch name="catch">
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe step="catch" port="error"/>
+                </p:input>
+            </p:identity>
+        </p:catch>
+    </p:try>
     
 </p:declare-step>
 

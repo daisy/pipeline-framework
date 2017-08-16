@@ -1,5 +1,13 @@
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -7,9 +15,15 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.xml.namespace.QName;
+import javax.xml.transform.Result;
+import javax.xml.transform.stream.StreamResult;
 
+import com.google.common.base.Function;
+import com.google.common.base.Supplier;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import com.google.common.collect.Iterators;
+import com.google.common.io.CharStreams;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.xproc.XProcInput;
@@ -25,18 +39,19 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.junit.AbstractTest;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.XProcScriptService;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import org.ops4j.pax.exam.Configuration;
-import static org.ops4j.pax.exam.CoreOptions.bundle;
 import static org.ops4j.pax.exam.CoreOptions.composite;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import org.ops4j.pax.exam.Option;
+import org.ops4j.pax.exam.ProbeBuilder;
+import org.ops4j.pax.exam.TestProbeBuilder;
 import org.ops4j.pax.exam.util.PathUtils;
 
 /*
@@ -57,81 +72,114 @@ public class FrameworkCoreTest extends AbstractTest {
 	EventBusProvider eventBusProvider;
 	
 	@Test
-	public void testFail() {
-		Object eventBusListener = new Object() {
-			@Subscribe
-			public void handleMessage(Message msg) {
-				System.out.println(msg.getJobId() + ": " + msg.getText());
-			}
-			@Subscribe
-			public void handleStatus(StatusMessage message) {
-			}
-		};
+	public void testCaughtError() throws IOException {
+		CollectMessages collectMessages = new CollectMessages();
 		EventBus bus = eventBusProvider.get();
-		bus.register(eventBusListener);
+		bus.register(collectMessages);
 		try {
-			Client client = webserviceStorage.getClientStorage().defaultClient();
-			JobManager jobManager = jobManagerFactory.createFor(client);
-			XProcScript script = scriptRegistry.getScript("fail").load();
-			Job job = jobManager.newJob(BoundXProcScript.from(script,
-			                                                  new XProcInput.Builder().build(),
-			                                                  new XProcOutput.Builder().build()))
-			                    .isMapping(true)
-			                    .withNiceName("nice")
-			                    .build().get();
+			OutputPortReader resultPort = new OutputPortReader();
+			Job job = newJob("fail",
+			                 new XProcInput.Builder().build(),
+			                 new XProcOutput.Builder().withOutput("result", resultPort).build());
+			String id = job.getId().toString();
 			waitForStatus(Job.Status.FAIL, job, 1000);
+			Iterator<Reader> results = resultPort.read();
+			Assert.assertTrue(results.hasNext());
+			Assert.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
+			                    "<c:errors xmlns:c=\"http://www.w3.org/ns/xproc-step\">" +
+			                      "<c:error name=\"!1.3.1.1\" type=\"p:error\" code=\"FOO\">" +
+			                        "<message xmlns:px=\"http://www.daisy.org/ns/pipeline/xproc\" " +
+			                                 "xmlns:d=\"http://www.daisy.org/ns/pipeline/data\">" +
+			                          "foobar" +
+			                        "</message>" +
+			                      "</c:error>" +
+			                    "</c:errors>",
+			                    CharStreams.toString(results.next()));
+			Assert.assertFalse(results.hasNext());
+			Iterator<Message> messages = collectMessages.get(id);
+			Assert.assertFalse(messages.hasNext());
 		} finally {
-			bus.unregister(eventBusListener);
+			bus.unregister(collectMessages);
 		}
 	}
 	
 	@Test
-	public void testUncaughtError() {
-		final Map<String,List<Message>> messages = new HashMap<String,List<Message>>();
-		Object eventBusListener = new Object() {
-			@Subscribe
-			public void handleMessage(Message msg) {
-				String jobid = msg.getJobId();
-				List<Message> list = messages.get(jobid);
-				if (list == null) {
-					list = new ArrayList<Message>();
-					messages.put(jobid, list);
-				}
-				list.add(msg);
-			}
-			@Subscribe
-			public void handleStatus(StatusMessage message) {
-			}
-		};
+	public void testUncaughtXProcError() {
+		CollectMessages collectMessages = new CollectMessages();
 		EventBus bus = eventBusProvider.get();
-		bus.register(eventBusListener);
+		bus.register(collectMessages);
 		try {
-			Client client = webserviceStorage.getClientStorage().defaultClient();
-			JobManager jobManager = jobManagerFactory.createFor(client);
-			XProcScript script = scriptRegistry.getScript("error").load();
-			Job job = jobManager.newJob(BoundXProcScript.from(script,
-			                                                  new XProcInput.Builder().build(),
-			                                                  new XProcOutput.Builder().build()))
-			                    .isMapping(true)
-			                    .withNiceName("nice")
-			                    .build().get();
+			Job job = newJob("xproc-error");
 			String id = job.getId().toString();
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			Assert.assertTrue(messages.containsKey(id));
-			Iterator<Message> i = messages.get(id).iterator();
-			Assert.assertTrue(i.hasNext());
-			Assert.assertEquals("Runtime Error", i.next().getText());
-			Assert.assertTrue(i.hasNext());
-			Assert.assertEquals("XTMM9000:Processing terminated by xsl:message at line -1 in null", i.next().getText());
-			Assert.assertTrue(i.hasNext());
-			Assert.assertEquals("Processing terminated by xsl:message at line -1 in null", i.next().getText());
-			Assert.assertTrue(i.hasNext());
-			Assert.assertEquals("net.sf.saxon.s9api.SaxonApiException: Processing terminated by xsl:message at line -1 in null",
-			                    i.next().getText());
-			Assert.assertFalse(i.hasNext());
+			Iterator<Message> messages = collectMessages.get(id);
+			Assert.assertTrue(messages.hasNext());
+			Assert.assertEquals("FOO:foobar", messages.next().getText());
+			Assert.assertTrue(messages.hasNext());
+			Assert.assertEquals("com.xmlcalabash.core.XProcException: foobar", messages.next().getText());
+			Assert.assertFalse(messages.hasNext());
 		} finally {
-			bus.unregister(eventBusListener);
+			bus.unregister(collectMessages);
 		}
+	}
+	
+	@Test
+	public void testUncaughtXslTerminateError() {
+		CollectMessages collectMessages = new CollectMessages();
+		EventBus bus = eventBusProvider.get();
+		bus.register(collectMessages);
+		try {
+			Job job = newJob("xslt-terminate-error");
+			String id = job.getId().toString();
+			waitForStatus(Job.Status.ERROR, job, 1000);
+			Iterator<Message> messages = collectMessages.get(id);
+			Assert.assertTrue(messages.hasNext());
+			Assert.assertEquals("Runtime Error", messages.next().getText());
+			Assert.assertTrue(messages.hasNext());
+			Assert.assertEquals("XTMM9000:Processing terminated by xsl:message at line -1 in null", messages.next().getText());
+			Assert.assertTrue(messages.hasNext());
+			Assert.assertEquals("Processing terminated by xsl:message at line -1 in null", messages.next().getText());
+			Assert.assertTrue(messages.hasNext());
+			Assert.assertEquals("net.sf.saxon.s9api.SaxonApiException: Processing terminated by xsl:message at line -1 in null",
+			                    messages.next().getText());
+			Assert.assertFalse(messages.hasNext());
+		} finally {
+			bus.unregister(collectMessages);
+		}
+	}
+	
+	@Test
+	public void testUncaughtJavaError() {
+		CollectMessages collectMessages = new CollectMessages();
+		EventBus bus = eventBusProvider.get();
+		bus.register(collectMessages);
+		try {
+			Job job = newJob("java-runtime-error");
+			String id = job.getId().toString();
+			waitForStatus(Job.Status.ERROR, job, 1000);
+			Iterator<Message> messages = collectMessages.get(id);
+			Assert.assertTrue(messages.hasNext());
+			Assert.assertEquals("java.lang.RuntimeException: foobar", messages.next().getText());
+			Assert.assertFalse(messages.hasNext());
+		} finally {
+			bus.unregister(collectMessages);
+		}
+	}
+	
+	Job newJob(String scriptId) {
+		return newJob(scriptId, new XProcInput.Builder().build(), new XProcOutput.Builder().build());
+	}
+	
+	Job newJob(String scriptId, XProcInput input, XProcOutput output) {
+		Client client = webserviceStorage.getClientStorage().defaultClient();
+		JobManager jobManager = jobManagerFactory.createFor(client);
+		XProcScriptService script = scriptRegistry.getScript(scriptId);
+		Assert.assertNotNull("The " + scriptId + " script should exist", script);
+		return jobManager.newJob(BoundXProcScript.from(script.load(), input, output))
+		                 .isMapping(true)
+		                 .withNiceName("nice")
+		                 .build()
+		                 .get();
 	}
 	
 	static void waitForStatus(Job.Status status, Job job, long timeout) {
@@ -179,7 +227,53 @@ public class FrameworkCoreTest extends AbstractTest {
 	public Option[] config() {
 		return options(
 			composite(super.config()),
-			bundle("reference:" + new File(PathUtils.getBaseDir(), "target/test-classes/module/").toURI()),
 			systemProperty("org.daisy.pipeline.iobase").value(new File(PIPELINE_DATA, "jobs").getAbsolutePath()));
+	}
+	
+	@ProbeBuilder
+	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
+		probe.setHeader("Bundle-Name", "Test module");
+		probe.setHeader("Service-Component", "OSGI-INF/script.xml,"
+		                                   + "OSGI-INF/java-step.xml");
+		return probe;
+	}
+	
+	static class CollectMessages {
+		final Map<String,List<Message>> messages = new HashMap<String,List<Message>>();
+		@Subscribe
+		public void add(Message msg) {
+			String jobid = msg.getJobId();
+			List<Message> list = messages.get(jobid);
+			if (list == null) {
+				list = new ArrayList<Message>();
+				messages.put(jobid, list);
+			}
+			list.add(msg);
+		}
+		public Iterator<Message> get(String jobId) {
+			if (messages.containsKey(jobId))
+				return messages.get(jobId).iterator();
+			else
+				return Collections.<Message>emptyIterator();
+		}
+	}
+	
+	static class OutputPortReader implements Supplier<Result> {
+		final List<ByteArrayOutputStream> docs = new ArrayList<ByteArrayOutputStream>();
+		public Result get() {
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			docs.add(os);
+			return new StreamResult(os);
+		}
+		public Iterator<Reader> read() {
+			return Iterators.<ByteArrayOutputStream,Reader>transform(
+				docs.iterator(),
+				new Function<ByteArrayOutputStream,Reader>() {
+					public Reader apply(ByteArrayOutputStream os) {
+						try {
+							return new InputStreamReader(new ByteArrayInputStream(os.toByteArray()), "UTF-8"); }
+						catch (UnsupportedEncodingException e) {
+							throw new RuntimeException(e); }}});
+		}
 	}
 }
