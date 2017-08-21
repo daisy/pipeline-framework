@@ -1,10 +1,12 @@
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,12 +16,20 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.ThrowableProxy;
+import ch.qos.logback.core.AppenderBase;
+
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.base.Supplier;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -34,7 +44,6 @@ import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
-import org.daisy.pipeline.job.StatusMessage;
 
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.junit.AbstractTest;
@@ -55,6 +64,8 @@ import org.ops4j.pax.exam.ProbeBuilder;
 import org.ops4j.pax.exam.TestProbeBuilder;
 import org.ops4j.pax.exam.util.PathUtils;
 
+import org.slf4j.LoggerFactory;
+
 /*
  * Tests the framework core and the the Java API via the XMLCalabash based implementation.
  */
@@ -74,6 +85,9 @@ public class FrameworkCoreTest extends AbstractTest {
 	
 	@Test
 	public void testCaughtError() throws IOException {
+		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		logger.addAppender(collectLog);
 		CollectMessages collectMessages = new CollectMessages();
 		EventBus bus = eventBusProvider.get();
 		bus.register(collectMessages);
@@ -99,13 +113,19 @@ public class FrameworkCoreTest extends AbstractTest {
 			Assert.assertFalse(results.hasNext());
 			Iterator<Message> messages = collectMessages.get(id);
 			Assert.assertFalse(messages.hasNext());
+			Iterator<ILoggingEvent> log = collectLog.get();
+			Assert.assertFalse(log.hasNext());
 		} finally {
+			logger.detachAppender(collectLog);
 			bus.unregister(collectMessages);
 		}
 	}
 	
 	@Test
 	public void testUncaughtXProcError() {
+		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		logger.addAppender(collectLog);
 		CollectMessages collectMessages = new CollectMessages();
 		EventBus bus = eventBusProvider.get();
 		bus.register(collectMessages);
@@ -115,16 +135,40 @@ public class FrameworkCoreTest extends AbstractTest {
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			Iterator<Message> messages = collectMessages.get(id);
 			int seq = 0;
-			assertMessage(seq++, "FOO:foobar", next(messages));
-			assertMessage(seq++, "com.xmlcalabash.core.XProcException: foobar", next(messages));
+			assertMessage(next(messages), seq++, Message.Level.ERROR, "FOO:foobar");
+			assertMessage(next(messages), seq++, Message.Level.ERROR, "com.xmlcalabash.core.XProcException: foobar");
 			Assert.assertFalse(messages.hasNext());
+			Iterator<ILoggingEvent> log = collectLog.get();
+			assertLogMessage(next(log), "com.xmlcalabash", Level.ERROR,
+			                 Predicates.containsPattern("^\\Qbundle://\\E.+\\Q/module/xproc-error.xpl:0:FOO:foobar\\E$"));
+			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
+			                 Predicates.containsPattern("^\\Q" +
+			                     "job finished with error state\n" +
+			                     "java.lang.RuntimeException: com.xmlcalabash.core.XProcException: foobar\n" +
+			                     "	at org.daisy.common.xproc.calabash.impl.CalabashXProcPipeline.run(CalabashXProcPipeline.java:\\E[0-9]+\\Q)\n" +
+			                     "	at org.daisy.pipeline.job.Job.run(Job.java:\\E[0-9]+\\Q)\n" +
+			                     "	at org.daisy.pipeline.job.impl.DefaultJobExecutionService$1.run(DefaultJobExecutionService.java:\\E[0-9]+\\Q)\n" +
+			                     "	at java.lang.Thread.run(Thread.java:\\E[0-9]+\\Q)\n" +
+			                     "Caused by: com.xmlcalabash.core.XProcException: foobar\n" +
+			                     "	at com.xmlcalabash.library.Error.run(Error.java:\\E[0-9]+\\Q)\n" +
+			                     "	at com.xmlcalabash.runtime.XAtomicStep.run(XAtomicStep.java:\\E[0-9]+\\Q)\n" +
+			                     "	at com.xmlcalabash.runtime.XPipeline.doRun(XPipeline.java:\\E[0-9]+\\Q)\n" +
+			                     "	at com.xmlcalabash.runtime.XPipeline.run(XPipeline.java:\\E[0-9]+\\Q)\n" +
+			                     "	at org.daisy.common.xproc.calabash.impl.CalabashXProcPipeline.run(CalabashXProcPipeline.java:\\E[0-9]+\\Q)\n" +
+			                     "	... 3 more\\E$"));
+			Assert.assertFalse(log.hasNext());
+			
 		} finally {
+			logger.detachAppender(collectLog);
 			bus.unregister(collectMessages);
 		}
 	}
 	
 	@Test
 	public void testUncaughtXslTerminateError() {
+		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		logger.addAppender(collectLog);
 		CollectMessages collectMessages = new CollectMessages();
 		EventBus bus = eventBusProvider.get();
 		bus.register(collectMessages);
@@ -134,18 +178,51 @@ public class FrameworkCoreTest extends AbstractTest {
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			Iterator<Message> messages = collectMessages.get(id);
 			int seq = 0;
-			assertMessage(seq++, "Runtime Error", next(messages));
-			assertMessage(seq++, "XTMM9000:Processing terminated by xsl:message at line -1 in null", next(messages));
-			assertMessage(seq++, "Processing terminated by xsl:message at line -1 in null", next(messages));
-			assertMessage(seq++, "net.sf.saxon.s9api.SaxonApiException: Processing terminated by xsl:message at line -1 in null", next(messages));
+			assertMessage(next(messages), seq++, Message.Level.INFO, "Runtime Error");
+			assertMessage(next(messages), seq++, Message.Level.ERROR, "XTMM9000:Processing terminated by xsl:message at line -1 in null");
+			assertMessage(next(messages), seq++, Message.Level.ERROR, "Processing terminated by xsl:message at line -1 in null");
+			assertMessage(next(messages), seq++, Message.Level.ERROR, "net.sf.saxon.s9api.SaxonApiException: Processing terminated by xsl:message at line -1 in null");
 			Assert.assertFalse(messages.hasNext());
+			Iterator<ILoggingEvent> log = collectLog.get();
+			assertLogMessage(next(log), "com.xmlcalabash.runtime.XAtomicStep", Level.ERROR,
+			                 "XTMM9000:Processing terminated by xsl:message at line -1 in null");
+			assertLogMessage(next(log), "com.xmlcalabash.runtime.XAtomicStep", Level.ERROR,
+			                 "Processing terminated by xsl:message at line -1 in null");
+			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
+			                 Predicates.containsPattern("^\\Q" +
+			                     "job finished with error state\n" +
+			                     "java.lang.RuntimeException: net.sf.saxon.s9api.SaxonApiException: Processing terminated by xsl:message at line -1 in null\n" +
+			                     "	at org.daisy.common.xproc.calabash.impl.CalabashXProcPipeline.run(CalabashXProcPipeline.java:\\E[0-9]+\\Q)\n" +
+			                     "	at org.daisy.pipeline.job.Job.run(Job.java:\\E[0-9]+\\Q)\n" +
+			                     "	at org.daisy.pipeline.job.impl.DefaultJobExecutionService$1.run(DefaultJobExecutionService.java:\\E[0-9]+\\Q)\n" +
+			                     "	at java.lang.Thread.run(Thread.java:\\E[0-9]+\\Q)\n" +
+			                     "Caused by: net.sf.saxon.s9api.SaxonApiException: Processing terminated by xsl:message at line -1 in null\n" +
+			                     "	at net.sf.saxon.s9api.XsltTransformer.transform(XsltTransformer.java:\\E[0-9]+\\Q)\n" +
+			                     "	at com.xmlcalabash.library.XSLT.run(XSLT.java:\\E[0-9]+\\Q)\n" +
+			                     "	at com.xmlcalabash.runtime.XAtomicStep.run(XAtomicStep.java:\\E[0-9]+\\Q)\n" +
+			                     "	at com.xmlcalabash.runtime.XPipeline.doRun(XPipeline.java:\\E[0-9]+\\Q)\n" +
+			                     "	at com.xmlcalabash.runtime.XPipeline.run(XPipeline.java:\\E[0-9]+\\Q)\n" +
+			                     "	at org.daisy.common.xproc.calabash.impl.CalabashXProcPipeline.run(CalabashXProcPipeline.java:\\E[0-9]+\\Q)\n" +
+			                     "	... 3 more\n" +
+			                     "Caused by: net.sf.saxon.expr.instruct.TerminationException: Processing terminated by xsl:message at line -1 in null\n" +
+			                     "	at net.sf.saxon.expr.instruct.Message.processLeavingTail(Message.java:\\E[0-9]+\\Q)\n" +
+			                     "	at net.sf.saxon.expr.instruct.Template.expand(Template.java:\\E[0-9]+\\Q)\n" +
+			                     "	at net.sf.saxon.Controller.transformDocument(Controller.java:\\E[0-9]+\\Q)\n" +
+			                     "	at net.sf.saxon.Controller.transform(Controller.java:\\E[0-9]+\\Q)\n" +
+			                     "	at net.sf.saxon.s9api.XsltTransformer.transform(XsltTransformer.java:\\E[0-9]+\\Q)\n" +
+			                     "	... 8 more\\E$"));
+			Assert.assertFalse(log.hasNext());
 		} finally {
+			logger.detachAppender(collectLog);
 			bus.unregister(collectMessages);
 		}
 	}
 	
 	@Test
 	public void testUncaughtJavaError() {
+		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		logger.addAppender(collectLog);
 		CollectMessages collectMessages = new CollectMessages();
 		EventBus bus = eventBusProvider.get();
 		bus.register(collectMessages);
@@ -155,9 +232,27 @@ public class FrameworkCoreTest extends AbstractTest {
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			Iterator<Message> messages = collectMessages.get(id);
 			int seq = 0;
-			assertMessage(seq++, "java.lang.RuntimeException: foobar", next(messages));
+			assertMessage(next(messages), seq++, Message.Level.ERROR, "java.lang.RuntimeException: foobar");
 			Assert.assertFalse(messages.hasNext());
+			Iterator<ILoggingEvent> log = collectLog.get();
+			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
+			                 Predicates.containsPattern("^\\Q" +
+			                     "job finished with error state\n" +
+			                     "java.lang.RuntimeException: java.lang.RuntimeException: foobar\n" +
+			                     "	at org.daisy.common.xproc.calabash.impl.CalabashXProcPipeline.run(CalabashXProcPipeline.java:\\E[0-9]+\\Q)\n" +
+			                     "	at org.daisy.pipeline.job.Job.run(Job.java:\\E[0-9]+\\Q)\n" +
+			                     "	at org.daisy.pipeline.job.impl.DefaultJobExecutionService$1.run(DefaultJobExecutionService.java:\\E[0-9]+\\Q)\n" +
+			                     "	at java.lang.Thread.run(Thread.java:\\E[0-9]+\\Q)\n" +
+			                     "Caused by: java.lang.RuntimeException: foobar\n" +
+			                     "	at JavaStep.run(JavaStep.java:\\E[0-9]+\\Q)\n" +
+			                     "	at com.xmlcalabash.runtime.XAtomicStep.run(XAtomicStep.java:\\E[0-9]+\\Q)\n" +
+			                     "	at com.xmlcalabash.runtime.XPipeline.doRun(XPipeline.java:\\E[0-9]+\\Q)\n" +
+			                     "	at com.xmlcalabash.runtime.XPipeline.run(XPipeline.java:\\E[0-9]+\\Q)\n" +
+			                     "	at org.daisy.common.xproc.calabash.impl.CalabashXProcPipeline.run(CalabashXProcPipeline.java:\\E[0-9]+\\Q)\n" +
+			                     "	... 3 more\\E$"));
+			Assert.assertFalse(log.hasNext());
 		} finally {
+			logger.detachAppender(collectLog);
 			bus.unregister(collectMessages);
 		}
 	}
@@ -203,11 +298,67 @@ public class FrameworkCoreTest extends AbstractTest {
 			return Optional.<T>absent();
 	}
 	
-	static void assertMessage(int expectedSequence, String expectedText, Optional<Message> message) {
+	static void assertMessage(Optional<Message> message, int expectedSequence, Message.Level expectedLevel, String expectedText) {
 		Assert.assertTrue("message does not exist", message.isPresent());
 		Message m = message.get();
 		Assert.assertEquals("message sequence number does not match", expectedSequence, m.getSequence());
+		Assert.assertEquals("message level does not match", expectedLevel, m.getLevel());
 		Assert.assertEquals("message text does not match", expectedText, m.getText());
+	}
+	
+	static void assertLogMessage(Optional<ILoggingEvent> message,
+	                             String expectedLoggerName, Level expectedLevel, String expectedText) {
+		assertLogMessage(message, expectedLoggerName, expectedLevel, Predicates.equalTo(expectedText));
+	}
+	
+	static void assertLogMessage(Optional<ILoggingEvent> message,
+	                             String expectedLoggerName, Level expectedLevel, Predicate<? super String> expectedText) {
+		Assert.assertTrue("message does not exist", message.isPresent());
+		ILoggingEvent m = message.get();
+		Assert.assertEquals("logger name does not match", expectedLoggerName, m.getLoggerName());
+		Assert.assertEquals("message level does not match", expectedLevel, m.getLevel());
+		StringBuilder text = new StringBuilder(); {
+			text.append(m.getFormattedMessage());
+			ThrowableProxy throwable = (ThrowableProxy)m.getThrowableProxy();
+			if (throwable != null) {
+				StringWriter trace = new StringWriter();
+				throwable.getThrowable().printStackTrace(new PrintWriter(trace));
+				text.append("\n" + trace);
+				// remove newline
+				text.setLength(text.length() - 1);
+			}
+		}
+		Assert.assertTrue("message text does not match", expectedText.apply(text.toString()));
+	}
+	
+	static void printLogMessage(ILoggingEvent message, PrintStream out) {
+		String s = "";
+		switch(message.getLevel().toInt()) {
+		case Level.TRACE_INT:
+			s += "TRACE: ";
+			break;
+		case Level.DEBUG_INT:
+			s += "DEBUG: ";
+			break;
+		case Level.INFO_INT:
+			s += "INFO:  ";
+			break;
+		case Level.WARN_INT:
+			s += "WARN:  ";
+			break;
+		case Level.ERROR_INT:
+			s += "ERROR: ";
+			break;
+		case Level.ALL_INT:
+		case Level.OFF_INT:
+		default:
+		}
+		s += message.getLoggerName() + " - ";
+		s += message.getFormattedMessage();
+		out.println(s);
+		ThrowableProxy throwable = (ThrowableProxy)message.getThrowableProxy();
+		if (throwable != null)
+			throwable.getThrowable().printStackTrace(out);
 	}
 	
 	// FIXME: can dependencies on modules-registry, webservice-utils and framework-volatile be eliminated?
@@ -265,6 +416,26 @@ public class FrameworkCoreTest extends AbstractTest {
 				return messages.get(jobId).iterator();
 			else
 				return Collections.<Message>emptyIterator();
+		}
+	}
+	
+	static class CollectLogMessages extends AppenderBase<ILoggingEvent> {
+		final List<ILoggingEvent> log = new ArrayList<ILoggingEvent>();
+		final Level threshold;
+		CollectLogMessages(LoggerContext context, Level threshold) {
+			super();
+			this.threshold = threshold;
+			setContext(context);
+			start();
+		}
+		public void append(ILoggingEvent event) {
+			if (event.getLevel().toInt() >= threshold.toInt()) {
+				printLogMessage(event, System.out);
+				log.add(event);
+			}
+		}
+		Iterator<ILoggingEvent> get() {
+			return log.iterator();
 		}
 	}
 	
