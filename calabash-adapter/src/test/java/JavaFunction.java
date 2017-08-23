@@ -46,8 +46,12 @@ public class JavaFunction extends ExtensionFunctionDefinition {
 	public ExtensionFunctionCall makeCallExpression() {
 		return new ExtensionFunctionCall() {
 			public Sequence call(XPathContext context, Sequence[] arguments) throws XPathException {
-				logger.info("going to throw an exception");
-				throw new RuntimeException("foobar");
+				try {
+					logger.info("going to throw an exception");
+					throw new RuntimeException("foobar");
+				} catch (Throwable e) {
+					throw new XPathException(XProcException.javaError(e, 0));
+				}
 			}
 		};
 	}

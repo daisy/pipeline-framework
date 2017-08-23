@@ -1,5 +1,6 @@
 package org.daisy.common.xproc.calabash.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Properties;
 
@@ -173,5 +174,11 @@ public class EventBusMessageListener implements XProcMessageListener {
 		post(builder);
 
 	}
+
+	@Override
+	public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion) {}
+
+	@Override
+	public void closeStep() {}
 
 }

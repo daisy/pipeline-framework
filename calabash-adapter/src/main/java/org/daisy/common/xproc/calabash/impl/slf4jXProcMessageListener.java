@@ -1,5 +1,7 @@
 package org.daisy.common.xproc.calabash.impl;
 
+import java.math.BigDecimal;
+
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 
@@ -128,7 +130,10 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
 
 	}
 
+	@Override
+	public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion) {}
 
-
+	@Override
+	public void closeStep() {}
 
 }

@@ -135,27 +135,14 @@ public class FrameworkCoreTest extends AbstractTest {
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			Iterator<Message> messages = collectMessages.get(id);
 			int seq = 0;
-			assertMessage(next(messages), seq++, Message.Level.ERROR, "FOO:foobar");
-			assertMessage(next(messages), seq++, Message.Level.ERROR, "com.xmlcalabash.core.XProcException: foobar");
+			assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
 			Assert.assertFalse(messages.hasNext());
 			Iterator<ILoggingEvent> log = collectLog.get();
-			assertLogMessage(next(log), "com.xmlcalabash", Level.ERROR,
-			                 Predicates.containsPattern("^\\Qbundle://\\E.+\\Q/module/xproc-error.xpl:0:FOO:foobar\\E$"));
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
-			                 Predicates.containsPattern("^\\Q" +
-			                     "job finished with error state\n" +
-			                     "java.lang.RuntimeException: com.xmlcalabash.core.XProcException: foobar\n" +
-			                     "	at org.daisy.common.xproc.calabash.impl.CalabashXProcPipeline.run(CalabashXProcPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	at org.daisy.pipeline.job.Job.run(Job.java:\\E[0-9]+\\Q)\n" +
-			                     "	at org.daisy.pipeline.job.impl.DefaultJobExecutionService$1.run(DefaultJobExecutionService.java:\\E[0-9]+\\Q)\n" +
-			                     "	at java.lang.Thread.run(Thread.java:\\E[0-9]+\\Q)\n" +
-			                     "Caused by: com.xmlcalabash.core.XProcException: foobar\n" +
-			                     "	at com.xmlcalabash.library.Error.run(Error.java:\\E[0-9]+\\Q)\n" +
-			                     "	at com.xmlcalabash.runtime.XAtomicStep.run(XAtomicStep.java:\\E[0-9]+\\Q)\n" +
-			                     "	at com.xmlcalabash.runtime.XPipeline.doRun(XPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	at com.xmlcalabash.runtime.XPipeline.run(XPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	at org.daisy.common.xproc.calabash.impl.CalabashXProcPipeline.run(CalabashXProcPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	... 3 more\\E$"));
+			                 "job finished with error state\n" +
+			                 "[FOO] foobar\n" +
+			                 "	at {http://www.w3.org/ns/xproc}error(xproc-error.xpl:10)\n" +
+			                 "	at {http://www.daisy.org/ns/pipeline/xproc}xproc-error(xproc-error.xpl:4)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
@@ -189,8 +176,6 @@ public class FrameworkCoreTest extends AbstractTest {
 			                    CharStreams.toString(results.next()));
 			Assert.assertFalse(results.hasNext());
 			Iterator<Message> messages = collectMessages.get(id);
-			int seq = 0;
-			assertMessage(next(messages), seq++, Message.Level.INFO, "Runtime Error");
 			Assert.assertFalse(messages.hasNext());
 			Iterator<ILoggingEvent> log = collectLog.get();
 			Assert.assertFalse(log.hasNext());
@@ -214,39 +199,16 @@ public class FrameworkCoreTest extends AbstractTest {
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			Iterator<Message> messages = collectMessages.get(id);
 			int seq = 0;
-			assertMessage(next(messages), seq++, Message.Level.INFO, "Runtime Error");
-			assertMessage(next(messages), seq++, Message.Level.ERROR, "XTMM9000:Processing terminated by xsl:message at line -1 in null");
-			assertMessage(next(messages), seq++, Message.Level.ERROR, "Processing terminated by xsl:message at line -1 in null");
-			assertMessage(next(messages), seq++, Message.Level.ERROR, "net.sf.saxon.s9api.SaxonApiException: Processing terminated by xsl:message at line -1 in null");
+			assertMessage(next(messages), seq++, Message.Level.ERROR, "Runtime Error (Please see detailed log for more info.)");
 			Assert.assertFalse(messages.hasNext());
 			Iterator<ILoggingEvent> log = collectLog.get();
-			assertLogMessage(next(log), "com.xmlcalabash.runtime.XAtomicStep", Level.ERROR,
-			                 "XTMM9000:Processing terminated by xsl:message at line -1 in null");
-			assertLogMessage(next(log), "com.xmlcalabash.runtime.XAtomicStep", Level.ERROR,
-			                 "Processing terminated by xsl:message at line -1 in null");
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
-			                 Predicates.containsPattern("^\\Q" +
-			                     "job finished with error state\n" +
-			                     "java.lang.RuntimeException: net.sf.saxon.s9api.SaxonApiException: Processing terminated by xsl:message at line -1 in null\n" +
-			                     "	at org.daisy.common.xproc.calabash.impl.CalabashXProcPipeline.run(CalabashXProcPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	at org.daisy.pipeline.job.Job.run(Job.java:\\E[0-9]+\\Q)\n" +
-			                     "	at org.daisy.pipeline.job.impl.DefaultJobExecutionService$1.run(DefaultJobExecutionService.java:\\E[0-9]+\\Q)\n" +
-			                     "	at java.lang.Thread.run(Thread.java:\\E[0-9]+\\Q)\n" +
-			                     "Caused by: net.sf.saxon.s9api.SaxonApiException: Processing terminated by xsl:message at line -1 in null\n" +
-			                     "	at net.sf.saxon.s9api.XsltTransformer.transform(XsltTransformer.java:\\E[0-9]+\\Q)\n" +
-			                     "	at com.xmlcalabash.library.XSLT.run(XSLT.java:\\E[0-9]+\\Q)\n" +
-			                     "	at com.xmlcalabash.runtime.XAtomicStep.run(XAtomicStep.java:\\E[0-9]+\\Q)\n" +
-			                     "	at com.xmlcalabash.runtime.XPipeline.doRun(XPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	at com.xmlcalabash.runtime.XPipeline.run(XPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	at org.daisy.common.xproc.calabash.impl.CalabashXProcPipeline.run(CalabashXProcPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	... 3 more\n" +
-			                     "Caused by: net.sf.saxon.expr.instruct.TerminationException: Processing terminated by xsl:message at line -1 in null\n" +
-			                     "	at net.sf.saxon.expr.instruct.Message.processLeavingTail(Message.java:\\E[0-9]+\\Q)\n" +
-			                     "	at net.sf.saxon.expr.instruct.Template.expand(Template.java:\\E[0-9]+\\Q)\n" +
-			                     "	at net.sf.saxon.Controller.transformDocument(Controller.java:\\E[0-9]+\\Q)\n" +
-			                     "	at net.sf.saxon.Controller.transform(Controller.java:\\E[0-9]+\\Q)\n" +
-			                     "	at net.sf.saxon.s9api.XsltTransformer.transform(XsltTransformer.java:\\E[0-9]+\\Q)\n" +
-			                     "	... 8 more\\E$"));
+			                 "job finished with error state\n" +
+			                 "Runtime Error\n" +
+			                 // FIXME: should be line 16
+			                 "	at xsl:message(xslt-terminate-error.xpl:14)\n" +
+			                 "	at {http://www.w3.org/ns/xproc}xslt(xslt-terminate-error.xpl:8)\n" +
+			                 "	at {http://www.daisy.org/ns/pipeline/xproc}xslt-terminate-error(xslt-terminate-error.xpl:4)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
@@ -268,24 +230,15 @@ public class FrameworkCoreTest extends AbstractTest {
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			Iterator<Message> messages = collectMessages.get(id);
 			int seq = 0;
-			assertMessage(next(messages), seq++, Message.Level.ERROR, "java.lang.RuntimeException: foobar");
+			assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
 			Assert.assertFalse(messages.hasNext());
 			Iterator<ILoggingEvent> log = collectLog.get();
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
-			                 Predicates.containsPattern("^\\Q" +
-			                     "job finished with error state\n" +
-			                     "java.lang.RuntimeException: java.lang.RuntimeException: foobar\n" +
-			                     "	at org.daisy.common.xproc.calabash.impl.CalabashXProcPipeline.run(CalabashXProcPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	at org.daisy.pipeline.job.Job.run(Job.java:\\E[0-9]+\\Q)\n" +
-			                     "	at org.daisy.pipeline.job.impl.DefaultJobExecutionService$1.run(DefaultJobExecutionService.java:\\E[0-9]+\\Q)\n" +
-			                     "	at java.lang.Thread.run(Thread.java:\\E[0-9]+\\Q)\n" +
-			                     "Caused by: java.lang.RuntimeException: foobar\n" +
-			                     "	at JavaStep.run(JavaStep.java:\\E[0-9]+\\Q)\n" +
-			                     "	at com.xmlcalabash.runtime.XAtomicStep.run(XAtomicStep.java:\\E[0-9]+\\Q)\n" +
-			                     "	at com.xmlcalabash.runtime.XPipeline.doRun(XPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	at com.xmlcalabash.runtime.XPipeline.run(XPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	at org.daisy.common.xproc.calabash.impl.CalabashXProcPipeline.run(CalabashXProcPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	... 3 more\\E$"));
+			                 "job finished with error state\n" +
+			                 "foobar\n" +
+			                 "	at JavaStep.run(JavaStep.java:25)\n" +
+			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:13)\n" +
+			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step-runtime-error(java-step-runtime-error.xpl:4)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
@@ -307,34 +260,17 @@ public class FrameworkCoreTest extends AbstractTest {
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			Iterator<Message> messages = collectMessages.get(id);
 			int seq = 0;
-			assertMessage(next(messages), seq++, Message.Level.ERROR, "java.lang.RuntimeException: foobar");
+			assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
 			Assert.assertFalse(messages.hasNext());
 			Iterator<ILoggingEvent> log = collectLog.get();
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
-			                 Predicates.containsPattern("^\\Q" +
-			                     "job finished with error state\n" +
-			                     "java.lang.RuntimeException: java.lang.RuntimeException: foobar\n" +
-			                     "	at org.daisy.common.xproc.calabash.impl.CalabashXProcPipeline.run(CalabashXProcPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	at org.daisy.pipeline.job.Job.run(Job.java:\\E[0-9]+\\Q)\n" +
-			                     "	at org.daisy.pipeline.job.impl.DefaultJobExecutionService$1.run(DefaultJobExecutionService.java:\\E[0-9]+\\Q)\n" +
-			                     "	at java.lang.Thread.run(Thread.java:\\E[0-9]+\\Q)\n" +
-			                     "Caused by: java.lang.RuntimeException: foobar\n" +
-			                     "	at JavaFunction$1.call(JavaFunction.java:50)\n" +
-			                     "	at net.sf.saxon.functions.IntegratedFunctionCall.iterate(IntegratedFunctionCall.java:\\E[0-9]+\\Q)\n" +
-			                     "	at net.sf.saxon.expr.Expression.evaluateItem(Expression.java:\\E[0-9]+\\Q)\n" +
-			                     "	at net.sf.saxon.expr.Expression.evaluateAsString(Expression.java:\\E[0-9]+\\Q)\n" +
-			                     "	at net.sf.saxon.expr.instruct.SimpleNodeConstructor.processLeavingTail(SimpleNodeConstructor.java:\\E[0-9]+\\Q)\n" +
-			                     "	at net.sf.saxon.expr.instruct.ValueOf.processLeavingTail(ValueOf.java:\\E[0-9]+\\Q)\n" +
-			                     "	at net.sf.saxon.expr.instruct.Template.expand(Template.java:\\E[0-9]+\\Q)\n" +
-			                     "	at net.sf.saxon.Controller.transformDocument(Controller.java:\\E[0-9]+\\Q)\n" +
-			                     "	at net.sf.saxon.Controller.transform(Controller.java:\\E[0-9]+\\Q)\n" +
-			                     "	at net.sf.saxon.s9api.XsltTransformer.transform(XsltTransformer.java:\\E[0-9]+\\Q)\n" +
-			                     "	at com.xmlcalabash.library.XSLT.run(XSLT.java:\\E[0-9]+\\Q)\n" +
-			                     "	at com.xmlcalabash.runtime.XAtomicStep.run(XAtomicStep.java:\\E[0-9]+\\Q)\n" +
-			                     "	at com.xmlcalabash.runtime.XPipeline.doRun(XPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	at com.xmlcalabash.runtime.XPipeline.run(XPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	at org.daisy.common.xproc.calabash.impl.CalabashXProcPipeline.run(CalabashXProcPipeline.java:\\E[0-9]+\\Q)\n" +
-			                     "	... 3 more\\E$"));
+			                 "job finished with error state\n" +
+			                 "foobar\n" +
+			                 "	at JavaFunction$1.call(JavaFunction.java:51)\n" +
+			                 // FIXME: should be line 17
+			                 "	at pf:java-function(java-function-runtime-error.xpl:15)\n" +
+			                 "	at {http://www.w3.org/ns/xproc}xslt(java-function-runtime-error.xpl:9)\n" +
+			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-function-runtime-error(java-function-runtime-error.xpl:5)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
@@ -356,16 +292,14 @@ public class FrameworkCoreTest extends AbstractTest {
 			waitForStatus(Job.Status.DONE, job, 1000);
 			Iterator<Message> messages = collectMessages.get(id);
 			int seq = 0;
-			assertMessage(next(messages), seq++, Message.Level.ERROR,
-			              "err:XTRE0540:Ambiguous rule match for /hello\n" +
-			              "Matches both \"element(Q{}hello)\" on line -1 of bundle://50.0:1/module/xslt-warning.xpl\n" +
-			              "and \"element(Q{}hello)\" on line -1 of bundle://50.0:1/module/xslt-warning.xpl");
+			assertMessage(next(messages), seq++, Message.Level.WARNING,
+			              Predicates.containsPattern("^\\Q" +
+			                  "err:XTRE0540:Ambiguous rule match for /hello\n" +
+			                  // FIXME: should be line 17 and 21
+			                  "Matches both \"element(Q{}hello)\" on line 16 of bundle://\\E[^/]+\\Q/module/xslt-warning.xpl\n" +
+			                  "and \"element(Q{}hello)\" on line 16 of bundle://\\E[^/]+\\Q/module/xslt-warning.xpl\\E$"));
 			Assert.assertFalse(messages.hasNext());
 			Iterator<ILoggingEvent> log = collectLog.get();
-			assertLogMessage(next(log), "com.xmlcalabash", Level.ERROR,
-			                 "err:XTRE0540:Ambiguous rule match for /hello\n" +
-			                 "Matches both \"element(Q{}hello)\" on line -1 of bundle://50.0:1/module/xslt-warning.xpl\n" +
-			                 "and \"element(Q{}hello)\" on line -1 of bundle://50.0:1/module/xslt-warning.xpl");
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
@@ -414,12 +348,18 @@ public class FrameworkCoreTest extends AbstractTest {
 			return Optional.<T>absent();
 	}
 	
-	static void assertMessage(Optional<Message> message, int expectedSequence, Message.Level expectedLevel, String expectedText) {
+	static void assertMessage(Optional<Message> message,
+	                          int expectedSequence, Message.Level expectedLevel, String expectedText) {
+		assertMessage(message, expectedSequence, expectedLevel, Predicates.equalTo(expectedText));
+	}
+	
+	static void assertMessage(Optional<Message> message,
+	                          int expectedSequence, Message.Level expectedLevel, Predicate<? super String> expectedText) {
 		Assert.assertTrue("message does not exist", message.isPresent());
 		Message m = message.get();
 		Assert.assertEquals("message sequence number does not match", expectedSequence, m.getSequence());
 		Assert.assertEquals("message level does not match", expectedLevel, m.getLevel());
-		Assert.assertEquals("message text does not match", expectedText, m.getText());
+		Assert.assertTrue("message text does not match", expectedText.apply(m.getText()));
 	}
 	
 	static void assertLogMessage(Optional<ILoggingEvent> message,

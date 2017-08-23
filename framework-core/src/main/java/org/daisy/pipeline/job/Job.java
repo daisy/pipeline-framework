@@ -7,6 +7,7 @@ import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.Message.MessageBuilder;
 import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcEngine;
+import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.job.impl.JobUtils;
@@ -222,8 +223,12 @@ public class Job implements RuntimeConfigurator.EventBusable{
                         }
                 }catch(Exception e){
                         changeStatus( Status.ERROR);
-                        broadcastError(e.getMessage());
-                        logger.error("job finished with error state",e);
+                        broadcastError(e.getMessage() + " (Please see detailed log for more info.)");
+                        if (e instanceof XProcErrorException) {
+                                logger.error("job finished with error state\n" + e.toString());
+                                logger.debug("job finished with error state", e);
+                        } else
+                                logger.error("job finished with error state", e);
 		} catch (OutOfMemoryError e) {//this one needs it's own catch!
                         changeStatus( Status.ERROR);
                         broadcastError(e.getMessage());
