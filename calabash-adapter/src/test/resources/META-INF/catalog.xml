@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
-  <uri name="http://www.daisy.org/pipeline/modules/test/fail.xpl" uri="../module/fail.xpl" px:script="true"/>
+  <uri name="http://www.daisy.org/pipeline/modules/test/catch-xproc-error.xpl" uri="../module/catch-xproc-error.xpl" px:script="true"/>
   <uri name="http://www.daisy.org/pipeline/modules/test/xproc-error.xpl" uri="../module/xproc-error.xpl" px:script="true"/>
+  <uri name="http://www.daisy.org/pipeline/modules/test/catch-xslt-terminate-error.xpl" uri="../module/catch-xslt-terminate-error.xpl" px:script="true"/>
   <uri name="http://www.daisy.org/pipeline/modules/test/xslt-terminate-error.xpl" uri="../module/xslt-terminate-error.xpl" px:script="true"/>
-  <uri name="http://www.daisy.org/pipeline/modules/test/java-runtime-error.xpl" uri="../module/java-runtime-error.xpl" px:script="true"/>
+  <uri name="http://www.daisy.org/pipeline/modules/test/java-step-runtime-error.xpl" uri="../module/java-step-runtime-error.xpl" px:script="true"/>
+  <uri name="http://www.daisy.org/pipeline/modules/test/java-function-runtime-error.xpl" uri="../module/java-function-runtime-error.xpl" px:script="true"/>
+  <uri name="http://www.daisy.org/pipeline/modules/test/xslt-warning.xpl" uri="../module/xslt-warning.xpl" px:script="true"/>
 </catalog>

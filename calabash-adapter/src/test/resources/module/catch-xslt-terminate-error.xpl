@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="px:fail" version="1.0"
+<p:declare-step type="px:catch-xslt-terminate-error" version="1.0"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data">
@@ -14,11 +14,23 @@
     
     <p:try>
         <p:group>
-            <p:error code="FOO">
+            <p:xslt template-name="start">
                 <p:input port="source">
-                    <p:inline><message>foobar</message></p:inline>
+                    <p:empty/>
                 </p:input>
-            </p:error>
+                <p:input port="stylesheet">
+                    <p:inline>
+                        <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+                            <xsl:template name="start">
+                                <xsl:message terminate="yes">Runtime Error</xsl:message>
+                            </xsl:template>
+                        </xsl:stylesheet>
+                    </p:inline>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
         </p:group>
         <p:catch name="catch">
             <p:identity>
