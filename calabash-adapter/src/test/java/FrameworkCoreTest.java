@@ -292,6 +292,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			try {
 				int seq = 0;
 				seq++; // px:java-step
+				assertMessage(next(messages), seq++, Message.Level.INFO, "going to throw an exception");
 				assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
 				Assert.assertFalse(messages.hasNext());
 			} catch (Throwable e) {
@@ -327,6 +328,7 @@ public class FrameworkCoreTest extends AbstractTest {
 				int seq = 0;
 				seq++; // p:xslt
 				assertMessage(next(messages), seq++, Message.Level.INFO, "inside pf:java-function");
+				assertMessage(next(messages), seq++, Message.Level.INFO, "going to throw an exception");
 				assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
 				Assert.assertFalse(messages.hasNext());
 			} catch (Throwable e) {
@@ -662,7 +664,8 @@ public class FrameworkCoreTest extends AbstractTest {
 			"org.apache.httpcomponents:httpclient-osgi:?",
 			"org.apache.httpcomponents:httpcore-osgi:?",
 			"org.daisy.libs:jing:?",
-			"org.daisy.pipeline:framework-volatile:?"
+			"org.daisy.pipeline:framework-volatile:?",
+			"org.daisy.pipeline:logging-appender:?"
 		};
 	}
 	
