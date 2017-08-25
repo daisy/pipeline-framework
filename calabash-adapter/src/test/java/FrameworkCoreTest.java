@@ -260,13 +260,14 @@ public class FrameworkCoreTest extends AbstractTest {
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			Iterator<Message> messages = collectMessages.get(id);
 			int seq = 0;
+			assertMessage(next(messages), seq++, Message.Level.INFO, "inside pf:java-function");
 			assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
 			Assert.assertFalse(messages.hasNext());
 			Iterator<ILoggingEvent> log = collectLog.get();
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "foobar\n" +
-			                 "	at JavaFunction$1.call(JavaFunction.java:51)\n" +
+			                 "	at JavaFunction$1.call(JavaFunction.java:60)\n" +
 			                 // FIXME: should be line 17
 			                 "	at pf:java-function(java-function-runtime-error.xpl:15)\n" +
 			                 "	at {http://www.w3.org/ns/xproc}xslt(java-function-runtime-error.xpl:9)\n" +

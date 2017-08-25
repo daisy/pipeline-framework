@@ -9,6 +9,8 @@ import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 
+import org.daisy.pipeline.event.EventBusProvider;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +18,12 @@ public class JavaFunction extends ExtensionFunctionDefinition {
 	
 	private static final StructuredQName funcname = new StructuredQName("pf",
 			"http://www.daisy.org/ns/pipeline/functions", "java-function");
+	
+	Logger messageBus;
+	
+	protected void bindEventBus(EventBusProvider eventBusProvider) {
+		messageBus = eventBusProvider.getAsLogger();
+	}
 	
 	@Override
 	public StructuredQName getFunctionQName() {
@@ -47,6 +55,7 @@ public class JavaFunction extends ExtensionFunctionDefinition {
 		return new ExtensionFunctionCall() {
 			public Sequence call(XPathContext context, Sequence[] arguments) throws XPathException {
 				try {
+					messageBus.info("inside pf:java-function");
 					logger.info("going to throw an exception");
 					throw new RuntimeException("foobar");
 				} catch (Throwable e) {
