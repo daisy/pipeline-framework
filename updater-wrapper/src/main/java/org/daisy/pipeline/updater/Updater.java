@@ -34,7 +34,7 @@ public class Updater {
                                 updateSite,
                                 deployPath,
                                 releaseDescriptor,
-                                "current").launch();
+                                "latest").launch();
                 new OutputParser(os,obs).parse();
 
         }
