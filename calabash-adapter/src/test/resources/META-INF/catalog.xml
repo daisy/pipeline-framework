@@ -7,4 +7,5 @@
   <uri name="http://www.daisy.org/pipeline/modules/test/java-step-runtime-error.xpl" uri="../module/java-step-runtime-error.xpl" px:script="true"/>
   <uri name="http://www.daisy.org/pipeline/modules/test/java-function-runtime-error.xpl" uri="../module/java-function-runtime-error.xpl" px:script="true"/>
   <uri name="http://www.daisy.org/pipeline/modules/test/xslt-warning.xpl" uri="../module/xslt-warning.xpl" px:script="true"/>
+  <uri name="http://www.daisy.org/pipeline/modules/test/xproc-warning.xpl" uri="../module/xproc-warning.xpl" px:script="true"/>
 </catalog>

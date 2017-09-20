@@ -307,6 +307,30 @@ public class FrameworkCoreTest extends AbstractTest {
 		}
 	}
 	
+	@Test
+	public void testXProcWarning() {
+		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		logger.addAppender(collectLog);
+		CollectMessages collectMessages = new CollectMessages();
+		EventBus bus = eventBusProvider.get();
+		bus.register(collectMessages);
+		try {
+			Job job = newJob("xproc-warning");
+			String id = job.getId().toString();
+			waitForStatus(Job.Status.DONE, job, 1000);
+			Iterator<Message> messages = collectMessages.get(id);
+			int seq = 0;
+			assertMessage(next(messages), seq++, Message.Level.WARNING, "Hello world!");
+			Assert.assertFalse(messages.hasNext());
+			Iterator<ILoggingEvent> log = collectLog.get();
+			Assert.assertFalse(log.hasNext());
+		} finally {
+			logger.detachAppender(collectLog);
+			bus.unregister(collectMessages);
+		}
+	}
+	
 	Job newJob(String scriptId) {
 		return newJob(scriptId, new XProcInput.Builder().build(), new XProcOutput.Builder().build());
 	}

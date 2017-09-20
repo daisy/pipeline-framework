@@ -77,4 +77,15 @@
     <property name="script.description" type="String" value="Succeeds but shows a error message about an ambiguous rule match"/>
     <property name="script.url" type="String" value="http://www.daisy.org/pipeline/modules/test/xslt-warning.xpl"/>
   </component>
+  <component name="xproc-warning" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="xproc-warning"/>
+    <property name="script.name" type="String" value="xproc-warning"/>
+    <property name="script.description" type="String" value="Shows a warning message"/>
+    <property name="script.url" type="String" value="http://www.daisy.org/pipeline/modules/test/xproc-warning.xpl"/>
+  </component>
 </components>

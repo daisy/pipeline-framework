@@ -131,7 +131,23 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
 	}
 
 	@Override
-	public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion) {}
+	public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion) {
+		if (message == null)
+			return;
+		if (level == null || level.equals("INFO")) {
+			info(step, node, message);
+		} else if (level.equals("ERROR")) {
+			error(step, node, message, null);
+		} else if (level.equals("WARN")) {
+			warning(step, node, message);
+		} else if (level.equals("DEBUG")) {
+			fine(step, node, message);
+		} else if (level.equals("TRACE")) {
+			finest(step, node, message);
+		} else {
+			info(step, node, "Message with invalid level '" + level + "': " + message);
+		}
+	}
 
 	@Override
 	public void closeStep() {}

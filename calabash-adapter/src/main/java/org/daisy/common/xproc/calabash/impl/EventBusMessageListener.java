@@ -176,7 +176,27 @@ public class EventBusMessageListener implements XProcMessageListener {
 	}
 
 	@Override
-	public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion) {}
+	public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion) {
+		if (message == null)
+			return;
+		MessageBuilder builder = messageBuilderFactory.newMessageBuilder();
+		if (level == null || level.equals("INFO")) {
+			builder.withLevel(Level.INFO);
+		} else if (level.equals("ERROR")) {
+			builder.withLevel(Level.ERROR);
+		} else if (level.equals("WARN")) {
+			builder.withLevel(Level.WARNING);
+		} else if (level.equals("DEBUG")) {
+			builder.withLevel(Level.DEBUG);
+		} else if (level.equals("TRACE")) {
+			builder.withLevel(Level.TRACE);
+		} else {
+			builder.withLevel(Level.INFO);
+			message = "Message with invalid level '" + level + "': " + message;
+		}
+		XprocMessageHelper.message(step, node, message, builder);
+		post(builder);
+	}
 
 	@Override
 	public void closeStep() {}
