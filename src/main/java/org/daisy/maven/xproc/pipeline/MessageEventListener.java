@@ -10,6 +10,9 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component
 public class MessageEventListener {
 	
@@ -26,6 +29,25 @@ public class MessageEventListener {
 	
 	@Subscribe
 	public synchronized void handleMessage(Message message) {
-		System.out.printf("[%s] %s\n", message.getLevel(), message.getText());
+		String m = message.getText();
+		switch (message.getLevel()) {
+		case TRACE:
+			logger.trace(m);
+			break;
+		case DEBUG:
+			logger.debug(m);
+			break;
+		case INFO:
+			logger.info(m);
+			break;
+		case WARNING:
+			logger.warn(m);
+			break;
+		case ERROR:
+			logger.error(m);
+			break; }
 	}
+	
+	private static final Logger logger = LoggerFactory.getLogger(MessageEventListener.class);
+	
 }
