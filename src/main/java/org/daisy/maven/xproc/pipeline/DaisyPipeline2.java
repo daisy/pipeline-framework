@@ -7,10 +7,10 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
-import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamResult;
 
 import com.google.common.base.Supplier;
@@ -26,6 +26,8 @@ import org.daisy.common.xproc.XProcResult;
 
 import org.daisy.maven.xproc.api.XProcExecutionException;
 
+import org.daisy.pipeline.job.JobMonitorFactory;
+
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -39,6 +41,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 	
 	private XProcEngine engine;
+	private JobMonitorFactory jobMonitorFactory;
 	
 	@Reference(
 		name = "XProcEngine",
@@ -49,6 +52,17 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 	)
 	protected void setXProcEngine(XProcEngine engine) {
 		this.engine = engine;
+	}
+	
+	@Reference(
+		name = "JobMonitorFactory",
+		unbind = "-",
+		service = JobMonitorFactory.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
+	public void setJobMonitorFactory(final JobMonitorFactory jobMonitorFactory) {
+		this.jobMonitorFactory = jobMonitorFactory;
 	}
 	
 	@Activate
@@ -70,6 +84,16 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 	                Map<String,String> options,
 	                Map<String,Map<String,String>> parameters)
 			throws XProcExecutionException {
+		run(pipeline, inputs, outputs, options, parameters, null);
+	}
+	
+	public void run(String pipeline,
+	                Map<String,List<String>> inputs,
+	                Map<String,String> outputs,
+	                Map<String,String> options,
+	                Map<String,Map<String,String>> parameters,
+	                Map<String,?> context)
+			throws XProcExecutionException {
 		try {
 			XProcPipeline xprocPipeline = engine.load(new URI(pipeline));
 			XProcInput.Builder inputBuilder = new XProcInput.Builder();
@@ -84,7 +108,21 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 				for (String port : parameters.keySet())
 					for (String name : parameters.get(port).keySet())
 						inputBuilder.withParameter(port, new QName("", name), parameters.get(port).get(name));
-			XProcResult results = xprocPipeline.run(inputBuilder.build());
+			XProcResult results; {
+				String jobId = context == null ? null : (String)context.get("XPROCSPEC_TEST_ID");
+				if (jobId != null) {
+					MessageEventListener listener = new MessageEventListener(jobId, jobMonitorFactory);
+					try {
+						Properties props = new Properties();
+						props.setProperty("JOB_ID", jobId);
+						results = xprocPipeline.run(inputBuilder.build(), null, props);
+					} finally {
+						listener.close();
+					}
+				} else {
+					results = xprocPipeline.run(inputBuilder.build());
+				}
+			}
 			XProcOutput.Builder outputBuilder = new XProcOutput.Builder();
 			for (XProcPortInfo info : xprocPipeline.getInfo().getOutputPorts()) {
 				String port = info.getName();

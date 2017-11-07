@@ -1,50 +1,75 @@
 package org.daisy.maven.xproc.pipeline;
 
-import com.google.common.eventbus.Subscribe;
+import java.math.BigDecimal;
+import java.util.function.BiConsumer;
+import java.util.Iterator;
 
 import org.daisy.common.messaging.Message;
-import org.daisy.pipeline.event.EventBusProvider;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
+import org.daisy.common.messaging.MessageAccessor;
+import org.daisy.maven.xproc.pipeline.logging.FlattenedProgressMessage;
+import org.daisy.pipeline.event.ProgressMessage;
+import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobMonitorFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Component
-public class MessageEventListener {
+class MessageEventListener implements BiConsumer<MessageAccessor,Integer> {
 	
-	@Reference(
-		name = "EventBusProvider",
-		unbind = "-",
-		service = EventBusProvider.class,
-		cardinality = ReferenceCardinality.MANDATORY,
-		policy = ReferencePolicy.STATIC
-	)
-	public void setEventBusProvider(EventBusProvider provider) {
-		provider.get().register(this);
+	final MessageAccessor messages;
+	
+	MessageEventListener(final String jobId, JobMonitorFactory jobMonitorFactory) {
+		// support any string (unlike JobUUIDGenerator)
+		JobId id = new JobId() {
+			@Override
+			public String toString() {
+				return jobId; }};
+		messages = jobMonitorFactory.newJobMonitor(id, true).getMessageAccessor();
+		messages.listen(this);
 	}
 	
-	@Subscribe
-	public synchronized void handleMessage(Message message) {
-		String m = message.getText();
-		switch (message.getLevel()) {
+	void close() {
+		messages.unlisten(this);
+	}
+	
+	public void accept(MessageAccessor messages, Integer sequenceNumber) {
+		if (sequenceNumber != null) {
+			flattenMessages(messages.createFilter().inRange(sequenceNumber,sequenceNumber).getMessages().iterator(),
+			                sequenceNumber,
+			                0,
+			                null,
+			                messages.getProgress());
+		}
+	}
+	
+	private void flattenMessages(Iterator<? extends Message> messages, int firstSeq, int depth, Integer parent, BigDecimal progress) {
+		while (messages.hasNext()) {
+			Message m = messages.next();
+			if (m.getSequence() >= firstSeq && m.getText() != null)
+				logMessage(new FlattenedProgressMessage(m.getText(), m.getSequence(), parent, depth, progress), m.getLevel());
+			if (m instanceof ProgressMessage)
+				flattenMessages(((ProgressMessage)m).iterator(), firstSeq, depth + 1, m.getSequence(), progress);
+		}
+	}
+	
+	private void logMessage(Object m, Message.Level level) {
+		if (level == null)
+			level = Message.Level.INFO;
+		switch (level) {
 		case TRACE:
-			logger.trace(m);
+			logger.trace("{}", m);
 			break;
 		case DEBUG:
-			logger.debug(m);
+			logger.debug("{}", m);
 			break;
 		case INFO:
-			logger.info(m);
+			logger.info("{}", m);
 			break;
 		case WARNING:
-			logger.warn(m);
+			logger.warn("{}", m);
 			break;
 		case ERROR:
-			logger.error(m);
+			logger.error("{}", m);
 			break; }
 	}
 	
