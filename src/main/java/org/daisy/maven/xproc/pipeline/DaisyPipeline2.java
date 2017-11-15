@@ -18,6 +18,7 @@ import com.google.common.base.Supplier;
 import org.daisy.common.transform.LazySaxResultProvider;
 import org.daisy.common.transform.LazySaxSourceProvider;
 import org.daisy.common.xproc.XProcEngine;
+import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPipeline;
@@ -131,7 +132,11 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 				                         new DevNullStreamResultProvider()); }
 			results.writeTo(outputBuilder.build()); }
 		catch (Exception e) {
-			throw new XProcExecutionException("DAISY Pipeline failed to execute XProc", e); }
+			if (e instanceof XProcErrorException) {
+				throw new XProcExecutionException("DAISY Pipeline failed to execute XProc\n" + e.toString(), e);
+			} else
+				throw new XProcExecutionException("DAISY Pipeline failed to execute XProc", e);
+		}
 	}
 	
 	private static class DevNullStreamResultProvider implements Supplier<Result> {
