@@ -212,7 +212,7 @@ public class JobXmlWriter {
 
         private void addResults(Element jobElem) {
                 //check if there are actual results
-                if (this.job.getContext().getResults()==null){
+                if (this.job.getContext().getResults()==null || this.job.getContext().getResults().getResults().size() == 0){
                         return;
                 }
                 Document doc = jobElem.getOwnerDocument();
