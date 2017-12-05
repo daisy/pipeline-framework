@@ -48,8 +48,10 @@ public class JobResultSetBuilder {
 			if(prov==null)
 				continue;
 			String mediaType=script.getPortMetadata(info.getName()).getMediaType();
-			List<JobResult> results = buildJobResult(prov,mapper,mediaType);
-			builder.addResults(info.getName(),results);
+			if (!"application/vnd.pipeline.status+xml".equals(mediaType)) {
+				List<JobResult> results = buildJobResult(prov,mapper,mediaType);
+				builder.addResults(info.getName(),results);
+			}
 		}
 
 	}

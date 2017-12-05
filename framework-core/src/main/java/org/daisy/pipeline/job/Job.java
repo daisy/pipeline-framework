@@ -238,7 +238,7 @@ public class Job implements RuntimeConfigurator.EventBusable{
         }
         //checks the status returned by the script
         private boolean checkStatus(){
-                return JobUtils.checkStatusPort(this.getContext().getResults());
+                return JobUtils.checkStatusPort(this.getContext().getScript(), this.getContext().getOutputs());
         }
 
         @Override
