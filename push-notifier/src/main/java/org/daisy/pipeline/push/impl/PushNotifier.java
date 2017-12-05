@@ -3,6 +3,7 @@ package org.daisy.pipeline.push.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.function.BiConsumer;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,14 +15,10 @@ import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.pipeline.clients.ClientStorage;
 import org.daisy.pipeline.event.EventBusProvider;
-import org.daisy.pipeline.event.ProgressMessage;
-import org.daisy.pipeline.event.ProgressMessageUpdate;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.Status;
-import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
-import org.daisy.pipeline.job.JobUUIDGenerator;
 import org.daisy.pipeline.job.StatusMessage;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
@@ -39,14 +36,13 @@ import com.google.common.eventbus.Subscribe;
 // this class could evolve into a general notification utility
 // e.g. it could also trigger email notifications
 // TODO: be sure to only do this N times per second
-public class PushNotifier implements CallbackHandler {
+public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor,Integer> {
 
-
-        private EventBusProvider eventBusProvider;
         private JobManagerFactory jobManagerFactory;
         private ClientStorage clientStorage;
         private JobManager jobManager;
         private Map<Job,List<Callback>> callbacks;
+        private Map<MessageAccessor,Job> jobForAccessor;
 
         /** The logger. */
         private static Logger logger = LoggerFactory.getLogger(PushNotifier.class); 
@@ -54,7 +50,7 @@ public class PushNotifier implements CallbackHandler {
         final int PUSH_INTERVAL = 1000;
 
         // track the starting point in the message sequence for every timed push
-        private Map<JobId,Integer> jobsWithNewMessages = Collections.synchronizedMap(new HashMap<JobId,Integer>());
+        private Map<MessageAccessor,Integer> newMessages = Collections.synchronizedMap(new HashMap<MessageAccessor,Integer>());
         private List<StatusHolder> statusList= Collections.synchronizedList(new LinkedList<StatusHolder>());
 
         Timer timer = null;
@@ -67,6 +63,7 @@ public class PushNotifier implements CallbackHandler {
                 logger.debug("Activating push notifier");
                 jobManager = jobManagerFactory.createFor(clientStorage.defaultClient());
                 callbacks = new HashMap<Job,List<Callback>>();
+                jobForAccessor = new HashMap<MessageAccessor,Job>();
                 this.startTimer();
         }
 
@@ -86,8 +83,7 @@ public class PushNotifier implements CallbackHandler {
         }
 
         public void setEventBusProvider(EventBusProvider eventBusProvider) {
-                this.eventBusProvider = eventBusProvider;
-                this.eventBusProvider.get().register(this);
+                eventBusProvider.get().register(this);
         }
 
         /**
@@ -105,47 +101,58 @@ public class PushNotifier implements CallbackHandler {
         @Override
         public void addCallback(Callback callback) {
                 Job job = callback.getJob();
-                if (callbacks.containsKey(job)) {
-                        callbacks.get(job).add(callback);
-                } else {
-                        List<Callback> list = new ArrayList<Callback>();
-                        list.add(callback);
+                List<Callback> list = callbacks.get(job);
+                if (list == null) {
+                        list = new ArrayList<Callback>();
                         callbacks.put(job, list);
                 }
+                if (callback.getType() == CallbackType.MESSAGES) {
+                        boolean alreadyListening = false;
+                        for (Callback c : list)
+                                if (c.getType() == CallbackType.MESSAGES) {
+                                        alreadyListening = true;
+                                        break; }
+                        if (!alreadyListening) {
+                                MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+                                jobForAccessor.put(accessor, job);
+                                accessor.listen(this);
+                        }
+                }
+                list.add(callback);
         }
 
         // this method is currently never called
         @Override
         public void removeCallback(Callback callback) {
                 Job job = callback.getJob();
-                if (callbacks.containsKey(job)) {
-                        callbacks.get(job).remove(callback);
-                        if (!callbacks.containsKey(job)) {
-                                callbacks.remove(job);
+                List<Callback> list = callbacks.get(job);
+                if (list == null)
+                        return;
+                list.remove(callback);
+                if (callback.getType() == CallbackType.MESSAGES) {
+                        boolean keepListening = false;
+                        for (Callback c : list)
+                                if (c.getType() == CallbackType.MESSAGES) {
+                                        keepListening = true;
+                                        break; }
+                        if (!keepListening) {
+                                MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+                                jobForAccessor.remove(accessor);
+                                accessor.unlisten(this);
                         }
                 }
+                if (list.isEmpty())
+                        callbacks.remove(job);
         }
 
-        @Subscribe
-        public void handleMessage(ProgressMessage msg) {
-                logger.trace("handling message: [job: " + msg.getJobId() + ", msg: " + msg.getSequence() + "]");
-                handleMessage(msg.getJobId(), msg.getSequence());
-        }
-
-        @Subscribe
-        public void handleMessageUpdate(ProgressMessageUpdate event) {
-                logger.trace("handling message update: [job: " + event.getMessage().getJobId()
-                             + ", msg: " + event.getMessage().getSequence()
-                             + ", event: " + event.getSequence() + "]");
-                handleMessage(event.getMessage().getJobId(), event.getSequence());
-        }
-
-        private void handleMessage(String jobId, int sequence) {
-                JobUUIDGenerator gen = new JobUUIDGenerator();
-                JobId id = gen.generateIdFromString(jobId);
-                synchronized (jobsWithNewMessages) {
-                        if (!jobsWithNewMessages.containsKey(id)) {
-                                jobsWithNewMessages.put(id, sequence);
+        @Override
+        public void accept(MessageAccessor accessor, Integer sequence) {
+                Job job = jobForAccessor.get(accessor);
+                logger.trace("handling message update: [job: " + job.getId() + ", event: " + sequence + "]");
+                synchronized (newMessages) {
+                        Integer seq = newMessages.get(accessor);
+                        if (seq == null) {
+                                newMessages.put(accessor, sequence);
                         }
                 }
         }
@@ -196,34 +203,40 @@ public class PushNotifier implements CallbackHandler {
 
                 }
                 private synchronized void postMessages() {
-                        Map<JobId,Integer> jobsWithNewMessages; {
-                                synchronized (PushNotifier.this.jobsWithNewMessages) {
-                                        jobsWithNewMessages = new HashMap<JobId,Integer>(PushNotifier.this.jobsWithNewMessages);
-                                        PushNotifier.this.jobsWithNewMessages.clear();
+                        Map<MessageAccessor,Integer> newMessages; {
+                                synchronized (PushNotifier.this.newMessages) {
+                                        newMessages = new HashMap<MessageAccessor,Integer>(PushNotifier.this.newMessages);
+                                        PushNotifier.this.newMessages.clear();
                                 }
                         }
-                        for (JobId jobId : jobsWithNewMessages.keySet()) {
-                                Optional<Job> job = jobManager.getJob(jobId);
-                                if(!job.isPresent()){
+                        for (MessageAccessor accessor : newMessages.keySet()) {
+                                Job job = jobForAccessor.get(accessor);
+                                // check if the job still exists, otherwise stop listening for messages
+                                if(!jobManager.getJob(job.getId()).isPresent()){
+                                        accessor.unlisten(PushNotifier.this);
                                         continue;
                                 }
-                                MessageAccessor accessor = job.get().getContext().getMonitor().getMessageAccessor();
-                                if (accessor != null) {
-                                        int seq = jobsWithNewMessages.get(jobId);
-                                        BigDecimal progress;
-                                        List<Message> messages;
-                                        {
-                                                progress = accessor.getProgress();
-                                                logger.debug("Posting messages starting from " + seq + " for job " + job.get().getId());
+                                Integer seq = newMessages.get(accessor);
+                                BigDecimal progress;
+                                List<Message> messages;
+                                {
+                                        progress = accessor.getProgress();
+                                        if (seq != null) {
+                                                logger.debug("Posting messages starting from " + seq + " for job " + job.getId());
                                                 messages = accessor.createFilter().greaterThan(seq - 1).getMessages();
+                                        } else {
+                                                newerThan = -1;
+                                                messages = Collections.<Message>emptyList();
                                         }
-                                        Iterable<Callback> callbacks = PushNotifier.this.callbacks.get(job.get());
-                                        if (callbacks != null) {
-                                                for (Callback callback : callbacks) {
-                                                        if (callback.getType() == CallbackType.MESSAGES) {
-                                                                Poster.postMessages(job.get(), messages, progress, callback);
-                                                        }
-                                                }
+                                }
+                                Iterable<Callback> callbacks = PushNotifier.this.callbacks.get(job);
+                                if (callbacks == null) {
+                                        // should not happen
+                                        continue;
+                                }
+                                for (Callback callback : callbacks) {
+                                        if (callback.getType() == CallbackType.MESSAGES) {
+                                                Poster.postMessages(job, messages, progress, callback);
                                         }
                                 }
                         }
