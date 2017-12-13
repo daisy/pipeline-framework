@@ -183,7 +183,7 @@ public class Job implements RuntimeConfigurator.EventBusable{
                 logger.info(String.format("Changing job status to: %s",to));
                 this.status=to;
                 this.onStatusChanged(to);
-                System.out.println("CHANGING STATUS IN THE DB BEFORE POSTING IT!");
+                //System.out.println("CHANGING STATUS IN THE DB BEFORE POSTING IT!");
                 if (this.eventBus!=null)
                         this.eventBus.post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
                 else
