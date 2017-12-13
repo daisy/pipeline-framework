@@ -35,7 +35,7 @@
     <daisy.push-notifier.version>2.0.2-SNAPSHOT</daisy.push-notifier.version>
     <daisy.updater-wrapper.version>1.0.1</daisy.updater-wrapper.version>
     <daisy.webservice.version>2.1.3-SNAPSHOT</daisy.webservice.version>
-    <daisy.webservice-utils.version>2.2.3-SNAPSHOT</daisy.webservice-utils.version>
+    <daisy.webservice-utils.version>3.0.0-SNAPSHOT</daisy.webservice-utils.version>
     <daisy.woodstox-osgi-adapter.version>2.0.1</daisy.woodstox-osgi-adapter.version>
     <daisy.xmlcatalog.version>2.0.3-SNAPSHOT</daisy.xmlcatalog.version>
     <daisy.xpath-registry.version>1.0.2</daisy.xpath-registry.version>

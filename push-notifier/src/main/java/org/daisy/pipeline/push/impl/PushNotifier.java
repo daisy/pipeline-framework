@@ -1,6 +1,7 @@
 package org.daisy.pipeline.push.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -24,7 +25,7 @@ import org.daisy.pipeline.job.JobUUIDGenerator;
 import org.daisy.pipeline.job.StatusMessage;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
-import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
+import org.daisy.pipeline.webserviceutils.callback.CallbackHandler;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -38,14 +39,14 @@ import com.google.common.eventbus.Subscribe;
 // this class could evolve into a general notification utility
 // e.g. it could also trigger email notifications
 // TODO: be sure to only do this N times per second
-public class PushNotifier {
+public class PushNotifier implements CallbackHandler {
 
 
-        private CallbackRegistry callbackRegistry;
         private EventBusProvider eventBusProvider;
         private JobManagerFactory jobManagerFactory;
         private ClientStorage clientStorage;
         private JobManager jobManager;
+        private Map<Job,List<Callback>> callbacks;
 
         /** The logger. */
         private static Logger logger = LoggerFactory.getLogger(PushNotifier.class); 
@@ -65,8 +66,8 @@ public class PushNotifier {
                 logger = LoggerFactory.getLogger(Poster.class.getName());
                 logger.debug("Activating push notifier");
                 jobManager = jobManagerFactory.createFor(clientStorage.defaultClient());
+                callbacks = new HashMap<Job,List<Callback>>();
                 this.startTimer();
-
         }
 
         public void close() {
@@ -97,12 +98,32 @@ public class PushNotifier {
                 
         }
 
-        public void setCallbackRegistry(CallbackRegistry callbackRegistry) {
-                this.callbackRegistry = callbackRegistry;
-        }
-
         public void setJobManagerFactory(JobManagerFactory jobManagerFactory) {
                 this.jobManagerFactory = jobManagerFactory;
+        }
+
+        @Override
+        public void addCallback(Callback callback) {
+                Job job = callback.getJob();
+                if (callbacks.containsKey(job)) {
+                        callbacks.get(job).add(callback);
+                } else {
+                        List<Callback> list = new ArrayList<Callback>();
+                        list.add(callback);
+                        callbacks.put(job, list);
+                }
+        }
+
+        // this method is currently never called
+        @Override
+        public void removeCallback(Callback callback) {
+                Job job = callback.getJob();
+                if (callbacks.containsKey(job)) {
+                        callbacks.get(job).remove(callback);
+                        if (!callbacks.containsKey(job)) {
+                                callbacks.remove(job);
+                        }
+                }
         }
 
         @Subscribe
@@ -163,10 +184,12 @@ public class PushNotifier {
                         for (StatusHolder holder: toPost) {
                                 logger.debug("Posting status '" + holder.status + "' for job " + holder.job.getId());
                                 Job job = holder.job;
-
-                                for (Callback callback :callbackRegistry.getCallbacks(job.getContext().getId())) {
-                                        if (callback.getType() == CallbackType.STATUS) {
-                                                Poster.postStatusUpdate(job, holder.status, callback);
+                                Iterable<Callback> callbacks = PushNotifier.this.callbacks.get(job);
+                                if (callbacks != null) {
+                                        for (Callback callback : callbacks) {
+                                                if (callback.getType() == CallbackType.STATUS) {
+                                                        Poster.postStatusUpdate(job, holder.status, callback);
+                                                }
                                         }
                                 }
                         }
@@ -194,9 +217,12 @@ public class PushNotifier {
                                                 logger.debug("Posting messages starting from " + seq + " for job " + job.get().getId());
                                                 messages = accessor.createFilter().greaterThan(seq - 1).getMessages();
                                         }
-                                        for (Callback callback : callbackRegistry.getCallbacks(jobId)) {
-                                                if (callback.getType() == CallbackType.MESSAGES) {
-                                                        Poster.postMessages(job.get(), messages, progress, callback);
+                                        Iterable<Callback> callbacks = PushNotifier.this.callbacks.get(job.get());
+                                        if (callbacks != null) {
+                                                for (Callback callback : callbacks) {
+                                                        if (callback.getType() == CallbackType.MESSAGES) {
+                                                                Poster.postMessages(job.get(), messages, progress, callback);
+                                                        }
                                                 }
                                         }
                                 }
