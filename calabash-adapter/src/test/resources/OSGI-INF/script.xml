@@ -88,6 +88,17 @@
     <property name="script.description" type="String" value="Shows a warning message created in XProc"/>
     <property name="script.url" type="String" value="http://www.daisy.org/pipeline/modules/test/xproc-warning.xpl"/>
   </component>
+  <component name="cx-eval-error" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="cx-eval-error"/>
+    <property name="script.name" type="String" value="cx-eval-error"/>
+    <property name="script.description" type="String" value="Always errors because of a p:error inside a cx:eval"/>
+    <property name="script.url" type="String" value="http://www.daisy.org/pipeline/modules/test/cx-eval-error.xpl"/>
+  </component>
   <component name="progress-messages" immediate="true">
     <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
     <service>

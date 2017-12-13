@@ -170,6 +170,42 @@ public class FrameworkCoreTest extends AbstractTest {
 	}
 	
 	@Test
+	public void testUncaughtXProcErrorInsideCxEval() {
+		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		logger.addAppender(collectLog);
+		try {
+			Job job = newJob("cx-eval-error");
+			waitForStatus(Job.Status.ERROR, job, 1000);
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
+			MessageAccessor accessor = monitor.getMessageAccessor();
+			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
+			try {
+				int seq = 0;
+				seq++; // cx:eval
+				seq++; // p:error
+				assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
+				Assert.assertFalse(messages.hasNext());
+			} catch (Throwable e) {
+				// print remaining messages
+				sink(messages);
+				throw e;
+			}
+			Iterator<ILoggingEvent> log = collectLog.get();
+			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
+			                 "job finished with error state\n" +
+			                 "[FOO] foobar\n" +
+			                 "	at {http://www.w3.org/ns/xproc}error(xproc-error.xpl:10)\n" +
+			                 "	at {http://www.daisy.org/ns/pipeline/xproc}xproc-error(xproc-error.xpl:4)\n" +
+			                 "	at {http://xmlcalabash.com/ns/extensions}eval(cx-eval-error.xpl:15)\n" +
+			                 "	at {http://www.daisy.org/ns/pipeline/xproc}cx-eval-error(cx-eval-error.xpl:5)");
+			Assert.assertFalse(log.hasNext());
+		} finally {
+			logger.detachAppender(collectLog);
+		}
+	}
+	
+	@Test
 	public void testCaughtXslTerminateError() throws IOException {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
