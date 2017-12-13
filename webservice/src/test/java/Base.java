@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
+import java.util.concurrent.Callable;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -18,6 +19,7 @@ import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 
 import org.daisy.pipeline.webservice.jaxb.clients.Client;
 import org.daisy.pipeline.webservice.jaxb.job.Job;
+import org.daisy.pipeline.webservice.jaxb.job.JobStatus;
 import org.daisy.pipeline.webservice.jaxb.request.Input;
 import org.daisy.pipeline.webservice.jaxb.request.Item;
 import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
@@ -180,30 +182,9 @@ public abstract class Base extends AbstractTest {
 		return new PipelineClient(DEFAULT_WS_URL, id, secret);
 	}
 	
-	
-	protected Job waitForStatus(String status, Job in, long timeout) throws Exception {
-		return waitForStatus(client(), status, in, timeout);
-	}
-	
-	private static Job waitForStatus(PipelineClient client, String status, Job in, long timeout) throws Exception {
-		long waited = 0L;
-		Job job = in;
+	protected Job waitForStatus(JobStatus status, Job job, long timeout) throws Exception {
 		logger.info("Waiting for status {}", status);
-		while (job.getStatus().value() != status) {
-			if (job.getStatus().value() == "ERROR") {
-				throw new RuntimeException("Job errored while waiting for another status");
-			}
-			job = client.job(job.getId());
-			try {
-				Thread.sleep(500);
-				waited += 500;
-			} catch (InterruptedException ex) {
-				Thread.currentThread().interrupt();
-			}
-			if (waited > timeout) {
-				throw new RuntimeException("waitForStatus " + status + " timed out (last status was " + job.getStatus().value() + ")");
-			}
-		}
+		job = new JobPoller(client(), job.getId(), status, 500, timeout).call();
 		logger.info("After status {}", job.getStatus().value());
 		return job;
 	}
@@ -277,5 +258,44 @@ public abstract class Base extends AbstractTest {
 	
 	protected static InputStream getResourceAsStream(String path) throws IOException {
 		return new File(new File(PathUtils.getBaseDir(), "src/test/resources"), path).toURI().toURL().openStream();
+	}
+	
+	static class JobPoller implements Callable<Job> {
+		final PipelineClient client;
+		final String jobId;
+		final JobStatus expectedStatus;
+		final long interval;
+		final long timeout;
+		JobPoller(PipelineClient client, String jobId, JobStatus expectedStatus, long interval, long timeout) {
+			this.client = client;
+			this.jobId = jobId;
+			this.expectedStatus = expectedStatus;
+			this.interval = interval;
+			this.timeout = timeout;
+		}
+		void performAction(Job job) {}
+		public Job call() throws Exception {
+			long waited = 0L;
+			while (true) {
+				Job job = client.job(jobId);
+				JobStatus status = job.getStatus();
+				if (status == expectedStatus) {
+					performAction(job);
+					return job;
+				} else if (status == JobStatus.ERROR) {
+					throw new RuntimeException("Job errored while waiting for another status");
+				}
+				try {
+					performAction(job);
+					Thread.sleep(interval);
+					waited += interval;
+				} catch (InterruptedException ex) {
+					Thread.currentThread().interrupt();
+				}
+				if (waited > timeout) {
+					throw new RuntimeException("waitForStatus " + expectedStatus + " timed out (last status was " + status + ")");
+				}
+			}
+		}
 	}
 }

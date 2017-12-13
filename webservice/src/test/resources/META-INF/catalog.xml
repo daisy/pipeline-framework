@@ -1,4 +1,5 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
   <uri name="http://www.daisy.org/pipeline/modules/mock/script.xpl" uri="../mock-module/script.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/mock/error-script.xpl" uri="../mock-module/error-script.xpl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/mock/messages-script.xpl" uri="../mock-module/messages-script.xpl"/>
 </catalog>

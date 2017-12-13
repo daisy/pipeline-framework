@@ -111,13 +111,13 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>clientlib-java-jaxb</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>webservice-jaxb</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>

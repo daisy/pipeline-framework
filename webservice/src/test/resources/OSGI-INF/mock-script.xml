@@ -22,4 +22,15 @@
     <property name="script.description" type="String" value="_"/>
     <property name="script.url" type="String" value="http://www.daisy.org/pipeline/modules/mock/error-script.xpl"/>
   </component>
+  <component name="mock-messages-script" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="mock-messages-script"/>
+    <property name="script.name" type="String" value="_"/>
+    <property name="script.description" type="String" value="_"/>
+    <property name="script.url" type="String" value="http://www.daisy.org/pipeline/modules/mock/messages-script.xpl"/>
+  </component>
 </components>

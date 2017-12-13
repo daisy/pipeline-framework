@@ -11,6 +11,7 @@ import com.google.common.io.Files;
 import org.daisy.pipeline.client.PipelineClient;
 import org.daisy.pipeline.webservice.jaxb.base.Alive;
 import org.daisy.pipeline.webservice.jaxb.job.Job;
+import org.daisy.pipeline.webservice.jaxb.job.JobStatus;
 import org.daisy.pipeline.webservice.jaxb.job.Result;
 import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
 import org.daisy.pipeline.webservice.jaxb.request.Priority;
@@ -68,9 +69,9 @@ public class TestLocalJobs extends Base {
 		Job job = client().sendJob(req.get());
 		deleteAfterTest(job);
 		Assert.assertEquals("The job status is IDLE", "IDLE", job.getStatus().value());
-		job = waitForStatus("RUNNING", job, 10000);
+		job = waitForStatus(JobStatus.RUNNING, job, 10000);
 		Assert.assertEquals("The job status is RUNNING", "RUNNING", job.getStatus().value());
-		job = waitForStatus("DONE", job, 10000);
+		job = waitForStatus(JobStatus.DONE, job, 10000);
 		Assert.assertEquals("The job status is DONE", "DONE", job.getStatus().value());
 		logger.info("{} testJobStatusCycle OUT", TestLocalJobs.class);
 	}
@@ -80,7 +81,7 @@ public class TestLocalJobs extends Base {
 		logger.info("{} testAfterJob IN", TestLocalJobs.class);
 		Optional<JobRequest> req = newJobRequest();
 		Job job = client().sendJob(req.get());
-		job = waitForStatus("DONE", job, 10000);
+		job = waitForStatus(JobStatus.DONE, job, 10000);
 		checkResults(job);
 		checkLog(job);
 		checkDelete(job);
@@ -93,7 +94,7 @@ public class TestLocalJobs extends Base {
 		Assert.assertTrue("The request is present", req.isPresent());
 		Job job = client().sendJob(req.get());
 		deleteAfterTest(job);
-		job = waitForStatus("ERROR", job, 10000);
+		job = waitForStatus(JobStatus.ERROR, job, 10000);
 	}
 	
 	private void checkDelete(Job in) throws Exception {
