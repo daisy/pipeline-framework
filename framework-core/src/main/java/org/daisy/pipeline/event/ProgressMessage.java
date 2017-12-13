@@ -49,6 +49,14 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 	/** Sequence number of an imaginary close message */
 	abstract int getCloseSequence();
 
+	private Logger asLogger;
+
+	public Logger asLogger() {
+		if (asLogger == null)
+			asLogger = new ProgressMessageLogger(this);
+		return asLogger;
+	}
+
 	/** Makes a deep copy */
 	public Iterator<ProgressMessage> iterator() {
 		synchronized(MUTEX) {
