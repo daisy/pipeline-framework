@@ -47,6 +47,7 @@ element job {
 		attribute progress {
 			xsd:decimal # between 0 and 1
 		}
+		& attribute msgSeq { xsd:int }?
 		& (progressMessage | message)*
 	} ?
 

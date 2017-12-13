@@ -217,13 +217,15 @@ public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor
                                         continue;
                                 }
                                 Integer seq = newMessages.get(accessor);
+                                int newerThan;
                                 BigDecimal progress;
                                 List<Message> messages;
                                 {
                                         progress = accessor.getProgress();
                                         if (seq != null) {
-                                                logger.debug("Posting messages starting from " + seq + " for job " + job.getId());
-                                                messages = accessor.createFilter().greaterThan(seq - 1).getMessages();
+                                                newerThan = seq - 1;
+                                                logger.debug("Posting messages starting from " + (newerThan + 1) + " for job " + job.getId());
+                                                messages = accessor.createFilter().greaterThan(newerThan).getMessages();
                                         } else {
                                                 newerThan = -1;
                                                 messages = Collections.<Message>emptyList();
@@ -236,7 +238,7 @@ public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor
                                 }
                                 for (Callback callback : callbacks) {
                                         if (callback.getType() == CallbackType.MESSAGES) {
-                                                Poster.postMessages(job, messages, progress, callback);
+                                                Poster.postMessages(job, messages, newerThan, progress, callback);
                                         }
                                 }
                         }

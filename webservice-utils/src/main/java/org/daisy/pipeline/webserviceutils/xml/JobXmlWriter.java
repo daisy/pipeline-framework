@@ -24,6 +24,7 @@ public class JobXmlWriter {
         
         private Job job = null;
         private List<Message> messages = null;
+        private long messagesNewerThan = -1;
         private BigDecimal progress = null;
         private boolean scriptDetails = false;
         private boolean fullResult=false;
@@ -86,13 +87,15 @@ public class JobXmlWriter {
                 if (accessor != null) {
                         withProgress(accessor.getProgress());
                         withMessages(accessor.createFilter().filterLevels(MSG_LEVELS)
-                                             .greaterThan(newerThan).getMessages());
+                                             .greaterThan(newerThan).getMessages(),
+                                     newerThan);
                 }
                 return this;
         }
 
-        public JobXmlWriter withMessages(List<Message> messages) {
+        public JobXmlWriter withMessages(List<Message> messages, int newerThan) {
                 this.messages = messages;
+                messagesNewerThan = newerThan;
                 return this;
         }
 
@@ -165,6 +168,8 @@ public class JobXmlWriter {
                                 messagesElm.setAttribute("progress", Float.toString(progress.floatValue()));
                         }
                         if (messages != null && messages.size() > 0) {
+                                if (messagesNewerThan >= 0)
+                                        messagesElm.setAttribute("msgSeq", ""+messagesNewerThan);
                                 for (Message message : messages) {
                                         addMessage(message, true, messagesElm);
                                 }

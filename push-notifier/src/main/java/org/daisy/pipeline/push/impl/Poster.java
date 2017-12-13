@@ -30,11 +30,11 @@ public class Poster {
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(Poster.class.getName());
 
-	public static void postMessages(Job job, List<Message> messages, BigDecimal progress, Callback callback) {
+	public static void postMessages(Job job, List<Message> messages, int newerThan, BigDecimal progress, Callback callback) {
 		logger.debug("Posting messages to " + callback.getHref());
 		URI url = callback.getHref();
 		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
-		writer.withMessages(messages);
+		writer.withMessages(messages, newerThan);
 		writer.withProgress(progress);
 		Document doc = writer.getXmlDocument();
 		postXml(doc, url, callback.getClient());
