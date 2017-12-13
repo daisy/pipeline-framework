@@ -8,9 +8,10 @@
     <p:declare-step type="px:java-step">
         <p:input port="source"/>
         <p:output port="result"/>
+        <p:option name="throw-error" select="'false'"/>
     </p:declare-step>
     
-    <px:java-step>
+    <px:java-step throw-error="true">
         <p:input port="source">
             <p:inline>
                 <hello/>

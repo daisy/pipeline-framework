@@ -2,14 +2,14 @@ package org.daisy.pipeline.job;
 
 import java.util.Properties;
 
-import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
-import org.daisy.common.messaging.Message.MessageBuilder;
 import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
+import org.daisy.pipeline.event.ProgressMessage;
+import org.daisy.pipeline.event.ProgressMessage.ProgressMessageBuilder;
 import org.daisy.pipeline.job.impl.JobUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -189,12 +189,19 @@ public class Job implements RuntimeConfigurator.EventBusable{
                 else
                         logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? " the context ": " event bus ") + "is null");
         }
+
         private final void broadcastError(String text){
-                Message msg= new MessageBuilder()
+                
+                // first close any open message blocks (in this thread)
+                ProgressMessage m;
+                while ((m = ProgressMessage.getActiveBlock()) != null)
+                        m.close();
+                ProgressMessage msg = new ProgressMessageBuilder()
                         .withJobId(this.getId().toString())
                         .withLevel(Level.ERROR)
                         .withText(text)
                         .build();
+                msg.close();
                 if (this.eventBus!=null)
                         this.eventBus.post(msg);
                 else

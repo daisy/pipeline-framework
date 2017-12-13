@@ -8,13 +8,20 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
+import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
@@ -30,22 +37,24 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.google.common.base.Supplier;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.common.collect.Iterators;
 import com.google.common.io.CharStreams;
 
 import org.daisy.common.messaging.Message;
+import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
+import org.daisy.pipeline.job.JobMonitor;
+import org.daisy.pipeline.job.JobMonitorFactory;
 
-import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.junit.AbstractTest;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -83,20 +92,19 @@ public class FrameworkCoreTest extends AbstractTest {
 	@Inject
 	EventBusProvider eventBusProvider;
 	
+	@Inject
+	JobMonitorFactory jobMonitorFactory;
+	
 	@Test
 	public void testCaughtError() throws IOException {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		CollectMessages collectMessages = new CollectMessages();
-		EventBus bus = eventBusProvider.get();
-		bus.register(collectMessages);
 		try {
 			OutputPortReader resultPort = new OutputPortReader();
 			Job job = newJob("catch-xproc-error",
 			                 new XProcInput.Builder().build(),
 			                 new XProcOutput.Builder().withOutput("result", resultPort).build());
-			String id = job.getId().toString();
 			waitForStatus(Job.Status.FAIL, job, 1000);
 			Iterator<Reader> results = resultPort.read();
 			Assert.assertTrue(results.hasNext());
@@ -111,13 +119,20 @@ public class FrameworkCoreTest extends AbstractTest {
 			                    "</c:errors>",
 			                    CharStreams.toString(results.next()));
 			Assert.assertFalse(results.hasNext());
-			Iterator<Message> messages = collectMessages.get(id);
-			Assert.assertFalse(messages.hasNext());
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
+			MessageAccessor accessor = monitor.getMessageAccessor();
+			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
+			try {
+				Assert.assertFalse(messages.hasNext());
+			} catch (Throwable e) {
+				// print remaining messages
+				sink(messages);
+				throw e;
+			}
 			Iterator<ILoggingEvent> log = collectLog.get();
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
-			bus.unregister(collectMessages);
 		}
 	}
 	
@@ -126,17 +141,22 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		CollectMessages collectMessages = new CollectMessages();
-		EventBus bus = eventBusProvider.get();
-		bus.register(collectMessages);
 		try {
 			Job job = newJob("xproc-error");
-			String id = job.getId().toString();
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			Iterator<Message> messages = collectMessages.get(id);
-			int seq = 0;
-			assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
-			Assert.assertFalse(messages.hasNext());
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
+			MessageAccessor accessor = monitor.getMessageAccessor();
+			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
+			try {
+				int seq = 0;
+				seq++; // p:error
+				assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
+				Assert.assertFalse(messages.hasNext());
+			} catch (Throwable e) {
+				// print remaining messages
+				sink(messages);
+				throw e;
+			}
 			Iterator<ILoggingEvent> log = collectLog.get();
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
@@ -146,7 +166,6 @@ public class FrameworkCoreTest extends AbstractTest {
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
-			bus.unregister(collectMessages);
 		}
 	}
 	
@@ -155,15 +174,11 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		CollectMessages collectMessages = new CollectMessages();
-		EventBus bus = eventBusProvider.get();
-		bus.register(collectMessages);
 		try {
 			OutputPortReader resultPort = new OutputPortReader();
 			Job job = newJob("catch-xslt-terminate-error",
 			                 new XProcInput.Builder().build(),
 			                 new XProcOutput.Builder().withOutput("result", resultPort).build());
-			String id = job.getId().toString();
 			waitForStatus(Job.Status.FAIL, job, 1000);
 			Iterator<Reader> results = resultPort.read();
 			Assert.assertTrue(results.hasNext());
@@ -175,13 +190,20 @@ public class FrameworkCoreTest extends AbstractTest {
 			                    "</c:errors>",
 			                    CharStreams.toString(results.next()));
 			Assert.assertFalse(results.hasNext());
-			Iterator<Message> messages = collectMessages.get(id);
-			Assert.assertFalse(messages.hasNext());
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
+			MessageAccessor accessor = monitor.getMessageAccessor();
+			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
+			try {
+				Assert.assertFalse(messages.hasNext());
+			} catch (Throwable e) {
+				// print remaining messages
+				sink(messages);
+				throw e;
+			}
 			Iterator<ILoggingEvent> log = collectLog.get();
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
-			bus.unregister(collectMessages);
 		}
 	}
 	
@@ -190,17 +212,22 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		CollectMessages collectMessages = new CollectMessages();
-		EventBus bus = eventBusProvider.get();
-		bus.register(collectMessages);
 		try {
 			Job job = newJob("xslt-terminate-error");
-			String id = job.getId().toString();
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			Iterator<Message> messages = collectMessages.get(id);
-			int seq = 0;
-			assertMessage(next(messages), seq++, Message.Level.ERROR, "Runtime Error (Please see detailed log for more info.)");
-			Assert.assertFalse(messages.hasNext());
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
+			MessageAccessor accessor = monitor.getMessageAccessor();
+			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
+			try {
+				int seq = 0;
+				seq++; // p:xslt
+				assertMessage(next(messages), seq++, Message.Level.ERROR, "Runtime Error (Please see detailed log for more info.)");
+				Assert.assertFalse(messages.hasNext());
+			} catch (Throwable e) {
+				// print remaining messages
+				sink(messages);
+				throw e;
+			}
 			Iterator<ILoggingEvent> log = collectLog.get();
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
@@ -212,7 +239,6 @@ public class FrameworkCoreTest extends AbstractTest {
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
-			bus.unregister(collectMessages);
 		}
 	}
 	
@@ -221,28 +247,32 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		CollectMessages collectMessages = new CollectMessages();
-		EventBus bus = eventBusProvider.get();
-		bus.register(collectMessages);
 		try {
 			Job job = newJob("java-step-runtime-error");
-			String id = job.getId().toString();
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			Iterator<Message> messages = collectMessages.get(id);
-			int seq = 0;
-			assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
-			Assert.assertFalse(messages.hasNext());
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
+			MessageAccessor accessor = monitor.getMessageAccessor();
+			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
+			try {
+				int seq = 0;
+				seq++; // px:java-step
+				assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
+				Assert.assertFalse(messages.hasNext());
+			} catch (Throwable e) {
+				// print remaining messages
+				sink(messages);
+				throw e;
+			}
 			Iterator<ILoggingEvent> log = collectLog.get();
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "foobar\n" +
-			                 "	at JavaStep.run(JavaStep.java:25)\n" +
-			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:13)\n" +
+			                 "	at JavaStep.run(JavaStep.java:56)\n" +
+			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step-runtime-error(java-step-runtime-error.xpl:4)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
-			bus.unregister(collectMessages);
 		}
 	}
 	
@@ -251,18 +281,23 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		CollectMessages collectMessages = new CollectMessages();
-		EventBus bus = eventBusProvider.get();
-		bus.register(collectMessages);
 		try {
 			Job job = newJob("java-function-runtime-error");
-			String id = job.getId().toString();
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			Iterator<Message> messages = collectMessages.get(id);
-			int seq = 0;
-			assertMessage(next(messages), seq++, Message.Level.INFO, "inside pf:java-function");
-			assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
-			Assert.assertFalse(messages.hasNext());
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
+			MessageAccessor accessor = monitor.getMessageAccessor();
+			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
+			try {
+				int seq = 0;
+				seq++; // p:xslt
+				assertMessage(next(messages), seq++, Message.Level.INFO, "inside pf:java-function");
+				assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
+				Assert.assertFalse(messages.hasNext());
+			} catch (Throwable e) {
+				// print remaining messages
+				sink(messages);
+				throw e;
+			}
 			Iterator<ILoggingEvent> log = collectLog.get();
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
@@ -275,7 +310,6 @@ public class FrameworkCoreTest extends AbstractTest {
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
-			bus.unregister(collectMessages);
 		}
 	}
 	
@@ -284,27 +318,31 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		CollectMessages collectMessages = new CollectMessages();
-		EventBus bus = eventBusProvider.get();
-		bus.register(collectMessages);
 		try {
 			Job job = newJob("xslt-warning");
-			String id = job.getId().toString();
 			waitForStatus(Job.Status.DONE, job, 1000);
-			Iterator<Message> messages = collectMessages.get(id);
-			int seq = 0;
-			assertMessage(next(messages), seq++, Message.Level.WARNING,
-			              Predicates.containsPattern("^\\Q" +
-			                  "err:XTRE0540:Ambiguous rule match for /hello\n" +
-			                  // FIXME: should be line 17 and 21
-			                  "Matches both \"element(Q{}hello)\" on line 16 of bundle://\\E[^/]+\\Q/module/xslt-warning.xpl\n" +
-			                  "and \"element(Q{}hello)\" on line 16 of bundle://\\E[^/]+\\Q/module/xslt-warning.xpl\\E$"));
-			Assert.assertFalse(messages.hasNext());
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
+			MessageAccessor accessor = monitor.getMessageAccessor();
+			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
+			try {
+				int seq = 0;
+				seq++; // p:xslt
+				assertMessage(next(messages), seq++, Message.Level.WARNING,
+				              Predicates.containsPattern("^\\Q" +
+				                  "err:XTRE0540:Ambiguous rule match for /hello\n" +
+				                  // FIXME: should be line 17 and 21
+				                  "Matches both \"element(Q{}hello)\" on line 16 of bundle://\\E[^/]+\\Q/module/xslt-warning.xpl\n" +
+				                  "and \"element(Q{}hello)\" on line 16 of bundle://\\E[^/]+\\Q/module/xslt-warning.xpl\\E$"));
+				Assert.assertFalse(messages.hasNext());
+			} catch (Throwable e) {
+				// print remaining messages
+				sink(messages);
+				throw e;
+			}
 			Iterator<ILoggingEvent> log = collectLog.get();
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
-			bus.unregister(collectMessages);
 		}
 	}
 	
@@ -313,22 +351,110 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		CollectMessages collectMessages = new CollectMessages();
-		EventBus bus = eventBusProvider.get();
-		bus.register(collectMessages);
 		try {
 			Job job = newJob("xproc-warning");
-			String id = job.getId().toString();
 			waitForStatus(Job.Status.DONE, job, 1000);
-			Iterator<Message> messages = collectMessages.get(id);
-			int seq = 0;
-			assertMessage(next(messages), seq++, Message.Level.WARNING, "Hello world!");
-			Assert.assertFalse(messages.hasNext());
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
+			MessageAccessor accessor = monitor.getMessageAccessor();
+			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
+			try {
+				int seq = 0;
+				assertMessage(next(messages), seq++, Message.Level.WARNING, "Hello world!");
+				Assert.assertFalse(messages.hasNext());
+			} catch (Throwable e) {
+				// print remaining messages
+				sink(messages);
+				throw e;
+			}
 			Iterator<ILoggingEvent> log = collectLog.get();
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
-			bus.unregister(collectMessages);
+		}
+	}
+	
+	@Test
+	public void testProgressMessages() throws InterruptedException, ExecutionException {
+		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		logger.addAppender(collectLog);
+		try {
+			Job job = newJob("progress-messages");
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
+			final MessageAccessor accessor = monitor.getMessageAccessor();
+			Runnable poller = new JobPoller(job, Job.Status.DONE, 200, 3000) {
+				BigDecimal lastProgress = BigDecimal.ZERO;
+				Iterator<BigDecimal> mustSee = stream(".125", ".375", ".9").map(d -> new BigDecimal(d)).iterator();
+				BigDecimal mustSeeNext = mustSee.next();
+				List<BigDecimal> seen = new ArrayList<BigDecimal>();
+				@Override
+				void performAction(Job.Status status) {
+					BigDecimal progress = accessor.getProgress();
+					if (progress.compareTo(lastProgress) != 0) {
+						Assert.assertTrue("Progress must be monotonic non-decreasing", progress.compareTo(lastProgress) >= 0);
+						if (mustSeeNext != null) {
+							if (progress.compareTo(mustSeeNext) == 0) {
+								seen.clear();
+								mustSeeNext = mustSee.hasNext() ? mustSee.next() : null;
+							} else {
+								seen.add(progress);
+								Assert.assertTrue("Expected " + mustSeeNext + " but got " + seen, progress.compareTo(mustSeeNext) < 0);
+							}
+						}
+						lastProgress = progress;
+					}
+					if (status == expectedStatus) {
+						Assert.assertTrue("Expected " + mustSeeNext + " but got " + seen, mustSeeNext == null);
+					}
+				}
+			};
+			Iterator<Message> messages = null;
+			try {
+				// run in new thread and propagate exceptions:
+				try {
+					FutureTask<Boolean> t = new FutureTask<Boolean>(poller, true);
+					t.run();
+					t.get();
+				} catch (ExecutionException e) {
+					if (e.getCause() instanceof AssertionError)
+						throw (AssertionError)e.getCause();
+					else if (e.getCause() instanceof RuntimeException)
+						throw (RuntimeException)e.getCause();
+					else
+						throw e;
+				} finally {
+					messages = printMessages(accessor.getAll().iterator());
+				}
+				final Counter seq = new Counter(0);
+				seq.get(); // p:identity
+				assertMessage(next(messages), seq.get(), Message.Level.INFO, "px:progress-messages (1)",
+				              msgs -> {
+				                  seq.get(); // for-each iteration
+				                  seq.get(); // px:java-step
+				                  assertMessage(next(msgs), seq.get(), Message.Level.INFO, "px:java-step (1)");
+				                  assertMessage(next(msgs), seq.get(), Message.Level.INFO, "px:java-step (2)");
+				                  seq.get(); // for-each iteration
+				                  seq.get(); // px:java-step
+				                  assertMessage(next(msgs), seq.get(), Message.Level.INFO, "px:java-step (1)");
+				                  assertMessage(next(msgs), seq.get(), Message.Level.INFO, "px:java-step (2)");
+				                  Assert.assertFalse(msgs.hasNext()); });
+				seq.get(); // p:wrap-sequence
+				assertMessage(next(messages), seq.get(), Message.Level.INFO, "px:progress-messages (2)",
+				              msgs -> {
+				                  assertMessage(next(msgs), seq.get(), Message.Level.INFO, "px:foo (1)");
+				                  assertMessage(next(msgs), seq.get(), Message.Level.INFO, "px:foo (2)");
+				                  Assert.assertFalse(msgs.hasNext()); });
+				assertMessage(next(messages), seq.get(), Message.Level.INFO, "px:progress-messages (3)");
+				Assert.assertFalse(messages.hasNext());
+				Iterator<ILoggingEvent> log = collectLog.get();
+				Assert.assertFalse(log.hasNext());
+			} catch (Throwable e) {
+				// print remainging messages
+				sink(messages);
+				throw e;
+			}
+		} finally {
+			logger.detachAppender(collectLog);
 		}
 	}
 	
@@ -349,23 +475,13 @@ public class FrameworkCoreTest extends AbstractTest {
 	}
 	
 	static void waitForStatus(Job.Status status, Job job, long timeout) {
-		long waited = 0L;
-		while (job.getStatus() != status) {
-			if (job.getStatus() == Job.Status.ERROR) {
-				throw new RuntimeException("Job errored while waiting for another status");
-			}
-			try {
-				Thread.sleep(500);
-				waited += 500;
-			} catch (InterruptedException ex) {
-				Thread.currentThread().interrupt();
-			}
-			if (waited > timeout) {
-				throw new RuntimeException("waitForStatus " + status + " timed out (last status was " + job.getStatus() + ")");
-			}
-		}
+		new JobPoller(job, status, 500, timeout).run();
 	}
 	
+	static <T> Stream<T> stream(T... array) {
+		return Arrays.<T>stream(array);
+	}
+
 	static <T> Optional<T> next(Iterator<T> iterator) {
 		if (iterator.hasNext())
 			return Optional.<T>of(iterator.next());
@@ -373,18 +489,47 @@ public class FrameworkCoreTest extends AbstractTest {
 			return Optional.<T>absent();
 	}
 	
-	static void assertMessage(Optional<Message> message,
-	                          int expectedSequence, Message.Level expectedLevel, String expectedText) {
-		assertMessage(message, expectedSequence, expectedLevel, Predicates.equalTo(expectedText));
+	static void sink(Iterator<?> iterator) {
+		try {
+			Iterators.getLast(iterator);
+		} catch (NoSuchElementException e) {
+		}
 	}
 	
-	static void assertMessage(Optional<Message> message,
+	static <T> T assertPresent(String message, Optional<T> optional) {
+		Assert.assertTrue(message, optional.isPresent());
+		return optional.get();
+	}
+
+	static void assertMessage(Optional<? extends Message> message,
+	                          int expectedSequence, Message.Level expectedLevel, String expectedText) {
+		assertMessage(message, expectedSequence, expectedLevel, expectedText, null);
+	}
+	
+	static void assertMessage(Optional<? extends Message> message,
+	                          int expectedSequence, Message.Level expectedLevel, String expectedText,
+	                          Consumer<Iterator<? extends Message>> assertChildMessages) {
+		assertMessage(message, expectedSequence, expectedLevel, t -> expectedText.equals(t), assertChildMessages);
+	}
+	
+	static void assertMessage(Optional<? extends Message> message,
 	                          int expectedSequence, Message.Level expectedLevel, Predicate<? super String> expectedText) {
-		Assert.assertTrue("message does not exist", message.isPresent());
-		Message m = message.get();
-		Assert.assertEquals("message sequence number does not match", expectedSequence, m.getSequence());
+		assertMessage(message, expectedSequence, expectedLevel, expectedText, null);
+	}
+	
+	static void assertMessage(Optional<? extends Message> message,
+	                          int expectedSequence, Message.Level expectedLevel, Predicate<? super String> expectedText,
+	                          Consumer<Iterator<? extends Message>> assertChildMessages) {
+		Message m = assertPresent("message does not exist", message);
+		Assert.assertEquals("message sequence number does not match", expectedSequence, ((ProgressMessage)m).getSequence());
 		Assert.assertEquals("message level does not match", expectedLevel, m.getLevel());
 		Assert.assertTrue("message text does not match", expectedText.apply(m.getText()));
+		if (assertChildMessages != null) {
+			Assert.assertTrue("message must be of type ProgressMessage", m instanceof ProgressMessage);
+			assertChildMessages.accept(((ProgressMessage)m).iterator());
+		} else if (m instanceof ProgressMessage) {
+			Assert.assertTrue("message must not have children", !((ProgressMessage)m).iterator().hasNext());
+		}
 	}
 	
 	static void assertLogMessage(Optional<ILoggingEvent> message,
@@ -410,6 +555,29 @@ public class FrameworkCoreTest extends AbstractTest {
 			}
 		}
 		Assert.assertTrue("message text does not match", expectedText.apply(text.toString()));
+	}
+	
+	static void printMessage(Message message, PrintStream out) {
+		printMessage(message, out, "");
+	}
+	
+	static Iterator<Message> printMessages(Iterator<Message> messages) {
+		return Iterators.transform(
+			messages,
+			m -> {
+				printMessage(m, System.out);
+				return m; });
+	}
+	
+	static void printMessage(Message message, PrintStream out, String indent) {
+		out.print(indent + message.getSequence() + ": " + message.getLevel() + ": " + message.getText());
+		if (message instanceof ProgressMessage) {
+			ProgressMessage jm = (ProgressMessage)message;
+			out.println(" [" + jm.getPortion() + "]");
+			for (Message m : jm)
+				printMessage(m, out, indent + "└─ ");
+		} else
+			out.println();
 	}
 	
 	static void printLogMessage(ILoggingEvent message, PrintStream out) {
@@ -481,10 +649,56 @@ public class FrameworkCoreTest extends AbstractTest {
 		return probe;
 	}
 	
+	static class Counter implements Supplier<Integer> {
+		int val = 0;
+		Counter(int initialValue) {
+			val = initialValue;
+		}
+		public Integer get() {
+			return val++;
+		}
+	};
+	
+	static class JobPoller implements Runnable {
+		final Job job;
+		final Job.Status expectedStatus;
+		final long interval;
+		final long timeout;
+		JobPoller(Job job, Job.Status expectedStatus, long interval, long timeout) {
+			this.job = job;
+			this.expectedStatus = expectedStatus;
+			this.interval = interval;
+			this.timeout = timeout;
+		}
+		void performAction(Job.Status status) {}
+		public void run() {
+			long waited = 0L;
+			while (true) {
+				Job.Status status = job.getStatus();
+				if (status == expectedStatus) {
+					performAction(status);
+					return;
+				} else if (status == Job.Status.ERROR) {
+					throw new RuntimeException("Job errored while waiting for another status");
+				}
+				try {
+					performAction(status);
+					Thread.sleep(interval);
+					waited += interval;
+				} catch (InterruptedException ex) {
+					Thread.currentThread().interrupt();
+				}
+				if (waited > timeout) {
+					throw new RuntimeException("waitForStatus " + expectedStatus + " timed out (last status was " + status + ")");
+				}
+			}
+		}
+	}
+	
 	static class CollectMessages {
 		final Map<String,List<Message>> messages = new HashMap<String,List<Message>>();
 		@Subscribe
-		public void add(Message msg) {
+		public void add(ProgressMessage msg) {
 			String jobid = msg.getJobId();
 			List<Message> list = messages.get(jobid);
 			if (list == null) {
@@ -521,7 +735,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		}
 	}
 	
-	static class OutputPortReader implements Supplier<Result> {
+	static class OutputPortReader implements com.google.common.base.Supplier<Result> {
 		final List<ByteArrayOutputStream> docs = new ArrayList<ByteArrayOutputStream>();
 		public Result get() {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();

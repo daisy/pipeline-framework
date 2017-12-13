@@ -1,5 +1,7 @@
 package org.daisy.common.messaging;
 
+import java.math.BigDecimal;
+import java.util.function.BiConsumer;
 import java.util.List;
 import java.util.Set;
 
@@ -68,8 +70,21 @@ public abstract class MessageAccessor{
 
 	public abstract List<Message> getAll();
 	protected abstract List<Message> getMessagesFrom(Level level);
+
+	/**
+	 * Register a callback that is called whenever a new message arrives or whenever the
+	 * progress is updated.
+	 *
+	 * The argument must be a function that accepts a MessageAccessor, which is always
+	 * this object, and an integer which is the sequence number of the message or null if
+	 * only the progress changes.
+	 */
+	public abstract void listen(BiConsumer<MessageAccessor,Integer> callback);
+	public abstract void unlisten(BiConsumer<MessageAccessor,Integer> callback);
+
 	public abstract boolean delete();
 
+	public abstract BigDecimal getProgress();
 
 	public abstract MessageFilter createFilter();
 

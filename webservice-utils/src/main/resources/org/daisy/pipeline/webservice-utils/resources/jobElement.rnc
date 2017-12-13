@@ -3,6 +3,29 @@ default namespace = "http://www.daisy.org/ns/pipeline/data"
 include "scriptElement.rnc"
 include "priority.rnc"
 
+messageAttrs =
+	attribute sequence { xsd:int }
+	& attribute level { message.level }
+	& attribute content { text }
+
+message =
+element message {
+	messageAttrs
+	& message*
+}
+
+progressMessage =
+element message {
+	messageAttrs
+	& attribute portion {
+		xsd:decimal # between 0 and 1
+	}
+	& attribute progress {
+		xsd:decimal # between 0 and 1
+	}
+	& (progressMessage | message)*
+}
+
 job = 
 element job {
 	attribute id { text }
@@ -20,13 +43,12 @@ element job {
 
 	& script?
 
-		& element messages {
-			element message { 
-				attribute level { message.level }
-				& attribute sequence { text }
-				& text
-			}*
-		}?
+	& element messages {
+		attribute progress {
+			xsd:decimal # between 0 and 1
+		}
+		& (progressMessage | message)*
+	} ?
 
 	& element log {
 		attribute href { xsd:anyURI }

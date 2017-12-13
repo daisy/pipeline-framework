@@ -8,6 +8,7 @@ import java.util.Set;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor.MessageFilter;
+import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageAccessor;
 import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageStorage;
@@ -21,27 +22,28 @@ import com.google.common.collect.Sets;
 public class VolatileMessageAccessorTest   {
 
 	VolatileMessageStorage storage = VolatileMessageStorage.getInstance();
-	Message m1;
+	ProgressMessage m1;
 
-	Message m2;
+	ProgressMessage m2;
 
-	Message m3;
+	ProgressMessage m3;
 
 	VolatileMessageAccessor accessor;
 	@Before
 	public void setUp() {
 		String id = JobIdFactory.newId().toString();
-		m1 = new Message.MessageBuilder().withText("message1")
-				.withLevel(Level.INFO).withJobId(id).build();
-
-		m2 = new Message.MessageBuilder().withText("message2")
+		m1 = new ProgressMessage.ProgressMessageBuilder().withText("message1")
+				.withLevel(Level.INFO).withJobId(id)
+				.build();
+		m1.close();
+		m2 = new ProgressMessage.ProgressMessageBuilder().withText("message2")
 				.withLevel(Level.ERROR).withJobId(id)
 				.build();
-
-		m3 = new Message.MessageBuilder().withText("message3")
+		m2.close();
+		m3 = new ProgressMessage.ProgressMessageBuilder().withText("message3")
 				.withLevel(Level.WARNING).withJobId(id)
 				.build();
-
+		m3.close();
 
 		storage.add(m1);
 		storage.add(m2);
@@ -86,21 +88,24 @@ public class VolatileMessageAccessorTest   {
 
 	@Test
 	public void createFilterRange() {
-		List<Message> out= accessor.createFilter().inRange(1,3).getMessages();
+		List<Message> out= accessor.createFilter().inRange(2,3).getMessages();
 		Assert.assertEquals(out.get(0).getLevel(),Level.ERROR);
 		Assert.assertEquals(out.get(1).getLevel(),Level.WARNING);
 	}
 
 	@Test
-	public void createFilterFromMessageAll() {
+	public void createFilterAll() {
 		List<Message> out= accessor.createFilter().greaterThan(-1).getMessages();
 		Assert.assertEquals(out.get(0).getLevel(),Level.INFO);
 		Assert.assertEquals(out.get(1).getLevel(),Level.ERROR);
 		Assert.assertEquals(out.get(2).getLevel(),Level.WARNING);
 	}
 	@Test
-	public void createFilterFromMessage() {
-		List<Message> out= accessor.createFilter().greaterThan(0).getMessages();
+	public void createFilterGreaterThan() {
+		// "greater than 1" means: get all new messages with a sequence number greater
+		// than 1, including their parents and all messages that were updated (closed
+		// and/or progress updated) since message 1 was opened
+		List<Message> out= accessor.createFilter().greaterThan(1).getMessages();
 		Assert.assertEquals(out.get(0).getLevel(),Level.ERROR);
 		Assert.assertEquals(out.get(1).getLevel(),Level.WARNING);
 	}
@@ -108,7 +113,7 @@ public class VolatileMessageAccessorTest   {
 	public void createFilterRangeAndLevel() {
 		Set<Level> levels = Sets.newHashSet();
 		levels.add(Level.ERROR);
-		List<Message> out= accessor.createFilter().inRange(1,2).getMessages();
+		List<Message> out= accessor.createFilter().inRange(2,2).getMessages();
 		Assert.assertEquals(out.get(0).getLevel(),Level.ERROR);
 	}
 
@@ -126,11 +131,6 @@ public class VolatileMessageAccessorTest   {
 	@Test (expected = IndexOutOfBoundsException.class)
 	public void createRangeStartOutOfIndex() {
 		List<Message> out= accessor.createFilter().inRange(-1,2).getMessages();
-	}
-
-	@Test (expected = IndexOutOfBoundsException.class)
-	public void createRangeEndOutOfIndex() {
-		List<Message> out= accessor.createFilter().inRange(0,10000).getMessages();
 	}
 
 	@Test (expected = IllegalArgumentException.class)

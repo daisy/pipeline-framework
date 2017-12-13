@@ -200,8 +200,13 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	public XProcResult run(XProcInput data, XProcMonitor monitor,Properties props) throws XProcErrorException {
 		PipelineInstance pipeline = pipelineSupplier.get();
 		// monitor.setMessageAccessor(pipeline.messageAccessor);
-		((XProcMessageListenerAggregator) pipeline.xpipe.getStep().getXProc()
-				.getMessageListener()).add(new EventBusMessageListener(eventBusProvider,props));
+		if (props != null) {
+			String jobId = props.getProperty("JOB_ID");
+			if (jobId != null) {
+				((XProcMessageListenerAggregator) pipeline.xpipe.getStep().getXProc()
+						.getMessageListener()).add(new EventBusMessageListener(eventBusProvider, jobId));
+			}
+		}
 		// bind inputs
 		for (String name : pipeline.xpipe.getInputs()) {
 			for (Supplier<Source> sourceProvider : data.getInputs(name)) {

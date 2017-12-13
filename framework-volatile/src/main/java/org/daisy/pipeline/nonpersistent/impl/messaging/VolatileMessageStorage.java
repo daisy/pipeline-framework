@@ -1,18 +1,21 @@
 package org.daisy.pipeline.nonpersistent.impl.messaging;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.function.BiConsumer;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
+import org.daisy.pipeline.event.ProgressMessage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalNotification;
 import com.google.common.collect.Lists;
 
 /**
@@ -22,7 +25,7 @@ public final class VolatileMessageStorage {
 
 	private static final VolatileMessageStorage INSTANCE = new VolatileMessageStorage();
 	private static final  String CACHE_TIMEOUT_PROPERTY="org.daisy.pipeline.messaging.cache";
-	private LoadingCache<String, List<Message>> cache;
+	private LoadingCache<String, List<ProgressMessage>> cache;
 	private static final Logger logger = LoggerFactory.getLogger(VolatileMessageStorage.class);
 
 	/**
@@ -32,10 +35,12 @@ public final class VolatileMessageStorage {
 		int timeout = Integer.valueOf(System.getProperty(
 				CACHE_TIMEOUT_PROPERTY, "60"));
 		cache = CacheBuilder.newBuilder()
+				.removalListener(
+						(RemovalNotification<String,List<ProgressMessage>> n) -> n.getValue().clear())
 				.expireAfterAccess(timeout, TimeUnit.SECONDS)
-				.build(new CacheLoader<String, List<Message>>() {
+				.build(new CacheLoader<String, List<ProgressMessage>>() {
 					@Override
-					public List<Message> load(String id) throws Exception {
+					public List<ProgressMessage> load(String id) throws Exception {
 						return Lists.newArrayList();
 					}
 				});
@@ -45,10 +50,12 @@ public final class VolatileMessageStorage {
 		logger.warn("Cache timeout was called. This is potentially dangerous outside testing environments!!!!");
 		synchronized(INSTANCE){
 			INSTANCE.cache = CacheBuilder.newBuilder()
+				.removalListener(
+						(RemovalNotification<String,List<ProgressMessage>> n) -> n.getValue().clear())
 				.expireAfterAccess(secs, TimeUnit.SECONDS)
-				.build(new CacheLoader<String, List<Message>>() {
+				.build(new CacheLoader<String, List<ProgressMessage>>() {
 					@Override
-					public List<Message> load(String id) throws Exception {
+					public List<ProgressMessage> load(String id) throws Exception {
 						return Lists.newArrayList();
 					}
 				});
@@ -56,26 +63,27 @@ public final class VolatileMessageStorage {
 
 	}
 
-	public boolean add(Message msg) {
+	public boolean add(ProgressMessage msg) {
 		//msgs less than info are discarded due to 
 		//perfomance issues
 		if (msg.getLevel().compareTo(Level.INFO)>0){
 			return false;
 		}
 		try {
-			this.cache.get(msg.getJobId()).add(msg.getSequence(), msg);
+			this.cache.get(msg.getJobId()).add(msg);
 			return true;
 		} catch (ExecutionException e) {
 			logger.warn("Error while adding message" , e);
-			return false;
+			throw new RuntimeException(e);
 		}
 	}
 
-	public List<Message> get(String id){
+	public List<ProgressMessage> get(String id){
 		try {
 			return this.cache.get(id);
 		} catch (ExecutionException e) {
-			return Collections.emptyList();
+			logger.warn("Error while getting messages" , e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -93,4 +101,7 @@ public final class VolatileMessageStorage {
 	public static VolatileMessageStorage getInstance() {
 		return INSTANCE;
 	}
+
+	final List<BiConsumer<String,Integer>> onNewMessages = new ArrayList<>();
+	
 }

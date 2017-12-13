@@ -21,6 +21,17 @@ public class EventBusProvider implements Supplier<EventBus>{
 	}
 
 	/**
+	 * Post a ProgressMessage to the bus, and post a ProgressMessageUpdate event every
+	 * time the object is updated.
+	 */
+	public ProgressMessage post(ProgressMessage.ProgressMessageBuilder message) {
+		message.onUpdated(e -> EventBusProvider.this.get().post(e));
+		ProgressMessage m = message.build();
+		get().post(m);
+		return m;
+	}
+
+	/**
 	 * SLF4J Logger that sends Message events with the job id of the current job to the
 	 * EventBus.
 	 */
@@ -73,13 +84,22 @@ public class EventBusProvider implements Supplier<EventBus>{
 		// depends on MDC manipulation of DefaultJobExecutionService
 		private void postMessage(String msg, Message.Level level) {
 			String jobId = MDC.get("jobid");
-			if (jobId != null)
+			if (jobId != null) {
+				ProgressMessage.ProgressMessageBuilder m = new ProgressMessage.ProgressMessageBuilder()
+				                                                              .withJobId(jobId)
+				                                                              .withLevel(level)
+				                                                              .withText(msg);
+				ProgressMessage activeBlock = ProgressMessage.getActiveBlock();
+				if (activeBlock != null)
+					activeBlock.post(m).close();
+				// is null if this is a top-level message
+				else
+					EventBusProvider.this.post(m).close(); }
+			else
 				mEventBus.post(new Message.MessageBuilder()
-				                   .withJobId(jobId)
-				                   .withTimeStamp(new Date())
-				                   .withLevel(level)
-				                   .withText(msg)
-				                   .build());
+				                          .withLevel(level)
+				                          .withText(msg)
+				                          .build());
 		}
 	};
 }

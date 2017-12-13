@@ -2,8 +2,8 @@ package org.daisy.pipeline.nonpersistent.impl.messaging;
 
 import java.util.List;
 
-import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
+import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageStorage;
 import org.junit.After;
@@ -15,28 +15,28 @@ public class VolatileMessageStorageTest {
 
 	String jobId;
 
-	Message m1;
+	ProgressMessage m1;
 
-	Message m2;
+	ProgressMessage m2;
 
-	Message m3;
+	ProgressMessage m3;
 
 	VolatileMessageStorage storage = VolatileMessageStorage.getInstance();
 
 	@Before
 	public void setUp() {
 		jobId = JobIdFactory.newId().toString();
-		m1 = new Message.MessageBuilder().withText("message1")
+		m1 = new ProgressMessage.ProgressMessageBuilder().withText("message1")
 				.withLevel(Level.INFO).withJobId(jobId).build();
-
-		m2 = new Message.MessageBuilder().withText("message2")
+		m1.close();
+		m2 = new ProgressMessage.ProgressMessageBuilder().withText("message2")
 				.withLevel(Level.ERROR).withJobId(jobId)
 				.build();
-
-		m3 = new Message.MessageBuilder().withText("message3")
+		m2.close();
+		m3 = new ProgressMessage.ProgressMessageBuilder().withText("message3")
 				.withLevel(Level.DEBUG).withJobId(jobId)
 				.build();
-
+		m3.close();
 	}
 	@After
 	public void tearDown(){
@@ -77,14 +77,14 @@ public class VolatileMessageStorageTest {
 	public void get() {
 		storage.add(m1);
 		storage.add(m2);
-		List<Message> list= storage.get(jobId);
+		List<ProgressMessage> list= storage.get(jobId);
 		Assert.assertEquals(0,list.get(0).getSequence());
 		Assert.assertEquals(1,list.get(1).getSequence());
 	}
 
 	@Test
 	public void getEmpty() {
-		List<Message> list=storage.get("newid");		
+		List<ProgressMessage> list=storage.get("newid");		
 		Assert.assertEquals(0,list.size());
 	}
 
