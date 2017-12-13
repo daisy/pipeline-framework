@@ -35,6 +35,7 @@ import org.ops4j.pax.exam.Configuration;
 import static org.ops4j.pax.exam.CoreOptions.bootDelegationPackage;
 import static org.ops4j.pax.exam.CoreOptions.composite;
 import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.systemPackage;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.options.SystemPropertyOption;
@@ -68,6 +69,7 @@ public abstract class Base extends AbstractTest {
 			"org.daisy.pipeline:webservice-utils:?",
 			"org.daisy.pipeline:framework-volatile:?",
 			"org.daisy.pipeline:calabash-adapter:?",
+			"org.daisy.pipeline:push-notifier:?",
 		};
 	}
 	
@@ -91,7 +93,10 @@ public abstract class Base extends AbstractTest {
 			// for org.eclipse.persistence:org.eclipse.persistence.moxy:2.5.0 (<-- glassfish <-- clientlib-java-jaxb)
 			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.core:2.5.0"),
 			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.asm:2.5.0"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.antlr:2.5.0")
+			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.antlr:2.5.0"),
+			
+			// for TestPushNotifications
+			systemPackage("com.sun.net.httpserver")
 		);
 	}
 	
