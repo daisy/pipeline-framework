@@ -41,6 +41,9 @@ public class Message {
 		this.level = level;
 		this.line = line;
 		this.column = column;
+		if (timeStamp == null) {
+			timeStamp = new Date();
+		}
 		this.timeStamp = timeStamp;
 		if (sequence == null) {
 			if (jobId == null) {
