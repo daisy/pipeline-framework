@@ -115,6 +115,7 @@
               <links>
                 <link>https://google.github.io/guava/releases/15.0/api/docs</link>
               </links>
+              <excludePackageNames>*.impl:*.impl.*</excludePackageNames>
             </configuration>
           </execution>
         </executions>
