@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-bom</artifactId>
-  <version>1.10.5-SNAPSHOT</version>
+  <version>1.11.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework BoM</name>
@@ -32,7 +32,7 @@
     <daisy.modules-registry.version>2.0.2-SNAPSHOT</daisy.modules-registry.version>
     <daisy.persistence-derby.version>2.0.2-SNAPSHOT</daisy.persistence-derby.version>
     <daisy.persistence-mysql.version>2.0.1-SNAPSHOT</daisy.persistence-mysql.version>
-    <daisy.push-notifier.version>2.0.1</daisy.push-notifier.version>
+    <daisy.push-notifier.version>2.0.2-SNAPSHOT</daisy.push-notifier.version>
     <daisy.updater-wrapper.version>1.0.2-SNAPSHOT</daisy.updater-wrapper.version>
     <daisy.webservice.version>2.1.3-SNAPSHOT</daisy.webservice.version>
     <daisy.webservice-utils.version>3.0.0-SNAPSHOT</daisy.webservice-utils.version>
@@ -51,7 +51,7 @@
     <guava.version>15.0</guava.version>
     <javax.persistence.version>2.0.3</javax.persistence.version>
     <javax.servlet-api.version>2.5.0</javax.servlet-api.version>
-    <jing.version>20120724.0.0</jing.version>
+    <jing.version>20151127.0.0</jing.version>
     <jetty.version>7.6.5.v20120716</jetty.version>
     <junit.version>4.10</junit.version>
     <logback.version>1.0.11</logback.version>
@@ -59,7 +59,7 @@
     <osgi.version>5.0.0</osgi.version>
     <powermock.version>1.5.4</powermock.version>
     <restlet.version>2.1-RC6</restlet.version>
-    <saxon-he.version>9.5.1.5</saxon-he.version>
+    <saxon-he.version>9.5.1.5-1</saxon-he.version>
     <slf4j.version>1.7.2</slf4j.version>
     <woodstox.core.version>4.1.2</woodstox.core.version>
     <woodstox.stax2-api.version>3.1.1</woodstox.stax2-api.version>
