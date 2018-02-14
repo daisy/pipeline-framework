@@ -28,7 +28,7 @@
     <daisy.framework-volatile.version>2.0.3-SNAPSHOT</daisy.framework-volatile.version>
     <daisy.launcher.version>1.0.0</daisy.launcher.version>
     <daisy.logging-activator.version>2.0.2</daisy.logging-activator.version>
-    <daisy.logging-appender.version>1.1.1</daisy.logging-appender.version>
+    <daisy.logging-appender.version>1.1.2-SNAPSHOT</daisy.logging-appender.version>
     <daisy.modules-registry.version>2.0.2-SNAPSHOT</daisy.modules-registry.version>
     <daisy.persistence-derby.version>2.0.2-SNAPSHOT</daisy.persistence-derby.version>
     <daisy.persistence-mysql.version>2.0.1-SNAPSHOT</daisy.persistence-mysql.version>
