@@ -7,7 +7,7 @@
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
     <version>4</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <groupId>org.daisy.pipeline</groupId>
@@ -33,7 +33,7 @@
     <module>framework-core</module>
     <module>framework-persistence</module>
     <module>framework-volatile</module>
-    <module>logging-activator</module>
+    <!--<module>logging-activator</module>-->
     <module>logging-appender</module>
     <module>modules-registry</module>
     <module>persistence-derby</module>
@@ -42,10 +42,10 @@
     <module>updater-wrapper</module>
     <module>webservice</module>
     <module>webservice-utils</module>
-    <module>woodstox-osgi-adapter</module>
-    <module>xpath-registry</module>
+    <!--<module>woodstox-osgi-adapter</module>-->
+    <!--<module>xpath-registry</module>-->
     <module>xproc-api</module>
-    <module>launcher</module>
+    <!--<module>launcher</module>-->
   </modules>
   
   <build>
