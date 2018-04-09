@@ -119,8 +119,9 @@
 
   <properties>
     <java.version>1.8</java.version>
+    <!-- must match version from framework-bom -->
+    <saxon.versionRange>[9.5.1,9.5.2)</saxon.versionRange>
   </properties>
-
 
   <dependencies>
     <!--

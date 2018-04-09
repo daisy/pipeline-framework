@@ -82,6 +82,11 @@
         test dependencies
     -->
     <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-volatile</artifactId>
       <scope>test</scope>

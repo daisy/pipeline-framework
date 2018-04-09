@@ -76,6 +76,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <Service-Component>OSGI-INF/property-tracker.xml, OSGI-INF/propery-publisher-factory.xml</Service-Component>
           </instructions>
         </configuration>
