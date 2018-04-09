@@ -95,6 +95,11 @@
             <addMavenDescriptor>false</addMavenDescriptor>
           </archive>
           <instructions>
+            <!-- must match version from framework-bom -->
+            <Import-Package>
+              net.sf.saxon.*;version="[9.5.1,9.5.2)",
+              *
+            </Import-Package>
             <Service-Component>
               OSGI-INF/saxon-processor.xml,
               OSGI-INF/saxon-transformer-factory.xml,
