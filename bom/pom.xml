@@ -29,7 +29,7 @@
     <daisy.launcher.version>1.0.0</daisy.launcher.version>
     <daisy.logging-activator.version>2.0.2</daisy.logging-activator.version>
     <daisy.logging-appender.version>1.1.2</daisy.logging-appender.version>
-    <daisy.modules-registry.version>2.0.2</daisy.modules-registry.version>
+    <daisy.modules-registry.version>2.1.0-SNAPSHOT</daisy.modules-registry.version>
     <daisy.persistence-derby.version>2.0.2</daisy.persistence-derby.version>
     <daisy.persistence-mysql.version>2.0.1</daisy.persistence-mysql.version>
     <daisy.push-notifier.version>2.0.2</daisy.push-notifier.version>
