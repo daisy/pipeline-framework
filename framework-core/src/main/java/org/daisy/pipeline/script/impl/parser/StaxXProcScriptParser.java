@@ -3,6 +3,7 @@ package org.daisy.pipeline.script.impl.parser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.function.Predicate;
 import java.util.LinkedList;
 
 import javax.xml.namespace.QName;
@@ -29,9 +30,6 @@ import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Elements;
 import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Values;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -417,9 +415,9 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 				final XMLEventReader reader, final DocumentationHolder dHolder)
 				throws XMLStreamException {
 
-			Predicate<XMLEvent> pred = Predicates.or(
-					EventPredicates.IS_START_ELEMENT,
-					EventPredicates.IS_END_ELEMENT);
+			Predicate<XMLEvent> pred =
+				EventPredicates.IS_START_ELEMENT.or(
+				EventPredicates.IS_END_ELEMENT);
 
 			// the tricky thing here is that you have to ignore blocks of markup
 			// for px:role="author" and px:role="maintainer"
