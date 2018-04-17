@@ -14,6 +14,8 @@ import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XsltTransformer;
 
+// FIXME: this class should be moved to org.daisy.common.saxon
+
 /**
  * Transform a given XML tree or sub-tree, with optional XSLT parameters. The
  * methods must not be called within multiple threads.
