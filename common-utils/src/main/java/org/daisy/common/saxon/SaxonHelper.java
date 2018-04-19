@@ -1,19 +1,19 @@
 package org.daisy.common.saxon;
 
-import java.util.ArrayList;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 import java.util.Vector;
 
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import javax.xml.transform.TransformerException;
+import javax.xml.stream.XMLStreamWriter;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
 
 import net.sf.saxon.Configuration;
+import net.sf.saxon.dom.DocumentOverNodeInfo;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.event.StreamWriterToReceiver;
@@ -22,18 +22,24 @@ import net.sf.saxon.evpull.EventIteratorOverSequence;
 import net.sf.saxon.evpull.EventToStaxBridge;
 import net.sf.saxon.om.NamespaceResolver;
 import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmDestination;
+import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.sxpath.XPathDynamicContext;
 import net.sf.saxon.sxpath.XPathEvaluator;
 import net.sf.saxon.sxpath.XPathExpression;
 import net.sf.saxon.trans.XPathException;
 
-import org.daisy.common.stax.XMLStreamWriterHelper.BufferedXMLStreamWriter;
-import org.daisy.common.stax.XMLStreamWriterHelper.FutureWriterEvent;
-import org.daisy.common.stax.XMLStreamWriterHelper.WriterEvent;
+import org.daisy.common.stax.XMLStreamWriterHelper;
+import org.daisy.common.stax.XMLStreamWriterHelper.XMLStreamWritable;
+import org.daisy.common.transform.TransformerException;
+import org.daisy.common.transform.DOMToXMLStreamTransformer;
 import org.daisy.common.transform.XMLStreamToXMLStreamTransformer;
+
+import org.w3c.dom.Document;
 
 public final class SaxonHelper {
 	
@@ -45,6 +51,14 @@ public final class SaxonHelper {
 			return new javax.xml.namespace.QName(ns, localPart, prefix);
 		else
 			return new javax.xml.namespace.QName(ns, localPart);
+	}
+	
+	public static Iterable<XdmItem> axisIterable(XdmNode node, Axis axis) {
+		return new Iterable<XdmItem>() {
+			public Iterator<XdmItem> iterator() {
+				return node.axisIterator(axis);
+			}
+		};
 	}
 	
 	public static XPathExpression compileExpression(String expression, Hashtable<String,String> namespaceBindings, Configuration configuration)
@@ -63,24 +77,58 @@ public final class SaxonHelper {
 		}
 	}
 	
-	public static XdmNode transform(NodeInfo element, XMLStreamToXMLStreamTransformer transformer, Configuration configuration)
+	public static XMLStreamWritable<XdmNode> nodeWriter(Configuration configuration) throws SaxonApiException, XPathException {
+		XdmDestination destination = new XdmDestination();
+		Receiver receiver = destination.getReceiver(configuration);
+		receiver.open();
+		StreamWriterToReceiver writer = new StreamWriterToReceiver(receiver);
+		return new XMLStreamWritable<XdmNode>() {
+			public XMLStreamWriter getWriter() {
+				return writer;
+			}
+			public XdmNode doneWriting() throws TransformerException {
+				try {
+					receiver.close();
+					return destination.getXdmNode();
+				} catch (XPathException e) {
+					throw new TransformerException(e);
+				}
+			}
+		};
+	}
+	
+	public static XMLStreamReader nodeReader(XdmNode node, Configuration configuration) throws XPathException {
+		return nodeReader(node.getUnderlyingNode(), configuration);
+	}
+	
+	public static XMLStreamReader nodeReader(NodeInfo node, Configuration configuration) throws XPathException {
+		PipelineConfiguration pipeConfig = new PipelineConfiguration(configuration);
+		return new EventToStaxBridge(
+			new Decomposer(
+				new EventIteratorOverSequence(node.iterate()), pipeConfig), pipeConfig);
+	}
+	
+	public static Iterator<XdmNode> transform(XMLStreamToXMLStreamTransformer transformer, Iterator<NodeInfo> input, Configuration config)
 			throws TransformerException {
-		try {
-			PipelineConfiguration pipeConfig = new PipelineConfiguration(configuration);
-			XMLStreamReader reader
-				= new EventToStaxBridge(
-					new Decomposer(
-						new EventIteratorOverSequence(element.iterate()), pipeConfig), pipeConfig);
-			XdmDestination destination = new XdmDestination();
-			Receiver receiver = destination.getReceiver(configuration);
-			receiver.open();
-			WriterImpl writer = new WriterImpl(receiver);
-			transformer.transform(reader, writer);
-			receiver.close();
-			return destination.getXdmNode();
-		} catch (Exception e) {
-			throw new TransformerException(e);
-		}
+		Iterator<XMLStreamReader> readers = Iterators.transform(input, propagateCE(doc -> nodeReader(doc, config), TransformerException::new));
+		Consumer<Supplier<XMLStreamWriter>> transform = writers -> transformer.transform(readers, writers);
+		Supplier<XMLStreamWritable<XdmNode>> writables = propagateCE(() -> nodeWriter(config), TransformerException::new);
+		return XMLStreamWriterHelper.collect(transform, writables).iterator();
+	}
+	
+	public static Iterator<XdmNode> transform(DOMToXMLStreamTransformer transformer, Iterator<NodeInfo> input, Configuration config)
+			throws TransformerException {
+		Iterator<Document> readers = Iterators.transform(input, doc -> (Document)DocumentOverNodeInfo.wrap(doc));
+		Consumer<Supplier<XMLStreamWriter>> transform = writers -> transformer.transform(readers, writers);
+		Supplier<XMLStreamWritable<XdmNode>> writables = propagateCE(() -> nodeWriter(config), TransformerException::new);
+		return XMLStreamWriterHelper.collect(transform, writables).iterator();
+	}
+	
+	public static Iterator<XdmNode> transform(NodeToXMLStreamTransformer transformer, Iterator<XdmNode> input, Configuration config)
+			throws TransformerException {
+		Consumer<Supplier<XMLStreamWriter>> transform = writers -> transformer.transform(input, writers);
+		Supplier<XMLStreamWritable<XdmNode>> writables = propagateCE(() -> nodeWriter(config), TransformerException::new);
+		return XMLStreamWriterHelper.collect(transform, writables).iterator();
 	}
 	
 	// copied from com.xmlcalabash.util.ProcessMatch
@@ -108,261 +156,58 @@ public final class SaxonHelper {
 		}
 	}
 	
-	private static class WriterImpl extends StreamWriterToReceiver implements BufferedXMLStreamWriter {
-		
-		WriterImpl(Receiver receiver) {
-			super(receiver);
-		}
-		
-		private Queue<WriterEvent> queue = new LinkedList<>();
-		
-		public void writeEvent(FutureWriterEvent event) throws XMLStreamException {
-			queue.add(event);
-			flushQueue();
-		}
-		
-		private boolean isQueueEmpty() {
-			return queue == null || queue.isEmpty();
-		}
-		
-		private boolean flushQueue() throws XMLStreamException {
-			if (queue == null)
-				return true;
-			List<WriterEvent> todo = null;
-			while (!queue.isEmpty()) {
-				WriterEvent event = queue.peek();
-				if (event instanceof FutureWriterEvent && !((FutureWriterEvent)event).isReady())
-					break;
-				if (todo == null)
-					todo = new ArrayList<WriterEvent>();
-				todo.add(event);
-				queue.remove(); }
-			Queue<WriterEvent> tmp = queue;
-			queue = null;
-			if (todo != null)
-				for (WriterEvent event : todo)
-					event.writeTo(this);
-			queue = tmp;
-			return queue.isEmpty();
-		}
-
+	@FunctionalInterface
+	private static interface ThrowingFunction<T,R> extends Function<T,R> {
 		@Override
-		public void flush() throws XMLStreamException {
-			if (!flushQueue())
-				throw new XMLStreamException("not ready");
-			super.flush();
+		default R apply(T t) {
+			try {
+				return applyThrows(t);
+			} catch (Throwable e) {
+				throw new RuntimeException(e);
+			}
 		}
-
+		R applyThrows(T t) throws Throwable;
+	}
+	
+	@FunctionalInterface
+	private static interface ThrowingSupplier<T> extends Supplier<T> {
 		@Override
-		public void close() throws XMLStreamException {
-			throw new UnsupportedOperationException();
+		default T get() {
+			try {
+				return getThrows();
+			} catch (Throwable e) {
+				throw new RuntimeException(e);
+			}
 		}
-
-		@Override
-		public NamespaceContext getNamespaceContext() {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public String getPrefix(String uri) {
-			if (!isQueueEmpty())
-				throw new IllegalStateException();
-			return super.getPrefix(uri);
-		}
-
-		@Override
-		public Object getProperty(String name) throws IllegalArgumentException {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public void setDefaultNamespace(String uri) throws XMLStreamException {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public void setNamespaceContext(NamespaceContext context) throws XMLStreamException {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public void setPrefix(String prefix, String uri) {
-			throw new UnsupportedOperationException();
-		}
-		
-		@Override
-		public void writeAttribute(String localName, String value) throws XMLStreamException {
-			if (flushQueue())
-				super.writeAttribute(localName, value);
-			else
-				queue.add(w -> w.writeAttribute(localName, value));
-		}
-
-		@Override
-		public void writeAttribute(String prefix, String namespaceURI, String localName, String value) throws XMLStreamException {
-			if (flushQueue())
-				super.writeAttribute(prefix, namespaceURI, localName, value);
-			else
-				queue.add(w -> w.writeAttribute(prefix, namespaceURI, localName, value));
-		}
-
-		@Override
-		public void writeAttribute(String namespaceURI, String localName, String value) throws XMLStreamException {
-			if (flushQueue())
-				super.writeAttribute(namespaceURI, localName, value);
-			else
-				queue.add(w -> w.writeAttribute(namespaceURI, localName, value));
-		}
-		
-		@Override
-		public void writeCData(String text) throws XMLStreamException {
-			if (flushQueue())
-				super.writeCData(text);
-			else
-				queue.add(w -> w.writeCData(text));
-		}
-
-		@Override
-		public void writeCharacters(String text) throws XMLStreamException {
-			if (flushQueue())
-				super.writeCharacters(text);
-			else
-				queue.add(w -> w.writeCharacters(text));
-		}
-
-		@Override
-		public void writeCharacters(char[] text, int start, int len) throws XMLStreamException {
-			throw new UnsupportedOperationException();
-		}
-		
-		@Override
-		public void writeComment(String text) throws XMLStreamException {
-			if (flushQueue())
-				super.writeComment(text);
-			else
-				queue.add(w -> w.writeComment(text));
-		}
-
-		@Override
-		public void writeDefaultNamespace(String namespaceURI) throws XMLStreamException {
-			if (flushQueue())
-				super.writeDefaultNamespace(namespaceURI);
-			else
-				queue.add(w -> w.writeDefaultNamespace(namespaceURI));
-		}
-
-		@Override
-		public void writeDTD(String dtd) throws XMLStreamException {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public void writeEmptyElement(String localName) throws XMLStreamException {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public void writeEmptyElement(String namespaceURI, String localName) throws XMLStreamException {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public void writeEmptyElement(String prefix, String localName, String namespaceURI) throws XMLStreamException {
-			throw new UnsupportedOperationException();
-		}
-		
-		@Override
-		public void writeEndElement() throws XMLStreamException {
-			if (flushQueue())
-				super.writeEndElement();
-			else
-				queue.add(w -> w.writeEndElement());
-		}
-		
-		@Override
-		public void writeEndDocument() throws XMLStreamException {
-			if (flushQueue())
-				super.writeEndDocument();
-			else
-				queue.add(w -> w.writeEndDocument());
-		}
-
-		@Override
-		public void writeEntityRef(String name) throws XMLStreamException {
-			throw new UnsupportedOperationException();
-		}
-		
-		@Override
-		public void writeNamespace(String prefix, String namespaceURI) throws XMLStreamException {
-			if (flushQueue())
-				super.writeNamespace(prefix, namespaceURI);
-			else
-				queue.add(w -> w.writeNamespace(prefix, namespaceURI));
-		}
-		
-		@Override
-		public void writeProcessingInstruction(String target) throws XMLStreamException {
-			if (flushQueue())
-				super.writeProcessingInstruction(target);
-			else
-				queue.add(w -> w.writeProcessingInstruction(target));
-		}
-
-		@Override
-		public void writeProcessingInstruction(String target, String data) throws XMLStreamException {
-			if (flushQueue())
-				super.writeProcessingInstruction(target, data);
-			else
-				queue.add(w -> w.writeProcessingInstruction(target, data));
-		}
-		
-		@Override
-		public void writeStartDocument() throws XMLStreamException {
-			if (flushQueue())
-				super.writeStartDocument();
-			else
-				queue.add(w -> w.writeStartDocument());
-		}
-
-		@Override
-		public void writeStartDocument(String version) throws XMLStreamException {
-			if (flushQueue())
-				super.writeStartDocument(version);
-			else
-				queue.add(w -> w.writeStartDocument(version));
-		}
-
-		@Override
-		public void writeStartDocument(String encoding, String version) throws XMLStreamException {
-			if (flushQueue())
-				super.writeStartDocument(encoding, version);
-			else
-				queue.add(w -> w.writeStartDocument(encoding, version));
-		}
-		
-		@Override
-		public void writeStartElement(String localName) throws XMLStreamException {
-			if (flushQueue())
-				super.writeStartElement(localName);
-			else
-				queue.add(w -> w.writeStartElement(localName));
-		}
-
-		@Override
-		public void writeStartElement(String namespaceURI, String localName) throws XMLStreamException {
-			if (flushQueue())
-				super.writeStartElement(namespaceURI, localName);
-			else
-				queue.add(w -> w.writeStartElement(namespaceURI, localName));
-		}
-
-		@Override
-		public void writeStartElement(String prefix, String localName, String namespaceURI) throws XMLStreamException {
-			if (flushQueue())
-				super.writeStartElement(prefix, localName, namespaceURI);
-			else
-				queue.add(w -> w.writeStartElement(prefix, localName, namespaceURI));
-		}
+		T getThrows() throws Throwable;
+	}
+	
+	private static <T,R,E extends RuntimeException> Function<T,R> propagateCE(ThrowingFunction<T,R> f, Function<Throwable,E> newEx) {
+		return new Function<T,R>() {
+			public R apply(T t) throws E {
+				try {
+					return f.applyThrows(t);
+				} catch (RuntimeException e) {
+					throw e;
+				} catch (Throwable e) {
+					throw newEx.apply(e);
+				}
+			}
+		};
+	}
+	
+	private static <T,E extends RuntimeException> Supplier<T> propagateCE(ThrowingSupplier<T> f, Function<Throwable,E> newEx) {
+		return new Supplier<T>() {
+			public T get() throws E {
+				try {
+					return f.getThrows();
+				} catch (RuntimeException e) {
+					throw e;
+				} catch (Throwable e) {
+					throw newEx.apply(e);
+				}
+			}
+		};
 	}
 	
 	private SaxonHelper() {

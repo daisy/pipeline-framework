@@ -1,8 +1,18 @@
 package org.daisy.common.stax;
 
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 import java.util.Stack;
 
 import javax.xml.namespace.NamespaceContext;
@@ -21,22 +31,137 @@ import static javax.xml.stream.XMLStreamConstants.SPACE;
 import static javax.xml.stream.XMLStreamConstants.START_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 
+import org.daisy.common.transform.TransformerException;
+
+import com.google.common.util.concurrent.SettableFuture;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NamedNodeMap;
 
 public final class XMLStreamWriterHelper {
 	
-	public interface WriterEvent {
-		public void writeTo(XMLStreamWriter writer) throws XMLStreamException;
+	public interface XMLStreamWritable<R> {
+		/**
+		 * @return the writer
+		 */
+		public XMLStreamWriter getWriter();
+		/**
+		 * @return the result
+		 */
+		public R doneWriting();
 	}
 	
-	public interface FutureWriterEvent extends WriterEvent {
-		public boolean isReady();
+	/**
+	 * Collect pushed documents in a list.
+	 *
+	 * @param writables The writable supplier
+	 * @param pusher The transformer
+	 * @return The collected documents
+	 * @throws TransformerException
+	 */
+	public static <R> List<R> collect(Consumer<Supplier<XMLStreamWriter>> pusher,Supplier<XMLStreamWritable<R>> writables)
+			throws TransformerException {
+		List<XMLStreamWritable<R>> supplied = new ArrayList<>();
+		pusher.accept(() -> {
+				XMLStreamWritable<R> w = writables.get();
+				supplied.add(w);
+				return w.getWriter();
+			});
+		List<R> collect = new ArrayList<>();
+		for (XMLStreamWritable<R> w : supplied)
+			collect.add(w.doneWriting());
+		return collect;
 	}
 	
-	public interface BufferedXMLStreamWriter extends XMLStreamWriter {
-		public void writeEvent(FutureWriterEvent event) throws XMLStreamException;
+	/**
+	 * Provide a "pull" interface (Iterator) for an object that "pushes" documents.
+	 *
+	 * @param writables The writable supplier
+	 * @param pusher The transformer
+	 * @return The iterator. May throw TransformerException.
+	 */
+	public static <R> Iterator<R> pushToPull(Consumer<Supplier<XMLStreamWriter>> pusher, Supplier<XMLStreamWritable<R>> writables) {
+		SettableFuture<Queue<Future<R>>> queue = SettableFuture.create();
+		new Supplier<XMLStreamWriter>() {
+				XMLStreamWritable<R> writable;
+				SettableFuture<R> resultNode;
+				public XMLStreamWriter get() throws TransformerException {
+					if (resultNode != null)
+						resultNode.set(writable.doneWriting());
+					resultNode = SettableFuture.create();
+					writable = writables.get();
+					if (!queue.isDone()) {
+						Queue<Future<R>> q = new ConcurrentLinkedQueue<>();
+						q.add(resultNode);
+						queue.set(q);
+					} else {
+						try {
+							queue.get().add(resultNode);
+						} catch (ExecutionException | InterruptedException e) {
+							throw new RuntimeException(); // cannot happen
+						}
+					}
+					return writable.getWriter();
+				}
+				void doneWriting() {
+					resultNode.set(writable.doneWriting());
+				}
+				void setException(Throwable e) {
+					resultNode.setException(e);
+				}
+				{
+					new Thread(() -> {
+							try {
+								pusher.accept(this);
+								if (!queue.isDone())
+									queue.set(new ConcurrentLinkedQueue<>());
+								else
+									doneWriting();
+							} catch (TransformerException e) {
+								if (!queue.isDone())
+									queue.setException(e.getCause());
+								else
+									setException(e.getCause());
+							}
+					}).start();
+				}
+			};
+		return new Iterator<R>() {
+			public boolean hasNext() throws TransformerException {
+				try {
+					return !queue.get().isEmpty();
+				} catch (ExecutionException e) {
+					try {
+						throw e.getCause();
+					} catch (RuntimeException ee) {
+						throw ee;
+					} catch (Throwable ee) {
+						throw new RuntimeException(ee);
+					}
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e); // cannot happen
+				}
+			}
+			public R next() throws TransformerException {
+				try {
+					return queue.get().remove().get();
+				} catch (ExecutionException e) {
+					try {
+						throw e.getCause();
+					} catch (RuntimeException ee) {
+						throw ee;
+					} catch (Throwable ee) {
+						throw new RuntimeException(ee);
+					}
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e); // cannot happen
+				}
+			}
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 	
 	private static QName nodeName(Node node) {
@@ -83,6 +208,10 @@ public final class XMLStreamWriterHelper {
 		writeAttribute(writer, nodeName(attr), attr.getNodeValue(), copyNamespaceNodes);
 	}
 	
+	public static void writeAttribute(XMLStreamWriter writer, Map.Entry<QName,String> attribute) throws XMLStreamException {
+		writeAttribute(writer, attribute.getKey(), attribute.getValue());
+	}
+	
 	public static void writeAttributes(XMLStreamWriter writer, Element element) throws XMLStreamException {
 		writeAttributes(writer, element, false);
 	}
@@ -98,6 +227,11 @@ public final class XMLStreamWriterHelper {
 	public static void writeAttributes(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
 		for (int i = 0; i < reader.getAttributeCount(); i++)
 			writeAttribute(writer, reader.getAttributeName(i), reader.getAttributeValue(i));
+	}
+	
+	public static void writeAttributes(XMLStreamWriter writer, Map<QName,String> attributes) throws XMLStreamException {
+		for (Map.Entry<QName,String> attr : attributes.entrySet())
+			writeAttribute(writer, attr);
 	}
 	
 	public static void writeCData(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
@@ -118,6 +252,27 @@ public final class XMLStreamWriterHelper {
 	
 	public static void writeComment(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
 		writer.writeComment(reader.getText());
+	}
+	
+	public static void writeDocument(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
+		writer.writeStartDocument();
+		while (true)
+			try {
+				int event = reader.next();
+				switch (event) {
+				case START_DOCUMENT:
+				case END_DOCUMENT:
+					break;
+				case START_ELEMENT:
+					writeElement(writer, reader);
+					break;
+				default:
+					writeEvent(writer, event, reader);
+				}
+			} catch (NoSuchElementException e) {
+				break;
+			}
+		writer.writeEndDocument();
 	}
 	
 	public static void writeElement(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
@@ -214,10 +369,279 @@ public final class XMLStreamWriterHelper {
 		String localPart = element.getLocalName();
 		if (prefix != null)
 			writer.writeStartElement(prefix, localPart, ns);
-		else
+		else if (ns != null)
 			writer.writeStartElement(ns, localPart);
+		else
+			writer.writeStartElement(localPart);
 		if (copyAttributes) {
 			writeAttributes(writer, element, copyNamespaceNodes);
+		}
+	}
+	
+	public interface WriterEvent {
+		public void writeTo(XMLStreamWriter writer) throws XMLStreamException;
+	}
+	
+	public interface FutureWriterEvent extends WriterEvent {
+		public boolean isReady();
+	}
+	
+	public static class BufferedXMLStreamWriter implements XMLStreamWriter {
+		
+		private final XMLStreamWriter zuper;
+		
+		public BufferedXMLStreamWriter(XMLStreamWriter zuper) {
+			this.zuper = zuper;
+		}
+		
+		private Queue<WriterEvent> queue = new LinkedList<>();
+		
+		public void writeEvent(FutureWriterEvent event) throws XMLStreamException {
+			queue.add(event);
+			flushQueue();
+		}
+		
+		private boolean isQueueEmpty() {
+			return queue == null || queue.isEmpty();
+		}
+		
+		private boolean flushQueue() throws XMLStreamException {
+			if (queue == null)
+				return true;
+			List<WriterEvent> todo = null;
+			while (!queue.isEmpty()) {
+				WriterEvent event = queue.peek();
+				if (event instanceof FutureWriterEvent && !((FutureWriterEvent)event).isReady())
+					break;
+				if (todo == null)
+					todo = new ArrayList<WriterEvent>();
+				todo.add(event);
+				queue.remove(); }
+			Queue<WriterEvent> tmp = queue;
+			queue = null;
+			if (todo != null)
+				for (WriterEvent event : todo)
+					event.writeTo(this);
+			queue = tmp;
+			return queue.isEmpty();
+		}
+
+		@Override
+		public void flush() throws XMLStreamException {
+			if (!flushQueue())
+				throw new XMLStreamException("not ready");
+			zuper.flush();
+		}
+
+		@Override
+		public void close() throws XMLStreamException {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public NamespaceContext getNamespaceContext() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public String getPrefix(String uri) throws XMLStreamException {
+			if (!isQueueEmpty())
+				throw new IllegalStateException();
+			return zuper.getPrefix(uri);
+		}
+
+		@Override
+		public Object getProperty(String name) throws IllegalArgumentException {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void setDefaultNamespace(String uri) throws XMLStreamException {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void setNamespaceContext(NamespaceContext context) throws XMLStreamException {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void setPrefix(String prefix, String uri) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public void writeAttribute(String localName, String value) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeAttribute(localName, value);
+			else
+				queue.add(w -> w.writeAttribute(localName, value));
+		}
+
+		@Override
+		public void writeAttribute(String prefix, String namespaceURI, String localName, String value) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeAttribute(prefix, namespaceURI, localName, value);
+			else
+				queue.add(w -> w.writeAttribute(prefix, namespaceURI, localName, value));
+		}
+
+		@Override
+		public void writeAttribute(String namespaceURI, String localName, String value) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeAttribute(namespaceURI, localName, value);
+			else
+				queue.add(w -> w.writeAttribute(namespaceURI, localName, value));
+		}
+		
+		@Override
+		public void writeCData(String text) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeCData(text);
+			else
+				queue.add(w -> w.writeCData(text));
+		}
+
+		@Override
+		public void writeCharacters(String text) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeCharacters(text);
+			else
+				queue.add(w -> w.writeCharacters(text));
+		}
+
+		@Override
+		public void writeCharacters(char[] text, int start, int len) throws XMLStreamException {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public void writeComment(String text) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeComment(text);
+			else
+				queue.add(w -> w.writeComment(text));
+		}
+
+		@Override
+		public void writeDefaultNamespace(String namespaceURI) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeDefaultNamespace(namespaceURI);
+			else
+				queue.add(w -> w.writeDefaultNamespace(namespaceURI));
+		}
+
+		@Override
+		public void writeDTD(String dtd) throws XMLStreamException {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void writeEmptyElement(String localName) throws XMLStreamException {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void writeEmptyElement(String namespaceURI, String localName) throws XMLStreamException {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void writeEmptyElement(String prefix, String localName, String namespaceURI) throws XMLStreamException {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public void writeEndElement() throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeEndElement();
+			else
+				queue.add(w -> w.writeEndElement());
+		}
+		
+		@Override
+		public void writeEndDocument() throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeEndDocument();
+			else
+				queue.add(w -> w.writeEndDocument());
+		}
+
+		@Override
+		public void writeEntityRef(String name) throws XMLStreamException {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public void writeNamespace(String prefix, String namespaceURI) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeNamespace(prefix, namespaceURI);
+			else
+				queue.add(w -> w.writeNamespace(prefix, namespaceURI));
+		}
+		
+		@Override
+		public void writeProcessingInstruction(String target) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeProcessingInstruction(target);
+			else
+				queue.add(w -> w.writeProcessingInstruction(target));
+		}
+
+		@Override
+		public void writeProcessingInstruction(String target, String data) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeProcessingInstruction(target, data);
+			else
+				queue.add(w -> w.writeProcessingInstruction(target, data));
+		}
+		
+		@Override
+		public void writeStartDocument() throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeStartDocument();
+			else
+				queue.add(w -> w.writeStartDocument());
+		}
+
+		@Override
+		public void writeStartDocument(String version) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeStartDocument(version);
+			else
+				queue.add(w -> w.writeStartDocument(version));
+		}
+
+		@Override
+		public void writeStartDocument(String encoding, String version) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeStartDocument(encoding, version);
+			else
+				queue.add(w -> w.writeStartDocument(encoding, version));
+		}
+		
+		@Override
+		public void writeStartElement(String localName) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeStartElement(localName);
+			else
+				queue.add(w -> w.writeStartElement(localName));
+		}
+
+		@Override
+		public void writeStartElement(String namespaceURI, String localName) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeStartElement(namespaceURI, localName);
+			else
+				queue.add(w -> w.writeStartElement(namespaceURI, localName));
+		}
+
+		@Override
+		public void writeStartElement(String prefix, String localName, String namespaceURI) throws XMLStreamException {
+			if (flushQueue())
+				zuper.writeStartElement(prefix, localName, namespaceURI);
+			else
+				queue.add(w -> w.writeStartElement(prefix, localName, namespaceURI));
 		}
 	}
 	

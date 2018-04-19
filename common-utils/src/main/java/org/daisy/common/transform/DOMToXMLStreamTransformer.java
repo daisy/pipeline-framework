@@ -1,7 +1,9 @@
 package org.daisy.common.transform;
 
+import java.util.function.Supplier;
+import java.util.Iterator;
+
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.TransformerException;
 
 import org.w3c.dom.Document;
 
@@ -10,6 +12,13 @@ import org.w3c.dom.Document;
  */
 public interface DOMToXMLStreamTransformer {
 	
-	public void transform(Document document, XMLStreamWriter writer) throws TransformerException;
+	/**
+	 * Transform a sequence of input documents to a sequence of output documents.
+	 *
+	 * @param input A sequence of DOM objects. Allowed to throw TransformerException.
+	 * @param output A supplier of XMLStreamWriters. Allowed to throw TransformerException.
+	 * @throws TransformerException
+	 */
+	public void transform(Iterator<Document> input, Supplier<XMLStreamWriter> output) throws TransformerException;
 	
 }
