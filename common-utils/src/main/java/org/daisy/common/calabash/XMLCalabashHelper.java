@@ -1,45 +1,81 @@
 package org.daisy.common.calabash;
 
-import java.net.URI;
+import java.util.Iterator;
 import java.util.Stack;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.TransformerException;
+
+import com.google.common.collect.Iterators;
 
 import com.xmlcalabash.core.XProcRuntime;
+import com.xmlcalabash.io.ReadablePipe;
+import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.util.TreeWriter;
 
-import net.sf.saxon.dom.DocumentOverNodeInfo;
+import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.saxon.NodeToXMLStreamTransformer;
+import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.transform.DOMToXMLStreamTransformer;
-
-import org.w3c.dom.Document;
+import org.daisy.common.transform.TransformerException;
+import org.daisy.common.transform.XMLStreamToXMLStreamTransformer;
 
 public final class XMLCalabashHelper {
 	
-	public static XdmNode transform(XdmNode document, DOMToXMLStreamTransformer transformer, XProcRuntime runtime)
-			throws TransformerException {
-		return transform(document, transformer, document.getBaseURI(), runtime);
+	public static Iterator<XdmNode> readPipe(ReadablePipe pipe) {
+		return new Iterator<XdmNode>() {
+			public boolean hasNext() {
+				return pipe.moreDocuments();
+			}
+			public XdmNode next() throws TransformerException {
+				try {
+					return pipe.read();
+				} catch (SaxonApiException e) {
+					throw new TransformerException(e);
+				}
+			}
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 	
-	public static XdmNode transform(XdmNode document, DOMToXMLStreamTransformer transformer, URI destBaseURI, XProcRuntime runtime)
-			throws TransformerException {
-		Document doc = (Document)DocumentOverNodeInfo.wrap(document.getUnderlyingNode());
-		XMLStreamWriterOverTreeWriter writer = new XMLStreamWriterOverTreeWriter(runtime, destBaseURI);
-		transformer.transform(doc, writer);
-		return writer.getResult();
+	public static void writePipe(WritablePipe pipe, Iterator<XdmNode> output) {
+		while (output.hasNext())
+			pipe.write(output.next());
 	}
 	
-	private static class XMLStreamWriterOverTreeWriter extends TreeWriter implements XMLStreamWriter {
+	public static void transform(XMLStreamToXMLStreamTransformer transformer, ReadablePipe input, WritablePipe output, XProcRuntime runtime)
+			throws TransformerException {
+		writePipe(output,
+		          SaxonHelper.transform(transformer,
+		                                Iterators.transform(readPipe(input), XdmNode::getUnderlyingNode),
+		                                runtime.getProcessor().getUnderlyingConfiguration()));
+	}
+	
+	public static void transform(DOMToXMLStreamTransformer transformer, ReadablePipe input, WritablePipe output, XProcRuntime runtime)
+			throws TransformerException {
+		writePipe(output,
+		          SaxonHelper.transform(transformer,
+		                                Iterators.transform(readPipe(input), XdmNode::getUnderlyingNode),
+		                                runtime.getProcessor().getUnderlyingConfiguration()));
+	}
+	
+	public static void transform(NodeToXMLStreamTransformer transformer, ReadablePipe input, WritablePipe output, XProcRuntime runtime)
+			throws TransformerException {
+		writePipe(output,
+		          SaxonHelper.transform(transformer,
+		                                readPipe(input),
+		                                runtime.getProcessor().getUnderlyingConfiguration()));
+	}
+	
+	public static class XMLStreamWriterOverTreeWriter extends TreeWriter implements XMLStreamWriter {
 		
-		final URI baseURI;
-		
-		XMLStreamWriterOverTreeWriter(XProcRuntime runtime, URI baseURI) {
+		XMLStreamWriterOverTreeWriter(XProcRuntime runtime) {
 			super(runtime);
-			this.baseURI = baseURI;
 		}
 
 		Stack<Boolean> contentStarted = new Stack<>();
@@ -184,7 +220,7 @@ public final class XMLCalabashHelper {
 
 		@Override
 		public void writeStartDocument() throws XMLStreamException {
-			startDocument(baseURI);
+			startDocument(null);
 		}
 
 		@Override
