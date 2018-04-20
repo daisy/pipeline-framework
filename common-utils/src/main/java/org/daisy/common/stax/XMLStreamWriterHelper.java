@@ -1,5 +1,6 @@
 package org.daisy.common.stax;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
@@ -45,7 +46,7 @@ public final class XMLStreamWriterHelper {
 		/**
 		 * @return the writer
 		 */
-		public XMLStreamWriter getWriter();
+		public BaseURIAwareXMLStreamWriter getWriter();
 		/**
 		 * @return the result
 		 */
@@ -60,7 +61,7 @@ public final class XMLStreamWriterHelper {
 	 * @return The collected documents
 	 * @throws TransformerException
 	 */
-	public static <R> List<R> collect(Consumer<Supplier<XMLStreamWriter>> pusher,Supplier<XMLStreamWritable<R>> writables)
+	public static <R> List<R> collect(Consumer<Supplier<BaseURIAwareXMLStreamWriter>> pusher,Supplier<XMLStreamWritable<R>> writables)
 			throws TransformerException {
 		List<XMLStreamWritable<R>> supplied = new ArrayList<>();
 		pusher.accept(() -> {
@@ -81,12 +82,12 @@ public final class XMLStreamWriterHelper {
 	 * @param pusher The transformer
 	 * @return The iterator. May throw TransformerException.
 	 */
-	public static <R> Iterator<R> pushToPull(Consumer<Supplier<XMLStreamWriter>> pusher, Supplier<XMLStreamWritable<R>> writables) {
+	public static <R> Iterator<R> pushToPull(Consumer<Supplier<BaseURIAwareXMLStreamWriter>> pusher, Supplier<XMLStreamWritable<R>> writables) {
 		SettableFuture<Queue<Future<R>>> queue = SettableFuture.create();
-		new Supplier<XMLStreamWriter>() {
+		new Supplier<BaseURIAwareXMLStreamWriter>() {
 				XMLStreamWritable<R> writable;
 				SettableFuture<R> resultNode;
-				public XMLStreamWriter get() throws TransformerException {
+				public BaseURIAwareXMLStreamWriter get() throws TransformerException {
 					if (resultNode != null)
 						resultNode.set(writable.doneWriting());
 					resultNode = SettableFuture.create();
@@ -358,11 +359,11 @@ public final class XMLStreamWriterHelper {
 	}
 	
 	public static void writeStartElement(XMLStreamWriter writer, Element element) throws XMLStreamException {
-		writeStartElement(writer, element, false, false);
+		writeStartElement(writer, element, false, false, false);
 	}
 	
 	public static void writeStartElement(XMLStreamWriter writer, Element element,
-	                                     boolean copyAttributes, boolean copyNamespaceNodes)
+	                                     boolean copyAttributes, boolean copyNamespaceNodes, boolean copyBaseURI)
 			throws XMLStreamException {
 		String prefix = element.getPrefix();
 		String ns = element.getNamespaceURI();
@@ -376,6 +377,13 @@ public final class XMLStreamWriterHelper {
 		if (copyAttributes) {
 			writeAttributes(writer, element, copyNamespaceNodes);
 		}
+		if (copyBaseURI) {
+			if (writer instanceof BaseURIAwareXMLStreamWriter) {
+				String baseURI = element.getBaseURI();
+				((BaseURIAwareXMLStreamWriter)writer).setBaseURI(baseURI == null ? null : URI.create(baseURI));
+			} else
+				throw new IllegalArgumentException();
+		}
 	}
 	
 	public interface WriterEvent {
@@ -386,11 +394,11 @@ public final class XMLStreamWriterHelper {
 		public boolean isReady();
 	}
 	
-	public static class BufferedXMLStreamWriter implements XMLStreamWriter {
+	public static class BufferedXMLStreamWriter implements BaseURIAwareXMLStreamWriter {
 		
-		private final XMLStreamWriter zuper;
+		private final BaseURIAwareXMLStreamWriter zuper;
 		
-		public BufferedXMLStreamWriter(XMLStreamWriter zuper) {
+		public BufferedXMLStreamWriter(BaseURIAwareXMLStreamWriter zuper) {
 			this.zuper = zuper;
 		}
 		
@@ -439,6 +447,11 @@ public final class XMLStreamWriterHelper {
 		}
 
 		@Override
+		public URI getBaseURI() throws XMLStreamException {
+			return zuper.getBaseURI();
+		}
+		
+		@Override
 		public NamespaceContext getNamespaceContext() {
 			throw new UnsupportedOperationException();
 		}
@@ -453,6 +466,11 @@ public final class XMLStreamWriterHelper {
 		@Override
 		public Object getProperty(String name) throws IllegalArgumentException {
 			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void setBaseURI(URI baseURI) throws XMLStreamException {
+			zuper.setBaseURI(baseURI);
 		}
 
 		@Override
@@ -645,7 +663,7 @@ public final class XMLStreamWriterHelper {
 		}
 	}
 	
-	public static class ToStringWriter implements XMLStreamWriter {
+	public static class ToStringWriter implements BaseURIAwareXMLStreamWriter {
 		
 		private StringBuilder b = new StringBuilder();
 		
@@ -668,6 +686,11 @@ public final class XMLStreamWriterHelper {
 		}
 
 		@Override
+		public URI getBaseURI() throws XMLStreamException {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
 		public NamespaceContext getNamespaceContext() {
 			throw new UnsupportedOperationException();
 		}
@@ -680,6 +703,10 @@ public final class XMLStreamWriterHelper {
 		@Override
 		public Object getProperty(String name) throws IllegalArgumentException {
 			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void setBaseURI(URI baseURI) throws XMLStreamException {
 		}
 
 		@Override

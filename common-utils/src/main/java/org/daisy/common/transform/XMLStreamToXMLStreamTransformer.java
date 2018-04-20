@@ -3,8 +3,8 @@ package org.daisy.common.transform;
 import java.util.function.Supplier;
 import java.util.Iterator;
 
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
+import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
+import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
 
 /*
  * Note that this interface does not extend javax.xml.transform.Transformer.
@@ -18,6 +18,7 @@ public interface XMLStreamToXMLStreamTransformer {
 	 * @param output A supplier of XMLStreamWriters. Allowed to throw TransformerException.
 	 * @throws TransformerException
 	 */
-	public void transform(Iterator<XMLStreamReader> input, Supplier<XMLStreamWriter> output) throws TransformerException;
+	public void transform(Iterator<BaseURIAwareXMLStreamReader> input, Supplier<BaseURIAwareXMLStreamWriter> output)
+		throws TransformerException;
 	
 }
