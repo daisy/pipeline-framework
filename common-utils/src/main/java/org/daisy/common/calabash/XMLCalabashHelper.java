@@ -1,11 +1,11 @@
 package org.daisy.common.calabash;
 
+import java.net.URI;
 import java.util.Iterator;
 import java.util.Stack;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 
 import com.google.common.collect.Iterators;
 
@@ -14,11 +14,14 @@ import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.util.TreeWriter;
 
+import net.sf.saxon.Configuration;
+import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.saxon.NodeToXMLStreamTransformer;
 import org.daisy.common.saxon.SaxonHelper;
+import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
 import org.daisy.common.transform.DOMToXMLStreamTransformer;
 import org.daisy.common.transform.TransformerException;
 import org.daisy.common.transform.XMLStreamToXMLStreamTransformer;
@@ -72,10 +75,22 @@ public final class XMLCalabashHelper {
 		                                runtime.getProcessor().getUnderlyingConfiguration()));
 	}
 	
-	public static class XMLStreamWriterOverTreeWriter extends TreeWriter implements XMLStreamWriter {
+	// This class is not used. It was originally intended to be the BaseURIAwareXMLStreamWriter
+	// implementation, but it was replaced with SaxonHelper.BaseURIAwareStreamWriterToReceiver.
+	
+	public static class XMLStreamWriterOverTreeWriter extends TreeWriter implements BaseURIAwareXMLStreamWriter {
 		
-		XMLStreamWriterOverTreeWriter(XProcRuntime runtime) {
-			super(runtime);
+		// FIXME: change when xml:base attributes are written
+		private URI baseURI = null;
+		private boolean seenRoot = false;
+		
+		public XMLStreamWriterOverTreeWriter(Configuration configuration) {
+			// FIXME: TreeWriter doesn't need the Processor, it calls getUnderlyingConfiguration
+			super(new Processor(configuration));
+		}
+		
+		public XMLStreamWriterOverTreeWriter(Processor processor) {
+			super(processor);
 		}
 
 		Stack<Boolean> contentStarted = new Stack<>();
@@ -97,6 +112,11 @@ public final class XMLCalabashHelper {
 		}
 
 		@Override
+		public URI getBaseURI() throws XMLStreamException {
+			return baseURI;
+		}
+
+		@Override
 		public NamespaceContext getNamespaceContext() {
 			throw new UnsupportedOperationException();
 		}
@@ -109,6 +129,13 @@ public final class XMLCalabashHelper {
 		@Override
 		public Object getProperty(String name) throws IllegalArgumentException {
 			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void setBaseURI(URI baseURI) throws XMLStreamException {
+			if (seenRoot)
+				throw new XMLStreamException("Setting base URI not supported after document has started.");
+			this.baseURI = baseURI;
 		}
 
 		@Override
@@ -220,7 +247,8 @@ public final class XMLCalabashHelper {
 
 		@Override
 		public void writeStartDocument() throws XMLStreamException {
-			startDocument(null);
+			startDocument(baseURI);
+			seenRoot = true;
 		}
 
 		@Override

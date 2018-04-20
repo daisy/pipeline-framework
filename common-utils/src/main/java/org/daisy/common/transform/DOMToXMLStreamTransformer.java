@@ -3,7 +3,7 @@ package org.daisy.common.transform;
 import java.util.function.Supplier;
 import java.util.Iterator;
 
-import javax.xml.stream.XMLStreamWriter;
+import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
 
 import org.w3c.dom.Document;
 
@@ -19,6 +19,6 @@ public interface DOMToXMLStreamTransformer {
 	 * @param output A supplier of XMLStreamWriters. Allowed to throw TransformerException.
 	 * @throws TransformerException
 	 */
-	public void transform(Iterator<Document> input, Supplier<XMLStreamWriter> output) throws TransformerException;
+	public void transform(Iterator<Document> input, Supplier<BaseURIAwareXMLStreamWriter> output) throws TransformerException;
 	
 }
