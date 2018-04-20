@@ -2,22 +2,24 @@ package org.daisy.common.saxon;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.net.URI;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
+import javax.xml.stream.XMLStreamException;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 
 import net.sf.saxon.Configuration;
 import net.sf.saxon.dom.DocumentOverNodeInfo;
+import net.sf.saxon.event.NamespaceReducer;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.event.StreamWriterToReceiver;
 import net.sf.saxon.evpull.Decomposer;
+import net.sf.saxon.evpull.EventIterator;
 import net.sf.saxon.evpull.EventIteratorOverSequence;
 import net.sf.saxon.evpull.EventToStaxBridge;
 import net.sf.saxon.om.NamespaceResolver;
@@ -33,6 +35,8 @@ import net.sf.saxon.sxpath.XPathEvaluator;
 import net.sf.saxon.sxpath.XPathExpression;
 import net.sf.saxon.trans.XPathException;
 
+import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
+import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
 import org.daisy.common.stax.XMLStreamWriterHelper;
 import org.daisy.common.stax.XMLStreamWriterHelper.XMLStreamWritable;
 import org.daisy.common.transform.TransformerException;
@@ -79,11 +83,11 @@ public final class SaxonHelper {
 	
 	public static XMLStreamWritable<XdmNode> nodeWriter(Configuration configuration) throws SaxonApiException, XPathException {
 		XdmDestination destination = new XdmDestination();
-		Receiver receiver = destination.getReceiver(configuration);
+		Receiver receiver = new NamespaceReducer(destination.getReceiver(configuration));
 		receiver.open();
-		StreamWriterToReceiver writer = new StreamWriterToReceiver(receiver);
+		BaseURIAwareXMLStreamWriter writer = new BaseURIAwareStreamWriterToReceiver(receiver);
 		return new XMLStreamWritable<XdmNode>() {
-			public XMLStreamWriter getWriter() {
+			public BaseURIAwareXMLStreamWriter getWriter() {
 				return writer;
 			}
 			public XdmNode doneWriting() throws TransformerException {
@@ -97,21 +101,22 @@ public final class SaxonHelper {
 		};
 	}
 	
-	public static XMLStreamReader nodeReader(XdmNode node, Configuration configuration) throws XPathException {
+	public static BaseURIAwareXMLStreamReader nodeReader(XdmNode node, Configuration configuration) throws XPathException {
 		return nodeReader(node.getUnderlyingNode(), configuration);
 	}
 	
-	public static XMLStreamReader nodeReader(NodeInfo node, Configuration configuration) throws XPathException {
+	public static BaseURIAwareXMLStreamReader nodeReader(NodeInfo node, Configuration configuration) throws XPathException {
 		PipelineConfiguration pipeConfig = new PipelineConfiguration(configuration);
-		return new EventToStaxBridge(
-			new Decomposer(
-				new EventIteratorOverSequence(node.iterate()), pipeConfig), pipeConfig);
+		return new BaseURIAwareEventToStaxBridge(
+			new Decomposer(new EventIteratorOverSequence(node.iterate()), pipeConfig),
+			pipeConfig,
+			node == null ? null : URI.create(node.getBaseURI()));
 	}
 	
 	public static Iterator<XdmNode> transform(XMLStreamToXMLStreamTransformer transformer, Iterator<NodeInfo> input, Configuration config)
 			throws TransformerException {
-		Iterator<XMLStreamReader> readers = Iterators.transform(input, propagateCE(doc -> nodeReader(doc, config), TransformerException::new));
-		Consumer<Supplier<XMLStreamWriter>> transform = writers -> transformer.transform(readers, writers);
+		Iterator<BaseURIAwareXMLStreamReader> readers = Iterators.transform(input, propagateCE(doc -> nodeReader(doc, config), TransformerException::new));
+		Consumer<Supplier<BaseURIAwareXMLStreamWriter>> transform = writers -> transformer.transform(readers, writers);
 		Supplier<XMLStreamWritable<XdmNode>> writables = propagateCE(() -> nodeWriter(config), TransformerException::new);
 		return XMLStreamWriterHelper.collect(transform, writables).iterator();
 	}
@@ -119,14 +124,14 @@ public final class SaxonHelper {
 	public static Iterator<XdmNode> transform(DOMToXMLStreamTransformer transformer, Iterator<NodeInfo> input, Configuration config)
 			throws TransformerException {
 		Iterator<Document> readers = Iterators.transform(input, doc -> (Document)DocumentOverNodeInfo.wrap(doc));
-		Consumer<Supplier<XMLStreamWriter>> transform = writers -> transformer.transform(readers, writers);
+		Consumer<Supplier<BaseURIAwareXMLStreamWriter>> transform = writers -> transformer.transform(readers, writers);
 		Supplier<XMLStreamWritable<XdmNode>> writables = propagateCE(() -> nodeWriter(config), TransformerException::new);
 		return XMLStreamWriterHelper.collect(transform, writables).iterator();
 	}
 	
 	public static Iterator<XdmNode> transform(NodeToXMLStreamTransformer transformer, Iterator<XdmNode> input, Configuration config)
 			throws TransformerException {
-		Consumer<Supplier<XMLStreamWriter>> transform = writers -> transformer.transform(input, writers);
+		Consumer<Supplier<BaseURIAwareXMLStreamWriter>> transform = writers -> transformer.transform(input, writers);
 		Supplier<XMLStreamWritable<XdmNode>> writables = propagateCE(() -> nodeWriter(config), TransformerException::new);
 		return XMLStreamWriterHelper.collect(transform, writables).iterator();
 	}
@@ -153,6 +158,52 @@ public final class SaxonHelper {
 				p.add(pfx);
 			}
 			return p.iterator();
+		}
+	}
+	
+	public static class BaseURIAwareEventToStaxBridge extends EventToStaxBridge implements BaseURIAwareXMLStreamReader {
+		
+		// FIXME: change when xml:base attributes are encountered
+		private final URI baseURI;
+		
+		public BaseURIAwareEventToStaxBridge(EventIterator provider, PipelineConfiguration pipe, URI baseURI) {
+			super(provider, pipe);
+			this.baseURI = baseURI;
+		}
+		
+		public URI getBaseURI() throws XMLStreamException {
+			return baseURI;
+		}
+	}
+	
+	public static class BaseURIAwareStreamWriterToReceiver extends StreamWriterToReceiver implements BaseURIAwareXMLStreamWriter {
+		
+		private final Receiver receiver;
+		// FIXME: change when xml:base attributes are written
+		private URI baseURI = null;
+		private boolean seenRoot = false;
+		
+		public BaseURIAwareStreamWriterToReceiver(Receiver receiver) {
+			super(receiver);
+			this.receiver = receiver;
+		}
+		
+		public URI getBaseURI() throws XMLStreamException {
+			return baseURI;
+		}
+		
+		public void setBaseURI(URI baseURI) throws XMLStreamException {
+			if (seenRoot)
+				throw new XMLStreamException("Setting base URI not supported after document has started.");
+			if (baseURI != null)
+				receiver.setSystemId(baseURI.toASCIIString());
+			this.baseURI = baseURI;
+		}
+		
+		@Override
+		public void writeStartDocument() throws XMLStreamException {
+			super.writeStartDocument();
+			seenRoot = true;
 		}
 	}
 	
