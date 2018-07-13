@@ -13,7 +13,7 @@ import org.osgi.service.component.annotations.Component;
 	immediate = true,
 	service = { JobMonitorFactory.class }
 )
-public final class VolatileJobMonitorFactory implements JobMonitorFactory{
+public class VolatileJobMonitorFactory implements JobMonitorFactory{
 
 
 

@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 	name = "calabash-xproc-engine",
 	service = { XProcEngine.class }
 )
-public final class CalabashXProcEngine implements XProcEngine {
+public class CalabashXProcEngine implements XProcEngine {
 
 	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory

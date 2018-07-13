@@ -32,12 +32,14 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>xproc-api</artifactId>
     </dependency>
-    <!--
-        test dependencies
-    -->
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
       <scope>provided</scope>
     </dependency>
     <!--
@@ -74,13 +76,49 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <_dsannotations>*</_dsannotations>
+            <_dsannotations>
+              org.daisy.pipeline.datatypes.impl.DefaultDatatypeRegistry,
+              org.daisy.pipeline.event.EventBusProvider,
+              org.daisy.pipeline.job.impl.DefaultJobExecutionService,
+              org.daisy.pipeline.job.JobManagerFactory,
+              org.daisy.pipeline.job.RuntimeConfigurator,
+              org.daisy.pipeline.script.impl.DefaultScriptRegistry,
+              org.daisy.pipeline.script.impl.parser.StaxXProcScriptParser
+            </_dsannotations>
             <!--
                 compatible with versions >= 20120724
             -->
-            <Import-Package>com.thaiopensource.*;version="[20120724.0,20151127]",*</Import-Package>
+            <Import-Package>
+              !org.daisy.common.spi,
+              com.thaiopensource.*;version="[20120724.0,20151127]",
+              *
+            </Import-Package>
           </instructions>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-classes</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-spi-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                org.daisy.pipeline.datatypes.impl.DefaultDatatypeRegistry,
+                org.daisy.pipeline.event.EventBusProvider,
+                org.daisy.pipeline.job.impl.DefaultJobExecutionService,
+                org.daisy.pipeline.job.JobManagerFactory,
+                org.daisy.pipeline.job.RuntimeConfigurator,
+                org.daisy.pipeline.script.impl.DefaultScriptRegistry,
+                org.daisy.pipeline.script.impl.parser.StaxXProcScriptParser
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
