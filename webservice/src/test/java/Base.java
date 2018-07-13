@@ -132,7 +132,8 @@ public abstract class Base extends AbstractTest {
 	
 	@ProbeBuilder
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		probe.setHeader("Service-Component", "OSGI-INF/mock-script.xml,"
+		probe.setHeader("Service-Component", "OSGI-INF/mock-module.xml,"
+		                                   + "OSGI-INF/mock-script.xml,"
 		                                   + "OSGI-INF/sleep-step.xml");
 		return probe;
 	}
