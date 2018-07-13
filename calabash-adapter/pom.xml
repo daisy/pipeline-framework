@@ -54,6 +54,11 @@
       <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!--
         runtime dependencies (for javax.xml.transform.URIResolver)
     -->
@@ -171,10 +176,14 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *,
               etc
             </Import-Package>
-            <_dsannotations>*</_dsannotations>
+            <_dsannotations>
+              org.daisy.common.xproc.calabash.impl.CalabashXProcEngine,
+              org.daisy.common.xproc.calabash.impl.DynamicXProcConfigurationFactory
+            </_dsannotations>
           </instructions>
         </configuration>
         <executions>
@@ -209,6 +218,25 @@
           </systemPropertyVariables>
           <trimStackTrace>false</trimStackTrace>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-classes</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-spi-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                org.daisy.common.xproc.calabash.impl.CalabashXProcEngine,
+                org.daisy.common.xproc.calabash.impl.DynamicXProcConfigurationFactory
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

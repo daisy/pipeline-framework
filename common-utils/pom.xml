@@ -54,6 +54,11 @@
         test dependencies
     -->
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>com.carrotsearch</groupId>
       <artifactId>junit-benchmarks</artifactId>
       <scope>test</scope>
@@ -120,9 +125,13 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <_dsannotations>*</_dsannotations>
+            <_dsannotations>
+              org.daisy.common.properties.PropertyPublisherFactory,
+              org.daisy.common.properties.PropertyTracker
+            </_dsannotations>
           </instructions>
         </configuration>
         <executions>
@@ -132,6 +141,25 @@
             <goals>
               <goal>bundle</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-classes</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-spi-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                org.daisy.common.properties.PropertyPublisherFactory,
+                org.daisy.common.properties.PropertyTracker
+              </includes>
+            </configuration>
           </execution>
         </executions>
       </plugin>
