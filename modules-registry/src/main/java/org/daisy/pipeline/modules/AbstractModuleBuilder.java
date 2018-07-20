@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.daisy.common.file.URIs;
+
 import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Entity;
 import org.daisy.pipeline.modules.Module;
@@ -113,11 +115,7 @@ public abstract class AbstractModuleBuilder<T extends AbstractModuleBuilder> {
 		URL catalogURL = loader.loadResource("../META-INF/catalog.xml");
 		if (catalogURL == null)
 			throw new RuntimeException("/META-INF/catalog.xml file not found");
-		try {
-			return withCatalog(parser.parse(asURI(catalogURL)));
-		} catch (URISyntaxException e) {
-			throw new RuntimeException(e);
-		}
+		return withCatalog(parser.parse(URIs.asURI(catalogURL)));
 	}
 	
 	/*
@@ -136,15 +134,6 @@ public abstract class AbstractModuleBuilder<T extends AbstractModuleBuilder> {
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
-	}
-	
-	private static URI asURI(URL url) throws URISyntaxException {
-		if (url.getProtocol().equals("jar"))
-			return new URI("jar:" + new URI(null, url.getAuthority(), url.getPath(), url.getQuery(), url.getRef()).toASCIIString());
-		String authority = (url.getPort() != -1) ?
-			url.getHost() + ":" + url.getPort() :
-			url.getHost();
-		return new URI(url.getProtocol(), authority, url.getPath(), url.getQuery(), url.getRef());
 	}
 	
 	// static nested class in order to delay class loading
