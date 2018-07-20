@@ -41,6 +41,9 @@ public final class URIs {
 	}
 	
 	public static URI relativize(Object base, Object uri) {
+		if (base.toString().startsWith("jar:") && uri.toString().startsWith("jar:")) {
+			base = asURI(base).toString().substring(4);
+			uri = asURI(uri).toString().substring(4); }
 		return asURI(base).relativize(asURI(uri));
 	}
 }
