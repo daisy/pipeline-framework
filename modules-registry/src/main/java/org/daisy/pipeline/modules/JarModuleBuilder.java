@@ -24,10 +24,11 @@ public class JarModuleBuilder extends AbstractModuleBuilder<JarModuleBuilder> {
 				if (!path.startsWith("../")) {
 					throw new RuntimeException("Paths must start with '../' but got '" + path + "'");
 				}
+				path = path.substring(2);
 				try {
 					return jarFile.isDirectory() ?
-						new URL(         URLDecoder.decode((jarFile.toURI().toASCIIString() + path.replaceAll("^\\.\\.", "/")).replace("+", "%2B"))) :
-						new URL("jar:" + URLDecoder.decode((jarFile.toURI().toASCIIString() + path.replaceAll("^\\.\\.", "!")).replace("+", "%2B")));
+						new URL(         URLDecoder.decode((jarFile.toURI().toASCIIString() + path).replace("+", "%2B"))) :
+						new URL("jar:" + URLDecoder.decode((jarFile.toURI().toASCIIString() + "!" + path).replace("+", "%2B")));
 				} catch (MalformedURLException e) {
 					throw new RuntimeException(e);
 				}
