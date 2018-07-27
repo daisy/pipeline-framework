@@ -95,7 +95,7 @@
     <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.2-SNAPSHOT</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -181,6 +181,12 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <reuseForks>false</reuseForks>
+            <systemPropertyVariables>
+              <!--
+                  set this to "OSGiLessRunner" to test without OSGi, or to "PaxExam,OSGiLessRunner" to test both
+              -->
+              <org.daisy.pipeline.junit.runners>PaxExam</org.daisy.pipeline.junit.runners>
+            </systemPropertyVariables>
         </configuration>
       </plugin>
     </plugins>

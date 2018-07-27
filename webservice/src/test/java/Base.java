@@ -3,7 +3,6 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -35,7 +34,6 @@ import static org.ops4j.pax.exam.CoreOptions.composite;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.options.SystemPropertyOption;
 import org.ops4j.pax.exam.ProbeBuilder;
 import org.ops4j.pax.exam.TestProbeBuilder;
 import org.ops4j.pax.exam.util.PathUtils;
@@ -71,16 +69,7 @@ public abstract class Base extends AbstractTest {
 	
 	@Override @Configuration
 	public Option[] config() {
-		SystemPropertyOption[] systemPropertyOptions; {
-			Properties systemProperties = systemProperties();
-			Set<String> keys = systemProperties.stringPropertyNames();
-			systemPropertyOptions = new SystemPropertyOption[keys.size()];
-			int i = 0;
-			for (String key : keys)
-				systemPropertyOptions[i++] = systemProperty(key).value(systemProperties.getProperty(key));
-		}
 		return options(
-			composite(systemPropertyOptions),
 			composite(super.config()),
 			
 			// for webservice-jaxb
