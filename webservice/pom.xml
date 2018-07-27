@@ -115,7 +115,7 @@
     <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
-      <version>1.0.4</version>
+      <version>1.1.0-SNAPSHOT</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -250,6 +250,10 @@
           <reuseForks>false</reuseForks>
           <systemPropertyVariables>
             <pax.exam.logging>none</pax.exam.logging>
+            <!--
+                set this to "OSGiLessRunner" to test without OSGi, or to "PaxExam,OSGiLessRunner" to test both
+            -->
+            <org.daisy.pipeline.junit.runners>PaxExam</org.daisy.pipeline.junit.runners>
           </systemPropertyVariables>
           <trimStackTrace>false</trimStackTrace>
         </configuration>
