@@ -16,6 +16,7 @@ import org.daisy.pipeline.client.PipelineClient;
 import org.daisy.pipeline.junit.AbstractTest;
 import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 
+import org.daisy.pipeline.webservice.impl.PipelineWebService;
 import org.daisy.pipeline.webservice.jaxb.clients.Client;
 import org.daisy.pipeline.webservice.jaxb.job.Job;
 import org.daisy.pipeline.webservice.jaxb.job.JobStatus;
@@ -157,6 +158,9 @@ public abstract class Base extends AbstractTest {
 		p.setProperty("org.daisy.pipeline.version", "SNAPSHOT");
 		return p;
 	}
+	
+	@Inject
+	public PipelineWebService webService;
 	
 	private static final String DEFAULT_WS_URL = "http://localhost:8181/ws";
 	private static final String DEFAULT_SCRIPT = "mock-script";
