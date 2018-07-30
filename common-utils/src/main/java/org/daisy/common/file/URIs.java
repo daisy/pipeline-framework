@@ -33,11 +33,12 @@ public final class URIs {
 	}
 	
 	public static URI resolve(Object base, Object uri) {
+		URI u = asURI(uri);
 		URI baseURI = asURI(base);
-		if (baseURI.toString().startsWith("jar:"))
-			return asURI("jar:" + asURI(baseURI.toString().substring(4)).resolve(asURI(uri)).toASCIIString());
+		if (baseURI.toString().startsWith("jar:") && !u.isAbsolute())
+			return asURI("jar:" + asURI(baseURI.toString().substring(4)).resolve(u).toASCIIString());
 		else
-			return baseURI.resolve(asURI(uri));
+			return baseURI.resolve(u);
 	}
 	
 	public static URI relativize(Object base, Object uri) {
