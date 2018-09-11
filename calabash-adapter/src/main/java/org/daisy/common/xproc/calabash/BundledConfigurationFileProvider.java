@@ -19,7 +19,7 @@ public class BundledConfigurationFileProvider implements ConfigurationFileProvid
 		name = properties.get("component.name").toString();
 		String path = properties.get(PATH).toString();
 		if (path == null)
-			throw new IllegalArgumentException(PATH + " property must not be empty");
+			path = "/config-calabash.xml";
 		configFile = context.getBundleContext().getBundle().getEntry(path);
 		if (configFile == null)
 			throw new IllegalArgumentException("Calabash configuration file at location " + path + " could not be found");
