@@ -173,6 +173,9 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <reuseForks>false</reuseForks>
+          <systemPropertyVariables>
+            <pax.exam.logging>none</pax.exam.logging>
+          </systemPropertyVariables>
         </configuration>
       </plugin>
     </plugins>
