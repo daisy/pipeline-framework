@@ -189,10 +189,9 @@ public class XProcScriptParserTest {
 	 @Test
 	 public void testOption() {
 		 XProcOptionMetadata opt = scp.getOptionMetadata(new QName("option1"));
-		 assertEquals("anyDirURI", opt.getType());
+		 assertEquals("dtbook:mydatatype", opt.getType());
 		 //assertEquals(Direction.OUTPUT, opt.getDirection());
 		 assertEquals("Option 1", opt.getNiceName());
-		 assertEquals("dtbook:mydatatype", opt.getDatatype());
 	 }
 	 
 	 /**
