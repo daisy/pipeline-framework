@@ -12,18 +12,18 @@ import javax.xml.stream.XMLStreamException;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 
+import com.saxonica.xqj.pull.PullFromIterator;
+import com.saxonica.xqj.pull.PullToStax;
+
 import net.sf.saxon.Configuration;
 import net.sf.saxon.dom.DocumentOverNodeInfo;
 import net.sf.saxon.event.NamespaceReducer;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.event.StreamWriterToReceiver;
-import net.sf.saxon.evpull.Decomposer;
-import net.sf.saxon.evpull.EventIterator;
-import net.sf.saxon.evpull.EventIteratorOverSequence;
-import net.sf.saxon.evpull.EventToStaxBridge;
 import net.sf.saxon.om.NamespaceResolver;
 import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.pull.PullProvider;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.QName;
@@ -106,11 +106,11 @@ public final class SaxonHelper {
 	}
 	
 	public static BaseURIAwareXMLStreamReader nodeReader(NodeInfo node, Configuration configuration) throws XPathException {
-		PipelineConfiguration pipeConfig = new PipelineConfiguration(configuration);
-		return new BaseURIAwareEventToStaxBridge(
-			new Decomposer(new EventIteratorOverSequence(node.iterate()), pipeConfig),
-			pipeConfig,
-			node == null ? null : URI.create(node.getBaseURI()));
+		PullFromIterator provider= new PullFromIterator(node.iterate());
+		provider.setPipelineConfiguration(new PipelineConfiguration(configuration));
+		return new BaseURIAwarePullToStax(
+			provider,
+			node.getBaseURI() == null ? null : URI.create(node.getBaseURI()));
 	}
 	
 	public static Iterator<XdmNode> transform(XMLStreamToXMLStreamTransformer transformer, Iterator<NodeInfo> input, Configuration config)
@@ -161,13 +161,13 @@ public final class SaxonHelper {
 		}
 	}
 	
-	public static class BaseURIAwareEventToStaxBridge extends EventToStaxBridge implements BaseURIAwareXMLStreamReader {
+	public static class BaseURIAwarePullToStax extends PullToStax implements BaseURIAwareXMLStreamReader {
 		
 		// FIXME: change when xml:base attributes are encountered
 		private final URI baseURI;
 		
-		public BaseURIAwareEventToStaxBridge(EventIterator provider, PipelineConfiguration pipe, URI baseURI) {
-			super(provider, pipe);
+		public BaseURIAwarePullToStax(PullProvider provider, URI baseURI) {
+			super(provider);
 			this.baseURI = baseURI;
 		}
 		
