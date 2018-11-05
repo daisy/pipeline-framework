@@ -23,7 +23,7 @@ public class CompiledStylesheet {
 	}
 
 	public ThreadUnsafeXslTransformer newTransformer() {
-		ThreadUnsafeXslTransformer res = new ThreadUnsafeXslTransformer(this.sheet.load());
+		ThreadUnsafeXslTransformer res = new ThreadUnsafeXslTransformer(this.sheet.load(), this.sheet.getProcessor());
 		if (this.uriResolver != null)
 			res.setURIResolver(this.uriResolver);
 		return res;
