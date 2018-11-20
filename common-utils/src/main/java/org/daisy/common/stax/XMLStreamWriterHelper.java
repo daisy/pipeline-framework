@@ -257,13 +257,14 @@ public final class XMLStreamWriterHelper {
 	
 	public static void writeDocument(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
 		writer.writeStartDocument();
-		while (true)
+	  loop: while (true)
 			try {
 				int event = reader.next();
 				switch (event) {
 				case START_DOCUMENT:
-				case END_DOCUMENT:
 					break;
+				case END_DOCUMENT:
+					break loop;
 				case START_ELEMENT:
 					writeElement(writer, reader);
 					break;
