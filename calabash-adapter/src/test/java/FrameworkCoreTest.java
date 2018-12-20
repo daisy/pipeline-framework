@@ -339,9 +339,12 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "foobar\n" +
-			                 "	at JavaFunction$1.call(JavaFunction.java:60)\n" +
-			                 // FIXME: should be line 17
-			                 "	at pf:java-function(java-function-runtime-error.xpl:15)\n" +
+			                 "	at JavaFunction$1.call(JavaFunction.java:62)\n" +
+			                 "	at {http://www.daisy.org/ns/pipeline/functions}java-function\n" +
+			                 "	at xsl:value-of/@select(java-function-runtime-error.xpl:26)\n" +
+			                 "	at {http://www.daisy.org/ns/pipeline/functions}user-function()(java-function-runtime-error.xpl:23)\n" +
+			                 "	at xsl:call-template name=\"b\"(java-function-runtime-error.xpl:20)\n" +
+			                 "	at xsl:call-template name=\"a\"(java-function-runtime-error.xpl:17)\n" +
 			                 "	at {http://www.w3.org/ns/xproc}xslt(java-function-runtime-error.xpl:9)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-function-runtime-error(java-function-runtime-error.xpl:5)");
 			Assert.assertFalse(log.hasNext());

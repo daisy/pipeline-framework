@@ -14,8 +14,17 @@
             <p:inline>
                 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
                     <xsl:template name="start">
-                        <xsl:value-of select="pf:java-function()"/>
+                        <xsl:call-template name="a"/>
                     </xsl:template>
+                    <xsl:template name="a">
+                        <xsl:call-template name="b"/>
+                    </xsl:template>
+                    <xsl:template name="b">
+                        <xsl:value-of select="pf:user-function()"/>
+                    </xsl:template>
+                    <xsl:function name="pf:user-function">
+                        <xsl:value-of select="pf:java-function()"/>
+                    </xsl:function>
                 </xsl:stylesheet>
             </p:inline>
         </p:input>

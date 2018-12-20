@@ -1,3 +1,5 @@
+import javax.xml.transform.SourceLocator;
+
 import com.xmlcalabash.core.XProcException;
 
 import net.sf.saxon.expr.XPathContext;
@@ -59,7 +61,9 @@ public class JavaFunction extends ExtensionFunctionDefinition {
 					logger.info("going to throw an exception");
 					throw new RuntimeException("foobar");
 				} catch (Throwable e) {
-					throw new XPathException(XProcException.javaError(e, 0));
+					throw new XPathException(
+						XProcException.javaError(e, 0)
+							.rebaseOnto(new SourceLocator[]{XProcException.prettyLocator(null, -1, funcname.getClarkName())}));
 				}
 			}
 		};
