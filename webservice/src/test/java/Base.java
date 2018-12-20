@@ -229,9 +229,9 @@ public abstract class Base extends AbstractTest {
 		input.getItem().add(source);
 		input.setName("source");
 		req.getScriptOrNicenameOrPriority().add(script);
-		req.getScriptOrNicenameOrPriority().add("NICE_NAME");
+		req.getScriptOrNicenameOrPriority().add(reqFactory.createNicename("NICE_NAME"));
 		req.getScriptOrNicenameOrPriority().add(input);
-		req.getScriptOrNicenameOrPriority().add(priority);
+		req.getScriptOrNicenameOrPriority().add(reqFactory.createPriority(priority));
 		return Optional.of(req);
 	}
 	

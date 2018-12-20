@@ -112,8 +112,8 @@ public class TestPushNotifications extends Base {
 					input.setName("source");
 				}
 				req.getScriptOrNicenameOrPriority().add(input);
-				req.getScriptOrNicenameOrPriority().add("NICE_NAME");
-				req.getScriptOrNicenameOrPriority().add(Priority.LOW);
+				req.getScriptOrNicenameOrPriority().add(oFactory.createNicename("NICE_NAME"));
+				req.getScriptOrNicenameOrPriority().add(oFactory.createPriority(Priority.LOW));
 				Callback callback = oFactory.createCallback(); {
 					callback.setType(CallbackType.MESSAGES);
 					callback.setHref("http://localhost:8080/notify");
@@ -167,7 +167,7 @@ public class TestPushNotifications extends Base {
 		return Optional.fromNullable(
 			Iterables.getOnlyElement(
 				Iterables.filter(
-					job.getNicenameOrScriptOrMessages(),
+					job.getNicenameOrBatchIdOrScript(),
 					Messages.class),
 				null));
 	}

@@ -122,7 +122,7 @@ public class TestMessages extends Base {
 		return Optional.fromNullable(
 			Iterables.getOnlyElement(
 				Iterables.filter(
-					job.getNicenameOrScriptOrMessages(),
+					job.getNicenameOrBatchIdOrScript(),
 					Messages.class),
 				null));
 	}
