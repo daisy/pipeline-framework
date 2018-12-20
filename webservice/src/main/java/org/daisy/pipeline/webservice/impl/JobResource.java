@@ -132,7 +132,7 @@ public class JobResource extends AuthenticatedResource {
                         return;
                 }
 
-                if (job == null) {
+                if (job == null || !job.isPresent()) {
                         setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 
                 } else {
