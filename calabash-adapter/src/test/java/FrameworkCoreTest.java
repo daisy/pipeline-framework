@@ -268,8 +268,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "Runtime Error\n" +
-			                 // FIXME: should be line 16
-			                 "	at xsl:message(xslt-terminate-error.xpl:14)\n" +
+			                 "	at xsl:message(xslt-terminate-error.xpl:16)\n" +
 			                 "	at {http://www.w3.org/ns/xproc}xslt(xslt-terminate-error.xpl:8)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}xslt-terminate-error(xslt-terminate-error.xpl:4)");
 			Assert.assertFalse(log.hasNext());
@@ -367,10 +366,9 @@ public class FrameworkCoreTest extends AbstractTest {
 				seq++; // p:xslt
 				assertMessage(next(messages), seq++, Message.Level.WARNING,
 				              Predicates.containsPattern("^\\Q" +
-				                  "err:XTRE0540:Ambiguous rule match for /hello\n" +
-				                  // FIXME: should be line 17 and 21
-				                  "Matches both \"element(Q{}hello)\" on line 16 of bundle://\\E[^/]+\\Q/module/xslt-warning.xpl\n" +
-				                  "and \"element(Q{}hello)\" on line 16 of bundle://\\E[^/]+\\Q/module/xslt-warning.xpl\\E$"));
+				                  "err:XTDE0540:Ambiguous rule match for /hello\n" +
+				                  "Matches both \"element(Q{}hello)\" on line 21 of bundle://\\E[^/]+\\Q/module/xslt-warning.xpl\n" +
+				                  "and \"element(Q{}hello)\" on line 17 of bundle://\\E[^/]+\\Q/module/xslt-warning.xpl\\E$"));
 				Assert.assertFalse(messages.hasNext());
 			} catch (Throwable e) {
 				// print remaining messages
