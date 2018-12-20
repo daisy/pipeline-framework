@@ -8,6 +8,10 @@ messageAttrs =
 	& attribute level { message.level }
 	& attribute content { text }
 
+# FIXME: The fact that these two elements have the same name is not so great. It can cause problems
+# in webservice-jaxb. For some reason though if the common.rnc include is present (in
+# scriptElement.rnc), it works fine. This is probably a bug in the xjc software, and it is very
+# brittle (e.g. it doesn't work if common.rnc is renamed to nicename.rnc).
 message =
 element message {
 	messageAttrs
@@ -38,8 +42,9 @@ element job {
 
 	& attribute queue-position { xsd:int }?
 
-    &element nicename{ text }?
-    &element batchId{ text }?
+	& nicename ?
+
+	& element batchId { text }?
 
 	& script?
 
