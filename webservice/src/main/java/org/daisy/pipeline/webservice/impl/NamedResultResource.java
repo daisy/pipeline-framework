@@ -73,6 +73,7 @@ public abstract class NamedResultResource extends AuthenticatedResource {
          */
         @Get
         public Representation getResource() {
+                logRequest();
                 if (!isAuthenticated()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;

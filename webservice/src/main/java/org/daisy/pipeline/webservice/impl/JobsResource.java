@@ -85,6 +85,7 @@ public class JobsResource extends AuthenticatedResource {
          */
         @Get("xml")
         public Representation getResource() {
+                logRequest();
                 if (!isAuthenticated()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
@@ -97,6 +98,7 @@ public class JobsResource extends AuthenticatedResource {
                 Document doc = writer.getXmlDocument();
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
                 setStatus(Status.SUCCESS_OK);
+                logResponse(dom);
                 return dom;
         }
 
@@ -110,6 +112,7 @@ public class JobsResource extends AuthenticatedResource {
          */
         @Post
         public Representation createResource(Representation representation) {
+                logRequest();
                 if (!isAuthenticated()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
@@ -189,6 +192,7 @@ public class JobsResource extends AuthenticatedResource {
                 Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
                 setStatus(Status.SUCCESS_CREATED);
+                logResponse(dom);
                 return dom;
 
         }

@@ -48,6 +48,18 @@ import org.slf4j.LoggerFactory;
 
 public abstract class Base extends AbstractTest {
 	
+	// This is a trick to make sure a PipelineWebService is instantiated. We can't inject
+	// PipelineWebService directly because this would result in a "java.net.BindException: Address
+	// already in use" error because two instances would be created, so we inject its dependencies.
+	// Normally this is not needed but it can help with debugging.
+	@Inject org.daisy.pipeline.script.ScriptRegistry dep1;
+	@Inject org.daisy.pipeline.job.JobManagerFactory dep2;
+	@Inject org.daisy.pipeline.webserviceutils.storage.WebserviceStorage dep3;
+	@Inject org.daisy.pipeline.webserviceutils.callback.CallbackHandler dep4;
+	@Inject org.daisy.pipeline.datatypes.DatatypeRegistry dep5;
+	@Inject org.daisy.common.properties.PropertyPublisherFactory dep6;
+	// @Inject org.restlet.Application webserver;
+	
 	@Override
 	protected String[] testDependencies() {
 		return new String[]{
@@ -70,6 +82,10 @@ public abstract class Base extends AbstractTest {
 			"org.daisy.pipeline:framework-volatile:?",
 			"org.daisy.pipeline:calabash-adapter:?",
 			"org.daisy.pipeline:push-notifier:?",
+			// this bundle is not needed but may be included to prevent
+			// "com.sun.jersey.server.impl.provider.RuntimeDelegateImpl not found by com.sun.jersey.core"
+			// errors
+			// "com.sun.jersey:jersey-server:1.18.1",
 		};
 	}
 	
