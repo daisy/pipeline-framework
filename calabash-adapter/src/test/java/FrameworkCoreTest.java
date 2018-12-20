@@ -398,7 +398,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
-				assertMessage(next(messages), seq++, Message.Level.WARNING, "Hello world!");
+				assertMessage(next(messages), seq++, Message.Level.WARNING, "Hello WORLD!");
 				Assert.assertFalse(messages.hasNext());
 			} catch (Throwable e) {
 				// print remaining messages

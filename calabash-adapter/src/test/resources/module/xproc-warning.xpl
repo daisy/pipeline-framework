@@ -7,7 +7,7 @@
     
     <p:variable name="var" select="'world'"/>
     
-    <p:identity px:message="Hello {$var}!" px:message-severity="WARN">
+    <p:identity px:message="Hello {upper-case($var)}!" px:message-severity="WARN">
         <p:input port="source">
             <p:inline>
                 <foo/>
