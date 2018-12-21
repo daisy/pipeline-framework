@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.10.5-SNAPSHOT</version>
+    <version>1.11.2-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
@@ -34,6 +34,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <Service-Component>OSGI-INF/xpath-registry.xml</Service-Component>
           </instructions>
         </configuration>

@@ -6,17 +6,21 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.10.5-SNAPSHOT</version>
+    <version>1.11.2-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>webservice</artifactId>
-  <version>2.1.3-SNAPSHOT</version>
+  <version>2.1.4-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Web Service</name>
 
   <dependencies>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
@@ -78,6 +82,11 @@
         test dependencies
     -->
     <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-volatile</artifactId>
       <scope>test</scope>
@@ -95,10 +104,7 @@
     <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
-      <!--
-          depends on latest master
-      -->
-      <version>1.0.1-SNAPSHOT</version>
+      <version>1.0.3-SNAPSHOT</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -128,6 +134,17 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>logging-activator</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!--
+        FIXME: This dependency is included in order to prevent the error
+        "Could not resolve version. Do you have a dependency for org.apache.logging.log4j/log4j-slf4j-impl in your maven project?"
+        Remove when updated to the latest pax-exam-helper
+    -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>2.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -170,6 +187,9 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <reuseForks>false</reuseForks>
+          <systemPropertyVariables>
+            <pax.exam.logging>none</pax.exam.logging>
+          </systemPropertyVariables>
         </configuration>
       </plugin>
     </plugins>

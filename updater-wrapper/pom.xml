@@ -4,17 +4,17 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.10.5-SNAPSHOT</version>
+    <version>1.11.2-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
   <artifactId>updater-wrapper</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Updater</name>
   <dependencies>
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

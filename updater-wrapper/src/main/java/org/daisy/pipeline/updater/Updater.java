@@ -3,21 +3,23 @@ package org.daisy.pipeline.updater;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.daisy.pipeline.properties.Properties;
+
 public class Updater {
 
-        private static String UPDATER_BIN="org.pipeline.updater.bin";
-        private static String DEPLOY_PATH="org.pipeline.updater.deployPath";
-        private static String UPDATE_SITE="org.pipeline.updater.updateSite";
-        private static String RELEASE_DESCRIPTOR="org.pipeline.updater.releaseDescriptor";
+        private static String UPDATER_BIN="org.daisy.pipeline.updater.bin";
+        private static String DEPLOY_PATH="org.daisy.pipeline.updater.deployPath";
+        private static String UPDATE_SITE="org.daisy.pipeline.updater.updateSite";
+        private static String RELEASE_DESCRIPTOR="org.daisy.pipeline.updater.releaseDescriptor";
         private static String ERROR="Property %s not set";
 
 
         //launches the pipeline and waits it to be up
         public void update(UpdaterObserver obs) throws IOException {
-                String bin=System.getProperty(UPDATER_BIN,"");
-                String deployPath=System.getProperty(DEPLOY_PATH,"");
-                String updateSite=System.getProperty(UPDATE_SITE,"");
-                String releaseDescriptor=System.getProperty(RELEASE_DESCRIPTOR,"");
+                String bin=Properties.getProperty(UPDATER_BIN,"");
+                String deployPath=Properties.getProperty(DEPLOY_PATH,"");
+                String updateSite=Properties.getProperty(UPDATE_SITE,"");
+                String releaseDescriptor=Properties.getProperty(RELEASE_DESCRIPTOR,"");
                 if (bin.isEmpty()){
                         throw new IllegalArgumentException(String.format(ERROR,UPDATER_BIN));
                 }
