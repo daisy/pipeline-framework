@@ -14,7 +14,7 @@ import com.xmlcalabash.runtime.XAtomicStep;
 import org.daisy.common.messaging.Message.Level;
 
 import org.daisy.pipeline.event.ProgressMessage;
-import org.daisy.pipeline.event.ProgressMessage.ProgressMessageBuilder;
+import org.daisy.pipeline.event.ProgressMessageBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

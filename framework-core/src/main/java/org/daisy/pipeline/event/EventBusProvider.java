@@ -1,7 +1,5 @@
 package org.daisy.pipeline.event;
 
-import java.util.Date;
-
 import com.google.common.base.Supplier;
 import com.google.common.eventbus.EventBus;
 
@@ -24,7 +22,7 @@ public class EventBusProvider implements Supplier<EventBus>{
 	 * Post a ProgressMessage to the bus, and post a ProgressMessageUpdate event every
 	 * time the object is updated.
 	 */
-	public ProgressMessage post(ProgressMessage.ProgressMessageBuilder message) {
+	public ProgressMessage post(ProgressMessageBuilder message) {
 		message.onUpdated(e -> EventBusProvider.this.get().post(e));
 		ProgressMessage m = message.build();
 		get().post(m);
@@ -85,10 +83,10 @@ public class EventBusProvider implements Supplier<EventBus>{
 		private void postMessage(String msg, Message.Level level) {
 			String jobId = MDC.get("jobid");
 			if (jobId != null) {
-				ProgressMessage.ProgressMessageBuilder m = new ProgressMessage.ProgressMessageBuilder()
-				                                                              .withJobId(jobId)
-				                                                              .withLevel(level)
-				                                                              .withText(msg);
+				ProgressMessageBuilder m = new ProgressMessageBuilder()
+				                               .withJobId(jobId)
+				                               .withLevel(level)
+				                               .withText(msg);
 				ProgressMessage activeBlock = ProgressMessage.getActiveBlock();
 				if (activeBlock != null)
 					activeBlock.post(m).close();

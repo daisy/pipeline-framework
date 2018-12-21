@@ -9,7 +9,7 @@ import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.event.ProgressMessage;
-import org.daisy.pipeline.event.ProgressMessage.ProgressMessageBuilder;
+import org.daisy.pipeline.event.ProgressMessageBuilder;
 import org.daisy.pipeline.job.impl.JobUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

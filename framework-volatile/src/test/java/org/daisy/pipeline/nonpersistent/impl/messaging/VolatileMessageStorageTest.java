@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.pipeline.event.ProgressMessage;
+import org.daisy.pipeline.event.ProgressMessageBuilder;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageStorage;
 import org.junit.After;
@@ -26,14 +27,14 @@ public class VolatileMessageStorageTest {
 	@Before
 	public void setUp() {
 		jobId = JobIdFactory.newId().toString();
-		m1 = new ProgressMessage.ProgressMessageBuilder().withText("message1")
+		m1 = new ProgressMessageBuilder().withText("message1")
 				.withLevel(Level.INFO).withJobId(jobId).build();
 		m1.close();
-		m2 = new ProgressMessage.ProgressMessageBuilder().withText("message2")
+		m2 = new ProgressMessageBuilder().withText("message2")
 				.withLevel(Level.ERROR).withJobId(jobId)
 				.build();
 		m2.close();
-		m3 = new ProgressMessage.ProgressMessageBuilder().withText("message3")
+		m3 = new ProgressMessageBuilder().withText("message3")
 				.withLevel(Level.DEBUG).withJobId(jobId)
 				.build();
 		m3.close();

@@ -10,7 +10,7 @@ import net.sf.saxon.s9api.XdmNode;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.event.ProgressMessage;
-import org.daisy.pipeline.event.ProgressMessage.ProgressMessageBuilder;
+import org.daisy.pipeline.event.ProgressMessageBuilder;
 
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRunnable;

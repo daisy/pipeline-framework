@@ -1,14 +1,12 @@
 package org.daisy.pipeline.nonpersistent.impl.messaging;
 
-import static org.junit.Assert.fail;
-
 import java.util.List;
 import java.util.Set;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
-import org.daisy.common.messaging.MessageAccessor.MessageFilter;
 import org.daisy.pipeline.event.ProgressMessage;
+import org.daisy.pipeline.event.ProgressMessageBuilder;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageAccessor;
 import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageStorage;
@@ -32,15 +30,15 @@ public class VolatileMessageAccessorTest   {
 	@Before
 	public void setUp() {
 		String id = JobIdFactory.newId().toString();
-		m1 = new ProgressMessage.ProgressMessageBuilder().withText("message1")
+		m1 = new ProgressMessageBuilder().withText("message1")
 				.withLevel(Level.INFO).withJobId(id)
 				.build();
 		m1.close();
-		m2 = new ProgressMessage.ProgressMessageBuilder().withText("message2")
+		m2 = new ProgressMessageBuilder().withText("message2")
 				.withLevel(Level.ERROR).withJobId(id)
 				.build();
 		m2.close();
-		m3 = new ProgressMessage.ProgressMessageBuilder().withText("message3")
+		m3 = new ProgressMessageBuilder().withText("message3")
 				.withLevel(Level.WARNING).withJobId(id)
 				.build();
 		m3.close();

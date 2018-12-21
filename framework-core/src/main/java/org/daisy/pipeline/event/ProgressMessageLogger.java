@@ -53,9 +53,9 @@ class ProgressMessageLogger extends AbstractLogger {
 
 	private void postMessage(String msg, Message.Level level) {
 		message.post(
-			new ProgressMessage.ProgressMessageBuilder()
-			                   .withLevel(level)
-			                   .withText(msg)
+			new ProgressMessageBuilder()
+			    .withLevel(level)
+			    .withText(msg)
 		).close();
 	}
 }

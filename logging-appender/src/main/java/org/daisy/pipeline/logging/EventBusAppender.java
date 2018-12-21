@@ -1,7 +1,5 @@
 package org.daisy.pipeline.logging;
 
-import java.util.Date;
-
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.sift.MDCBasedDiscriminator;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -9,6 +7,7 @@ import ch.qos.logback.core.AppenderBase;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.event.ProgressMessage;
+import org.daisy.pipeline.event.ProgressMessageBuilder;
 
 /**
  * Configure like this:
@@ -52,7 +51,7 @@ public class EventBusAppender extends AppenderBase<ILoggingEvent> {
 			if (activeBlock != null) {
 				Level level = event.getLevel();
 				activeBlock.post(
-					new ProgressMessage.ProgressMessageBuilder()
+					new ProgressMessageBuilder()
 						.withJobId(jobId)
 						.withLevel(messageLevelFromLogbackLevel(level))
 						.withText(event.getFormattedMessage())
