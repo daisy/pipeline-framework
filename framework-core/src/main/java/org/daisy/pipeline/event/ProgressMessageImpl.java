@@ -146,7 +146,10 @@ class ProgressMessageImpl extends ProgressMessage {
 			parent.updated(sequence);
 	}
 
-	/** Unmodifiable iterator, unmodifiable elements */
+	/**
+	 * Returns read-only (but not immutable) elements. The iterator does not implement the remove()
+	 * method.
+	 */
 	public Iterator<ProgressMessage> __iterator() {
 		return unmodifiableListOfUnmodifiableChildren.iterator();
 	}

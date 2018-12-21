@@ -79,6 +79,9 @@ class MessageFilterImpl implements MessageFilter {
 		return this;
 	}
 
+	/**
+	 * Returns an immutable list of immutable messages (read-only deep copies).
+	 */
 	public List<Message> getMessages() {
 		if (filter == null) {
 			if (start != null || end != null) {
@@ -129,8 +132,8 @@ class MessageFilterImpl implements MessageFilter {
 	}
 
 	/**
-	  * Returned Iterable can not be used again after message has been modified.
-	  */
+	 * Returned Iterable can not be used again after message has been modified.
+	 */
 	private static interface Filter extends Function<ProgressMessage,Iterable<ProgressMessage>> {}
 
 	/** Get children */
@@ -226,6 +229,7 @@ class MessageFilterImpl implements MessageFilter {
 
 	private static final Iterable<ProgressMessage> empty = Optional.<ProgressMessage>absent().asSet();
 
+	/** Apply the first filter after the second */
 	private static Filter compose(final Filter g, final Filter f) {
 		if (f == null)
 			return g;

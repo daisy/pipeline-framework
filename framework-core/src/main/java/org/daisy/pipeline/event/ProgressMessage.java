@@ -16,34 +16,53 @@ import org.daisy.common.messaging.MessageAccessor.MessageFilter;
 
 import org.slf4j.Logger;
 
+/**
+ * A progress message is an extension of a simple message, with a certain "progress" and with
+ * possible nested (progress) messages. Every progress message represents a certain "portion" of the
+ * conversion process. The size of the portion is expressed as a fraction (number between 0 and 1)
+ * of the "parent" message, or of the whole process in case it is a "top-level" message (without a
+ * parent). The progress is a number between 0 (not started) and 1 (completed) that indicates how
+ * much of the process has been completed. The total progress of a portion is always greater than or
+ * equal to the sum of the child portions' progresses (multiplied by the corresponding
+ * portions). Sibling portions have no particular order. They may run sequentially or in parallel.
+ */
 public abstract class ProgressMessage extends Message implements MessageFilter, Iterable<ProgressMessage> {
 	
 	public abstract String getJobId();
 
-	/** The total progress of this block */
+	/** The total progress of this message */
 	public abstract BigDecimal getProgress();
 	
-	/** Portion within parent */
+	/** Portion within parent (or within whole process if no parent) */
 	public abstract BigDecimal getPortion();
 
+	/** If a message is closed, the progress becomes 1 and no child message can be added. */
 	public abstract void close();
 
+	/** Add a child message. */
 	public abstract ProgressMessage post(ProgressMessageBuilder message);
-	
+
+	/** Whether or not the close() method has been previously called */
 	abstract boolean isOpen();
 
-	/** Sequence number of an imaginary close message */
+	/**
+	 * Sequence number of an imaginary "close" message. Used by MessageFilterImpl to determine
+	 * whether a message is to be included in a sequence range.
+	 */
 	abstract int getCloseSequence();
 
 	private Logger asLogger;
 
+	/** org.slf4j.Logger interface for this ProgressMessage */
 	public Logger asLogger() {
 		if (asLogger == null)
 			asLogger = new ProgressMessageLogger(this);
 		return asLogger;
 	}
 
-	/** Makes a deep copy */
+	/**
+	 * Iterate over the child messages. The returned messages are immutable (read-only deep copies).
+	 */
 	public Iterator<ProgressMessage> iterator() {
 		synchronized(MUTEX) {
 			return Iterators.transform(
@@ -53,14 +72,14 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 	}
 
 	private Iterator<ProgressMessage> i = null;
-	
+
+	/** Whether or not child messages are present. */
 	protected final boolean isEmpty() {
 		if (i == null)
 			i = __iterator();
 		return !i.hasNext();
 	}
 
-	/** No deep copy, optimized */
 	public final Iterator<ProgressMessage> _iterator() {
 		if (i != null) {
 			Iterator<ProgressMessage> ret = i;
@@ -70,7 +89,7 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 			return __iterator();
 	}
 
-	/** No deep copy, not optimized */
+	/** No deep copies */
 	protected abstract Iterator<ProgressMessage> __iterator();
 
 	private Iterable<ProgressMessage> singleton = null;
@@ -83,7 +102,12 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 	private MessageFilterImpl asMessageFilter() {
 		return new MessageFilterImpl(this);
 	}
-	
+
+	/**
+	 * Returns a (read-only) view with only messages of a given severity level. Child messages
+	 * of excluded messages are promoted (become direct children of the excluded message's
+	 * parent).
+	 */
 	public MessageFilter filterLevels(Set<Level> levels) {
 		return asMessageFilter().filterLevels(levels);
 	}
@@ -92,15 +116,23 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 		return asMessageFilter().greaterThan(sequence);
 	}
 
+	/**
+	 * Returns a (read-only) view with only messages with a sequence number within a given
+	 * range, or with a descendant message within that range.
+	 */
 	public MessageFilter inRange(int start, int end) {
 		return asMessageFilter().inRange(start, end);
 	}
 
-	/** Returns a view without text-less messages */
+	/**
+	 * Returns a (read-only) view that excludes text-less messages (messages that only carry
+	 * progress information). Child messages of excluded messages are promoted (become direct
+	 * children of the excluded message's parent). */
 	public MessageFilter withText() {
 		return asMessageFilter().withText();
 	}
 
+	/** Returns read-only version of this message as a singleton list. */
 	public List<Message> getMessages() {
 		return asMessageFilter().getMessages();
 	}
@@ -114,14 +146,26 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 		return s;
 	}
 
+	// Package private constructor
 	ProgressMessage(Throwable throwable, String text, Level level, int line,
 	                int column, Date timeStamp, Integer sequence, String jobId, String file) {
 		super(throwable, text, level, line, column, timeStamp, sequence, jobId, file);
 	}
 
+	/**
+	 * Mutex object used for blocking modifications to a ProgressMessage while it is being
+	 * iterated. Made public because it is also used for instance in VolatileMessageAccessor for
+	 * iterating over the top-level list of messages.
+	 */
 	public static final Object MUTEX = new Object();
 
-	/** Returns the active block in the current thread */
+	/**
+	 * Returns the "active" block in the current thread.
+	 *
+	 * The active block is the portion of the process currently in progress. New messages are
+	 * appended as children to this block. When a new message is created it becomes the new
+	 * active block until it is closed.
+	 */
 	public static ProgressMessage getActiveBlock() {
 		return ProgressMessageImpl.activeBlock.get();
 	}
@@ -132,7 +176,8 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 			threadId = "default";
 		return ProgressMessageImpl.activeBlockInThread.get(new ProgressMessageImpl.JobThread(jobId, threadId));
 	}
-	
+
+	/** Get an immutable view of the message (read-only deep copy). */
 	static ProgressMessage deepCopy(ProgressMessage message) {
 		return new UnmodifiableProgressMessage(message) {
 			final Iterable<ProgressMessage> children = ImmutableList.copyOf(super.iterator());
@@ -142,7 +187,7 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 		};
 	}
 
-	/** Create unmodifiable view of message */
+	/** Get a read-only view of message */
 	static ProgressMessage unmodifiable(ProgressMessage message) {
 		if (message instanceof UnmodifiableProgressMessage)
 			return message;
@@ -180,11 +225,11 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 		}
 
 		public void close() {
-			throw new UnsupportedOperationException("This is an unmodifiable view of the message");
+			throw new UnsupportedOperationException("This is a read-only view of the message");
 		}
 
 		public ProgressMessage post(ProgressMessageBuilder m) {
-			throw new UnsupportedOperationException("This is an unmodifiable view of the message");
+			throw new UnsupportedOperationException("This is a read-only view of the message");
 		}
 
 		boolean isOpen() {

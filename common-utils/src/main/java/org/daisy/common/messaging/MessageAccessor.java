@@ -7,11 +7,10 @@ import java.util.Set;
 
 import org.daisy.common.messaging.Message.Level;
 
-
 /**
- * Gives access to the stored messages by level.
+ * Gives access to the stored messages.
  */
-public abstract class MessageAccessor{
+public abstract class MessageAccessor {
 
 	/**
 	 * Gets the errors.
@@ -72,12 +71,15 @@ public abstract class MessageAccessor{
 	protected abstract List<Message> getMessagesFrom(Level level);
 
 	/**
-	 * Register a callback that is called whenever a new message arrives or whenever the
-	 * progress is updated.
+	 * Register a callback that is called whenever a new (top-level) message arrives, a message is
+	 * updated with descendant messages, or the progress of a message changes.
 	 *
-	 * The argument must be a function that accepts a MessageAccessor, which is always
-	 * this object, and an integer which is the sequence number of the message or null if
-	 * only the progress changes.
+	 * The argument must be a function that accepts a MessageAccessor, which is always this object,
+	 * and a sequence number representing the event. This sequence number can then be used to get
+	 * the list of all messages affected by the change, via createFilter().inRange(...).getMessages().
+	 *
+	 * A sequence number is never lower than the sequence numbers previously received, but the same
+	 * sequence number may occur more than once.
 	 */
 	public abstract void listen(BiConsumer<MessageAccessor,Integer> callback);
 	public abstract void unlisten(BiConsumer<MessageAccessor,Integer> callback);
@@ -91,6 +93,12 @@ public abstract class MessageAccessor{
 	public interface  MessageFilter{
 		public MessageFilter filterLevels(Set<Level> levels);
 		public MessageFilter greaterThan(int sequence);
+		/**
+		 * Get all the top-level messages affected by the events between "start" en "end". A
+		 * top-level message may have been added, or a message may have been changed by a progress
+		 * update or a new child message, or by a change of any of its already contained child
+		 * messages.
+		 */
 		public MessageFilter inRange(int start, int end);
 		public List<Message> getMessages();
 	}
