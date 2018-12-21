@@ -85,7 +85,7 @@ public class TestPushNotifications extends Base {
 			}
 			@Override
 			void finalTest() {
-				Assert.assertEquals(JobStatus.DONE, lastStatus);
+				Assert.assertEquals(JobStatus.SUCCESS, lastStatus);
 				Assert.assertTrue("Expected " + mustSeeNext + " but got " + seen, mustSeeNext == null);
 			}
 		};
@@ -129,7 +129,7 @@ public class TestPushNotifications extends Base {
 			}
 			Job job = client().sendJob(req);
 			deleteAfterTest(job);
-			waitForStatus(JobStatus.DONE, job, 10000);
+			waitForStatus(JobStatus.SUCCESS, job, 10000);
 			// wait until all updates have been pushed
 			Thread.sleep(1000);
 			testStatusAndMessages.finalTest();

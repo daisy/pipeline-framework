@@ -52,7 +52,7 @@ public class TestNonLocalJobs extends Base {
 		Job job = client().sendJob(req.get(), is);
 		deleteAfterTest(job);
 		Assert.assertTrue("Job has been sent", job.getId() != null && job.getId().length() > 0);
-		waitForStatus(JobStatus.DONE, job, 10000);
+		waitForStatus(JobStatus.SUCCESS, job, 10000);
 	}
 	
 	@Test
@@ -62,7 +62,7 @@ public class TestNonLocalJobs extends Base {
 		Assert.assertTrue("The request is present", req.isPresent());
 		Job job = client().sendJob(req.get(), is);
 		deleteAfterTest(job);
-		job = waitForStatus(JobStatus.DONE, job, 10000);
+		job = waitForStatus(JobStatus.SUCCESS, job, 10000);
 		List<Result> results = new JobWrapper(job).getResults().getResult();
 		for (Result firstLevelResult : results) {
 			checkZippedResult(firstLevelResult);
@@ -98,6 +98,6 @@ public class TestNonLocalJobs extends Base {
 		Job job = client().sendJob(req.get(), getResourceAsStream("data2.zip"));
 		deleteAfterTest(job);
 		Assert.assertTrue("Job has been sent", job.getId() != null && job.getId().length() > 0);
-		waitForStatus(JobStatus.DONE, job, 10000);
+		waitForStatus(JobStatus.SUCCESS, job, 10000);
 	}
 }

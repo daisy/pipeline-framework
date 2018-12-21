@@ -74,8 +74,8 @@ public class TestLocalJobs extends Base {
 		Assert.assertEquals("The job status is IDLE", "IDLE", job.getStatus().value());
 		job = waitForStatus(JobStatus.RUNNING, job, 10000);
 		Assert.assertEquals("The job status is RUNNING", "RUNNING", job.getStatus().value());
-		job = waitForStatus(JobStatus.DONE, job, 10000);
-		Assert.assertEquals("The job status is DONE", "DONE", job.getStatus().value());
+		job = waitForStatus(JobStatus.SUCCESS, job, 10000);
+		Assert.assertEquals("The job status is SUCCESS", "SUCCESS", job.getStatus().value());
 		logger.info("{} testJobStatusCycle OUT", TestLocalJobs.class);
 	}
 	
@@ -84,7 +84,7 @@ public class TestLocalJobs extends Base {
 		logger.info("{} testAfterJob IN", TestLocalJobs.class);
 		Optional<JobRequest> req = newJobRequest();
 		Job job = client().sendJob(req.get());
-		job = waitForStatus(JobStatus.DONE, job, 10000);
+		job = waitForStatus(JobStatus.SUCCESS, job, 10000);
 		checkResults(job);
 		checkLog(job);
 		checkDelete(job);

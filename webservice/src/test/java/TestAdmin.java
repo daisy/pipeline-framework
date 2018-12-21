@@ -26,7 +26,7 @@ public class TestAdmin extends Base {
 		Assert.assertTrue("Couldn't build the request", req.isPresent());
 		Job job = client().sendJob(req.get());
 		deleteAfterTest(job);
-		waitForStatus(JobStatus.DONE, job, 10000);
+		waitForStatus(JobStatus.SUCCESS, job, 10000);
 		sizes = client().sizes();
 		Assert.assertFalse("The current size is not 0", sizes.getTotal() == 0);
 		Assert.assertEquals("there is one job", sizes.getJobSize().size(), 1);

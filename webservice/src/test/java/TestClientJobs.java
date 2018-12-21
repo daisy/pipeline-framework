@@ -84,8 +84,8 @@ public class TestClientJobs extends Base {
 		}
 		Job fromServer = client().job(other.getId());
 		Assert.assertNotNull("Admin accessed the client app job", fromServer);
-		waitForStatus(JobStatus.DONE, admin, 10000);
-		waitForStatus(JobStatus.DONE, other, 10000);
+		waitForStatus(JobStatus.SUCCESS, admin, 10000);
+		waitForStatus(JobStatus.SUCCESS, other, 10000);
 		logger.info("job access OUT");
 	}
 	
@@ -109,7 +109,7 @@ public class TestClientJobs extends Base {
 			Assert.fail("Other shouldn't be able to move other client jobs around");
 		} catch(Exception e){
 		}
-		waitForStatus(JobStatus.DONE, last, 10000);
+		waitForStatus(JobStatus.SUCCESS, last, 10000);
 		logger.info("queue access OUT");
 	}
 }

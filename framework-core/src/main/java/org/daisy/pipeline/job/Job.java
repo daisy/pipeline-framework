@@ -79,16 +79,10 @@ public class Job implements RuntimeConfigurator.EventBusable{
 
 
         public static enum Status {
-
-                /** The IDLE. */
                 IDLE,
-                /** The RUNNING. */
                 RUNNING,
-                /** The DONE. */
-                DONE,
-                /** The ERROR. */
+                SUCCESS,
                 ERROR,
-                /** The FAIL */
                 FAIL
         }
 
@@ -226,7 +220,7 @@ public class Job implements RuntimeConfigurator.EventBusable{
                         if (!this.checkStatus()){
                                 changeStatus(Status.FAIL);
                         }else{
-                                changeStatus( Status.DONE );
+                                changeStatus(Status.SUCCESS);
                         }
                 }catch(Exception e){
                         changeStatus( Status.ERROR);

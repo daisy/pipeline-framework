@@ -22,7 +22,7 @@ public class TestMultipleJobs extends Base {
 		Job job3 = client().sendJob(req.get());
 		Jobs jobs = client().jobs();
 		Assert.assertEquals("we have 3 jobs", 3, jobs.getJob().size());
-		waitForStatus(JobStatus.DONE, job1, 10000);
+		waitForStatus(JobStatus.SUCCESS, job1, 10000);
 		client().delete(job1.getId());
 		client().delete(job2.getId());
 		client().delete(job3.getId());
@@ -64,7 +64,7 @@ public class TestMultipleJobs extends Base {
 		Assert.assertEquals("The last job has been moved up", last.getId(), queue.get(queue.size() - 2).getId());
 		queue = client().moveDown(last.getId()).getJob();
 		Assert.assertEquals("The last job has been moved down", last.getId(), queue.get(queue.size() - 1).getId());
-		waitForStatus(JobStatus.DONE, lastJob, 10000);
+		waitForStatus(JobStatus.SUCCESS, lastJob, 10000);
 		logger.info("{} testPriorities OUT", TestMultipleJobs.class);
 	}
 }

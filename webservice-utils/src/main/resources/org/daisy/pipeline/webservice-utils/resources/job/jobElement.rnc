@@ -81,7 +81,7 @@ element result{
 		& result*
 }
 
-job.status = "IDLE" | "RUNNING" | "DONE" | "ERROR" | "FAIL"
+job.status = "IDLE" | "RUNNING" | "SUCCESS" | "ERROR" | "FAIL"
 
 
 message.level = "WARNING" | "ERROR" | "INFO" | "DEBUG" | "TRACE"

@@ -360,7 +360,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		logger.addAppender(collectLog);
 		try {
 			Job job = newJob("xslt-warning");
-			waitForStatus(Job.Status.DONE, job, 1000);
+			waitForStatus(Job.Status.SUCCESS, job, 1000);
 			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			MessageAccessor accessor = monitor.getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
@@ -392,7 +392,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		logger.addAppender(collectLog);
 		try {
 			Job job = newJob("xproc-warning");
-			waitForStatus(Job.Status.DONE, job, 1000);
+			waitForStatus(Job.Status.SUCCESS, job, 1000);
 			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			MessageAccessor accessor = monitor.getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
@@ -421,7 +421,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			Job job = newJob("progress-messages");
 			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			final MessageAccessor accessor = monitor.getMessageAccessor();
-			Runnable poller = new JobPoller(job, Job.Status.DONE, 200, 3000) {
+			Runnable poller = new JobPoller(job, Job.Status.SUCCESS, 200, 3000) {
 				BigDecimal lastProgress = BigDecimal.ZERO;
 				Iterator<BigDecimal> mustSee = stream(".125", ".375", ".9").map(d -> new BigDecimal(d)).iterator();
 				BigDecimal mustSeeNext = mustSee.next();

@@ -31,7 +31,7 @@ public class TestMessages extends Base {
 		Assert.assertTrue("The request is present", req.isPresent());
 		Job job = client().sendJob(req.get());
 		deleteAfterTest(job);
-		Callable<Job> poller = new JobPoller(client(), job.getId(), JobStatus.DONE, 500, 10000) {
+		Callable<Job> poller = new JobPoller(client(), job.getId(), JobStatus.SUCCESS, 500, 10000) {
 			BigDecimal lastProgress = BigDecimal.ZERO;
 			Iterator<BigDecimal> mustSee = stream(".25", ".375", ".5", ".55", ".675", ".8", ".9").map(d -> new BigDecimal(d)).iterator();
 			BigDecimal mustSeeNext = mustSee.next();
