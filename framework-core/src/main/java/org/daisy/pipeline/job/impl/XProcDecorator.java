@@ -15,6 +15,7 @@ import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.XProcPortMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,7 +115,7 @@ public class XProcDecorator {
 		for(XProcPortInfo info:outputInfos){
 			String port = info.getName();
 			String mediaType = script.getPortMetadata(port).getMediaType();
-			if ("application/vnd.pipeline.status+xml".equals(mediaType)) {
+			if (XProcPortMetadata.MEDIA_TYPE_STATUS_XML.equals(mediaType)) {
 				builder.withOutput(port, new StatusResultProvider(port));
 			} else {
 				builder.withOutput(port, new DynamicResultProvider(output.getResultProvider(port), port, mediaType, mapper));

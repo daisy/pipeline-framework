@@ -16,6 +16,7 @@ import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.XProcPortMetadata;
 
 import com.google.common.base.Supplier;
 import com.google.common.collect.Collections2;
@@ -48,7 +49,7 @@ public class JobResultSetBuilder {
 			if(prov==null)
 				continue;
 			String mediaType=script.getPortMetadata(info.getName()).getMediaType();
-			if (!"application/vnd.pipeline.status+xml".equals(mediaType)) {
+			if (!XProcPortMetadata.MEDIA_TYPE_STATUS_XML.equals(mediaType)) {
 				List<JobResult> results = buildJobResult(prov,mapper,mediaType);
 				builder.addResults(info.getName(),results);
 			}
