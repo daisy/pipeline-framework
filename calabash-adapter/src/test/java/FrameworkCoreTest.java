@@ -143,7 +143,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		logger.addAppender(collectLog);
 		try {
 			Job job = newJob("xproc-error");
-			waitForStatus(Job.Status.ERROR, job, 1000);
+			waitForStatus(Job.Status.ERROR, job, 2000);
 			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			MessageAccessor accessor = monitor.getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
