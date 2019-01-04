@@ -77,6 +77,7 @@ class ProgressMessageImpl extends ProgressMessage {
 			else
 				throw new RuntimeException("???");
 		}
+		BigDecimal lastProgress = getProgress();
 		closed = true;
 		closeSequence = messageCounts.get(jobId);
 		if (parent != null && thread == parent.thread) {
@@ -87,7 +88,9 @@ class ProgressMessageImpl extends ProgressMessage {
 			MDC.remove("jobthread");
 			activeBlockInThread.remove(threadId);
 		}
-		updated(closeSequence);
+		// a notification needs to be sent only if closing the message changes its progress
+		if (lastProgress.compareTo(BigDecimal.ONE) < 0)
+			updated(closeSequence, false);
 	}
 
 	public synchronized ProgressMessage post(ProgressMessageBuilder message) {
@@ -97,7 +100,13 @@ class ProgressMessageImpl extends ProgressMessage {
 			ProgressMessage m = message.build(this);
 			children.add((ProgressMessageImpl)m);
 			unmodifiableChildren.add(unmodifiable(m));
-			updated(m.getSequence());
+			// if the message has no text, it is irrelevant so we don't have to send any notifications yet
+			// however we don't ignore it completely because it may receive child messages later
+			// the child messages will trigger their parent's updated() method
+			// for now we don't notify at all about text-less messages, not even postponed,
+			// because in practice notifying about the relevant child messages will be enough
+			if (m.getText() != null)
+				updated(m.getSequence(), true);
 			return m;
 		}
 	}
@@ -137,13 +146,17 @@ class ProgressMessageImpl extends ProgressMessage {
 		return progress;
 	}
 
-	void updated(int sequence) {
+	void updated(int sequence, boolean textMessageAdded) {
+		// either a descendant text message was added, or the progress has changed
+		// if a text messages was added, we consider it relevant for all ancestors
+		// if only the progress has changed, it is relevant for the parent only if the portion with the parent is non-zero
 		if (callbacks != null && !callbacks.isEmpty()) {
 			ProgressMessageUpdate update = new ProgressMessageUpdate(this, sequence);
 			for (Consumer<ProgressMessageUpdate> callback : callbacks)
 				callback.accept(update); }
 		if (parent != null)
-			parent.updated(sequence);
+			if (textMessageAdded || portion.compareTo(BigDecimal.ZERO) > 0)
+				parent.updated(sequence, textMessageAdded);
 	}
 
 	/**
