@@ -17,7 +17,6 @@ public abstract class MessageAccessor {
 	 *
 	 * @return the error messages
 	 */
-
 	public List<Message> getErrors() {
 		return getMessagesFrom(Level.ERROR);
 	}
@@ -49,8 +48,6 @@ public abstract class MessageAccessor {
 		return getMessagesFrom(Level.DEBUG);
 	}
 
-
-
 	/**
 	 * Gets the traces.
 	 *
@@ -66,7 +63,6 @@ public abstract class MessageAccessor {
 	 * @param fromLevels levels
 	 * @return the messages
 	 */
-
 	public abstract List<Message> getAll();
 	protected abstract List<Message> getMessagesFrom(Level level);
 
@@ -84,13 +80,11 @@ public abstract class MessageAccessor {
 	public abstract void listen(BiConsumer<MessageAccessor,Integer> callback);
 	public abstract void unlisten(BiConsumer<MessageAccessor,Integer> callback);
 
-	public abstract boolean delete();
-
 	public abstract BigDecimal getProgress();
 
 	public abstract MessageFilter createFilter();
 
-	public interface  MessageFilter{
+	public interface MessageFilter {
 		public MessageFilter filterLevels(Set<Level> levels);
 		public MessageFilter greaterThan(int sequence);
 		/**

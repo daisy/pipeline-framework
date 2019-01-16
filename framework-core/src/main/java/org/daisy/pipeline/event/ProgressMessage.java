@@ -154,10 +154,9 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 
 	/**
 	 * Mutex object used for blocking modifications to a ProgressMessage while it is being
-	 * iterated. Made public because it is also used for instance in VolatileMessageAccessor for
-	 * iterating over the top-level list of messages.
+	 * iterated.
 	 */
-	public static final Object MUTEX = new Object();
+	static final Object MUTEX = new Object();
 
 	/**
 	 * Returns the "active" block in the current thread.

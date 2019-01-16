@@ -1,44 +1,35 @@
-package org.daisy.pipeline.nonpersistent.impl.messaging;
+package org.daisy.pipeline.event;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.function.BiConsumer;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.StreamSupport;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor;
-import org.daisy.pipeline.event.ProgressMessage;
-import org.daisy.pipeline.job.JobId;
 
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 
-public class VolatileMessageAccessor extends MessageAccessor{
+abstract class AbstractMessageAccessor extends MessageAccessor {
 
-	private final VolatileMessageStorage storage=VolatileMessageStorage.getInstance();
-	private final Iterable<MessageFilter> messages;
-	private final String id;
-	private final List<BiConsumer<MessageAccessor,Integer>> callbacks;
-	private final BiConsumer<String,Integer> onNewMessages;
+	final String id;
+
+	public AbstractMessageAccessor(String id) {
+		this.id = id;
+	}
 
 	/**
-	 * @param id
+	 * Must return a (mutable) iterable that contains all messages (which are mutable) received
+	 * up till now. Mutating operations on the iterable must be synchronized on the object
+	 * itself.
 	 */
-	public VolatileMessageAccessor(JobId id) {
-		this.id = id.toString();
-		messages = storage.get(this.id);
-		callbacks = new ArrayList<>();
-		onNewMessages = (j,m) -> {
-			if (this.id.equals(j))
-				for (BiConsumer<MessageAccessor,Integer> c : callbacks)
-					c.accept(VolatileMessageAccessor.this, m); };
-	}
+	protected abstract Iterable<Message> allMessages();
 
 	@Override
 	public List<Message> getAll() {
@@ -49,7 +40,7 @@ public class VolatileMessageAccessor extends MessageAccessor{
 	protected List<Message> getMessagesFrom(final Level level) {
 		return createFilter().filterLevels(fromLevel(level)).getMessages();
 	}
-	
+
 	private Set<Level> fromLevel(Level level) {
 		ImmutableSet.Builder<Level> b = new ImmutableSet.Builder();
 		for (Level l : Level.values())
@@ -59,50 +50,36 @@ public class VolatileMessageAccessor extends MessageAccessor{
 	}
 
 	@Override
-	public boolean delete() {
-		storage.remove(id);
-		return true;
-	}
-
-	@Override
 	public BigDecimal getProgress() {
 		BigDecimal progress;
-		synchronized(ProgressMessage.MUTEX) {
-			progress = storage.get(this.id).stream().map(
-					m -> m.getProgress().multiply(m.getPortion())
+		synchronized (ProgressMessage.MUTEX) { // objects inside iterable are mutable
+			Iterable<Message> messages = allMessages();
+			synchronized (messages) { // iterable itself is mutable
+				progress = StreamSupport.stream(messages.spliterator(), false).map(
+					m -> {
+						if (m instanceof ProgressMessage) {
+							ProgressMessage pm = (ProgressMessage)m;
+							return pm.getProgress().multiply(pm.getPortion()); }
+						else
+							return BigDecimal.ZERO; }
 				).reduce(
 					BigDecimal.ZERO,
 					(d1, d2) -> d1.add(d2)
 				).min(BigDecimal.ONE);
+			}
 		}
 		return progress;
 	}
 
-	public void listen(BiConsumer<MessageAccessor,Integer> callback) {
-		synchronized (storage) {
-			if (callbacks.isEmpty())
-				storage.onNewMessages.add(onNewMessages);
-			callbacks.add(callback);
-		}
-	}
-
-	public void unlisten(BiConsumer<MessageAccessor,Integer> callback) {
-		synchronized (storage) {
-			callbacks.remove(callback);
-			if (callbacks.isEmpty())
-				storage.onNewMessages.remove(onNewMessages);
-		}
-	}
-	
 	@Override
 	public MessageFilter createFilter() {
-		return new VolatileMessageFilter();
+		return new MessageFilterImpl();
 	}
 
 	private static final Set<Level> allLevels = ImmutableSet.copyOf(Level.values());
 
-	private class VolatileMessageFilter implements MessageFilter {
-		
+	private class MessageFilterImpl implements MessageFilter {
+
 		private Set<Level> levels = new HashSet<Level>(allLevels);
 		private Integer rangeStart = null;
 		private Integer rangeEnd = null;
@@ -144,19 +121,32 @@ public class VolatileMessageAccessor extends MessageAccessor{
 
 		@Override
 		public List<Message> getMessages() {
-			synchronized(ProgressMessage.MUTEX) {
-				return Lists.newArrayList(
-					Iterables.concat(
-						Iterables.transform(
-							VolatileMessageAccessor.this.messages,
-							(MessageFilter m) -> {
-								if (greaterThan != null)
-									m = m.greaterThan(greaterThan);
-								if (rangeStart != null)
-									m = m.inRange(rangeStart, rangeEnd);
-								if (levels.size() < allLevels.size())
-									m = m.filterLevels(levels);
-								return m.getMessages(); })));
+			synchronized (ProgressMessage.MUTEX) { // objects inside iterable are mutable
+				Iterable<Message> messages = allMessages();
+				synchronized (messages) { // iterable itself is mutable
+					return Lists.newArrayList(
+						Iterables.concat(
+							Iterables.transform(
+								messages,
+								(Message m) -> {
+									if (m instanceof ProgressMessage) {
+										MessageFilter f = ((ProgressMessage)m).asMessageFilter();
+										if (greaterThan != null)
+											f = f.greaterThan(greaterThan);
+										if (rangeStart != null)
+											f = f.inRange(rangeStart, rangeEnd);
+										if (levels.size() < allLevels.size())
+											f = f.filterLevels(levels);
+										return f.getMessages();
+									} else {
+										int seq = m.getSequence();
+										if ((greaterThan == null || seq > greaterThan)
+										    && (rangeStart == null || (rangeStart >= seq && seq >= rangeEnd))
+										    && (levels.size() == allLevels.size() || levels.contains(m.getLevel())))
+											return Collections.singleton(m);
+										else
+											return ImmutableSet.of(); }})));
+				}
 			}
 		}
 	}

@@ -20,7 +20,8 @@ import com.google.common.eventbus.EventBus;
 /**
  * The Class Job defines the execution unit.
  */
-public class Job implements RuntimeConfigurator.EventBusable{
+public class Job implements RuntimeConfigurator.EventBusable, RuntimeConfigurator.Monitorable {
+
 
         private static final Logger logger = LoggerFactory
                         .getLogger(Job.class);
@@ -28,7 +29,6 @@ public class Job implements RuntimeConfigurator.EventBusable{
 
         public static class  JobBuilder{
                 protected JobContext ctxt;
-                protected EventBus bus;
                 protected Priority priority=Priority.MEDIUM;
                 private Job job;
 
@@ -42,13 +42,9 @@ public class Job implements RuntimeConfigurator.EventBusable{
                         return this;
                 }
 
-                public JobBuilder withEventBus(EventBus bus){
-                        this.bus=bus;
-                        return this;
-                }
                 //available for subclasses to override
                 protected Job initJob(){
-                        Job job = new Job(this.ctxt,this.bus,this.priority);
+                        Job job = new Job(this.ctxt,this.priority);
                         return job;
                 }
                 public final Job build(){
@@ -93,9 +89,8 @@ public class Job implements RuntimeConfigurator.EventBusable{
         protected JobContext ctxt;
         private EventBus eventBus;
 
-        protected Job(JobContext ctxt,EventBus eventBus,Priority priority) {
+        protected Job(JobContext ctxt,Priority priority) {
                 this.ctxt=ctxt;
-                this.eventBus=eventBus;
                 this.priority=priority;
         }
 
@@ -142,8 +137,14 @@ public class Job implements RuntimeConfigurator.EventBusable{
         /**
          * @param eventBus the eventBus to set
          */
+        @Override
         public void setEventBus(EventBus eventBus) {
                 this.eventBus = eventBus;
+        }
+
+        @Override
+        public void setJobMonitor(JobMonitorFactory factory) {
+                this.ctxt.setMonitor(factory.newJobMonitor(this.getId(), getStatus() == Status.IDLE));
         }
 
         /**

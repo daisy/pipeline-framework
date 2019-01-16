@@ -1,13 +1,12 @@
 package org.daisy.pipeline.nonpersistent.impl.messaging;
 
-import java.util.ArrayList;
-import java.util.function.BiConsumer;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
-import org.daisy.pipeline.event.ProgressMessage;
+import org.daisy.pipeline.event.MessageStorage;
 import org.daisy.pipeline.properties.Properties;
 
 import org.slf4j.Logger;
@@ -22,26 +21,26 @@ import com.google.common.collect.Lists;
 /**
  * Singleton
  */
-public final class VolatileMessageStorage {
+public final class VolatileMessageStorage implements MessageStorage {
 
 	private static final VolatileMessageStorage INSTANCE = new VolatileMessageStorage();
 	private static final  String CACHE_TIMEOUT_PROPERTY="org.daisy.pipeline.messaging.cache";
-	private LoadingCache<String, List<ProgressMessage>> cache;
+	private LoadingCache<String, List<Message>> cache;
 	private static final Logger logger = LoggerFactory.getLogger(VolatileMessageStorage.class);
 
 	/**
 	 *
 	 */
-	private VolatileMessageStorage() {
+	public VolatileMessageStorage() {
 		int timeout = Integer.valueOf(Properties.getProperty(
 				CACHE_TIMEOUT_PROPERTY, "60"));
 		cache = CacheBuilder.newBuilder()
 				.removalListener(
-						(RemovalNotification<String,List<ProgressMessage>> n) -> n.getValue().clear())
+						(RemovalNotification<String,List<Message>> n) -> n.getValue().clear())
 				.expireAfterAccess(timeout, TimeUnit.SECONDS)
-				.build(new CacheLoader<String, List<ProgressMessage>>() {
+				.build(new CacheLoader<String, List<Message>>() {
 					@Override
-					public List<ProgressMessage> load(String id) throws Exception {
+					public List<Message> load(String id) throws Exception {
 						return Lists.newArrayList();
 					}
 				});
@@ -52,11 +51,11 @@ public final class VolatileMessageStorage {
 		synchronized(INSTANCE){
 			INSTANCE.cache = CacheBuilder.newBuilder()
 				.removalListener(
-						(RemovalNotification<String,List<ProgressMessage>> n) -> n.getValue().clear())
+						(RemovalNotification<String,List<Message>> n) -> n.getValue().clear())
 				.expireAfterAccess(secs, TimeUnit.SECONDS)
-				.build(new CacheLoader<String, List<ProgressMessage>>() {
+				.build(new CacheLoader<String, List<Message>>() {
 					@Override
-					public List<ProgressMessage> load(String id) throws Exception {
+					public List<Message> load(String id) throws Exception {
 						return Lists.newArrayList();
 					}
 				});
@@ -64,7 +63,8 @@ public final class VolatileMessageStorage {
 
 	}
 
-	public boolean add(ProgressMessage msg) {
+	@Override
+	public boolean add(Message msg) {
 		//msgs less than info are discarded due to 
 		//perfomance issues
 		if (msg.getLevel().compareTo(Level.INFO)>0){
@@ -79,7 +79,8 @@ public final class VolatileMessageStorage {
 		}
 	}
 
-	public List<ProgressMessage> get(String id){
+	@Override
+	public List<Message> get(String id){
 		try {
 			return this.cache.get(id);
 		} catch (ExecutionException e) {
@@ -88,8 +89,10 @@ public final class VolatileMessageStorage {
 		}
 	}
 
-	public void remove(String id){
+	@Override
+	public boolean remove(String id){
 		this.cache.invalidate(id);
+		return true;
 	}
 
 	void removeAll(){
@@ -102,7 +105,4 @@ public final class VolatileMessageStorage {
 	public static VolatileMessageStorage getInstance() {
 		return INSTANCE;
 	}
-
-	final List<BiConsumer<String,Integer>> onNewMessages = new ArrayList<>();
-	
 }

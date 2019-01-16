@@ -5,10 +5,12 @@ import java.util.Set;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
+import org.daisy.common.messaging.MessageAccessor;
+import org.daisy.pipeline.event.MessageAccessorFromStorage;
+import org.daisy.pipeline.event.MessageStorage;
 import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.event.ProgressMessageBuilder;
 import org.daisy.pipeline.job.JobIdFactory;
-import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageAccessor;
 import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageStorage;
 import org.junit.After;
 import org.junit.Assert;
@@ -19,14 +21,14 @@ import com.google.common.collect.Sets;
 
 public class VolatileMessageAccessorTest   {
 
-	VolatileMessageStorage storage = VolatileMessageStorage.getInstance();
+	MessageStorage storage = VolatileMessageStorage.getInstance();
 	ProgressMessage m1;
 
 	ProgressMessage m2;
 
 	ProgressMessage m3;
 
-	VolatileMessageAccessor accessor;
+	MessageAccessor accessor;
 	@Before
 	public void setUp() {
 		String id = JobIdFactory.newId().toString();
@@ -46,7 +48,7 @@ public class VolatileMessageAccessorTest   {
 		storage.add(m1);
 		storage.add(m2);
 		storage.add(m3);
-		accessor = new VolatileMessageAccessor(JobIdFactory.newIdFromString(id));
+		accessor = new MessageAccessorFromStorage(id, storage);
 	}
 
 	@After
@@ -57,7 +59,7 @@ public class VolatileMessageAccessorTest   {
 	@Test
 	public void getMessagesFromWarn() {
 
-		List<Message> out=accessor.getMessagesFrom(Level.WARNING);			
+		List<Message> out=accessor.getWarnings();
 		Assert.assertEquals(2,out.size());
 		Assert.assertEquals(out.get(0).getLevel(),Level.ERROR);
 		Assert.assertEquals(out.get(1).getLevel(),Level.WARNING);
@@ -65,7 +67,7 @@ public class VolatileMessageAccessorTest   {
 
 	@Test
 	public void getMessagesFromInfo() {
-		List<Message> out=accessor.getMessagesFrom(Level.INFO);			
+		List<Message> out=accessor.getInfos();
 		Assert.assertEquals(3,out.size());
 		Assert.assertEquals(out.get(0).getLevel(),Level.INFO);
 		Assert.assertEquals(out.get(1).getLevel(),Level.ERROR);
@@ -75,13 +77,6 @@ public class VolatileMessageAccessorTest   {
 	public void getAll() {
 		List<Message> out=accessor.getAll();			
 		Assert.assertEquals(3,out.size());
-	}
-
-	@Test
-	public void delete() {
-		accessor.delete();
-		List<Message> out=accessor.getAll();			
-		Assert.assertEquals(0,out.size());
 	}
 
 	@Test

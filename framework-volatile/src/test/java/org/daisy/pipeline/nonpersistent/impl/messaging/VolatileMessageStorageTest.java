@@ -2,6 +2,7 @@ package org.daisy.pipeline.nonpersistent.impl.messaging;
 
 import java.util.List;
 
+import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.event.ProgressMessageBuilder;
@@ -78,14 +79,14 @@ public class VolatileMessageStorageTest {
 	public void get() {
 		storage.add(m1);
 		storage.add(m2);
-		List<ProgressMessage> list= storage.get(jobId);
+		List<Message> list= storage.get(jobId);
 		Assert.assertEquals(0,list.get(0).getSequence());
 		Assert.assertEquals(1,list.get(1).getSequence());
 	}
 
 	@Test
 	public void getEmpty() {
-		List<ProgressMessage> list=storage.get("newid");		
+		List<Message> list=storage.get("newid");
 		Assert.assertEquals(0,list.size());
 	}
 
