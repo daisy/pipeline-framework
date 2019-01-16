@@ -60,27 +60,16 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 		return asLogger;
 	}
 
-	/**
-	 * Iterate over the child messages. The returned messages are immutable (read-only deep copies).
-	 */
-	public Iterator<ProgressMessage> iterator() {
-		synchronized(MUTEX) {
-			return Iterators.transform(
-				_iterator(),
-				m -> deepCopy(m));
-		}
-	}
-
 	private Iterator<ProgressMessage> i = null;
 
 	/** Whether or not child messages are present. */
-	protected final boolean isEmpty() {
+	final boolean isEmpty() {
 		if (i == null)
 			i = __iterator();
 		return !i.hasNext();
 	}
 
-	public final Iterator<ProgressMessage> _iterator() {
+	final Iterator<ProgressMessage> _iterator() {
 		if (i != null) {
 			Iterator<ProgressMessage> ret = i;
 			i = null;
@@ -90,17 +79,22 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 	}
 
 	/** No deep copies */
-	protected abstract Iterator<ProgressMessage> __iterator();
+	abstract Iterator<ProgressMessage> __iterator();
 
 	private Iterable<ProgressMessage> singleton = null;
-	protected Iterable<ProgressMessage> selfIterate() {
+	Iterable<ProgressMessage> selfIterate() {
 		if (singleton == null)
 			singleton = Collections.<ProgressMessage>singleton(this);
 		return singleton;
 	}
 
-	private MessageFilterImpl asMessageFilter() {
-		return new MessageFilterImpl(this);
+	/**
+	 * Returns a (read-only) view that excludes text-less messages (messages that only carry
+	 * progress information). Child messages of excluded messages are promoted (become direct
+	 * children of the excluded message's parent).
+	 */
+	public MessageFilter asMessageFilter() {
+		return new MessageFilterImpl(this, false).withText();
 	}
 
 	/**
@@ -125,16 +119,22 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 	}
 
 	/**
-	 * Returns a (read-only) view that excludes text-less messages (messages that only carry
-	 * progress information). Child messages of excluded messages are promoted (become direct
-	 * children of the excluded message's parent). */
-	public MessageFilter withText() {
-		return asMessageFilter().withText();
-	}
-
-	/** Returns read-only version of this message as a singleton list. */
+	 * If this message has text, returns an immutable version (read-only deep copy) of this it as a
+	 * singleton list. If this messages has no text, returns the immutable versions of its
+	 * descdendants with text.
+	 */
 	public List<Message> getMessages() {
 		return asMessageFilter().getMessages();
+	}
+
+	/**
+	 * Iterate over the child messages. The returned messages are immutable (read-only deep copies).
+	 */
+	@SuppressWarnings(
+		"unchecked" // safe cast to Iterator<ProgressMessage>
+	)
+	public Iterator<ProgressMessage> iterator() {
+		return (Iterator<ProgressMessage>)(Object)(new MessageFilterImpl(this, true).withText().getMessages().iterator());
 	}
 
 	@Override
@@ -177,12 +177,29 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 		return ProgressMessageImpl.activeBlockInThread.get(new ProgressMessageImpl.JobThread(jobId, threadId));
 	}
 
+	/**
+	 * Whether deepCopy should return "this".
+	 */
+	boolean isImmutable() {
+		return false;
+	}
+
 	/** Get an immutable view of the message (read-only deep copy). */
-	static ProgressMessage deepCopy(ProgressMessage message) {
-		return new UnmodifiableProgressMessage(message) {
-			final Iterable<ProgressMessage> children = ImmutableList.copyOf(super.iterator());
-			public Iterator<ProgressMessage> iterator() {
+	ProgressMessage deepCopy() {
+		if (isImmutable())
+			return this;
+		final Iterable<ProgressMessage> children = ImmutableList.copyOf(
+			Iterators.transform(
+				_iterator(),
+				m -> m.deepCopy()));
+		return new UnmodifiableProgressMessage(this) {
+			@Override
+			Iterator<ProgressMessage> __iterator() {
 				return children.iterator();
+			}
+			@Override
+			boolean isImmutable() {
+				return true;
 			}
 		};
 	}
@@ -240,9 +257,23 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 			return message.getCloseSequence();
 		}
 
+		// unmodifiable is not the same as immutable
+		boolean isImmutable() {
+			return message.isImmutable();
+		}
+
+		Iterator<ProgressMessage> __iterator() {
+			return message.__iterator();
+		}
+
 		@Override
-		public Iterator<ProgressMessage> __iterator() {
-			return message._iterator();
+		public Iterator<ProgressMessage> iterator() {
+			return message.iterator();
+		}
+
+		@Override
+		public String toString() {
+			return message.toString();
 		}
 	}
 }

@@ -28,14 +28,16 @@ class MessageFilterImpl implements MessageFilter {
 	private static final Logger logger = LoggerFactory.getLogger(MessageFilterImpl.class);
 
 	private final ProgressMessage message;
+	private final boolean excludeSelf;
 	private Filter filter = null;
 	private Set<Level> levels = new HashSet<Level>(allLevels);
 	private Integer start = null;
 	private Integer end = null;
 	private boolean onlyWithText = false;
 
-	MessageFilterImpl(ProgressMessage message) {
+	MessageFilterImpl(ProgressMessage message, boolean excludeSelf) {
 		this.message = message;
+		this.excludeSelf = excludeSelf;
 	}
 
 	public MessageFilter filterLevels(Set<Level> levels) {
@@ -71,7 +73,7 @@ class MessageFilterImpl implements MessageFilter {
 		return this;
 	}
 
-	public MessageFilter withText() {
+	MessageFilterImpl withText() {
 		if (!onlyWithText) {
 			onlyWithText = true;
 			filter = null;
@@ -84,11 +86,13 @@ class MessageFilterImpl implements MessageFilter {
 	 */
 	public List<Message> getMessages() {
 		if (filter == null) {
+			if (excludeSelf)
+				filter = compose(getChildren, filter);
 			if (start != null || end != null) {
 				if (end == null)
-					filter = sequenceFilter(start);
+					filter = compose(sequenceFilter(start), filter);
 				else
-					filter = sequenceFilter(start, end);
+					filter = compose(sequenceFilter(start, end), filter);
 			}
 			if (levels.size() < allLevels.size()) {
 				filter = compose(levelFilter(levels), filter);
@@ -98,21 +102,15 @@ class MessageFilterImpl implements MessageFilter {
 			}
 		}
 		List<Message> r;
-		String traceMessage;
 		synchronized(ProgressMessage.MUTEX) {
 			if (filter != null)
 				r = Lists.<Message>newArrayList(
 					Iterators.transform(
 						filter.apply(message).iterator(),
-						m -> ProgressMessage.deepCopy(m)));
+						m -> m.deepCopy()));
 			else
-				r = Collections.<Message>singletonList(ProgressMessage.deepCopy(message));
-			traceMessage = logger.isTraceEnabled()
-				? (message + " --> " + r)
-				: null;
+				r = Collections.<Message>singletonList(message.deepCopy());
 		}
-		// don't call logger inside synchronized block
-		logger.trace(traceMessage);
 		return r;
 	}
 	
@@ -223,7 +221,12 @@ class MessageFilterImpl implements MessageFilter {
 	 */
 	private static Filter textFilter = deepFilterBottomUp(
 		m -> m.getText() != null
-			? m.selfIterate()
+			? new ProgressMessage.UnmodifiableProgressMessage(m) {
+					@Override // messages without text already filtered out, only need to make copies
+					public Iterator<ProgressMessage> iterator() {
+						return Iterators.transform(_iterator(), mm -> mm.deepCopy());
+					}
+				}.selfIterate()
 			: promoteChildren.apply(m)
 	);
 

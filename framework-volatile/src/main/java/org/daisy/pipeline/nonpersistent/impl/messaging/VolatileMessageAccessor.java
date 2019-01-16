@@ -32,8 +32,7 @@ public class VolatileMessageAccessor extends MessageAccessor{
 	 */
 	public VolatileMessageAccessor(JobId id) {
 		this.id = id.toString();
-		messages = FluentIterable.from(storage.get(this.id))
-		                         .transform(m -> m.withText());
+		messages = storage.get(this.id);
 		callbacks = new ArrayList<>();
 		onNewMessages = (j,m) -> {
 			if (this.id.equals(j))
