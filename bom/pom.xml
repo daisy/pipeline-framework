@@ -98,12 +98,12 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>persistence-derby</artifactId>
-        <version>2.0.2</version>
+        <version>2.0.3-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>persistence-mysql</artifactId>
-        <version>2.0.1</version>
+        <version>2.0.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
