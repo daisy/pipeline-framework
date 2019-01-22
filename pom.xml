@@ -11,7 +11,7 @@
   </parent>
   
   <artifactId>xproc-engine-daisy-pipeline-logging</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>xproc-engine-daisy-pipeline-logging</name>
   
@@ -37,9 +37,4 @@
       </plugin>
     </plugins>
   </build>
-  
-
-  <scm>
-    <tag>xproc-engine-daisy-pipeline-logging-1.0.0</tag>
-  </scm>
 </project>
