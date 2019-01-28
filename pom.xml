@@ -111,7 +111,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>jaxb2-maven-plugin</artifactId>
-        <version>2.3</version>
+        <version>2.4</version>
         <configuration>
           <xjcSourceExcludeFilters>
             <filter implementation="org.codehaus.mojo.jaxb2.shared.filters.pattern.PatternFileFilter">
