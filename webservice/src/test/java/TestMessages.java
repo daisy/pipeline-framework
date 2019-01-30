@@ -65,16 +65,16 @@ public class TestMessages extends Base {
 		Iterator<Message> messages = getMessage(messagesElem).iterator();
 		assertMessage(next(messages), 0, MessageLevel.INFO, "a", new BigDecimal(".5"), BigDecimal.ONE,
 			msgs -> {
-				assertMessage(next(msgs), 1, MessageLevel.INFO, "b", new BigDecimal(".5"), BigDecimal.ONE, null);
-				assertMessage(next(msgs), 2, MessageLevel.INFO, "c", new BigDecimal(".5"), BigDecimal.ONE,
+				assertMessage(next(msgs), 2, MessageLevel.INFO, "b", new BigDecimal(".5"), BigDecimal.ONE, null);
+				assertMessage(next(msgs), 3, MessageLevel.INFO, "c", new BigDecimal(".5"), BigDecimal.ONE,
 					m -> {
-						assertMessage(next(m), 3, MessageLevel.INFO, "d", new BigDecimal(".5"), BigDecimal.ONE, null);
-						assertMessage(next(m), 4, MessageLevel.INFO, "e", new BigDecimal(".5"), BigDecimal.ONE, null);
+						assertMessage(next(m), 4, MessageLevel.INFO, "d", new BigDecimal(".5"), BigDecimal.ONE, null);
+						assertMessage(next(m), 5, MessageLevel.INFO, "e", new BigDecimal(".5"), BigDecimal.ONE, null);
 						Assert.assertFalse(m.hasNext()); });
 				Assert.assertFalse(msgs.hasNext()); });
-		assertMessage(next(messages), 7, MessageLevel.INFO, "f", new BigDecimal(".125"), BigDecimal.ONE, null);
-		assertMessage(next(messages), 8, MessageLevel.INFO, "g", new BigDecimal(".125"), BigDecimal.ONE, null);
-		assertMessage(next(messages), 9, MessageLevel.INFO, "h", new BigDecimal(".1"), BigDecimal.ONE, null);
+		assertMessage(next(messages), 8, MessageLevel.INFO, "f", new BigDecimal(".125"), BigDecimal.ONE, null);
+		assertMessage(next(messages), 9, MessageLevel.INFO, "g", new BigDecimal(".125"), BigDecimal.ONE, null);
+		assertMessage(next(messages), 10, MessageLevel.INFO, "h", new BigDecimal(".1"), BigDecimal.ONE, null);
 		Assert.assertFalse(messages.hasNext());
 	}
 

@@ -492,6 +492,10 @@ public class FrameworkCoreTest extends AbstractTest {
 				                  assertMessage(next(msgs), seq.get(), Message.Level.INFO, "px:foo (2)");
 				                  Assert.assertFalse(msgs.hasNext()); });
 				assertMessage(next(messages), seq.get(), Message.Level.INFO, "px:progress-messages (3)");
+				assertMessage(next(messages), seq.get(), Message.Level.INFO, "px:progress-messages (4)",
+				              msgs -> {
+				                  assertMessage(next(msgs), seq.get(), Message.Level.INFO, "px:progress-messages (4a)");
+				                  Assert.assertFalse(msgs.hasNext()); });
 				Assert.assertFalse(messages.hasNext());
 				Iterator<ILoggingEvent> log = collectLog.get();
 				Assert.assertFalse(log.hasNext());
