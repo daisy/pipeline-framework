@@ -74,7 +74,6 @@ public abstract class Base extends AbstractTest {
 			"org.restlet.osgi:org.restlet:?",
 			"org.restlet.osgi:org.restlet.ext.fileupload:?",
 			"org.restlet.osgi:org.restlet.ext.xml:?",
-			"org.restlet.osgi:org.restlet.ext.jetty:?",
 			"org.daisy.pipeline:common-utils:?",
 			"org.daisy.pipeline:framework-core:?",
 			"org.daisy.pipeline:xproc-api:?",
