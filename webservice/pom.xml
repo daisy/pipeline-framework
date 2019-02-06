@@ -89,6 +89,16 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-persistence</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>persistence-derby</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
       <scope>test</scope>
     </dependency>
@@ -130,6 +140,54 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>logging-activator</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!--
+        for derby
+    -->
+    <dependency>
+      <groupId>org.eclipse</groupId>
+      <artifactId>org.eclipse.gemini.jpa</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.gemini</groupId>
+      <artifactId>org.apache.derby</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.gemini</groupId>
+      <artifactId>org.eclipse.gemini.dbaccess.derby</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.gemini</groupId>
+      <artifactId>org.eclipse.gemini.dbaccess.util</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>javax.persistence</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>org.eclipse.persistence.asm</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>org.eclipse.persistence.antlr</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>org.eclipse.persistence.core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>org.eclipse.persistence.jpa</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

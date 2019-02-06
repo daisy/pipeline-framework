@@ -37,7 +37,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.common.collect.Iterators;
 import com.google.common.io.CharStreams;
@@ -54,7 +53,6 @@ import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.job.JobMonitor;
 import org.daisy.pipeline.job.JobMonitorFactory;
-
 import org.daisy.pipeline.junit.AbstractTest;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
