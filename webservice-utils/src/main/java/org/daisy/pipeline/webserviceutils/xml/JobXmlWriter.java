@@ -165,6 +165,8 @@ public class JobXmlWriter {
                         Element messagesElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "messages");
                         element.appendChild(messagesElm);
                         if (progress != null) {
+                                if (status == Job.Status.SUCCESS || job.getStatus() == Job.Status.FAIL)
+                                        progress = BigDecimal.ONE;
                                 messagesElm.setAttribute("progress", Float.toString(progress.floatValue()));
                         }
                         if (messages != null && messages.size() > 0) {
