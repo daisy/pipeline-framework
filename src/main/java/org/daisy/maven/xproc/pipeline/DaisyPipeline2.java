@@ -3,6 +3,7 @@ package org.daisy.maven.xproc.pipeline;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
@@ -121,6 +122,19 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 						MDC.put("jobid", jobId); // this is used in EventBusAppender
 						results = xprocPipeline.run(inputBuilder.build(), null, props);
 						MDC.remove("jobid");
+						// store messages XML
+						try {
+							Class.forName("org.daisy.pipeline.webserviceutils.xml.JobXmlWriter");
+							PrintWriter writer = new PrintWriter(
+								new File(
+									// hack to get hold of directory to store message
+									new File(new URI(options.get("temp-dir"))),
+									jobId + "-messages.xml"));
+							writer.print(MessagesXmlWriter.serializeMessages(listener.messages));
+							writer.close();
+						} catch (ClassNotFoundException e) {
+							// webservice-utils is an optional dependency
+						}
 					} finally {
 						listener.close();
 					}

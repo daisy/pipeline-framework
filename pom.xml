@@ -70,6 +70,15 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>webservice-utils</artifactId>
+      <version>4.0.1-SNAPSHOT</version>
+      <!--
+          optional dependency (but also dependency of framework-volatile)
+      -->
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <scope>provided</scope>
@@ -131,6 +140,9 @@
         <configuration>
           <instructions>
             <_dsannotations>*</_dsannotations>
+            <Import-Package>
+              org.daisy.pipeline.webserviceutils.xml;resolution:=optional,*
+            </Import-Package>
           </instructions>
         </configuration>
       </plugin>
