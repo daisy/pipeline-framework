@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
     immediate = true,
     service = { MessageStorage.class }
 )
-public final class VolatileMessageStorage implements MessageStorage {
+public class VolatileMessageStorage implements MessageStorage {
 
 	private static final VolatileMessageStorage INSTANCE = new VolatileMessageStorage();
 	private static final  String CACHE_TIMEOUT_PROPERTY="org.daisy.pipeline.messaging.cache";

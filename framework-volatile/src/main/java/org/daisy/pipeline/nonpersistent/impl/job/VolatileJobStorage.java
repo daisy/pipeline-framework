@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
     immediate = true,
     service = { JobStorage.class }
 )
-public final class VolatileJobStorage implements JobStorage {
+public class VolatileJobStorage implements JobStorage {
         private static final Logger logger = LoggerFactory
                         .getLogger(VolatileJobStorage.class);
 
