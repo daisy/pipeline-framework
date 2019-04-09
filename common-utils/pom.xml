@@ -91,7 +91,7 @@
       <exclusions>
         <exclusion>
           <groupId>org.daisy.pipeline</groupId>
-          <artifactId>common-utils</artifactId>
+          <artifactId>saxon-adapter</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
