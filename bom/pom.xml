@@ -137,11 +137,6 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
-        <artifactId>xpath-registry</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
         <artifactId>xproc-api</artifactId>
         <version>3.0.0</version>
       </dependency>
