@@ -19,7 +19,7 @@
 
   <properties>
     <benchmark.version>0.7.2</benchmark.version>
-    <calabash.version>1.1.20-p2-98</calabash.version>
+    <calabash.version>1.1.20-p3-98-SNAPSHOT</calabash.version>
     <commons.codec.version>1.6</commons.codec.version>
     <commons.fileupload.version>1.3.3</commons.fileupload.version>
     <commons.io.version>2.3</commons.io.version>
