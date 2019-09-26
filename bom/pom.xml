@@ -477,35 +477,6 @@
       </dependency>
 
 
-      <!-- Third-Party Libraries required by modules -->
-      <dependency>
-        <groupId>net.java.dev.jna</groupId>
-        <artifactId>jna</artifactId>
-        <version>5.2.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.libs</groupId>
-        <artifactId>jnaerator</artifactId>
-        <version>0.11-p1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.libs</groupId>
-        <artifactId>jstyleparser</artifactId>
-        <version>1.20-p13-SNAPSHOT</version>
-        <exclusions>
-          <exclusion>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.unbescape</groupId>
-        <artifactId>unbescape</artifactId>
-        <version>1.1.0.RELEASE</version>
-      </dependency>
-
-
       <!-- Third-Party Libraries required by GUI -->
       <dependency>
         <groupId>de.codecentric.centerdevice</groupId>
