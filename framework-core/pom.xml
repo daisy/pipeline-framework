@@ -58,6 +58,16 @@
       <artifactId>modules-test-helper</artifactId>
       <version>1.0.4</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.daisy.pipeline</groupId>
+          <artifactId>saxon-adapter</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.daisy.maven</groupId>
+          <artifactId>xproc-engine-daisy-pipeline</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.carrotsearch</groupId>
