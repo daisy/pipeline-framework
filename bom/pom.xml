@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-bom</artifactId>
-  <version>1.13.0-SNAPSHOT</version>
+  <version>1.13.0</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework BoM</name>
@@ -48,7 +48,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>calabash-adapter</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>3.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -58,22 +58,22 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>common-utils</artifactId>
-        <version>3.1.0-SNAPSHOT</version>
+        <version>3.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-core</artifactId>
-        <version>4.2.0-SNAPSHOT</version>
+        <version>4.2.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-persistence</artifactId>
-        <version>2.1.1-SNAPSHOT</version>
+        <version>2.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-volatile</artifactId>
-        <version>2.1.1-SNAPSHOT</version>
+        <version>2.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -93,22 +93,22 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>modules-registry</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>persistence-derby</artifactId>
-        <version>2.0.4-SNAPSHOT</version>
+        <version>2.0.4</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>push-notifier</artifactId>
-        <version>2.1.1-SNAPSHOT</version>
+        <version>2.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>saxon-adapter</artifactId>
-        <version>1.4.0-SNAPSHOT</version>
+        <version>1.4.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -118,22 +118,22 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>webservice-utils</artifactId>
-        <version>4.0.2-SNAPSHOT</version>
+        <version>4.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>webservice</artifactId>
-        <version>2.2.1-SNAPSHOT</version>
+        <version>2.2.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>woodstox-osgi-adapter</artifactId>
-        <version>2.0.2-SNAPSHOT</version>
+        <version>2.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>xmlcatalog</artifactId>
-        <version>2.0.5-SNAPSHOT</version>
+        <version>2.0.5</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -549,4 +549,8 @@
 
     </dependencies>
   </dependencyManagement>
+
+  <scm>
+    <tag>v1.13.0</tag>
+  </scm>
 </project>
