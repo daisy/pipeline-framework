@@ -196,6 +196,7 @@
           </execution>
         </executions>
       </plugin>
+      <!--
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-build-helper</artifactId>
@@ -210,6 +211,7 @@
           </execution>
         </executions>
       </plugin>
+      -->
       <plugin>
         <groupId>org.ops4j.pax.exam</groupId>
         <artifactId>maven-paxexam-plugin</artifactId>
