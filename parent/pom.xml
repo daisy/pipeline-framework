@@ -257,17 +257,6 @@
       Restlet is not on Maven Central
       https://github.com/restlet/restlet-framework-java/issues/481
      -->
-    <repository>
-      <id>central</id>
-      <name>Maven Central</name>
-      <url>http://repo.maven.apache.org/maven2/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
     <!-- Restlet maven repository -->
     <repository>
       <id>restlet-repo</id>
