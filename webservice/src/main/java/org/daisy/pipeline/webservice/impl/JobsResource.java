@@ -536,13 +536,13 @@ public class JobsResource extends AuthenticatedResource {
                 Iterator<XProcOptionInfo> it = allOptions.iterator();
                 while(it.hasNext()) {
                         XProcOptionInfo opt = it.next();
-                        String optionName = opt.getName().toString();
+                        QName optionName = opt.getName();
                         // if we are filtering options, then check to ensure that this particular option exists in the filtered set
                         if (filteredOptions != null) {
                                 Iterator<XProcOptionInfo> itFilter = filteredOptions.iterator();
                                 boolean found = false;
                                 while (itFilter.hasNext()) {
-                                        String filteredOptName = itFilter.next().getName().toString();
+                                        QName filteredOptName = itFilter.next().getName();
                                         if (filteredOptName.equals(optionName)) {
                                                 found = true;
                                                 break;
@@ -553,7 +553,7 @@ public class JobsResource extends AuthenticatedResource {
                                 // then we are not allowed to set it
                                 // however, it still requires a value, so set it to ""
                                 if (!found) {
-                                        builder.withOption(new QName(optionName), "");
+                                        builder.withOption(optionName, "");
                                         continue;
                                 }
                         }
@@ -561,10 +561,10 @@ public class JobsResource extends AuthenticatedResource {
                         // this is an option we are allowed to set. so, look for the option in the job request doc.
                         for (int i = 0; i< nodes.getLength(); i++) {
                                 Element optionElm = (Element) nodes.item(i);
-                                String name = optionElm.getAttribute("name");
-                                XProcOptionMetadata metadata = script.getOptionMetadata(new QName(name));
+                                QName name = QName.valueOf(optionElm.getAttribute("name"));
+                                XProcOptionMetadata metadata = script.getOptionMetadata(name);
                                 if (metadata==null){
-                                        throw new IllegalArgumentException(String.format("Option %s is not recognized by script %s",name,script.getName()));
+                                        throw new IllegalArgumentException(String.format("Option %s is not recognized by script %s",name.toString(),script.getName()));
                                 }
 
                                 //if input we have to check
@@ -585,14 +585,14 @@ public class JobsResource extends AuthenticatedResource {
                                                                 val += metadata.getSeparator();
                                                         val += e.getAttribute("value");
                                                 }
-                                                builder.withOption(new QName(name), val);
+                                                builder.withOption(name, val);
                                         }
                                         else {
                                                 String val = optionElm.getTextContent();
                                                 if(isInput){
                                                         checkInput(val,zippedContext);
                                                 }
-                                                builder.withOption(new QName(name), val);
+                                                builder.withOption(name, val);
                                                 break;
                                         }
 
