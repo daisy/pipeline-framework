@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipFile;
 
 import javax.xml.namespace.QName;
@@ -371,12 +372,7 @@ public class JobsResource extends AuthenticatedResource {
 
                 addInputsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"input"), script.getXProcPipelineInfo().getInputPorts(), inBuilder,zip!=null);
 
-                /*Iterable<XProcOptionInfo> filteredOptions = null;
-                  if (!((PipelineWebService) getApplication()).isLocal()) {
-                  filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
-                  }*/
-
-                addOptionsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"option"), script, inBuilder,zip!=null);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
+                addOptionsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"option"), script, inBuilder,zip!=null);
                 addOutputsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"output"), script.getXProcPipelineInfo().getOutputPorts(), outBuilder);
 
                 BoundXProcScript bound= BoundXProcScript.from(script,inBuilder.build(),outBuilder.build());
@@ -490,7 +486,7 @@ public class JobsResource extends AuthenticatedResource {
         }
 
         /**
-         * Adds the inputs to job.
+         * Adds the outputs to job.
          *
          * @param nodes the nodes
          * @param inputPorts the input ports
@@ -524,18 +520,16 @@ public class JobsResource extends AuthenticatedResource {
          * Adds the options to job.
          * @throws LocalInputException
          */
-        //private void addOptionsToJob(NodeList nodes, Iterable<XProcOptionInfo> allOptions, XProcInput.Builder builder, Iterable<XProcOptionInfo> filteredOptions) {
         private void addOptionsToJob(NodeList nodes, XProcScript script,
                         XProcInput.Builder builder,boolean zippedContext) throws LocalInputException {
 
-                Iterable<XProcOptionInfo> allOptions = script.getXProcPipelineInfo().getOptions();
+                Iterator<XProcOptionInfo> allOptions = script.getXProcPipelineInfo().getOptions().iterator();
+                Iterable<XProcOptionInfo> filteredOptions
+                        = XProcScriptFilter.withoutOutputs(script).getXProcPipelineInfo().getOptions();
+                Map<QName,QName> renamedOptions = XProcScriptFilter.renameOptions(filteredOptions);
 
-                Iterable<XProcOptionInfo> filteredOptions = null;
-                filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
-
-                Iterator<XProcOptionInfo> it = allOptions.iterator();
-                while(it.hasNext()) {
-                        XProcOptionInfo opt = it.next();
+                while (allOptions.hasNext()) {
+                        XProcOptionInfo opt = allOptions.next();
                         QName optionName = opt.getName();
                         // if we are filtering options, then check to ensure that this particular option exists in the filtered set
                         if (filteredOptions != null) {
@@ -559,16 +553,20 @@ public class JobsResource extends AuthenticatedResource {
                         }
 
                         // this is an option we are allowed to set. so, look for the option in the job request doc.
+                        QName renamedOption = renamedOptions.get(optionName);
                         for (int i = 0; i< nodes.getLength(); i++) {
                                 Element optionElm = (Element) nodes.item(i);
                                 QName name = QName.valueOf(optionElm.getAttribute("name"));
-                                XProcOptionMetadata metadata = script.getOptionMetadata(name);
-                                if (metadata==null){
-                                        throw new IllegalArgumentException(String.format("Option %s is not recognized by script %s",name.toString(),script.getName()));
+                                if (!renamedOptions.values().contains(name)) {
+                                        throw new IllegalArgumentException(
+                                                String.format("Option %s is not recognized by script %s",
+                                                              name.toString(),
+                                                              script.getName()));
                                 }
 
                                 //if input we have to check
-                                if (name.equals(optionName)) {
+                                if (name.equals(renamedOption)) {
+                                        XProcOptionMetadata metadata = script.getOptionMetadata(optionName);
                                         boolean isInput = "anyDirURI".equals(metadata.getType()) || "anyFileURI".equals(metadata.getType());
                                         //eventhough the option is a sequence it may happen that 
                                         //there are no item elements, just one value
@@ -585,14 +583,14 @@ public class JobsResource extends AuthenticatedResource {
                                                                 val += metadata.getSeparator();
                                                         val += e.getAttribute("value");
                                                 }
-                                                builder.withOption(name, val);
+                                                builder.withOption(optionName, val);
                                         }
                                         else {
                                                 String val = optionElm.getTextContent();
                                                 if(isInput){
                                                         checkInput(val,zippedContext);
                                                 }
-                                                builder.withOption(name, val);
+                                                builder.withOption(optionName, val);
                                                 break;
                                         }
 
