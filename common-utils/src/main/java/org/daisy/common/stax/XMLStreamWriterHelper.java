@@ -136,7 +136,7 @@ public final class XMLStreamWriterHelper {
 					writeElement(writer, reader);
 					break;
 				default:
-					writeEvent(writer, event, reader);
+					writeEvent(writer, reader);
 				}
 			} catch (NoSuchElementException e) {
 				break;
@@ -164,13 +164,13 @@ public final class XMLStreamWriterHelper {
 						return;
 					break;
 				default:
-					writeEvent(writer, event, reader); }}
+					writeEvent(writer, reader); }}
 			catch (NoSuchElementException e) {
 				throw new RuntimeException("coding error"); }
 	}
 	
-	public static void writeEvent(XMLStreamWriter writer, int event, XMLStreamReader reader) throws XMLStreamException {
-		switch (event) {
+	public static void writeEvent(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
+		switch (reader.getEventType()) {
 		case START_DOCUMENT:
 			writer.writeStartDocument();
 			break;
