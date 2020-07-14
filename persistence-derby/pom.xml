@@ -41,7 +41,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
-      <version>1.0.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -152,6 +151,10 @@
         <configuration>
           <systemPropertyVariables>
             <pax.exam.logging>none</pax.exam.logging>
+            <!--
+                set this to "OSGiLessRunner" to test without OSGi, or to "PaxExam,OSGiLessRunner" to test both
+            -->
+            <org.daisy.pipeline.junit.runners>PaxExam</org.daisy.pipeline.junit.runners>
           </systemPropertyVariables>
           <trimStackTrace>false</trimStackTrace>
         </configuration>

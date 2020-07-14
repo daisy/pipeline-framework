@@ -86,7 +86,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
-      <version>1.0.4</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
