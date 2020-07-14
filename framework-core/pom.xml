@@ -66,6 +66,10 @@
           <groupId>org.daisy.maven</groupId>
           <artifactId>xproc-engine-daisy-pipeline</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.daisy.maven</groupId>
+          <artifactId>xprocspec-runner</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -100,10 +104,7 @@
         <configuration>
           <systemPropertyVariables>
             <pax.exam.logging>none</pax.exam.logging>
-            <!--
-                set this to "OSGiLessRunner" to test without OSGi, or to "PaxExam,OSGiLessRunner" to test both
-            -->
-            <org.daisy.pipeline.junit.runners>PaxExam</org.daisy.pipeline.junit.runners>
+            <org.daisy.pipeline.junit.runners>PaxExam,OSGiLessRunner</org.daisy.pipeline.junit.runners>
           </systemPropertyVariables>
           <trimStackTrace>false</trimStackTrace>
         </configuration>
@@ -168,13 +169,25 @@
               </includes>
             </configuration>
           </execution>
+          <execution>
+            <id>generate-spi-test-classes</id>
+            <phase>process-test-sources</phase>
+            <goals>
+              <goal>generate-spi-test-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                org.daisy.pipeline.datatypes.impl.Datatype_dtbook_mydatatype,
+                org.daisy.pipeline.script.impl.XProcScript_unit_test_script
+              </includes>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-build-helper</artifactId>
         <executions>
-          <!--
           <execution>
             <id>process-test-catalog</id>
             <phase>generate-test-sources</phase>
@@ -182,7 +195,6 @@
               <goal>process-test-catalog</goal>
             </goals>
           </execution>
-          -->
           <execution>
             <id>package-list</id>
             <phase>prepare-package</phase>
