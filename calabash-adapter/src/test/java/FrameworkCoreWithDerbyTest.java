@@ -29,7 +29,6 @@ import org.daisy.pipeline.job.JobMonitor;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.junit.AbstractTest;
 import org.daisy.pipeline.junit.OSGiLessConfiguration;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScriptService;
@@ -39,9 +38,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import org.ops4j.pax.exam.Configuration;
-import static org.ops4j.pax.exam.CoreOptions.composite;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.systemPackage;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.ProbeBuilder;
 import org.ops4j.pax.exam.TestProbeBuilder;
@@ -205,22 +201,7 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 	@Override @Configuration
 	public Option[] config() {
 		setup();
-		return options(
-			composite(super.config()),
-			// for derby
-			mavenBundle("org.eclipse:org.eclipse.gemini.jpa:?"),
-			mavenBundle("org.eclipse.gemini:org.eclipse.gemini.dbaccess.derby:?"),
-			mavenBundle("org.eclipse.gemini:org.eclipse.gemini.dbaccess.util:?"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.asm:?"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.antlr:?"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.core:?"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.jpa:?"),
-			mavenBundle("org.eclipse.persistence:javax.persistence:?"),
-			mavenBundle("org.eclipse.gemini:org.apache.derby:?"),
-			mavenBundle("org.osgi:org.osgi.enterprise:5.0.0"),
-			
-			systemPackage("javax.transaction")
-		);
+		return super.config();
 	}
 	
 	@ProbeBuilder

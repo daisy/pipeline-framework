@@ -4,12 +4,10 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 
 import org.daisy.pipeline.junit.AbstractTest;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 
 import org.ops4j.pax.exam.Configuration;
 import static org.ops4j.pax.exam.CoreOptions.composite;
 import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.systemPackage;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.ProbeBuilder;
@@ -22,6 +20,15 @@ public abstract class OSGiTestBase extends AbstractTest {
 	public String[] testDependencies() {
 		return new String[]{
 			"org.daisy.pipeline:framework-persistence:?",
+			"org.eclipse.gemini:org.apache.derby:?",
+			"org.eclipse.gemini:org.eclipse.gemini.dbaccess.derby:?",
+			"org.eclipse.gemini:org.eclipse.gemini.dbaccess.util:?",
+			"org.eclipse.persistence:javax.persistence:?",
+			"org.eclipse.persistence:org.eclipse.persistence.antlr:?",
+			"org.eclipse.persistence:org.eclipse.persistence.asm:?",
+			"org.eclipse.persistence:org.eclipse.persistence.core:?",
+			"org.eclipse.persistence:org.eclipse.persistence.jpa:?",
+			"org.eclipse:org.eclipse.gemini.jpa:?",
 		};
 	}
 	
@@ -49,18 +56,7 @@ public abstract class OSGiTestBase extends AbstractTest {
 			composite(super.config()),
 			systemProperty("org.daisy.pipeline.iobase").value(new File(PIPELINE_DATA, "jobs").getAbsolutePath()),
 			systemProperty("org.daisy.pipeline.data").value(PIPELINE_DATA.getAbsolutePath()),
-			systemProperty("derby.stream.error.file").value(new File(PIPELINE_BASE, "log/derby.log").getAbsolutePath()),
-			mavenBundle("org.eclipse:org.eclipse.gemini.jpa:?"),
-			mavenBundle("org.eclipse.gemini:org.eclipse.gemini.dbaccess.derby:?"),
-			mavenBundle("org.eclipse.gemini:org.eclipse.gemini.dbaccess.util:?"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.asm:?"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.antlr:?"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.core:?"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.jpa:?"),
-			mavenBundle("org.eclipse.persistence:javax.persistence:?"),
-			mavenBundle("org.eclipse.gemini:org.apache.derby:?"),
-			mavenBundle("org.osgi:org.osgi.enterprise:?"),
-			systemPackage("javax.transaction")
+			systemProperty("derby.stream.error.file").value(new File(PIPELINE_BASE, "log/derby.log").getAbsolutePath())
 		);
 	}
 	

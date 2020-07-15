@@ -130,7 +130,7 @@
             -->
             <Import-Package>
               !org.daisy.common.spi,
-              com.thaiopensource.*;version="[20120724.0,20151127]",
+              com.thaiopensource.*;version="20120724.0",
               *
             </Import-Package>
           </instructions>

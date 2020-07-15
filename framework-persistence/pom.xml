@@ -12,7 +12,6 @@
   <packaging>bundle</packaging>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <eclipselink.version>2.4.0</eclipselink.version>
   </properties>
   <name>DAISY Pipeline 2 :: Framework Persistence Layer</name>
   <dependencies>
@@ -66,14 +65,7 @@
     <dependency>
       <groupId>org.eclipse.persistence</groupId>
       <artifactId>eclipselink</artifactId>
-      <version>${eclipselink.version}</version>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>commonj.sdo</artifactId>
-          <groupId>commonj.sdo</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>

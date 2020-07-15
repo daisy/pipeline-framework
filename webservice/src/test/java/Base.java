@@ -15,7 +15,6 @@ import org.apache.commons.io.FileUtils;
 
 import org.daisy.pipeline.client.PipelineClient;
 import org.daisy.pipeline.junit.AbstractTest;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 
 import org.daisy.pipeline.webservice.jaxb.clients.Client;
 import org.daisy.pipeline.webservice.jaxb.job.Job;
@@ -45,16 +44,10 @@ import org.ops4j.pax.exam.util.PathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// FIXME: The combination of Surefire forking the process and Pax Exam forking it again can
-// apparently lead to "The forked VM terminated without properly saying goodbye" errors. Note that
-// the process keeps logging to the test.log file. The problem can not be pinpointed to a specific
-// test. I have not been able to make it work with pax-exam-container-native yet, nor with a
-// different Surefire configuration. The webservice tests were already disabled on Travis before for
-// a different reason.
-
 // FIXME: If a server is already running (e.g. a remnent of a previous test) there is an error in
 // the test.log file ("Shutting down the framework because of:Address already in use") but this is
 // not visible in the maven log.
+
 public abstract class Base extends AbstractTest {
 	
 	// This is a trick to make sure a PipelineWebService is instantiated. We can't inject
@@ -90,10 +83,6 @@ public abstract class Base extends AbstractTest {
 			"org.daisy.pipeline:framework-volatile:?",
 			"org.daisy.pipeline:calabash-adapter:?",
 			"org.daisy.pipeline:push-notifier:?",
-			// this bundle is not needed but may be included to prevent
-			// "com.sun.jersey.server.impl.provider.RuntimeDelegateImpl not found by com.sun.jersey.core"
-			// errors (not a fatal error)
-			// "com.sun.jersey:jersey-server:1.18.1",
 		};
 	}
 	
@@ -109,22 +98,6 @@ public abstract class Base extends AbstractTest {
 			
 			// for webservice-jaxb
 			bootDelegationPackage("com.sun.xml.internal.bind"),
-			
-			// for persistence-derby
-			mavenBundle("org.eclipse:org.eclipse.gemini.jpa:?"),
-			mavenBundle("org.eclipse.gemini:org.eclipse.gemini.dbaccess.derby:?"),
-			mavenBundle("org.eclipse.gemini:org.eclipse.gemini.dbaccess.util:?"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.jpa:?"),
-			mavenBundle("org.eclipse.persistence:javax.persistence:?"),
-			mavenBundle("org.eclipse.gemini:org.apache.derby:?"),
-			// for persistence-derby (TestMessagesWithDerby)
-			// but also org.eclipse.persistence:org.eclipse.persistence.moxy (<-- glassfish <-- clientlib-java-jaxb)
-			// Note that the versions need to be 2.3.2 for derby to work, but this has the result
-			// that org.eclipse.persistence.moxy (2.5.0) can not be resolved. Luckily this is not a
-			// problem for clientlib-java-jaxb. It only results in more error messages.
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.asm:?"),   // 2.3.2 (-> 2.5.0)
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.antlr:?"), // 2.3.2 (-> 2.5.0)
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.core:?"),  // 2.3.2 (-> 2.5.0)
 			
 			// for TestPushNotifications
 			systemPackage("com.sun.net.httpserver")
