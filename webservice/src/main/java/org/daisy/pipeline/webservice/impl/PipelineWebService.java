@@ -10,6 +10,10 @@ import org.daisy.common.priority.Priority;
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.common.properties.PropertyTracker;
+
+import org.daisy.common.spi.CreateOnStart;
+import org.daisy.common.spi.ServiceLoader;
+
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.job.Job;
@@ -246,11 +250,13 @@ public class PipelineWebService extends Application {
                 return false;
         }
 
+        /* FIXME: depending on how the application is invoked, this may not be the desired effect of
+         * calling halt */
         private void halt() {
                 if (OSGiHelper.inOSGiContext())
                         OSGiHelper.stopFramework();
                 else
-                        System.exit();
+                        System.exit(0);
         }
 
         /**
@@ -412,6 +418,21 @@ public class PipelineWebService extends Application {
                 return this.datatypeRegistry;
         }
 
+        /**
+         * Main method to launch the web service.
+         */
+        public static void main(String[] args) {
+                if (args.length > 0) {
+                        logger.error("No arguments expected");
+                        System.exit(1);
+                }
+                PipelineWebService webservice = SPIHelper.createWebService();
+                if (webservice == null)
+                        System.exit(1);
+                System.err.println("Press Ctrl-C to exit");
+                // program does not exit until last thread has finished
+        }
+
         // static nested class in order to delay class loading
         private static abstract class OSGiHelper {
 
@@ -430,6 +451,18 @@ public class PipelineWebService extends Application {
                         } catch (BundleException e) {
                                 throw new RuntimeException(e);
                         }
+                }
+        }
+
+        // static nested class in order to delay class loading
+        private static abstract class SPIHelper {
+
+                static PipelineWebService createWebService() {
+                        PipelineWebService webservice = null;
+                        for (CreateOnStart o : ServiceLoader.load(CreateOnStart.class))
+                                if (webservice == null && o instanceof PipelineWebService)
+                                        webservice = (PipelineWebService)o;
+                        return webservice;
                 }
         }
 }
