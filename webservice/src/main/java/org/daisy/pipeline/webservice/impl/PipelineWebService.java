@@ -7,9 +7,6 @@ import java.util.Map;
 import java.util.Random;
 
 import org.daisy.common.priority.Priority;
-import org.daisy.common.properties.PropertyPublisher;
-import org.daisy.common.properties.PropertyPublisherFactory;
-import org.daisy.common.properties.PropertyTracker;
 
 import org.daisy.common.spi.CreateOnStart;
 import org.daisy.common.spi.ServiceLoader;
@@ -78,7 +75,6 @@ public class PipelineWebService extends Application {
         private WebserviceStorage webserviceStorage;
         private CallbackHandler callbackHandler = null;
 
-        private PropertyPublisher propertyPublisher;
         private long shutDownKey=0L;
 
         private Component component;
@@ -119,7 +115,6 @@ public class PipelineWebService extends Application {
                 router.attach(Routes.CLIENTS_ROUTE, ClientsResource.class);
                 router.attach(Routes.CLIENT_ROUTE, ClientResource.class);
                 router.attach(Routes.HALT_ROUTE, HaltResource.class);
-                router.attach(Routes.PROPERTIES_ROUTE, PropertiesResource.class  );
                 router.attach(Routes.SIZES_ROUTE, SizesResource.class  );
                 router.attach(Routes.QUEUE_ROUTE, QueueResource.class  );
                 router.attach(Routes.QUEUE_UP_ROUTE, QueueUpResource.class  );
@@ -134,7 +129,6 @@ public class PipelineWebService extends Application {
          */
         @Activate
         public void init() {
-                this.conf.publishConfiguration(this.propertyPublisher);
                 if (!checkAuthenticationSanity()){
 
                         try {
@@ -375,33 +369,6 @@ public class PipelineWebService extends Application {
 
         public CallbackHandler getCallbackHandler() {
                 return callbackHandler;
-        }
-
-        @Reference(
-           name = "PropertyPublisherFactory",
-           unbind = "unsetPropertyPublisherFactory",
-           service = PropertyPublisherFactory.class,
-           cardinality = ReferenceCardinality.MANDATORY,
-           policy = ReferencePolicy.DYNAMIC
-        )
-        public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
-                this.propertyPublisher=propertyPublisherFactory.newPropertyPublisher(); 
-        }
-
-        public void unsetPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
-                this.propertyPublisher=propertyPublisherFactory.newPropertyPublisher(); 
-                this.conf.unpublishConfiguration(this.propertyPublisher);
-                this.propertyPublisher=null;
-        }
-        /**
-         * Gets the client store
-         *
-         * @return the client store
-         */
-        public PropertyTracker getPropertyTracker(){
-                if(this.propertyPublisher == null)
-                        return null;
-                return this.propertyPublisher.getTracker();
         }
 
         @Reference(

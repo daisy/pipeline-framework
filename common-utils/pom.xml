@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>common-utils</artifactId>
-  <version>3.1.1-SNAPSHOT</version>
+  <version>4.0.0-SNAPSHOT</version>
 
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Common Utilities</name>
@@ -39,11 +39,6 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
       <scope>provided</scope>
     </dependency>
     <!--
@@ -115,13 +110,8 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
-              !org.daisy.common.spi,
               *
             </Import-Package>
-            <_dsannotations>
-              org.daisy.common.properties.PropertyPublisherFactory,
-              org.daisy.common.properties.PropertyTracker
-            </_dsannotations>
           </instructions>
         </configuration>
         <executions>
@@ -131,25 +121,6 @@
             <goals>
               <goal>bundle</goal>
             </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.daisy.pipeline.build</groupId>
-        <artifactId>ds-to-spi-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-spi-classes</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>generate-spi-classes</goal>
-            </goals>
-            <configuration>
-              <includes>
-                org.daisy.common.properties.PropertyPublisherFactory,
-                org.daisy.common.properties.PropertyTracker
-              </includes>
-            </configuration>
           </execution>
         </executions>
       </plugin>
