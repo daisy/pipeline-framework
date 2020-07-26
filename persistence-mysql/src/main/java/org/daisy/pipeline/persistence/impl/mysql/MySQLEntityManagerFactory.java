@@ -16,7 +16,6 @@ import org.osgi.service.component.annotations.Component;
 
 @Component(
 	name = "daisy-mysql-emf",
-	immediate = true,
 	service = { EntityManagerFactory.class },
 	property = { "osgi.unit.name:String=pipeline-pu" }
 )

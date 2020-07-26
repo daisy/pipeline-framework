@@ -45,7 +45,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 // TODO: be sure to only do this N times per second
 @Component(
     name = "push-notifier",
-    immediate = true,
     service = { CallbackHandler.class }
 )
 public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor,Integer> {

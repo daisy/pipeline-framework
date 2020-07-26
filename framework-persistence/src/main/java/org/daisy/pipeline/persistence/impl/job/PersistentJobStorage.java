@@ -35,7 +35,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
     name = "persistent-job-storage",
-    immediate = true,
     service = { JobStorage.class }
 )
 public class PersistentJobStorage implements JobStorage {

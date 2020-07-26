@@ -26,7 +26,6 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
     name = "volatile-message-storage",
-    immediate = true,
     service = { MessageStorage.class }
 )
 public class VolatileMessageStorage implements MessageStorage {

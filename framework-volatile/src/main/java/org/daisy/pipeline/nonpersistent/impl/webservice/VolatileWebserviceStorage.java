@@ -15,7 +15,6 @@ import org.osgi.service.component.annotations.Component;
 
 @Component(
 	name = "volatile-webservice-storage",
-	immediate = true,
 	service = { WebserviceStorage.class }
 )
 public class VolatileWebserviceStorage   implements WebserviceStorage{

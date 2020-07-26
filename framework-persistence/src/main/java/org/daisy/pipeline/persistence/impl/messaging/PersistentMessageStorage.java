@@ -22,7 +22,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
 	name = "persistent-message-storage",
-	immediate = true,
 	service = { MessageStorage.class }
 )
 public class PersistentMessageStorage implements MessageStorage {

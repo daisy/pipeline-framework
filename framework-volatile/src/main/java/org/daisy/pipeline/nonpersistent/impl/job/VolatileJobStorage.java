@@ -34,7 +34,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
     name = "volatile-job-storage",
-    immediate = true,
     service = { JobStorage.class }
 )
 public class VolatileJobStorage implements JobStorage {
