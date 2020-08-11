@@ -8,6 +8,8 @@ import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.library.Identity;
 import com.xmlcalabash.runtime.XAtomicStep;
 
+import org.osgi.service.component.annotations.Component;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +35,11 @@ public class SleepStep extends Identity {
 		super.run();
 	}
 	
+	@Component(
+		name = "px:sleep",
+		service = { XProcStepProvider.class },
+		property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}sleep" }
+	)
 	public static class Provider implements XProcStepProvider {
 		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
 			return new SleepStep(runtime, step);

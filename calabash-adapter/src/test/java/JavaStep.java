@@ -16,6 +16,8 @@ import org.daisy.common.messaging.Message.Level;
 import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.event.ProgressMessageBuilder;
 
+import org.osgi.service.component.annotations.Component;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +60,11 @@ public class JavaStep extends Identity {
 		super.run();
 	}
 	
+	@Component(
+		name = "px:java-step",
+		service = { XProcStepProvider.class },
+		property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}java-step" }
+	)
 	public static class Provider implements XProcStepProvider {
 		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
 			return new JavaStep(runtime, step);
