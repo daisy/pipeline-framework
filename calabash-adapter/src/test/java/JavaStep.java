@@ -3,11 +3,10 @@ import java.math.BigDecimal;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
-import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.library.Identity;
 import com.xmlcalabash.runtime.XAtomicStep;
 
@@ -21,7 +20,7 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JavaStep extends Identity {
+public class JavaStep extends Identity implements XProcStep {
 	
 	private static final Logger logger = LoggerFactory.getLogger(JavaStep.class);
 	private static final QName _throw_error = new QName("throw-error");
