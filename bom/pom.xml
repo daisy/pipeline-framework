@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-bom</artifactId>
-  <version>1.13.3</version>
+  <version>1.13.4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework BoM</name>
@@ -506,8 +506,4 @@
 
     </dependencies>
   </dependencyManagement>
-
-  <scm>
-    <tag>v1.13.3</tag>
-  </scm>
 </project>
