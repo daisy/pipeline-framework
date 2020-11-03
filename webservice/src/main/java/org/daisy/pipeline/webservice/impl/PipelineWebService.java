@@ -379,7 +379,7 @@ public class PipelineWebService extends Application {
          */
         public static void main(String[] args) {
                 if (args.length > 0) {
-                        logger.error("No arguments expected");
+                        logger.error("No arguments expected (got '" + String.join(" ", args) + "')");
                         System.exit(1);
                 }
                 PipelineWebService webservice = SPIHelper.createWebService();
