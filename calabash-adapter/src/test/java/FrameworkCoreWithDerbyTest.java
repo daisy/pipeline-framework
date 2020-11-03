@@ -177,7 +177,6 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 	@Override
 	protected Properties systemProperties() {
 		Properties p = new Properties();
-		p.setProperty("org.daisy.pipeline.iobase", new File(PIPELINE_DATA, "jobs").getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.persistence", "true");
 		p.setProperty("derby.stream.error.file", new File(PIPELINE_DATA, "log/derby.log").getAbsolutePath());

@@ -61,7 +61,6 @@ public abstract class TestBase extends AbstractTest {
 	@Override
 	protected Properties systemProperties() {
 		Properties props = new Properties();
-		props.setProperty("org.daisy.pipeline.iobase", new File(PIPELINE_DATA, "jobs").getAbsolutePath());
 		props.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
 		props.setProperty("derby.stream.error.file", new File(PIPELINE_BASE, "log/derby.log").getAbsolutePath());
 		return props;
