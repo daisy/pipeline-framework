@@ -80,6 +80,7 @@ public class DynamicXProcConfigurationFactory implements
 	 */
 	@Override
 	public XProcConfiguration newConfiguration() {
+		System.setProperty("com.xmlcalabash.config.user", ""); // skip loading configuration from ~/.calabash
 		XProcConfiguration config = new DynamicXProcConfiguration(
 			new Input(null, null, Input.Type.XML) {
 				@Override
@@ -112,6 +113,7 @@ public class DynamicXProcConfigurationFactory implements
 	 */
 	@Override
 	public XProcConfiguration newConfiguration(boolean schemaAware) {
+		System.setProperty("com.xmlcalabash.config.user", "");
 		XProcConfiguration config = new DynamicXProcConfiguration(schemaAware,
 				this);
 		loadMainConfigurationFile(config);
@@ -133,6 +135,7 @@ public class DynamicXProcConfigurationFactory implements
 	 */
 	@Override
 	public XProcConfiguration newConfiguration(Processor processor) {
+		System.setProperty("com.xmlcalabash.config.user", "");
 		XProcConfiguration config = new DynamicXProcConfiguration(processor,
 				this);
 		loadMainConfigurationFile(config);
