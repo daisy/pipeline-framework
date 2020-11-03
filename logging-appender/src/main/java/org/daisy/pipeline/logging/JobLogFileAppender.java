@@ -19,6 +19,7 @@ import ch.qos.logback.core.sift.AppenderFactoryBase;
 import ch.qos.logback.core.sift.SiftingJoranConfiguratorBase;
 import ch.qos.logback.core.FileAppender;
 
+import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.job.JobURIUtils;
 
 /**

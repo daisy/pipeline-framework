@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 
+import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.job.impl.IOHelper;
-import org.daisy.pipeline.properties.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

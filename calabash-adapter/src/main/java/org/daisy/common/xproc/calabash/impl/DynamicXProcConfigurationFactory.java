@@ -20,6 +20,7 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.properties.Properties;
 import org.daisy.common.xproc.calabash.ConfigurationFileProvider;
 import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
@@ -237,7 +238,7 @@ public class DynamicXProcConfigurationFactory implements
 	 */
 	private void loadMainConfigurationFile(XProcConfiguration conf) {
 		// TODO cleanup and cache
-		String prop = System.getProperty(CONFIG_PATH);
+		String prop = Properties.getProperty(CONFIG_PATH);
 		if (prop != null) {
 			File configPath; {
 				if (prop.startsWith("file:")) {

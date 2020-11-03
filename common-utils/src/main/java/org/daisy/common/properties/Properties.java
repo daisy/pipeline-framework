@@ -1,4 +1,4 @@
-package org.daisy.pipeline.properties;
+package org.daisy.common.properties;
 
 import java.util.HashSet;
 import java.util.Map;
