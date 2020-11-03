@@ -34,6 +34,8 @@ public class DerbyEntityManagerFactory extends ForwardingEntityManagerFactory {
 		props.put(JAVAX_PERSISTENCE_JDBC_URL,
 				DERBY_DB_URL);
 		logger.debug(DERBY_DB_URL);
+		System.setProperty("derby.stream.error.file",
+		                   Properties.getProperty("org.daisy.pipeline.logdir") + "/derby.log");
 	}
 
 	public DerbyEntityManagerFactory(){
