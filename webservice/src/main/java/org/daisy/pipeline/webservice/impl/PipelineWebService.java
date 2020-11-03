@@ -207,7 +207,7 @@ public class PipelineWebService extends Application {
                                         +"\n"
                                         +"************************************************************\n"
                                         +"WS mode authenticated but the client store is empty, exiting\n"
-                                        +"please provide values for the following properties in etc/system.properties: \n"
+                                        +"please provide values for the following properties:\n"
                                         +"-org.daisy.pipeline.ws.authentication.key    \n"
                                         +"-org.daisy.pipeline.ws.authentication.secret \n"
                                         +"************************************************************\n"
