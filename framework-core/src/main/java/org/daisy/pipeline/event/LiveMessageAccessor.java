@@ -4,8 +4,12 @@ import java.util.function.BiConsumer;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.daisy.common.messaging.AbstractMessageAccessor;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
+import org.daisy.common.messaging.MessageUpdate;
+import org.daisy.common.messaging.ProgressMessage;
+import org.daisy.pipeline.properties.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,13 +21,23 @@ import org.slf4j.LoggerFactory;
 public class LiveMessageAccessor extends AbstractMessageAccessor {
 
 	private static Logger logger = LoggerFactory.getLogger(LiveMessageAccessor.class);
+	private static Message.Level threshold;
+	static {
+		try {
+			threshold = Message.Level.valueOf(Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
+		} catch (IllegalArgumentException e) {
+			threshold = Message.Level.INFO;
+		}
+	}
 
+	final String id;
 	private final MessageEventListener eventListener;
 	private final List<BiConsumer<MessageAccessor,Integer>> callbacks;
 	private final List<Message> messages;
 
 	public LiveMessageAccessor(String id, MessageEventListener eventListener) {
-		super(id);
+		super(threshold);
+		this.id = id;
 		this.eventListener = eventListener;
 		this.callbacks = new LinkedList<>();
 		this.messages = new LinkedList<>();
@@ -60,7 +74,7 @@ public class LiveMessageAccessor extends AbstractMessageAccessor {
 		}
 	}
 
-	void handleMessageUpdate(ProgressMessageUpdate update) {
+	void handleMessageUpdate(MessageUpdate update) {
 		synchronized (callbacks) {
 			for (BiConsumer<MessageAccessor,Integer> c : callbacks)
 				c.accept(this, update.getSequence());

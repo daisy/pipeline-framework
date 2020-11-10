@@ -45,10 +45,10 @@ import org.apache.commons.io.FileUtils;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
+import org.daisy.common.messaging.ProgressMessage;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
@@ -307,7 +307,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "foobar\n" +
-			                 "	at JavaStep.run(JavaStep.java:57)\n" +
+			                 "	at JavaStep.run(JavaStep.java:55)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
@@ -342,7 +342,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "foobar\n" +
-			                 "	at JavaFunction$1.call(JavaFunction.java:78)\n" +
+			                 "	at JavaFunction$1.call(JavaFunction.java:81)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/functions}java-function\n" +
 			                 "	at xsl:value-of/@select(java-function-runtime-error.xpl:26)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/functions}user-function()(java-function-runtime-error.xpl:23)\n" +

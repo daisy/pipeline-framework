@@ -1,4 +1,4 @@
-package org.daisy.pipeline.event;
+package org.daisy.common.messaging;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -15,7 +15,6 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor.MessageFilter;
 

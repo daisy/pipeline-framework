@@ -21,7 +21,7 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
     </dependency>
-    <dependency>
+     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
     </dependency>
@@ -44,12 +44,10 @@
         <configuration>
           <instructions>
             <Fragment-Host>ch.qos.logback.classic</Fragment-Host>
-           <!--<Export-Package>org.daisy.pipeline.logging</Export-Package> -->
           </instructions>
         </configuration>
       </plugin>
     </plugins>
   </build>
-
 
 </project>

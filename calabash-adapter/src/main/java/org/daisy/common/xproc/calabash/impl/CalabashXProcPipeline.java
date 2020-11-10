@@ -197,7 +197,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	 * )
 	 */
 	@Override
-	public XProcResult run(XProcInput data, XProcMonitor monitor,Properties props) throws XProcErrorException {
+	public XProcResult run(XProcInput data, XProcMonitor monitor, Properties props) throws XProcErrorException {
 		PipelineInstance pipeline = pipelineSupplier.get();
 		// monitor.setMessageAccessor(pipeline.messageAccessor);
 		if (props != null) {
