@@ -3,7 +3,6 @@ package org.daisy.pipeline.job;
 import java.io.IOException;
 
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.job.impl.JobURIUtils;
 import org.daisy.pipeline.job.impl.XProcDecorator;
 import org.daisy.pipeline.script.BoundXProcScript;
 
@@ -47,7 +46,7 @@ public class JobContextFactory {
         private static class MappingJobContext extends AbstractJobContext {
 
         	public MappingJobContext(Client client,JobId id, JobBatchId batchId,String niceName,BoundXProcScript boundScript,JobResources collection) throws IOException{
-        		super(client,id,batchId,niceName,boundScript,JobURIUtils.newURIMapper(id));
+        		super(client, id, batchId, niceName, boundScript, JobURIUtils.newURIMapper(id.toString()));
         		XProcDecorator decorator=XProcDecorator.from(this.getScript(),this.getMapper(),collection);
         		this.setInput(decorator.decorate(this.getInputs()));
         		this.setOutput(decorator.decorate(this.getOutputs()));
@@ -58,7 +57,7 @@ public class JobContextFactory {
         private final class SimpleJobContext extends AbstractJobContext {
 
         	public SimpleJobContext(Client client,JobId id, JobBatchId batchId,String niceName,BoundXProcScript boundScript) throws IOException {
-        		super(client,id,batchId,niceName, boundScript,JobURIUtils.newOutputURIMapper(id));
+        		super(client, id, batchId, niceName, boundScript, JobURIUtils.newOutputURIMapper(id.toString()));
         		XProcDecorator decorator=XProcDecorator.from(this.getScript(),this.getMapper());
         		this.setInput(decorator.decorate(this.getInputs()));
         		this.setOutput(decorator.decorate(this.getOutputs()));

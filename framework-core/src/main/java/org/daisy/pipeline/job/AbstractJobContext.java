@@ -7,7 +7,6 @@ import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.job.impl.JobURIUtils;
 import org.daisy.pipeline.job.impl.JobResultSetBuilder;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScript;
@@ -61,7 +60,7 @@ public abstract class AbstractJobContext implements JobContext{
                 this.mapper=mapper;
 
                 if(id!=null)
-                        this.logFile=JobURIUtils.getLogFile(id);
+                        this.logFile = JobURIUtils.getLogFile(id.toString()).toURI();
                 else
                         this.logFile=URI.create("");
 
@@ -185,7 +184,7 @@ public abstract class AbstractJobContext implements JobContext{
 
         public void cleanUp(){
                 logger.info(String.format( "Deleting context for job %s" ,this.id));
-                JobURIUtils.cleanJobBase(this.id);
+                JobURIUtils.cleanJobBase(this.id.toString());
         }
 
 

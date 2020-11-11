@@ -51,7 +51,7 @@ public interface MessageAppender {
 	/**
 	 * Returns the active block in the specified message thread.
 	 *
-	 * This method is intended to be used by the <code>EventBusAppender</code> class which receives
+	 * This method is intended to be used by the <code>JobProgressAppender</code> class which receives
 	 * log messages with "message-thread" info attached to them through the {@link org.slf4j.MDC}
 	 * mechanism.
 	 */

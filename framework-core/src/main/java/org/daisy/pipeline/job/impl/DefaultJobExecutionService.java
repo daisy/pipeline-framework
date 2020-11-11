@@ -122,7 +122,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
                 return new ThreadWrapper(new Runnable() {
                         @Override
                         public void run() {
-                                // used with IgnoreSiftAppender in config-logback.xml and also in EventBusProvider
+                                // used in JobLogFileAppender and also in EventBusProvider
                                 MDC.put("jobid", job.getId().toString());
                                 logger.info("Starting to log to job's log file too:" + job.getId().toString());
                                 job.run(xprocEngine);

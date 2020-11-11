@@ -5,17 +5,17 @@ import java.io.File;
 import junit.framework.Assert;
 
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.job.JobContext;
-import org.daisy.pipeline.job.JobContextFactory;
-import org.daisy.pipeline.job.impl.JobURIUtils;
 import org.daisy.pipeline.script.BoundXProcScript;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
 @RunWith(MockitoJUnitRunner.class)
 public class JobContextFactoryTest   {
         @Mock Client client;
