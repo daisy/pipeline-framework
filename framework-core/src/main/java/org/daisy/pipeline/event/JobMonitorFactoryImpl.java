@@ -9,7 +9,7 @@ import org.daisy.pipeline.job.JobMonitor;
 import org.daisy.pipeline.job.JobMonitorFactory;
 
 import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.RemovalNotification;
+import com.google.common.eventbus.EventBus;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -28,6 +28,7 @@ public class JobMonitorFactoryImpl implements JobMonitorFactory {
 	}
 
 	private MessageEventListener messageEventListener;
+	private EventBus eventBus;
 
 	@Reference(
 		name = "event-listener",
@@ -51,6 +52,17 @@ public class JobMonitorFactoryImpl implements JobMonitorFactory {
 	)
 	public void setMessageStorage(MessageStorage storage) {
 		this.messageStorage = storage;
+	}
+
+	@Reference(
+		name = "event-bus-provider",
+		unbind = "-",
+		service = EventBusProvider.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
+	public void setEventBus(EventBusProvider provider) {
+		eventBus = provider.get();
 	}
 
 	private final Map<String,MessageAccessor> liveAccessors;
@@ -107,6 +119,11 @@ public class JobMonitorFactoryImpl implements JobMonitorFactory {
 		@Override
 		public MessageAccessor getMessageAccessor() {
 			return accessor;
+		}
+
+		@Override
+		public EventBus getEventBus() {
+			return eventBus;
 		}
 	}
 }

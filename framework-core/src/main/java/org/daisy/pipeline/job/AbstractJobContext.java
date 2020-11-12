@@ -3,7 +3,6 @@ package org.daisy.pipeline.job;
 import java.net.URI;
 
 import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.clients.Client;
@@ -33,7 +32,7 @@ public abstract class AbstractJobContext implements JobContext{
 
         private JobBatchId batchId;
         /** monitor */
-        private XProcMonitor monitor;
+        private JobMonitor monitor;
 
         private URI logFile;
 
@@ -128,7 +127,7 @@ public abstract class AbstractJobContext implements JobContext{
         }
 
         @Override
-        public XProcMonitor getMonitor() {
+        public JobMonitor getMonitor() {
                 return this.monitor;
         }
 
@@ -208,7 +207,7 @@ public abstract class AbstractJobContext implements JobContext{
         }
 
         @Override
-        public void setMonitor(XProcMonitor monitor) {
+        public void setMonitor(JobMonitor monitor) {
                 this.monitor=monitor;
         }
 

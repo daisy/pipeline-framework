@@ -8,7 +8,6 @@ import java.util.Map;
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
-import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
@@ -25,7 +24,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
-import com.google.common.eventbus.EventBus;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -45,7 +43,6 @@ public class VolatileJobStorage implements JobStorage {
                         .getLogger(VolatileJobStorage.class);
         private Map<JobId, Job> jobs = Collections
                         .synchronizedMap(new HashMap<JobId, Job>());
-        private EventBus eventBus;
         private JobMonitorFactory jobMonitorFactory;
         private Predicate<Job> filter = Predicates.alwaysTrue();
 
@@ -60,23 +57,11 @@ public class VolatileJobStorage implements JobStorage {
                         throw new RuntimeException("Volatile storage is disabled");
         }
 
-        VolatileJobStorage(Map<JobId,Job> jobs, EventBus eventBus, JobMonitorFactory jobMonitorFactory,
+        VolatileJobStorage(Map<JobId,Job> jobs, JobMonitorFactory jobMonitorFactory,
                            Predicate<Job> filter) {
                 this.jobs = jobs;
-                this.eventBus = eventBus;
                 this.jobMonitorFactory = jobMonitorFactory;
                 this.filter = filter;
-        }
-
-        @Reference(
-            name = "event-bus-provider",
-            unbind = "-",
-            service = EventBusProvider.class,
-            cardinality = ReferenceCardinality.MANDATORY,
-            policy = ReferencePolicy.STATIC
-        )
-        public void setEventBus(EventBusProvider provider) {
-                eventBus = provider.get();
         }
 
         @Reference(
@@ -126,7 +111,7 @@ public class VolatileJobStorage implements JobStorage {
 
         @Override
         public JobStorage filterBy(final JobBatchId batchId) {
-                return new VolatileJobStorage(jobs, eventBus, jobMonitorFactory, Predicates.and(this.filter, new Predicate<Job>() {
+                return new VolatileJobStorage(jobs, jobMonitorFactory, Predicates.and(this.filter, new Predicate<Job>() {
 
                         @Override
                         public boolean apply(Job job) {
@@ -142,7 +127,7 @@ public class VolatileJobStorage implements JobStorage {
                 if (client.getRole().equals(Role.ADMIN)){
                         return this;
                 }else{
-                        return new VolatileJobStorage(jobs, eventBus, jobMonitorFactory, Predicates.and(this.filter, new Predicate<Job>() {
+                        return new VolatileJobStorage(jobs, jobMonitorFactory, Predicates.and(this.filter, new Predicate<Job>() {
 
                                 @Override
                                 public boolean apply(Job job) {
@@ -158,8 +143,6 @@ public class VolatileJobStorage implements JobStorage {
                         super(ctxt, priority);
                         if (VolatileJobStorage.this.jobMonitorFactory != null)
                                 setJobMonitor(VolatileJobStorage.this.jobMonitorFactory);
-                        if (VolatileJobStorage.this.eventBus != null)
-                                setEventBus(VolatileJobStorage.this.eventBus);
                         // Store the job before broadcasting its status
                         VolatileJobStorage.this.jobs.put(ctxt.getId(), this);
                         changeStatus(Status.IDLE);

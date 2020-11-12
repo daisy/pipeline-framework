@@ -28,7 +28,6 @@ public abstract class AbstractJob implements Job {
         private volatile Status status = Status.IDLE;
         private Priority priority;
         protected JobContext ctxt;
-        private EventBus eventBus;
 
         protected AbstractJob(JobContext ctxt, Priority priority) {
                 this.ctxt = ctxt;
@@ -60,10 +59,6 @@ public abstract class AbstractJob implements Job {
                 this.priority=priority;
         }
 
-        public void setEventBus(EventBus eventBus) {
-                this.eventBus = eventBus;
-        }
-
         public void setJobMonitor(JobMonitorFactory factory) {
                 this.ctxt.setMonitor(factory.newJobMonitor(this.getId(), getStatus() == Status.IDLE));
         }
@@ -91,8 +86,9 @@ public abstract class AbstractJob implements Job {
                 this.status=to;
                 this.onStatusChanged(to);
                 //System.out.println("CHANGING STATUS IN THE DB BEFORE POSTING IT!");
-                if (this.eventBus!=null)
-                        this.eventBus.post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
+                EventBus eventBus = ctxt.getMonitor() != null ? ctxt.getMonitor().getEventBus() : null;
+                if (eventBus != null)
+                        eventBus.post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
                 else
                         logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? " the context ": " event bus ") + "is null");
         }
@@ -103,14 +99,15 @@ public abstract class AbstractJob implements Job {
                 MessageAppender m;
                 while ((m = MessageAppender.getActiveBlock()) != null)
                         m.close();
-                if (this.eventBus != null) {
+                EventBus eventBus = ctxt.getMonitor() != null ? ctxt.getMonitor().getEventBus() : null;
+                if (eventBus != null) {
                         m = new MessageBuilder()
                                 .withOwnerId(this.getId().toString())
                                 .withLevel(Level.ERROR)
                                 .withText(text)
                                 .build();
                         m.close();
-                        this.eventBus.post((ProgressMessage)m);
+                        eventBus.post((ProgressMessage)m);
                 } else
                         logger.warn("I couldnt broadcast an error "+((this.ctxt==null)? " the context ": " event bus ") + "is null");
         }

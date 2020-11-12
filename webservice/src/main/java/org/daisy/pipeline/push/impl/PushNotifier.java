@@ -14,11 +14,11 @@ import java.util.TimerTask;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.pipeline.clients.ClientStorage;
-import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.Status;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
+import org.daisy.pipeline.job.JobMonitor;
 import org.daisy.pipeline.job.StatusMessage;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
@@ -97,17 +97,6 @@ public class PushNotifier implements CallbackHandler {
                 }
         }
 
-        @Reference(
-           name = "event-bus-provider",
-           unbind = "-",
-           service = EventBusProvider.class,
-           cardinality = ReferenceCardinality.MANDATORY,
-           policy = ReferencePolicy.STATIC
-        )
-        public void setEventBusProvider(EventBusProvider eventBusProvider) {
-                eventBusProvider.get().register(this);
-        }
-
         /**
          * @param clientStorage the clientStorage to set
          */
@@ -151,7 +140,9 @@ public class PushNotifier implements CallbackHandler {
                                         alreadyListening = true;
                                         break; }
                         if (!alreadyListening) {
-                                MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+                                JobMonitor monitor = job.getContext().getMonitor();
+                                monitor.getEventBus().register(this);
+                                MessageAccessor accessor = monitor.getMessageAccessor();
                                 jobForAccessor.put(accessor, job);
                                 Consumer<Integer> listener = i -> update(accessor, i);
                                 accessor.listen(listener);
@@ -185,7 +176,7 @@ public class PushNotifier implements CallbackHandler {
                         callbacks.remove(job);
         }
 
-        // notify of message updates
+        // get notified of message updates
         private void update(MessageAccessor accessor, Integer sequence) {
                 Job job = jobForAccessor.get(accessor);
                 logger.trace("handling message update: [job: " + job.getId() + ", event: " + sequence + "]");
@@ -197,8 +188,9 @@ public class PushNotifier implements CallbackHandler {
                 }
         }
 
+        // get notified of status updates
         @Subscribe
-        public void handleStatus(StatusMessage message) {
+        private void update(StatusMessage message) {
                 logger.debug(String.format("Status changed %s->%s",message.getJobId(),message.getStatus()));
                 StatusHolder holder= new StatusHolder();
                 holder.status=message.getStatus();

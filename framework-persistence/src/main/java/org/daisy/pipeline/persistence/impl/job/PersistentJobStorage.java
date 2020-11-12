@@ -10,7 +10,6 @@ import javax.persistence.TypedQuery;
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
-import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobContext;
@@ -26,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
-import com.google.common.eventbus.EventBus;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -48,17 +46,15 @@ public class PersistentJobStorage implements JobStorage {
 
         private Database db;
 
-        private EventBus eventBus;
         private JobMonitorFactory jobMonitorFactory;
 
         private QueryDecorator<PersistentJob> filter;
 
         public PersistentJobStorage(){}
 
-        PersistentJobStorage(Database db, QueryDecorator<PersistentJob> filter, EventBus eventBus, JobMonitorFactory jobMonitorFactory) {
+        PersistentJobStorage(Database db, QueryDecorator<PersistentJob> filter, JobMonitorFactory jobMonitorFactory) {
                 this.db=db;
                 this.filter=filter;
-                this.eventBus = eventBus;
                 this.jobMonitorFactory = jobMonitorFactory;
         }
 
@@ -84,17 +80,6 @@ public class PersistentJobStorage implements JobStorage {
         )
         public void setRegistry(ScriptRegistry scriptRegistry) {
                 PersistentJobContext.setScriptRegistry(scriptRegistry);
-        }
-
-        @Reference(
-            name = "event-bus-provider",
-            unbind = "-",
-            service = EventBusProvider.class,
-            cardinality = ReferenceCardinality.MANDATORY,
-            policy = ReferencePolicy.STATIC
-        )
-        public void setEventBus(EventBusProvider provider) {
-                eventBus = provider.get();
         }
 
         @Reference(
@@ -138,8 +123,6 @@ public class PersistentJobStorage implements JobStorage {
                                                 // set event bus and monitor
                                                 if (PersistentJobStorage.this.jobMonitorFactory != null)
                                                         job.setJobMonitor(PersistentJobStorage.this.jobMonitorFactory);
-                                                if (PersistentJobStorage.this.eventBus != null)
-                                                        job.setEventBus(PersistentJobStorage.this.eventBus);
                                                 return job;
                                         }
                                 }).iterator();
@@ -154,8 +137,6 @@ public class PersistentJobStorage implements JobStorage {
                 // set event bus and monitor
                 if (jobMonitorFactory != null)
                         pjob.setJobMonitor(jobMonitorFactory);
-                if (eventBus != null)
-                        pjob.setEventBus(eventBus);
                 return Optional.of(pjob);
         }
 
@@ -188,8 +169,6 @@ public class PersistentJobStorage implements JobStorage {
                         // set event bus and monitor
                         if (jobMonitorFactory != null)
                                 job.setJobMonitor(jobMonitorFactory);
-                        if (eventBus != null)
-                                job.setEventBus(eventBus);
                 }
                 return Optional.fromNullable((Job)job);
         }
@@ -201,7 +180,7 @@ public class PersistentJobStorage implements JobStorage {
                 }else{
                         QueryDecorator<PersistentJob> byClient= new ClientFilter(this.db.getEntityManager(),client);
                         byClient.setNext(filter);
-                        return new PersistentJobStorage(db, byClient, eventBus, jobMonitorFactory);
+                        return new PersistentJobStorage(db, byClient, jobMonitorFactory);
                 }
         }
 
@@ -209,7 +188,7 @@ public class PersistentJobStorage implements JobStorage {
         public JobStorage filterBy(JobBatchId id) {
                 QueryDecorator<PersistentJob> byBatchId= new BatchFilter(this.db.getEntityManager(),id);
                 byBatchId.setNext(filter);
-                return new PersistentJobStorage(db, byBatchId, eventBus, jobMonitorFactory);
+                return new PersistentJobStorage(db, byBatchId, jobMonitorFactory);
         }
         
 }
