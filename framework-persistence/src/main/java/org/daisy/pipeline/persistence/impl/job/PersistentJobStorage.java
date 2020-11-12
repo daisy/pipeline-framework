@@ -10,13 +10,13 @@ import javax.persistence.TypedQuery;
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
+import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.Job.JobBuilder;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobStorage;
-import org.daisy.pipeline.job.RuntimeConfigurator;
 import org.daisy.pipeline.persistence.impl.Database;
 import org.daisy.pipeline.properties.Properties;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
+import com.google.common.eventbus.EventBus;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -47,17 +48,18 @@ public class PersistentJobStorage implements JobStorage {
 
         private Database db;
 
-        private RuntimeConfigurator configurator;
+        private EventBus eventBus;
+        private JobMonitorFactory jobMonitorFactory;
 
         private QueryDecorator<PersistentJob> filter;
 
         public PersistentJobStorage(){}
 
-        PersistentJobStorage(Database db,QueryDecorator<PersistentJob> filter,
-                        RuntimeConfigurator configurator){
+        PersistentJobStorage(Database db, QueryDecorator<PersistentJob> filter, EventBus eventBus, JobMonitorFactory jobMonitorFactory) {
                 this.db=db;
                 this.filter=filter;
-                this.configurator=configurator;
+                this.eventBus = eventBus;
+                this.jobMonitorFactory = jobMonitorFactory;
         }
 
         @Reference(
@@ -84,6 +86,28 @@ public class PersistentJobStorage implements JobStorage {
                 PersistentJobContext.setScriptRegistry(scriptRegistry);
         }
 
+        @Reference(
+            name = "event-bus-provider",
+            unbind = "-",
+            service = EventBusProvider.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.STATIC
+        )
+        public void setEventBus(EventBusProvider provider) {
+                eventBus = provider.get();
+        }
+
+        @Reference(
+            name = "monitor",
+            unbind = "-",
+            service = JobMonitorFactory.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.STATIC
+        )
+        public void setJobMonitorFactory(JobMonitorFactory factory){
+                jobMonitorFactory = factory;
+        }
+
         /**
          * @throws RuntimeException if persistent storage is disabled through the org.daisy.pipeline.persistence system property.
          */
@@ -108,11 +132,14 @@ public class PersistentJobStorage implements JobStorage {
                 query.setHint(STORE_MODE, CacheStoreMode.REFRESH);
 
                 return Collections2.transform(query.getResultList(),
-                                new Function<Job, Job>() {
+                                new Function<PersistentJob,Job>() {
                                         @Override
-                                        public Job apply(Job job) {
+                                        public Job apply(PersistentJob job) {
                                                 // set event bus and monitor
-                                                PersistentJobStorage.this.configurator.configure(job);
+                                                if (PersistentJobStorage.this.jobMonitorFactory != null)
+                                                        job.setJobMonitor(PersistentJobStorage.this.jobMonitorFactory);
+                                                if (PersistentJobStorage.this.eventBus != null)
+                                                        job.setEventBus(PersistentJobStorage.this.eventBus);
                                                 return job;
                                         }
                                 }).iterator();
@@ -123,11 +150,12 @@ public class PersistentJobStorage implements JobStorage {
         public Optional<Job> add(Priority priority,JobContext ctxt) {
                 checkDatabase();
                 logger.debug("Adding job to db:" + ctxt.getId());
-                JobBuilder builder = new PersistentJob.PersistentJobBuilder(db).withPriority(priority)
-                                .withContext(ctxt);
-                Job pjob = builder.build();
+                PersistentJob pjob = new PersistentJob(db, ctxt, priority);
                 // set event bus and monitor
-                this.configurator.configure(pjob);
+                if (jobMonitorFactory != null)
+                        pjob.setJobMonitor(jobMonitorFactory);
+                if (eventBus != null)
+                        pjob.setEventBus(eventBus);
                 return Optional.of(pjob);
         }
 
@@ -158,7 +186,10 @@ public class PersistentJobStorage implements JobStorage {
                 if (job != null) {
                         job.setDatabase(db);
                         // set event bus and monitor
-                        this.configurator.configure(job);
+                        if (jobMonitorFactory != null)
+                                job.setJobMonitor(jobMonitorFactory);
+                        if (eventBus != null)
+                                job.setEventBus(eventBus);
                 }
                 return Optional.fromNullable((Job)job);
         }
@@ -170,29 +201,15 @@ public class PersistentJobStorage implements JobStorage {
                 }else{
                         QueryDecorator<PersistentJob> byClient= new ClientFilter(this.db.getEntityManager(),client);
                         byClient.setNext(filter);
-                        return new PersistentJobStorage(this.db,byClient,this.configurator);
+                        return new PersistentJobStorage(db, byClient, eventBus, jobMonitorFactory);
                 }
-        }
-
-        /**
-         * @param configurator the configurator to set
-         */
-        @Reference(
-           name = "runtime-configurator",
-           unbind = "-",
-           service = RuntimeConfigurator.class,
-           cardinality = ReferenceCardinality.MANDATORY,
-           policy = ReferencePolicy.STATIC
-        )
-        public void setConfigurator(RuntimeConfigurator configurator) {
-                this.configurator = configurator;
         }
 
         @Override
         public JobStorage filterBy(JobBatchId id) {
                 QueryDecorator<PersistentJob> byBatchId= new BatchFilter(this.db.getEntityManager(),id);
                 byBatchId.setNext(filter);
-                return new PersistentJobStorage(this.db,byBatchId,this.configurator);
+                return new PersistentJobStorage(db, byBatchId, eventBus, jobMonitorFactory);
         }
         
 }

@@ -12,10 +12,10 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobIdFactory;
-import org.daisy.pipeline.job.RuntimeConfigurator;
 import org.daisy.pipeline.persistence.impl.Database;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
 import org.daisy.pipeline.script.ScriptRegistry;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,7 +38,6 @@ public class PersistentJobStorageTest {
         PersistentClient cl = new PersistentClient("paco","asdf",Role.CLIENTAPP,"afasd",Priority.LOW);
         PersistentClient clAdmin = new PersistentClient("power_paco","asdf",Role.ADMIN,"afasd",Priority.LOW);
         @Mock ScriptRegistry registry;
-        @Mock RuntimeConfigurator configurator;
 
         @Before
         public void setUp() {
@@ -47,7 +46,6 @@ public class PersistentJobStorageTest {
                 storage=new PersistentJobStorage();
                 storage.setEntityManagerFactory(DatabaseProvider.getEMF());
                 storage.setRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
-                storage.setConfigurator(configurator);
                 db.addObject(this.cl);
                 db.addObject(this.clAdmin);
                 clientsToDel.add(this.cl);

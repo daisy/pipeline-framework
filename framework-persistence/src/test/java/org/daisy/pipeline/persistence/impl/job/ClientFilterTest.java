@@ -7,14 +7,9 @@ import javax.persistence.TypedQuery;
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.Job.JobBuilder;
 import org.daisy.pipeline.persistence.impl.Database;
-import org.daisy.pipeline.persistence.impl.job.ClientFilter;
-import org.daisy.pipeline.persistence.impl.job.PersistentJob;
-import org.daisy.pipeline.persistence.impl.job.PersistentJobContext;
-import org.daisy.pipeline.persistence.impl.job.QueryDecorator;
-import org.daisy.pipeline.persistence.impl.job.PersistentJob.PersistentJobBuilder;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -35,12 +30,9 @@ public class ClientFilterTest{
 
 		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
-		JobBuilder builder= new PersistentJobBuilder(db).withContext(Mocks.buildContext());
-		job =(PersistentJob) builder.build();//new PersistentJob(Job.newJob(Mocks.buildContext()),db);
-		builder= new PersistentJobBuilder(db).withContext(Mocks.buildContext());
-		job2 =(PersistentJob) builder.build();//new PersistentJob(Job.newJob(Mocks.buildContext()),db);
+		job = new PersistentJob(db, Mocks.buildContext());
+		job2 = new PersistentJob(db, Mocks.buildContext());
                 client=new PersistentClient("cli","sadfsa",Role.ADMIN,"asdf",Priority.LOW);
-
         }
 	@After
 	public void tearDown(){

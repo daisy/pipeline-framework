@@ -19,6 +19,7 @@ import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 
 import org.daisy.common.priority.Priority;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;
@@ -30,26 +31,9 @@ import org.slf4j.LoggerFactory;
 @Table(name="jobs")
 @NamedQuery ( name="Job.getAll", query="select j from PersistentJob j")
 @Access(value=AccessType.FIELD)
-public class PersistentJob  extends Job implements Serializable {
+public class PersistentJob  extends AbstractJob implements Serializable {
 
-        public static final String MODEL_JOB_CONTEXT="context";
-	public static class PersistentJobBuilder extends JobBuilder{
-		private Database db;
-
-		/**
-		 * @param db
-		 */
-		public PersistentJobBuilder(Database db) {
-			this.db = db;
-		}
-
-		@Override
-		protected Job initJob(){
-			Job pjob=new PersistentJob(this.ctxt,this.priority,this.db);
-			this.db.addObject(pjob);	
-			return pjob;
-		}
-	}
+	public static final String MODEL_JOB_CONTEXT="context";
 
 	private static final Logger logger = LoggerFactory.getLogger(PersistentJob.class);
 	public static final long serialVersionUID=1L;
@@ -69,13 +53,17 @@ public class PersistentJob  extends Job implements Serializable {
 	@Transient
 	Database db=null;
 
-
-	private PersistentJob(JobContext ctxt,Priority priority,Database db) {
-		super(new PersistentJobContext((AbstractJobContext)ctxt),priority);
-		this.db=db;
-		this.sJobId=ctxt.getId().toString();
+	PersistentJob(Database db, JobContext ctxt) {
+		this(db, ctxt, null);
 	}
 
+	PersistentJob(Database db, JobContext ctxt, Priority priority) {
+		super(new PersistentJobContext((AbstractJobContext)ctxt), priority);
+		this.db=db;
+		this.sJobId=ctxt.getId().toString();
+		this.db.addObject(this);
+		changeStatus(Status.IDLE);
+	}
 
 	/**
 	 * Constructs a new instance.

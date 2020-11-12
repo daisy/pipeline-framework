@@ -1,18 +1,10 @@
 
 package org.daisy.pipeline.persistence.impl.job;
 
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
 
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.Job.JobBuilder;
 import org.daisy.pipeline.persistence.impl.Database;
-import org.daisy.pipeline.persistence.impl.job.IdFilter;
-import org.daisy.pipeline.persistence.impl.job.PersistentJob;
-import org.daisy.pipeline.persistence.impl.job.PersistentJobContext;
-import org.daisy.pipeline.persistence.impl.job.QueryDecorator;
-import org.daisy.pipeline.persistence.impl.job.PersistentJob.PersistentJobBuilder;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,10 +23,8 @@ public class IdFilterTest   {
 
 		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
-		JobBuilder builder= new PersistentJobBuilder(db).withContext(Mocks.buildContext());
-		job =(PersistentJob) builder.build();//new PersistentJob(Job.newJob(Mocks.buildContext()),db);
-		builder= new PersistentJobBuilder(db).withContext(Mocks.buildContext());
-		job2 =(PersistentJob) builder.build();//new PersistentJob(Job.newJob(Mocks.buildContext()),db);
+		job = new PersistentJob(db, Mocks.buildContext());
+		job2 = new PersistentJob(db, Mocks.buildContext());
 
         }
 	@After
