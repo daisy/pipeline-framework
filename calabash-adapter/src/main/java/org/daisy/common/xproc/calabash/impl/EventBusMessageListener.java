@@ -10,7 +10,6 @@ import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.pipeline.event.EventBusProvider;
-import org.daisy.pipeline.properties.Properties;
 
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRunnable;
@@ -22,18 +21,19 @@ import com.xmlcalabash.runtime.XStep;
  */
 public class EventBusMessageListener implements XProcMessageListener {
 
-	// use this property to automatically add a message to all steps with progress information but
-	// no message (only for debugging)
-	private final boolean AUTO_NAME_STEPS = Boolean.parseBoolean(
-		Properties.getProperty("org.daisy.pipeline.calabash.autonamesteps", "false"));
-	
 	private final String jobId;
 	private final EventBusProvider eventBus;
+	private final boolean autoNameSteps;
 
-	public EventBusMessageListener(EventBusProvider eventBus, String jobId) {
+	/**
+	 * @param autoNameSteps Set this property to automatically add a message to all steps with
+	 *        progress information but no message (only for debugging)
+	 */
+	public EventBusMessageListener(EventBusProvider eventBus, String jobId, boolean autoNameSteps) {
 		super();
 		this.eventBus = eventBus;
 		this.jobId = jobId;
+		this.autoNameSteps = autoNameSteps;
 	}
 
 	private MessageAppender post(MessageBuilder builder) {
@@ -165,7 +165,7 @@ public class EventBusMessageListener implements XProcMessageListener {
 	@Override
 	public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion) {
 		MessageBuilder builder = new MessageBuilder().withProgress(portion);
-		if (message == null && AUTO_NAME_STEPS && portion != null && portion.compareTo(BigDecimal.ZERO) > 0) {
+		if (message == null && autoNameSteps && portion != null && portion.compareTo(BigDecimal.ZERO) > 0) {
 			// FIXME: not if there is a an ancestor block with portion 0!
 			// how to test this?
 			// -> activeBlock.getPortion() returns portion as defined in XPL and no access to parents

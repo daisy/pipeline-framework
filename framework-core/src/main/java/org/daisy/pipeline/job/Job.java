@@ -217,6 +217,10 @@ public class Job implements RuntimeConfigurator.EventBusable, RuntimeConfigurato
                         pipeline = engine.load(this.ctxt.getScript().getXProcPipelineInfo().getURI());
                         Properties props = new Properties();
                         props.setProperty("JOB_ID", this.ctxt.getId().toString()); // used in calabash-adapter's EventBusMessageListener
+                        props.setProperty(
+                                "autonamesteps",
+                                org.daisy.pipeline.properties.Properties.getProperty(
+                                        "org.daisy.pipeline.calabash.autonamesteps", "false"));
                         XProcResult results = pipeline.run(this.ctxt.getInputs(),this.ctxt.getMonitor(),props);
                         this.ctxt.writeResult(results);
                         //if the validation fails set the job status

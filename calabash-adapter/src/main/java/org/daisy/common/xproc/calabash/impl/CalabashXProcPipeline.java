@@ -203,8 +203,11 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		if (props != null) {
 			String jobId = props.getProperty("JOB_ID");
 			if (jobId != null) {
-				((XProcMessageListenerAggregator) pipeline.xpipe.getStep().getXProc()
-						.getMessageListener()).add(new EventBusMessageListener(eventBusProvider, jobId));
+				boolean autoNameSteps = false;
+				if (props.getProperty("autonamesteps") != null)
+					autoNameSteps = Boolean.parseBoolean(props.getProperty("autonamesteps"));
+				((XProcMessageListenerAggregator) pipeline.xpipe.getStep().getXProc().getMessageListener())
+					.add(new EventBusMessageListener(eventBusProvider, jobId, autoNameSteps));
 			}
 		}
 		// bind inputs
