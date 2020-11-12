@@ -3,7 +3,7 @@ package org.daisy.pipeline.persistence.impl.job;
 
 import javax.persistence.TypedQuery;
 
-import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.persistence.impl.Database;
 import org.junit.After;
 import org.junit.Assert;
@@ -14,14 +14,13 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class IdFilterTest   {
-        Job job; 
-        Job job2; 
+        AbstractJob job;
+        AbstractJob job2;
         Database db;
         @Before
         public void setUp(){
 		db=DatabaseProvider.getDatabase();
 
-		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
 		job = new PersistentJob(db, Mocks.buildContext());
 		job2 = new PersistentJob(db, Mocks.buildContext());
@@ -40,7 +39,7 @@ public class IdFilterTest   {
         public void getSelect(){
                 QueryDecorator<PersistentJob> dec=new IdFilter(db.getEntityManager(),job2.getId());
                 TypedQuery<PersistentJob> q=dec.getQuery(PersistentJob.class); 
-                Job fromDb=(Job)q.getSingleResult();
+                AbstractJob fromDb = q.getSingleResult();
                 Assert.assertEquals("Finds the appropriate job",fromDb.getId(),job2.getId());
         }
 

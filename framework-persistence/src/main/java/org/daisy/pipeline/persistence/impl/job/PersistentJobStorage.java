@@ -10,19 +10,19 @@ import javax.persistence.TypedQuery;
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
-import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.AbstractJob;
+import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobBatchId;
-import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.persistence.impl.Database;
 import org.daisy.pipeline.properties.Properties;
 import org.daisy.pipeline.script.ScriptRegistry;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 
@@ -110,40 +110,38 @@ public class PersistentJobStorage implements JobStorage {
         }
 
         @Override
-        public Iterator<Job> iterator() {
+        public Iterator<AbstractJob> iterator() {
                 checkDatabase();
                 TypedQuery<PersistentJob> query=this.filter.getQuery(PersistentJob.class);
                 //make sure that we have the data from the db, 
                 query.setHint(STORE_MODE, CacheStoreMode.REFRESH);
-
-                return Collections2.transform(query.getResultList(),
-                                new Function<PersistentJob,Job>() {
-                                        @Override
-                                        public Job apply(PersistentJob job) {
-                                                // set event bus and monitor
-                                                if (PersistentJobStorage.this.jobMonitorFactory != null)
-                                                        job.setJobMonitor(PersistentJobStorage.this.jobMonitorFactory);
-                                                return job;
-                                        }
-                                }).iterator();
+                return Collections2.transform(
+                    query.getResultList(),
+                    job -> {
+                        // set event bus and monitor
+                        if (PersistentJobStorage.this.jobMonitorFactory != null)
+                                job.getContext().setMonitor(PersistentJobStorage.this.jobMonitorFactory, job.getStatus());
+                        return (AbstractJob)job;
+                    }
+                ).iterator();
         }
 
 
         @Override
-        public Optional<Job> add(Priority priority,JobContext ctxt) {
+        public Optional<AbstractJob> add(Priority priority, AbstractJobContext ctxt) {
                 checkDatabase();
                 logger.debug("Adding job to db:" + ctxt.getId());
                 PersistentJob pjob = new PersistentJob(db, ctxt, priority);
                 // set event bus and monitor
                 if (jobMonitorFactory != null)
-                        pjob.setJobMonitor(jobMonitorFactory);
+                        pjob.getContext().setMonitor(jobMonitorFactory, pjob.getStatus());
                 return Optional.of(pjob);
         }
 
         @Override
-        public Optional<Job> remove(JobId jobId) {
+        public Optional<AbstractJob> remove(JobId jobId) {
                 checkDatabase();
-                Optional<Job> stored=this.get(jobId);
+                Optional<AbstractJob> stored=this.get(jobId);
                 if (stored.isPresent()) {
                         db.deleteObject(stored.get());
                         logger.debug(String.format("Job with id %s deleted", jobId));
@@ -152,7 +150,7 @@ public class PersistentJobStorage implements JobStorage {
         }
 
         @Override
-        public Optional<Job> get(JobId id) {
+        public Optional<AbstractJob> get(JobId id) {
                 checkDatabase();
                 IdFilter idFilter=new IdFilter(this.db.getEntityManager(),id);
                 idFilter.setNext(this.filter);
@@ -168,9 +166,9 @@ public class PersistentJobStorage implements JobStorage {
                         job.setDatabase(db);
                         // set event bus and monitor
                         if (jobMonitorFactory != null)
-                                job.setJobMonitor(jobMonitorFactory);
+                                job.getContext().setMonitor(jobMonitorFactory, job.getStatus());
                 }
-                return Optional.fromNullable((Job)job);
+                return Optional.fromNullable(job);
         }
 
         @Override

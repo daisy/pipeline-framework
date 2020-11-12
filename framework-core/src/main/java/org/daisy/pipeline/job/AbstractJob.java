@@ -10,13 +10,9 @@ import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcPipeline;
-import org.daisy.common.xproc.XProcResult;
-import org.daisy.pipeline.job.impl.JobUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.eventbus.EventBus;
 
 /**
  * The Class Job defines the execution unit.
@@ -26,25 +22,21 @@ public abstract class AbstractJob implements Job {
         private static final Logger logger = LoggerFactory.getLogger(Job.class);
 
         private volatile Status status = Status.IDLE;
-        private Priority priority;
-        protected JobContext ctxt;
+        protected Priority priority;
+        protected AbstractJobContext ctxt;
 
-        protected AbstractJob(JobContext ctxt, Priority priority) {
+        protected AbstractJob(AbstractJobContext ctxt, Priority priority) {
                 this.ctxt = ctxt;
                 this.priority = priority != null ? priority : Priority.MEDIUM;
         }
 
         @Override
         public Status getStatus() {
-                synchronized(this.status){
-                        return status;
-                }
+                return status;
         }
 
-        protected void setStatus(Status status){
-                synchronized(this.status){
-                        this.status=status;
-                }
+        protected synchronized void setStatus(Status status) {
+                this.status = status;
         }
 
         @Override
@@ -52,45 +44,17 @@ public abstract class AbstractJob implements Job {
                 return priority;
         }
 
-        /**
-         * @return the priority
-         */
-        protected void setPriority(Priority priority) {
-                this.priority=priority;
-        }
-
-        public void setJobMonitor(JobMonitorFactory factory) {
-                this.ctxt.setMonitor(factory.newJobMonitor(this.getId(), getStatus() == Status.IDLE));
-        }
-
         @Override
-        public JobContext getContext() {
+        public AbstractJobContext getContext() {
                 return this.ctxt;
-        }
-
-        /**
-         * Sets the ctxt for this instance.
-         *
-         * @return The ctxt.
-         */
-        protected void setContext(JobContext ctxt) {
-                this.ctxt=ctxt;
-        }
-
-        final XProcResult getXProcOutput() {
-                return null;
         }
 
         protected synchronized final void changeStatus(Status to){
                 logger.info(String.format("Changing job status to: %s",to));
                 this.status=to;
                 this.onStatusChanged(to);
-                //System.out.println("CHANGING STATUS IN THE DB BEFORE POSTING IT!");
-                EventBus eventBus = ctxt.getMonitor() != null ? ctxt.getMonitor().getEventBus() : null;
-                if (eventBus != null)
-                        eventBus.post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
-                else
-                        logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? " the context ": " event bus ") + "is null");
+                ctxt.getMonitor().getEventBus().post(
+                        new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
         }
 
         private final void broadcastError(String text){
@@ -99,17 +63,13 @@ public abstract class AbstractJob implements Job {
                 MessageAppender m;
                 while ((m = MessageAppender.getActiveBlock()) != null)
                         m.close();
-                EventBus eventBus = ctxt.getMonitor() != null ? ctxt.getMonitor().getEventBus() : null;
-                if (eventBus != null) {
-                        m = new MessageBuilder()
-                                .withOwnerId(this.getId().toString())
-                                .withLevel(Level.ERROR)
-                                .withText(text)
-                                .build();
-                        m.close();
-                        eventBus.post((ProgressMessage)m);
-                } else
-                        logger.warn("I couldnt broadcast an error "+((this.ctxt==null)? " the context ": " event bus ") + "is null");
+                m = new MessageBuilder()
+                        .withOwnerId(this.getId().toString())
+                        .withLevel(Level.ERROR)
+                        .withText(text)
+                        .build();
+                m.close();
+                ctxt.getMonitor().getEventBus().post((ProgressMessage)m);
         }
 
         @Override
@@ -124,14 +84,10 @@ public abstract class AbstractJob implements Job {
                                 "autonamesteps",
                                 org.daisy.pipeline.properties.Properties.getProperty(
                                         "org.daisy.pipeline.calabash.autonamesteps", "false"));
-                        XProcResult results = pipeline.run(this.ctxt.getInputs(),this.ctxt.getMonitor(),props);
-                        this.ctxt.writeResult(results);
-                        //if the validation fails set the job status
-                        if (!this.checkStatus()){
-                                changeStatus(Status.FAIL);
-                        }else{
+                        if (ctxt.collectResults(pipeline.run(ctxt.input, ctxt.getMonitor(), props)))
                                 changeStatus(Status.SUCCESS);
-                        }
+                        else
+                                changeStatus(Status.FAIL);
                 }catch(Exception e){
                         changeStatus( Status.ERROR);
                         broadcastError(e.getMessage() + " (Please see detailed log for more info.)");
@@ -150,10 +106,6 @@ public abstract class AbstractJob implements Job {
 
         protected void onStatusChanged(Status newStatus){
                 //for subclasses
-        }
-        //checks the status returned by the script
-        private boolean checkStatus(){
-                return JobUtils.checkStatusPort(this.getContext().getScript(), this.getContext().getOutputs());
         }
 
         @Override

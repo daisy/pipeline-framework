@@ -9,11 +9,10 @@ import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.AbstractJob;
+import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
-import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.properties.Properties;
 
@@ -27,9 +26,6 @@ import com.google.common.collect.Collections2;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
     name = "volatile-job-storage",
@@ -41,9 +37,8 @@ public class VolatileJobStorage implements JobStorage {
                 Properties.getProperty("org.daisy.pipeline.persistence"));
         private static final Logger logger = LoggerFactory
                         .getLogger(VolatileJobStorage.class);
-        private Map<JobId, Job> jobs = Collections
-                        .synchronizedMap(new HashMap<JobId, Job>());
-        private JobMonitorFactory jobMonitorFactory;
+        private Map<JobId,AbstractJob> jobs = Collections
+                        .synchronizedMap(new HashMap<JobId,AbstractJob>());
         private Predicate<Job> filter = Predicates.alwaysTrue();
 
         public VolatileJobStorage(){}
@@ -57,39 +52,26 @@ public class VolatileJobStorage implements JobStorage {
                         throw new RuntimeException("Volatile storage is disabled");
         }
 
-        VolatileJobStorage(Map<JobId,Job> jobs, JobMonitorFactory jobMonitorFactory,
-                           Predicate<Job> filter) {
+        VolatileJobStorage(Map<JobId,AbstractJob> jobs, Predicate<Job> filter) {
                 this.jobs = jobs;
-                this.jobMonitorFactory = jobMonitorFactory;
                 this.filter = filter;
         }
 
-        @Reference(
-            name = "monitor",
-            unbind = "-",
-            service = JobMonitorFactory.class,
-            cardinality = ReferenceCardinality.MANDATORY,
-            policy = ReferencePolicy.STATIC
-        )
-        public void setJobMonitorFactory(JobMonitorFactory factory){
-                jobMonitorFactory = factory;
-        }
-
         @Override
-        public Iterator<Job> iterator() {
+        public Iterator<AbstractJob> iterator() {
                 return Collections2.filter(this.jobs.values(),this.filter).iterator();
         }
 
         @Override
-        public synchronized Optional<Job> add(final Priority priority, final JobContext ctxt) {
+        public synchronized Optional<AbstractJob> add(final Priority priority, final AbstractJobContext ctxt) {
                 if (!this.jobs.containsKey(ctxt.getId()))
                         return Optional.of(new VolatileJob(ctxt, priority));
                 return Optional.absent();
         }
 
         @Override
-        public synchronized Optional<Job> remove(JobId jobId) {
-                Optional<Job> job = this.get(jobId);
+        public synchronized Optional<AbstractJob> remove(JobId jobId) {
+                Optional<AbstractJob> job = this.get(jobId);
                 if(job.isPresent()){
                         this.jobs.remove(jobId);
                 }
@@ -98,8 +80,8 @@ public class VolatileJobStorage implements JobStorage {
         }
 
         @Override
-        public synchronized Optional<Job> get(JobId jobId) {
-                Job job=this.jobs.get(jobId);
+        public synchronized Optional<AbstractJob> get(JobId jobId) {
+                AbstractJob job=this.jobs.get(jobId);
                 if (job==null){
                         return Optional.absent();
                 }
@@ -111,7 +93,7 @@ public class VolatileJobStorage implements JobStorage {
 
         @Override
         public JobStorage filterBy(final JobBatchId batchId) {
-                return new VolatileJobStorage(jobs, jobMonitorFactory, Predicates.and(this.filter, new Predicate<Job>() {
+                return new VolatileJobStorage(jobs, Predicates.and(this.filter, new Predicate<Job>() {
 
                         @Override
                         public boolean apply(Job job) {
@@ -127,7 +109,7 @@ public class VolatileJobStorage implements JobStorage {
                 if (client.getRole().equals(Role.ADMIN)){
                         return this;
                 }else{
-                        return new VolatileJobStorage(jobs, jobMonitorFactory, Predicates.and(this.filter, new Predicate<Job>() {
+                        return new VolatileJobStorage(jobs, Predicates.and(this.filter, new Predicate<Job>() {
 
                                 @Override
                                 public boolean apply(Job job) {
@@ -139,10 +121,8 @@ public class VolatileJobStorage implements JobStorage {
         }
 
         private class VolatileJob extends AbstractJob {
-                VolatileJob(JobContext ctxt, Priority priority) {
+                VolatileJob(AbstractJobContext ctxt, Priority priority) {
                         super(ctxt, priority);
-                        if (VolatileJobStorage.this.jobMonitorFactory != null)
-                                setJobMonitor(VolatileJobStorage.this.jobMonitorFactory);
                         // Store the job before broadcasting its status
                         VolatileJobStorage.this.jobs.put(ctxt.getId(), this);
                         changeStatus(Status.IDLE);

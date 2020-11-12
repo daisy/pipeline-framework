@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.daisy.common.priority.Priority;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.persistence.impl.Database;
@@ -24,7 +25,6 @@ public class PersistentJobTest   {
 		//script setup
 			
 		db=DatabaseProvider.getDatabase();
-		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
 		job = new PersistentJob(db, Mocks.buildContext());
 		id=job.getContext().getId();
@@ -65,7 +65,7 @@ public class PersistentJobTest   {
         }
 	@Test 
 	public void getJobsTest(){
-		List<Job> jobs=PersistentJob.getAllJobs(db);
+		List<AbstractJob> jobs=PersistentJob.getAllJobs(db);
                 Assert.assertEquals("2 jobs",2,jobs.size());
                 HashSet<JobId> ids=new HashSet<JobId>();
                 ids.add(id);

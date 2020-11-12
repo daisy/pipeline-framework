@@ -7,7 +7,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.persistence.impl.Database;
 import org.daisy.pipeline.persistence.impl.job.QueryDecorator.QueryHolder;
 
@@ -41,7 +41,7 @@ public class QueryDecoratorTest {
         @Mock Root<PersistentJob> root;
         @Mock CriteriaQuery<PersistentJob> cq;
         @Mock Predicate pred;
-        Job job; 
+        AbstractJob job;
         Database db;
         @Before
         public void setUp(){
@@ -49,7 +49,6 @@ public class QueryDecoratorTest {
                 dec1=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager()));
                 dec2=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager()));
 
-		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
 		job = new PersistentJob(db, Mocks.buildContext());
 
