@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.LinkedList;
 
 import org.daisy.common.messaging.Message;
-import org.daisy.common.messaging.MessageUpdate;
 import org.daisy.common.messaging.ProgressMessage;
 
 import com.google.common.eventbus.Subscribe;
@@ -64,12 +63,10 @@ public class MessageEventListener {
 
 	@Subscribe
 	public void handleMessageUpdate(MessageUpdate update) {
-		Message msg = update.getMessage();
-		String jobId = msg.getOwnerId();
-		logger.trace("received message update event: [job: " + jobId + ", msg: " + msg.getSequence()
-		             + ", event: " + update.getSequence() + "]");
+		String jobId = update.getJobId();
+		logger.trace("received message update event: [job: " + jobId + update.getSequence() + "]");
 		for (LiveMessageAccessor l : listeners)
 			if (l.id.equals(jobId))
-				l.handleMessageUpdate(update);
+				l.handleMessageUpdate(update.getSequence());
 	}
 }

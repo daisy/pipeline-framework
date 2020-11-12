@@ -3,7 +3,7 @@ package org.daisy.pipeline.push.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,13 +47,14 @@ import org.osgi.service.component.annotations.ReferencePolicy;
     name = "push-notifier",
     service = { CallbackHandler.class }
 )
-public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor,Integer> {
+public class PushNotifier implements CallbackHandler {
 
         private JobManagerFactory jobManagerFactory;
         private ClientStorage clientStorage;
         private JobManager jobManager;
         private Map<Job,List<Callback>> callbacks;
         private Map<MessageAccessor,Job> jobForAccessor;
+        private Map<MessageAccessor,Runnable> unlistenFunctions;
 
         /** The logger. */
         private static Logger logger = LoggerFactory.getLogger(PushNotifier.class); 
@@ -74,8 +75,9 @@ public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor
                 logger = LoggerFactory.getLogger(Poster.class.getName());
                 logger.debug("Activating push notifier");
                 jobManager = jobManagerFactory.createFor(clientStorage.defaultClient());
-                callbacks = new HashMap<Job,List<Callback>>();
-                jobForAccessor = new HashMap<MessageAccessor,Job>();
+                callbacks = new HashMap<>();
+                jobForAccessor = new HashMap<>();
+                unlistenFunctions = new HashMap<>();
                 this.startTimer();
         }
 
@@ -141,6 +143,7 @@ public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor
                         list = new ArrayList<Callback>();
                         callbacks.put(job, list);
                 }
+                // FIXME: should also listen on event bus when type = STATUS
                 if (callback.getType() == CallbackType.MESSAGES) {
                         boolean alreadyListening = false;
                         for (Callback c : list)
@@ -150,7 +153,9 @@ public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor
                         if (!alreadyListening) {
                                 MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
                                 jobForAccessor.put(accessor, job);
-                                accessor.listen(this);
+                                Consumer<Integer> listener = i -> update(accessor, i);
+                                accessor.listen(listener);
+                                unlistenFunctions.put(accessor, () -> accessor.unlisten(listener));
                         }
                 }
                 list.add(callback);
@@ -173,15 +178,15 @@ public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor
                         if (!keepListening) {
                                 MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
                                 jobForAccessor.remove(accessor);
-                                accessor.unlisten(this);
+                                unlistenFunctions.remove(accessor).run();
                         }
                 }
                 if (list.isEmpty())
                         callbacks.remove(job);
         }
 
-        @Override
-        public void accept(MessageAccessor accessor, Integer sequence) {
+        // notify of message updates
+        private void update(MessageAccessor accessor, Integer sequence) {
                 Job job = jobForAccessor.get(accessor);
                 logger.trace("handling message update: [job: " + job.getId() + ", event: " + sequence + "]");
                 synchronized (newMessages) {
@@ -247,8 +252,8 @@ public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor
                         for (MessageAccessor accessor : newMessages.keySet()) {
                                 Job job = jobForAccessor.get(accessor);
                                 // check if the job still exists, otherwise stop listening for messages
-                                if(!jobManager.getJob(job.getId()).isPresent()){
-                                        accessor.unlisten(PushNotifier.this);
+                                if (!jobManager.getJob(job.getId()).isPresent()) {
+                                        unlistenFunctions.remove(accessor).run();
                                         continue;
                                 }
                                 Integer seq = newMessages.get(accessor);

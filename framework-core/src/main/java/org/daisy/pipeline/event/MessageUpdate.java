@@ -1,4 +1,4 @@
-package org.daisy.common.messaging;
+package org.daisy.pipeline.event;
 
 /**
  * Event for notifying that a job message that has been previously put on the event bus
@@ -6,18 +6,18 @@ package org.daisy.common.messaging;
  */
 public class MessageUpdate {
 
-	private final ProgressMessage message;
+	private final String jobId;
 	private final int sequence;
 
 	/* Package private constructor */
-	MessageUpdate(ProgressMessage message, int sequence) {
-		this.message = message;
+	MessageUpdate(String jobId, int sequence) {
+		this.jobId = jobId;
 		this.sequence = sequence;
 	}
 
 	/** The message that has been updated */
-	public ProgressMessage getMessage() {
-		return message;
+	public String getJobId() {
+		return jobId;
 	}
 
 	/** Sequence number that represents the update */
@@ -27,6 +27,6 @@ public class MessageUpdate {
 
 	@Override
 	public String toString() {
-		return sequence + " within " + message;
+		return sequence + " within " + jobId;
 	}
 }

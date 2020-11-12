@@ -95,7 +95,7 @@ public class JobMonitorFactoryImpl implements JobMonitorFactory {
 					liveAccessors.put(id, this.accessor);
 					// Keep the accessor in the cache for the time job is running. The accessor will
 					// be evicted 60 seconds after the last message has arrived.
-					this.accessor.listen((a,i) -> liveAccessors.get(id));
+					this.accessor.listen(i -> liveAccessors.get(id));
 				}
 				// Otherwise the messages are gathered from the message storage. In this case it is
 				// assumed that the job has finished and therefore no new messages are produced.

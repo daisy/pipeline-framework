@@ -1,7 +1,6 @@
 package org.daisy.maven.xproc.pipeline;
 
 import java.math.BigDecimal;
-import java.util.function.BiConsumer;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -18,7 +17,7 @@ import org.daisy.pipeline.properties.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class MessageEventListener implements BiConsumer<MessageAccessor,Integer> {
+class MessageEventListener {
 	
 	final MessageAccessor messages;
 	
@@ -29,14 +28,15 @@ class MessageEventListener implements BiConsumer<MessageAccessor,Integer> {
 			public String toString() {
 				return jobId; }};
 		messages = jobMonitorFactory.newJobMonitor(id, true).getMessageAccessor();
-		messages.listen(this);
+		messages.listen(this::update);
 	}
 	
 	void close() {
-		messages.unlisten(this);
+		messages.unlisten(this::update);
 	}
 	
-	public void accept(MessageAccessor messages, Integer sequenceNumber) {
+	// notify of message updates
+	private void update(Integer sequenceNumber) {
 		if (sequenceNumber != null) {
 			flattenMessages(messages.createFilter()
 			                        .filterLevels(levels)

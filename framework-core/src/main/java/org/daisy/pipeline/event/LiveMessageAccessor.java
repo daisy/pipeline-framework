@@ -1,13 +1,11 @@
 package org.daisy.pipeline.event;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.daisy.common.messaging.AbstractMessageAccessor;
 import org.daisy.common.messaging.Message;
-import org.daisy.common.messaging.MessageAccessor;
-import org.daisy.common.messaging.MessageUpdate;
 import org.daisy.common.messaging.ProgressMessage;
 import org.daisy.pipeline.properties.Properties;
 
@@ -32,7 +30,7 @@ public class LiveMessageAccessor extends AbstractMessageAccessor {
 
 	final String id;
 	private final MessageEventListener eventListener;
-	private final List<BiConsumer<MessageAccessor,Integer>> callbacks;
+	private final List<Consumer<Integer>> callbacks;
 	private final List<Message> messages;
 
 	public LiveMessageAccessor(String id, MessageEventListener eventListener) {
@@ -51,14 +49,14 @@ public class LiveMessageAccessor extends AbstractMessageAccessor {
 	}
 
 	@Override
-	public void listen(BiConsumer<MessageAccessor,Integer> callback) {
+	public void listen(Consumer<Integer> callback) {
 		synchronized (callbacks) {
 			callbacks.add(callback);
 		}
 	}
 
 	@Override
-	public void unlisten(BiConsumer<MessageAccessor,Integer> callback) {
+	public void unlisten(Consumer<Integer> callback) {
 		synchronized (callbacks) {
 			callbacks.remove(callback);
 		}
@@ -69,15 +67,15 @@ public class LiveMessageAccessor extends AbstractMessageAccessor {
 			messages.add(msg);
 		}
 		synchronized (callbacks) {
-			for (BiConsumer<MessageAccessor,Integer> c : callbacks)
-				c.accept(this, msg.getSequence());
+			for (Consumer<Integer> c : callbacks)
+				c.accept(msg.getSequence());
 		}
 	}
 
-	void handleMessageUpdate(MessageUpdate update) {
+	void handleMessageUpdate(Integer update) {
 		synchronized (callbacks) {
-			for (BiConsumer<MessageAccessor,Integer> c : callbacks)
-				c.accept(this, update.getSequence());
+			for (Consumer<Integer> c : callbacks)
+				c.accept(update);
 		}
 	}
 

@@ -33,7 +33,7 @@ public class EventBusProvider implements Supplier<EventBus>, MessageAppender {
 		String jobId = MDC.get("jobid");
 		if (jobId != null)
 			message = message.withOwnerId(jobId);
-		message.onUpdated(e -> EventBusProvider.this.get().post(e));
+		message.onUpdated(s -> EventBusProvider.this.get().post(new MessageUpdate(jobId, s)));
 		MessageAppender m = message.build();
 		get().post((ProgressMessage)m);
 		return m;

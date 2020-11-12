@@ -19,7 +19,7 @@ public final class MessageBuilder {
 	private String ownerId;
 	private String file;
 	private BigDecimal portion;
-	private List<Consumer<MessageUpdate>> callbacks;
+	private List<Consumer<Integer>> callbacks;
 
 	public MessageBuilder withThrowable(Throwable throwable) {
 		this.throwable = throwable;
@@ -72,9 +72,9 @@ public final class MessageBuilder {
 		return this;
 	}
 
-	public MessageBuilder onUpdated(Consumer<MessageUpdate> callback) {
+	public MessageBuilder onUpdated(Consumer<Integer> callback) {
 		if (callbacks == null)
-			callbacks = new ArrayList<Consumer<MessageUpdate>>();
+			callbacks = new ArrayList<Consumer<Integer>>();
 		callbacks.add(callback);
 		return this;
 	}
@@ -91,7 +91,7 @@ public final class MessageBuilder {
 			portion = BigDecimal.ONE;
 		return new MessageImpl(throwable, text, level, line, column,
 				timeStamp, null, ownerId, file, parent, portion,
-				callbacks != null ? new ArrayList<Consumer<MessageUpdate>>(callbacks) : null);
+				callbacks != null ? new ArrayList<Consumer<Integer>>(callbacks) : null);
 	}
 	
 	public MessageAppender build() {

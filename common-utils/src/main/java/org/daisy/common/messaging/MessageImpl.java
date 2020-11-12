@@ -17,7 +17,7 @@ class MessageImpl extends ProgressMessage implements MessageAppender {
 	final String ownerId;
 	private final MessageImpl parent;
 	private final BigDecimal portion;
-	private final List<Consumer<MessageUpdate>> callbacks;
+	private final List<Consumer<Integer>> callbacks;
 	private final Thread thread;
 	private final MessageThread messageThread;
 	private final List<MessageImpl> children = new ArrayList<MessageImpl>();
@@ -33,7 +33,7 @@ class MessageImpl extends ProgressMessage implements MessageAppender {
 	public MessageImpl(Throwable throwable, String text, Level level, int line,
 	                   int column, Date timeStamp, Integer sequence, String ownerId,
 	                   String file, MessageImpl parent, BigDecimal portion,
-	                   List<Consumer<MessageUpdate>> callbacks) {
+	                   List<Consumer<Integer>> callbacks) {
 		super(throwable, text, level, line, column, timeStamp, sequence, ownerId, file);
 		this.ownerId = ownerId;
 		this.parent = parent;
@@ -150,9 +150,8 @@ class MessageImpl extends ProgressMessage implements MessageAppender {
 		// if a text messages was added, we consider it relevant for all ancestors
 		// if only the progress has changed, it is relevant for the parent only if the portion with the parent is non-zero
 		if (callbacks != null && !callbacks.isEmpty()) {
-			MessageUpdate update = new MessageUpdate(this, sequence);
-			for (Consumer<MessageUpdate> callback : callbacks)
-				callback.accept(update); }
+			for (Consumer<Integer> callback : callbacks)
+				callback.accept(sequence); }
 		if (parent != null)
 			if (textMessageAdded || portion.compareTo(BigDecimal.ZERO) > 0)
 				parent.updated(sequence, textMessageAdded);
