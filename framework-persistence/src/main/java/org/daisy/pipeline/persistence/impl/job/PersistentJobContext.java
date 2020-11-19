@@ -22,7 +22,6 @@ import javax.persistence.Transient;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.Job.Status;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobResultSet;
@@ -226,9 +225,8 @@ public final class PersistentJobContext extends AbstractJobContext {
                 registry=sregistry;
         }
 
-        void setMonitor(JobMonitorFactory monitorFactory, Status status) {
-                this.monitor = monitorFactory.newJobMonitor(
-                        id, status == Status.IDLE || status == Status.RUNNING);
+        void setMonitor(JobMonitorFactory monitorFactory) {
+                this.monitor = monitorFactory.newJobMonitor(id);
         }
 
         // for unit tests

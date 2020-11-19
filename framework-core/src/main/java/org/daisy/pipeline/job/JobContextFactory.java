@@ -46,7 +46,7 @@ public class JobContextFactory {
                         }
                         input = decorator.decorate(input);
                         output = decorator.decorate(output);
-                        return new AbstractJobContext(client, id, batchId, niceName, script, input, output, mapper, monitorFactory.newJobMonitor(id, true)) {};
+                        return new AbstractJobContext(client, id, batchId, niceName, script, input, output, mapper, monitorFactory) {};
                 } catch (IOException e){
                         throw new RuntimeException("Error while creating job context",e);
                 }

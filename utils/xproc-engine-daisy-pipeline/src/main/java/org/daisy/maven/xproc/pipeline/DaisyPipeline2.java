@@ -16,6 +16,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import com.google.common.base.Supplier;
 
+import org.daisy.common.messaging.Message.Level;
+import org.daisy.common.messaging.MessageBus;
 import org.daisy.common.transform.LazySaxResultProvider;
 import org.daisy.common.transform.LazySaxSourceProvider;
 import org.daisy.common.xproc.XProcEngine;
@@ -27,8 +29,6 @@ import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcResult;
 
 import org.daisy.maven.xproc.api.XProcExecutionException;
-
-import org.daisy.pipeline.job.JobMonitorFactory;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -42,7 +42,15 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 	
 	private XProcEngine engine;
-	private JobMonitorFactory jobMonitorFactory;
+	private static Level messagesThreshold;
+	static {
+		try {
+			messagesThreshold = Level.valueOf(
+				org.daisy.pipeline.properties.Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
+		} catch (IllegalArgumentException e) {
+			messagesThreshold = Level.INFO;
+		}
+	}
 	
 	@Reference(
 		name = "XProcEngine",
@@ -53,17 +61,6 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 	)
 	protected void setXProcEngine(XProcEngine engine) {
 		this.engine = engine;
-	}
-	
-	@Reference(
-		name = "JobMonitorFactory",
-		unbind = "-",
-		service = JobMonitorFactory.class,
-		cardinality = ReferenceCardinality.MANDATORY,
-		policy = ReferencePolicy.STATIC
-	)
-	public void setJobMonitorFactory(final JobMonitorFactory jobMonitorFactory) {
-		this.jobMonitorFactory = jobMonitorFactory;
 	}
 	
 	public void setCatalog(URL catalog) {
@@ -114,11 +111,15 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 			XProcResult results; {
 				String jobId = context == null ? null : (String)context.get("XPROCSPEC_TEST_ID");
 				if (jobId != null) {
-					MessageEventListener listener = new MessageEventListener(jobId, jobMonitorFactory);
+					MessageBus messageBus = new MessageBus(jobId, messagesThreshold);
+					MessageEventListener listener = new MessageEventListener(messageBus);
 					try {
 						Properties props = new Properties();
-						props.setProperty("JOB_ID", jobId); // this is used in EventBusMessageListener
-						results = xprocPipeline.run(inputBuilder.build(), null, props);
+						props.setProperty(
+							"autonamesteps",
+							org.daisy.pipeline.properties.Properties.getProperty(
+								"org.daisy.pipeline.calabash.autonamesteps", "false"));
+						results = xprocPipeline.run(inputBuilder.build(), () -> messageBus, props);
 						// store messages XML
 						try {
 							Class.forName("org.daisy.pipeline.webserviceutils.xml.JobXmlWriter");

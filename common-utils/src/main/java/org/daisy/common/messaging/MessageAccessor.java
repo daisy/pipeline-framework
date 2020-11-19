@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.daisy.common.messaging.Message.Level;
 
+import com.google.common.collect.ImmutableSet;
+
 /**
  * Gives access to the stored messages.
  */
@@ -57,6 +59,18 @@ public abstract class MessageAccessor {
 		return getMessagesFrom(Level.TRACE);
 	}
 
+	private List<Message> getMessagesFrom(Level level) {
+		return createFilter().filterLevels(fromLevel(level)).getMessages();
+	}
+
+	private Set<Level> fromLevel(Level level) {
+		ImmutableSet.Builder<Level> b = new ImmutableSet.Builder<>();
+		for (Level l : Level.values())
+			if (l.compareTo(level) <= 0)
+				b.add(l);
+		return b.build();
+	}
+
 	/**
 	 * Gets the messgages from a set of levels
 	 *
@@ -64,7 +78,6 @@ public abstract class MessageAccessor {
 	 * @return the messages
 	 */
 	public abstract List<Message> getAll();
-	protected abstract List<Message> getMessagesFrom(Level level);
 
 	/**
 	 * Register a callback that is called whenever a new (top-level) message arrives, a message is

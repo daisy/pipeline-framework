@@ -10,8 +10,6 @@ import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.ProgressMessage;
 import org.daisy.maven.xproc.pipeline.logging.FlattenedProgressMessage;
-import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.properties.Properties;
 
 import org.slf4j.Logger;
@@ -21,13 +19,8 @@ class MessageEventListener {
 	
 	final MessageAccessor messages;
 	
-	MessageEventListener(final String jobId, JobMonitorFactory jobMonitorFactory) {
-		// support any string (unlike JobUUIDGenerator)
-		JobId id = new JobId() {
-			@Override
-			public String toString() {
-				return jobId; }};
-		messages = jobMonitorFactory.newJobMonitor(id, true).getMessageAccessor();
+	MessageEventListener(MessageAccessor messages) {
+		this.messages = messages;
 		messages.listen(this::update);
 	}
 	

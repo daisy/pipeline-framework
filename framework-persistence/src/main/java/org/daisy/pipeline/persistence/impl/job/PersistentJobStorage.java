@@ -120,7 +120,7 @@ public class PersistentJobStorage implements JobStorage {
                     job -> {
                         // set event bus and monitor
                         if (PersistentJobStorage.this.jobMonitorFactory != null)
-                                job.getContext().setMonitor(PersistentJobStorage.this.jobMonitorFactory, job.getStatus());
+                                job.getContext().setMonitor(PersistentJobStorage.this.jobMonitorFactory);
                         return (AbstractJob)job;
                     }
                 ).iterator();
@@ -131,11 +131,7 @@ public class PersistentJobStorage implements JobStorage {
         public Optional<AbstractJob> add(Priority priority, AbstractJobContext ctxt) {
                 checkDatabase();
                 logger.debug("Adding job to db:" + ctxt.getId());
-                PersistentJob pjob = new PersistentJob(db, ctxt, priority);
-                // set event bus and monitor
-                if (jobMonitorFactory != null)
-                        pjob.getContext().setMonitor(jobMonitorFactory, pjob.getStatus());
-                return Optional.of(pjob);
+                return Optional.of(new PersistentJob(db, ctxt, priority));
         }
 
         @Override
@@ -166,7 +162,7 @@ public class PersistentJobStorage implements JobStorage {
                         job.setDatabase(db);
                         // set event bus and monitor
                         if (jobMonitorFactory != null)
-                                job.getContext().setMonitor(jobMonitorFactory, job.getStatus());
+                                job.getContext().setMonitor(jobMonitorFactory);
                 }
                 return Optional.fromNullable(job);
         }

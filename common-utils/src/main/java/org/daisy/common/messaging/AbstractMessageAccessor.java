@@ -38,19 +38,6 @@ public abstract class AbstractMessageAccessor extends MessageAccessor {
 	}
 
 	@Override
-	protected List<Message> getMessagesFrom(final Level level) {
-		return createFilter().filterLevels(fromLevel(level)).getMessages();
-	}
-
-	private Set<Level> fromLevel(Level level) {
-		ImmutableSet.Builder<Level> b = new ImmutableSet.Builder();
-		for (Level l : Level.values())
-			if (l.compareTo(level) <= 0)
-				b.add(l);
-		return b.build();
-	}
-
-	@Override
 	public BigDecimal getProgress() {
 		BigDecimal progress;
 		synchronized (ProgressMessage.MUTEX) { // objects inside iterable are mutable

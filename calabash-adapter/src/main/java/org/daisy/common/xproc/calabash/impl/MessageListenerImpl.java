@@ -10,38 +10,32 @@ import net.sf.saxon.s9api.XdmNode;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
-import org.daisy.pipeline.event.EventBusProvider;
 
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRunnable;
 import com.xmlcalabash.runtime.XStep;
 
 /**
- * Wrapps the org.daisy.common.messaging.MessageListener to a
- * XProcMessageListener to be plugged in calabash
+ * XProcMessageListener that appends messages to a {@link MessageAppender}.
  */
-public class EventBusMessageListener implements XProcMessageListener {
+public class MessageListenerImpl implements XProcMessageListener {
 
-	private final String jobId;
-	private final EventBusProvider eventBus;
 	private final boolean autoNameSteps;
+	private final MessageAppender rootAppender;
 	private final Deque<MessageAppender> messageStack = new ArrayDeque<>();
 
 	/**
 	 * @param autoNameSteps Set this property to automatically add a message to all steps with
 	 *        progress information but no message (only for debugging)
 	 */
-	public EventBusMessageListener(EventBusProvider eventBus, String jobId, boolean autoNameSteps) {
+	public MessageListenerImpl(MessageAppender rootAppender, boolean autoNameSteps) {
 		super();
-		this.eventBus = eventBus;
-		this.jobId = jobId;
+		this.rootAppender = rootAppender;
 		this.autoNameSteps = autoNameSteps;
 	}
 
-	private MessageAppender post(MessageBuilder builder, boolean close) {
-		MessageAppender current = messageStack.isEmpty() ? eventBus : messageStack.peek();
-		if (messageStack.isEmpty())
-			builder = builder.withOwnerId(jobId);
+	private MessageAppender append(MessageBuilder builder, boolean close) {
+		MessageAppender current = messageStack.isEmpty() ? rootAppender : messageStack.peek();
 		current = current.append(builder);
 		if (!close)
 			messageStack.push(current);
@@ -60,7 +54,7 @@ public class EventBusMessageListener implements XProcMessageListener {
 		MessageBuilder builder = new MessageBuilder()
 				.withLevel(Level.ERROR);
 		XprocMessageHelper.errorMessage(exception, builder);
-		post(builder, true);
+		append(builder, true);
 	}
 
 	/*
@@ -77,7 +71,7 @@ public class EventBusMessageListener implements XProcMessageListener {
 		MessageBuilder builder = new MessageBuilder()
 				.withLevel(Level.ERROR);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-		post(builder, true);
+		append(builder, true);
 	}
 
 	/*
@@ -91,7 +85,7 @@ public class EventBusMessageListener implements XProcMessageListener {
 		MessageBuilder builder = new MessageBuilder()
 				.withLevel(Level.DEBUG);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-		post(builder, true);
+		append(builder, true);
 	}
 
 	/*
@@ -106,7 +100,7 @@ public class EventBusMessageListener implements XProcMessageListener {
 		MessageBuilder builder = new MessageBuilder()
 				.withLevel(Level.TRACE);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-		post(builder, true);
+		append(builder, true);
 	}
 
 	/*
@@ -121,7 +115,7 @@ public class EventBusMessageListener implements XProcMessageListener {
 		MessageBuilder builder = new MessageBuilder()
 				.withLevel(Level.TRACE);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-		post(builder, true);
+		append(builder, true);
 	}
 
 	/*
@@ -135,7 +129,7 @@ public class EventBusMessageListener implements XProcMessageListener {
 		MessageBuilder builder = new MessageBuilder()
 				.withLevel(Level.INFO);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-		post(builder, true);
+		append(builder, true);
 	}
 
 	/*
@@ -150,7 +144,7 @@ public class EventBusMessageListener implements XProcMessageListener {
 		MessageBuilder builder = new MessageBuilder()
 				.withLevel(Level.WARNING);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-		post(builder, true);
+		append(builder, true);
 	}
 
 	/*
@@ -164,7 +158,7 @@ public class EventBusMessageListener implements XProcMessageListener {
 		MessageBuilder builder = new MessageBuilder()
 				.withLevel(Level.WARNING);
 		XprocMessageHelper.errorMessage(exception, builder);
-		post(builder, true);
+		append(builder, true);
 	}
 
 	@Override
@@ -195,14 +189,21 @@ public class EventBusMessageListener implements XProcMessageListener {
 			message = "Message with invalid level '" + level + "': " + message;
 		}
 		XprocMessageHelper.message(step, node, message, builder);
-		post(builder, false);
+		append(builder, false);
 	}
 
 	@Override
 	public void closeStep() {
 		if (messageStack.isEmpty())
 			throw new RuntimeException("coding error");
-		MessageAppender current = messageStack.pop();
-		current.close();
+		messageStack.pop().close();
+	}
+
+	/**
+	 * Close any open message blocks.
+	 */
+	void clean() {
+		while (!messageStack.isEmpty())
+			messageStack.pop().close();
 	}
 }

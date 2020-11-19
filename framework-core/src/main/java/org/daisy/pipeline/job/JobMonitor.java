@@ -1,10 +1,15 @@
 package org.daisy.pipeline.job;
 
-import org.daisy.common.xproc.XProcMonitor;
+import org.daisy.common.messaging.MessageAccessor;
 
 import com.google.common.eventbus.EventBus;
 
-public interface JobMonitor extends XProcMonitor {
+public interface JobMonitor {
+
+	/**
+	 * Job messages may be accessed through this {@link MessageAccessor}.
+	 */
+	public MessageAccessor getMessageAccessor();
 
 	/**
 	 * Get the {@link EventBus} that this job posts {@link StatusMessage status update events}

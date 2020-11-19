@@ -118,7 +118,6 @@
               org.daisy.pipeline.datatypes.impl.DefaultDatatypeRegistry,
               org.daisy.pipeline.event.EventBusProvider,
               org.daisy.pipeline.event.JobMonitorFactoryImpl,
-              org.daisy.pipeline.event.MessageEventListener,
               org.daisy.pipeline.job.impl.DefaultJobExecutionService,
               org.daisy.pipeline.job.JobManagerFactory,
               org.daisy.pipeline.job.RuntimeConfigurator,

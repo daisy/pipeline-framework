@@ -2,6 +2,8 @@ package org.daisy.pipeline.job;
 
 import java.net.URI;
 
+import org.daisy.common.messaging.Message.Level;
+import org.daisy.common.messaging.MessageBus;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
@@ -21,12 +23,22 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractJobContext implements JobContext{
 
         private static final Logger logger = LoggerFactory.getLogger(AbstractJobContext.class);
+        private static Level messagesThreshold;
+        static {
+                try {
+                        messagesThreshold = Level.valueOf(
+                                org.daisy.pipeline.properties.Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
+                } catch (IllegalArgumentException e) {
+                        messagesThreshold = Level.INFO;
+                }
+        }
 
         protected XProcInput input;
         private XProcOutput output;
         protected XProcScript script;
         protected JobId id;
         protected JobBatchId batchId;
+        MessageBus messageBus;
         protected JobMonitor monitor;
         protected URI logFile;
         protected URIMapper resultMapper;
@@ -37,7 +49,7 @@ public abstract class AbstractJobContext implements JobContext{
         // used by JobContextFactory
         AbstractJobContext(Client client, JobId id, JobBatchId batchId, String niceName,
                            XProcScript script, XProcInput input, XProcOutput output,
-                           URIMapper resultMapper, JobMonitor monitor) {
+                           URIMapper resultMapper, JobMonitorFactory monitorFactory) {
                 if (client == null ||
                     id == null ||
                     niceName == null ||
@@ -45,8 +57,8 @@ public abstract class AbstractJobContext implements JobContext{
                     input == null ||
                     output == null ||
                     resultMapper == null ||
-                    monitor == null)
-                        throw new IllegalArgumentException();
+                    monitorFactory == null)
+                        throw new IllegalArgumentException("id must not be null");
                 this.client = client;
                 this.id = id;
                 this.batchId = batchId;
@@ -57,7 +69,8 @@ public abstract class AbstractJobContext implements JobContext{
                 this.input = input;
                 this.output = output;
                 this.resultMapper = resultMapper;
-                this.monitor = monitor;
+                this.messageBus = new MessageBus(id.toString(), messagesThreshold);
+                this.monitor = monitorFactory.newJobMonitor(id, messageBus);
         }
 
         // used by PersistentJobContext
@@ -79,6 +92,7 @@ public abstract class AbstractJobContext implements JobContext{
                 this.output = from.output;
                 this.resultMapper = from.resultMapper;
                 this.monitor = from.monitor;
+                this.messageBus = from.messageBus;
         }
 
         @Override

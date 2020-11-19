@@ -56,6 +56,8 @@ public final class MessageBuilder {
 	}
 
 	public MessageBuilder withOwnerId(String ownerId) {
+		if (this.ownerId != null)
+			throw new RuntimeException();
 		this.ownerId = ownerId;
 		return this;
 	}
