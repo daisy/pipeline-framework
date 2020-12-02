@@ -38,7 +38,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.google.common.eventbus.Subscribe;
 import com.google.common.collect.Iterators;
 import com.google.common.io.CharStreams;
 
@@ -49,7 +48,6 @@ import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
@@ -87,9 +85,6 @@ public class FrameworkCoreTest extends AbstractTest {
 	
 	@Inject
 	public ScriptRegistry scriptRegistry;
-	
-	@Inject
-	public EventBusProvider eventBusProvider;
 	
 	@Inject
 	public JobMonitorFactory jobMonitorFactory;
@@ -759,26 +754,6 @@ public class FrameworkCoreTest extends AbstractTest {
 					throw new RuntimeException("waitForStatus " + expectedStatus + " timed out (last status was " + status + ")");
 				}
 			}
-		}
-	}
-	
-	static class CollectMessages {
-		final Map<String,List<Message>> messages = new HashMap<String,List<Message>>();
-		@Subscribe
-		public void add(ProgressMessage msg) {
-			String jobid = msg.getJobId();
-			List<Message> list = messages.get(jobid);
-			if (list == null) {
-				list = new ArrayList<Message>();
-				messages.put(jobid, list);
-			}
-			list.add(msg);
-		}
-		public Iterator<Message> get(String jobId) {
-			if (messages.containsKey(jobId))
-				return messages.get(jobId).iterator();
-			else
-				return Collections.<Message>emptyIterator();
 		}
 	}
 	

@@ -28,7 +28,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.eventbus.EventBus;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PersistentJobStorageTest {
@@ -40,7 +39,6 @@ public class PersistentJobStorageTest {
         PersistentClient clAdmin = new PersistentClient("power_paco","asdf",Role.ADMIN,"afasd",Priority.LOW);
         @Mock ScriptRegistry registry;
         @Mock RuntimeConfigurator configurator;
-        @Mock EventBus bus;
 
         @Before
         public void setUp() {

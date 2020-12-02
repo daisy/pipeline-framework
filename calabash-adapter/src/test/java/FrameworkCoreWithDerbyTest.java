@@ -21,7 +21,6 @@ import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
@@ -55,9 +54,6 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 	
 	@Inject
 	public ScriptRegistry scriptRegistry;
-	
-	@Inject
-	public EventBusProvider eventBusProvider;
 	
 	@Inject
 	public JobMonitorFactory jobMonitorFactory;
