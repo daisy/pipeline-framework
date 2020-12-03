@@ -1,8 +1,8 @@
 package org.daisy.pipeline.job;
 
-import org.daisy.common.messaging.MessageAccessor;
+import java.util.function.Consumer;
 
-import com.google.common.eventbus.EventBus;
+import org.daisy.common.messaging.MessageAccessor;
 
 public interface JobMonitor {
 
@@ -12,9 +12,8 @@ public interface JobMonitor {
 	public MessageAccessor getMessageAccessor();
 
 	/**
-	 * Get the {@link EventBus} that this job posts {@link StatusMessage status update events}
-	 * to. The caller can subscribe to these events using {@link EventBus#register(Object)}.
+	 * Get notified when the job status changes.
 	 */
-	public EventBus getEventBus();
+	public StatusNotifier getStatusUpdates();
 
 }

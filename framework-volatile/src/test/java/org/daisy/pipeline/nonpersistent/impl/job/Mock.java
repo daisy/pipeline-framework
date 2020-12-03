@@ -6,8 +6,7 @@ import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobMonitor;
-
-import com.google.common.eventbus.EventBus;
+import org.daisy.pipeline.job.StatusNotifier;
 
 public class Mock {
 
@@ -23,15 +22,14 @@ public class Mock {
 			this.id = JobIdFactory.newId();
 			this.batchId = batchId;
 			this.niceName = "";
-			EventBus bus = new EventBus();
 			this.monitor = new JobMonitor() {
 					@Override
 					public MessageAccessor getMessageAccessor() {
 						return null;
 					}
 					@Override
-					public EventBus getEventBus() {
-						return bus;
+					public StatusNotifier getStatusUpdates() {
+						return null;
 					}
 				};
 		}

@@ -1,6 +1,9 @@
 package org.daisy.pipeline.job;
 
 import java.net.URI;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Consumer;
 
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageBus;
@@ -45,6 +48,7 @@ public abstract class AbstractJobContext implements JobContext{
         protected JobResultSet results;
         protected String niceName;
         protected Client client;
+        private List<Consumer<Job.Status>> statusListeners;
 
         // used by JobContextFactory
         AbstractJobContext(Client client, JobId id, JobBatchId batchId, String niceName,
@@ -70,7 +74,15 @@ public abstract class AbstractJobContext implements JobContext{
                 this.output = output;
                 this.resultMapper = resultMapper;
                 this.messageBus = new MessageBus(id.toString(), messagesThreshold);
-                this.monitor = monitorFactory.newJobMonitor(id, messageBus);
+                statusListeners = new LinkedList<>();
+                StatusNotifier statusNotifier = new StatusNotifier() {
+                        public void listen(Consumer<Job.Status> listener) {
+                            synchronized (statusListeners) {
+                                statusListeners.add(listener); }}
+                        public void unlisten(Consumer<Job.Status> listener) {
+                            synchronized (statusListeners) {
+                                statusListeners.remove(listener); }}};
+                this.monitor = monitorFactory.newJobMonitor(id, messageBus, statusNotifier);
         }
 
         // used by PersistentJobContext
@@ -93,6 +105,7 @@ public abstract class AbstractJobContext implements JobContext{
                 this.resultMapper = from.resultMapper;
                 this.monitor = from.monitor;
                 this.messageBus = from.messageBus;
+                this.statusListeners = from.statusListeners;
         }
 
         @Override
@@ -155,5 +168,13 @@ public abstract class AbstractJobContext implements JobContext{
         @Override
         public JobBatchId getBatchId() {
                 return batchId;
+        }
+
+        void changeStatus(Job.Status status) {
+            if (statusListeners != null)
+                synchronized (statusListeners) {
+                    for (Consumer<Job.Status> l : statusListeners)
+                        l.accept(status);
+                }
         }
 }

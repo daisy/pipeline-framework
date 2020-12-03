@@ -21,6 +21,7 @@ import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobMonitor;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
+import org.daisy.pipeline.job.StatusNotifier;
 import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -28,7 +29,6 @@ import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
 
 import com.google.common.base.Supplier;
-import com.google.common.eventbus.EventBus;
 
 public class Mocks   {
 
@@ -160,15 +160,14 @@ public class Mocks   {
 				this.input = input;
 				this.resultMapper = mapper;
 				this.results = set;
-				EventBus bus = new EventBus();
 				this.monitor = new JobMonitor() {
 						@Override
 						public MessageAccessor getMessageAccessor() {
 							return null;
 						}
 						@Override
-						public EventBus getEventBus() {
-							return bus;
+						public StatusNotifier getStatusUpdates() {
+							return null;
 						}
 					};
 			}

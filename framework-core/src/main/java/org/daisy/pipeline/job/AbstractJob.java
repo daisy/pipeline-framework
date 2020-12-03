@@ -51,8 +51,7 @@ public abstract class AbstractJob implements Job {
                 logger.info(String.format("Changing job status to: %s",to));
                 this.status=to;
                 this.onStatusChanged(to);
-                ctxt.getMonitor().getEventBus().post(
-                        new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
+                ctxt.changeStatus(this.status);
         }
 
         @Override

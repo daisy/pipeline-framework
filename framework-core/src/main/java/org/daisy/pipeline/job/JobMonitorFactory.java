@@ -13,8 +13,9 @@ public interface JobMonitorFactory {
 	public JobMonitor newJobMonitor(JobId id);
 
 	/**
-	 * Create a "live" job monitor from a given MessageAccessor. To be used for newly created jobs.
+	 * Create a "live" job monitor from a given MessageAccessor and StatusNotifier. To be used for
+	 * newly created jobs.
 	 */
-	public JobMonitor newJobMonitor(JobId id, MessageAccessor messageAccessor);
+	public JobMonitor newJobMonitor(JobId id, MessageAccessor messageAccessor, StatusNotifier statusNotifier);
 
 }
