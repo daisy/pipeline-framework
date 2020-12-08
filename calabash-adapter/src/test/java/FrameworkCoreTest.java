@@ -486,10 +486,22 @@ public class FrameworkCoreTest extends AbstractTest {
 				                  assertMessage(next(msgs), seq.get(), Message.Level.INFO, "px:foo (2)");
 				                  Assert.assertFalse(msgs.hasNext()); });
 				assertMessage(next(messages), seq.get(), Message.Level.INFO, "px:progress-messages (3)");
-				assertMessage(next(messages), seq.get(), Message.Level.INFO, "px:progress-messages (4)",
-				              msgs -> {
-				                  assertMessage(next(msgs), seq.get(), Message.Level.INFO, "px:progress-messages (4a)");
-				                  Assert.assertFalse(msgs.hasNext()); });
+				assertMessage(
+					next(messages), seq.get(), Message.Level.INFO, "px:progress-messages (4)",
+					submsgs -> {
+						assertMessage(
+							next(submsgs), seq.get(), Message.Level.INFO, "px:progress-messages (4a)",
+							subsubmsgs -> {
+								assertMessage(next(subsubmsgs), seq.get(), Message.Level.INFO, "same message");
+								assertMessage(next(subsubmsgs), seq.get(), Message.Level.INFO, "same message");
+								assertMessage(next(subsubmsgs), seq.get(), Message.Level.INFO, "same message");
+								assertMessage(next(subsubmsgs), seq.get(), Message.Level.INFO, "other message");
+								assertMessage(next(subsubmsgs), seq.get(), Message.Level.INFO, "same message");
+								assertMessage(
+									next(subsubmsgs), seq.get(), Message.Level.INFO,
+									"same message (further repetitions of this message will be omitted)");
+								Assert.assertFalse(subsubmsgs.hasNext()); });
+						Assert.assertFalse(submsgs.hasNext()); });
 				Assert.assertFalse(messages.hasNext());
 				Iterator<ILoggingEvent> log = collectLog.get();
 				Assert.assertFalse(log.hasNext());

@@ -13,8 +13,6 @@ import com.google.common.collect.Lists;
 
 import org.daisy.common.messaging.MessageAccessor.MessageFilter;
 
-import org.slf4j.Logger;
-
 /**
  * A progress message is an extension of a simple message, with a certain "progress" and with
  * possible nested (progress) messages. Every progress message represents a certain "portion" of the
@@ -69,7 +67,7 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 		"unchecked" // safe cast to Iterator<ProgressMessage>
 	)
 	public Iterator<ProgressMessage> iterator() {
-		return (Iterator<ProgressMessage>)(Object)(new MessageFilterImpl(this, true).withText().getMessages().iterator());
+		return (Iterator<ProgressMessage>)(Object)(asMessageFilter(true).getMessages().iterator());
 	}
 
 	/* =============================================================== */
@@ -81,7 +79,7 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 	 * excluded messages are promoted (become direct children of the excluded message's parent).
 	 */
 	public MessageFilter filterLevels(Set<Level> levels) {
-		return asMessageFilter().filterLevels(levels);
+		return asMessageFilter(false).filterLevels(levels);
 	}
 
 	/**
@@ -89,7 +87,7 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 	 * threshold, or with a descendant message above that threshold.
 	 */
 	public MessageFilter greaterThan(int sequence) {
-		return asMessageFilter().greaterThan(sequence);
+		return asMessageFilter(false).greaterThan(sequence);
 	}
 
 	/**
@@ -97,7 +95,7 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 	 * or with a descendant message within that range.
 	 */
 	public MessageFilter inRange(int start, int end) {
-		return asMessageFilter().inRange(start, end);
+		return asMessageFilter(false).inRange(start, end);
 	}
 
 	/**
@@ -105,7 +103,7 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 	 * this message has no text, returns a list of immutable copies of its descendants with text.
 	 */
 	public List<Message> getMessages() {
-		return asMessageFilter().getMessages();
+		return asMessageFilter(false).getMessages();
 	}
 
 	/* =============================================================== */
@@ -128,8 +126,8 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 	 * Returns a view that excludes text-less messages. Child messages of excluded messages are
 	 * promoted (become direct children of the excluded message's parent).
 	 */
-	MessageFilter asMessageFilter() {
-		return new MessageFilterImpl(this, false).withText();
+	private MessageFilter asMessageFilter(boolean excludeSelf) {
+		return new MessageFilterImpl(this, excludeSelf).withText().skipRepeated(5);
 	}
 
 	private Iterator<ProgressMessage> i = null;

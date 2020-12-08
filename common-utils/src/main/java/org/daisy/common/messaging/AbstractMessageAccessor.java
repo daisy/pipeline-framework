@@ -113,7 +113,7 @@ public abstract class AbstractMessageAccessor extends MessageAccessor {
 								messages,
 								(Message m) -> {
 									if (m instanceof ProgressMessage) {
-										MessageFilter f = ((ProgressMessage)m).asMessageFilter();
+										MessageFilter f = (ProgressMessage)m;
 										if (greaterThan != null)
 											f = f.greaterThan(greaterThan);
 										if (rangeStart != null)
