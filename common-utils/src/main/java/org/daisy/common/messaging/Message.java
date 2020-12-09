@@ -17,7 +17,11 @@ public class Message {
 		WARNING,
 		INFO,
 		DEBUG,
-		TRACE
+		TRACE;
+
+		public boolean isMoreSevereThan(Level other) {
+			return compareTo(other) < 0;
+		}
 	}
 
 	protected Throwable throwable;

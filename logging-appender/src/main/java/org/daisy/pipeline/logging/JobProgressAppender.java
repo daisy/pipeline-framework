@@ -8,6 +8,7 @@ import ch.qos.logback.core.AppenderBase;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
+import org.daisy.pipeline.properties.Properties;
 
 /**
  * Append to the current job progress thread.
@@ -27,6 +28,22 @@ import org.daisy.common.messaging.MessageBuilder;
  */
 public class JobProgressAppender extends AppenderBase<ILoggingEvent> {
 
+	// Global threshold under which messages should be ignored. This filtering also happens on the
+	// level of MessageAccessor, but doing it here also for further performance boost. The messages
+	// created by this class do not carry any progress information and are immediately closed, so it
+	// is safe to drop them completely (as opposed to hiding the text and promoting the child
+	// messages). Note that in addition to this (global) threshold, other thresholds can be set
+	// with ThresholdFilter.
+	private static Message.Level messagesThreshold;
+	static {
+		try {
+			messagesThreshold = Message.Level.valueOf(
+				Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
+		} catch (IllegalArgumentException e) {
+			messagesThreshold = Message.Level.INFO;
+		}
+	}
+	
 	// MessageAppender.getActiveBlockLogger() can not be used here because the logback appender is
 	// run in a separate thread. Using MDCBasedDiscriminator instead.
 	private MDCBasedDiscriminator threadDiscriminator;
@@ -44,15 +61,17 @@ public class JobProgressAppender extends AppenderBase<ILoggingEvent> {
 			return;
 		String threadId = threadDiscriminator.getDiscriminatingValue(event);
 		if (!"default".equals(threadId)) {
-			MessageAppender activeBlock = MessageAppender.getActiveBlock(threadId);
-			// we need an active block otherwise we have no place to send the message to
-			if (activeBlock != null) {
-				Level level = event.getLevel();
-				activeBlock.append(
-					new MessageBuilder()
-					    .withLevel(messageLevelFromLogbackLevel(level))
-					    .withText(event.getFormattedMessage())
-				).close();
+			Message.Level level = messageLevelFromLogbackLevel(event.getLevel());
+			if (!messagesThreshold.isMoreSevereThan(level)) {
+				MessageAppender activeBlock = MessageAppender.getActiveBlock(threadId);
+				// we need an active block otherwise we have no place to send the message to
+				if (activeBlock != null) {
+					activeBlock.append(
+						new MessageBuilder()
+						.withLevel(level)
+						.withText(event.getFormattedMessage())
+					).close();
+				}
 			}
 		}
 	}

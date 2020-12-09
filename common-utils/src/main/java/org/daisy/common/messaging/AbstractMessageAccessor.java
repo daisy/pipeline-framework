@@ -21,7 +21,7 @@ public abstract class AbstractMessageAccessor extends MessageAccessor {
 	public AbstractMessageAccessor(Level threshold) {
 		this.allLevels = new HashSet<>();
 		for (Level l : Level.values())
-			if (l.ordinal() <= threshold.ordinal())
+			if (!threshold.isMoreSevereThan(l))
 				allLevels.add(l);
 	}
 
