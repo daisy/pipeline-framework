@@ -101,10 +101,10 @@ public abstract class MessageAccessor {
 		public MessageFilter filterLevels(Set<Level> levels);
 		public MessageFilter greaterThan(int sequence);
 		/**
-		 * Get all the top-level messages affected by the events between "start" en "end". A
-		 * top-level message may have been added, or a message may have been changed by a progress
-		 * update or a new child message, or by a change of any of its already contained child
-		 * messages.
+		 * Get all the top-level messages affected by the events between (and including) "start" en
+		 * "end". A top-level message may have been added, or a message may have been changed by a
+		 * progress update or a new child message, or by a change of any of its already contained
+		 * child messages.
 		 */
 		public MessageFilter inRange(int start, int end);
 		public List<Message> getMessages();

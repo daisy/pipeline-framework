@@ -87,11 +87,11 @@ class MessageFilterImpl implements MessageFilter {
 		if (filter == null) {
 			if (excludeSelf)
 				filter = compose(getChildren, filter);
-			if (start != null || end != null) {
-				if (end == null)
-					filter = compose(sequenceFilter(start), filter);
-				else
-					filter = compose(sequenceFilter(start, end), filter);
+			if (start != null) {
+				filter = compose(end == null
+				                     ? sequenceFilter(start)
+				                     : sequenceFilter(start, end),
+				                 filter);
 			}
 			if (levels.size() < allLevels.size()) {
 				filter = compose(levelFilter(levels), filter);
@@ -152,7 +152,6 @@ class MessageFilterImpl implements MessageFilter {
 	 *
 	 * @param shallowFilter is applied on the message itself and recursively on the children
 	 */
-	@SuppressWarnings("unused")
 	private static Filter deepFilterTopDown(final Filter shallowFilter) {
 		return new Filter() {
 			private final Filter recur = compose(this, getChildren);
@@ -195,12 +194,20 @@ class MessageFilterImpl implements MessageFilter {
 	 * Hide messages that are not within the given range and that have no descendants within that range.
 	 */
 	private static Filter sequenceFilter(final int start, final int end) {
-		return deepFilterBottomUp(
-			m -> isLessOrEqual(start, m.getSequence(), end)
-			     || (!m.isOpen() && isLessOrEqual(start, m.getCloseSequence(), end))
-			     || !m.isEmpty()
-				? m.selfIterate()
-				: empty
+		return compose(
+			deepFilterBottomUp(
+				m -> isLessOrEqual(start, m.getSequence(), end)
+				     || (!m.isOpen() && isLessOrEqual(start, m.getCloseSequence(), end))
+				     || !m.isEmpty()
+					? m.selfIterate()
+					: empty),
+			// make use of the fact that a closed message which falls out of the range completely
+			// (also the closing message) can not have descendant messages that fall in the range
+			deepFilterTopDown(
+				m -> m.isOpen()
+				     || (isLessOrEqual(m.getSequence(), end) && isLessOrEqual(start, m.getCloseSequence()))
+					? m.selfIterate()
+					: empty)
 		);
 	}
 
