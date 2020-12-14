@@ -114,7 +114,7 @@ public final class Properties {
 					return expand(v);
 			}
 		}
-		return defaultValue;
+		return defaultValue != null ? expand(defaultValue) : null;
 	}
 
 	private static java.util.Properties readPropertiesFromFile() {
