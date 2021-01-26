@@ -95,24 +95,26 @@ public final class Properties {
 				if (!internalProperties.contains(key))
 					return expand(systemEnv.get(envKey));
 				else
-					logger().warn("Environment variable '{}' ignored", envKey);
+					logger().warn("Environment variable '{}' ignored; "
+					              + "expected to be specified through system property", envKey);
 		}
 		// then come system properties
 		String v = systemProperties.getProperty(key);
 		if (v != null)
-			if (!internalProperties.contains(key))
-				return expand(v);
-			else
-				logger().warn("System property '{}' ignored", key);
+			return expand(v);
 		// and finally properties defined in the pipeline.properties file
 		if (key.startsWith("org.daisy.pipeline.")) {
-			if (propertiesFromFile == null)
-				propertiesFromFile = readPropertiesFromFile();
-			if (propertiesFromFile != null) {
-				v = propertiesFromFile.getProperty(key);
-				if (v != null)
-					return expand(v);
-			}
+			if (!internalProperties.contains(key)) {
+				if (propertiesFromFile == null)
+					propertiesFromFile = readPropertiesFromFile();
+				if (propertiesFromFile != null) {
+					v = propertiesFromFile.getProperty(key);
+					if (v != null)
+						return expand(v);
+				}
+			} else
+				logger().warn("Property '{}' in pipeline.properties file ignored; "
+				              + "expected to be specified through system property", key);
 		}
 		return defaultValue != null ? expand(defaultValue) : null;
 	}
