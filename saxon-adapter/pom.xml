@@ -60,6 +60,31 @@
     </resources>
     <plugins>
       <plugin>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xspec-maven-plugin</artifactId>
+        <version>1.0.1</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.daisy.maven</groupId>
+            <artifactId>xspec-runner</artifactId>
+            <version>1.0.5</version>
+          </dependency>
+          <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>ds-to-spi-runtime</artifactId>
+            <version>1.1.1</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
@@ -101,6 +126,18 @@
                 org.daisy.common.saxon.impl.TransformerFactoryImpl,
                 org.daisy.common.xpath.saxon.impl.XPathFactoryImpl,
                 org.daisy.common.xpath.saxon.XPathFunctionRegistry
+              </includes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>generate-spi-test-classes</id>
+            <phase>process-test-sources</phase>
+            <goals>
+              <goal>generate-spi-test-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                MyClass$Provider
               </includes>
             </configuration>
           </execution>
