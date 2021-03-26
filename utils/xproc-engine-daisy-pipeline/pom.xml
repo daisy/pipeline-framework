@@ -44,14 +44,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-core</artifactId>
-      <!--
-          dependency of calabash-adapter
-      -->
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
       <!--
           dependency of calabash-adapter
