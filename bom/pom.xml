@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-bom</artifactId>
-  <version>1.14.1-SNAPSHOT</version>
+  <version>1.14.1</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework BoM</name>
@@ -50,12 +50,12 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>calabash-adapter</artifactId>
-        <version>4.1.1-SNAPSHOT</version>
+        <version>4.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>common-utils</artifactId>
-        <version>5.1.0-SNAPSHOT</version>
+        <version>5.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -500,4 +500,8 @@
 
     </dependencies>
   </dependencyManagement>
+
+  <scm>
+    <tag>v1.14.1</tag>
+  </scm>
 </project>
