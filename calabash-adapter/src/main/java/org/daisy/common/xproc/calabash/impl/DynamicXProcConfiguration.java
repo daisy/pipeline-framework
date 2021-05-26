@@ -24,6 +24,7 @@ public class DynamicXProcConfiguration extends XProcConfiguration {
 		super(processor);
 		this.stepRegistry = stepRegistry;
 		extensionValues = true;
+		sequenceAsContext = true;
 		// FIXME: This is a hack to disable the Calabash hack that makes sure the Saxon processor
 		// uses our resolver for everything. The way Calabash does it does not work in OSGi. Also I
 		// don't understand why the call to net.sf.saxon.Configuration.setURIResolver() isn't
