@@ -288,14 +288,14 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 
 	private static List<Object> listFromArrayItem(ArrayItem array, Type itemType) throws XPathException {
 		List<Object> list = new ArrayList<>();
-		for (Sequence s : array)
+		for (Sequence s : array.members())
 			list.add(objectFromItem(getSingleItem(s), itemType));
 		return list;
 	}
 
 	private static Map<String,Object> mapFromMapItem(MapItem item, Type itemType) throws XPathException {
 		Map<String,Object> map = new HashMap<>();
-		for (KeyValuePair kv : item)
+		for (KeyValuePair kv : item.keyValuePairs())
 			map.put(kv.key.getStringValue(), objectFromItem(getSingleItem(kv.value), itemType));
 		return map;
 	}

@@ -92,7 +92,7 @@ public class FrameworkCoreTest extends AbstractTest {
 	@Test
 	public void testCaughtError() throws IOException {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.WARN);
 		logger.addAppender(collectLog);
 		try {
 			OutputPortReader resultPort = new OutputPortReader();
@@ -109,8 +109,8 @@ public class FrameworkCoreTest extends AbstractTest {
 					"^\\Q" +
 					"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
 					"<c:errors xmlns:c=\"http://www.w3.org/ns/xproc-step\">" +
-					  "<c:error code=\"FOO\" name=\"!1.2\" type=\"p:error\" " +
-					           "href=\"\\E.+\\Q/module/error.xpl\" line=\"8\" column=\"25\">" +
+					  "<c:error xmlns=\"\" code=\"FOO\" name=\"!1.2\" type=\"p:error\" " +
+					           "href=\"\\E.+\\Q/module/catch-xproc-error.xpl\" line=\"18\" column=\"18\">" +
 					    "<message xmlns:px=\"http://www.daisy.org/ns/pipeline/xproc\">" +
 					      "foobar" +
 					    "</message>" +
@@ -145,7 +145,7 @@ public class FrameworkCoreTest extends AbstractTest {
 	@Test
 	public void testUncaughtXProcError() {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.WARN);
 		logger.addAppender(collectLog);
 		try {
 			Job job = newJob("xproc-error");
@@ -179,7 +179,7 @@ public class FrameworkCoreTest extends AbstractTest {
 	@Test
 	public void testUncaughtXProcErrorInsideCxEval() {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.WARN);
 		logger.addAppender(collectLog);
 		try {
 			Job job = newJob("cx-eval-error");
@@ -215,7 +215,7 @@ public class FrameworkCoreTest extends AbstractTest {
 	@Test
 	public void testCaughtXslTerminateError() throws IOException {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.WARN);
 		logger.addAppender(collectLog);
 		try {
 			OutputPortReader resultPort = new OutputPortReader();
@@ -265,7 +265,7 @@ public class FrameworkCoreTest extends AbstractTest {
 	@Test
 	public void testUncaughtXslTerminateError() {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.WARN);
 		logger.addAppender(collectLog);
 		try {
 			Job job = newJob("xslt-terminate-error");
@@ -298,7 +298,7 @@ public class FrameworkCoreTest extends AbstractTest {
 	@Test
 	public void testUncaughtJavaStepError() {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.WARN);
 		logger.addAppender(collectLog);
 		try {
 			Job job = newJob("java-step-runtime-error");
@@ -332,7 +332,7 @@ public class FrameworkCoreTest extends AbstractTest {
 	@Test
 	public void testUncaughtJavaFunctionError() {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.WARN);
 		logger.addAppender(collectLog);
 		try {
 			Job job = newJob("java-function-runtime-error");
@@ -375,7 +375,7 @@ public class FrameworkCoreTest extends AbstractTest {
 	@Test
 	public void testXslWarning() {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.WARN);
 		logger.addAppender(collectLog);
 		try {
 			Job job = newJob("xslt-warning");
@@ -386,11 +386,6 @@ public class FrameworkCoreTest extends AbstractTest {
 			try {
 				int seq = 0;
 				seq++; // p:xslt
-				assertMessage(next(messages), seq++, Message.Level.WARNING,
-				              Predicates.containsPattern("^\\Q" +
-				                  "err:XTDE0540:Ambiguous rule match for /hello\n" +
-				                  "Matches both \"element(Q{}hello)\" on line 21 of \\E.+\\Q/module/xslt-warning.xpl\n" +
-				                  "and \"element(Q{}hello)\" on line 17 of \\E.+\\Q/module/xslt-warning.xpl\\E$"));
 				Assert.assertFalse(messages.hasNext());
 			} catch (Throwable e) {
 				// print remaining messages
@@ -398,6 +393,10 @@ public class FrameworkCoreTest extends AbstractTest {
 				throw e;
 			}
 			Iterator<ILoggingEvent> log = collectLog.get();
+			assertLogMessage(next(log), "com.xmlcalabash.library.XSLT", Level.WARN,
+			                 Predicates.containsPattern("\\QAmbiguous rule match for /hello\n" +
+			                     "Matches both \"hello\" on line 21 of \\E.+\\Q/module/xslt-warning.xpl\n" +
+			                     "and \"hello\" on line 17 of \\E.+\\Q/module/xslt-warning.xpl\\E$"));
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
@@ -407,7 +406,7 @@ public class FrameworkCoreTest extends AbstractTest {
 	@Test
 	public void testXProcWarning() {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.WARN);
 		logger.addAppender(collectLog);
 		try {
 			Job job = newJob("xproc-warning");
@@ -425,6 +424,7 @@ public class FrameworkCoreTest extends AbstractTest {
 				throw e;
 			}
 			Iterator<ILoggingEvent> log = collectLog.get();
+			log.next(); // bundle://48.0:0/module/xproc-warning.xpl:10:83:Hello WORLD!
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
@@ -434,7 +434,7 @@ public class FrameworkCoreTest extends AbstractTest {
 	@Test
 	public void testProgressMessages() throws InterruptedException, ExecutionException {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
+		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.WARN);
 		logger.addAppender(collectLog);
 		try {
 			Job job = newJob("progress-messages");

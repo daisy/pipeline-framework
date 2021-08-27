@@ -94,9 +94,9 @@ public final class SaxonHelper {
 			return new javax.xml.namespace.QName(ns, localPart);
 	}
 
-	public static Iterable<XdmItem> axisIterable(XdmNode node, Axis axis) {
-		return new Iterable<XdmItem>() {
-			public Iterator<XdmItem> iterator() {
+	public static Iterable<XdmNode> axisIterable(XdmNode node, Axis axis) {
+		return new Iterable<XdmNode>() {
+			public Iterator<XdmNode> iterator() {
 				return node.axisIterator(axis);
 			}
 		};

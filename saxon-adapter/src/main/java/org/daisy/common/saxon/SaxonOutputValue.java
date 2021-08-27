@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import javax.xml.stream.XMLStreamException;
 
 import net.sf.saxon.Configuration;
+import net.sf.saxon.event.ComplexContentOutputter;
 import net.sf.saxon.event.NamespaceReducer;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.event.StreamWriterToReceiver;
@@ -14,11 +15,11 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.XPathException;
 
 import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
 import org.daisy.common.stax.DelegatingXMLStreamWriter;
-import org.daisy.common.transform.TransformerException;
 import org.daisy.common.transform.XMLOutputValue;
 
 public class SaxonOutputValue extends XMLOutputValue<Void> {
@@ -59,14 +60,13 @@ public class SaxonOutputValue extends XMLOutputValue<Void> {
 			private int elementDepth = 0;
 			protected BaseURIAwareXMLStreamWriter delegate() {
 				if (writer == null) {
-					try {
-						destination = new XdmDestination();
-						receiver = new NamespaceReducer(destination.getReceiver(config));
-						receiver.open();
-						writer = new BaseURIAwareStreamWriterToReceiver(receiver);
-					} catch (SaxonApiException | XPathException e) {
-						throw new TransformerException(e);
-					}
+					destination = new XdmDestination();
+					receiver = new ComplexContentOutputter(
+						new NamespaceReducer(
+							destination.getReceiver(
+								config.makePipelineConfiguration(),
+								new SerializationProperties())));
+					writer = new BaseURIAwareStreamWriterToReceiver(receiver);
 				}
 				return writer;
 			}
@@ -157,6 +157,9 @@ public class SaxonOutputValue extends XMLOutputValue<Void> {
 		private URI baseURI = null;
 		private boolean seenRoot = false;
 
+		/*
+		 * receiver may not be opened yet (otherwise setSystemId will have no effect)
+		 */
 		public BaseURIAwareStreamWriterToReceiver(Receiver receiver) {
 			super(receiver);
 			this.receiver = receiver;
@@ -170,12 +173,17 @@ public class SaxonOutputValue extends XMLOutputValue<Void> {
 			if (seenRoot)
 				throw new XMLStreamException("Setting base URI not supported after document has started.");
 			if (baseURI != null)
-				receiver.setSystemId(baseURI.toASCIIString());
+				receiver.setSystemId(baseURI.toString());
 			this.baseURI = baseURI;
 		}
 
 		@Override
 		public void writeStartDocument() throws XMLStreamException {
+			try {
+				receiver.open();
+			} catch (XPathException e) {
+				throw new XMLStreamException(e);
+			}
 			super.writeStartDocument();
 			seenRoot = true;
 		}

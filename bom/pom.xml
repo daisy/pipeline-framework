@@ -36,7 +36,7 @@
     <osgi.version>5.0.0</osgi.version>
     <powermock.version>2.0.2</powermock.version>
     <restlet.version>2.1-RC6</restlet.version>
-    <saxon-he.version>9.8.0.8-1</saxon-he.version>
+    <saxon-he.version>10.5</saxon-he.version>
     <slf4j.version>1.7.32</slf4j.version>
     <woodstox.core.version>4.1.2</woodstox.core.version>
     <woodstox.stax2-api.version>3.1.1</woodstox.stax2-api.version>

@@ -68,7 +68,7 @@ public class XMLCalabashInputValue extends SaxonInputValue {
 			public boolean readSequence() {
 				return true;
 			}
-			public XdmNode read() throws SaxonApiException {
+			public XdmNode read() {
 				XdmItem i = itemIterator.next();
 				if (i instanceof XdmNode)
 					return (XdmNode)i;
