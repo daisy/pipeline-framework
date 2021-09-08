@@ -142,53 +142,58 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 					return new ExtensionFunctionCall() {
 						@Override
 						public Sequence call(XPathContext ctxt, Sequence[] args) throws XPathException {
-							if (args.length != argCount)
-								throw new IllegalArgumentException(); // should not happen
-							int i = 0;
-							Object instance = null;
-							if (!isStatic) {
-								Item item = getSingleItem(args[i++]);
-								if (!(item instanceof ObjectValue))
+							try {
+								if (args.length != argCount)
 									throw new IllegalArgumentException(); // should not happen
-								instance = ((ObjectValue<?>)item).getObject();
-							}
-							Object[] javaArgs = new Object[method.getParameterCount()];
-							int j = 0;
-							for (Type type : method.getGenericParameterTypes()) {
-								if (type.equals(XPath.class))
-									javaArgs[j++] = new XPathFactoryImpl(ctxt.getConfiguration()).newXPath();
-								else if (type.equals(DocumentBuilder.class)) {
-									DocumentBuilderImpl b = new DocumentBuilderImpl();
-									b.setConfiguration(ctxt.getConfiguration());
-									javaArgs[j++] = b;
-								} else if (type instanceof ParameterizedType
-								         && ((ParameterizedType)type).getRawType().equals(Iterator.class))
-									javaArgs[j++] = iteratorFromSequence(
-										args[i++],
-										((ParameterizedType)type).getActualTypeArguments()[0]);
-								else
-									javaArgs[j++] = objectFromItem(getSingleItem(args[i++]), type);
-							}
-							Object result; {
-								try {
-									if (method instanceof Constructor)
-										result = ((Constructor<?>)method).newInstance(javaArgs);
-									else
-										result = ((Method)method).invoke(instance, javaArgs);
-								} catch (InstantiationException|InvocationTargetException e) {
-									throw new XPathException(e.getCause());
-								} catch (IllegalAccessException e) {
-									throw new RuntimeException(); // should not happen
+								int i = 0;
+								Object instance = null;
+								if (!isStatic) {
+									Item item = getSingleItem(args[i++]);
+									if (!(item instanceof ObjectValue))
+										throw new IllegalArgumentException(
+											"Expected ObjectValue<" + declaringClass.getSimpleName() + ">" + ", but got: " + item);
+									instance = ((ObjectValue<?>)item).getObject();
 								}
+								Object[] javaArgs = new Object[method.getParameterCount()];
+								int j = 0;
+								for (Type type : method.getGenericParameterTypes()) {
+									if (type.equals(XPath.class))
+										javaArgs[j++] = new XPathFactoryImpl(ctxt.getConfiguration()).newXPath();
+									else if (type.equals(DocumentBuilder.class)) {
+										DocumentBuilderImpl b = new DocumentBuilderImpl();
+										b.setConfiguration(ctxt.getConfiguration());
+										javaArgs[j++] = b;
+									} else if (type instanceof ParameterizedType
+									           && ((ParameterizedType)type).getRawType().equals(Iterator.class))
+										javaArgs[j++] = iteratorFromSequence(
+											args[i++],
+											((ParameterizedType)type).getActualTypeArguments()[0]);
+									else
+										javaArgs[j++] = objectFromItem(getSingleItem(args[i++]), type);
+								}
+								Object result; {
+									try {
+										if (method instanceof Constructor)
+											result = ((Constructor<?>)method).newInstance(javaArgs);
+										else
+											result = ((Method)method).invoke(instance, javaArgs);
+									} catch (InstantiationException|InvocationTargetException e) {
+										throw new XPathException(e.getCause());
+									} catch (IllegalAccessException e) {
+										throw new RuntimeException(); // should not happen
+									}
+								}
+								if (result == null)
+									return EmptySequence.getInstance();
+								else if (declaringClass.isInstance(result))
+									return new ObjectValue<>(result);
+								else if (result instanceof Iterator)
+									return sequenceFromIterator((Iterator<?>)result);
+								else
+									return itemFromObject(result);
+							} catch (RuntimeException e) {
+								throw new XPathException("Unexpected error in " + getFunctionQName().getClarkName(), e);
 							}
-							if (result == null)
-								return EmptySequence.getInstance();
-							else if (declaringClass.isInstance(result))
-								return new ObjectValue<>(result);
-							else if (result instanceof Iterator)
-								return sequenceFromIterator((Iterator<?>)result);
-							else
-								return itemFromObject(result);
 						}
 					};
 				}
