@@ -7,7 +7,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,6 +18,7 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.xpath.XPath;
 
+import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.saxon.SaxonInputValue;
 
 import org.w3c.dom.Node;
@@ -38,12 +38,9 @@ import net.sf.saxon.om.SequenceIterator;
 import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.value.BooleanValue;
-import net.sf.saxon.value.EmptySequence;
 import net.sf.saxon.value.FloatValue;
 import net.sf.saxon.value.IntegerValue;
 import net.sf.saxon.value.ObjectValue;
-import net.sf.saxon.value.SequenceExtent;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 import net.sf.saxon.xpath.XPathFactoryImpl;
@@ -183,14 +180,10 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 										throw new RuntimeException(); // should not happen
 									}
 								}
-								if (result == null)
-									return EmptySequence.getInstance();
-								else if (declaringClass.isInstance(result))
+								if (declaringClass.isInstance(result))
 									return new ObjectValue<>(result);
-								else if (result instanceof Iterator)
-									return sequenceFromIterator((Iterator<?>)result);
 								else
-									return itemFromObject(result);
+									return SaxonHelper.sequenceFromObject(result);
 							} catch (RuntimeException e) {
 								throw new XPathException("Unexpected error in " + getFunctionQName().getClarkName(), e);
 							}
@@ -243,30 +236,6 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			}
 		}
 		throw new IllegalArgumentException("Unsupported type: " + type);
-	}
-
-	private static Item itemFromObject(Object object) {
-		if (object == null)
-			throw new IllegalArgumentException();
-		else if (object instanceof String)
-			return new StringValue((String)object);
-		else if (object instanceof Integer)
-			return IntegerValue.makeIntegerValue(BigInteger.valueOf((Integer)object));
-		else if (object instanceof Long)
-			return IntegerValue.makeIntegerValue(BigInteger.valueOf((Long)object));
-		else if (object instanceof Float)
-			return FloatValue.makeFloatValue((Float)object);
-		else if (object instanceof Boolean)
-			return BooleanValue.get((Boolean)object);
-		else
-			throw new IllegalArgumentException();
-	}
-
-	private static Sequence sequenceFromIterator(Iterator<?> iterator) {
-		List<Item> list = new ArrayList<>();
-		while (iterator.hasNext())
-			list.add(itemFromObject(iterator.next()));
-		return new SequenceExtent(list);
 	}
 
 	private static Iterator<?> iteratorFromSequence(Sequence sequence, Type itemType) throws XPathException {

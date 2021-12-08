@@ -40,19 +40,19 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 						XProcStep.this.setInput(n.getLocalPart(), XMLCalabashInputValue.of(i).asReadablePipe());
 					} else if (i instanceof StringWithNamespaceContext) {
 						XProcStep.this.setOption(new net.sf.saxon.s9api.QName(n),
-						                         XMLCalabashOptionValue.of((StringWithNamespaceContext)i).asRuntimeValue());
+						                         XMLCalabashOptionValue.of(i).asRuntimeValue());
 					} else {
 						try {
-							XProcStep.this.setOption(new net.sf.saxon.s9api.QName(n),
-							                         XMLCalabashOptionValue.of(i).asRuntimeValue());
+							Map<net.sf.saxon.s9api.QName,RuntimeValue> params
+								= XMLCalabashParameterInputValue.of(i).asRuntimeValueMap();
+							if (n.getNamespaceURI() != null && !"".equals(n.getNamespaceURI()))
+								throw new IllegalArgumentException("unexpected value on input port " + n);
+							for (net.sf.saxon.s9api.QName p : params.keySet())
+								XProcStep.this.setParameter(n.getLocalPart(), p, params.get(p));
 						} catch (IllegalArgumentException e) {
 							try {
-								Map<net.sf.saxon.s9api.QName,RuntimeValue> params
-									= XMLCalabashParameterInputValue.of(i).asRuntimeValueMap();
-								if (n.getNamespaceURI() != null && !"".equals(n.getNamespaceURI()))
-									throw new IllegalArgumentException("unexpected value on input port " + n);
-								for (net.sf.saxon.s9api.QName p : params.keySet())
-									XProcStep.this.setParameter(n.getLocalPart(), p, params.get(p));
+								XProcStep.this.setOption(new net.sf.saxon.s9api.QName(n),
+								                         XMLCalabashOptionValue.of(i).asRuntimeValue());
 							} catch (IllegalArgumentException ee) {
 								throw new IllegalArgumentException("unexpected value on input port " + n);
 							}
