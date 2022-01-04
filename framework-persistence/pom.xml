@@ -29,6 +29,10 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xproc-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
     </dependency>
     <dependency>

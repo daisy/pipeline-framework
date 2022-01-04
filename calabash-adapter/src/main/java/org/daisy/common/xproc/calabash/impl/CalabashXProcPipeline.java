@@ -5,7 +5,6 @@ import java.util.Properties;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
-import javax.xml.transform.SourceLocator;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 
@@ -23,7 +22,9 @@ import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcResult;
+import org.daisy.common.xproc.calabash.CalabashXProcError;
 import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
+
 import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -31,6 +32,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+
 import com.xmlcalabash.core.XProcConfiguration;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcMessageListener;
@@ -259,7 +261,8 @@ public class CalabashXProcPipeline implements XProcPipeline {
                 //propagate possible errors
 			
 		} catch (XProcException e) {
-			throw new XProcErrorException(new CalabashXProcError(e), e);
+			XProcError err = CalabashXProcError.from(e);
+			throw new XProcErrorException(err, e);
 		} catch (Exception e) {
                         throw new RuntimeException(e);
 
@@ -270,35 +273,6 @@ public class CalabashXProcPipeline implements XProcPipeline {
                 }
 		return CalabashXProcResult.newInstance( pipeline.xpipe ,
 				pipeline.config);
-	}
-
-	private class CalabashXProcError extends XProcError {
-		
-		final XProcException e;
-		
-		CalabashXProcError(XProcException e) {
-			this.e = e;
-		}
-		
-		public String getCode() {
-			if (e.getErrorCode() != null)
-				return e.getErrorCode().toString();
-			else
-				return null;
-		}
-		
-		public String getMessage() {
-			return e.getMessage();
-		}
-		
-		public XProcError getCause() {
-			XProcException cause = e.getErrorCause();
-			return cause == null ? null : new CalabashXProcError(cause);
-		}
-		
-		public SourceLocator[] getLocation() {
-			return e.getLocation();
-		}
 	}
 
 	/**

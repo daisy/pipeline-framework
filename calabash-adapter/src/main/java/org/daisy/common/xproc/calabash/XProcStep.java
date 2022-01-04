@@ -22,6 +22,7 @@ import org.daisy.common.transform.OutputValue;
 import org.daisy.common.transform.StringWithNamespaceContext;
 import org.daisy.common.transform.TransformerException;
 import org.daisy.common.transform.XMLTransformer;
+import org.daisy.common.xproc.XProcErrorException;
 
 /**
  * {@link com.xmlcalabash.core.XProcStep} that also implements the {@link XMLTransformer} API.
@@ -163,14 +164,20 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 	public static XProcException raiseError(Throwable e, XAtomicStep step) {
 		if (e instanceof XProcException)
 			throw (XProcException)e;
-		else {
+		else if (e instanceof XProcErrorException) {
+			throw CalabashExceptionFromXProcError.from(((XProcErrorException)e).getXProcError());
+		} else {
 			StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
 			stackTrace = Arrays.copyOfRange(stackTrace, 1, stackTrace.length);
 			if (e instanceof TransformerException) {
-				XProcException cause = e.getCause() != null
-					? XProcException.fromException(e.getCause())
-					                .rebase(step.getLocation(), stackTrace)
-					: null;
+				XProcException cause = e.getCause() instanceof XProcException
+					? (XProcException)e.getCause()
+					: e.getCause() instanceof XProcErrorException
+						? CalabashExceptionFromXProcError.from(((XProcErrorException)e.getCause()).getXProcError())
+						: e.getCause() != null
+							? XProcException.fromException(e.getCause())
+							                .rebase(step.getLocation(), stackTrace)
+							: null;
 				return e.getMessage() != null
 					? cause != null
 						? new XProcException(step, e.getMessage(), cause)

@@ -18,7 +18,7 @@ import static org.daisy.common.stax.XMLStreamWriterHelper.skipElement;
 
 public abstract class XProcError {
 	
-	public abstract String getCode();
+	public abstract QName getCode();
 	
 	public abstract String getMessage();
 	
@@ -67,7 +67,7 @@ public abstract class XProcError {
 			throw new IllegalArgumentException();
 		if (!C_ERROR.equals(reader.getName()))
 			throw new IllegalArgumentException();
-		String code = null;
+		QName code = null;
 		String message = null;
 		List<SourceLocator> location = null;
 		XProcError cause = null;
@@ -75,7 +75,13 @@ public abstract class XProcError {
 			QName name = reader.getAttributeName(i);
 			String value = reader.getAttributeValue(i);
 			if (_CODE.equals(name)) {
-				code = value;
+				if (value.contains(":")) {
+					String prefix = value.substring(0, value.indexOf(":"));
+					String namespace = reader.getNamespaceContext().getNamespaceURI(prefix);
+					String localPart = value.substring(prefix.length() + 1, value.length());
+					code = new QName(namespace, localPart, prefix);
+				} else
+					code = new QName(value);
 				break;
 			}
 		}
@@ -101,14 +107,14 @@ public abstract class XProcError {
 					break;
 				case END_ELEMENT:
 					if (C_ERROR.equals(reader.getName())) {
-						String _code = code;
+						QName _code = code;
 						String _message = message;
 						SourceLocator[] _location = location == null
 							? new SourceLocator[]{}
 							: location.toArray(new SourceLocator[location.size()]);
 						XProcError _cause = cause;
 						return new XProcError() {
-							public String getCode() { return _code; }
+							public QName getCode() { return _code; }
 							public String getMessage() { return _message; }
 							public XProcError getCause() { return _cause; }
 							public SourceLocator[] getLocation() { return _location; }
