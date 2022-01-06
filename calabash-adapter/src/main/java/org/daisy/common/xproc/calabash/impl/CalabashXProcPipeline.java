@@ -265,8 +265,10 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		// run
 		try {
 			pipeline.xpipe.run();
-                //propagate possible errors
-			
+			// make sure all lazy code is executed by accessing all output ports
+			for (String port : pipeline.xpipe.getOutputs()) {
+				pipeline.xpipe.readFrom(port).moreDocuments();
+			}
 		} catch (XProcException e) {
 
 			// if multiple errors have been reported, log all except the last one (the last one
