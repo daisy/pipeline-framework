@@ -13,6 +13,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
@@ -72,7 +73,12 @@ public final class CalabashXProcResult implements XProcResult {
 				Supplier<Result> resultProvider = output.getResultProvider(port);
 
 				ReadablePipe rpipe = xpipeline.readFrom(port);
-				while (rpipe.moreDocuments()) {
+				while (true) {
+					try {
+						if (!rpipe.moreDocuments()) break;
+					} catch (SaxonApiException e) {
+						throw new RuntimeException(e); // should not happen
+					}
 					Serializer serializer = SerializationUtils.newSerializer(
 							xpipeline.getSerialization(port), configuration);
 					Result result = resultProvider.get();
@@ -102,10 +108,17 @@ public final class CalabashXProcResult implements XProcResult {
 							}
 						}
 					}
+					XdmNode node; {
+						try {
+							node = rpipe.read();
+						} catch (SaxonApiException e) {
+							throw new RuntimeException(e); // should not happen
+						}
+					}
 					try {
-						serializer.serializeNode(rpipe.read());
+						serializer.serializeNode(node);
 					} catch (SaxonApiException e) {
-						throw new RuntimeException("Error caught when writing results",e);
+						throw new RuntimeException("Error caught when writing results", e);
 					}
 				}
 			}
