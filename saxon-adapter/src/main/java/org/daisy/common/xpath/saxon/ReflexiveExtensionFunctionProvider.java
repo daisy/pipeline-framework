@@ -269,17 +269,13 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 	private static <T> Iterator<T> iteratorFromSequence(Sequence sequence, Class<T> itemType) throws XPathException {
 		if (itemType.equals(Node.class)) {
 			List<XdmNode> list = new ArrayList<>();
-			Configuration config = null;
 			SequenceIterator iterator = sequence.iterate();
 			Item next;
-			while ((next = iterator.next()) != null) {
+			while ((next = iterator.next()) != null)
 				list.add(objectFromItem(next, XdmNode.class));
-				if (config == null)
-					config = ((NodeInfo)next).getConfiguration();
-			}
 			return list.isEmpty()
 				? (Iterator<T>)Collections.EMPTY_LIST.iterator()
-				: (Iterator<T>)new SaxonInputValue(list.iterator(), config).asNodeIterator();
+				: (Iterator<T>)new SaxonInputValue(list.iterator()).asNodeIterator();
 		} else {
 			List<T> list = new ArrayList<>();
 			SequenceIterator iterator = sequence.iterate();

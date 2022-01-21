@@ -137,7 +137,7 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 					Map<QName,InputValue<?>> input = new HashMap<>();
 					if (inputs != null)
 						for (String port : inputs.keySet())
-							input.put(new QName(port), new XMLCalabashInputValue(inputs.get(port), runtime));
+							input.put(new QName(port), new XMLCalabashInputValue(inputs.get(port)));
 					if (options != null)
 						for (QName name : options.keySet())
 							input.put(name, new XMLCalabashOptionValue(options.get(name)));
