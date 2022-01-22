@@ -51,14 +51,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>webservice</artifactId>
-      <!--
-          optional dependency
-      -->
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <scope>provided</scope>
