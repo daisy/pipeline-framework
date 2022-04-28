@@ -24,7 +24,6 @@ public final class Properties {
 	private final static java.util.Properties systemProperties = System.getProperties();
 	private final static Map<String,String> systemEnv = System.getenv();
 	private final static Set<String> internalProperties = ImmutableSet.of(
-		"org.daisy.pipeline.xproc.configuration",
 		"org.daisy.pipeline.updater.bin",
 		"org.daisy.pipeline.updater.deployPath",
 		"org.daisy.pipeline.updater.releaseDescriptor");
@@ -125,9 +124,6 @@ public final class Properties {
 		else if ("org.daisy.pipeline.updater.releaseDescriptor".equals(key))
 			// pipeline-assembly is responsible for placing the file at this location
 			return expand("${org.daisy.pipeline.home}/etc/releaseDescriptor.xml");
-		else if ("org.daisy.pipeline.xproc.configuration".equals(key))
-			// pipeline-assembly is responsible for placing the file at this location
-			return expand("${org.daisy.pipeline.home}/etc/config-calabash.xml");
 		// return default value
 		return defaultValue != null ? expand(defaultValue) : null;
 	}
