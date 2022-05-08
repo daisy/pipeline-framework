@@ -125,7 +125,7 @@ public final class Properties {
 			// pipeline-assembly is responsible for placing the file at this location
 			return expand("${org.daisy.pipeline.home}/etc/releaseDescriptor.xml");
 		// return default value
-		return defaultValue != null ? expand(defaultValue) : null;
+		return defaultValue;
 	}
 
 	private static java.util.Properties readPropertiesFromFile() {
