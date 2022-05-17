@@ -2,6 +2,8 @@ package org.daisy.common.xproc.calabash.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -84,7 +86,14 @@ public final class CalabashXProcResult implements XProcResult {
 					Result result = resultProvider.get();
 					if (result instanceof StreamResult) {
 						StreamResult streamResult = (StreamResult) result;
-						serializer.setOutputStream(streamResult.getOutputStream());
+						OutputStream os = streamResult.getOutputStream();
+						if (os != null)
+							serializer.setOutputStream(os);
+						else {
+							Writer w = streamResult.getWriter();
+							if (w != null)
+								serializer.setOutputWriter(w);
+						}
 					} else {
 						URI uri = null;
 						try {

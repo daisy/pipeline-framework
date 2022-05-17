@@ -257,6 +257,28 @@
     </pluginManagement>
   </build>
 
+  <profiles>
+    <profile>
+      <id>modules-with-java-test-exclusions</id>
+      <activation>
+        <file>
+          <exists>src/test/java/ignore</exists>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <excludesFile>src/test/java/ignore</excludesFile>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
   <repositories>
     <!--
       Restlet is not on Maven Central
