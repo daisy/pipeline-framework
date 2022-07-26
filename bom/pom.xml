@@ -417,48 +417,6 @@
         <version>${slf4j.version}</version>
       </dependency>
 
-
-      <!-- Third-Party Libraries required by GUI -->
-      <dependency>
-        <groupId>de.jangassen</groupId>
-        <artifactId>nsmenufx</artifactId>
-        <version>2.1.8</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.libs</groupId>
-        <artifactId>pegdown</artifactId>
-        <version>1.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.libs</groupId>
-        <artifactId>parboiled</artifactId>
-        <version>1.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.parboiled</groupId>
-        <artifactId>parboiled-core</artifactId>
-        <version>1.1.7</version>
-      </dependency>
-      <dependency>
-        <groupId>org.ow2.asm</groupId>
-        <artifactId>asm</artifactId>
-        <version>5.0.3</version>
-      </dependency>
-      <dependency>
-        <groupId>org.ow2.asm</groupId>
-        <artifactId>asm-analysis</artifactId>
-        <version>5.0.3</version>
-      </dependency>
-      <dependency>
-        <groupId>org.ow2.asm</groupId>
-        <artifactId>asm-tree</artifactId>
-        <version>5.0.3</version>
-      </dependency>
-      <dependency>
-        <groupId>org.ow2.asm</groupId>
-        <artifactId>asm-util</artifactId>
-        <version>5.0.3</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 </project>
