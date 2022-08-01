@@ -95,7 +95,7 @@ public class JobsResource extends AuthenticatedResource {
                         return null;
                 }
                 JobManager jobMan = webservice().getJobManager(this.getClient());
-                JobsXmlWriter writer = new JobsXmlWriter(jobMan.getJobs());
+                JobsXmlWriter writer = new JobsXmlWriter(jobMan.getJobs(), getRequest().getRootRef().toString());
                 if(this.webservice().getConfiguration().isLocalFS()){
                 	writer.withLocalPaths();
                 }
@@ -195,7 +195,7 @@ public class JobsResource extends AuthenticatedResource {
                 webservice().getStorage().getJobConfigurationStorage()
                     .add(job.get().getId(), XmlUtils.nodeToString(doc));
 
-                JobXmlWriter writer = new JobXmlWriter(job.get());
+                JobXmlWriter writer = new JobXmlWriter(job.get(), getRequest().getRootRef().toString());
                 Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
                 setStatus(Status.SUCCESS_CREATED);
@@ -410,7 +410,8 @@ public class JobsResource extends AuthenticatedResource {
                                 if (handler == null) {
                                         throw new RuntimeException("No push notifier");
                                 }
-                                handler.addCallback(new PosterCallback(newJob.get(), type, freq, href, getClient()));
+                                handler.addCallback(new PosterCallback(newJob.get(), type, freq, href, getClient(),
+                                                                       getRequest().getRootRef().toString()));
                         } catch (URISyntaxException e) {
                                 logger.warn("Cannot create callback: " + e.getMessage());
                         }
