@@ -43,7 +43,6 @@ import org.daisy.pipeline.webservice.CallbackHandler;
 import org.daisy.pipeline.webservice.xml.JobXmlWriter;
 import org.daisy.pipeline.webservice.xml.JobsXmlWriter;
 import org.daisy.pipeline.webservice.xml.XmlUtils;
-import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
 
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -97,7 +96,7 @@ public class JobsResource extends AuthenticatedResource {
                         return null;
                 }
                 JobManager jobMan = webservice().getJobManager(this.getClient());
-                JobsXmlWriter writer = XmlWriterFactory.createXmlWriterForJobs(jobMan.getJobs());
+                JobsXmlWriter writer = new JobsXmlWriter(jobMan.getJobs());
                 if(this.webservice().getConfiguration().isLocalFS()){
                 	writer.withLocalPaths();
                 }
@@ -197,7 +196,7 @@ public class JobsResource extends AuthenticatedResource {
                 webservice().getStorage().getJobConfigurationStorage()
                     .add(job.get().getId(), XmlUtils.nodeToString(doc));
 
-                JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job.get());
+                JobXmlWriter writer = new JobXmlWriter(job.get());
                 Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
                 setStatus(Status.SUCCESS_CREATED);
