@@ -8,6 +8,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,7 +26,6 @@ import org.daisy.common.saxon.SaxonInputValue;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import net.sf.saxon.Configuration;
 import net.sf.saxon.dom.DocumentBuilderImpl;
 import net.sf.saxon.dom.ElementOverNodeInfo;
 import net.sf.saxon.dom.NodeOverNodeInfo;
@@ -96,7 +96,9 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			throw new IllegalArgumentException(); // vararg functions not supported
 		else {
 			Class<?> declaringClass = method.getDeclaringClass();
-			boolean isStatic = method instanceof Constructor || Modifier.isStatic(method.getModifiers());
+			boolean isInnerClass = Arrays.stream(getClass().getClasses()).anyMatch(declaringClass::equals);
+			boolean isConstructor = method instanceof Constructor;
+			boolean isStatic = isConstructor || Modifier.isStatic(method.getModifiers());
 			boolean requiresXPath = false;
 			boolean requiresDocumentBuilder = false;
 			for (Class<?> t : method.getParameterTypes()) {
@@ -110,18 +112,26 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 					requiresDocumentBuilder = true;
 				}
 			}
-			int argCount = method.getParameterCount()
+			Type[] javaArgumentTypes; { // arguments of Java method/constructor
+				Type[] types = method.getGenericParameterTypes();
+				javaArgumentTypes = isConstructor && isInnerClass
+					// in case of constructor of inner class, first element is type of enclosing instance
+					? Arrays.copyOfRange(types, 1, types.length)
+					: types;
+			}
+			SequenceType[] argumentTypes = new SequenceType[ // arguments of XPath function
+				javaArgumentTypes.length
 				+ (isStatic ? 0 : 1)
 				- (requiresXPath ? 1 : 0)
-				- (requiresDocumentBuilder ? 1 : 0);
-			SequenceType[] argumentTypes = new SequenceType[argCount];
+				- (requiresDocumentBuilder ? 1 : 0)
+			];
 			int i = 0;
 			if (!isStatic)
 				argumentTypes[i++] = SequenceType.SINGLE_ITEM; // must be special wrapper item
-			for (Type t : method.getGenericParameterTypes())
+			for (Type t : javaArgumentTypes)
 				if (!t.equals(XPath.class) && !t.equals(DocumentBuilder.class))
 					argumentTypes[i++] = sequenceTypeFromType(t);
-			SequenceType resultType = (method instanceof Constructor
+			SequenceType resultType = (isConstructor
 			                           || ((Method)method).getReturnType().equals(declaringClass))
 				? SequenceType.SINGLE_ITEM // special wrapper item
 				: sequenceTypeFromType(((Method)method).getGenericReturnType());
@@ -134,7 +144,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 				public StructuredQName getFunctionQName() {
 					return new StructuredQName(declaringClass.getSimpleName(),
 					                           declaringClass.getName(),
-					                           method instanceof Constructor ? "new" : method.getName());
+					                           isConstructor ? "new" : method.getName());
 				}
 				@Override
 				public SequenceType getResultType(SequenceType[] arg0) {
@@ -146,7 +156,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 						@Override
 						public Sequence call(XPathContext ctxt, Sequence[] args) throws XPathException {
 							try {
-								if (args.length != argCount)
+								if (args.length != argumentTypes.length)
 									throw new IllegalArgumentException(); // should not happen
 								int i = 0;
 								Object instance = null;
@@ -157,9 +167,15 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 											"Expected ObjectValue<" + declaringClass.getSimpleName() + ">" + ", but got: " + item);
 									instance = ((ObjectValue<?>)item).getObject();
 								}
-								Object[] javaArgs = new Object[method.getParameterCount()];
+								Object[] javaArgs = new Object[ // arguments passed to Method.invoke() in addition to instance,
+								                                // or to Constructor.newInstance()
+									method.getParameterCount()
+								];
 								int j = 0;
-								for (Type type : method.getGenericParameterTypes()) {
+								if (isConstructor && isInnerClass)
+									// in case of constructor of inner class, first argument is enclosing instance
+									javaArgs[j++] = ReflexiveExtensionFunctionProvider.this;
+								for (Type type : javaArgumentTypes) {
 									if (type.equals(XPath.class))
 										javaArgs[j++] = new XPathFactoryImpl(ctxt.getConfiguration()).newXPath();
 									else if (type.equals(DocumentBuilder.class)) {
@@ -182,7 +198,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 								}
 								Object result; {
 									try {
-										if (method instanceof Constructor)
+										if (isConstructor)
 											result = ((Constructor<?>)method).newInstance(javaArgs);
 										else
 											result = ((Method)method).invoke(instance, javaArgs);

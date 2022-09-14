@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:x="http://www.jenitennison.com/xslt/xspec"
-                xmlns:MyClass="MyClass">
+                xmlns:MyClass="MyClassProvider$MyClass">
 
 	<xsl:function name="x:test" as="xs:string">
 		<xsl:variable name="x" select="MyClass:new('foobar')"/>
