@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -44,8 +45,10 @@ import net.sf.saxon.om.SequenceIterator;
 import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.type.ValidationException;
 import net.sf.saxon.value.AnyURIValue;
 import net.sf.saxon.value.BooleanValue;
+import net.sf.saxon.value.DecimalValue;
 import net.sf.saxon.value.FloatValue;
 import net.sf.saxon.value.IntegerValue;
 import net.sf.saxon.value.ObjectValue;
@@ -247,6 +250,8 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 		else if (type.equals(Float.class)
 		         || type.equals(float.class))
 			return SequenceType.SINGLE_FLOAT;
+		else if (type.equals(BigDecimal.class))
+			return SequenceType.SINGLE_DECIMAL;
 		else if (type.equals(Boolean.class)
 		         || type.equals(boolean.class))
 			return SequenceType.SINGLE_BOOLEAN;
@@ -385,6 +390,15 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 		else if (type.equals(Float.class) || type.equals(float.class))
 			if (item instanceof FloatValue)
 				return (T)(Float)((FloatValue)item).getFloatValue();
+			else
+				throw new IllegalArgumentException();
+		else if (type.equals(BigDecimal.class))
+			if (item instanceof DecimalValue)
+				try {
+					return (T)(BigDecimal)((DecimalValue)item).getDecimalValue();
+				} catch (ValidationException e) {
+					throw new RuntimeException(e); // should not happen
+				}
 			else
 				throw new IllegalArgumentException();
 		else if (type.equals(Boolean.class))

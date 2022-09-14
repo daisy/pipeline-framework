@@ -1,5 +1,6 @@
 package org.daisy.common.saxon;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import net.sf.saxon.sxpath.XPathEvaluator;
 import net.sf.saxon.sxpath.XPathExpression;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.AnyURIValue;
+import net.sf.saxon.value.BigDecimalValue;
 import net.sf.saxon.value.BooleanValue;
 import net.sf.saxon.value.EmptySequence;
 import net.sf.saxon.value.FloatValue;
@@ -56,6 +58,8 @@ public final class SaxonHelper {
 			return IntegerValue.makeIntegerValue(BigInteger.valueOf((Long)object));
 		else if (object instanceof Float)
 			return FloatValue.makeFloatValue((Float)object);
+		else if (object instanceof BigDecimal)
+			return new BigDecimalValue((BigDecimal)object);
 		else if (object instanceof Boolean)
 			return BooleanValue.get((Boolean)object);
 		else if (object instanceof URI)
