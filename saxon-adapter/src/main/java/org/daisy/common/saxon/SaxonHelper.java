@@ -1,6 +1,7 @@
 package org.daisy.common.saxon;
 
 import java.math.BigInteger;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -21,6 +22,7 @@ import net.sf.saxon.sxpath.XPathDynamicContext;
 import net.sf.saxon.sxpath.XPathEvaluator;
 import net.sf.saxon.sxpath.XPathExpression;
 import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.value.AnyURIValue;
 import net.sf.saxon.value.BooleanValue;
 import net.sf.saxon.value.EmptySequence;
 import net.sf.saxon.value.FloatValue;
@@ -56,6 +58,8 @@ public final class SaxonHelper {
 			return FloatValue.makeFloatValue((Float)object);
 		else if (object instanceof Boolean)
 			return BooleanValue.get((Boolean)object);
+		else if (object instanceof URI)
+			return new AnyURIValue(((URI)object).toASCIIString());
 		else
 			throw new IllegalArgumentException();
 	}
@@ -70,12 +74,14 @@ public final class SaxonHelper {
 	public static XdmValue xdmValueFromObject(Object object) {
 		if (object == null)
 			return XdmValue.wrap(EmptySequence.getInstance());
-		if (object instanceof String)
+		else if (object instanceof String)
 			return new XdmAtomicValue((String)object);
 		else if (object instanceof Integer)
 			return new XdmAtomicValue((Integer)object);
 		else if (object instanceof Boolean)
 			return new XdmAtomicValue((Boolean)object);
+		else if (object instanceof URI)
+			return new XdmAtomicValue((URI)object);
 		else
 			try {
 				return XdmValue.wrap(sequenceFromObject(object));

@@ -7,6 +7,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,6 +44,8 @@ import net.sf.saxon.om.SequenceIterator;
 import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.value.AnyURIValue;
+import net.sf.saxon.value.BooleanValue;
 import net.sf.saxon.value.FloatValue;
 import net.sf.saxon.value.IntegerValue;
 import net.sf.saxon.value.ObjectValue;
@@ -193,6 +197,12 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 										javaArgs[j++] = item.isPresent()
 											? Optional.of(objectFromItem(item.get(), ((ParameterizedType)type).getActualTypeArguments()[0]))
 											: Optional.empty();
+									} else if (type.equals(URI.class)) {
+										// could be empty because sequenceTypeFromType() returned OPTIONAL_ANY_URI
+										Optional<Item> item = getOptionalItem(args[i++]);
+										if (!item.isPresent())
+											throw new IllegalArgumentException("Expected xs:anyURI but got an empty sequence");
+										javaArgs[j++] = objectFromItem(item.get(), type);
 									} else
 										javaArgs[j++] = objectFromItem(getSingleItem(args[i++]), type);
 								}
@@ -240,6 +250,8 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 		else if (type.equals(Boolean.class)
 		         || type.equals(boolean.class))
 			return SequenceType.SINGLE_BOOLEAN;
+		else if (type.equals(URI.class))
+			return SequenceType.OPTIONAL_ANY_URI; // SINGLE_ANY_URI
 		else if (type.equals(Element.class) || type.equals(Node.class))
 			return SequenceType.SINGLE_NODE;
 		else if (type.equals(Object.class))
@@ -252,6 +264,8 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 					return SequenceType.OPTIONAL_NODE;
 				else if (itemType.equals(String.class))
 					return SequenceType.OPTIONAL_STRING;
+				else if (itemType.equals(URI.class))
+					return SequenceType.OPTIONAL_ANY_URI;
 			} else if (rawType.equals(Iterator.class)) {
 				Type itemType = ((ParameterizedType)type).getActualTypeArguments()[0];
 				if (itemType.equals(Node.class) || itemType.equals(Element.class))
@@ -376,6 +390,15 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 		else if (type.equals(Boolean.class))
 			if (item instanceof BooleanValue)
 				return (T)(Boolean)((BooleanValue)item).getBooleanValue();
+			else
+				throw new IllegalArgumentException();
+		else if (type.equals(URI.class))
+			if (item instanceof AnyURIValue)
+				try {
+					return (T)(new URI((String)((StringValue)item).getStringValue()));
+				} catch (URISyntaxException e) {
+					throw new IllegalArgumentException(e); // should not happen
+				}
 			else
 				throw new IllegalArgumentException();
 		else if (type.equals(Object.class))
