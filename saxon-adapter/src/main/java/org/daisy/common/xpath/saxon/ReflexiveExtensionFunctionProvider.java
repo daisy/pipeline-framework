@@ -191,7 +191,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 									           && ((ParameterizedType)type).getRawType().equals(Optional.class)) {
 										Optional<Item> item = getOptionalItem(args[i++]);
 										javaArgs[j++] = item.isPresent()
-											? objectFromItem(item.get(), ((ParameterizedType)type).getActualTypeArguments()[0])
+											? Optional.of(objectFromItem(item.get(), ((ParameterizedType)type).getActualTypeArguments()[0]))
 											: Optional.empty();
 									} else
 										javaArgs[j++] = objectFromItem(getSingleItem(args[i++]), type);
@@ -371,6 +371,11 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 		else if (type.equals(Float.class) || type.equals(float.class))
 			if (item instanceof FloatValue)
 				return (T)(Float)((FloatValue)item).getFloatValue();
+			else
+				throw new IllegalArgumentException();
+		else if (type.equals(Boolean.class))
+			if (item instanceof BooleanValue)
+				return (T)(Boolean)((BooleanValue)item).getBooleanValue();
 			else
 				throw new IllegalArgumentException();
 		else if (type.equals(Object.class))
