@@ -18,7 +18,7 @@ public abstract class SingleInSingleOutXMLTransformer implements XMLTransformer 
 
 	public Runnable transform(Map<QName,InputValue<?>> input, Map<QName,OutputValue<?>> output) {
 		input = XMLTransformer.validateInput(input,
-		                                     ImmutableMap.of(_SOURCE,     InputType.MANDATORY_NODE_SINGLE,
+		                                     ImmutableMap.of(_SOURCE,     InputType.MANDATORY_NODE_SEQUENCE,
 		                                                     _PARAMETERS, InputType.OPTIONAL_ITEM_SEQUENCE));
 		output = XMLTransformer.validateOutput(output,
 		                                       ImmutableMap.of(_RESULT,   OutputType.NODE_SEQUENCE));
