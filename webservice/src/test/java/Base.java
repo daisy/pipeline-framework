@@ -111,6 +111,7 @@ public abstract class Base extends AbstractTest {
 		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.ws.authentication", "false");
 		p.setProperty("org.daisy.pipeline.ws.localfs", "true");
+		p.setProperty("org.daisy.pipeline.persistence", "false");
 		return p;
 	}
 	
