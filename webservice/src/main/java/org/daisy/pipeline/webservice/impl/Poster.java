@@ -52,8 +52,6 @@ public class Poster {
 	}
 
 	private static void postXml(Document doc, URI url, Client client) {
-		//System.out.println(XmlUtils.DOMToString(doc));
-
 		URI requestUri = url;
 		if (client != null) {
 			requestUri = Authenticator.createUriWithCredentials(url.toString(), client);
@@ -97,8 +95,8 @@ public class Poster {
 
         // Send the request data.
         try {
-	logger.debug("Posting XML: "+XmlUtils.DOMToString(doc));
-            output.writeBytes(XmlUtils.DOMToString(doc));
+	logger.debug("Posting XML: "+XmlUtils.nodeToString(doc));
+            output.writeBytes(XmlUtils.nodeToString(doc));
             output.flush();
             output.close();
         } catch (IOException e) {

@@ -28,8 +28,7 @@ public class AliveXmlWriter {
 		aliveElm.setAttribute("authentication", Properties.AUTHENTICATION.get());
 		aliveElm.setAttribute("version", getVersion());
 		if (!XmlValidator.validate(doc, XmlValidator.ALIVE_SCHEMA_URL)) {
-			logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
-			logger.error(XmlUtils.DOMToString(doc));
+			logger.error("INVALID XML:\n" + XmlUtils.nodeToString(doc));
 		}
 		return doc;
 	}

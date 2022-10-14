@@ -170,7 +170,7 @@ public class JobsResource extends AuthenticatedResource {
                         }
                 }
                 if (logger.isDebugEnabled())
-                        logger.debug(XmlUtils.DOMToString(doc));
+                        logger.debug(XmlUtils.nodeToString(doc));
 
                 ValidationStatus status= Validator.validateJobRequest(doc, webservice());
 
@@ -195,7 +195,7 @@ public class JobsResource extends AuthenticatedResource {
                 
                 //store the config
                 webservice().getStorage().getJobConfigurationStorage()
-                        .add(job.get().getId(),XmlUtils.DOMToString(doc));
+                    .add(job.get().getId(), XmlUtils.nodeToString(doc));
 
                 JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job.get());
                 Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();

@@ -39,7 +39,7 @@ public class ClientsXmlWriter {
 		}
 		// for debugging only
 		if (!XmlValidator.validate(doc, XmlValidator.CLIENTS_SCHEMA_URL)) {
-			logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
+			logger.error("INVALID XML:\n" + XmlUtils.nodeToString(doc));
 		}
 		return doc;
 	}

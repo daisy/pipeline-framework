@@ -37,7 +37,7 @@ public class JobsSizeXmlWriter{
 		}
 		
                 if (!XmlValidator.validate(doc, XmlValidator.SIZES_SCHEMA_URL)) {
-                        logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
+                        logger.error("INVALID XML:\n" + XmlUtils.nodeToString(doc));
                 }
 
 		return doc;
