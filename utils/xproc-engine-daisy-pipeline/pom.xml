@@ -82,16 +82,6 @@
       <scope>runtime</scope>
     </dependency>
     -->
-    <!--
-        for org.daisy.pipeline.job.JobMonitorFactory
-    -->
-    <!--
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    -->
   </dependencies>
   <build>
     <pluginManagement>
