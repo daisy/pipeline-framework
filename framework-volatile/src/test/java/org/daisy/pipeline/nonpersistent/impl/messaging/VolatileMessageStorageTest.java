@@ -19,7 +19,7 @@ public class VolatileMessageStorageTest {
 
 	Message m1, m2, m3;
 
-	VolatileMessageStorage storage = VolatileMessageStorage.getInstance();
+	final static VolatileMessageStorage storage = new VolatileMessageStorage();
 
 	@Before
 	public void setUp() {
@@ -42,7 +42,7 @@ public class VolatileMessageStorageTest {
 	}
 	@After
 	public void tearDown(){
-		VolatileMessageStorage.getInstance().removeAll();
+		storage.removeAll();
 	}
 
 	@Test

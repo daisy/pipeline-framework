@@ -9,7 +9,6 @@ import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.pipeline.event.MessageAccessorFromStorage;
-import org.daisy.pipeline.event.MessageStorage;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageStorage;
 
@@ -22,7 +21,7 @@ import com.google.common.collect.Sets;
 
 public class VolatileMessageAccessorTest   {
 
-	MessageStorage storage = VolatileMessageStorage.getInstance();
+	final static VolatileMessageStorage storage = new VolatileMessageStorage();
 
 	Message m1, m2, m3;
 
@@ -55,7 +54,7 @@ public class VolatileMessageAccessorTest   {
 
 	@After
 	public void tearDown(){
-		VolatileMessageStorage.getInstance().removeAll();
+		storage.removeAll();
 	}
 
 	@Test
@@ -134,7 +133,7 @@ public class VolatileMessageAccessorTest   {
 	}
 	@Test
 	public void filterWithEmptyList() {
-		VolatileMessageStorage.getInstance().removeAll();
+		storage.removeAll();
 		List<Message> out= accessor.createFilter().greaterThan(0).getMessages();
 		Assert.assertEquals(out.size(),0);
 	}

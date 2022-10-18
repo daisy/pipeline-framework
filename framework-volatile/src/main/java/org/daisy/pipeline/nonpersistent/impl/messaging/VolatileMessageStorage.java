@@ -24,7 +24,6 @@ import org.osgi.service.component.annotations.Component;
 )
 public class VolatileMessageStorage implements MessageStorage {
 
-	private static final VolatileMessageStorage INSTANCE = new VolatileMessageStorage();
 	private static final boolean VOLATILE_DISABLED = "true".equalsIgnoreCase(
 		Properties.getProperty("org.daisy.pipeline.persistence"));
 	private Map<String,List<Message>> messages = Collections.synchronizedMap(new HashMap<>());
@@ -72,11 +71,5 @@ public class VolatileMessageStorage implements MessageStorage {
 	// for use in tests
 	void removeAll(){
 		messages.clear();
-	}
-	/**
-	 * @return the instance
-	 */
-	public static VolatileMessageStorage getInstance() {
-		return INSTANCE;
 	}
 }
