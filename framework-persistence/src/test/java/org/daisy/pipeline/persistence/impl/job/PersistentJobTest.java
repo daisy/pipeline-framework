@@ -26,10 +26,10 @@ public class PersistentJobTest   {
 			
 		db=DatabaseProvider.getDatabase();
 		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
-		job = new PersistentJob(db, Mocks.buildContext());
+		job = new PersistentJob(db, Mocks.buildContext(), null);
 		id=job.getContext().getId();
 		// high priority
-		jobHigh = new PersistentJob(db, Mocks.buildContext(), Priority.HIGH);
+		jobHigh = new PersistentJob(db, Mocks.buildContext(), null, Priority.HIGH);
 		idHigh=jobHigh.getContext().getId();
 	}
 	@After

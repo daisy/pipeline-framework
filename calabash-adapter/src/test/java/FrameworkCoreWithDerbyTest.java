@@ -20,8 +20,6 @@ import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
-import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
@@ -48,9 +46,6 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 	
 	@Inject
 	public JobManagerFactory jobManagerFactory;
-	
-	@Inject
-	public WebserviceStorage webserviceStorage;
 	
 	@Inject
 	public ScriptRegistry scriptRegistry;
@@ -139,8 +134,7 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 	}
 	
 	Job newJob(String scriptId, XProcInput input, XProcOutput output) {
-		Client client = webserviceStorage.getClientStorage().defaultClient();
-		JobManager jobManager = jobManagerFactory.createFor(client);
+		JobManager jobManager = jobManagerFactory.create();
 		XProcScriptService script = scriptRegistry.getScript(scriptId);
 		Assert.assertNotNull("The " + scriptId + " script should exist", script);
 		return jobManager.newJob(BoundXProcScript.from(script.load(), input, output))

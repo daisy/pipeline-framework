@@ -18,6 +18,8 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.persistence.impl.Database;
+import org.daisy.pipeline.persistence.impl.webservice.PersistentClientStorage;
+import org.daisy.pipeline.persistence.impl.webservice.PersistentWebserviceStorage;
 import org.daisy.pipeline.script.ScriptRegistry;
 
 import org.slf4j.Logger;
@@ -46,6 +48,8 @@ public class PersistentJobStorage implements JobStorage {
 
         private Database db;
 
+        private PersistentClientStorage clientStorage;
+
         private JobMonitorFactory jobMonitorFactory;
 
         private QueryDecorator<PersistentJob> filter;
@@ -56,6 +60,17 @@ public class PersistentJobStorage implements JobStorage {
                 this.db=db;
                 this.filter=filter;
                 this.jobMonitorFactory = jobMonitorFactory;
+        }
+
+        @Reference(
+           name = "persistent-client-storage",
+           unbind = "-",
+           service = PersistentWebserviceStorage.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
+        public void setClientStorage(PersistentWebserviceStorage storage) {
+                this.clientStorage = (PersistentClientStorage)storage.getClientStorage();
         }
 
         @Reference(
@@ -131,7 +146,7 @@ public class PersistentJobStorage implements JobStorage {
         public Optional<AbstractJob> add(Priority priority, AbstractJobContext ctxt) {
                 checkDatabase();
                 logger.debug("Adding job to db:" + ctxt.getId());
-                return Optional.of(new PersistentJob(db, ctxt, priority));
+                return Optional.of(new PersistentJob(db, ctxt, clientStorage, priority));
         }
 
         @Override

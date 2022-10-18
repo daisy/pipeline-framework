@@ -16,8 +16,6 @@ import com.google.common.base.Optional;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
-import org.daisy.pipeline.clients.ClientStorage;
-import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.Status;
 import org.daisy.pipeline.job.JobId;
@@ -50,7 +48,6 @@ import org.slf4j.LoggerFactory;
 public class PushNotifier implements CallbackHandler {
 
         private JobManagerFactory jobManagerFactory;
-        private ClientStorage clientStorage;
         private JobManager jobManager;
         private Map<JobId,List<Callback>> callbacks;
         private Map<MessageAccessor,JobId> jobForAccessor;
@@ -77,7 +74,7 @@ public class PushNotifier implements CallbackHandler {
         @Activate
         public void init() {
                 logger.debug("Activating push notifier");
-                jobManager = jobManagerFactory.createFor(clientStorage.defaultClient());
+                jobManager = jobManagerFactory.create();
                 callbacks = new HashMap<>();
                 jobForAccessor = Collections.synchronizedMap(new HashMap<>());
                 unlistenMessagesFunctions = new HashMap<>();
@@ -99,21 +96,6 @@ public class PushNotifier implements CallbackHandler {
                         timer.cancel();
                         timer = null;
                 }
-        }
-
-        /**
-         * @param clientStorage the clientStorage to set
-         */
-        @Reference(
-           name = "webservice-storage",
-           unbind = "-",
-           service = WebserviceStorage.class,
-           cardinality = ReferenceCardinality.MANDATORY,
-           policy = ReferencePolicy.STATIC
-        )
-        public void setWebserviceStorage(WebserviceStorage storage) {
-                this.clientStorage = storage.getClientStorage();
-                
         }
 
         @Reference(

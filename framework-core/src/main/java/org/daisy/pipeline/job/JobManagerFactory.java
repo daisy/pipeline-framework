@@ -14,27 +14,55 @@ import org.osgi.service.component.annotations.ReferencePolicy;
     service = { JobManagerFactory.class }
 )
 public class JobManagerFactory {
+
         private JobStorage storage;
         private MessageStorage messageStorage;
         private JobExecutionService executionService;
         private JobMonitorFactory monitorFactory;
 
-        public JobManager createFor(Client client){
-                return new DefaultJobManager(this.storage.filterBy(client),
-                                messageStorage,
-                                this.executionService.filterBy(client),
-                                new JobContextFactory(client, monitorFactory));
-        }
-        public JobManager createFor(Client client,JobBatchId batchId){
-                return new DefaultJobManager(this.storage.filterBy(client).filterBy(batchId),
-                                messageStorage,
-                                this.executionService.filterBy(client),
-                                new JobContextFactory(client, monitorFactory));
+        /**
+         * Create a job manager for all jobs.
+         */
+        public JobManager create() {
+                return createFor(Client.DEFAULT_ADMIN);
         }
 
         /**
-         * @param storage the storage to set
+         * Create a job manager for only the jobs belonging to a certain batch.
          */
+        public JobManager createFor(JobBatchId batchId) {
+                return createFor(Client.DEFAULT_ADMIN, batchId);
+        }
+
+        /**
+         * Create a job manager for only the jobs visible for a certain client. An admin client can
+         * see all jobs, other clients can only see the jobs that they created.
+         *
+         * This method is primarily intended to be used by the web service. In other contexts
+         * clients make less sence.
+         */
+        public JobManager createFor(Client client) {
+                return new DefaultJobManager(storage.filterBy(client),
+                                             messageStorage,
+                                             executionService.filterBy(client),
+                                             new JobContextFactory(client, monitorFactory));
+        }
+
+        /**
+         * Create a job manager for only the jobs visible for a certain client and belonging to a
+         * certain batch. An admin client can see all jobs, other clients can only see the jobs that
+         * they created.
+         *
+         * This method is primarily intended to be used by the web service. In other contexts
+         * clients make less sence.
+         */
+        public JobManager createFor(Client client, JobBatchId batchId) {
+                return new DefaultJobManager(storage.filterBy(client).filterBy(batchId),
+                                             messageStorage,
+                                             executionService.filterBy(client),
+                                             new JobContextFactory(client, monitorFactory));
+        }
+
         @Reference(
             name = "job-storage",
             unbind = "-",
