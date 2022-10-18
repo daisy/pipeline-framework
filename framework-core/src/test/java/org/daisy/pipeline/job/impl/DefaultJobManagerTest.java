@@ -7,7 +7,6 @@ import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobContextFactory;
-import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager.JobBuilder;
 import org.daisy.pipeline.job.JobResources;
@@ -38,8 +37,8 @@ public class DefaultJobManagerTest{
 
         DefaultJobManager jobManager;
         @Before
-        public void setUp(){
-                jobManager=Mockito.spy(new DefaultJobManager(storage,messageStorage,service,factory));
+        public void setUp() {
+                jobManager = Mockito.spy(new DefaultJobManager(storage, service,factory));
         }
 
         @Test

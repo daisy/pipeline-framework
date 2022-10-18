@@ -16,7 +16,6 @@ import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
-import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -73,13 +72,11 @@ public class PipelineWebService extends Application {
         private ScriptRegistry scriptRegistry;
 
         private WebserviceStorage webserviceStorage;
-        private CallbackHandler callbackHandler = null;
+        private PushNotifier pushNotifier = null;
 
         private long shutDownKey=0L;
 
         private Component component;
-
-        private JobExecutionService executionQueue;
 
         private DatatypeRegistry datatypeRegistry;
 
@@ -174,6 +171,7 @@ public class PipelineWebService extends Application {
                         }
 
                 }
+                pushNotifier = new PushNotifier(jobManagerFactory);
         }
 
         private void cleanUp() {
@@ -263,6 +261,7 @@ public class PipelineWebService extends Application {
         @Deactivate
         public void close() {
                 try {
+                        pushNotifier.close();
                         if (this.component!=null)
                                 this.component.stop();
                         this.stop();
@@ -363,7 +362,7 @@ public class PipelineWebService extends Application {
         }
 
         public CallbackHandler getCallbackHandler() {
-                return callbackHandler;
+                return pushNotifier;
         }
 
         @Reference(

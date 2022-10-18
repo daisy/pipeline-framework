@@ -1,17 +1,18 @@
-package org.daisy.pipeline.event;
+package org.daisy.pipeline.job;
 
 import java.util.function.Consumer;
 
 import org.daisy.common.messaging.AbstractMessageAccessor;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.properties.Properties;
+import org.daisy.pipeline.event.MessageStorage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MessageAccessorFromStorage extends AbstractMessageAccessor {
+public class JobMessageAccessorFromStorage extends AbstractMessageAccessor {
 
-	private static Logger logger = LoggerFactory.getLogger(MessageAccessorFromStorage.class);
+	private static Logger logger = LoggerFactory.getLogger(JobMessageAccessorFromStorage.class);
 	private static Message.Level threshold;
 	static {
 		try {
@@ -21,10 +22,10 @@ public class MessageAccessorFromStorage extends AbstractMessageAccessor {
 		}
 	}
 
-	private final String id;
+	private final JobId id;
 	private final MessageStorage storage;
 
-	public MessageAccessorFromStorage(String id, MessageStorage storage) {
+	public JobMessageAccessorFromStorage(JobId id, MessageStorage storage) {
 		super(threshold);
 		this.id = id;
 		this.storage = storage;
@@ -33,7 +34,7 @@ public class MessageAccessorFromStorage extends AbstractMessageAccessor {
 
 	@Override
 	protected Iterable<Message> allMessages() {
-		return storage.get(id);
+		return storage.get(id.toString());
 	}
 
 	// It is assumed that messages are immutable once stored and that no new messages are produced.

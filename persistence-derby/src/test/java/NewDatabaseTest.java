@@ -33,9 +33,6 @@ public class NewDatabaseTest extends TestBase {
 	@Inject
 	public XProcScriptService script;
 	
-	@Inject
-	public JobMonitorFactory monitorFactory;
-	
 	@Test
 	public void testClientStorage() {
 		ClientStorage clientStorage = webserviceStorage.getClientStorage();
@@ -55,7 +52,7 @@ public class NewDatabaseTest extends TestBase {
 		ClientStorage clientStorage = webserviceStorage.getClientStorage();
 		Optional<Client> client = clientStorage.addClient("my-client", "my-secret", Client.Role.CLIENTAPP, "me@daisy.org");
 		Assert.assertTrue(client.isPresent());
-		JobContextFactory jobContextFactory = new JobContextFactory(client.get(), monitorFactory);
+		JobContextFactory jobContextFactory = new JobContextFactory(client.get(), new JobMonitorFactory(jobStorage));
 		Assert.assertEquals("my-script", script.getId());
 		BoundXProcScript boundScript = BoundXProcScript.from(
 			script.load(),

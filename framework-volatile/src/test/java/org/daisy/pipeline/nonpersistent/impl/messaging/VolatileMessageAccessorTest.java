@@ -8,8 +8,9 @@ import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
-import org.daisy.pipeline.event.MessageAccessorFromStorage;
+import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
+import org.daisy.pipeline.job.JobMessageAccessorFromStorage;
 import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageStorage;
 
 import org.junit.After;
@@ -29,27 +30,27 @@ public class VolatileMessageAccessorTest   {
 
 	@Before
 	public void setUp() {
-		String id = JobIdFactory.newId().toString();
+		JobId id = JobIdFactory.newId();
 		MessageAppender m;
 		m = new MessageBuilder().withText("message1")
-				.withLevel(Level.INFO).withOwnerId(id)
+				.withLevel(Level.INFO).withOwnerId(id.toString())
 				.build();
 		m.close();
 		m1 = (Message)m;
 		m = new MessageBuilder().withText("message2")
-				.withLevel(Level.ERROR).withOwnerId(id)
+				.withLevel(Level.ERROR).withOwnerId(id.toString())
 				.build();
 		m.close();
 		m2 = (Message)m;
 		m = new MessageBuilder().withText("message3")
-				.withLevel(Level.WARNING).withOwnerId(id)
+				.withLevel(Level.WARNING).withOwnerId(id.toString())
 				.build();
 		m.close();
 		m3 = (Message)m;
 		storage.add(m1);
 		storage.add(m2);
 		storage.add(m3);
-		accessor = new MessageAccessorFromStorage(id, storage);
+		accessor = new JobMessageAccessorFromStorage(id, storage);
 	}
 
 	@After

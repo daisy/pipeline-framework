@@ -89,7 +89,6 @@
             <DynamicImport-Package>*</DynamicImport-Package>
             <_dsannotations>
               org.daisy.pipeline.persistence.impl.job.PersistentJobStorage,
-              org.daisy.pipeline.persistence.impl.messaging.PersistentMessageStorage,
               org.daisy.pipeline.persistence.impl.webservice.PersistentWebserviceStorage
             </_dsannotations>
             <Import-Package>!org.daisy.common.spi,*</Import-Package>
@@ -109,7 +108,6 @@
             <configuration>
               <includes>
                 org.daisy.pipeline.persistence.impl.job.PersistentJobStorage,
-                org.daisy.pipeline.persistence.impl.messaging.PersistentMessageStorage,
                 org.daisy.pipeline.persistence.impl.webservice.PersistentWebserviceStorage
               </includes>
             </configuration>

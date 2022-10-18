@@ -54,7 +54,6 @@
           <instructions>
             <_dsannotations>
               org.daisy.pipeline.nonpersistent.impl.job.VolatileJobStorage,
-              org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageStorage,
               org.daisy.pipeline.nonpersistent.impl.webservice.VolatileWebserviceStorage
             </_dsannotations>
             <Import-Package>!org.daisy.common.spi,*</Import-Package>
@@ -74,7 +73,6 @@
             <configuration>
               <includes>
                 org.daisy.pipeline.nonpersistent.impl.job.VolatileJobStorage,
-                org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageStorage,
                 org.daisy.pipeline.nonpersistent.impl.webservice.VolatileWebserviceStorage
               </includes>
             </configuration>

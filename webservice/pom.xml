@@ -160,8 +160,7 @@
             </goals>
             <configuration>
               <includes>
-                org.daisy.pipeline.webservice.impl.PipelineWebService,
-                org.daisy.pipeline.webservice.impl.PushNotifier
+                org.daisy.pipeline.webservice.impl.PipelineWebService
               </includes>
             </configuration>
           </execution>
@@ -188,8 +187,7 @@
         <configuration>
           <instructions>
             <_dsannotations>
-              org.daisy.pipeline.webservice.impl.PipelineWebService,
-              org.daisy.pipeline.webservice.impl.PushNotifier
+              org.daisy.pipeline.webservice.impl.PipelineWebService
             </_dsannotations>
             <Import-Package>!org.daisy.common.spi,*</Import-Package>
           </instructions>

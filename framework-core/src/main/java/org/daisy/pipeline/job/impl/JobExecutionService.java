@@ -1,6 +1,8 @@
-package org.daisy.pipeline.job;
+package org.daisy.pipeline.job.impl;
 
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobQueue;
 
 
 

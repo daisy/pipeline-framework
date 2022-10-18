@@ -11,6 +11,7 @@ import org.daisy.common.priority.Priority;
 import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
+import org.daisy.pipeline.event.MessageStorage;
 import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobBatchId;
@@ -19,6 +20,7 @@ import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.persistence.impl.Database;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClientStorage;
+import org.daisy.pipeline.persistence.impl.messaging.PersistentMessageStorage;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentWebserviceStorage;
 import org.daisy.pipeline.script.ScriptRegistry;
 
@@ -49,17 +51,27 @@ public class PersistentJobStorage implements JobStorage {
         private Database db;
 
         private PersistentClientStorage clientStorage;
+        private final PersistentMessageStorage messageStorage;
+        private boolean messageStorageAccessed = false;
 
+        /**
+         * The {@link JobMonitorFactory} that will be used to recreate {@link AbstractJob} objects
+         * if needed (in the {@link #get()} and {@link #iterator()} methods).
+         */
         private JobMonitorFactory jobMonitorFactory;
 
         private QueryDecorator<PersistentJob> filter;
 
-        public PersistentJobStorage(){}
+        public PersistentJobStorage() {
+                messageStorage = new PersistentMessageStorage();
+        }
 
-        PersistentJobStorage(Database db, QueryDecorator<PersistentJob> filter, JobMonitorFactory jobMonitorFactory) {
-                this.db=db;
-                this.filter=filter;
-                this.jobMonitorFactory = jobMonitorFactory;
+        private PersistentJobStorage(PersistentJobStorage template) {
+                this.db = template.db;
+                this.filter = template.filter;
+                this.messageStorage = template.messageStorage;
+                this.messageStorageAccessed = template.messageStorageAccessed;
+                this.jobMonitorFactory = template.jobMonitorFactory;
         }
 
         @Reference(
@@ -82,8 +94,9 @@ public class PersistentJobStorage implements JobStorage {
            policy = ReferencePolicy.STATIC
         )
         public void setEntityManagerFactory(EntityManagerFactory emf) {
-                this.db = new Database(emf);
-                this.filter=QueryDecorator.empty(db.getEntityManager());
+                db = new Database(emf);
+                filter = QueryDecorator.empty(db.getEntityManager());
+                messageStorage.setEntityManagerFactory(emf);
         }
 
         @Reference(
@@ -97,17 +110,6 @@ public class PersistentJobStorage implements JobStorage {
                 PersistentJobContext.setScriptRegistry(scriptRegistry);
         }
 
-        @Reference(
-            name = "monitor",
-            unbind = "-",
-            service = JobMonitorFactory.class,
-            cardinality = ReferenceCardinality.MANDATORY,
-            policy = ReferencePolicy.STATIC
-        )
-        public void setJobMonitorFactory(JobMonitorFactory factory){
-                jobMonitorFactory = factory;
-        }
-
         /**
          * @throws RuntimeException if persistent storage is disabled through the org.daisy.pipeline.persistence system property.
          */
@@ -115,6 +117,7 @@ public class PersistentJobStorage implements JobStorage {
         protected void activate() throws RuntimeException {
                 if (PERSISTENCE_DISABLED)
                         throw new RuntimeException("Persistent storage is disabled");
+                jobMonitorFactory = new JobMonitorFactory(this);
         }
 
         private void checkDatabase() {
@@ -134,8 +137,8 @@ public class PersistentJobStorage implements JobStorage {
                     query.getResultList(),
                     job -> {
                         // set event bus and monitor
-                        if (PersistentJobStorage.this.jobMonitorFactory != null)
-                                job.getContext().setMonitor(PersistentJobStorage.this.jobMonitorFactory);
+                        if (jobMonitorFactory != null)
+                                job.getContext().setMonitor(jobMonitorFactory);
                         return (AbstractJob)job;
                     }
                 ).iterator();
@@ -157,6 +160,8 @@ public class PersistentJobStorage implements JobStorage {
                         db.deleteObject(stored.get());
                         logger.debug(String.format("Job with id %s deleted", jobId));
                 }
+                if (messageStorageAccessed)
+                        messageStorage.remove(jobId.toString());
                 return stored;
         }
 
@@ -184,20 +189,29 @@ public class PersistentJobStorage implements JobStorage {
 
         @Override
         public JobStorage filterBy(Client client) {
-                if (client.getRole()==Role.ADMIN){
+                if (client.getRole()==Role.ADMIN) {
                         return this;
-                }else{
-                        QueryDecorator<PersistentJob> byClient= new ClientFilter(this.db.getEntityManager(),client);
+                } else {
+                        PersistentJobStorage copy = new PersistentJobStorage(this);
+                        QueryDecorator<PersistentJob> byClient = new ClientFilter(this.db.getEntityManager(), client);
                         byClient.setNext(filter);
-                        return new PersistentJobStorage(db, byClient, jobMonitorFactory);
+                        copy.filter = byClient;
+                        return copy;
                 }
         }
 
         @Override
         public JobStorage filterBy(JobBatchId id) {
-                QueryDecorator<PersistentJob> byBatchId= new BatchFilter(this.db.getEntityManager(),id);
+                PersistentJobStorage copy = new PersistentJobStorage(this);
+                QueryDecorator<PersistentJob> byBatchId = new BatchFilter(this.db.getEntityManager(), id);
                 byBatchId.setNext(filter);
-                return new PersistentJobStorage(db, byBatchId, jobMonitorFactory);
+                copy.filter = byBatchId;
+                return copy;
         }
-        
+
+        @Override
+        public MessageStorage getMessageStorage() {
+                messageStorageAccessed = true;
+                return messageStorage;
+        }
 }

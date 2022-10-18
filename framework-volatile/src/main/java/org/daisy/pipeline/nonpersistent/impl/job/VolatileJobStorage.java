@@ -9,12 +9,14 @@ import org.daisy.common.priority.Priority;
 import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
+import org.daisy.pipeline.event.MessageStorage;
 import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
+import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageStorage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +42,11 @@ public class VolatileJobStorage implements JobStorage {
         private Map<JobId,AbstractJob> jobs = Collections
                         .synchronizedMap(new HashMap<JobId,AbstractJob>());
         private Predicate<Job> filter = Predicates.alwaysTrue();
+        private final MessageStorage messageStorage;
 
-        public VolatileJobStorage(){}
+        public VolatileJobStorage() {
+                messageStorage = new VolatileMessageStorage();
+        }
 
         /**
          * @throws RuntimeException if volatile storage is disabled through the org.daisy.pipeline.persistence system property.
@@ -52,8 +57,9 @@ public class VolatileJobStorage implements JobStorage {
                         throw new RuntimeException("Volatile storage is disabled");
         }
 
-        VolatileJobStorage(Map<JobId,AbstractJob> jobs, Predicate<Job> filter) {
+        private VolatileJobStorage(Map<JobId,AbstractJob> jobs, MessageStorage messageStorage, Predicate<Job> filter) {
                 this.jobs = jobs;
+                this.messageStorage = messageStorage;
                 this.filter = filter;
         }
 
@@ -75,6 +81,7 @@ public class VolatileJobStorage implements JobStorage {
                 if(job.isPresent()){
                         this.jobs.remove(jobId);
                 }
+                messageStorage.remove(jobId.toString());
                 return job;
 
         }
@@ -93,7 +100,7 @@ public class VolatileJobStorage implements JobStorage {
 
         @Override
         public JobStorage filterBy(final JobBatchId batchId) {
-                return new VolatileJobStorage(jobs, Predicates.and(this.filter, new Predicate<Job>() {
+                return new VolatileJobStorage(jobs, messageStorage, Predicates.and(this.filter, new Predicate<Job>() {
 
                         @Override
                         public boolean apply(Job job) {
@@ -109,7 +116,7 @@ public class VolatileJobStorage implements JobStorage {
                 if (client.getRole().equals(Role.ADMIN)){
                         return this;
                 }else{
-                        return new VolatileJobStorage(jobs, Predicates.and(this.filter, new Predicate<Job>() {
+                        return new VolatileJobStorage(jobs, messageStorage, Predicates.and(this.filter, new Predicate<Job>() {
 
                                 @Override
                                 public boolean apply(Job job) {
@@ -127,5 +134,10 @@ public class VolatileJobStorage implements JobStorage {
                         VolatileJobStorage.this.jobs.put(ctxt.getId(), this);
                         changeStatus(Status.IDLE);
                 }
+        }
+
+        @Override
+        public MessageStorage getMessageStorage() {
+                return messageStorage;
         }
 }

@@ -1,9 +1,12 @@
 package org.daisy.pipeline.job;
 
+import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.event.MessageStorage;
+import org.daisy.pipeline.job.impl.DefaultJobExecutionService;
 import org.daisy.pipeline.job.impl.DefaultJobManager;
+import org.daisy.pipeline.job.impl.JobExecutionService;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -14,11 +17,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
     service = { JobManagerFactory.class }
 )
 public class JobManagerFactory {
-
-        private JobStorage storage;
-        private MessageStorage messageStorage;
-        private JobExecutionService executionService;
-        private JobMonitorFactory monitorFactory;
 
         /**
          * Create a job manager for all jobs.
@@ -43,7 +41,6 @@ public class JobManagerFactory {
          */
         public JobManager createFor(Client client) {
                 return new DefaultJobManager(storage.filterBy(client),
-                                             messageStorage,
                                              executionService.filterBy(client),
                                              new JobContextFactory(client, monitorFactory));
         }
@@ -58,9 +55,17 @@ public class JobManagerFactory {
          */
         public JobManager createFor(Client client, JobBatchId batchId) {
                 return new DefaultJobManager(storage.filterBy(client).filterBy(batchId),
-                                             messageStorage,
                                              executionService.filterBy(client),
                                              new JobContextFactory(client, monitorFactory));
+        }
+
+        private JobStorage storage;
+        private JobMonitorFactory monitorFactory;
+        private JobExecutionService executionService;
+
+        @Activate
+        protected void init() {
+                monitorFactory = new JobMonitorFactory(storage);
         }
 
         @Reference(
@@ -70,45 +75,18 @@ public class JobManagerFactory {
             cardinality = ReferenceCardinality.MANDATORY,
             policy = ReferencePolicy.STATIC
         )
-        public void setJobStorage(JobStorage storage) {
-                //TODO: check null
+        protected void setJobStorage(JobStorage storage) {
                 this.storage = storage;
         }
 
         @Reference(
-            name = "message-storage",
-            unbind = "-",
-            service = MessageStorage.class,
-            cardinality = ReferenceCardinality.MANDATORY,
-            policy = ReferencePolicy.STATIC
+           name = "xproc-engine",
+           unbind = "-",
+           service = XProcEngine.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
         )
-        public void setMessageStorage(MessageStorage storage) {
-                this.messageStorage = storage;
-        }
-
-        /**
-         * @param executionService the executionService to set
-         */
-        @Reference(
-            name = "execution-service",
-            unbind = "-",
-            service = JobExecutionService.class,
-            cardinality = ReferenceCardinality.MANDATORY,
-            policy = ReferencePolicy.STATIC
-        )
-        public void setExecutionService(JobExecutionService executionService) {
-                //TODO:check null
-                this.executionService = executionService;
-        }
-
-        @Reference(
-                name = "monitor",
-                unbind = "-",
-                service = JobMonitorFactory.class,
-                cardinality = ReferenceCardinality.MANDATORY,
-                policy = ReferencePolicy.STATIC
-        )
-        public void setJobMonitorFactory(JobMonitorFactory factory){
-                this.monitorFactory = factory;
+        protected void setXProcEngine(XProcEngine xprocEngine) {
+                this.executionService = new DefaultJobExecutionService(xprocEngine);
         }
 }
