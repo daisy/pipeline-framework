@@ -663,7 +663,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			throwable.getThrowable().printStackTrace(out);
 	}
 	
-	// FIXME: can dependencies on modules-registry, framework-volatile be eliminated?
+	// FIXME: can dependencies on modules-registry be eliminated?
 	@Override
 	public String[] testDependencies() {
 		return new String[]{
@@ -679,7 +679,6 @@ public class FrameworkCoreTest extends AbstractTest {
 			"org.apache.httpcomponents:httpclient-osgi:?",
 			"org.apache.httpcomponents:httpcore-osgi:?",
 			"org.daisy.libs:jing:?",
-			"org.daisy.pipeline:framework-volatile:?",
 			"org.daisy.pipeline:logging-appender:?"
 		};
 	}

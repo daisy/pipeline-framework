@@ -5,6 +5,7 @@ import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.impl.DefaultJobExecutionService;
 import org.daisy.pipeline.job.impl.DefaultJobManager;
 import org.daisy.pipeline.job.impl.JobExecutionService;
+import org.daisy.pipeline.job.impl.VolatileJobStorage;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -65,6 +66,8 @@ public class JobManagerFactory {
 
         @Activate
         protected void init() {
+                if (storage == null)
+                        storage = new VolatileJobStorage();
                 monitorFactory = new JobMonitorFactory(storage);
         }
 
@@ -72,7 +75,7 @@ public class JobManagerFactory {
             name = "job-storage",
             unbind = "-",
             service = JobStorage.class,
-            cardinality = ReferenceCardinality.MANDATORY,
+            cardinality = ReferenceCardinality.OPTIONAL,
             policy = ReferencePolicy.STATIC
         )
         protected void setJobStorage(JobStorage storage) {

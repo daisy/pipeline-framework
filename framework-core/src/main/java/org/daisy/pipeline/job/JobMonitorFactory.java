@@ -9,6 +9,7 @@ import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.event.MessageStorage;
+import org.daisy.pipeline.job.impl.JobMessageAccessorFromStorage;
 
 import com.google.common.cache.CacheBuilder;
 

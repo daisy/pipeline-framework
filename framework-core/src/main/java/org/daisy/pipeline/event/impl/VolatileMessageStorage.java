@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.impl.messaging;
+package org.daisy.pipeline.event.impl;
 
 import java.util.Collections;
 import java.util.HashMap;

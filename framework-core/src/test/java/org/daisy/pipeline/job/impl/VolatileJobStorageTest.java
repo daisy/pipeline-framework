@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.impl.job;
+package org.daisy.pipeline.job.impl;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -14,7 +14,7 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
-import org.daisy.pipeline.nonpersistent.impl.webservice.VolatileClient;
+import org.daisy.pipeline.job.impl.VolatileJobStorage;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,9 +29,9 @@ public class VolatileJobStorageTest {
         AbstractJobContext ctxt1OtherCli;
         AbstractJobContext ctxt2OtherCli;
         VolatileJobStorage storage;
-        VolatileClient cl = new VolatileClient("paco","asdf",Role.CLIENTAPP,"afasd",Priority.LOW);
-        VolatileClient clOther = new VolatileClient("pepe","asdf",Role.CLIENTAPP,"afasd",Priority.LOW);
-        VolatileClient clAdmin = new VolatileClient("power_paco","asdf",Role.ADMIN,"afasd",Priority.LOW);
+        VolatileClient cl = new VolatileClient("paco", Role.CLIENTAPP, Priority.LOW);
+        VolatileClient clOther = new VolatileClient("pepe", Role.CLIENTAPP, Priority.LOW);
+        VolatileClient clAdmin = new VolatileClient("power_paco", Role.ADMIN, Priority.LOW);
         String oldBase = "";
         JobBatchId batchId1=JobIdFactory.newBatchId();
         JobBatchId batchId2=JobIdFactory.newBatchId();

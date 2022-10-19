@@ -1,4 +1,4 @@
-package org.daisy.pipeline.job;
+package org.daisy.pipeline.job.impl;
 
 import java.util.function.Consumer;
 
@@ -6,6 +6,7 @@ import org.daisy.common.messaging.AbstractMessageAccessor;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.event.MessageStorage;
+import org.daisy.pipeline.job.JobId;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

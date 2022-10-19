@@ -71,7 +71,7 @@ public class PipelineWebService extends Application {
         /** The script registry. */
         private ScriptRegistry scriptRegistry;
 
-        private WebserviceStorage webserviceStorage;
+        private WebserviceStorage webserviceStorage = null;
         private PushNotifier pushNotifier = null;
 
         private long shutDownKey=0L;
@@ -126,8 +126,9 @@ public class PipelineWebService extends Application {
          */
         @Activate
         public void init() {
+                if (webserviceStorage == null)
+                        webserviceStorage = new VolatileWebserviceStorage();
                 if (!checkAuthenticationSanity()){
-
                         try {
                                 this.halt();
                         } catch (Exception e) {
@@ -138,11 +139,9 @@ public class PipelineWebService extends Application {
                 //get rid of stale jobs
                 this.cleanUp();
                 Routes routes = new Routes();
-                
                 logger.info(String.format("Starting webservice on port %d",
                                 routes.getPort()));
                 component = new Component();
-                
                 if (!conf.isSsl()){
                         component.getServers().add(Protocol.HTTP, routes.getHost(),routes.getPort());
                         logger.debug("Using HTTP");
@@ -153,12 +152,9 @@ public class PipelineWebService extends Application {
                         server.getContext().getParameters().add("keyPassword",conf.getSslKeyPassword());
                         logger.debug("Using HTTPS");
                 }
-                
-                
                 component.getDefaultHost().attach(routes.getPath(), this);
                 this.setStatusService(new PipelineStatusService());
                 try {
-
                         component.start();
                         logger.debug("component started");
                         generateStopKey();
@@ -169,7 +165,6 @@ public class PipelineWebService extends Application {
                         }catch (Exception innerException) {
                                 logger.error("Error shutting down:"+e.getMessage());
                         }
-
                 }
                 pushNotifier = new PushNotifier(jobManagerFactory);
         }
@@ -328,18 +323,6 @@ public class PipelineWebService extends Application {
                 this.scriptRegistry = scriptRegistry;
         }
 
-        @Reference(
-           name = "callback-handler",
-           unbind = "-",
-           service = CallbackHandler.class,
-           cardinality = ReferenceCardinality.MANDATORY,
-           policy = ReferencePolicy.STATIC
-        )
-        public void setCallbackHandler(CallbackHandler callbackHandler) {
-                this.callbackHandler = callbackHandler;
-        }
-
-
         /**
          * @return the webserviceStorage
          */
@@ -354,7 +337,7 @@ public class PipelineWebService extends Application {
            name = "webservice-storage",
            unbind = "-",
            service = WebserviceStorage.class,
-           cardinality = ReferenceCardinality.MANDATORY,
+           cardinality = ReferenceCardinality.OPTIONAL,
            policy = ReferencePolicy.STATIC
         )
         public void setWebserviceStorage(WebserviceStorage webserviceStorage) {

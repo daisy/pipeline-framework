@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.impl.job;
+package org.daisy.pipeline.job.impl;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -6,17 +6,16 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.daisy.common.priority.Priority;
-import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.event.MessageStorage;
+import org.daisy.pipeline.event.impl.VolatileMessageStorage;
 import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
-import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageStorage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,17 +25,8 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-
-@Component(
-    name = "volatile-job-storage",
-    service = { JobStorage.class }
-)
 public class VolatileJobStorage implements JobStorage {
 
-        private static final boolean VOLATILE_DISABLED = "true".equalsIgnoreCase(
-                Properties.getProperty("org.daisy.pipeline.persistence"));
         private static final Logger logger = LoggerFactory
                         .getLogger(VolatileJobStorage.class);
         private Map<JobId,AbstractJob> jobs = Collections
@@ -46,15 +36,6 @@ public class VolatileJobStorage implements JobStorage {
 
         public VolatileJobStorage() {
                 messageStorage = new VolatileMessageStorage();
-        }
-
-        /**
-         * @throws RuntimeException if volatile storage is disabled through the org.daisy.pipeline.persistence system property.
-         */
-        @Activate
-        public void activate() {
-                if (VOLATILE_DISABLED)
-                        throw new RuntimeException("Volatile storage is disabled");
         }
 
         private VolatileJobStorage(Map<JobId,AbstractJob> jobs, MessageStorage messageStorage, Predicate<Job> filter) {

@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.impl.messaging;
+package org.daisy.pipeline.event.impl;
 
 import java.util.List;
 
@@ -6,8 +6,9 @@ import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
+import org.daisy.pipeline.event.impl.VolatileMessageStorage;
 import org.daisy.pipeline.job.JobIdFactory;
-import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageStorage;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

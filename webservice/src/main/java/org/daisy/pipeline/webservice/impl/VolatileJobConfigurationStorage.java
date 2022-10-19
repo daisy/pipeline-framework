@@ -1,4 +1,4 @@
-package org.daisy.pipeline.nonpersistent.impl.webservice;
+package org.daisy.pipeline.webservice.impl;
 
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.clients.JobConfigurationStorage;
