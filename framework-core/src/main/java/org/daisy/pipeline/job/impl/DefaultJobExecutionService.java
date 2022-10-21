@@ -15,9 +15,6 @@ import org.daisy.pipeline.job.impl.fuzzy.FuzzyJobFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
-import org.slf4j.MarkerFactory;
-import org.slf4j.MDC;
 
 import com.google.common.base.Predicate;
 
@@ -85,19 +82,11 @@ public class DefaultJobExecutionService implements JobExecutionService {
                 this.executor.execute(runnable);
         }
 
-        // see  ch.qos.logback.classic.ClassicConstants
-        private static final Marker FINALIZE_SESSION_MARKER = MarkerFactory.getMarker("FINALIZE_SESSION");
-
         Runnable getRunnable(final Job job) {
                 return new ThreadWrapper(new Runnable() {
                         @Override
                         public void run() {
-                                // used in JobLogFileAppender
-                                MDC.put("jobid", job.getId().toString());
-                                logger.info("Starting to log to job's log file too:" + job.getId().toString());
                                 job.run(xprocEngine);
-                                logger.info(FINALIZE_SESSION_MARKER,"Stopping logging to job's log file");
-                                MDC.remove("jobid");
                         }
                 });
         }

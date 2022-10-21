@@ -9,6 +9,9 @@ import org.daisy.common.xproc.XProcPipeline;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
+import org.slf4j.MDC;
 
 /**
  * The Class Job defines the execution unit.
@@ -52,8 +55,16 @@ public abstract class AbstractJob implements Job {
                 ctxt.changeStatus(this.status);
         }
 
+        // see  ch.qos.logback.classic.ClassicConstants
+        private static final Marker FINALIZE_SESSION_MARKER = MarkerFactory.getMarker("FINALIZE_SESSION");
+
         @Override
         public synchronized final void run(XProcEngine engine) {
+
+                // used in JobLogFileAppender
+                MDC.put("jobid", getId().toString());
+                logger.info("Starting to log to job's log file too:" + getId().toString());
+
                 changeStatus(Status.RUNNING);
                 XProcPipeline pipeline = null;
                 if (ctxt.messageBus == null)
@@ -85,6 +96,9 @@ public abstract class AbstractJob implements Job {
                         } else
                                 logger.error("job finished with error state", e);
                 }
+
+                logger.info(FINALIZE_SESSION_MARKER,"Stopping logging to job's log file");
+                MDC.remove("jobid");
         }
 
         protected void onStatusChanged(Status newStatus){
