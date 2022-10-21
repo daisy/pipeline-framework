@@ -53,6 +53,7 @@ public final class PersistentJobContext extends AbstractJobContext {
         public static final long serialVersionUID=1L;
         private static final Logger logger = LoggerFactory.getLogger(PersistentJobContext.class);
 
+        private String scriptId = null;
 
         //embedded mapper
         @Embedded
@@ -188,28 +189,18 @@ public final class PersistentJobContext extends AbstractJobContext {
         @Column(name="script_id")
         @Access(AccessType.PROPERTY)
         private String getScriptId() {
-                if(this.getScript()!=null){
+                if (scriptId != null) {
+                        return scriptId;
+                } else if (this.getScript() != null) {
                         return this.getScript().getDescriptor().getId();
-                }else{
-                        //throw new IllegalStateException("Script is null");
-                        return "";
+                } else {
+                        throw new IllegalStateException("Script is null");
                 }
         }
 
         @SuppressWarnings("unused") //used by jpa
         private void setScriptId(String id) {
-                if(registry!=null){
-                        XProcScriptService service=registry.getScript(id);
-                        if (service!=null){
-                                XProcScript xcript=service.load();
-                                logger.debug(String.format("load script %s",xcript));
-                                this.script = xcript;
-                                return;
-                        }
-                }
-                throw new IllegalStateException(
-                                String.format("Illegal state for recovering XProcScript: registry %s"
-                                        ,this.getScript(),registry));
+                scriptId = id;
         }
 
         @Column(name="nice_name")
@@ -233,14 +224,18 @@ public final class PersistentJobContext extends AbstractJobContext {
                 return status;
         }
 
-        @Transient
-        private static ScriptRegistry registry;
-        static void setScriptRegistry(ScriptRegistry sregistry) {
-                registry=sregistry;
-        }
-
-        void setMonitor(JobMonitorFactory monitorFactory) {
-                this.monitor = monitorFactory.newJobMonitor(id);
+        void finalize(ScriptRegistry registry, JobMonitorFactory monitorFactory) {
+                if (registry != null) {
+                        XProcScriptService service = registry.getScript(scriptId);
+                        if (service == null)
+                                throw new IllegalStateException(
+                                        String.format("Illegal state for recovering XProcScript %s: registry %s",
+                                                      scriptId, registry));
+                        script = service.load();
+                        logger.debug(String.format("load script %s", script));
+                }
+                if (monitorFactory != null)
+                        monitor = monitorFactory.newJobMonitor(id);
         }
 
         // for unit tests

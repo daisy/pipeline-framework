@@ -49,7 +49,6 @@ public class QueryDecoratorTest {
                 dec1=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager()));
                 dec2=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager()));
 
-		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
 		job = new PersistentJob(db, Mocks.buildContext(), null);
 
         }

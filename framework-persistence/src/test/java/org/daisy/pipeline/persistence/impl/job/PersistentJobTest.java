@@ -22,10 +22,7 @@ public class PersistentJobTest   {
 	PersistentJob jobHigh;
 	@Before	
 	public void setUp(){
-		//script setup
-			
 		db=DatabaseProvider.getDatabase();
-		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
 		job = new PersistentJob(db, Mocks.buildContext(), null);
 		id=job.getContext().getId();
 		// high priority

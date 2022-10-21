@@ -130,9 +130,7 @@ public class Mocks   {
                 return buildContext(client,null);
         }
 	public static AbstractJobContext buildContext(Client client,JobBatchId batchId){  
-                //new RuntimeException().printStackTrace();
 		final XProcScript script = Mocks.buildScript();
-		//ScriptRegistryHolder.setScriptRegistry(new Mocks.DummyScriptService(script));
 		//Input setup
 		final XProcInput input= new XProcInput.Builder().withInput("source",new Mocks.SimpleSourceProvider(file1)).withInput("source", new Mocks.SimpleSourceProvider(file2)).withOption(opt1Qname,value1).withOption(opt2Qname,value2).withParameter(paramPort,new QName(qparam),paramVal).build();
 		
