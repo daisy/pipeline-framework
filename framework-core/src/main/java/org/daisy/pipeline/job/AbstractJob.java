@@ -38,7 +38,6 @@ public abstract class AbstractJob implements Job {
                 this.status = status;
         }
 
-        @Override
         public Priority getPriority() {
                 return priority;
         }

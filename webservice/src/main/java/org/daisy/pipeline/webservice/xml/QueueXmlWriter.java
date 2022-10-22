@@ -1,7 +1,9 @@
 package org.daisy.pipeline.webservice.xml;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.common.priority.Prioritizable;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.webservice.Routes;
 
 import org.restlet.Request;
@@ -15,7 +17,7 @@ import org.w3c.dom.Element;
 public class QueueXmlWriter{
         private static final Logger logger = LoggerFactory.getLogger(QueueXmlWriter.class); 
         private final String baseUrl;
-        Iterable<? extends Prioritizable<Job>> jobs;
+        private final JobQueue queue;
 
         /**
          * @param baseUrl Prefix to be included at the beginning of <code>href</code>
@@ -23,8 +25,8 @@ public class QueueXmlWriter{
          *                to get fully qualified URLs. Set this to {@link Routes#getPath()} to get
          *                absolute paths relative to the domain name.
          */
-        public QueueXmlWriter(Iterable<? extends Prioritizable<Job>> jobs, String baseUrl) {
-                this.jobs= jobs;
+        public QueueXmlWriter(JobQueue queue, String baseUrl) {
+                this.queue = queue;
                 this.baseUrl = baseUrl;
         }
 
@@ -32,9 +34,8 @@ public class QueueXmlWriter{
                 Document doc = XmlUtils.createDom("queue");
                 Element queueElem= doc.getDocumentElement();
 		queueElem.setAttribute("href", baseUrl + Routes.QUEUE_ROUTE);
-                for (Prioritizable<Job> job: this.jobs){
+                for (Prioritizable<Job> job: queue.asCollection()) {
                         addElementData(job, queueElem);
-
                 }
                 
 		// for debugging only
@@ -50,8 +51,14 @@ public class QueueXmlWriter{
                 element.setAttribute("id",job.prioritySource().getId().toString());
                 element.setAttribute("href", baseUrl + "/jobs/" + job.prioritySource().getId().toString());
                 element.setAttribute("computedPriority",String.valueOf(job.getPriority()));
-                element.setAttribute("jobPriority",String.valueOf(job.prioritySource().getPriority()).toLowerCase());
-                element.setAttribute("clientPriority",String.valueOf(job.prioritySource().getContext().getClient().getPriority()).toLowerCase());
+                Priority jobPrio = queue.getJobPriority(job.prioritySource().getId());
+                if (jobPrio != null)
+                        // should always be the case
+                        element.setAttribute("jobPriority", String.valueOf(jobPrio).toLowerCase());
+                Priority clientPrio = queue.getClientPriority(job.prioritySource().getId());
+                if (clientPrio != null)
+                        // should always be the case
+                        element.setAttribute("clientPriority", String.valueOf(clientPrio).toLowerCase());
                 element.setAttribute("relativeTime",String.valueOf(job.getRelativeWaitingTime()));
                 element.setAttribute("timestamp",String.valueOf(job.getTimestamp()));
                 element.setAttribute("moveUp", baseUrl + "/queue/up/" + job.prioritySource().getId().toString());

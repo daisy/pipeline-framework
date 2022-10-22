@@ -2,6 +2,7 @@ package org.daisy.pipeline.webservice.impl;
 
 import java.util.Collection;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.common.priority.Prioritizable;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
@@ -94,7 +95,8 @@ public class JobResource extends AuthenticatedResource {
                 else {
                         writer = writer.withNewMessages(msgSeq);
                 }
-                if(job.get().getStatus() == Job.Status.IDLE){
+                if (job.get().getStatus() == Job.Status.IDLE) {
+                        writer.withPriority(getJobPriority(job.get()));
                         int pos = getPositionInQueue(job.get());
                         writer.withQueuePosition(pos);
                 }
@@ -114,6 +116,11 @@ public class JobResource extends AuthenticatedResource {
                 else
                         // As this is targeted for end-usures the position starts at 1
                         return pos + 1;
+        }
+
+        private Priority getJobPriority(Job job) {
+                return webservice().getJobManager(webservice().getStorage().getClientStorage().defaultClient())
+                                   .getExecutionQueue().getJobPriority(job.getId());
         }
 
         /**

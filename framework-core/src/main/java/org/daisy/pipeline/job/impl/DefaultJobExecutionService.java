@@ -76,7 +76,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
 
                 //Make the runnable ready to submit to the fuzzy-prioritized thread pool
                 PrioritizableRunnable<Job> runnable = FuzzyJobFactory.newFuzzyRunnable(
-                        job,
+                        (AbstractJob)job,
                         getRunnable((AbstractJob)job));
                 //Conviniently wrap it in a PrioritizedJob for later access
                 this.executor.execute(runnable);

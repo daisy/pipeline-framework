@@ -10,8 +10,8 @@ import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -19,12 +19,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
+
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Monitor;

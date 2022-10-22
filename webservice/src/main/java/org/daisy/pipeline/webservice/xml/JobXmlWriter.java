@@ -10,6 +10,7 @@ import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.ProgressMessage;
+import org.daisy.common.priority.Priority;
 import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobResult;
@@ -38,6 +39,7 @@ public class JobXmlWriter {
         private boolean onlyPrimaries=false; 
 
         private Job.Status statusOverWrite = null;
+        private Priority priority = null;
         private int queuePosition = -1;
         private static Logger logger = LoggerFactory.getLogger(JobXmlWriter.class
                         .getName());
@@ -150,11 +152,12 @@ public class JobXmlWriter {
                 element.setAttribute("id", job.getId().toString());
                 element.setAttribute("href", jobHref);
                 element.setAttribute("status", status.toString());
-                element.setAttribute("priority", job.getPriority().toString().toLowerCase());
-                if (this.queuePosition != -1){
-                        element.setAttribute("queue-position",String.format("%d",this.queuePosition));
+                if (priority != null) {
+                        element.setAttribute("priority", priority.toString().toLowerCase());
                 }
-
+                if (queuePosition != -1) {
+                        element.setAttribute("queue-position",String.format("%d", queuePosition));
+                }
                 if(!job.getContext().getName().isEmpty()){
                         Element nicenameElem= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "nicename");
                         nicenameElem.setTextContent(job.getContext().getName());
@@ -295,6 +298,10 @@ public class JobXmlWriter {
                                 optionResultElm.appendChild(resultElm);
                         }
                 }
+        }
+
+        public void withPriority(Priority priority) {
+                this.priority = priority;
         }
 
                 public void withQueuePosition(int pos) {
