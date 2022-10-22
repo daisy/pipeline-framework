@@ -68,6 +68,17 @@ public class DefaultJobQueue implements JobQueue {
         }
 
         @Override
+        public int getPositionInQueue(JobId id) {
+                int pos = 0;
+                for (Prioritizable<Job> job : asCollection()) {
+                        if (job.prioritySource().getId().equals(id))
+                                return pos;
+                        pos++;
+                }
+                return -1; // not in the queue
+        }
+
+        @Override
         public Collection<? extends Prioritizable<Job>> asCollection(){
                 return (Collection<? extends Prioritizable<Job>>)
                         this.getQueue().asOrderedCollection();
@@ -122,6 +133,4 @@ public class DefaultJobQueue implements JobQueue {
         protected UpdatablePriorityBlockingQueue<Job> getQueue() {
                 return executor.getUpdatableQueue();
         }
-
-        
 }

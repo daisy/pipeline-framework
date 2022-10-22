@@ -106,22 +106,14 @@ public class JobResource extends AuthenticatedResource {
                 return dom;
         }
 
-        int getPositionInQueue(Job job){
-
-                Client client = webservice().getStorage().
-                        getClientStorage().defaultClient();
-                Collection<? extends Prioritizable<Job>> queue = webservice().getJobManager(client).getExecutionQueue().asCollection();
-                int pos = 0;
-
-                //As this is targeted for end-usures the position starts at 1
-                for (Prioritizable<Job> pJob: queue){
-                        pos++;
-                        if (pJob.prioritySource().getId().equals(job.getId())){
-                                return pos;
-                        }
-                }
-                return -1;
-
+        private int getPositionInQueue(Job job) {
+                int pos = webservice().getJobManager(webservice().getStorage().getClientStorage().defaultClient())
+                                      .getExecutionQueue().getPositionInQueue(job.getId());
+                if (pos < 0) // should not happen because we've checked above that the job is idle, meaning it is in the queue
+                        return pos;
+                else
+                        // As this is targeted for end-usures the position starts at 1
+                        return pos + 1;
         }
 
         /**
