@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageBus;
 import org.daisy.common.properties.Properties;
+import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
@@ -44,6 +45,7 @@ public abstract class AbstractJobContext implements JobContext{
         protected JobBatchId batchId;
         MessageBus messageBus;
         protected JobMonitor monitor;
+        XProcEngine xprocEngine;
         protected URI logFile;
         protected URIMapper resultMapper;
         protected JobResultSet results;
@@ -54,7 +56,8 @@ public abstract class AbstractJobContext implements JobContext{
         // used by JobContextFactory
         AbstractJobContext(Client client, JobId id, JobBatchId batchId, String niceName,
                            XProcScript script, XProcInput input, XProcOutput output,
-                           URIMapper resultMapper, JobMonitorFactory monitorFactory) {
+                           URIMapper resultMapper, JobMonitorFactory monitorFactory,
+                           XProcEngine xprocEngine) {
                 if (client == null ||
                     id == null ||
                     niceName == null ||
@@ -84,6 +87,7 @@ public abstract class AbstractJobContext implements JobContext{
                             synchronized (statusListeners) {
                                 statusListeners.remove(listener); }}};
                 this.monitor = monitorFactory.newJobMonitor(id, messageBus, statusNotifier);
+                this.xprocEngine = xprocEngine;
         }
 
         // used by PersistentJobContext
@@ -105,6 +109,7 @@ public abstract class AbstractJobContext implements JobContext{
                 this.output = from.output;
                 this.resultMapper = from.resultMapper;
                 this.monitor = from.monitor;
+                this.xprocEngine = from.xprocEngine;
                 this.messageBus = from.messageBus;
                 this.statusListeners = from.statusListeners;
         }

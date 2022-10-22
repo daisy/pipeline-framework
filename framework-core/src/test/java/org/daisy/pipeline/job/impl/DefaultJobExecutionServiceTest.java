@@ -7,6 +7,8 @@ import org.daisy.common.fuzzy.InferenceEngine;
 import org.daisy.common.priority.Priority;
 import org.daisy.common.priority.PriorityThreadPoolExecutor;
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.job.AbstractJob;
+import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
@@ -34,7 +36,7 @@ public class DefaultJobExecutionServiceTest {
         public TestRule benchmarkRun = new BenchmarkRule();
         static int execCount=0;
         static char[] animation=new char[]{'|','/','-','\\'};
-        Job[] jobs = new Job[100];
+        AbstractJob[] jobs = new AbstractJob[100];
         DefaultJobExecutionService service;
         RunnableTracker tracker;
         Monitor mon;
@@ -56,12 +58,12 @@ public class DefaultJobExecutionServiceTest {
         public void setUp() {
                 mon = new Monitor();
                 tracker = new RunnableTracker();
-                service = Mockito.spy(new DefaultJobExecutionService(null));
-                jobs = new Job[100];
+                service = Mockito.spy(new DefaultJobExecutionService());
+                jobs = new AbstractJob[100];
                 for (int i=0;i<100;i++){
-                        JobContext ctxt = Mockito.mock(JobContext.class);
+                        AbstractJobContext ctxt = Mockito.mock(AbstractJobContext.class);
                         Client client = Mockito.mock(Client.class);
-                        Job job = Mockito.mock(Job.class);
+                        AbstractJob job = Mockito.mock(AbstractJob.class);
                         JobId id = Mockito.mock(JobId.class);
 
                         Mockito.when(client.getPriority()).thenReturn(Priority.LOW);

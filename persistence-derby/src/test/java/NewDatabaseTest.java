@@ -52,7 +52,7 @@ public class NewDatabaseTest extends TestBase {
 		ClientStorage clientStorage = webserviceStorage.getClientStorage();
 		Optional<Client> client = clientStorage.addClient("my-client", "my-secret", Client.Role.CLIENTAPP, "me@daisy.org");
 		Assert.assertTrue(client.isPresent());
-		JobContextFactory jobContextFactory = new JobContextFactory(client.get(), new JobMonitorFactory(jobStorage));
+		JobContextFactory jobContextFactory = new JobContextFactory(client.get(), new JobMonitorFactory(jobStorage), null);
 		Assert.assertEquals("my-script", script.getId());
 		BoundXProcScript boundScript = BoundXProcScript.from(
 			script.load(),

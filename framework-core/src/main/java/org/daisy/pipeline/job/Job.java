@@ -1,12 +1,11 @@
 package org.daisy.pipeline.job;
 
 import org.daisy.common.priority.Priority;
-import org.daisy.common.xproc.XProcEngine;
 
 /**
  * The Class Job defines the execution unit.
  */
-public interface Job {
+public interface Job extends Runnable {
 
     public enum Status {
         IDLE,
@@ -37,10 +36,5 @@ public interface Job {
      * @return The context of this job.
      */
     public JobContext getContext();
-
-    /**
-     * Run the job using the {@link XProcEngine}.
-     */
-    public void run(XProcEngine engine);
 
 }

@@ -6,9 +6,9 @@ import org.daisy.common.priority.PriorityThreadPoolExecutor;
 import org.daisy.common.priority.timetracking.TimeFunctions;
 import org.daisy.common.priority.timetracking.TimeTrackerFactory;
 import org.daisy.common.properties.Properties;
-import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.impl.fuzzy.FuzzyJobFactory;
@@ -27,8 +27,6 @@ public class DefaultJobExecutionService implements JobExecutionService {
         /** The Constant logger. */
         private static final Logger logger = LoggerFactory
                         .getLogger(DefaultJobExecutionService.class);
-        /** The xproc engine. */
-        private XProcEngine xprocEngine;
 
         private PriorityThreadPoolExecutor<Job> executor;
         private JobQueue executionQueue;
@@ -52,15 +50,13 @@ public class DefaultJobExecutionService implements JobExecutionService {
                 return executor;
         }
 
-        public DefaultJobExecutionService(XProcEngine xprocEngine) {
+        public DefaultJobExecutionService() {
                 this.executor=DefaultJobExecutionService.configureExecutor();
                 this.executionQueue=new DefaultJobQueue(this.executor); 
         }
 
-        private DefaultJobExecutionService(XProcEngine xprocEngine,
-                                           PriorityThreadPoolExecutor<Job> executor,
+        private DefaultJobExecutionService(PriorityThreadPoolExecutor<Job> executor,
                                            JobQueue executionQueue) {
-                this.xprocEngine = xprocEngine;
                 this.executor = executor;
                 this.executionQueue = executionQueue;
         }
@@ -74,21 +70,22 @@ public class DefaultJobExecutionService implements JobExecutionService {
          */
         @Override
         public void submit(final Job job) {
-                //logger.info("Submitting job");
+                if (!(job instanceof AbstractJob))
+                        // should not happen because DefaultJobManager creates AbstractJob objects
+                        throw new IllegalStateException();
+
                 //Make the runnable ready to submit to the fuzzy-prioritized thread pool
-                PrioritizableRunnable<Job> runnable = FuzzyJobFactory.newFuzzyRunnable(job,
-                                this.getRunnable(job));
+                PrioritizableRunnable<Job> runnable = FuzzyJobFactory.newFuzzyRunnable(
+                        job,
+                        getRunnable((AbstractJob)job));
                 //Conviniently wrap it in a PrioritizedJob for later access
                 this.executor.execute(runnable);
         }
 
-        Runnable getRunnable(final Job job) {
-                return new ThreadWrapper(new Runnable() {
-                        @Override
-                        public void run() {
-                                job.run(xprocEngine);
-                        }
-                });
+        // package private for unit tests
+        Runnable getRunnable(final AbstractJob job) {
+                // job.run() will throw an exception
+                return () -> job.managedRun();
         }
 
         /**
@@ -142,7 +139,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
                 if (client.getRole()==Role.ADMIN){
                         return this;
                 }else{
-                        return new DefaultJobExecutionService(this.xprocEngine, this.executor, 
+                        return new DefaultJobExecutionService(this.executor, 
                                         new FilteredJobQueue(this.executor,
                                                 new Predicate<Prioritizable<Job>>() {
                                                         @Override

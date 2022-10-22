@@ -3,7 +3,6 @@ package org.daisy.pipeline.job;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.common.priority.Priority;
-import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcPipeline;
 
@@ -23,6 +22,7 @@ public abstract class AbstractJob implements Job {
         private volatile Status status = Status.IDLE;
         protected Priority priority;
         protected AbstractJobContext ctxt;
+        private final boolean managed = true;
 
         protected AbstractJob(AbstractJobContext ctxt, Priority priority) {
                 this.ctxt = ctxt;
@@ -58,8 +58,20 @@ public abstract class AbstractJob implements Job {
         // see  ch.qos.logback.classic.ClassicConstants
         private static final Marker FINALIZE_SESSION_MARKER = MarkerFactory.getMarker("FINALIZE_SESSION");
 
+        private boolean run = false;
+
         @Override
-        public synchronized final void run(XProcEngine engine) {
+        public final void run() {
+                if (managed)
+                        throw new UnsupportedOperationException("Managed job can only be run by the JobManager");
+                managedRun();
+        }
+
+        public synchronized void managedRun() {
+                if (run)
+                        throw new UnsupportedOperationException("Can not run a job more than once");
+                else
+                        run = true;
 
                 // used in JobLogFileAppender
                 MDC.put("jobid", getId().toString());
@@ -67,12 +79,12 @@ public abstract class AbstractJob implements Job {
 
                 changeStatus(Status.RUNNING);
                 XProcPipeline pipeline = null;
-                if (ctxt.messageBus == null)
-                    // This means we've tried to execute a PersistentJob that was read from the
-                    // database. Should not happen.
-                    throw new RuntimeException();
+                if (ctxt.messageBus == null || ctxt.xprocEngine == null)
+                        // This means we've tried to execute a PersistentJob that was read from the
+                        // database. Should not happen.
+                        throw new RuntimeException();
                 try{
-                        pipeline = engine.load(this.ctxt.getScript().getXProcPipelineInfo().getURI());
+                        pipeline = ctxt.xprocEngine.load(this.ctxt.getScript().getXProcPipelineInfo().getURI());
                         if (ctxt.collectResults(pipeline.run(ctxt.input, () -> ctxt.messageBus, null)))
                                 changeStatus(Status.SUCCESS);
                         else

@@ -2,6 +2,7 @@ package org.daisy.pipeline.job;
 
 import java.io.IOException;
 
+import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.clients.Client;
@@ -19,13 +20,19 @@ public class JobContextFactory {
 
         private final Client client;
         private final JobMonitorFactory monitorFactory;
+        private final XProcEngine xprocEngine;
 
-        public JobContextFactory(Client client, JobMonitorFactory monitorFactory) {
+        public JobContextFactory(Client client, JobMonitorFactory monitorFactory, XProcEngine xprocEngine) {
                 this.client = client;
                 this.monitorFactory = monitorFactory;
+                this.xprocEngine = xprocEngine;
         }
 
-        public AbstractJobContext newJobContext(boolean mapping, String niceName, JobBatchId batchId, BoundXProcScript boundScript, JobResources collection) {
+        public AbstractJobContext newJobContext(boolean mapping,
+                                                String niceName,
+                                                JobBatchId batchId,
+                                                BoundXProcScript boundScript,
+                                                JobResources collection) {
                 try {
                         JobId id = JobIdFactory.newId();
                         if (niceName == null ||
@@ -46,7 +53,8 @@ public class JobContextFactory {
                         }
                         input = decorator.decorate(input);
                         output = decorator.decorate(output);
-                        return new AbstractJobContext(client, id, batchId, niceName, script, input, output, mapper, monitorFactory) {};
+                        return new AbstractJobContext(client, id, batchId, niceName, script, input, output,
+                                                      mapper, monitorFactory, xprocEngine) {};
                 } catch (IOException e){
                         throw new RuntimeException("Error while creating job context",e);
                 }

@@ -67,7 +67,7 @@ public class PersistentJob  extends AbstractJob implements Serializable {
 	 * Constructs a new instance.
 	 */
 	private PersistentJob() {
-		super(null,null);
+		super(null, null);
 	}
 
 	@Enumerated(EnumType.ORDINAL)

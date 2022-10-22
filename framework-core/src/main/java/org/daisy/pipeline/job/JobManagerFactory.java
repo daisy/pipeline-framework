@@ -43,7 +43,7 @@ public class JobManagerFactory {
         public JobManager createFor(Client client) {
                 return new DefaultJobManager(storage.filterBy(client),
                                              executionService.filterBy(client),
-                                             new JobContextFactory(client, monitorFactory));
+                                             new JobContextFactory(client, monitorFactory, xprocEngine));
         }
 
         /**
@@ -57,11 +57,12 @@ public class JobManagerFactory {
         public JobManager createFor(Client client, JobBatchId batchId) {
                 return new DefaultJobManager(storage.filterBy(client).filterBy(batchId),
                                              executionService.filterBy(client),
-                                             new JobContextFactory(client, monitorFactory));
+                                             new JobContextFactory(client, monitorFactory, xprocEngine));
         }
 
         private JobStorage storage;
         private JobMonitorFactory monitorFactory;
+        private XProcEngine xprocEngine;
         private JobExecutionService executionService;
 
         @Activate
@@ -69,6 +70,7 @@ public class JobManagerFactory {
                 if (storage == null)
                         storage = new VolatileJobStorage();
                 monitorFactory = new JobMonitorFactory(storage);
+                this.executionService = new DefaultJobExecutionService();
         }
 
         @Reference(
@@ -90,6 +92,6 @@ public class JobManagerFactory {
            policy = ReferencePolicy.STATIC
         )
         protected void setXProcEngine(XProcEngine xprocEngine) {
-                this.executionService = new DefaultJobExecutionService(xprocEngine);
+                this.xprocEngine = xprocEngine;
         }
 }
