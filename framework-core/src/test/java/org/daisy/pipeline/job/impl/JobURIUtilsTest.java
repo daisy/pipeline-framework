@@ -66,7 +66,7 @@ public class JobURIUtilsTest   {
 	@Test
 	public void getJobBase() throws Exception{
 		URI expected= jobsDir.toURI().resolve(URI.create(String.format("%s/", id.toString())));
-		Assert.assertEquals(JobURIUtils.getJobBase(id.toString()),expected);
+		Assert.assertEquals(JobURIUtils.getJobBaseDir(id.toString()).toURI(), expected);
 	}
 
 	@Test

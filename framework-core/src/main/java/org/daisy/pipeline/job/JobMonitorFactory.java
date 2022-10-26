@@ -19,6 +19,12 @@ import org.slf4j.LoggerFactory;
 public class JobMonitorFactory {
 
 	/**
+	 * {@link JobMonitorFactory} that is not backed by a {@link JobStorage}. Only supports the
+	 * {@link #newJobMonitor(JobId, MessageAccessor, StatusNotifier}} method.
+	 */
+	public static final JobMonitorFactory LIVE_MONITOR_FACTORY = new JobMonitorFactory(null);
+
+	/**
 	 * Get the monitor for a job.
 	 *
 	 * If a "live" monitor (for monitoring the job while it runs) is present in memory, always
@@ -51,30 +57,39 @@ public class JobMonitorFactory {
 	 * Not thread-safe.
 	 */
 	public JobMonitorFactory(JobStorage storage) {
-		messageStorage = storage.getMessageStorage();
-		if (!LIVE_MONITORS.containsKey(messageStorage)) {
-			// This is the first time a JobMonitorFactory is created (for the given MessageStorage,
-			// of which there should be only one).
+		if (storage != null) {
+			// It is assumed that when a JobStorage is provided, it is required that job objects can
+			// be re-created from the (persistent) storage (which means that monitors need to be
+			// cached). If no JobStorage is provided, it is assumed that this is not required.
 
-			// Use this property only for testing! Use to configure how long messages are cached
-			// before storing them in a MessageStorage (volatile of persistent).
-			int timeout = Integer.valueOf(Properties.getProperty("org.daisy.pipeline.messaging.cache.buffer", "60"));
-			LIVE_MONITORS.put(
-				messageStorage,
-				CacheBuilder.newBuilder()
-				            .expireAfterAccess(timeout, TimeUnit.SECONDS)
-				            .removalListener(
-				                notification -> {
-				                    JobMonitor mon = (JobMonitor)notification.getValue();
-				                    // store buffered messages to memory or database
-				                    logger.trace("Persisting messages to " + messageStorage);
-				                    for (Message m : mon.getMessageAccessor().getAll())
-				                        messageStorage.add(m); })
-				            .<JobId,JobMonitor>build()
-				            .asMap()
-			);
+			messageStorage = storage.getMessageStorage();
+			if (!LIVE_MONITORS.containsKey(messageStorage)) {
+				// This is the first time a JobMonitorFactory is created (for the given MessageStorage,
+				// of which there should be only one).
+
+				// Use this property only for testing! Use to configure how long messages are cached
+				// before storing them in a MessageStorage (volatile of persistent).
+				int timeout = Integer.valueOf(Properties.getProperty("org.daisy.pipeline.messaging.cache.buffer", "60"));
+				LIVE_MONITORS.put(
+					messageStorage,
+					CacheBuilder.newBuilder()
+					            .expireAfterAccess(timeout, TimeUnit.SECONDS)
+					            .removalListener(
+					                notification -> {
+					                    JobMonitor mon = (JobMonitor)notification.getValue();
+					                    // store buffered messages to memory or database
+					                    logger.trace("Persisting messages to " + messageStorage);
+					                    for (Message m : mon.getMessageAccessor().getAll())
+					                        messageStorage.add(m); })
+					            .<JobId,JobMonitor>build()
+					            .asMap()
+				);
+			}
+			liveMonitors = LIVE_MONITORS.get(messageStorage);
+		} else {
+			messageStorage = null;
+			liveMonitors = null;
 		}
-		liveMonitors = LIVE_MONITORS.get(messageStorage);
 	}
 
 	private final class JobMonitorImpl implements JobMonitor {
@@ -82,8 +97,12 @@ public class JobMonitorFactory {
 		private final JobMonitor monitor;
 
 		private JobMonitorImpl(JobId id) {
+			if (liveMonitors == null)
+				// should not happen: JobMonitorFactory.newJobMonitor(JobId) is only called in the
+				// context of a JobStorage, in which case a cache has been created
+				throw new IllegalStateException();
 			// If a monitor is cached, return it.
-			if (liveMonitors.containsKey(id))
+			else if (liveMonitors.containsKey(id))
 				monitor = liveMonitors.get(id);
 			// Otherwise load the messages from storage (assumes the job has finished).
 			else {
@@ -105,24 +124,26 @@ public class JobMonitorFactory {
 		}
 
 		private JobMonitorImpl(JobId id, MessageAccessor messageAccessor, StatusNotifier statusNotifier) {
-			if (liveMonitors.containsKey(id))
-				throw new IllegalArgumentException(); // a monitor was already registered for this job
-			else {
-				liveMonitors.remove(id); // this is needed to trigger removal listener (why?)
-				monitor = new JobMonitor() {
-					public MessageAccessor getMessageAccessor() {
-						return messageAccessor;
-					}
-					public StatusNotifier getStatusUpdates() {
-						return statusNotifier;
-					}
-				};
-				liveMonitors.put(id, monitor);
-				logger.trace("Registered JobMonitor for job " + id);
-				// Keep the monitor in the cache for the time job is running. The monitor will
-				// be evicted 60 seconds after the last message or status update has arrived.
-				messageAccessor.listen(i -> liveMonitors.get(id));
-				statusNotifier.listen(s -> liveMonitors.get(id));
+			monitor = new JobMonitor() {
+				public MessageAccessor getMessageAccessor() {
+					return messageAccessor;
+				}
+				public StatusNotifier getStatusUpdates() {
+					return statusNotifier;
+				}
+			};
+			if (liveMonitors != null) {
+				if (liveMonitors.containsKey(id))
+					throw new IllegalArgumentException(); // a monitor was already registered for this job
+				else {
+					liveMonitors.remove(id); // this is needed to trigger removal listener (why?)
+					liveMonitors.put(id, monitor);
+					logger.trace("Registered JobMonitor for job " + id);
+					// Keep the monitor in the cache for the time job is running. The monitor will
+					// be evicted 60 seconds after the last message or status update has arrived.
+					messageAccessor.listen(i -> liveMonitors.get(id));
+					statusNotifier.listen(s -> liveMonitors.get(id));
+				}
 			}
 		}
 

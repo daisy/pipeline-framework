@@ -33,22 +33,32 @@ public class JobURIUtils {
                 File contextDir = IOHelper.makeDirs(getJobContextDir(jobId));
                 File outputDir = IOHelper.makeDirs(getJobOutputDir(jobId));
                 return new URIMapper(contextDir.toURI(),outputDir.toURI());
-
         }
 
         public static File getLogFile(String jobId) {
-                File logFile;
+                return getLogFile(jobId, true);
+        }
+
+        private static File getLogFile(String jobId, boolean create) {
                 try {
-                        logFile = new File(getJobBaseDir(jobId), String.format("%s.log", jobId));
-                        logFile.createNewFile();
+                        File logFile = new File(getJobBaseDir(jobId, create), String.format("%s.log", jobId));
+                        if (create)
+                                logFile.createNewFile();
                         return logFile;
                 } catch (IOException e) {
                         throw new RuntimeException(String.format("Error creating the log file for %s", jobId), e);
                 }
         }
 
-        // Base directory for a job's input, output and temp files
+        /**
+         * @return the base directory for a job's input, output and temp files
+         * @throws IOException if <code>create</code> is true and the directory could not be created.
+         */
         static File getJobBaseDir(String jobId) throws IOException {
+                return getJobBaseDir(jobId, true);
+        }
+
+        private static File getJobBaseDir(String jobId, boolean create) throws IOException {
                 File jobsBaseDir; {
                         String prop = "org.daisy.pipeline.iobase";
                         String val = Properties.getProperty(prop);
@@ -58,34 +68,89 @@ public class JobURIUtils {
                         } else
                                 jobsBaseDir = new File(frameworkDataDir(), "jobs");
                 }
-                return IOHelper.makeDirs(new File(jobsBaseDir, jobId));
+                File f = new File(jobsBaseDir, jobId);
+                if (create)
+                        IOHelper.makeDirs(f);
+                return f;
         }
 
         /**
-         * Returns the job's context directory
-         * @throws IOException
+         * @return the job's context directory
+         * @throws IOException if <code>create</code> is true and the directory could not be created.
          */
         public static File getJobContextDir(String jobId) throws IOException {
-                return new File(getJobBaseDir(jobId), IO_DATA_SUBDIR);
+                return getJobContextDir(jobId, true);
+        }
+
+        private static File getJobContextDir(String jobId, boolean create) throws IOException {
+                return new File(getJobBaseDir(jobId, create), IO_DATA_SUBDIR);
         }
 
         /**
-         * Returns the job's output directory
-         * @throws IOException
+         * @return the job's output directory
+         * @throws IOException if <code>create</code> is true and the directory could not be created.
          */
         public static File getJobOutputDir(String jobId) throws IOException {
-                return new File(getJobBaseDir(jobId), IO_OUTPUT_SUBDIR);
+                return getJobOutputDir(jobId, true);
         }
 
-        static URI getJobBase(String jobId) throws IOException {
-                return getJobBaseDir(jobId).toURI();
+        private static File getJobOutputDir(String jobId, boolean create) throws IOException {
+                return new File(getJobBaseDir(jobId, create), IO_OUTPUT_SUBDIR);
         }
 
-        public static boolean cleanJobBase(String jobId) {
+        public static boolean deleteJobBaseDir(String jobId) {
                 try {
-                        return IOHelper.delete(getJobBase(jobId));
+                        return deleteDir(getJobBaseDir(jobId, false));
                 } catch (IOException e) {
-                        throw new RuntimeException(String.format("Error cleaning Job id:%s", jobId), e);
+                        throw new RuntimeException(); // coding error
+                }
+        }
+
+        private static boolean deleteJobBaseDirIfEmpty(String jobId) {
+                try {
+                        return getJobBaseDir(jobId, false).delete();
+                } catch (IOException e) {
+                        throw new RuntimeException(); // coding error
+                }
+        }
+
+        /**
+         * Delete the job' log file, and also the parent directory if it contained only the log
+         * file.
+         */
+        public static boolean deleteLogFile(String jobId) {
+                File f = getLogFile(jobId, false);
+                logger.debug("Deleting file: " + f);
+                boolean logFileDeleted = f.delete();
+                deleteJobBaseDirIfEmpty(jobId);
+                return logFileDeleted;
+        }
+
+        /**
+         * Delete the job' context directory, and also the parent directory if it contained only the
+         * context directory.
+         */
+        public static boolean deleteJobContextDir(String jobId) {
+                try {
+                        boolean contextDirDeleted = deleteDir(getJobContextDir(jobId, false));
+                        deleteJobBaseDirIfEmpty(jobId);
+                        return contextDirDeleted;
+                } catch (IOException e) {
+                        throw new RuntimeException(); // coding error
+                }
+        }
+
+        /**
+         * Delete the job' output directory (results and temporary files), and also the parent
+         * directory if it contained only the output directory.
+         */
+        public static boolean deleteJobOutputDir(String jobId) {
+                try {
+                        boolean outputDirDeleted = deleteDir(getJobOutputDir(jobId, false));
+                        deleteJobBaseDirIfEmpty(jobId);
+                        return outputDirDeleted;
+                } catch (IOException e) {
+                        throw new RuntimeException(); // coding error
                 }
         }
 
@@ -94,5 +159,18 @@ public class JobURIUtils {
                 String val = Properties.getProperty(prop);
                 if (val == null) throw new IllegalStateException(String.format("The property '%s' is not set", prop));
                 return new File(val);
+        }
+
+        private static boolean deleteDir(File dir) {
+                logger.debug("Deleting directory: " + dir);
+                File[] files = dir.listFiles();
+                if (files != null)
+                        for (File f : files) {
+                                if (f.isDirectory()) {
+                                        deleteDir(f);
+                                }
+                                f.delete();
+                        }
+                return dir.delete();
         }
 }

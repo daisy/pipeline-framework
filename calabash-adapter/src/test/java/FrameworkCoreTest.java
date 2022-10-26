@@ -49,8 +49,7 @@ import org.daisy.common.messaging.ProgressMessage;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobManager;
-import org.daisy.pipeline.job.JobManagerFactory;
+import org.daisy.pipeline.job.JobFactory;
 import org.daisy.pipeline.junit.AbstractTest;
 import org.daisy.pipeline.junit.OSGiLessConfiguration;
 import org.daisy.pipeline.script.BoundXProcScript;
@@ -74,7 +73,7 @@ import org.slf4j.LoggerFactory;
 public class FrameworkCoreTest extends AbstractTest {
 	
 	@Inject
-	public JobManagerFactory jobManagerFactory;
+	public JobFactory jobFactory;
 	
 	@Inject
 	public ScriptRegistry scriptRegistry;
@@ -84,11 +83,10 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			OutputPortReader resultPort = new OutputPortReader();
-			Job job = newJob("catch-xproc-error",
-			                 new XProcInput.Builder().build(),
-			                 new XProcOutput.Builder().withOutput("result", resultPort).build());
+		OutputPortReader resultPort = new OutputPortReader();
+		try (Job job = newJob("catch-xproc-error",
+		                      new XProcInput.Builder().build(),
+		                      new XProcOutput.Builder().withOutput("result", resultPort).build())) {
 			waitForStatus(Job.Status.FAIL, job, 1000);
 			Iterator<Reader> results = resultPort.read();
 			Assert.assertTrue(results.hasNext());
@@ -136,8 +134,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("xproc-error");
+		try (Job job = newJob("xproc-error")) {
 			waitForStatus(Job.Status.ERROR, job, 2000);
 			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
@@ -169,8 +166,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("cx-eval-error");
+		try (Job job = newJob("cx-eval-error")) {
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
@@ -204,11 +200,10 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
 			OutputPortReader resultPort = new OutputPortReader();
-			Job job = newJob("catch-xslt-terminate-error",
-			                 new XProcInput.Builder().build(),
-			                 new XProcOutput.Builder().withOutput("result", resultPort).build());
+		try (Job job = newJob("catch-xslt-terminate-error",
+		                      new XProcInput.Builder().build(),
+		                      new XProcOutput.Builder().withOutput("result", resultPort).build())) {
 			waitForStatus(Job.Status.FAIL, job, 1000);
 			Iterator<Reader> results = resultPort.read();
 			Assert.assertTrue(results.hasNext());
@@ -253,8 +248,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("xslt-terminate-error");
+		try (Job job = newJob("xslt-terminate-error")) {
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
@@ -285,8 +279,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("java-step-runtime-error");
+		try (Job job = newJob("java-step-runtime-error")) {
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
@@ -318,8 +311,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("java-function-runtime-error");
+		try (Job job = newJob("java-function-runtime-error")) {
 			waitForStatus(Job.Status.ERROR, job, 1000);
 			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
@@ -360,8 +352,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("xslt-warning");
+		try (Job job = newJob("xslt-warning")) {
 			waitForStatus(Job.Status.SUCCESS, job, 1000);
 			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
@@ -391,8 +382,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("xproc-warning");
+		try (Job job = newJob("xproc-warning")) {
 			waitForStatus(Job.Status.SUCCESS, job, 1000);
 			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
@@ -417,8 +407,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("progress-messages");
+		try (Job job = newJob("progress-messages")) {
 			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Runnable poller = new JobPoller(job, Job.Status.SUCCESS, 200, 3000) {
 				BigDecimal lastProgress = BigDecimal.ZERO;
@@ -517,14 +506,15 @@ public class FrameworkCoreTest extends AbstractTest {
 	}
 	
 	Job newJob(String scriptId, XProcInput input, XProcOutput output) {
-		JobManager jobManager = jobManagerFactory.create();
 		XProcScriptService script = scriptRegistry.getScript(scriptId);
 		Assert.assertNotNull("The " + scriptId + " script should exist", script);
-		return jobManager.newJob(BoundXProcScript.from(script.load(), input, output))
-		                 .isMapping(true)
-		                 .withNiceName("nice")
-		                 .build()
-		                 .get();
+		Job job = jobFactory.newJob(BoundXProcScript.from(script.load(), input, output))
+		                    .isMapping(true)
+		                    .withNiceName("nice")
+		                    .build()
+		                    .get();
+		new Thread(job).start();
+		return job;
 	}
 	
 	static void waitForStatus(Job.Status status, Job job, long timeout) {

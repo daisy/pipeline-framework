@@ -26,8 +26,8 @@ public final class JobResultSet {
 
         public static class Builder{
 
-                private final Multimap<String,JobResult> outputPorts = LinkedListMultimap.create();
-                private final Multimap<QName,JobResult> options = LinkedListMultimap.create();
+                protected final Multimap<String,JobResult> outputPorts = LinkedListMultimap.create();
+                protected final Multimap<QName,JobResult> options = LinkedListMultimap.create();
 
                 public Builder addResult(String port, String idx, URI path, String mediaType) {
                         outputPorts.put(port, new JobResult(idx, path, mediaType));

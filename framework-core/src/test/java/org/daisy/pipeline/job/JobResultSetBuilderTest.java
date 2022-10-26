@@ -11,12 +11,13 @@ import java.util.List;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
 
+import org.apache.commons.io.FileUtils;
+
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.URIMapper;
-import org.daisy.pipeline.job.impl.IOHelper;
 import org.daisy.pipeline.job.impl.Mock;
 import org.daisy.pipeline.job.impl.XProcDecorator;
 import org.daisy.pipeline.script.BoundXProcScript;
@@ -61,11 +62,14 @@ public class JobResultSetBuilderTest {
                 bound=BoundXProcScript.from(script,input,output);
         }
 
-
         @After
         public void tearDown() {
                 QName optDir=Mock.ScriptGenerator.getOptionOutputDirName(0);
-                IOHelper.deleteDir(new File((String)input.getOptions().get(optDir)));
+                try {
+                        FileUtils.deleteDirectory(new File((String)input.getOptions().get(optDir)));
+                } catch (IOException e) {
+                        throw new RuntimeException(e);
+                }
                 if(oldIoBase!=null)
                         System.setProperty("org.daisy.pipeline.data", oldIoBase);
         }

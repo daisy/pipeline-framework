@@ -13,6 +13,7 @@ import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobIdFactory;
@@ -29,6 +30,7 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 	private final XProcEngine xprocEngine;
 	private final Client client;
 	private final BoundXProcScript boundScript;
+	private final boolean managed;
 	private boolean isMapping;
 	private JobBatchId batchId;
 	private JobResources resources;
@@ -45,14 +47,19 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 		}
 	}
 
+	/**
+	 * @param managed Whether the Job will be managed by a JobManager.
+	 */
 	public DefaultJobBuilder(JobMonitorFactory monitorFactory,
 	                         XProcEngine xprocEngine,
 	                         Client client,
-	                         BoundXProcScript boundScript) {
+	                         BoundXProcScript boundScript,
+	                         boolean managed) {
 		this.monitorFactory = monitorFactory;
 		this.xprocEngine = xprocEngine;
 		this.client = client;
 		this.boundScript = boundScript;
+		this.managed = managed;
 	}
 
 	@Override
@@ -91,8 +98,7 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 	 */
 	@Override
 	public Optional<Job> build() {
-		if (client == null ||
-		    niceName == null ||
+		if (niceName == null ||
 		    boundScript == null ||
 		    monitorFactory == null)
 			throw new IllegalArgumentException("argument must not be null");
@@ -124,7 +130,9 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 								statusListeners.remove(listener); }}};
 				monitor = monitorFactory.newJobMonitor(id, messageBus, statusNotifier);
 			}};
-			return Optional.of(new VolatileJob(ctxt, priority, xprocEngine));
+			return Optional.of(
+				managed ? new AbstractJob(ctxt, priority, xprocEngine, true) {}
+				        : new VolatileJob(ctxt, priority, xprocEngine, false));
 		} catch (IOException e) {
 			throw new RuntimeException("Error while creating job context", e);
 		}

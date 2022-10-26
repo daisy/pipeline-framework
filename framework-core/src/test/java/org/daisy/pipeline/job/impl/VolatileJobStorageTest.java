@@ -40,10 +40,10 @@ public class VolatileJobStorageTest {
                 oldBase = System.getProperty("org.daisy.pipeline.data", "");
                 System.setProperty("org.daisy.pipeline.data", System.getProperty("java.io.tmpdir"));
                 storage = new VolatileJobStorage();
-                job1 = new VolatileJob(new Mock.MockedJobContext(cl, batchId1), Priority.MEDIUM, null);
-                job2 = new VolatileJob(new Mock.MockedJobContext(cl, batchId2), Priority.MEDIUM, null);
-                job1OtherCli = new VolatileJob(new Mock.MockedJobContext(clOther, batchId1), Priority.MEDIUM, null);
-                job2OtherCli = new VolatileJob(new Mock.MockedJobContext(clOther, batchId2), Priority.MEDIUM, null);
+                job1 = new VolatileJob(new Mock.MockedJobContext(cl, batchId1), Priority.MEDIUM, null, true);
+                job2 = new VolatileJob(new Mock.MockedJobContext(cl, batchId2), Priority.MEDIUM, null, true);
+                job1OtherCli = new VolatileJob(new Mock.MockedJobContext(clOther, batchId1), Priority.MEDIUM, null, true);
+                job2OtherCli = new VolatileJob(new Mock.MockedJobContext(clOther, batchId2), Priority.MEDIUM, null, true);
         }
 
         @After

@@ -1,5 +1,6 @@
 package org.daisy.pipeline.job;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.function.Consumer;
@@ -41,19 +42,25 @@ import org.slf4j.MDC;
  */
 public abstract class AbstractJob implements Job {
 
-        private static final Logger logger = LoggerFactory.getLogger(Job.class);
+        protected static final Logger logger = LoggerFactory.getLogger(Job.class);
 
         protected volatile Status status = Status.IDLE;
         protected Priority priority;
         protected AbstractJobContext ctxt;
         public final XProcEngine xprocEngine;
-        private final boolean managed = true;
+        private final boolean managed;
         private boolean closed = false;
 
-        protected AbstractJob(AbstractJobContext ctxt, Priority priority, XProcEngine xprocEngine) {
+        /**
+         * @param managed Whether the Job will be managed by a {@link JobManager}.
+         */
+        protected AbstractJob(AbstractJobContext ctxt, Priority priority, XProcEngine xprocEngine, boolean managed) {
                 this.ctxt = ctxt;
                 this.priority = priority != null ? priority : Priority.MEDIUM;
                 this.xprocEngine = xprocEngine;
+                this.managed = managed;
+                if (!managed)
+                        changeStatus(Status.IDLE);
         }
 
         @Override
@@ -155,7 +162,7 @@ public abstract class AbstractJob implements Job {
 
                 // used in JobLogFileAppender
                 MDC.put("jobid", getId().toString());
-                logger.info("Starting to log to job's log file too:" + getId().toString());
+                logger.info("Starting to log to job's log file: " + getId().toString());
 
                 changeStatus(Status.RUNNING);
                 XProcPipeline pipeline = null;
@@ -209,8 +216,8 @@ public abstract class AbstractJob implements Job {
 
         public synchronized void managedClose() {
                 if (!closed) {
-                        logger.info(String.format("Deleting context for job %s", getId()));
-                        JobURIUtils.cleanJobBase(getId().toString());
+                        logger.info(String.format("Deleting files for job %s", getId()));
+                        JobURIUtils.deleteJobBaseDir(getId().toString());
                         closed = true;
                 }
         }
@@ -233,12 +240,19 @@ public abstract class AbstractJob implements Job {
         }
 
         private JobResultSet buildResultSet() {
-                return buildResultSet(ctxt.script, ctxt.input, ctxt.output, ctxt.resultMapper);
+                return buildResultSet(ctxt.script, ctxt.input, ctxt.output, ctxt.resultMapper, newResultSetBuilder());
+        }
+
+        protected JobResultSet.Builder newResultSetBuilder() {
+                return new JobResultSet.Builder();
         }
 
         // package private for unit tests
         static JobResultSet buildResultSet(XProcScript script, XProcInput inputs, XProcOutput outputs, URIMapper mapper) {
-                JobResultSet.Builder builder = new JobResultSet.Builder();
+                return buildResultSet(script, inputs, outputs, mapper, new JobResultSet.Builder());
+        }
+
+        private static JobResultSet buildResultSet(XProcScript script, XProcInput inputs, XProcOutput outputs, URIMapper mapper, JobResultSet.Builder builder) {
 
                 // iterate over output ports
                 for (XProcPortInfo info : script.getXProcPipelineInfo().getOutputPorts()) {

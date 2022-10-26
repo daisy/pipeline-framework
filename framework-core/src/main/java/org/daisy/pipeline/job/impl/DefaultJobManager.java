@@ -103,7 +103,8 @@ public class DefaultJobManager implements JobManager {
                 return new DefaultJobBuilder(monitorFactory,
                                              xprocEngine,
                                              client,
-                                             boundScript) {
+                                             boundScript,
+                                             true) {
                         @SuppressWarnings("unchecked") // safe cast to Optional<Job>
                         @Override
                         public Optional<Job> build() {

@@ -51,7 +51,7 @@ public class PersistentJob  extends AbstractJob implements Serializable {
 	Database db=null;
 
 	PersistentJob(Database db, AbstractJob job, PersistentClientStorage clientStorage) {
-		super(new PersistentJobContext(job.getContext(), clientStorage), job.getPriority(), job.xprocEngine);
+		super(new PersistentJobContext(job.getContext(), clientStorage), job.getPriority(), job.xprocEngine, true);
 		this.db=db;
 		this.sJobId=ctxt.getId().toString();
 		this.db.addObject(this);
@@ -61,7 +61,7 @@ public class PersistentJob  extends AbstractJob implements Serializable {
 	 * Constructs a new instance.
 	 */
 	private PersistentJob() {
-		super(null, null, null);
+		super(null, null, null, true);
 	}
 
 	@Enumerated(EnumType.ORDINAL)

@@ -124,15 +124,15 @@ public class Mocks   {
 	}
 
 	public static AbstractJob buildJob(Priority priority) {
-		return new AbstractJob(buildContext(), priority, null) {};
+		return new AbstractJob(buildContext(), priority, null, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client) {
-		return new AbstractJob(buildContext(client), Priority.MEDIUM, null) {};
+		return new AbstractJob(buildContext(client), Priority.MEDIUM, null, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client, JobBatchId batchId) {
-		return new AbstractJob(buildContext(client, batchId), Priority.MEDIUM, null) {};
+		return new AbstractJob(buildContext(client, batchId), Priority.MEDIUM, null, true) {};
 	}
 
 	public static AbstractJobContext buildContext(){  
