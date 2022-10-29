@@ -167,7 +167,6 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 		Properties p = new Properties();
 		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.persistence", "true");
-		p.setProperty("org.daisy.pipeline.logdir", new File(PIPELINE_DATA, "log").getAbsolutePath());
 		return p;
 	}
 

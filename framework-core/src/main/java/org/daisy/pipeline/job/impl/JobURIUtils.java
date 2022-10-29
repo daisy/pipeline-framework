@@ -3,6 +3,7 @@ package org.daisy.pipeline.job.impl;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.job.URIMapper;
@@ -50,6 +51,8 @@ public class JobURIUtils {
                 }
         }
 
+        private static File jobsBaseDir = null;
+
         /**
          * @return the base directory for a job's input, output and temp files
          * @throws IOException if <code>create</code> is true and the directory could not be created.
@@ -59,14 +62,12 @@ public class JobURIUtils {
         }
 
         private static File getJobBaseDir(String jobId, boolean create) throws IOException {
-                File jobsBaseDir; {
+                if (jobsBaseDir == null) {
                         String prop = "org.daisy.pipeline.iobase";
                         String val = Properties.getProperty(prop);
-                        if (val != null) {
-                                logger.warn("The '" + prop + "' property is deprecated.");
-                                jobsBaseDir = new File(val);
-                        } else
-                                jobsBaseDir = new File(frameworkDataDir(), "jobs");
+                        if (val != null)
+                                logger.warn("The '" + prop + "' property is deprecated. Ignoring.");
+                        jobsBaseDir = new File(frameworkDataDir(), "jobs");
                 }
                 File f = new File(jobsBaseDir, jobId);
                 if (create)
@@ -154,11 +155,31 @@ public class JobURIUtils {
                 }
         }
 
-        private static File frameworkDataDir() {
+        // see org.daisy.pipeline.job.JobURIUtils
+        public static void assertFrameworkDataDirPersisted() throws IllegalStateException {
                 String prop = "org.daisy.pipeline.data";
-                String val = Properties.getProperty(prop);
-                if (val == null) throw new IllegalStateException(String.format("The property '%s' is not set", prop));
-                return new File(val);
+                if (Properties.getProperty(prop) == null)
+                        throw new IllegalStateException(String.format("The property '%s' is not set", prop));
+        }
+
+        private static File frameworkDataDir = null;
+
+        private static File frameworkDataDir() throws IOException {
+                if (frameworkDataDir == null) {
+                        String prop = "org.daisy.pipeline.data";
+                        String val = Properties.getProperty(prop);
+                        if (val != null)
+                                frameworkDataDir = new File(val);
+                        else {
+                                frameworkDataDir = Files.createTempDirectory("pipeline-jobs-").toFile();
+                                // delete on exit
+                                Runtime.getRuntime().addShutdownHook(
+                                        new Thread() {
+                                                public void run() {
+                                                        deleteDir(frameworkDataDir); }});
+                        }
+                }
+                return frameworkDataDir;
         }
 
         private static boolean deleteDir(File dir) {

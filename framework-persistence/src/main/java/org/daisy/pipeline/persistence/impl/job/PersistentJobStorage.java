@@ -17,6 +17,7 @@ import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobStorage;
+import org.daisy.pipeline.job.JobURIUtils;
 import org.daisy.pipeline.persistence.impl.Database;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClientStorage;
 import org.daisy.pipeline.persistence.impl.messaging.PersistentMessageStorage;
@@ -63,6 +64,12 @@ public class PersistentJobStorage implements JobStorage {
 
         public PersistentJobStorage() {
                 messageStorage = new PersistentMessageStorage();
+                // make sure that the org.daisy.pipeline.data property is set
+                try {
+                        JobURIUtils.assertFrameworkDataDirPersisted();
+                } catch (Exception e) {
+                        throw new IllegalStateException("'org.daisy.pipeline.data' property is not set, can not persist jobs", e);
+                }
         }
 
         private PersistentJobStorage(PersistentJobStorage template) {
