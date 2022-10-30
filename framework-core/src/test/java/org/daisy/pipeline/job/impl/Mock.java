@@ -33,7 +33,7 @@ import org.daisy.pipeline.script.XProcScript;
 
 import com.google.common.base.Supplier;
 
-class Mock   {
+public class Mock   {
         public static AbstractJobContext mockContext(JobId jobId) {
                 return new AbstractJobContext() {{
                         this.id = jobId;

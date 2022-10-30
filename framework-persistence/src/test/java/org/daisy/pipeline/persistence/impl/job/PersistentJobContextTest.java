@@ -105,14 +105,14 @@ public class PersistentJobContextTest  {
 	@Test
 	public void resultPortTest(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
-		List<JobResult> l=new LinkedList<JobResult>(jCtxt.getResults().getResults(Mocks.portResult));
-		Assert.assertEquals(l.get(0),Mocks.res1);
+		Assert.assertEquals(jCtxt.getResults().getResults(Mocks.portResult),
+		                    ctxt.getResults().getResults(Mocks.portResult));
 	}
 	@Test
 	public void resultOptionTest(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
-		List<JobResult> l=new LinkedList<JobResult>(jCtxt.getResults().getResults(Mocks.opt1Qname));
-		Assert.assertEquals(l.get(0),Mocks.res2);
+		Assert.assertEquals(jCtxt.getResults().getResults(Mocks.opt1Qname),
+		                    ctxt.getResults().getResults(Mocks.opt1Qname));
 	}
 	@Test
 	public void batchIdTest(){

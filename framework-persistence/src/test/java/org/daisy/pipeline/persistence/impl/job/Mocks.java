@@ -49,10 +49,6 @@ public class Mocks   {
 	public static final URI out=URI.create("file:/tmp/out/");
 	public static final String portResult="res"; 
 
-	
-	public static final JobResult res1= new JobResult.Builder().withPath(in).withIdx(value1).build();
-	public static final JobResult res2= new JobResult.Builder().withPath(out).withIdx(value2).build();
-
 	public static class DummyScriptService implements ScriptRegistry{
 
 		protected XProcScript script;
@@ -153,7 +149,9 @@ public class Mocks   {
 		
 		final JobId id = JobIdFactory.newId();
 		final URIMapper mapper= new URIMapper(in,out);
-		final JobResultSet rSet=new JobResultSet.Builder().addResult(portResult,res1).addResult(opt1Qname,res2).build();
+		final JobResultSet rSet=new JobResultSet.Builder().addResult(portResult, value1, in, null)
+		                                                  .addResult(opt1Qname, value2, out, null)
+		                                                  .build();
                 //add to the db
                 if ( client ==null){
                         client=new PersistentClient("Client_"+Math.random(),"b",Role.ADMIN,"a@a",Priority.LOW);

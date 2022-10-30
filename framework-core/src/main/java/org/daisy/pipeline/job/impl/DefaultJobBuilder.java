@@ -103,7 +103,7 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 				niceName = DefaultJobBuilder.this.niceName;
 				id = JobIdFactory.newId();
 				logFile = JobURIUtils.getLogFile(id.toString()).toURI();
-				results = new JobResultSet.Builder().build();
+				results = JobResultSet.EMPTY;
 				script = boundScript.getScript();
 				resultMapper = isMapping
 					? JobURIUtils.newURIMapper(id.toString())
