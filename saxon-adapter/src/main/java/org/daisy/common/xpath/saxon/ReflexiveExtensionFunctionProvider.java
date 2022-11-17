@@ -77,15 +77,13 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 	protected ReflexiveExtensionFunctionProvider(Class<?> definition) {
 		definitions = new ArrayList<>();
 		Collection<String> names = new ArrayList<>();
-		if (!Modifier.isAbstract(definition.getModifiers())) {
-			for (Constructor<?> constructor : definition.getConstructors()) {
-				if (Modifier.isPublic(constructor.getModifiers())) {
-					if (names.contains("new"))
-						throw new IllegalArgumentException("function overloading not supported");
-					else {
-						names.add("new");
-						definitions.add(extensionFunctionDefinitionFromMethod(constructor));
-					}
+		for (Constructor<?> constructor : definition.getConstructors()) {
+			if (Modifier.isPublic(constructor.getModifiers())) {
+				if (names.contains("new"))
+					throw new IllegalArgumentException("function overloading not supported");
+				else {
+					names.add("new");
+					definitions.add(extensionFunctionDefinitionFromMethod(constructor));
 				}
 			}
 		}
