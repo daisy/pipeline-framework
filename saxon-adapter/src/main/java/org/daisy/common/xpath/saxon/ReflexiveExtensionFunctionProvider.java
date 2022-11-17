@@ -22,10 +22,12 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
 
 import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.saxon.SaxonInputValue;
+import org.daisy.common.saxon.SaxonOutputValue;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -54,6 +56,7 @@ import net.sf.saxon.value.DecimalValue;
 import net.sf.saxon.value.FloatValue;
 import net.sf.saxon.value.IntegerValue;
 import net.sf.saxon.value.ObjectValue;
+import net.sf.saxon.value.SequenceExtent;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 import net.sf.saxon.xpath.XPathFactoryImpl;
@@ -108,6 +111,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			boolean isInnerClass = Arrays.stream(getClass().getClasses()).anyMatch(declaringClass::equals);
 			boolean isConstructor = method instanceof Constructor;
 			boolean isStatic = isConstructor || Modifier.isStatic(method.getModifiers());
+			boolean requiresXMLStreamWriter = false;
 			boolean requiresXPath = false;
 			boolean requiresDocumentBuilder = false;
 			for (Class<?> t : method.getParameterTypes()) {
@@ -119,6 +123,10 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 					if (requiresDocumentBuilder)
 						throw new IllegalArgumentException(); // only one DocumentBuilder argument allowed
 					requiresDocumentBuilder = true;
+				} else if (t.equals(XMLStreamWriter.class)) {
+					if (requiresXMLStreamWriter)
+						throw new IllegalArgumentException(); // only one XMLStreamWriter argument allowed
+					requiresXMLStreamWriter = true;
 				}
 			}
 			Type[] javaArgumentTypes; { // arguments of Java method/constructor
@@ -131,6 +139,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			SequenceType[] argumentTypes = new SequenceType[ // arguments of XPath function
 				javaArgumentTypes.length
 				+ (isStatic ? 0 : 1)
+				- (requiresXMLStreamWriter ? 1 : 0)
 				- (requiresXPath ? 1 : 0)
 				- (requiresDocumentBuilder ? 1 : 0)
 			];
@@ -138,11 +147,25 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			if (!isStatic)
 				argumentTypes[i++] = SequenceType.SINGLE_ITEM; // must be special wrapper item
 			for (Type t : javaArgumentTypes)
-				if (!t.equals(XPath.class) && !t.equals(DocumentBuilder.class))
+				if (!t.equals(XMLStreamWriter.class) &&
+				    !t.equals(XPath.class) &&
+				    !t.equals(DocumentBuilder.class))
 					argumentTypes[i++] = sequenceTypeFromType(t);
-			SequenceType resultType = isConstructor
-				? SequenceType.SINGLE_ITEM // special wrapper item
-				: sequenceTypeFromType(((Method)method).getGenericReturnType(), Collections.singleton(declaringClass));
+			SequenceType resultType; {
+				if (isConstructor) {
+					if (requiresXMLStreamWriter)
+						throw new IllegalArgumentException(); // no XMLStreamWriter argument allowed in case of constructor
+					resultType = SequenceType.SINGLE_ITEM; // special wrapper item
+				} else {
+					Type t = ((Method)method).getGenericReturnType();
+					if (requiresXMLStreamWriter) {
+						if (!t.equals(Void.TYPE))
+							throw new IllegalArgumentException(); // XMLStreamWriter argument only allowed when return type is void
+						resultType = SequenceType.NODE_SEQUENCE;
+					} else
+						resultType = sequenceTypeFromType(t, Collections.singleton(declaringClass));
+				}
+			}
 			return new ExtensionFunctionDefinition() {
 				@Override
 				public SequenceType[] getArgumentTypes() {
@@ -175,6 +198,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 											"Expected ObjectValue<" + declaringClass.getSimpleName() + ">" + ", but got: " + item);
 									instance = ((ObjectValue<?>)item).getObject();
 								}
+								List<NodeInfo> nodeListFromXMLStreamWriter = null;
 								Object[] javaArgs = new Object[ // arguments passed to Method.invoke() in addition to instance,
 								                                // or to Constructor.newInstance()
 									method.getParameterCount()
@@ -184,7 +208,20 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 									// in case of constructor of inner class, first argument is enclosing instance
 									javaArgs[j++] = ReflexiveExtensionFunctionProvider.this;
 								for (Type type : javaArgumentTypes) {
-									if (type.equals(XPath.class))
+									if (type.equals(XMLStreamWriter.class)) {
+										List<NodeInfo> list = new ArrayList<>();
+										nodeListFromXMLStreamWriter = list;
+										XMLStreamWriter xmlStreamWriterArg = new SaxonOutputValue(
+											item -> {
+												if (item instanceof XdmNode)
+													list.add(((XdmNode)item).getUnderlyingNode());
+												else
+													throw new RuntimeException(); // should not happen
+											},
+											ctxt.getConfiguration()
+										).asXMLStreamWriter();
+										javaArgs[j++] = xmlStreamWriterArg;
+									} else if (type.equals(XPath.class))
 										javaArgs[j++] = new XPathFactoryImpl(ctxt.getConfiguration()).newXPath();
 									else if (type.equals(DocumentBuilder.class)) {
 										DocumentBuilderImpl b = new DocumentBuilderImpl();
@@ -222,6 +259,8 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 										throw new RuntimeException(); // should not happen
 									}
 								}
+								if (nodeListFromXMLStreamWriter != null)
+									return new SequenceExtent(nodeListFromXMLStreamWriter);
 								if (result instanceof Optional)
 									return SaxonHelper.sequenceFromObject(((Optional<?>)result).orElse(null));
 								else
