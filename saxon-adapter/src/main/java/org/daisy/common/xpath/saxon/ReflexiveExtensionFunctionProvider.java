@@ -1,5 +1,6 @@
 package org.daisy.common.xpath.saxon;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
@@ -19,11 +20,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
+
+import com.google.common.collect.ImmutableList;
 
 import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.saxon.SaxonInputValue;
@@ -106,7 +108,9 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			throw new IllegalArgumentException(); // vararg functions not supported
 		else {
 			Class<?> declaringClass = method.getDeclaringClass();
-			boolean isInnerClass = Arrays.stream(getClass().getClasses()).anyMatch(declaringClass::equals);
+			boolean isInnerClass = Arrays.stream(getClass().getClasses()).anyMatch(declaringClass::equals)
+				// not static nested
+				&& !Modifier.isStatic(declaringClass.getModifiers());
 			boolean isConstructor = method instanceof Constructor;
 			boolean isStatic = isConstructor || Modifier.isStatic(method.getModifiers());
 			boolean requiresXMLStreamWriter = false;
@@ -161,7 +165,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 							throw new IllegalArgumentException(); // XMLStreamWriter argument only allowed when return type is void
 						resultType = SequenceType.NODE_SEQUENCE;
 					} else
-						resultType = sequenceTypeFromType(t, Collections.singleton(declaringClass));
+						resultType = sequenceTypeFromType(t);
 				}
 			}
 			return new ExtensionFunctionDefinition() {
@@ -191,10 +195,12 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 								Object instance = null;
 								if (!isStatic) {
 									Item item = getSingleItem(args[i++]);
-									if (!(item instanceof ObjectValue))
+									try {
+										instance = objectFromItem(item, declaringClass);
+									} catch (IllegalArgumentException e) {
 										throw new IllegalArgumentException(
-											"Expected ObjectValue<" + declaringClass.getSimpleName() + ">" + ", but got: " + item);
-									instance = ((ObjectValue<?>)item).getObject();
+											"Expected ObjectValue<" + declaringClass.getSimpleName() + ">" + ", but got: " + item, e);
+									}
 								}
 								List<NodeInfo> nodeListFromXMLStreamWriter = null;
 								Object[] javaArgs = new Object[ // arguments passed to Method.invoke() in addition to instance,
@@ -231,6 +237,11 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 											args[i++],
 											((ParameterizedType)type).getActualTypeArguments()[0]);
 									else if (type instanceof ParameterizedType
+									           && ((ParameterizedType)type).getRawType().equals(Iterable.class))
+										javaArgs[j++] = iterableFromSequence(
+											args[i++],
+											((ParameterizedType)type).getActualTypeArguments()[0]);
+									else if (type instanceof ParameterizedType
 									           && ((ParameterizedType)type).getRawType().equals(Optional.class)) {
 										Optional<Item> item = getOptionalItem(args[i++]);
 										javaArgs[j++] = item.isPresent()
@@ -249,7 +260,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 									try {
 										if (isConstructor)
 											result = ((Constructor<?>)method).newInstance(javaArgs);
-										else
+										else // instance is null in case of static method
 											result = ((Method)method).invoke(instance, javaArgs);
 									} catch (InstantiationException|InvocationTargetException e) {
 										throw new XPathException(e.getCause());
@@ -262,7 +273,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 								if (result instanceof Optional)
 									return SaxonHelper.sequenceFromObject(((Optional<?>)result).orElse(null));
 								else
-									return SaxonHelper.sequenceFromObject(result, Collections.singleton(declaringClass));
+									return SaxonHelper.sequenceFromObject(result);
 							} catch (RuntimeException e) {
 								throw new XPathException("Unexpected error in " + getFunctionQName().getClarkName(), e);
 							}
@@ -274,16 +285,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 	}
 
 	private static SequenceType sequenceTypeFromType(Type type) throws IllegalArgumentException {
-		return sequenceTypeFromType(type, null);
-	}
-
-	/**
-	 * @param externalObjectClasses Classes of objects that are wrapped in a XPath value.
-	 */
-	private static SequenceType sequenceTypeFromType(Type type, Set<Class<?>> externalObjectClasses) throws IllegalArgumentException {
-		if (externalObjectClasses != null && externalObjectClasses.contains(type))
-			return SequenceType.SINGLE_ITEM; // special wrapper item
-		else if (type.equals(Void.TYPE))
+		if (type.equals(Void.TYPE))
 			return SequenceType.EMPTY_SEQUENCE;
 		else if (type.equals(String.class))
 			return SequenceType.SINGLE_STRING;
@@ -306,7 +308,11 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			return SequenceType.SINGLE_NODE;
 		else if (type.equals(Object.class))
 			return SequenceType.SINGLE_ITEM;
-		else if (type instanceof ParameterizedType) {
+		else if (type instanceof Class && ((Class<?>)type).isArray()) {
+			Type itemType = ((Class<?>)type).getComponentType();
+			sequenceTypeFromType(itemType);
+			return ArrayItem.SINGLE_ARRAY_TYPE;
+		} else if (type instanceof ParameterizedType) {
 			Type rawType = ((ParameterizedType)type).getRawType();
 			if (rawType.equals(Optional.class)) {
 				Type itemType = ((ParameterizedType)type).getActualTypeArguments()[0];
@@ -316,61 +322,99 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 					return SequenceType.OPTIONAL_STRING;
 				else if (itemType.equals(URI.class))
 					return SequenceType.OPTIONAL_ANY_URI;
-			} else if (rawType.equals(Iterator.class)) {
+				else if (itemType.equals(Object.class))
+					return SequenceType.OPTIONAL_ITEM;
+				else if (itemType instanceof ParameterizedType) {
+					rawType = ((ParameterizedType)itemType).getRawType();
+					if (rawType.equals(Iterator.class) || rawType.equals(Iterable.class))
+						return sequenceTypeFromType(itemType);
+					else
+						return SequenceType.OPTIONAL_ITEM;
+				} else
+					return SequenceType.OPTIONAL_ITEM; // optional special wrapper item
+			} else if (rawType.equals(Iterator.class) || rawType.equals(Iterable.class)) {
 				Type itemType = ((ParameterizedType)type).getActualTypeArguments()[0];
 				if (itemType.equals(Node.class) || itemType.equals(Element.class))
 					return SequenceType.NODE_SEQUENCE;
 				else if (itemType.equals(String.class))
 					return SequenceType.STRING_SEQUENCE;
-			} else if (rawType.equals(List.class)) {
-				Type itemType = ((ParameterizedType)type).getActualTypeArguments()[0];
-				sequenceTypeFromType(itemType, externalObjectClasses);
-				return ArrayItem.SINGLE_ARRAY_TYPE;
+				else
+					return SequenceType.ANY_SEQUENCE; // sequence of special wrapper items
 			} else if (rawType.equals(Map.class)) {
 				Type keyType = ((ParameterizedType)type).getActualTypeArguments()[0];
-				Type valueType = ((ParameterizedType)type).getActualTypeArguments()[1];
 				if (keyType.equals(String.class)) {
-					sequenceTypeFromType(valueType, externalObjectClasses);
+					Type valueType = ((ParameterizedType)type).getActualTypeArguments()[1];
+					sequenceTypeFromType(valueType);
 					return HashTrieMap.SINGLE_MAP_TYPE;
 				}
 			}
-		}
+		} else
+			return SequenceType.SINGLE_ITEM; // special wrapper item
 		throw new IllegalArgumentException("Unsupported type: " + type);
 	}
 
-	private static Iterator<?> iteratorFromSequence(Sequence sequence, Type itemType) throws XPathException {
+	private static Iterable<?> iterableFromSequence(Sequence sequence, Type itemType) throws XPathException {
 		if (itemType instanceof Class)
-			return iteratorFromSequence(sequence, (Class<?>)itemType);
-		else
-			throw new IllegalArgumentException();
-	}
-
-	@SuppressWarnings("unchecked") // safe casts
-	private static <T> Iterator<T> iteratorFromSequence(Sequence sequence, Class<T> itemType) throws XPathException {
-		if (itemType.equals(Node.class)) {
-			List<XdmNode> list = new ArrayList<>();
+			return iterableFromSequence(sequence, (Class<?>)itemType);
+		else {
+			List<Object> list = new ArrayList<>();
 			SequenceIterator iterator = sequence.iterate();
 			Item next;
 			while ((next = iterator.next()) != null)
-				list.add(objectFromItem(next, XdmNode.class));
-			return list.isEmpty()
-				? (Iterator<T>)Collections.EMPTY_LIST.iterator()
-				: (Iterator<T>)new SaxonInputValue(list.iterator()).asNodeIterator();
-		} else {
+				list.add(objectFromItem(next, itemType));
+			return list;
+		}
+	}
+
+	@SuppressWarnings("unchecked") // safe casts
+	private static <T> Iterable<T> iterableFromSequence(Sequence sequence, Class<T> itemType) throws XPathException {
+		if (itemType.equals(Node.class))
+			return (Iterable<T>)ImmutableList.copyOf(iteratorFromNodeSequence(sequence));
+		else {
 			List<T> list = new ArrayList<>();
 			SequenceIterator iterator = sequence.iterate();
 			Item next;
 			while ((next = iterator.next()) != null)
 				list.add(objectFromItem(next, itemType));
-			return list.iterator();
+			return list;
 		}
 	}
 
-	private static List<Object> listFromArrayItem(ArrayItem array, Type itemType) throws XPathException {
-		List<Object> list = new ArrayList<>();
+	@SuppressWarnings("unchecked") // safe casts
+	private static Iterator<?> iteratorFromSequence(Sequence sequence, Type itemType) throws XPathException {
+		if (itemType.equals(Node.class))
+			return iteratorFromSequence(sequence, (Class<Node>)itemType);
+		else
+			return iterableFromSequence(sequence, itemType).iterator();
+	}
+
+	@SuppressWarnings("unchecked") // safe casts
+	private static <T> Iterator<T> iteratorFromSequence(Sequence sequence, Class<T> itemType) throws XPathException {
+		if (itemType.equals(Node.class))
+			return (Iterator<T>)iteratorFromNodeSequence(sequence);
+		else
+			return iterableFromSequence(sequence, itemType).iterator();
+	}
+
+	@SuppressWarnings("unchecked") // safe casts
+	private static Iterator<Node> iteratorFromNodeSequence(Sequence sequence) throws XPathException {
+		List<XdmNode> list = new ArrayList<>();
+		SequenceIterator iterator = sequence.iterate();
+		Item next;
+		while ((next = iterator.next()) != null)
+			list.add(objectFromItem(next, XdmNode.class));
+		return list.isEmpty()
+			? ((Iterable<Node>)Collections.EMPTY_LIST).iterator()
+			: new SaxonInputValue(list.iterator()).asNodeIterator();
+	}
+
+	@SuppressWarnings("unchecked") // safe casts
+	private static <T> T[] arrayFromArrayItem(ArrayItem array, Class<T> itemType) throws XPathException {
+		T[] a = (T[])Array.newInstance(itemType, array.arrayLength());
+		int i = 0;
 		for (Sequence s : array)
-			list.add(objectFromItem(getSingleItem(s), itemType));
-		return list;
+			a[i++] = objectFromItem(getSingleItem(s), itemType);
+		return a;
 	}
 
 	private static Map<String,Object> mapFromMapItem(MapItem item, Type itemType) throws XPathException {
@@ -385,12 +429,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			return objectFromItem(item, (Class<?>)type);
 		else if (type instanceof ParameterizedType) {
 			Type rawType = ((ParameterizedType)type).getRawType();
-			if (rawType.equals(List.class)) {
-				if (item instanceof ArrayItem)
-					return listFromArrayItem(
-						(ArrayItem)item,
-						((ParameterizedType)type).getActualTypeArguments()[0]);
-			} else if (rawType.equals(Map.class)) {
+			if (rawType.equals(Map.class)) {
 				if (item instanceof MapItem)
 					return mapFromMapItem(
 						(MapItem)item,
@@ -401,8 +440,15 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 	}
 
 	@SuppressWarnings("unchecked") // safe casts
-	private static <T> T objectFromItem(Item item, Class<T> type) {
-		if (type.equals(XdmNode.class))
+	private static <T> T objectFromItem(Item item, Class<T> type) throws XPathException {
+		if (type.isArray())
+			if (item instanceof ArrayItem) {
+				return (T)arrayFromArrayItem(
+					(ArrayItem)item,
+					((Class<?>)type).getComponentType());
+			} else
+				throw new IllegalArgumentException();
+		else if (type.equals(XdmNode.class))
 			if (item instanceof NodeInfo)
 				return (T)new XdmNode((NodeInfo)item);
 			else
@@ -461,13 +507,32 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			else
 				throw new IllegalArgumentException();
 		else if (type.equals(Object.class))
-			if (item instanceof IntegerValue)
-				return (T)(Object)((IntegerValue)item).asBigInteger().longValue();
+			// argument can be anything
+			if (item instanceof ArrayItem)
+				return (T)objectFromItem(item, Object[].class);
+			else if (item instanceof NodeInfo)
+				return (T)objectFromItem(item, Node.class);
 			else if (item instanceof StringValue)
-				return (T)(Object)((StringValue)item).getStringValue();
+				return (T)objectFromItem(item, String.class);
+			else if (item instanceof IntegerValue)
+				return (T)objectFromItem(item, Long.class);
+			else if (item instanceof FloatValue)
+				return (T)objectFromItem(item, Float.class);
+			else if (item instanceof DecimalValue)
+				return (T)objectFromItem(item, BigDecimal.class);
+			else if (item instanceof BooleanValue)
+				return (T)objectFromItem(item, Boolean.class);
+			else if (item instanceof AnyURIValue)
+				return (T)objectFromItem(item, URI.class);
 			else
 				throw new IllegalArgumentException();
-		else
+		else if (item instanceof ObjectValue) {
+			Object o = ((ObjectValue<?>)item).getObject();
+			if (type.isInstance(o))
+				return (T)o;
+			else
+				throw new IllegalArgumentException("expected " + type + " object, but got " + o);
+		} else
 			throw new IllegalArgumentException();
 	}
 
