@@ -8,7 +8,7 @@ import org.daisy.pipeline.script.XProcScript;
 /**
  * The Class Job defines the execution unit.
  */
-public interface Job extends Runnable {
+public interface Job extends Runnable, AutoCloseable {
 
     public enum Status {
         IDLE,
@@ -41,5 +41,16 @@ public interface Job extends Runnable {
     public JobBatchId getBatchId();
 
     public Client getClient();
+
+    /////// AutoCloseable ///////
+
+    /**
+     * Close the job. Will clean up any resources associated with the job and will make it
+     * impossible to call any methods on it.
+     *
+     * Call this method before discarding the job. This method should not be called when the job is
+     * managed by a {@link JobManager}.
+     */
+    public void close();
 
 }

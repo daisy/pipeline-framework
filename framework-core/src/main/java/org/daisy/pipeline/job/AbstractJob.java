@@ -48,6 +48,7 @@ public abstract class AbstractJob implements Job {
         protected AbstractJobContext ctxt;
         public final XProcEngine xprocEngine;
         private final boolean managed = true;
+        private boolean closed = false;
 
         protected AbstractJob(AbstractJobContext ctxt, Priority priority, XProcEngine xprocEngine) {
                 this.ctxt = ctxt;
@@ -62,16 +63,19 @@ public abstract class AbstractJob implements Job {
 
         @Override
         public String getNiceName() {
+                assertOpen();
                 return ctxt.getName();
         }
 
         @Override
         public XProcScript getScript() {
+                assertOpen();
                 return ctxt.getScript();
         }
 
         @Override
         public Status getStatus() {
+                assertOpen();
                 return status;
         }
 
@@ -82,26 +86,31 @@ public abstract class AbstractJob implements Job {
 
         @Override
         public JobMonitor getMonitor() {
+                assertOpen();
                 return ctxt.getMonitor();
         }
 
         @Override
         public URI getLogFile() {
+                assertOpen();
                 return ctxt.getLogFile();
         }
 
         @Override
         public JobResultSet getResults() {
+                assertOpen();
                 return ctxt.getResults();
         }
 
         @Override
         public JobBatchId getBatchId() {
+                assertOpen();
                 return ctxt.getBatchId();
         }
 
         @Override
         public Client getClient() {
+                assertOpen();
                 return ctxt.getClient();
         }
 
@@ -138,6 +147,7 @@ public abstract class AbstractJob implements Job {
         }
 
         public synchronized void managedRun() {
+                assertOpen();
                 if (run)
                         throw new UnsupportedOperationException("Can not run a job more than once");
                 else
@@ -190,9 +200,24 @@ public abstract class AbstractJob implements Job {
                 MDC.remove("jobid");
         }
 
-        public void cleanUp() {
-                logger.info(String.format("Deleting context for job %s", getId()));
-                JobURIUtils.cleanJobBase(getId().toString());
+        @Override
+        public final void close() {
+                if (managed)
+                        throw new UnsupportedOperationException("Managed job can only be closed by the JobManager");
+                managedClose();
+        }
+
+        public synchronized void managedClose() {
+                if (!closed) {
+                        logger.info(String.format("Deleting context for job %s", getId()));
+                        JobURIUtils.cleanJobBase(getId().toString());
+                        closed = true;
+                }
+        }
+
+        private void assertOpen() {
+                if (closed)
+                        throw new UnsupportedOperationException("Job is closed");
         }
 
         // for subclasses

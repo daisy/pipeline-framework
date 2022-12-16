@@ -71,7 +71,7 @@ public class DefaultJobManager implements JobManager {
                         return Optional.absent();
                 }
                 this.storage.remove(id);
-                job.get().cleanUp();
+                job.get().managedClose();
                 return (Optional<Job>)(Optional<?>)job;
         }
 
@@ -92,7 +92,7 @@ public class DefaultJobManager implements JobManager {
                 //that we clean the context up
                 for (AbstractJob job : jobs) {
                         logger.debug(String.format("Deleting job %s", job));
-                        job.cleanUp();
+                        job.managedClose();
                         this.storage.remove(job.getId());
                 }
                 return (Iterable<Job>)(Iterable<?>)jobs;
