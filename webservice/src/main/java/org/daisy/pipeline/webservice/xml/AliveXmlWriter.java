@@ -35,9 +35,10 @@ public class AliveXmlWriter {
 
 	private static String getVersion() {
 		if (version == null) {
-			String releaseDescriptorPath = Properties.RELEASE_DESCRIPTOR.get();
-			if (releaseDescriptorPath != null) {
-				File releaseDescriptor = new File(releaseDescriptorPath);
+			String home = org.daisy.common.properties.Properties.getProperty("org.daisy.pipeline.home");
+			if (home != null) {
+				// pipeline-assembly is responsible for placing the file at this location
+				File releaseDescriptor = new File(home + "/etc/releaseDescriptor.xml");
 				if (releaseDescriptor.isFile()) {
 					try {
 						Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(releaseDescriptor);
