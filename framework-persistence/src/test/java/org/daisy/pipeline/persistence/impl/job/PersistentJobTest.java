@@ -23,10 +23,10 @@ public class PersistentJobTest   {
 	@Before	
 	public void setUp(){
 		db=DatabaseProvider.getDatabase();
-		job = new PersistentJob(db, Mocks.buildContext(), null);
+		job = new PersistentJob(db, Mocks.buildJob(Priority.MEDIUM), null);
 		id=job.getContext().getId();
 		// high priority
-		jobHigh = new PersistentJob(db, Mocks.buildContext(), null, Priority.HIGH);
+		jobHigh = new PersistentJob(db, Mocks.buildJob(Priority.HIGH), null);
 		idHigh=jobHigh.getContext().getId();
 	}
 	@After
@@ -54,8 +54,7 @@ public class PersistentJobTest   {
         public void changeStatusTest(){
                 PersistentJob pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
                 pjob.setDatabase(db);
-                pjob.setStatus(Job.Status.SUCCESS);
-                pjob.onStatusChanged(Job.Status.SUCCESS);
+                pjob.changeStatus(Job.Status.SUCCESS);
                 pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
                 Assert.assertEquals(Job.Status.SUCCESS,pjob.getStatus());
 

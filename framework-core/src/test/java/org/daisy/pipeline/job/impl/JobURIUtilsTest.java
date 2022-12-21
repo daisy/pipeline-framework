@@ -1,7 +1,11 @@
-package org.daisy.pipeline.job;
+package org.daisy.pipeline.job.impl;
 
 import java.io.File;
 import java.net.URI;
+
+import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobIdFactory;
+import org.daisy.pipeline.job.URIMapper;
 
 import org.junit.After;
 import org.junit.Assert;

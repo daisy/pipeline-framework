@@ -21,8 +21,8 @@ public class IdFilterTest   {
         public void setUp(){
 		db=DatabaseProvider.getDatabase();
 
-		job = new PersistentJob(db, Mocks.buildContext(), null);
-		job2 = new PersistentJob(db, Mocks.buildContext(), null);
+		job = new PersistentJob(db, Mocks.buildJob(), null);
+		job2 = new PersistentJob(db, Mocks.buildJob(), null);
 
         }
 	@After

@@ -23,7 +23,6 @@ import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.impl.XProcDecorator;
 import org.daisy.pipeline.job.JobBatchId;
-import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobMonitor;
@@ -35,7 +34,7 @@ import org.daisy.pipeline.script.XProcScript;
 import com.google.common.base.Supplier;
 
 class Mock   {
-        public static JobContext mockContext(JobId jobId) {
+        public static AbstractJobContext mockContext(JobId jobId) {
                 return new AbstractJobContext() {{
                         this.id = jobId;
                         this.niceName = "";

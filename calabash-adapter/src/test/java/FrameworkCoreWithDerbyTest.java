@@ -71,7 +71,7 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 			                                                          catch (IOException e) {
 			                                                              throw new RuntimeException(e); }})
 			                                          .build());
-			final MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+			final MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Runnable poller = new FrameworkCoreTest.JobPoller(job, Job.Status.SUCCESS, 200, 3000) {
 				BigDecimal lastProgress = BigDecimal.ZERO;
 				Iterator<BigDecimal> mustSee = FrameworkCoreTest.stream(".125", ".375", ".9").map(d -> new BigDecimal(d)).iterator();

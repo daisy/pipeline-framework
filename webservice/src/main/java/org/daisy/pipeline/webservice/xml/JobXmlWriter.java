@@ -91,7 +91,7 @@ public class JobXmlWriter {
         }
 
         public JobXmlWriter withAllMessages() {
-                MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+                MessageAccessor accessor = job.getMonitor().getMessageAccessor();
                 if (accessor != null) {
                         progress = accessor.getProgress();
                         messages = accessor.createFilter().filterLevels(MSG_LEVELS).getMessages();
@@ -100,7 +100,7 @@ public class JobXmlWriter {
         }
 
         public JobXmlWriter withNewMessages(int newerThan) {
-                MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+                MessageAccessor accessor = job.getMonitor().getMessageAccessor();
                 if (accessor != null) {
                         withProgress(accessor.getProgress());
                         withMessages(accessor.createFilter().filterLevels(MSG_LEVELS)
@@ -158,19 +158,19 @@ public class JobXmlWriter {
                 if (queuePosition != -1) {
                         element.setAttribute("queue-position",String.format("%d", queuePosition));
                 }
-                if(!job.getContext().getName().isEmpty()){
+                if (!job.getNiceName().isEmpty()) {
                         Element nicenameElem= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "nicename");
-                        nicenameElem.setTextContent(job.getContext().getName());
+                        nicenameElem.setTextContent(job.getNiceName());
                         element.appendChild(nicenameElem);
                 }
-                if(!job.getContext().getBatchId().toString().isEmpty()){
+                if (!job.getBatchId().toString().isEmpty()) {
                         Element batchId= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "batchId");
-                        batchId.setTextContent(job.getContext().getBatchId().toString());
+                        batchId.setTextContent(job.getBatchId().toString());
                         element.appendChild(batchId);
                 }
 
                 if (scriptDetails) {
-                        XProcScript script=job.getContext().getScript();
+                        XProcScript script = job.getScript();
                         //return if no script was loadeded
                         if(script.getDescriptor()!=null){
                                 ScriptXmlWriter writer = new ScriptXmlWriter(script, baseUrl);
@@ -232,7 +232,7 @@ public class JobXmlWriter {
 
         private void addResults(Element jobElem) {
                 //check if there are actual results
-                if (this.job.getContext().getResults()==null || this.job.getContext().getResults().getResults().size() == 0){
+                if (this.job.getResults() == null || this.job.getResults().getResults().size() == 0) {
                         return;
                 }
                 Document doc = jobElem.getOwnerDocument();
@@ -242,8 +242,8 @@ public class JobXmlWriter {
                 resultsElm.setAttribute("mime-type", "application/zip");
                 jobElem.appendChild(resultsElm);
                 //ports
-                for (String port : this.job.getContext().getResults().getPorts()) {
-                        if (this.onlyPrimaries && !job.getContext().getScript().getPortMetadata(port).isPrimary()){
+                for (String port : this.job.getResults().getPorts()) {
+                        if (this.onlyPrimaries && !job.getScript().getPortMetadata(port).isPrimary()){
                                 continue;
                         }
                         Element portResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
@@ -251,9 +251,9 @@ public class JobXmlWriter {
                         portResultElm.setAttribute("mime-type", "application/zip");
                         portResultElm.setAttribute("from", "port");
                         portResultElm.setAttribute("name", port);
-                        portResultElm.setAttribute("nicename", job.getContext().getScript().getPortMetadata(port).getNiceName());
+                        portResultElm.setAttribute("nicename", job.getScript().getPortMetadata(port).getNiceName());
                         resultsElm.appendChild(portResultElm);
-                        for(JobResult result: this.job.getContext().getResults().getResults(port)){
+                        for (JobResult result : this.job.getResults().getResults(port)) {
                                 Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
                                 resultElm.setAttribute("href", String.format("%s/port/%s/idx/%s",resultHref,port,result.getIdx()));
                                 if(result.getMediaType()!= null && !result.getMediaType().isEmpty()){
@@ -269,8 +269,8 @@ public class JobXmlWriter {
                 }
 
 
-                for(QName option: this.job.getContext().getResults().getOptions()){
-                        XProcOptionMetadata meta=job.getContext().getScript().getOptionMetadata(option);
+                for (QName option : this.job.getResults().getOptions()) {
+                        XProcOptionMetadata meta = job.getScript().getOptionMetadata(option);
                         if ( this.onlyPrimaries&&  (meta==null || !meta.isPrimary())){
                                 continue;
                         }
@@ -281,10 +281,10 @@ public class JobXmlWriter {
                         optionResultElm.setAttribute("name", option.toString());
                         //in case the script was deleted
                         if (meta!=null){
-                                optionResultElm.setAttribute("nicename", job.getContext().getScript().getOptionMetadata(option).getNiceName());
+                                optionResultElm.setAttribute("nicename", job.getScript().getOptionMetadata(option).getNiceName());
                         }
                         resultsElm.appendChild(optionResultElm);
-                        for(JobResult result: this.job.getContext().getResults().getResults(option)){
+                        for(JobResult result : this.job.getResults().getResults(option)) {
                                 Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
                                 resultElm.setAttribute("href", String.format("%s/option/%s/idx/%s",resultHref,option,result.getIdx()));
                                 if(result.getMediaType()!= null && !result.getMediaType().isEmpty()){

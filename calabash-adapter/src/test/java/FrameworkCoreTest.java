@@ -115,7 +115,7 @@ public class FrameworkCoreTest extends AbstractTest {
 					"\\E$"
 				).apply(errorXml));
 			Assert.assertFalse(results.hasNext());
-			MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				Assert.assertFalse(messages.hasNext());
@@ -139,7 +139,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		try {
 			Job job = newJob("xproc-error");
 			waitForStatus(Job.Status.ERROR, job, 2000);
-			MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
@@ -172,7 +172,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		try {
 			Job job = newJob("cx-eval-error");
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
@@ -232,7 +232,7 @@ public class FrameworkCoreTest extends AbstractTest {
 					"\\E$"
 				).apply(errorXml));
 			Assert.assertFalse(results.hasNext());
-			MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				Assert.assertFalse(messages.hasNext());
@@ -256,7 +256,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		try {
 			Job job = newJob("xslt-terminate-error");
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
@@ -288,7 +288,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		try {
 			Job job = newJob("java-step-runtime-error");
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
@@ -321,7 +321,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		try {
 			Job job = newJob("java-function-runtime-error");
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
@@ -363,7 +363,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		try {
 			Job job = newJob("xslt-warning");
 			waitForStatus(Job.Status.SUCCESS, job, 1000);
-			MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
@@ -394,7 +394,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		try {
 			Job job = newJob("xproc-warning");
 			waitForStatus(Job.Status.SUCCESS, job, 1000);
-			MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
@@ -419,7 +419,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		logger.addAppender(collectLog);
 		try {
 			Job job = newJob("progress-messages");
-			MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Runnable poller = new JobPoller(job, Job.Status.SUCCESS, 200, 3000) {
 				BigDecimal lastProgress = BigDecimal.ZERO;
 				Iterator<BigDecimal> mustSee = stream(".125", ".375", ".9").map(d -> new BigDecimal(d)).iterator();

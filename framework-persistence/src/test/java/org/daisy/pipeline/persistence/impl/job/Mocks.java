@@ -14,6 +14,7 @@ import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
@@ -120,6 +121,22 @@ public class Mocks   {
 		                                                   return Mocks.scriptId; }},
 		                                           fileset, fileset);
 		return script;
+	}
+
+	public static AbstractJob buildJob() {
+		return buildJob(Priority.MEDIUM);
+	}
+
+	public static AbstractJob buildJob(Priority priority) {
+		return new AbstractJob(buildContext(), priority, null) {};
+	}
+
+	public static AbstractJob buildJob(Client client) {
+		return new AbstractJob(buildContext(client), Priority.MEDIUM, null) {};
+	}
+
+	public static AbstractJob buildJob(Client client, JobBatchId batchId) {
+		return new AbstractJob(buildContext(client, batchId), Priority.MEDIUM, null) {};
 	}
 
 	public static AbstractJobContext buildContext(){  

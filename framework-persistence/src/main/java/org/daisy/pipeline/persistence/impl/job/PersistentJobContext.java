@@ -21,7 +21,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobIdFactory;
@@ -140,7 +139,7 @@ public final class PersistentJobContext extends AbstractJobContext {
                 this.results = rBuilder.build();
         }
 
-        private void updateResults(){
+        void updateResults() {
                 if(this.portResults.size()==0)
                         this.portResults=ContextHydrator.dehydratePortResults(this);
                 if(this.optionResults.size()==0)
@@ -213,15 +212,6 @@ public final class PersistentJobContext extends AbstractJobContext {
         @SuppressWarnings("unused") // used by jpa
         private void setName(String Name) {
                 this.niceName = Name;
-        }
-
-        @Override
-        protected boolean collectResults(XProcResult result) {
-                //build the result set
-                boolean status = super.collectResults(result);
-                //and make sure that the new values get stored
-                this.updateResults();
-                return status;
         }
 
         void finalize(ScriptRegistry registry, JobMonitorFactory monitorFactory) {

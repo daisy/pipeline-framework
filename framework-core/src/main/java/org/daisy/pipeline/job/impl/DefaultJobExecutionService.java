@@ -136,19 +136,28 @@ public class DefaultJobExecutionService implements JobExecutionService {
 
         @Override
         public JobExecutionService filterBy(final Client client) {
-                if (client.getRole()==Role.ADMIN){
+                if (client.getRole() == Role.ADMIN) {
                         return this;
-                }else{
-                        return new DefaultJobExecutionService(this.executor, 
-                                        new FilteredJobQueue(this.executor,
-                                                new Predicate<Prioritizable<Job>>() {
-                                                        @Override
-                                                        public boolean apply(Prioritizable<Job> pJob) {
-                                                                return pJob.prioritySource().getContext()
-                                                .getClient().getId().equals(client.getId());
+                } else {
+                        return new DefaultJobExecutionService(
+                                this.executor,
+                                new FilteredJobQueue(
+                                        this.executor,
+                                        new Predicate<Prioritizable<Job>>() {
+                                                @Override
+                                                public boolean apply(Prioritizable<Job> pJob) {
+                                                        try {
+                                                                AbstractJob j = ((AbstractJob)pJob.prioritySource());
+                                                                return j.getContext().getClient().getId().equals(client.getId());
+                                                        } catch (ClassCastException e) {
+                                                                // can not happen because we make sure that no jobs are submitted
+                                                                // that are not of type AbstractJob
+                                                                throw new IllegalStateException("coding error");
                                                         }
                                                 }
-                        ));
+                                        }
+                                )
+                        );
                 }
         }
 }

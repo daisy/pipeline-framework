@@ -13,7 +13,6 @@ import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.event.MessageStorage;
 import org.daisy.pipeline.job.AbstractJob;
-import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobMonitorFactory;
@@ -145,10 +144,10 @@ public class PersistentJobStorage implements JobStorage {
 
 
         @Override
-        public Optional<AbstractJob> add(Priority priority, AbstractJobContext ctxt) {
+        public Optional<AbstractJob> add(AbstractJob job) {
                 checkDatabase();
-                logger.debug("Adding job to db:" + ctxt.getId());
-                return Optional.of(new PersistentJob(db, ctxt, clientStorage, priority));
+                logger.debug("Adding job to db:" + job.getId());
+                return Optional.of(new PersistentJob(db, job, clientStorage));
         }
 
         @Override

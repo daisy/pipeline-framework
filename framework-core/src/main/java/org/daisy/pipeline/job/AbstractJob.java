@@ -1,10 +1,20 @@
 package org.daisy.pipeline.job;
 
+import java.net.URI;
+import java.util.function.Consumer;
+
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.common.priority.Priority;
+import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcPipeline;
+import org.daisy.common.xproc.XProcResult;
+import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.job.impl.JobResultSetBuilder;
+import org.daisy.pipeline.job.impl.JobURIUtils;
+import org.daisy.pipeline.job.impl.JobUtils;
+import org.daisy.pipeline.script.XProcScript;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,14 +29,31 @@ public abstract class AbstractJob implements Job {
 
         private static final Logger logger = LoggerFactory.getLogger(Job.class);
 
-        private volatile Status status = Status.IDLE;
+        protected volatile Status status = Status.IDLE;
         protected Priority priority;
         protected AbstractJobContext ctxt;
+        public final XProcEngine xprocEngine;
         private final boolean managed = true;
 
-        protected AbstractJob(AbstractJobContext ctxt, Priority priority) {
+        protected AbstractJob(AbstractJobContext ctxt, Priority priority, XProcEngine xprocEngine) {
                 this.ctxt = ctxt;
                 this.priority = priority != null ? priority : Priority.MEDIUM;
+                this.xprocEngine = xprocEngine;
+        }
+
+        @Override
+        public JobId getId() {
+                return ctxt.getId();
+        }
+
+        @Override
+        public String getNiceName() {
+                return ctxt.getName();
+        }
+
+        @Override
+        public XProcScript getScript() {
+                return ctxt.getScript();
         }
 
         @Override
@@ -34,24 +61,54 @@ public abstract class AbstractJob implements Job {
                 return status;
         }
 
+        // for subclasses
         protected synchronized void setStatus(Status status) {
                 this.status = status;
+        }
+
+        @Override
+        public JobMonitor getMonitor() {
+                return ctxt.getMonitor();
+        }
+
+        @Override
+        public URI getLogFile() {
+                return ctxt.getLogFile();
+        }
+
+        @Override
+        public JobResultSet getResults() {
+                return ctxt.getResults();
+        }
+
+        @Override
+        public JobBatchId getBatchId() {
+                return ctxt.getBatchId();
+        }
+
+        @Override
+        public Client getClient() {
+                return ctxt.getClient();
         }
 
         public Priority getPriority() {
                 return priority;
         }
 
-        @Override
         public AbstractJobContext getContext() {
-                return this.ctxt;
+                return ctxt;
         }
 
-        protected synchronized final void changeStatus(Status to){
-                logger.info(String.format("Changing job status to: %s",to));
-                this.status=to;
-                this.onStatusChanged(to);
-                ctxt.changeStatus(this.status);
+        public synchronized final void changeStatus(Status to) {
+                logger.info(String.format("Changing job status to: %s", to));
+                status = to;
+                onStatusChanged();
+                if (ctxt.statusListeners != null) {
+                        synchronized (ctxt.statusListeners) {
+                                for (Consumer<Job.Status> listener : ctxt.statusListeners)
+                                        listener.accept(status);
+                        }
+                }
         }
 
         // see  ch.qos.logback.classic.ClassicConstants
@@ -78,13 +135,20 @@ public abstract class AbstractJob implements Job {
 
                 changeStatus(Status.RUNNING);
                 XProcPipeline pipeline = null;
-                if (ctxt.messageBus == null || ctxt.xprocEngine == null)
+                if (ctxt.messageBus == null || xprocEngine == null || ctxt.output == null)
                         // This means we've tried to execute a PersistentJob that was read from the
-                        // database. Should not happen.
-                        throw new RuntimeException();
-                try{
-                        pipeline = ctxt.xprocEngine.load(this.ctxt.getScript().getXProcPipelineInfo().getURI());
-                        if (ctxt.collectResults(pipeline.run(ctxt.input, () -> ctxt.messageBus, null)))
+                        // database. This should not happen because upon creation jobs are
+                        // immediately submitted to DefaultJobExecutionService, which keeps them in
+                        // memory, and old idle jobs (created but not executed before a shutdown)
+                        // are not added to the execution queue upon launching Pipeline.
+                        throw new IllegalStateException();
+                try {
+                        pipeline = xprocEngine.load(this.ctxt.getScript().getXProcPipelineInfo().getURI());
+                        XProcResult result = pipeline.run(ctxt.input, () -> ctxt.messageBus, null);
+                        result.writeTo(ctxt.output);
+                        ctxt.results = JobResultSetBuilder.newResultSet(ctxt.script, ctxt.input, ctxt.output, ctxt.resultMapper);
+                        onResultsChanged();
+                        if (JobUtils.checkStatusPort(ctxt.script, ctxt.output))
                                 changeStatus(Status.SUCCESS);
                         else
                                 changeStatus(Status.FAIL);
@@ -112,14 +176,20 @@ public abstract class AbstractJob implements Job {
                 MDC.remove("jobid");
         }
 
-        protected void onStatusChanged(Status newStatus){
-                //for subclasses
+        public void cleanUp() {
+                logger.info(String.format("Deleting context for job %s", getId()));
+                JobURIUtils.cleanJobBase(getId().toString());
         }
+
+        // for subclasses
+        protected void onStatusChanged() {}
+
+        // for subclasses
+        protected void onResultsChanged() {}
 
         @Override
         public boolean equals(Object object) {
                 return (object instanceof Job)   && 
                         this.getId().equals(((Job) object).getId());
         }
-        
 }

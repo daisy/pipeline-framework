@@ -41,9 +41,11 @@ public class JobManagerFactory {
          * clients make less sence.
          */
         public JobManager createFor(Client client) {
-                return new DefaultJobManager(storage.filterBy(client),
-                                             executionService.filterBy(client),
-                                             new JobContextFactory(client, monitorFactory, xprocEngine));
+                return new DefaultJobManager(client,
+                                             monitorFactory,
+                                             xprocEngine,
+                                             storage.filterBy(client),
+                                             executionService.filterBy(client));
         }
 
         /**
@@ -55,9 +57,11 @@ public class JobManagerFactory {
          * clients make less sence.
          */
         public JobManager createFor(Client client, JobBatchId batchId) {
-                return new DefaultJobManager(storage.filterBy(client).filterBy(batchId),
-                                             executionService.filterBy(client),
-                                             new JobContextFactory(client, monitorFactory, xprocEngine));
+                return new DefaultJobManager(client,
+                                             monitorFactory,
+                                             xprocEngine,
+                                             storage.filterBy(client).filterBy(batchId),
+                                             executionService.filterBy(client));
         }
 
         private JobStorage storage;

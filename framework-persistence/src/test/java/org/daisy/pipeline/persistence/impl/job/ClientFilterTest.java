@@ -28,8 +28,8 @@ public class ClientFilterTest{
         public void setUp(){
 		db=DatabaseProvider.getDatabase();
 
-		job = new PersistentJob(db, Mocks.buildContext(), null);
-		job2 = new PersistentJob(db, Mocks.buildContext(), null);
+		job = new PersistentJob(db, Mocks.buildJob(), null);
+		job2 = new PersistentJob(db, Mocks.buildJob(), null);
                 client=new PersistentClient("cli","sadfsa",Role.ADMIN,"asdf",Priority.LOW);
         }
 	@After

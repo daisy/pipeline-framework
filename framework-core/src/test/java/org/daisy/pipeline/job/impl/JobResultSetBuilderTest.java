@@ -15,7 +15,6 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
-import org.daisy.pipeline.job.JobURIUtils;
 import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScript;
