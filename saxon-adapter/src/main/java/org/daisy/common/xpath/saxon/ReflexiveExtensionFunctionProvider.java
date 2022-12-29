@@ -79,28 +79,118 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 	}
 
 	protected ReflexiveExtensionFunctionProvider(Class<?> definition) {
-		definitions = new ArrayList<>();
-		Collection<String> names = new ArrayList<>();
+		Map<String,List<Executable>> methods = new HashMap<>();
 		for (Constructor<?> constructor : definition.getConstructors()) {
 			if (Modifier.isPublic(constructor.getModifiers())) {
-				if (names.contains("new"))
-					throw new IllegalArgumentException("function overloading not supported");
-				else {
-					names.add("new");
-					definitions.add(extensionFunctionDefinitionFromMethod(constructor));
+				List<Executable> list = methods.get("new");
+				if (list == null) {
+					list = new ArrayList<>();
+					methods.put("new", list);
 				}
+				list.add(constructor);
+				methods.put("new", list);
 			}
 		}
 		for (Method method : definition.getDeclaredMethods()) {
 			if (Modifier.isPublic(method.getModifiers())) {
-				if (names.contains(method.getName()))
-					throw new IllegalArgumentException("function overloading not supported");
-				else {
-					names.add(method.getName());
-					definitions.add(extensionFunctionDefinitionFromMethod(method));
+				List<Executable> list = methods.get(method.getName());
+				if (list == null) {
+					list = new ArrayList<>();
+					methods.put(method.getName(), list);
 				}
+				list.add(method);
+				methods.put(method.getName(), list);
 			}
 		}
+		definitions = new ArrayList<>();
+		for (List<Executable> m : methods.values()) {
+			Collections.sort(m, (a, b) -> new Integer(a.getParameterCount()).compareTo(b.getParameterCount()));
+			definitions.add(extensionFunctionDefinitionFromMethods(m));
+		}
+	}
+
+	/**
+	 * @param methods Collection of constructors of the same class, or methods of the same class and
+	 *                with the same name. Assumed to be sorted by number of parameters (from least
+	 *                to most number of parameters).
+	 */
+	private ExtensionFunctionDefinition extensionFunctionDefinitionFromMethods(Collection<Executable> methods)
+			throws IllegalArgumentException {
+		ExtensionFunctionDefinition ret = null;
+		for (Executable m : methods) {
+			ExtensionFunctionDefinition def = extensionFunctionDefinitionFromMethod(m);
+			if (ret == null)
+				ret = def;
+			else {
+				ExtensionFunctionDefinition defA = ret;
+				ExtensionFunctionDefinition defB = def;
+				StructuredQName funcName = defA.getFunctionQName();
+				if (!defB.getFunctionQName().equals(funcName))
+					throw new IllegalArgumentException(); // should not happen
+				SequenceType[] argTypes = defB.getArgumentTypes();
+				if (defB.getMinimumNumberOfArguments() <= defA.getMaximumNumberOfArguments()
+				    || !Arrays.equals(Arrays.copyOfRange(argTypes, 0, defA.getArgumentTypes().length), defA.getArgumentTypes())) {
+					if (m instanceof Constructor)
+						throw new IllegalArgumentException("Incompatible constructors");
+					else // m instanceof Method
+						throw new IllegalArgumentException("Incompatible '" + m.getName() + "' methods");
+				}
+				int minArgs = defA.getMinimumNumberOfArguments();
+				int maxArgs = defB.getMaximumNumberOfArguments();
+				ret = new ExtensionFunctionDefinition() {
+						@Override
+						public StructuredQName getFunctionQName() {
+							return funcName;
+						}
+						@Override
+						public int getMinimumNumberOfArguments() {
+							return minArgs;
+						}
+						@Override
+						public int getMaximumNumberOfArguments() {
+							return maxArgs;
+						}
+						@Override
+						public SequenceType[] getArgumentTypes() {
+							return argTypes;
+						}
+						@Override
+						public SequenceType getResultType(SequenceType[] suppliedArgTypes) {
+							if (suppliedArgTypes.length >= defB.getMinimumNumberOfArguments())
+								return defB.getResultType(suppliedArgTypes);
+							else if (suppliedArgTypes.length <= defA.getMaximumNumberOfArguments())
+								return defA.getResultType(suppliedArgTypes);
+							else
+								throw new IllegalArgumentException(
+									"Function " + funcName + " can not be called with " + suppliedArgTypes.length + " arguments");
+						}
+						@Override
+						public ExtensionFunctionCall makeCallExpression() {
+							return new ExtensionFunctionCall() {
+								ExtensionFunctionCall callA = null;
+								ExtensionFunctionCall callB = null;
+								@Override
+								public Sequence call(XPathContext ctxt, Sequence[] args) throws XPathException {
+									if (args.length <= defA.getMaximumNumberOfArguments()) {
+										if (callA == null)
+											callA = defA.makeCallExpression();
+										return callA.call(ctxt, args);
+									} else if (args.length >= defB.getMinimumNumberOfArguments()) {
+										if (callB == null)
+											callB = defB.makeCallExpression();
+										return callB.call(ctxt, args);
+									} else
+										throw new IllegalArgumentException(
+											"Function " + funcName + " can not be called with " + args.length + " arguments");
+								}
+							};
+						}
+					};
+			}
+		}
+		if (ret == null)
+			throw new IllegalArgumentException();
+		return ret;
 	}
 
 	private ExtensionFunctionDefinition extensionFunctionDefinitionFromMethod(Executable method)
@@ -182,7 +272,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 					                           isConstructor ? "new" : method.getName());
 				}
 				@Override
-				public SequenceType getResultType(SequenceType[] arg0) {
+				public SequenceType getResultType(SequenceType[] suppliedArgTypes) {
 					return resultType;
 				}
 				@Override
