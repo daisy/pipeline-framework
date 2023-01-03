@@ -31,9 +31,11 @@ import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.saxon.SaxonOutputValue;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import net.sf.saxon.dom.AttrOverNodeInfo;
 import net.sf.saxon.dom.DocumentBuilderImpl;
 import net.sf.saxon.dom.ElementOverNodeInfo;
 import net.sf.saxon.dom.NodeOverNodeInfo;
@@ -304,7 +306,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			return SequenceType.SINGLE_BOOLEAN;
 		else if (type.equals(URI.class))
 			return SequenceType.OPTIONAL_ANY_URI; // SINGLE_ANY_URI
-		else if (type.equals(Element.class) || type.equals(Node.class))
+		else if (type.equals(Element.class) || type.equals(Node.class) || type.equals(Attr.class))
 			return SequenceType.SINGLE_NODE;
 		else if (type.equals(Object.class))
 			return SequenceType.SINGLE_ITEM;
@@ -316,7 +318,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			Type rawType = ((ParameterizedType)type).getRawType();
 			if (rawType.equals(Optional.class)) {
 				Type itemType = ((ParameterizedType)type).getActualTypeArguments()[0];
-				if (itemType.equals(Node.class) || itemType.equals(Element.class))
+				if (itemType.equals(Node.class) || itemType.equals(Element.class) || itemType.equals(Attr.class))
 					return SequenceType.OPTIONAL_NODE;
 				else if (itemType.equals(String.class))
 					return SequenceType.OPTIONAL_STRING;
@@ -334,7 +336,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 					return SequenceType.OPTIONAL_ITEM; // optional special wrapper item
 			} else if (rawType.equals(Iterator.class) || rawType.equals(Iterable.class)) {
 				Type itemType = ((ParameterizedType)type).getActualTypeArguments()[0];
-				if (itemType.equals(Node.class) || itemType.equals(Element.class))
+				if (itemType.equals(Node.class))
 					return SequenceType.NODE_SEQUENCE;
 				else if (itemType.equals(String.class))
 					return SequenceType.STRING_SEQUENCE;
@@ -456,6 +458,11 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 		else if (type.equals(Element.class))
 			if (item instanceof NodeInfo)
 				return (T)ElementOverNodeInfo.wrap((NodeInfo)item);
+			else
+				throw new IllegalArgumentException();
+		else if (type.equals(Attr.class))
+			if (item instanceof NodeInfo)
+				return (T)AttrOverNodeInfo.wrap((NodeInfo)item);
 			else
 				throw new IllegalArgumentException();
 		else if (type.equals(Node.class))
