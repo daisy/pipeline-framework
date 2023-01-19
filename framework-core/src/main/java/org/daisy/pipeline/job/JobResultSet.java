@@ -3,6 +3,7 @@ package org.daisy.pipeline.job;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -98,7 +99,7 @@ public final class JobResultSet {
                                                         return 0;
                                                 }
                                                 JobResult result = resultsIt.next();
-                                                ZipEntry entry = new ZipEntry(result.getIdx().toString());
+                                                ZipEntry entry = new ZipEntry(URI.create(result.getIdx().toString()).getPath());
                                                 zipos.putNextEntry(entry);
                                                 InputStream is = result.getPath().toURL().openStream();
                                                 IOHelper.dump(is, zipos);
