@@ -25,7 +25,8 @@ public class AliveResource extends AuthenticatedResource{
 
     	maybeEnableCORS();
     	setStatus(Status.SUCCESS_OK);
-    	AliveXmlWriter writer = new AliveXmlWriter();
+    	AliveXmlWriter writer = new AliveXmlWriter(webservice().getConfiguration().isLocalFS(),
+    	                                           webservice().getConfiguration().isAuthenticationEnabled());
     	DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
 		logResponse(dom);
