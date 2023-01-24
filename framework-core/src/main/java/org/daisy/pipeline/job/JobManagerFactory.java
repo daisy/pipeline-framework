@@ -2,10 +2,12 @@ package org.daisy.pipeline.job;
 
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.job.impl.DefaultJobBuilder;
 import org.daisy.pipeline.job.impl.DefaultJobExecutionService;
 import org.daisy.pipeline.job.impl.DefaultJobManager;
 import org.daisy.pipeline.job.impl.JobExecutionService;
 import org.daisy.pipeline.job.impl.VolatileJobStorage;
+import org.daisy.pipeline.script.BoundXProcScript;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -15,9 +17,21 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
     name = "job-manager-factory",
-    service = { JobManagerFactory.class }
+    service = {
+            JobManagerFactory.class,
+            JobFactory.class
+    }
 )
-public class JobManagerFactory {
+public class JobManagerFactory implements JobFactory {
+
+        @Override
+        public JobFactory.JobBuilder newJob(BoundXProcScript boundScript) {
+                return new DefaultJobBuilder(JobMonitorFactory.LIVE_MONITOR_FACTORY,
+                                             xprocEngine,
+                                             null,
+                                             boundScript,
+                                             false);
+        }
 
         /**
          * Create a job manager for all jobs.
@@ -41,9 +55,11 @@ public class JobManagerFactory {
          * clients make less sence.
          */
         public JobManager createFor(Client client) {
-                return new DefaultJobManager(storage.filterBy(client),
-                                             executionService.filterBy(client),
-                                             new JobContextFactory(client, monitorFactory));
+                return new DefaultJobManager(client,
+                                             monitorFactory,
+                                             xprocEngine,
+                                             storage.filterBy(client),
+                                             executionService.filterBy(client));
         }
 
         /**
@@ -55,13 +71,16 @@ public class JobManagerFactory {
          * clients make less sence.
          */
         public JobManager createFor(Client client, JobBatchId batchId) {
-                return new DefaultJobManager(storage.filterBy(client).filterBy(batchId),
-                                             executionService.filterBy(client),
-                                             new JobContextFactory(client, monitorFactory));
+                return new DefaultJobManager(client,
+                                             monitorFactory,
+                                             xprocEngine,
+                                             storage.filterBy(client).filterBy(batchId),
+                                             executionService.filterBy(client));
         }
 
         private JobStorage storage;
         private JobMonitorFactory monitorFactory;
+        private XProcEngine xprocEngine;
         private JobExecutionService executionService;
 
         @Activate
@@ -69,6 +88,7 @@ public class JobManagerFactory {
                 if (storage == null)
                         storage = new VolatileJobStorage();
                 monitorFactory = new JobMonitorFactory(storage);
+                this.executionService = new DefaultJobExecutionService();
         }
 
         @Reference(
@@ -90,6 +110,6 @@ public class JobManagerFactory {
            policy = ReferencePolicy.STATIC
         )
         protected void setXProcEngine(XProcEngine xprocEngine) {
-                this.executionService = new DefaultJobExecutionService(xprocEngine);
+                this.xprocEngine = xprocEngine;
         }
 }

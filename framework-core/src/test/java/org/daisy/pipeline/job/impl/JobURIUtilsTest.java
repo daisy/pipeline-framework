@@ -1,7 +1,11 @@
-package org.daisy.pipeline.job;
+package org.daisy.pipeline.job.impl;
 
 import java.io.File;
 import java.net.URI;
+
+import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobIdFactory;
+import org.daisy.pipeline.job.URIMapper;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -62,7 +66,7 @@ public class JobURIUtilsTest   {
 	@Test
 	public void getJobBase() throws Exception{
 		URI expected= jobsDir.toURI().resolve(URI.create(String.format("%s/", id.toString())));
-		Assert.assertEquals(JobURIUtils.getJobBase(id.toString()),expected);
+		Assert.assertEquals(JobURIUtils.getJobBaseDir(id.toString()).toURI(), expected);
 	}
 
 	@Test

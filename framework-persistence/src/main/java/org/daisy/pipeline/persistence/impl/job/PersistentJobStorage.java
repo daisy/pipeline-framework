@@ -13,7 +13,6 @@ import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.event.MessageStorage;
 import org.daisy.pipeline.job.AbstractJob;
-import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobMonitorFactory;
@@ -49,7 +48,7 @@ public class PersistentJobStorage implements JobStorage {
                         .getLogger(PersistentJobStorage.class);
 
         private Database db;
-
+        private ScriptRegistry scriptRegistry;
         private PersistentClientStorage clientStorage;
         private final PersistentMessageStorage messageStorage;
         private boolean messageStorageAccessed = false;
@@ -107,7 +106,7 @@ public class PersistentJobStorage implements JobStorage {
            policy = ReferencePolicy.STATIC
         )
         public void setRegistry(ScriptRegistry scriptRegistry) {
-                PersistentJobContext.setScriptRegistry(scriptRegistry);
+                this.scriptRegistry = scriptRegistry;
         }
 
         /**
@@ -136,9 +135,8 @@ public class PersistentJobStorage implements JobStorage {
                 return Collections2.transform(
                     query.getResultList(),
                     job -> {
-                        // set event bus and monitor
-                        if (jobMonitorFactory != null)
-                                job.getContext().setMonitor(jobMonitorFactory);
+                        // finalize job context (set JobMonitor and XProcScript)
+                        job.getContext().finalize(scriptRegistry, jobMonitorFactory);
                         return (AbstractJob)job;
                     }
                 ).iterator();
@@ -146,10 +144,10 @@ public class PersistentJobStorage implements JobStorage {
 
 
         @Override
-        public Optional<AbstractJob> add(Priority priority, AbstractJobContext ctxt) {
+        public Optional<AbstractJob> add(AbstractJob job) {
                 checkDatabase();
-                logger.debug("Adding job to db:" + ctxt.getId());
-                return Optional.of(new PersistentJob(db, ctxt, clientStorage, priority));
+                logger.debug("Adding job to db:" + job.getId());
+                return Optional.of(new PersistentJob(db, job, clientStorage));
         }
 
         @Override
@@ -180,9 +178,8 @@ public class PersistentJobStorage implements JobStorage {
 
                 if (job != null) {
                         job.setDatabase(db);
-                        // set event bus and monitor
-                        if (jobMonitorFactory != null)
-                                job.getContext().setMonitor(jobMonitorFactory);
+                        // finalize job context (set JobMonitor and XProcScript)
+                        job.getContext().finalize(scriptRegistry, jobMonitorFactory);
                 }
                 return Optional.fromNullable(job);
         }

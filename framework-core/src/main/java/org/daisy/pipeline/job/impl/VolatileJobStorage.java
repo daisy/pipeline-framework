@@ -5,14 +5,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.event.MessageStorage;
 import org.daisy.pipeline.event.impl.VolatileMessageStorage;
 import org.daisy.pipeline.job.AbstractJob;
-import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
@@ -31,14 +28,14 @@ public class VolatileJobStorage implements JobStorage {
                         .getLogger(VolatileJobStorage.class);
         private Map<JobId,AbstractJob> jobs = Collections
                         .synchronizedMap(new HashMap<JobId,AbstractJob>());
-        private Predicate<Job> filter = Predicates.alwaysTrue();
+        private Predicate<AbstractJob> filter = Predicates.alwaysTrue();
         private final MessageStorage messageStorage;
 
         public VolatileJobStorage() {
                 messageStorage = new VolatileMessageStorage();
         }
 
-        private VolatileJobStorage(Map<JobId,AbstractJob> jobs, MessageStorage messageStorage, Predicate<Job> filter) {
+        private VolatileJobStorage(Map<JobId,AbstractJob> jobs, MessageStorage messageStorage, Predicate<AbstractJob> filter) {
                 this.jobs = jobs;
                 this.messageStorage = messageStorage;
                 this.filter = filter;
@@ -50,9 +47,12 @@ public class VolatileJobStorage implements JobStorage {
         }
 
         @Override
-        public synchronized Optional<AbstractJob> add(final Priority priority, final AbstractJobContext ctxt) {
-                if (!this.jobs.containsKey(ctxt.getId()))
-                        return Optional.of(new VolatileJob(ctxt, priority));
+        public synchronized Optional<AbstractJob> add(AbstractJob job) {
+                if (!jobs.containsKey(job.getId())) {
+                        job = new VolatileJob(job.getContext(), job.getPriority(), job.xprocEngine, true);
+                        jobs.put(job.getId(), job);
+                        return Optional.of(job);
+                }
                 return Optional.absent();
         }
 
@@ -81,11 +81,10 @@ public class VolatileJobStorage implements JobStorage {
 
         @Override
         public JobStorage filterBy(final JobBatchId batchId) {
-                return new VolatileJobStorage(jobs, messageStorage, Predicates.and(this.filter, new Predicate<Job>() {
-
+                return new VolatileJobStorage(jobs, messageStorage, Predicates.and(this.filter, new Predicate<AbstractJob>() {
                         @Override
-                        public boolean apply(Job job) {
-                                JobBatchId bId=job.getContext().getBatchId();
+                        public boolean apply(AbstractJob job) {
+                                JobBatchId bId = job.getContext().getBatchId();
                                 //check if the client id is the one we're filtering by
                                 return bId!=null && bId.toString().equals(batchId.toString());
                         }
@@ -97,23 +96,13 @@ public class VolatileJobStorage implements JobStorage {
                 if (client.getRole().equals(Role.ADMIN)){
                         return this;
                 }else{
-                        return new VolatileJobStorage(jobs, messageStorage, Predicates.and(this.filter, new Predicate<Job>() {
-
+                        return new VolatileJobStorage(jobs, messageStorage, Predicates.and(this.filter, new Predicate<AbstractJob>() {
                                 @Override
-                                public boolean apply(Job job) {
+                                public boolean apply(AbstractJob job) {
                                         //check if the client id is the one we're filtering by
                                         return job.getContext().getClient().getId().equals(client.getId());
                                 }
                         }));
-                }
-        }
-
-        private class VolatileJob extends AbstractJob {
-                VolatileJob(AbstractJobContext ctxt, Priority priority) {
-                        super(ctxt, priority);
-                        // Store the job before broadcasting its status
-                        VolatileJobStorage.this.jobs.put(ctxt.getId(), this);
-                        changeStatus(Status.IDLE);
                 }
         }
 

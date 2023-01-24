@@ -1,8 +1,5 @@
 package org.daisy.pipeline.webservice.impl;
 
-import java.util.Collection;
-
-import org.daisy.common.priority.Prioritizable;
 import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
@@ -56,8 +53,7 @@ public abstract class QueueMoveResource extends AuthenticatedResource {
 
                 setStatus(Status.SUCCESS_OK);
                 this.move(this.queue,this.job.get().getId());
-                Collection<? extends Prioritizable< Job>> jobs=this.queue.asCollection();
-                QueueXmlWriter writer = new QueueXmlWriter(jobs, getRequest().getRootRef().toString());
+                QueueXmlWriter writer = new QueueXmlWriter(queue, getRequest().getRootRef().toString());
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
                                 writer.getXmlDocument());
                 logResponse(dom);

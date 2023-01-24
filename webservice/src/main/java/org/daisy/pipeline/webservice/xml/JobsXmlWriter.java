@@ -1,6 +1,7 @@
 package org.daisy.pipeline.webservice.xml;
 
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.webservice.Routes;
 
 import org.restlet.Request;
@@ -14,7 +15,8 @@ import org.w3c.dom.Element;
 public class JobsXmlWriter {
 	
 	private final String baseUrl;
-	Iterable<? extends Job> jobs = null;
+	private final Iterable<? extends Job> jobs;
+	private final JobQueue queue;
 	private static Logger logger = LoggerFactory.getLogger(JobsXmlWriter.class.getName());
         private boolean localPaths=false; 
 
@@ -24,8 +26,9 @@ public class JobsXmlWriter {
 	 *                to get fully qualified URLs. Set this to {@link Routes#getPath()} to get
 	 *                absolute paths relative to the domain name.
 	 */
-	public JobsXmlWriter(Iterable<? extends Job> jobs, String baseUrl) {
+	public JobsXmlWriter(Iterable<? extends Job> jobs, JobQueue queue, String baseUrl) {
 		this.jobs = jobs;
+		this.queue = queue;
 		this.baseUrl = baseUrl;
 	}
 
@@ -50,6 +53,9 @@ public class JobsXmlWriter {
                         if(this.localPaths){
                                 writer.withLocalPaths();
                         }
+			if (job.getStatus() == Job.Status.IDLE) {
+				writer.withPriority(queue.getJobPriority(job.getId()));
+			}
 			writer.addAsElementChild(jobsElm);
 		}
 		

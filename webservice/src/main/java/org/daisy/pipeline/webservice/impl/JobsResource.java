@@ -95,7 +95,11 @@ public class JobsResource extends AuthenticatedResource {
                         return null;
                 }
                 JobManager jobMan = webservice().getJobManager(this.getClient());
-                JobsXmlWriter writer = new JobsXmlWriter(jobMan.getJobs(), getRequest().getRootRef().toString());
+                JobsXmlWriter writer = new JobsXmlWriter(
+                        jobMan.getJobs(),
+                        webservice().getJobManager(webservice().getStorage().getClientStorage().defaultClient())
+                                    .getExecutionQueue(),
+                        getRequest().getRootRef().toString());
                 if(this.webservice().getConfiguration().isLocalFS()){
                 	writer.withLocalPaths();
                 }
@@ -196,6 +200,9 @@ public class JobsResource extends AuthenticatedResource {
                     .add(job.get().getId(), XmlUtils.nodeToString(doc));
 
                 JobXmlWriter writer = new JobXmlWriter(job.get(), getRequest().getRootRef().toString());
+                if (job.get().getStatus() == Job.Status.IDLE) {
+                        writer.withPriority(getJobPriority(job.get()));
+                }
                 Document jobXml = writer.withScriptDetails().getXmlDocument();
 
                 // initiate callbacks
@@ -206,6 +213,11 @@ public class JobsResource extends AuthenticatedResource {
                 logResponse(dom);
                 return dom;
 
+        }
+
+        private Priority getJobPriority(Job job) {
+                return webservice().getJobManager(webservice().getStorage().getClientStorage().defaultClient())
+                                   .getExecutionQueue().getJobPriority(job.getId());
         }
 
         private Representation badRequest(Exception e) {

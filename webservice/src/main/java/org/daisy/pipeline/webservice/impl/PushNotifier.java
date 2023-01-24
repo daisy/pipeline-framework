@@ -107,7 +107,7 @@ public class PushNotifier implements CallbackHandler {
                                                         alreadyListening = true;
                                                         break; }
                                         if (!alreadyListening) {
-                                                JobMonitor monitor = job.getContext().getMonitor();
+                                                JobMonitor monitor = job.getMonitor();
                                                 StatusNotifier statusNotifier = monitor.getStatusUpdates();
                                                 Consumer<Status> statusListener = s -> update(job.getId(), s);
                                                 statusNotifier.listen(statusListener);
@@ -122,7 +122,7 @@ public class PushNotifier implements CallbackHandler {
                                     || status == Status.ERROR
                                     || status == Status.FAIL) {
                                         // if the job has already finished when the callback is registered, push all messages
-                                        lastUnpushedMessage.put(job.getContext().getMonitor().getMessageAccessor(),
+                                        lastUnpushedMessage.put(job.getMonitor().getMessageAccessor(),
                                                                 Integer.MAX_VALUE);
                                 } else {
                                         // otherwise push the initial messages on the first new message event
@@ -132,7 +132,7 @@ public class PushNotifier implements CallbackHandler {
                                                         alreadyListening = true;
                                                         break; }
                                         if (!alreadyListening) {
-                                                JobMonitor monitor = job.getContext().getMonitor();
+                                                JobMonitor monitor = job.getMonitor();
                                                 MessageAccessor accessor = monitor.getMessageAccessor();
                                                 jobForAccessor.put(accessor, job.getId());
                                                 Consumer<Integer> messageListener = i -> update(accessor, i);
@@ -167,7 +167,7 @@ public class PushNotifier implements CallbackHandler {
                                         break;
                         }
                         if (!keepListeningForMessages || !keepListeningForStatusUpdates) {
-                                JobMonitor monitor = job.getContext().getMonitor();
+                                JobMonitor monitor = job.getMonitor();
                                 if (!keepListeningForMessages) {
                                         MessageAccessor accessor = monitor.getMessageAccessor();
                                         jobForAccessor.remove(accessor);
@@ -201,7 +201,7 @@ public class PushNotifier implements CallbackHandler {
                                 job = c.getJob();
                                 break;
                         }
-                        JobMonitor monitor = job.getContext().getMonitor();
+                        JobMonitor monitor = job.getMonitor();
                         MessageAccessor accessor = monitor.getMessageAccessor();
                         jobForAccessor.remove(accessor);
                         Runnable unlistenMessages = unlistenMessagesFunctions.remove(accessor);
