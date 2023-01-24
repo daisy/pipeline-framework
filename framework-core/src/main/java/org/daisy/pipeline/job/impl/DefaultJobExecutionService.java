@@ -10,7 +10,6 @@ import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.impl.fuzzy.FuzzyJobFactory;
 
@@ -22,18 +21,9 @@ import org.slf4j.MDC;
 
 import com.google.common.base.Predicate;
 
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-
 /**
  * DefaultJobExecutionService is the defualt way to execute jobs
  */
-@Component(
-    name = "job-execution-service",
-    service = { JobExecutionService.class }
-)
 public class DefaultJobExecutionService implements JobExecutionService {
 
         static final String NUM_PROCS="org.daisy.pipeline.procs";
@@ -65,37 +55,17 @@ public class DefaultJobExecutionService implements JobExecutionService {
                 return executor;
         }
 
-        public DefaultJobExecutionService(){
+        public DefaultJobExecutionService(XProcEngine xprocEngine) {
                 this.executor=DefaultJobExecutionService.configureExecutor();
                 this.executionQueue=new DefaultJobQueue(this.executor); 
         }
-        /**
-         * @param xprocEngine
-         * @param executor
-         * @param executionQueue
-         */
-        public DefaultJobExecutionService(XProcEngine xprocEngine,
-                        PriorityThreadPoolExecutor<Job> executor, JobQueue executionQueue) {
+
+        private DefaultJobExecutionService(XProcEngine xprocEngine,
+                                           PriorityThreadPoolExecutor<Job> executor,
+                                           JobQueue executionQueue) {
                 this.xprocEngine = xprocEngine;
                 this.executor = executor;
                 this.executionQueue = executionQueue;
-        }
-
-        /**
-         * Sets the x proc engine.
-         *
-         * @param xprocEngine
-         *            the new x proc engine
-         */
-        @Reference(
-           name = "xproc-engine",
-           unbind = "-",
-           service = XProcEngine.class,
-           cardinality = ReferenceCardinality.MANDATORY,
-           policy = ReferencePolicy.STATIC
-        )
-        public void setXProcEngine(XProcEngine xprocEngine) {
-                this.xprocEngine = xprocEngine;
         }
 
         /*

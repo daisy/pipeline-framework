@@ -16,8 +16,6 @@ import com.google.common.base.Optional;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
-import org.daisy.pipeline.clients.ClientStorage;
-import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.Status;
 import org.daisy.pipeline.job.JobId;
@@ -29,13 +27,6 @@ import org.daisy.pipeline.webservice.Callback;
 import org.daisy.pipeline.webservice.Callback.CallbackType;
 import org.daisy.pipeline.webservice.CallbackHandler;
 
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,14 +34,8 @@ import org.slf4j.LoggerFactory;
 // this class could evolve into a general notification utility
 // e.g. it could also trigger email notifications
 // TODO: be sure to only do this N times per second
-@Component(
-    name = "push-notifier",
-    service = { CallbackHandler.class }
-)
 public class PushNotifier implements CallbackHandler {
 
-        private JobManagerFactory jobManagerFactory;
-        private ClientStorage clientStorage;
         private JobManager jobManager;
         private Map<JobId,List<Callback>> callbacks;
         private Map<MessageAccessor,JobId> jobForAccessor;
@@ -69,62 +54,31 @@ public class PushNotifier implements CallbackHandler {
         // track the last status of each job
         private Map<JobId,Status> lastUnpushedStatus = Collections.synchronizedMap(new HashMap<>());
 
-        Timer timer = null;
+        private Timer timer = null;
 
-        public PushNotifier() {
-        }
-
-        @Activate
-        public void init() {
+        PushNotifier(JobManagerFactory jobManagerFactory) {
                 logger.debug("Activating push notifier");
-                jobManager = jobManagerFactory.createFor(clientStorage.defaultClient());
+                jobManager = jobManagerFactory.create();
                 callbacks = new HashMap<>();
                 jobForAccessor = Collections.synchronizedMap(new HashMap<>());
                 unlistenMessagesFunctions = new HashMap<>();
                 unlistenStatusFunctions = new HashMap<>();
-                this.startTimer();
+                startTimer();
         }
 
-        @Deactivate
-        public void close() {
+        void close() {
                 cancelTimer();
         }
 
-        public synchronized void startTimer() {
+        private synchronized void startTimer() {
                 timer = new Timer();
                 timer.schedule(new NotifyTask(), 0, PUSH_INTERVAL);
         }
-        public synchronized void cancelTimer() {
+        private synchronized void cancelTimer() {
                 if (timer != null) {
                         timer.cancel();
                         timer = null;
                 }
-        }
-
-        /**
-         * @param clientStorage the clientStorage to set
-         */
-        @Reference(
-           name = "webservice-storage",
-           unbind = "-",
-           service = WebserviceStorage.class,
-           cardinality = ReferenceCardinality.MANDATORY,
-           policy = ReferencePolicy.STATIC
-        )
-        public void setWebserviceStorage(WebserviceStorage storage) {
-                this.clientStorage = storage.getClientStorage();
-                
-        }
-
-        @Reference(
-           name = "job-manager-factory",
-           unbind = "-",
-           service = JobManagerFactory.class,
-           cardinality = ReferenceCardinality.MANDATORY,
-           policy = ReferencePolicy.STATIC
-        )
-        public void setJobManagerFactory(JobManagerFactory jobManagerFactory) {
-                this.jobManagerFactory = jobManagerFactory;
         }
 
         @Override

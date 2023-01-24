@@ -56,7 +56,7 @@ public class DefaultJobExecutionServiceTest {
         public void setUp() {
                 mon = new Monitor();
                 tracker = new RunnableTracker();
-                service = Mockito.spy(new DefaultJobExecutionService());
+                service = Mockito.spy(new DefaultJobExecutionService(null));
                 jobs = new Job[100];
                 for (int i=0;i<100;i++){
                         JobContext ctxt = Mockito.mock(JobContext.class);

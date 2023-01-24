@@ -86,11 +86,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-persistence</artifactId>
       <scope>test</scope>
     </dependency>
@@ -160,8 +155,7 @@
             </goals>
             <configuration>
               <includes>
-                org.daisy.pipeline.webservice.impl.PipelineWebService,
-                org.daisy.pipeline.webservice.impl.PushNotifier
+                org.daisy.pipeline.webservice.impl.PipelineWebService
               </includes>
             </configuration>
           </execution>
@@ -188,8 +182,7 @@
         <configuration>
           <instructions>
             <_dsannotations>
-              org.daisy.pipeline.webservice.impl.PipelineWebService,
-              org.daisy.pipeline.webservice.impl.PushNotifier
+              org.daisy.pipeline.webservice.impl.PipelineWebService
             </_dsannotations>
             <Import-Package>!org.daisy.common.spi,*</Import-Package>
           </instructions>

@@ -23,6 +23,7 @@ import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.persistence.impl.Database;
+import org.daisy.pipeline.persistence.impl.webservice.PersistentClientStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,12 +51,12 @@ public class PersistentJob  extends AbstractJob implements Serializable {
 	@Transient
 	Database db=null;
 
-	PersistentJob(Database db, AbstractJobContext ctxt) {
-		this(db, ctxt, null);
+	PersistentJob(Database db, AbstractJobContext ctxt, PersistentClientStorage clientStorage) {
+		this(db, ctxt, clientStorage, null);
 	}
 
-	PersistentJob(Database db, AbstractJobContext ctxt, Priority priority) {
-		super(new PersistentJobContext(ctxt), priority);
+	PersistentJob(Database db, AbstractJobContext ctxt, PersistentClientStorage clientStorage, Priority priority) {
+		super(new PersistentJobContext(ctxt, clientStorage), priority);
 		this.db=db;
 		this.sJobId=ctxt.getId().toString();
 		this.db.addObject(this);

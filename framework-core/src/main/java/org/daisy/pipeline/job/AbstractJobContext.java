@@ -90,7 +90,7 @@ public abstract class AbstractJobContext implements JobContext{
         protected AbstractJobContext() {
         }
 
-        // used by PersistentJobContext and VolatileContext
+        // used by PersistentJobContext
         protected AbstractJobContext(AbstractJobContext from) {
                 if (from == null)
                         throw new IllegalArgumentException();

@@ -35,7 +35,7 @@ public class PersistentJobContextTest  {
 	public void setUp(){
 		//script setup
 		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
-		ctxt=new PersistentJobContext(Mocks.buildContext(null,JobIdFactory.newBatchId()));
+		ctxt=new PersistentJobContext(Mocks.buildContext(null, JobIdFactory.newBatchId()), null);
 		logFile=ctxt.getLogFile();
 		id=ctxt.getId();
 		batchId=ctxt.getBatchId();

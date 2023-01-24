@@ -1,48 +1,25 @@
-package org.daisy.pipeline.persistence.impl.webservice;
-
-import java.util.List;
+package org.daisy.pipeline.webservice.impl;
 
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
-import org.daisy.pipeline.persistence.impl.Database;
-import org.daisy.pipeline.persistence.impl.job.DatabaseProvider;
-import org.daisy.pipeline.persistence.impl.webservice.PersistentClientStorage;
-import org.junit.After;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
 
+public class VolatileClientStorageTest   {
 
-@RunWith(MockitoJUnitRunner.class)
-public class PersistentClientStorageTest {
-
-        Database db;
-        PersistentClientStorage storage;
+        VolatileClientStorage storage;  
         String secret="secret";
         String contact="name@server.com";
-
-        List<Client> toDel;
         @Before
         public void setUp(){
-                db=Mockito.spy(DatabaseProvider.getDatabase());
-                storage=new PersistentClientStorage(db);
-                toDel= Lists.newLinkedList();
-        }
+                storage=new VolatileClientStorage();
 
-        @After
-        public void tearDown(){
-                for(Client c:toDel){
-                        db.deleteObject(c);
-                }
         }
-
         @Test
         public void listEmpty(){
                 Assert.assertEquals("Empty",0,storage.getAll().size());
@@ -53,9 +30,7 @@ public class PersistentClientStorageTest {
         public void listAll(){
                 String id="IDDD";
                 Optional<Client> c=storage.addClient(id,secret,Role.ADMIN,contact,Priority.HIGH);
-                toDel.add(c.get());
                 c=storage.addClient(id+"2",secret,Role.ADMIN,contact,Priority.HIGH);
-                toDel.add(c.get());
                 Assert.assertEquals("Empty",2,storage.getAll().size());
 
         }
@@ -63,21 +38,17 @@ public class PersistentClientStorageTest {
         @Test
         public void listWithDefault(){
                 Client c= storage.defaultClient();
-                toDel.add(c);
                 Assert.assertEquals("Default should not be in the list",0,storage.getAll().size());
-
         }
 
         @Test
         public void getOk(){
                 String id="id";
                 Optional<Client> c=storage.addClient(id,secret,Role.ADMIN,contact,Priority.HIGH);
-                toDel.add(c.get());
                 Client cli=storage.get(c.get().getId()).get();
                 Assert.assertEquals("what I put is what I get", id,cli.getId());
 
         }
-
 
         @Test
         public void getNull(){
@@ -91,7 +62,6 @@ public class PersistentClientStorageTest {
         public void delete(){
                 String id="id";
                 Optional<Client> c=storage.addClient(id,secret,Role.ADMIN,contact,Priority.HIGH);
-                toDel.add(c.get());
                 boolean del=storage.delete(id);
                 Assert.assertTrue("Was deleted", del);
                 c=storage.get(id);
@@ -112,7 +82,6 @@ public class PersistentClientStorageTest {
         @Test
         public void deleteDefault(){
                 Client def=storage.defaultClient();
-                this.toDel.add(def);
                 boolean deleted=this.storage.delete(def.getId());
                 Assert.assertFalse("default can't be deleted",deleted);
         }
@@ -123,7 +92,6 @@ public class PersistentClientStorageTest {
                 String otherSecret="otherSecret";
                 String otherContact="otherContact";
                 Optional<Client> c=storage.addClient(id,secret,Role.ADMIN,contact,Priority.HIGH);
-                toDel.add(c.get());
                 c=this.storage.update(id,otherSecret,Role.CLIENTAPP,otherContact,Priority.LOW);
                 Assert.assertEquals("updated secret",otherSecret,c.get().getSecret());
                 Assert.assertEquals("updated contact",otherContact,c.get().getContactInfo());
@@ -153,7 +121,6 @@ public class PersistentClientStorageTest {
                 String id="cli"; 
                 Optional<Client> c=storage.addClient(id,secret,Role.ADMIN,contact,Priority.HIGH);
                 Assert.assertTrue(c.isPresent());
-                toDel.add(c.get());
                 Client res=storage.get(id).get();
                 Assert.assertEquals("id",id,res.getId());
                 Assert.assertEquals("secret",secret,res.getSecret());
@@ -167,41 +134,25 @@ public class PersistentClientStorageTest {
                 Optional<Client> c=storage.addClient(null,secret,Role.ADMIN,contact,Priority.HIGH);
         }
 
+
+
         @Test 
         public void addDefault(){
                 Client c= storage.defaultClient();
-                Optional<Client>def=storage.update(c.getId(),"",Role.ADMIN,"",Priority.LOW);
-                //make sure is in the db
-                toDel.add(c);
+                Optional<Client>def=storage.update(VolatileClientStorage.DEFAULT.getId(),"",Role.ADMIN,"",Priority.LOW);
                 Assert.assertFalse(def.isPresent());
         }
+
         @Test
         public void addClientDefaultPriority(){
                 String id="cli"; 
                 Optional<Client>c =storage.addClient(id,secret,Role.ADMIN,contact,Priority.MEDIUM);
-                toDel.add(c.get());
                 Optional<Client> res=storage.get(id);
                 Assert.assertTrue(res.isPresent());
                 Assert.assertEquals("priority",Priority.MEDIUM,res.get().getPriority());
         }
 
-        @Test
-        public void getDefaultClientEmpty(){
-                Client def= storage.defaultClient();
-                toDel.add(def);
-                //the client has been inserted in the db
-                Mockito.verify(db,Mockito.times(1)).addObject(Mockito.any());
-                Assert.assertEquals("Check default id", Client.DEFAULT_ADMIN.getId(), def.getId());
-        }
 
-        @Test
-        public void getDefaultClientTwice(){
-                Client def= storage.defaultClient();
-                toDel.add(def);
-                //the client has been inserted in the db but only once
-                Mockito.verify(db,Mockito.times(1)).addObject(Mockito.any());
-                def= storage.defaultClient();
-                Mockito.verify(db,Mockito.times(1)).addObject(Mockito.any());
-                Assert.assertEquals("Check default id", Client.DEFAULT_ADMIN.getId(), def.getId());
-        }
+
+
 }
