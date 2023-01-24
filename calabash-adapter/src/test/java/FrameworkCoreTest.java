@@ -41,8 +41,6 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Iterators;
 import com.google.common.io.CharStreams;
 
-import org.apache.commons.io.FileUtils;
-
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.ProgressMessage;
@@ -51,7 +49,6 @@ import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobFactory;
 import org.daisy.pipeline.junit.AbstractTest;
-import org.daisy.pipeline.junit.OSGiLessConfiguration;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScriptService;
@@ -673,29 +670,15 @@ public class FrameworkCoreTest extends AbstractTest {
 		};
 	}
 	
-	static final File PIPELINE_BASE = new File(new File(PathUtils.getBaseDir()), "target/tmp");
-	static final File PIPELINE_DATA = new File(PIPELINE_BASE, "data");
-
 	@Override
 	protected Properties systemProperties() {
 		Properties p = new Properties();
-		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.persistence", "false");
 		return p;
 	}
 	
-	@OSGiLessConfiguration
-	public void setup() {
-		try {
-			FileUtils.deleteDirectory(PIPELINE_BASE);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	@Override @Configuration
 	public Option[] config() {
-		setup();
 		return super.config();
 	}
 

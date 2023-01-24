@@ -14,7 +14,7 @@ import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.impl.VolatileJobStorage;
-import org.junit.After;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +23,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 
 public class VolatileJobStorageTest {
+
         AbstractJob job1;
         AbstractJob job2;
         AbstractJob job1OtherCli;
@@ -31,24 +32,16 @@ public class VolatileJobStorageTest {
         VolatileClient cl = new VolatileClient("paco", Role.CLIENTAPP, Priority.LOW);
         VolatileClient clOther = new VolatileClient("pepe", Role.CLIENTAPP, Priority.LOW);
         VolatileClient clAdmin = new VolatileClient("power_paco", Role.ADMIN, Priority.LOW);
-        String oldBase = "";
         JobBatchId batchId1=JobIdFactory.newBatchId();
         JobBatchId batchId2=JobIdFactory.newBatchId();
 
         @Before
         public void setUp() {
-                oldBase = System.getProperty("org.daisy.pipeline.data", "");
-                System.setProperty("org.daisy.pipeline.data", System.getProperty("java.io.tmpdir"));
                 storage = new VolatileJobStorage();
                 job1 = new VolatileJob(new Mock.MockedJobContext(cl, batchId1), Priority.MEDIUM, null, true);
                 job2 = new VolatileJob(new Mock.MockedJobContext(cl, batchId2), Priority.MEDIUM, null, true);
                 job1OtherCli = new VolatileJob(new Mock.MockedJobContext(clOther, batchId1), Priority.MEDIUM, null, true);
                 job2OtherCli = new VolatileJob(new Mock.MockedJobContext(clOther, batchId2), Priority.MEDIUM, null, true);
-        }
-
-        @After
-        public void tearDown() {
-                System.setProperty("org.daisy.pipeline.data", oldBase);
         }
 
         @Test

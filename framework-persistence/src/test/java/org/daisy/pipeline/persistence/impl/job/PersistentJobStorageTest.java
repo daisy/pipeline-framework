@@ -38,10 +38,13 @@ public class PersistentJobStorageTest {
         PersistentClient cl = new PersistentClient("paco","asdf",Role.CLIENTAPP,"afasd",Priority.LOW);
         PersistentClient clAdmin = new PersistentClient("power_paco","asdf",Role.ADMIN,"afasd",Priority.LOW);
         @Mock ScriptRegistry registry;
+        String oldBase;
 
         @Before
         public void setUp() {
 		db=DatabaseProvider.getDatabase();
+                oldBase = System.getProperty("org.daisy.pipeline.data", "");
+                System.setProperty("org.daisy.pipeline.data", System.getProperty("java.io.tmpdir"));
                 storage=new PersistentJobStorage();
                 storage.setEntityManagerFactory(DatabaseProvider.getEMF());
                 storage.setRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
@@ -49,8 +52,8 @@ public class PersistentJobStorageTest {
                 db.addObject(this.clAdmin);
                 clientsToDel.add(this.cl);
                 clientsToDel.add(this.clAdmin);
-                
         }
+
         @After
         public void tearDown() {
                 //for (Job j: jobsToDel){
@@ -62,7 +65,7 @@ public class PersistentJobStorageTest {
                 for (Client c : clientsToDel) {
                         this. db.deleteObject(c);
                 }
-                
+                System.setProperty("org.daisy.pipeline.data", oldBase);
         }
         @Test
         public void addJob() throws Exception{
