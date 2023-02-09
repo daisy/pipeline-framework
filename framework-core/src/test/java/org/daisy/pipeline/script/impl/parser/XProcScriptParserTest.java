@@ -161,9 +161,10 @@ public class XProcScriptParserTest {
 	  */
 	 @Test
 	 public void testOutputPortPrimary() {
-                 assertTrue("when primary is given true it's set", scp.getPortMetadata("result").isPrimary());
-                 assertTrue("when primary is given false it's set", !scp.getPortMetadata("result2").isPrimary());
-                 assertTrue("when primary is not given is set to true", scp.getPortMetadata("result3").isPrimary());
+		 assertTrue("when primary is given true it's set", scp.getXProcPipelineInfo().getOutputPort("result").isPrimary());
+		 assertTrue("when primary is given false it's set", !scp.getXProcPipelineInfo().getOutputPort("result2").isPrimary());
+		 assertTrue("when primary is not given and it is not the only output port it is set to false",
+		            !scp.getXProcPipelineInfo().getOutputPort("result3").isPrimary());
 	 }
 	 
 	 /**

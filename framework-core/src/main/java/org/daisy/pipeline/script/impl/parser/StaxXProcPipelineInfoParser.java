@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.LinkedList;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 import org.daisy.common.xproc.XProcOptionInfo;
@@ -21,7 +21,6 @@ import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Attributes;
 import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Elements;
 import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Values;
 
-// TODO: Auto-generated Javadoc
 /**
  * Parser the xproc pipeline info, not only for scripts but for regular steps.
  */
@@ -39,216 +38,182 @@ public class StaxXProcPipelineInfoParser {
 	}
 
 	/**
-	 * Parses the the pipeline file
+	 * Parses the info from the xproc pipeline located at the provided uri
 	 *
 	 * @param uri the uri
 	 * @return the x proc pipeline info
 	 */
 	public XProcPipelineInfo parse(URL url) {
-		return new StatefulParser().parse(url);
+		if (mFactory == null) {
+			throw new IllegalStateException();
+		}
+		XProcPipelineInfo.Builder infoBuilder = new XProcPipelineInfo.Builder();
+		try {
+			infoBuilder.withURI(url.toURI());
+		} catch (URISyntaxException e) {
+			throw new RuntimeException("Error converting URL to URI", e);
+		}
+
+		InputStream is = null;
+		XMLEventReader reader = null;
+		try {
+
+			// count number of input and output ports
+			boolean singleInput;
+			boolean singleOutput; {
+				int inputCount = 0;
+				int outputCount = 0;
+				is = url.openConnection().getInputStream();
+				reader = mFactory.createXMLEventReader(is);
+				int depth = 0;
+				while (reader.hasNext()) {
+					XMLEvent event = reader.nextEvent();
+					if (event.isStartElement()) {
+						if (depth == 1) {
+							QName name = event.asStartElement().getName();
+							if (name.equals(Elements.P_INPUT)) {
+								inputCount++;
+							} else if (name.equals(Elements.P_OUTPUT)) {
+								outputCount++;
+							}
+							if (inputCount > 1 && outputCount > 1)
+								break;
+						}
+						depth++;
+					} else if (event.isEndElement()) {
+						depth--;
+					}
+					// FIXME: break the loop when we reach the subpipeline
+				}
+				singleInput = (inputCount == 1);
+				singleOutput = (outputCount == 1);
+				is = null;
+				reader = null;
+			}
+
+			// parse options, input and outputs
+			is = url.openConnection().getInputStream();
+			reader = mFactory.createXMLEventReader(is);
+			int depth = 0;
+			while (reader.hasNext()) {
+				XMLEvent event = reader.nextEvent();
+				if (event.isStartElement()) {
+					if (depth == 1) {
+						StartElement elem = event.asStartElement();
+						QName name = elem.getName();
+						if (name.equals(Elements.P_OPTION)) {
+							parseOption(elem, infoBuilder);
+						} else if (name.equals(Elements.P_INPUT)) {
+							parsePort(elem, infoBuilder, singleInput);
+						} else if (name.equals(Elements.P_OUTPUT)) {
+							parsePort(elem, infoBuilder, singleOutput);
+						}
+					}
+					depth++;
+				} else if (event.isEndElement()) {
+					depth--;
+				}
+				// FIXME: break the loop when we reach the subpipeline
+			}
+			return infoBuilder.build();
+		} catch (XMLStreamException e) {
+			throw new RuntimeException("Parsing error: " + e.getMessage(),
+					e);
+		} catch (IOException e) {
+			throw new RuntimeException("io error while parsing"
+					+ e.getMessage(), e);
+		} finally {
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+				if (is != null) {
+					is.close();
+				}
+			} catch (Exception e) {
+				// ignore;
+			}
+		}
 	}
 
 	/**
-	 *StatefulParser is thread safe.
+	 * Parses a p:input or p:output element.
+	 *
+	 * Consumes the whole element (everything until and including the end event of the element).
 	 */
-	private class StatefulParser {
-
-		/** The m ancestors. */
-		private final LinkedList<XMLEvent> mAncestors = new LinkedList<XMLEvent>();
-
-		/**
-		 * Parses the info from the xproc pipeline located at the provided uri
-		 *
-		 * @param uri the uri
-		 * @return the x proc pipeline info
-		 */
-		public XProcPipelineInfo parse(URL url) {
-			if (mFactory == null) {
-				throw new IllegalStateException();
-			}
-			InputStream is = null;
-			XMLEventReader reader = null;
-
-			try {
-				// init the XMLStreamReader
-				is = url.openConnection().getInputStream();
-				reader = mFactory.createXMLEventReader(is);
-				XProcPipelineInfo.Builder infoBuilder = new XProcPipelineInfo.Builder();
-				try {
-					infoBuilder.withURI(url.toURI());
-				} catch (URISyntaxException e) {
-					throw new RuntimeException("Error converting URL to URI", e);
-				}
-				parseInfoElements(reader, infoBuilder);
-				return infoBuilder.build();
-			} catch (XMLStreamException e) {
-				throw new RuntimeException("Parsing error: " + e.getMessage(),
-						e);
-			} catch (IOException e) {
-				throw new RuntimeException("io error while parsing"
-						+ e.getMessage(), e);
-			} finally {
-				try {
-					if (reader != null) {
-						reader.close();
-					}
-					if (is != null) {
-						is.close();
-					}
-				} catch (Exception e) {
-					// ignore;
-				}
-			}
-
+	private static void parsePort(StartElement elem, Builder infoBuilder, boolean onlyPort)
+			throws XMLStreamException {
+		QName elemName = elem.getName();
+		boolean primary = false;
+		boolean sequence = false;
+		Attribute portAttr = elem.getAttributeByName(Attributes.PORT);
+		Attribute kindAttr = elem.getAttributeByName(Attributes.KIND);
+		Attribute primaryAttr = elem.getAttributeByName(Attributes.PRIMARY);
+		Attribute sequenceAttr = elem.getAttributeByName(Attributes.SEQUENCE);
+		if (primaryAttr != null) {
+			primary = Values.TRUE.equals(primaryAttr.getValue());
+		} else {
+			primary = onlyPort;
 		}
-
-		/**
-		 * Checks if is first child.
-		 *
-		 * @return true, if is first child
-		 */
-		public boolean isFirstChild() {
-			return mAncestors.size() == 2;
+		if (sequenceAttr != null && Values.TRUE.equals(sequenceAttr.getValue())) {
+			sequence = true;
 		}
-
-		/**
-		 * Reads the next element
-		 *
-		 * @param reader the reader
-		 * @return the xML event
-		 * @throws XMLStreamException the xML stream exception
-		 */
-		private XMLEvent readNext(XMLEventReader reader)
-				throws XMLStreamException {
-			XMLEvent event = reader.nextEvent();
-
-			if (event.isStartElement()) {
-				mAncestors.add(event);
-			} else if (event.isEndElement()) {
-				mAncestors.pollLast();
+		XProcPortInfo info = null;
+		if (portAttr != null) {
+			if (kindAttr != null && elemName.equals(Elements.P_INPUT)
+					&& Values.PARAMETER.equals(kindAttr.getValue())) {
+				info = XProcPortInfo.newParameterPort(portAttr.getValue(), primary);
+			} else if (elemName.equals(Elements.P_INPUT)) {
+				info = XProcPortInfo.newInputPort(portAttr.getValue(), sequence, primary);
+			} else if (elemName.equals(Elements.P_OUTPUT)) {
+				info = XProcPortInfo.newOutputPort(portAttr.getValue(), sequence, primary);
 			}
-			return event;
 		}
-
-		/**
-		 * Parses the info elements (options, input and outputs)
-		 *
-		 * @param reader the reader
-		 * @param infoBuilder the info builder
-		 * @throws XMLStreamException the xML stream exception
-		 */
-		private void parseInfoElements(final XMLEventReader reader,
-				final Builder infoBuilder) throws XMLStreamException {
-
-			while (reader.hasNext()) {
-				XMLEvent event = readNext(reader);
-				if (event.isStartElement()) {
-					if (isFirstChild() && event.asStartElement().getName()
-							.equals(Elements.P_OPTION)) {
-						parseOption(event, infoBuilder);
-					} else if (isFirstChild()
-							&& (event.asStartElement().getName()
-									.equals(Elements.P_INPUT)
-							|| event.asStartElement().getName()
-									.equals(Elements.P_OUTPUT))) {
-						parsePort(event, infoBuilder);
-					}
-				}
-				//TODO break the loop when reached the subpipeline
-			}
-
+		if (info != null) {
+			infoBuilder.withPort(info);
 		}
+	}
 
-		/**
-		 * Parses a port.
-		 *
-		 * @param event the event
-		 * @param infoBuilder the info builder
-		 */
-		private void parsePort(XMLEvent event, Builder infoBuilder) {
-			QName elemName = event.asStartElement().getName();
-			boolean primary = false;
-			boolean sequence = false;
-			Attribute portAttr = event.asStartElement().getAttributeByName(
-					Attributes.PORT);
-			Attribute kindAttr = event.asStartElement().getAttributeByName(
-					Attributes.KIND);
-			Attribute primaryAttr = event.asStartElement().getAttributeByName(
-					Attributes.PRIMARY);
-			Attribute sequenceAttr = event.asStartElement().getAttributeByName(
-					Attributes.SEQUENCE);
-			if (primaryAttr != null && Values.TRUE.equals(primaryAttr.getValue())) {
-				primary = true;
+	/**
+	 * Parses a p:option element
+	 *
+	 ¨Consumes the whole element (everything until and including the end event of the element).
+	 */
+	private static void parseOption(StartElement elem, final Builder infoBuilder)
+			throws XMLStreamException {
+		Attribute hiddenAttr = elem.getAttributeByName(
+				Attributes.PX_HIDDEN);
+		if (hiddenAttr != null) {
+			if (Values.TRUE.equals(hiddenAttr.getValue())) {
+				// hide option from user
+				return;
 			}
-			if (sequenceAttr != null && Values.TRUE.equals(sequenceAttr.getValue())) {
-				sequence = true;
-			}
-			XProcPortInfo info = null;
-			if (portAttr != null) {
-				if (kindAttr != null && elemName.equals(Elements.P_INPUT)
-						&& Values.PARAMETER.equals(kindAttr.getValue())) {
-					info = XProcPortInfo.newParameterPort(portAttr.getValue(),
-							primary);
-				} else if (elemName.equals(Elements.P_INPUT)) {
-					info = XProcPortInfo.newInputPort(portAttr.getValue(),
-							sequence, primary);
-				} else if (elemName.equals(Elements.P_OUTPUT)) {
-					info = XProcPortInfo.newOutputPort(portAttr.getValue(),
-							sequence, primary);
-				}
-			}
-			if (info != null) {
-				infoBuilder.withPort(info);
-			}
-
 		}
-
-		/**
-		 * Parses an option.
-		 *
-		 * @param event the event
-		 * @param infoBuilder the info builder
-		 */
-		private void parseOption(final XMLEvent event, final Builder infoBuilder) {
-			Attribute hiddenAttr = event.asStartElement().getAttributeByName(
-					Attributes.PX_HIDDEN);
-			if (hiddenAttr != null) {
-				if (Values.TRUE.equals(hiddenAttr.getValue())) {
-					// hide option from user
-					return;
-				}
+		QName name = null;
+		boolean required = false;
+		String select = null;
+		Attribute nameAttr = elem.getAttributeByName(Attributes.NAME);
+		Attribute requiredAttr = elem.getAttributeByName(Attributes.REQUIRED);
+		Attribute selectAttr = elem.getAttributeByName(Attributes.SELECT);
+		if (nameAttr != null) {
+			String nameVal = nameAttr.getValue();
+			if (nameVal.contains(":")) {
+				String prefix = nameVal.substring(0, nameVal.indexOf(":"));
+				String namespace = elem.getNamespaceURI(prefix);
+				String localPart = nameVal.substring(prefix.length() + 1, nameVal.length());
+				name = new QName(namespace, localPart, prefix);
+			} else {
+				name = new QName(nameVal);
 			}
-			QName name = null;
-			boolean required = false;
-			String select = null;
-			Attribute nameAttr = event.asStartElement().getAttributeByName(
-					Attributes.NAME);
-			Attribute requiredAttr = event.asStartElement().getAttributeByName(
-					Attributes.REQUIRED);
-			Attribute selectAttr = event.asStartElement().getAttributeByName(
-					Attributes.SELECT);
-			if (nameAttr != null) {
-				String nameVal = nameAttr.getValue();
-				if (nameVal.contains(":")) {
-					String prefix = nameVal.substring(0, nameVal.indexOf(":"));
-					String namespace = event.asStartElement().getNamespaceURI(prefix);
-					String localPart = nameVal.substring(prefix.length() + 1, nameVal.length());
-					name = new QName(namespace, localPart, prefix);
-				} else {
-					name = new QName(nameVal);
-				}
-			}
-			if (requiredAttr != null) {
-				if (Values.TRUE.equals(requiredAttr.getValue())) {
-					required = true;
-				}
-			}
-			if (selectAttr != null) {
-				select = selectAttr.getValue();
-			}
-			infoBuilder.withOption(XProcOptionInfo.newOption(name, required,
-					select));
-
 		}
+		if (requiredAttr != null) {
+			if (Values.TRUE.equals(requiredAttr.getValue())) {
+				required = true;
+			}
+		}
+		if (selectAttr != null) {
+			select = selectAttr.getValue();
+		}
+		infoBuilder.withOption(XProcOptionInfo.newOption(name, required, select));
 	}
 }

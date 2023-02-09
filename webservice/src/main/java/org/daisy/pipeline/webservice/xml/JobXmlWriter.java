@@ -249,7 +249,7 @@ public class JobXmlWriter {
                 jobElem.appendChild(resultsElm);
                 //ports
                 for (String port : this.job.getResults().getPorts()) {
-                        if (this.onlyPrimaries && !job.getScript().getPortMetadata(port).isPrimary()){
+                        if (this.onlyPrimaries && !job.getScript().getXProcPipelineInfo().getOutputPort(port).isPrimary()) {
                                 continue;
                         }
                         Element portResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");

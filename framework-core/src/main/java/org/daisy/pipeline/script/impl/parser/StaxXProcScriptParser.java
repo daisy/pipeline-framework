@@ -525,15 +525,6 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			if (mediaType != null) {
 				portBuilder.withMediaType(mediaType.getValue());
 			}
-			Attribute primary= portElement
-					.getAttributeByName(XProcScriptConstants.Attributes.PRIMARY);
-
-                        if (primary !=null && primary.getValue().equals("false")){
-                                portBuilder.withPrimary(false);
-                        }else{
-
-                                portBuilder.withPrimary(true);
-                        }
 		}
 	}
 
