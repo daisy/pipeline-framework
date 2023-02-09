@@ -171,15 +171,6 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		}
 
 		/**
-		 * Checks the depth of the current element
-		 * 
-		 * @return true, if the element's depth is the given depth
-		 */
-		private boolean isDepth(int detph) {
-			return mAncestors.size() == detph + 1;
-		}
-
-		/**
 		 * Returns the name of the current element's parent.
 		 * 
 		 * @return the QName of the parent
@@ -263,8 +254,6 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 					bHolder.mName = name.getValue();
 					bHolder.mBuilder = portBuilder;
 					mPortBuilders.add(bHolder);
-					// by default all ports are required
-					portBuilder.withRequired(true);
 					parsePort(event.asStartElement(), portBuilder);
 
 				} else if (isFirstChild() && event.isStartElement()
@@ -289,22 +278,9 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 						mOptionBuilders.add(bHolder);
 
 					}
-				} else if (this.isPortConnection(event)) {
-					mPortBuilders.peekLast().mBuilder.withRequired(false);
 				}
 
 			}
-		}
-
-		protected boolean isPortConnection(XMLEvent event) {
-
-			boolean ret = event.isStartElement()
-					&& this.isDepth(2)
-					&& this.getParentName().equals(Elements.P_INPUT)
-					&& Elements.CONNECTIONS.contains(event.asStartElement()
-							.getName());
-			return ret;
-
 		}
 
 		protected void parseFilesets(final StartElement declareStep)

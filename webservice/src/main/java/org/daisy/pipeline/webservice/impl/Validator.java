@@ -193,7 +193,7 @@ public class Validator {
 			XProcPortInfo arg = it.next();
                         //if it's not required is valid unless otherwise proven (i.e. empty item)
                         //if it is required is not valid unless proven (it exists and the values/items are well formed
-			boolean validArg = !script.getPortMetadata(arg.getName()).isRequired();
+			boolean validArg = !arg.isRequired();
 			// input elements should be of one of two forms:
 			// <input name="in1">
 			//   <item value="./path/to/file/book.xml/>

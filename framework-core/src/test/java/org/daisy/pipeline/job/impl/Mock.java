@@ -295,7 +295,7 @@ public class Mock   {
                         HashMap<String,XProcPortMetadata> portMetadatas= new LinkedHashMap<String,XProcPortMetadata>(); 
                         //inputs
                         for (int i=0;i<this.inputs;i++){
-                                inputSet.add(XProcPortInfo.newInputPort(getInputName(i),false, true));
+                                inputSet.add(XProcPortInfo.newInputPort(getInputName(i), false, true, true));
                         }
                         //outputs
                         if (fixedOutputPorts != null) {

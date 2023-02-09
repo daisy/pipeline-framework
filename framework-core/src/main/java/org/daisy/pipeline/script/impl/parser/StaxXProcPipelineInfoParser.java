@@ -102,14 +102,17 @@ public class StaxXProcPipelineInfoParser {
 						StartElement elem = event.asStartElement();
 						QName name = elem.getName();
 						if (name.equals(Elements.P_OPTION)) {
-							parseOption(elem, infoBuilder);
+							parseOption(reader, elem, infoBuilder);
 						} else if (name.equals(Elements.P_INPUT)) {
-							parsePort(elem, infoBuilder, singleInput);
+							parsePort(reader, elem, infoBuilder, singleInput);
 						} else if (name.equals(Elements.P_OUTPUT)) {
-							parsePort(elem, infoBuilder, singleOutput);
+							parsePort(reader, elem, infoBuilder, singleOutput);
+						} else {
+							depth++;
 						}
+					} else {
+						depth++;
 					}
-					depth++;
 				} else if (event.isEndElement()) {
 					depth--;
 				}
@@ -141,7 +144,7 @@ public class StaxXProcPipelineInfoParser {
 	 *
 	 * Consumes the whole element (everything until and including the end event of the element).
 	 */
-	private static void parsePort(StartElement elem, Builder infoBuilder, boolean onlyPort)
+	private static void parsePort(XMLEventReader reader, StartElement elem, Builder infoBuilder, boolean onlyPort)
 			throws XMLStreamException {
 		QName elemName = elem.getName();
 		boolean primary = false;
@@ -158,13 +161,30 @@ public class StaxXProcPipelineInfoParser {
 		if (sequenceAttr != null && Values.TRUE.equals(sequenceAttr.getValue())) {
 			sequence = true;
 		}
+		boolean hasDefaultConnection = false; {
+			int depth = 1;
+			while (reader.hasNext()) {
+				XMLEvent event = reader.nextEvent();
+				if (event.isStartElement()) {
+					if (!hasDefaultConnection && depth == 1 && Elements.CONNECTIONS.contains(event.asStartElement().getName())) {
+						hasDefaultConnection = true;
+					}
+					depth++;
+				} else if (event.isEndElement()) {
+					depth--;
+					if (depth == 0)
+						break;
+				}
+			}
+		}
 		XProcPortInfo info = null;
 		if (portAttr != null) {
 			if (kindAttr != null && elemName.equals(Elements.P_INPUT)
 					&& Values.PARAMETER.equals(kindAttr.getValue())) {
 				info = XProcPortInfo.newParameterPort(portAttr.getValue(), primary);
 			} else if (elemName.equals(Elements.P_INPUT)) {
-				info = XProcPortInfo.newInputPort(portAttr.getValue(), sequence, primary);
+				boolean required = !hasDefaultConnection;
+				info = XProcPortInfo.newInputPort(portAttr.getValue(), sequence, required, primary);
 			} else if (elemName.equals(Elements.P_OUTPUT)) {
 				info = XProcPortInfo.newOutputPort(portAttr.getValue(), sequence, primary);
 			}
@@ -179,41 +199,48 @@ public class StaxXProcPipelineInfoParser {
 	 *
 	 ¨Consumes the whole element (everything until and including the end event of the element).
 	 */
-	private static void parseOption(StartElement elem, final Builder infoBuilder)
+	private static void parseOption(XMLEventReader reader, StartElement elem, final Builder infoBuilder)
 			throws XMLStreamException {
-		Attribute hiddenAttr = elem.getAttributeByName(
-				Attributes.PX_HIDDEN);
-		if (hiddenAttr != null) {
-			if (Values.TRUE.equals(hiddenAttr.getValue())) {
-				// hide option from user
-				return;
+		Attribute hiddenAttr = elem.getAttributeByName(Attributes.PX_HIDDEN);
+		if (hiddenAttr == null || !Values.TRUE.equals(hiddenAttr.getValue())) {
+			QName name = null;
+			boolean required = false;
+			String select = null;
+			Attribute nameAttr = elem.getAttributeByName(Attributes.NAME);
+			Attribute requiredAttr = elem.getAttributeByName(Attributes.REQUIRED);
+			Attribute selectAttr = elem.getAttributeByName(Attributes.SELECT);
+			if (nameAttr != null) {
+				String nameVal = nameAttr.getValue();
+				if (nameVal.contains(":")) {
+					String prefix = nameVal.substring(0, nameVal.indexOf(":"));
+					String namespace = elem.getNamespaceURI(prefix);
+					String localPart = nameVal.substring(prefix.length() + 1, nameVal.length());
+					name = new QName(namespace, localPart, prefix);
+				} else {
+					name = new QName(nameVal);
+				}
+			}
+			if (requiredAttr != null) {
+				if (Values.TRUE.equals(requiredAttr.getValue())) {
+					required = true;
+				}
+			}
+			if (selectAttr != null) {
+				select = selectAttr.getValue();
+			}
+			infoBuilder.withOption(XProcOptionInfo.newOption(name, required, select));
+		}
+		// consume whole element
+		int depth = 1;
+		while (reader.hasNext()) {
+			XMLEvent event = reader.nextEvent();
+			if (event.isStartElement()) {
+				depth++;
+			} else if (event.isEndElement()) {
+				depth--;
+				if (depth == 0)
+					break;
 			}
 		}
-		QName name = null;
-		boolean required = false;
-		String select = null;
-		Attribute nameAttr = elem.getAttributeByName(Attributes.NAME);
-		Attribute requiredAttr = elem.getAttributeByName(Attributes.REQUIRED);
-		Attribute selectAttr = elem.getAttributeByName(Attributes.SELECT);
-		if (nameAttr != null) {
-			String nameVal = nameAttr.getValue();
-			if (nameVal.contains(":")) {
-				String prefix = nameVal.substring(0, nameVal.indexOf(":"));
-				String namespace = elem.getNamespaceURI(prefix);
-				String localPart = nameVal.substring(prefix.length() + 1, nameVal.length());
-				name = new QName(namespace, localPart, prefix);
-			} else {
-				name = new QName(nameVal);
-			}
-		}
-		if (requiredAttr != null) {
-			if (Values.TRUE.equals(requiredAttr.getValue())) {
-				required = true;
-			}
-		}
-		if (selectAttr != null) {
-			select = selectAttr.getValue();
-		}
-		infoBuilder.withOption(XProcOptionInfo.newOption(name, required, select));
 	}
 }

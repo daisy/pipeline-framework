@@ -30,9 +30,6 @@ public class XProcPortMetadata {
 		/** The media type. */
 		private String mediaType;
 
-		/** If it is required **/
-		private boolean required;
-
 		/**
 		 * With nice name.
 		 * 
@@ -42,16 +39,6 @@ public class XProcPortMetadata {
 		 */
 		public Builder withNiceName(String niceName) {
 			this.niceName = niceName;
-			return this;
-		}
-
-		/**
-		 * Sets the port as required (no default connections where requried):w
-		 * 
-		 * @return the builder
-		 */
-		public Builder withRequired(boolean required) {
-			this.required = required;
 			return this;
 		}
 
@@ -85,7 +72,7 @@ public class XProcPortMetadata {
 		 * @return the x proc port metadata
 		 */
 		public XProcPortMetadata build() {
-			return new XProcPortMetadata(niceName, description, mediaType, required);
+			return new XProcPortMetadata(niceName, description, mediaType);
 		}
 
 	}
@@ -99,9 +86,6 @@ public class XProcPortMetadata {
 	/** The media type. */
 	final private String mediaType;
 
-	/** required port */
-	private boolean required;
-
 	/**
 	 * Instantiates a new x proc port metadata.
 	 * 
@@ -112,12 +96,11 @@ public class XProcPortMetadata {
 	 * @param mediaType
 	 *            the media type
 	 */
-	public XProcPortMetadata(String niceName, String description, String mediaType, boolean required) {
+	public XProcPortMetadata(String niceName, String description, String mediaType) {
 		super();
 		this.niceName = niceName;
 		this.description = description;
 		this.mediaType = mediaType;
-		this.required = required;
 	}
 
 	/**
@@ -145,15 +128,5 @@ public class XProcPortMetadata {
 	 */
 	public String getMediaType() {
 		return mediaType;
-	}
-
-	/**
-	 * The port is required if no default connection was available connection
-	 * (p:data,p:empty,p:inline,p:document)
-	 * 
-	 * @return the required
-	 */
-	public boolean isRequired() {
-		return required;
 	}
 }

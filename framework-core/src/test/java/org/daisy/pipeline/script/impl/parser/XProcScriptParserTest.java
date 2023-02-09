@@ -112,9 +112,9 @@ public class XProcScriptParserTest {
 	 
 	 @Test
 	 public void testInputPortRequired() {
-		 XProcPortMetadata port = scp.getPortMetadata("source");
+		 XProcPortInfo port = scp.getXProcPipelineInfo().getInputPort("source");
                  assertTrue(port.isRequired());
-		 port = scp.getPortMetadata("source2");
+		 port = scp.getXProcPipelineInfo().getInputPort("source2");
                  Assert.assertFalse(port.isRequired());
 	 
 	 }

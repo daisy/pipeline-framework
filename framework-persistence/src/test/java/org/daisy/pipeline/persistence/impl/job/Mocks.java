@@ -107,7 +107,7 @@ public class Mocks   {
 	}
 
 	public static XProcScript buildScript(){
-		XProcPortInfo pinfo= XProcPortInfo.newInputPort("source",true,true);
+		XProcPortInfo pinfo= XProcPortInfo.newInputPort("source", true, false, true);
 		XProcPortInfo ppinfo= XProcPortInfo.newParameterPort(Mocks.paramPort,true);
 		XProcPipelineInfo pipelineInfo = new XProcPipelineInfo.Builder().withURI(URI.create(Mocks.scriptUri)).withPort(pinfo).withPort(ppinfo).build();
 		List<String> fileset=Collections.emptyList();	
