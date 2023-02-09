@@ -1,7 +1,7 @@
 package org.daisy.pipeline.job;
 
 import org.daisy.common.priority.Priority;
-import org.daisy.pipeline.script.BoundXProcScript;
+import org.daisy.pipeline.script.BoundScript;
 
 import com.google.common.base.Optional;
 
@@ -15,7 +15,7 @@ public interface JobManager extends JobFactory {
 	 * job, it will be added to the storage and the execution queue.
 	 */
 	@Override
-	public JobBuilder newJob(BoundXProcScript boundScript);
+	public JobBuilder newJob(BoundScript boundScript);
 
 	/**
 	 * Gets the jobs.

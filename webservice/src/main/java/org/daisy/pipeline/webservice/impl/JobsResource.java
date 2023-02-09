@@ -7,34 +7,29 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipFile;
 
-import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
 import org.daisy.common.priority.Priority;
-import org.daisy.common.transform.LazySaxSourceProvider;
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcOptionInfo;
-import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.ZippedJobResources;
-import org.daisy.pipeline.script.BoundXProcScript;
+import org.daisy.pipeline.script.BoundScript;
+import org.daisy.pipeline.script.Script;
+import org.daisy.pipeline.script.ScriptInput;
+import org.daisy.pipeline.script.ScriptOption;
+import org.daisy.pipeline.script.ScriptPort;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.script.XProcOptionMetadata;
-import org.daisy.pipeline.script.XProcScript;
-import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.script.ScriptService;
 import org.daisy.pipeline.webservice.Callback.CallbackType;
 import org.daisy.pipeline.webservice.CallbackHandler;
 import org.daisy.pipeline.webservice.xml.JobXmlWriter;
@@ -61,7 +56,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -379,15 +373,15 @@ public class JobsResource extends AuthenticatedResource {
 
                 // get the script from the ID
                 ScriptRegistry scriptRegistry = webservice().getScriptRegistry();
-                XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptId);
-                if (unfilteredScript == null) {
+                ScriptService<?> scriptService = scriptRegistry.getScript(scriptId);
+                if (scriptService == null) {
                         logger.error("Script not found");
                         return Optional.absent();
                 }
-                XProcScript script = unfilteredScript.load();
-                XProcInput.Builder inBuilder = new XProcInput.Builder();
+                Script script = scriptService.load();
+                ScriptInput.Builder inBuilder = new ScriptInput.Builder();
 
-                addInputsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"input"), script.getXProcPipelineInfo().getInputPorts(), inBuilder,zip!=null);
+                addInputsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"input"), script, inBuilder, zip != null);
                 addOptionsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"option"), script, inBuilder,zip!=null);
                 if (doc.getElementsByTagNameNS(Validator.NS_DAISY,"output").getLength() > 0) {
                         // show deprecation warning in server logs
@@ -398,7 +392,7 @@ public class JobsResource extends AuthenticatedResource {
                                 "\"Deprecated API\": "
                                 + "<output/> is deprecated, job results should be retrieved through the /jobs/ID/result API");
                 }
-                BoundXProcScript bound = BoundXProcScript.from(script, inBuilder.build());
+                BoundScript bound = BoundScript.from(script, inBuilder.build());
 
                 JobManager jobMan = webservice().getJobManager(this.getClient());
                 JobResources resourceCollection=null;
@@ -449,13 +443,10 @@ public class JobsResource extends AuthenticatedResource {
          * @param builder the builder
          * @throws LocalInputException
          */
-        private void addInputsToJob(NodeList nodes,
-                        Iterable<XProcPortInfo> inputPorts, XProcInput.Builder builder,boolean zippedContext)
+        private void addInputsToJob(NodeList nodes, Script script, ScriptInput.Builder builder, boolean zippedContext)
                         throws LocalInputException {
 
-                Iterator<XProcPortInfo> it = inputPorts.iterator();
-                while (it.hasNext()) {
-                        XProcPortInfo input = it.next();
+                for (ScriptPort input : script.getInputPorts()) {
                         String inputName = input.getName();
                         for (int i = 0; i < nodes.getLength(); i++) {
                                 Element inputElm = (Element) nodes.item(i);
@@ -466,10 +457,9 @@ public class JobsResource extends AuthenticatedResource {
 
                                         if (fileNodes.getLength() > 0) {
                                                 for (int j = 0; j < fileNodes.getLength(); j++) {
-                                                        String src = ((Element)fileNodes.item(j)).getAttribute("value");
-                                                        this.checkInput(src,zippedContext);
-                                                        LazySaxSourceProvider prov= new LazySaxSourceProvider(src);
-                                                        builder.withInput(name, prov);
+                                                        URI src = URI.create(((Element)fileNodes.item(j)).getAttribute("value"));
+                                                        checkInput(src, zippedContext);
+                                                        builder.withInput(name, src);
                                                 }
                                         }
                                         else {
@@ -483,21 +473,11 @@ public class JobsResource extends AuthenticatedResource {
                                                                         break;
                                                                 }
                                                         }
-
-                                                        final SAXSource source = new SAXSource();
-
-                                                        // TODO any way to get Source directly from a node?
-                                                        //
+                                                        SAXSource source = new SAXSource();
                                                         String xml = XmlUtils.nodeToString(content);
-                                                        InputSource is = new org.xml.sax.InputSource(new java.io.StringReader(xml));
+                                                        InputSource is = new InputSource(new StringReader(xml));
                                                         source.setInputSource(is);
-                                                        Supplier<Source> prov= new Supplier<Source>(){
-                                                                @Override
-                                                                public Source get(){
-                                                                        return source;
-                                                                }
-                                                        };
-                                                        builder.withInput(name, prov);
+                                                        builder.withInput(name, source);
                                                 }
                                         }
                                 }
@@ -510,100 +490,64 @@ public class JobsResource extends AuthenticatedResource {
          * Adds the options to job.
          * @throws LocalInputException
          */
-        private void addOptionsToJob(NodeList nodes, XProcScript script,
-                        XProcInput.Builder builder,boolean zippedContext) throws LocalInputException {
+        private void addOptionsToJob(NodeList nodes, Script script, ScriptInput.Builder builder, boolean zippedContext)
+                        throws LocalInputException {
 
-                Iterator<XProcOptionInfo> allOptions = script.getXProcPipelineInfo().getOptions().iterator();
-                Iterable<XProcOptionInfo> filteredOptions
-                        = XProcScriptFilter.withoutOutputs(script).getXProcPipelineInfo().getOptions();
-                Map<QName,QName> renamedOptions = XProcScriptFilter.renameOptions(filteredOptions);
-
-                while (allOptions.hasNext()) {
-                        XProcOptionInfo opt = allOptions.next();
-                        QName optionName = opt.getName();
-                        // if we are filtering options, then check to ensure that this particular option exists in the filtered set
-                        if (filteredOptions != null) {
-                                Iterator<XProcOptionInfo> itFilter = filteredOptions.iterator();
-                                boolean found = false;
-                                while (itFilter.hasNext()) {
-                                        QName filteredOptName = itFilter.next().getName();
-                                        if (filteredOptName.equals(optionName)) {
-                                                found = true;
-                                                break;
-                                        }
-                                }
-
-                                // if the option did not exist in the filtered set of options
-                                // then we are not allowed to set it
-                                // however, it still requires a value, so set it to ""
-                                if (!found) {
-                                        builder.withOption(optionName, "");
-                                        continue;
-                                }
-                        }
-
-                        // this is an option we are allowed to set. so, look for the option in the job request doc.
-                        QName renamedOption = renamedOptions.get(optionName);
+                Iterable<ScriptOption> options = script.getOptions();
+                for (ScriptOption option : options) {
                         for (int i = 0; i< nodes.getLength(); i++) {
                                 Element optionElm = (Element) nodes.item(i);
-                                QName name = QName.valueOf(optionElm.getAttribute("name"));
-                                if (!renamedOptions.values().contains(name)) {
+                                String name = optionElm.getAttribute("name");
+                                if (script.getOption(name) == null) {
                                         throw new IllegalArgumentException(
                                                 String.format("Option %s is not recognized by script %s",
                                                               name.toString(),
                                                               script.getName()));
                                 }
-
-                                //if input we have to check
-                                if (name.equals(renamedOption)) {
-                                        XProcOptionMetadata metadata = script.getOptionMetadata(optionName);
-                                        boolean isInput = "anyDirURI".equals(metadata.getType()) || "anyFileURI".equals(metadata.getType());
+                                if (name.equals(option.getName())) {
+                                        boolean isInput = "anyDirURI".equals(option.getType()) || "anyFileURI".equals(option.getType());
                                         //eventhough the option is a sequence it may happen that 
                                         //there are no item elements, just one value
                                         NodeList items = optionElm.getElementsByTagNameNS(Validator.NS_DAISY,"item");
-                                        String val = "";
                                         if (items.getLength() > 0) {
                                                 // accept <item> children even if it is not a sequence option
                                                 // but at most one
-                                                if (!metadata.isSequence() && items.getLength() > 1) {
+                                                if (!option.isSequence() && items.getLength() > 1) {
                                                         throw new IllegalArgumentException(
                                                                 String.format("Option %s of script %s does not accept a sequence of values",
                                                                               name.toString(),
                                                                               script.getName()));
                                                 }
-                                                // concat items
                                                 for (int j = 0; j<items.getLength(); j++) {
                                                         Element e = (Element)items.item(j);
                                                         String v = e.getAttribute("value");
                                                         if(isInput){
-                                                                checkInput(v, zippedContext);
+                                                                checkInput(URI.create(v), zippedContext);
                                                         }
-                                                        if (j > 0)
-                                                                val += metadata.getSeparator();
-                                                        val += v;
+                                                        builder.withOption(option.getName(), v);
                                                 }
                                         } else {
                                                 // accept text node even if it is a sequence option
                                                 String v = optionElm.getTextContent();
                                                 if(isInput){
-                                                        checkInput(v, zippedContext);
+                                                        checkInput(URI.create(v), zippedContext);
                                                 }
-                                                val += v;
+                                                builder.withOption(option.getName(), v);
                                         }
-                                        builder.withOption(optionName, val);
                                         break;
                                 }
                         }
                 }
         }
-        private void checkInput(String uri,boolean zipFileSupplied) throws LocalInputException{ 
-                //if the uri file starts with "file" but we're not executing in
-                //localfs mode send exception
-                if (uri.contains("file:") && ! this.webservice().getConfiguration().isLocalFS()){
-                        throw new LocalInputException("WS does not allow local inputs but a href starting with 'file:' was found "+uri);
-                }
-                if (uri.contains("file:") && zipFileSupplied){
-                        throw new LocalInputException("You can't supply the data uri "+uri);
+
+        private void checkInput(URI uri, boolean zipFileSupplied) throws LocalInputException {
+                if ("file".equals(uri.getScheme())) {
+                        if (!this.webservice().getConfiguration().isLocalFS()) {
+                                throw new LocalInputException(
+                                        "WS does not allow local inputs but a href starting with 'file:' was found " + uri);
+                        } else if (zipFileSupplied) {
+                                throw new LocalInputException("You can't supply the data uri " + uri);
+                        }
                 }
         }
 

@@ -1,11 +1,10 @@
 import javax.inject.Inject;
-import javax.xml.namespace.QName;
 
 import org.daisy.pipeline.datatypes.DatatypeService;
 import org.daisy.pipeline.junit.AbstractTest;
+import org.daisy.pipeline.script.ScriptOption;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.script.XProcOptionMetadata;
-import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.script.ScriptService;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -40,9 +39,9 @@ public class FrameworkCoreTest extends AbstractTest {
 	
 	@Test
 	public void testScript() {
-		XProcScriptService script = registry.getScript("unit-test-script");
+		ScriptService<?> script = registry.getScript("unit-test-script");
 		assertEquals("unit-test-script", script.getId());
-		XProcOptionMetadata meta = script.load().getOptionMetadata(new QName("option1"));
+		ScriptOption meta = script.load().getOption("option1");
 		assertEquals("dtbook:mydatatype", meta.getType());
 	}
 

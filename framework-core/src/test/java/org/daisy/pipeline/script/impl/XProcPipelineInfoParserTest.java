@@ -112,7 +112,7 @@ public class XProcPipelineInfoParserTest {
 		assertNotNull(info);
 		assertEquals(new QName("option1"), info.getName());
 		assertEquals(".", info.getSelect());
-		assertEquals(true, info.isRequired());
+		assertEquals(false, info.isRequired());
                  assertEquals("There are 3 options",3,Iterables.size(xproc.getOptions()));
 	}
 }

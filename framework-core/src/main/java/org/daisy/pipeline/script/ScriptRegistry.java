@@ -30,22 +30,22 @@ public class ScriptRegistry {
 	/**
 	 * Gets all the scripts.
 	 */
-	public Iterable<XProcScriptService> getScripts() {
+	public Iterable<ScriptService<?>> getScripts() {
 		return ImmutableList.copyOf(descriptors.values());
 	}
 
 	/**
 	 * Gets the script looking it up by its short name.
 	 */
-	public XProcScriptService getScript(String name) {
-		XProcScriptService descriptor = descriptors.get(name);
+	public ScriptService<?> getScript(String name) {
+		ScriptService<?> descriptor = descriptors.get(name);
 		if (descriptor == null)
 			logger.warn("Script {} does not exist", name);
 		return descriptor;
 	}
 
 	private static final Logger logger = LoggerFactory.getLogger(ScriptRegistry.class);
-	private final Map<String,XProcScriptService> descriptors = Maps.newHashMap();
+	private final Map<String,ScriptService<?>> descriptors = Maps.newHashMap();
 
 	@Activate
 	protected void activate() {
@@ -73,7 +73,7 @@ public class ScriptRegistry {
 	}
 
 	/**
-	 * The parser to load {@link XProcScript} objects from XProc files.
+	 * The parser to load {@link Script} objects from XProc files.
 	 */
 	private StaxXProcScriptParser parser;
 

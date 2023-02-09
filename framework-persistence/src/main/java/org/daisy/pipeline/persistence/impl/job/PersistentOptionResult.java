@@ -16,7 +16,7 @@ import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
 
 /**
- * Because of backward compatibility the path is stored as a URI.
+ * Not used (only kept for backward compatibility).
  */
 @Entity
 @Table(name="job_option_results")

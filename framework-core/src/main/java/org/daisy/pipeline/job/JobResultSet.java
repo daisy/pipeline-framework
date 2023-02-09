@@ -8,11 +8,8 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import javax.xml.namespace.QName;
 
 import org.daisy.pipeline.job.impl.IOHelper;
 
@@ -28,36 +25,26 @@ public final class JobResultSet {
         public static class Builder{
 
                 protected final Multimap<String,JobResult> outputPorts = LinkedListMultimap.create();
-                protected final Multimap<QName,JobResult> options = LinkedListMultimap.create();
 
                 public Builder addResult(String port, String idx, File path, String mediaType) {
                         outputPorts.put(port, new JobResult(idx, path, mediaType));
                         return this;
                 }
 
-                public Builder addResult(QName option, String idx, File path, String mediaType) {
-                        options.put(option, new JobResult(idx, path, mediaType));
-                        return this;
-                }
-
                 public JobResultSet build() {
-                        return new JobResultSet(outputPorts, options);
+                        return new JobResultSet(outputPorts);
                 }
         }
 
         private final Multimap<String,JobResult> outputPorts;
-        private final Multimap<QName,JobResult> options;
 
         /**
          * Constructs a new instance.
          *
          * @param outputPorts The outputPorts for this instance.
-         * @param options The options for this instance.
          */
-        public JobResultSet(Multimap<String, JobResult> outputPorts,
-                        Multimap<QName, JobResult> options) {
+        public JobResultSet(Multimap<String, JobResult> outputPorts) {
                 this.outputPorts = Multimaps.unmodifiableMultimap(outputPorts);
-                this.options = Multimaps.unmodifiableMultimap(options);
         }
 
         public static InputStream asZip(Collection<JobResult> results) throws IOException {
@@ -122,19 +109,12 @@ public final class JobResultSet {
         public Collection<String> getPorts(){
                 return outputPorts.keySet();
         }
-        public Collection<QName> getOptions(){
-                return options.keySet();
-        }
 
         public Collection<JobResult> getResults(String port){
                 return outputPorts.get(port);
         }
-        public Collection<JobResult> getResults(QName option){
-                return options.get(option);
-        }
+
         public Collection<JobResult> getResults(){
-                List<JobResult> results= Lists.newLinkedList(outputPorts.values());
-                results.addAll(options.values());
-                return Collections.unmodifiableList(results);
+                return Collections.unmodifiableList(Lists.newLinkedList(outputPorts.values()));
         }
 }

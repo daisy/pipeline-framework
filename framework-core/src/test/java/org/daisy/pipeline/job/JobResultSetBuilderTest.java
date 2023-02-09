@@ -19,7 +19,9 @@ import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.job.impl.Mock;
 import org.daisy.pipeline.job.impl.XProcDecorator;
+import org.daisy.pipeline.script.ScriptInput;
 import org.daisy.pipeline.script.XProcScript;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -35,32 +37,23 @@ public class JobResultSetBuilderTest {
         JobResultSet.Builder builder ;
         XProcOutput output;
         XProcInput input;
-        File file1;
-        File file2;
-        String dir="option/";
         String oldIoBase="";
 
         @Before
         public void setUp() throws IOException{
-                file1 = File.createTempFile("res1", null);
-                file1.delete();
-                file2 = File.createTempFile("res2", null);
-                file2.delete();
                 script= new Mock.ScriptGenerator.Builder().withOutputPort("sequence", "xml", true, false)
                                                           .withOutputPorts(2).withOptionOutputsFile(1).withOptionOutputsDir(1).build().generate();
                 URI tmp=new File(System.getProperty("java.io.tmpdir")).toURI();
                 oldIoBase=System.getProperty("org.daisy.pipeline.data");
                 System.setProperty("org.daisy.pipeline.data", new File(tmp).toString());
                 mapper = new URIMapper(tmp.resolve("inputs/"),tmp.resolve("outputs/"));
-                String outName = Mock.ScriptGenerator.getOutputName(0);
-                XProcOutput outs = new XProcOutput.Builder().withOutput(outName, Mock.getResultProvider(file1.toURI().toString())).build();
-                XProcDecorator trans=XProcDecorator.from(script,mapper);
-                output=trans.decorate(outs);
                 QName optDir=Mock.ScriptGenerator.getOptionOutputDirName(0);
                 QName optName=Mock.ScriptGenerator.getOptionOutputFileName(0);
-                input = new XProcInput.Builder().withOption(optDir, dir).withOption(optName, file2.toURI().toString()).build();
-                input=trans.decorate(input);
-                writeResult(file2);
+                XProcDecorator trans = XProcDecorator.from(script,mapper);
+                output = trans.decorate(new XProcOutput.Builder().build());
+                input = trans.decorate(new ScriptInput.Builder().build());
+                // create result files
+                writeResult(new File(URI.create((String)input.getOptions().get(optName))));
                 Mock.populateDir((String)input.getOptions().get(optDir));
         }
 
@@ -82,11 +75,8 @@ public class JobResultSetBuilderTest {
 
         @After
         public void tearDown() {
-                if (file2 != null && file2.exists())
-                        file2.delete();
-                QName optDir=Mock.ScriptGenerator.getOptionOutputDirName(0);
                 try {
-                        FileUtils.deleteDirectory(new File((String)input.getOptions().get(optDir)));
+                        FileUtils.deleteDirectory(new File(mapper.getOutputBase()));
                 } catch (IOException e) {
                         throw new RuntimeException(e);
                 }
@@ -103,8 +93,8 @@ public class JobResultSetBuilderTest {
                         f = writeResult(res.get());
                         JobResultSet rSet = AbstractJob.buildResultSet(script, input, output, mapper);
                         List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(outName));
-                        Assert.assertEquals(mapper.mapOutput(file1.toURI()), jobs.get(0).getPath().toURI());
-                        Assert.assertEquals(file1.toURI().toString(), jobs.get(0).getIdx().toString());
+                        Assert.assertEquals(mapper.mapOutput(URI.create("output-0/output-0.xml")), jobs.get(0).getPath().toURI());
+                        Assert.assertEquals("output-0/output-0.xml", jobs.get(0).getIdx().toString());
                 } finally {
                         if (f != null) f.delete();
                 }
@@ -140,11 +130,11 @@ public class JobResultSetBuilderTest {
                 }
         }
 
-        @Test(expected=IllegalArgumentException.class)
+        @Test(expected=RuntimeException.class)
         public void nonDynamicProviderResults() throws Exception{
                 String outName = Mock.ScriptGenerator.getOutputName(0);
                 // undecorated output
-                XProcOutput output = new XProcOutput.Builder().withOutput(outName, Mock.getResultProvider(file1.toURI().toString())).build();
+                XProcOutput output = new XProcOutput.Builder().withOutput(outName, Mock.getResultProvider("foo.xml")).build();
                 AbstractJob.buildResultSet(script, input, output, mapper);
         }
 
@@ -152,16 +142,17 @@ public class JobResultSetBuilderTest {
         public void optionsOutputFile() throws Exception{
                 QName optName=Mock.ScriptGenerator.getOptionOutputFileName(0);
                 JobResultSet rSet = AbstractJob.buildResultSet(script, input, output, mapper);
-                List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName));
-                Assert.assertEquals(mapper.mapOutput(file2.toURI()), jobs.get(0).getPath().toURI());
-                Assert.assertEquals(file2.toURI().toString(), jobs.get(0).getIdx().toString());
+                List<JobResult> jobs = Lists.newLinkedList(rSet.getResults(optName.getLocalPart()));
+                Assert.assertEquals(1, jobs.size());
+                Assert.assertEquals(mapper.mapOutput(URI.create("option-output-file-0.xml")), jobs.get(0).getPath().toURI());
+                Assert.assertEquals("option-output-file-0.xml", jobs.get(0).getIdx().toString());
         }
 
         @Test
         public void optionsOutputDirSize() throws Exception{
                 QName optName=Mock.ScriptGenerator.getOptionOutputDirName(0);
                 JobResultSet rSet = AbstractJob.buildResultSet(script, input, output, mapper);
-                List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName));
+                List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName.getLocalPart()));
                 Assert.assertEquals(3,jobs.size());
         }
 
@@ -169,11 +160,12 @@ public class JobResultSetBuilderTest {
         public void optionsOutputURIs() throws Exception{
                 QName optName=Mock.ScriptGenerator.getOptionOutputDirName(0);
                 JobResultSet rSet = AbstractJob.buildResultSet(script, input, output, mapper);
-                List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName));
+                List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName.getLocalPart()));
+                Assert.assertEquals(3, jobs.size());
                 HashSet<URI> uris= new HashSet<URI>();
-                uris.add(mapper.mapOutput(URI.create(dir+"dos.xml")));
-                uris.add(mapper.mapOutput(URI.create(dir+"uno.xml")));
-                uris.add(mapper.mapOutput(URI.create(dir+"tres.xml")));
+                uris.add(mapper.mapOutput(URI.create("option-output-dir-0/dos.xml")));
+                uris.add(mapper.mapOutput(URI.create("option-output-dir-0/uno.xml")));
+                uris.add(mapper.mapOutput(URI.create("option-output-dir-0/tres.xml")));
                 Assert.assertTrue(uris.contains(jobs.get(0).getPath().toURI()));
                 Assert.assertTrue(uris.contains(jobs.get(1).getPath().toURI()));
                 Assert.assertTrue(uris.contains(jobs.get(2).getPath().toURI()));
@@ -183,11 +175,12 @@ public class JobResultSetBuilderTest {
         public void optionsOutputIdx() throws Exception{
                 QName optName=Mock.ScriptGenerator.getOptionOutputDirName(0);
                 JobResultSet rSet = AbstractJob.buildResultSet(script, input, output, mapper);
-                List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName));
+                List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName.getLocalPart()));
+                Assert.assertEquals(3, jobs.size());
                 HashSet<String> uris= new HashSet<String>();
-                uris.add(dir+"dos.xml");
-                uris.add(dir+"uno.xml");
-                uris.add(dir+"tres.xml");
+                uris.add("option-output-dir-0/dos.xml");
+                uris.add("option-output-dir-0/uno.xml");
+                uris.add("option-output-dir-0/tres.xml");
                 Assert.assertTrue(uris.contains(jobs.get(0).getIdx().toString()));
                 Assert.assertTrue(uris.contains(jobs.get(1).getIdx().toString()));
                 Assert.assertTrue(uris.contains(jobs.get(2).getIdx().toString()));

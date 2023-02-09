@@ -17,15 +17,15 @@ import org.apache.commons.io.FileUtils;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
-import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.junit.AbstractTest;
 import org.daisy.pipeline.junit.OSGiLessConfiguration;
-import org.daisy.pipeline.script.BoundXProcScript;
+import org.daisy.pipeline.script.BoundScript;
+import org.daisy.pipeline.script.ScriptInput;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.script.ScriptService;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -112,9 +112,9 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 	
 	Job newJob(String scriptId) {
 		JobManager jobManager = jobManagerFactory.create();
-		XProcScriptService script = scriptRegistry.getScript(scriptId);
+		ScriptService<?> script = scriptRegistry.getScript(scriptId);
 		Assert.assertNotNull("The " + scriptId + " script should exist", script);
-		return jobManager.newJob(BoundXProcScript.from(script.load(), new XProcInput.Builder().build()))
+		return jobManager.newJob(BoundScript.from(script.load(), new ScriptInput.Builder().build()))
 		                 .isMapping(true)
 		                 .withNiceName("nice")
 		                 .build()

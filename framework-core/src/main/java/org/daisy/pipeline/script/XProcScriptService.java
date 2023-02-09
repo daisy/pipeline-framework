@@ -6,20 +6,18 @@ import java.util.Map;
 import org.daisy.common.file.URLs;
 import org.daisy.pipeline.script.impl.StaxXProcScriptParser;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class XProcScriptService defines the script basic attributes loaded from the OSGI bundle.
+ * Implementation of {@link ScriptService} based on an XProc step with some extra information such
+ * as port and option metadata.
  */
-public class XProcScriptService {
+public class XProcScriptService implements ScriptService<XProcScript> {
 
 	/** The Constant SCRIPT_URL. */
 	public static final String SCRIPT_URL = "script.url";
 
-	/** The Constant SCRIPT_DESCRIPTION. */
-	public static final String SCRIPT_DESCRIPTION = "script.description";
-
 	/** The Constant SCRIPT_ID. */
 	public static final String SCRIPT_ID = "script.id";
+
 	/** The Constant SCRIPT_ID. */
 	public static final String SCRIPT_VERSION = "script.version";
 
@@ -28,9 +26,6 @@ public class XProcScriptService {
 
 	/** The id. */
 	private String id;
-
-	/** The description. */
-	private String description;
 
 	/** The version. */
 	private String version;
@@ -41,7 +36,7 @@ public class XProcScriptService {
 	private StaxXProcScriptParser parser;
 
 	/**
-	 * Instantiates a new x proc script service.
+	 * Instantiates a new {@link XProcScriptService}
 	 */
 	public XProcScriptService() {
 	}
@@ -55,12 +50,6 @@ public class XProcScriptService {
 		if (properties.get(SCRIPT_ID) == null
 				|| properties.get(SCRIPT_ID).toString().isEmpty()) {
 			throw new IllegalArgumentException(SCRIPT_ID
-					+ " property must not be empty");
-		}
-
-		if (properties.get(SCRIPT_DESCRIPTION) == null
-				|| properties.get(SCRIPT_DESCRIPTION).toString().isEmpty()) {
-			throw new IllegalArgumentException(SCRIPT_DESCRIPTION
 					+ " property must not be empty");
 		}
 		if (properties.get(SCRIPT_URL) == null
@@ -78,55 +67,33 @@ public class XProcScriptService {
 		if (url == null)
 			throw new IllegalArgumentException("Resource at location " + path + " could not be found");
 		id = properties.get(SCRIPT_ID).toString();
-		description = properties.get(SCRIPT_DESCRIPTION).toString();
                 version= properties.get(SCRIPT_VERSION).toString();
 	}
 
 	/**
-	 * Gets the script URL.
-	 *
-	 * @return the url
+	 * Get the script URL.
 	 */
 	public URL getURL() {
 		return url;
 	}
 
-	/**
-	 * Gets the script ID.
-	 *
-	 * @return the id
-	 */
+	@Override
 	public String getId() {
 		return id;
 	}
 
-	/**
-	 * Gets the script description.
-	 *
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-	/**
-	 * Gets the script version.
-	 *
-	 * @return the description
-	 */
+	@Override
 	public String getVersion() {
 		return version;
 	}
 
-	/**
-	 * Loads the script into a XProcScript object.
-	 *
-	 * @return the x proc script
-	 */
+	@Override
 	public XProcScript load() {
 		if (parser == null)
 			throw new IllegalStateException("Object was not property initialized");
-		if (script == null)
+		if (script == null) {
 			script = parser.parse(this);
+		}
 		return script;
 	}
 
@@ -144,7 +111,6 @@ public class XProcScriptService {
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		buf.append("Id: " + id);
-		buf.append(", desc: " + description);
 		buf.append(", url: " + url.toString());
 		buf.append(", version: " + version.toString());
 		return buf.toString();

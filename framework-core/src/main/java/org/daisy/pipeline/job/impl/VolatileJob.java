@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.xml.namespace.QName;
-
 import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.job.AbstractJob;
@@ -70,11 +68,6 @@ public class VolatileJob extends AbstractJob {
 			@Override
 			public JobResultSet.Builder addResult(String port, String idx, File path, String mediaType) {
 				outputPorts.put(port, newResult(idx, path, mediaType));
-				return this;
-			}
-			@Override
-			public JobResultSet.Builder addResult(QName option, String idx, File path, String mediaType) {
-				options.put(option, newResult(idx, path, mediaType));
 				return this;
 			}
 		};

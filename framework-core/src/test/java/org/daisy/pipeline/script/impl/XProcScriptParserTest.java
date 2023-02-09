@@ -8,14 +8,11 @@ import static org.junit.Assert.assertTrue;
 import java.net.URL;
 import java.net.URISyntaxException;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 
-import org.daisy.common.xproc.XProcPipelineInfo;
-import org.daisy.common.xproc.XProcPortInfo;
-import org.daisy.pipeline.script.XProcOptionMetadata;
-import org.daisy.pipeline.script.XProcPortMetadata;
-import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.ScriptOption;
+import org.daisy.pipeline.script.ScriptPort;
+import org.daisy.pipeline.script.Script;
 import org.daisy.pipeline.script.XProcScriptService;
 
 import org.junit.Assert;
@@ -51,7 +48,7 @@ public class XProcScriptParserTest {
 	} 
 
 	 /** The scp. */
-	 XProcScript scp;
+	 Script scp;
 	 
 	 /**
 	  * Sets the up.
@@ -83,27 +80,11 @@ public class XProcScriptParserTest {
 	 }
 	 
 	 /**
-	  * Test port metadata is set.
-	  */
-	 @Test
-	 public void testPortMetadataIsSet() {
-		 for (XProcPortInfo port : scp.getXProcPipelineInfo().getInputPorts()) {
-			 assertNotNull("port '" + port.getName() + "' has no metadata",
-					 scp.getPortMetadata(port.getName()));
-		 }
-		 for (XProcPortInfo port : scp.getXProcPipelineInfo().getOutputPorts()) {
-			 assertNotNull("port '" + port.getName() + "' has no metadata",
-					 scp.getPortMetadata(port.getName()));
-		 }
-		 //TODO test parameter ports
-	 }
-	 
-	 /**
 	  * Test input port.
 	  */
 	 @Test
 	 public void testInputPort() {
-		 XProcPortMetadata port = scp.getPortMetadata("source");
+		 ScriptPort port = scp.getInputPort("source");
 		 assertEquals("application/x-dtbook+xml", port.getMediaType());
 		 assertEquals("source name", port.getNiceName());
 		 assertEquals("source description", port.getDescription());
@@ -112,11 +93,10 @@ public class XProcScriptParserTest {
 	 
 	 @Test
 	 public void testInputPortRequired() {
-		 XProcPortInfo port = scp.getXProcPipelineInfo().getInputPort("source");
-                 assertTrue(port.isRequired());
-		 port = scp.getXProcPipelineInfo().getInputPort("source2");
-                 Assert.assertFalse(port.isRequired());
-	 
+		 ScriptPort port = scp.getInputPort("source");
+		 assertTrue(port.isRequired());
+		 port = scp.getInputPort("source2");
+		 Assert.assertFalse(port.isRequired());
 	 }
 
 	 /**
@@ -124,11 +104,11 @@ public class XProcScriptParserTest {
 	  */
 	 @Test
 	 public void testMissingInputMetadata() {
-		 XProcPortMetadata meta = scp.getPortMetadata("source2");
-		 assertNotNull(meta);
-		 assertNull(meta.getMediaType());
-		 assertNull(meta.getNiceName());
-		 assertNull(meta.getDescription());
+		 ScriptPort port = scp.getInputPort("source2");
+		 assertNotNull(port);
+		 assertNull(port.getMediaType());
+		 assertNull(port.getNiceName());
+		 assertNull(port.getDescription());
 	 }
 	 
 	 /**
@@ -136,7 +116,7 @@ public class XProcScriptParserTest {
 	  */
 	 @Test
 	 public void testOutputPort() {
-		 XProcPortMetadata port = scp.getPortMetadata("result");
+		 ScriptPort port = scp.getOutputPort("result");
 		 port.getDescription();
 		 assertEquals("application/x-dtbook+xml", port.getMediaType());
 		 assertEquals("result name", port.getNiceName());
@@ -149,11 +129,11 @@ public class XProcScriptParserTest {
 	  */
 	 @Test
 	 public void testMissingOutputMetadata() {
-		 XProcPortMetadata meta = scp.getPortMetadata("result2");
-		 assertNotNull(meta);
-		 assertNull(meta.getMediaType());
-		 assertNull(meta.getNiceName());
-		 assertNull(meta.getDescription());
+		 ScriptPort port = scp.getOutputPort("result2");
+		 assertNotNull(port);
+		 assertNull(port.getMediaType());
+		 assertNull(port.getNiceName());
+		 assertNull(port.getDescription());
 	 }
 
 	 /**
@@ -161,10 +141,10 @@ public class XProcScriptParserTest {
 	  */
 	 @Test
 	 public void testOutputPortPrimary() {
-		 assertTrue("when primary is given true it's set", scp.getXProcPipelineInfo().getOutputPort("result").isPrimary());
-		 assertTrue("when primary is given false it's set", !scp.getXProcPipelineInfo().getOutputPort("result2").isPrimary());
+		 assertTrue("when primary is given true it's set", scp.getOutputPort("result").isPrimary());
+		 assertTrue("when primary is given false it's set", !scp.getOutputPort("result2").isPrimary());
 		 assertTrue("when primary is not given and it is not the only output port it is set to false",
-		            !scp.getXProcPipelineInfo().getOutputPort("result3").isPrimary());
+		            !scp.getOutputPort("result3").isPrimary());
 	 }
 	 
 	 /**
@@ -188,26 +168,12 @@ public class XProcScriptParserTest {
 	  */
 	 @Test
 	 public void testOption() {
-		 XProcOptionMetadata opt = scp.getOptionMetadata(new QName("option1"));
+		 ScriptOption opt = scp.getOption("option1");
 		 assertEquals("dtbook:mydatatype", opt.getType());
 		 //assertEquals(Direction.OUTPUT, opt.getDirection());
 		 assertEquals("Option 1", opt.getNiceName());
 	 }
 	 
-	 /**
-	  * Test info.
-	  */
-	 @Test
-	 public void testInfo() {
-		 // just a simple test to see if is correctly set
-		 XProcPipelineInfo info = scp.getXProcPipelineInfo();
-		 assertNotNull(info);
-		 XProcPortInfo port = info.getInputPort("source");
-		assertEquals("source", port.getName());
-		assertTrue(port.isPrimary());
-		assertTrue(port.isSequence());
-	}
-
 	 /**
 	  * input file sets
 	  */
@@ -236,11 +202,11 @@ public class XProcScriptParserTest {
 	  */
 	 @Test
 	 public void testOptionPrimary() {
-		 XProcOptionMetadata opt = scp.getOptionMetadata(new QName("option1"));
+		 ScriptOption opt = scp.getOption("option1");
                  assertTrue("when primary is given true it's set", opt.isPrimary());
-		 opt = scp.getOptionMetadata(new QName("option2"));
+		 opt = scp.getOption("option2");
                  assertTrue("when primary is given false it's set", !opt.isPrimary());
-		 opt = scp.getOptionMetadata(new QName("option3"));
+		 opt = scp.getOption("option3");
                  assertTrue("when primary is not given is set to true",opt.isPrimary() );
 	 }
 	 /**
@@ -248,6 +214,6 @@ public class XProcScriptParserTest {
 	  */
 	 @Test
 	 public void testOptionsCount() {
-                 assertEquals("There are 3 options",3,Iterables.size(scp.getXProcPipelineInfo().getOptions()));
+                 assertEquals("There are 3 options",3,Iterables.size(scp.getOptions()));
 	 }
 }

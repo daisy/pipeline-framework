@@ -37,13 +37,13 @@ import com.google.common.io.CharStreams;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.ProgressMessage;
-import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobFactory;
 import org.daisy.pipeline.junit.AbstractTest;
-import org.daisy.pipeline.script.BoundXProcScript;
+import org.daisy.pipeline.script.BoundScript;
+import org.daisy.pipeline.script.ScriptInput;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.script.ScriptService;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -497,9 +497,9 @@ public class FrameworkCoreTest extends AbstractTest {
 	}
 	
 	Job newJob(String scriptId) {
-		XProcScriptService script = scriptRegistry.getScript(scriptId);
+		ScriptService<?> script = scriptRegistry.getScript(scriptId);
 		Assert.assertNotNull("The " + scriptId + " script should exist", script);
-		Job job = jobFactory.newJob(BoundXProcScript.from(script.load(), new XProcInput.Builder().build()))
+		Job job = jobFactory.newJob(BoundScript.from(script.load(), new ScriptInput.Builder().build()))
 		                    .isMapping(true)
 		                    .withNiceName("nice")
 		                    .build()

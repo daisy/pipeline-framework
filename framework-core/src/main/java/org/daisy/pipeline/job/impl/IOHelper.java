@@ -101,9 +101,6 @@ public class IOHelper {
 
 	/**
 	 * creates a flat list out of a tree directory.
-	 *
-	 * @param base the base
-	 * @return the list
 	 */
 	public static List<File> treeFileList(File base) {
 		LinkedList<File> result = new LinkedList<>();

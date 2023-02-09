@@ -13,7 +13,8 @@ import org.daisy.common.priority.Priority;
 import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobResult;
-import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.ScriptPort;
+import org.daisy.pipeline.script.Script;
 import org.daisy.pipeline.webservice.Routes;
 
 import org.restlet.Request;
@@ -168,12 +169,9 @@ public class JobXmlWriter {
                 }
 
                 if (scriptDetails) {
-                        XProcScript script = job.getScript();
-                        //return if no script was loadeded
-                        if(script.getDescriptor()!=null){
-                                ScriptXmlWriter writer = new ScriptXmlWriter(script, baseUrl);
-                                writer.addAsElementChild(element);
-                        }
+                        Script script = job.getScript();
+                        ScriptXmlWriter writer = new ScriptXmlWriter(script, baseUrl);
+                        writer.addAsElementChild(element);
                 }
                 
                 if (progress != null && status == Job.Status.RUNNING || messages != null && messages.size() > 0) {
@@ -245,28 +243,29 @@ public class JobXmlWriter {
                 resultsElm.setAttribute("mime-type", "application/zip");
                 jobElem.appendChild(resultsElm);
                 //ports
-                for (String port : this.job.getResults().getPorts()) {
-                        if (this.onlyPrimaries && !job.getScript().getXProcPipelineInfo().getOutputPort(port).isPrimary()) {
+                for (String portName : this.job.getResults().getPorts()) {
+                        ScriptPort port = job.getScript().getOutputPort(portName);
+                        if (this.onlyPrimaries && !port.isPrimary()) {
                                 continue;
                         }
                         Element portResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
-                        portResultElm.setAttribute("href", String.format("%s/port/%s",resultHref,port));
+                        portResultElm.setAttribute("href", String.format("%s/port/%s",resultHref, portName));
                         portResultElm.setAttribute("mime-type", "application/zip");
                         /**
                          * Note that this attribute does not really have a meaning anymore now that
                          * all results come from ports, but it is kept for backward compatibility.
                          */
                         portResultElm.setAttribute("from", "port");
-                        portResultElm.setAttribute("name", port);
-                        portResultElm.setAttribute("nicename", job.getScript().getPortMetadata(port).getNiceName());
-                        String desc = job.getScript().getPortMetadata(port).getDescription();
+                        portResultElm.setAttribute("name", portName);
+                        portResultElm.setAttribute("nicename", port.getNiceName());
+                        String desc = port.getDescription();
                         if (desc != null && !"".equals(desc)) {
                                 portResultElm.setAttribute("desc", desc);
                         }
                         resultsElm.appendChild(portResultElm);
-                        for (JobResult result : this.job.getResults().getResults(port)) {
+                        for (JobResult result : this.job.getResults().getResults(portName)) {
                                 Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
-                                resultElm.setAttribute("href", String.format("%s/port/%s/idx/%s",resultHref,port,result.getIdx()));
+                                resultElm.setAttribute("href", String.format("%s/port/%s/idx/%s",resultHref, portName, result.getIdx()));
                                 if(result.getMediaType()!= null && !result.getMediaType().isEmpty()){
                                         resultElm.setAttribute("mime-type", result.getMediaType());
                                 }

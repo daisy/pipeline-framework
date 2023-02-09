@@ -3,16 +3,13 @@ package org.daisy.pipeline.persistence.impl.job;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Collections;
-import java.util.List;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.priority.Priority;
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcPipelineInfo;
+import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
@@ -27,11 +24,14 @@ import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.StatusNotifier;
 import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
+import org.daisy.pipeline.script.Script;
+import org.daisy.pipeline.script.ScriptInput;
 import org.daisy.pipeline.script.ScriptRegistry;
+import org.daisy.pipeline.script.ScriptService;
+import org.daisy.pipeline.script.XProcOptionMetadata;
+import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
-
-import com.google.common.base.Supplier;
 
 public class Mocks   {
 
@@ -40,14 +40,11 @@ public class Mocks   {
 	public static final String testLogFile="http://daisy.com/log.txt";
 	public static final String file1="file:/tmp/f1.xml";
 	public static final String file2="file:/tmp/f2.xml";
-	public static final QName opt1Qname=new QName("www.daisy.org","opt1"); 
-	public static final QName opt2Qname=new QName("www.daisy.org","opt2"); 
+	public static final String opt1Name = "opt1";
+	public static final String opt2Name = "opt2";
 	public static final String value1 = "value1";
 	public static final File result1;
 	public static final File result2;
-	public static final String paramPort="params";	
-	public static final String qparam="param1"; 
-	public static final String paramVal="pval";
 	public static final URI in=URI.create("file:/tmp/in/");
 	public static final URI out=URI.create("file:/tmp/out/");
 	public static final String portResult="res"; 
@@ -65,7 +62,7 @@ public class Mocks   {
 
 	public static class DummyScriptService extends ScriptRegistry {
 
-		protected XProcScript script;
+		private XProcScript script;
 
 		/**
 		 * Constructs a new instance.
@@ -87,13 +84,13 @@ public class Mocks   {
 		}
 
 		@Override
-		public Iterable<XProcScriptService> getScripts() {
+		public Iterable<ScriptService<?>> getScripts() {
 			return null;
 		}
 	}
 
 
-	static class SimpleSourceProvider implements Source,Supplier<Source>{
+	static class SimpleSourceProvider implements Source {
 		String sysId;
 
 		/**
@@ -103,11 +100,6 @@ public class Mocks   {
 		 */
 		public SimpleSourceProvider(String sysId) {
 			this.sysId = sysId;
-		}
-
-		@Override
-		public Source get() {
-			return this;
 		}
 
 		@Override
@@ -122,16 +114,16 @@ public class Mocks   {
 	}
 
 	public static XProcScript buildScript(){
-		XProcPortInfo pinfo= XProcPortInfo.newInputPort("source", true, false, true);
-		XProcPortInfo ppinfo= XProcPortInfo.newParameterPort(Mocks.paramPort,true);
-		XProcPipelineInfo pipelineInfo = new XProcPipelineInfo.Builder().withURI(URI.create(Mocks.scriptUri)).withPort(pinfo).withPort(ppinfo).build();
-		List<String> fileset=Collections.emptyList();	
-		final XProcScript script = new XProcScript(pipelineInfo, "", "", "", null, null,
-		                                           new XProcScriptService() {
-		                                               public String getId() {
-		                                                   return Mocks.scriptId; }},
-		                                           fileset, fileset);
-		return script;
+		XProcScript.Builder builder = new XProcScript.Builder(Mocks.scriptId, "", URI.create(Mocks.scriptUri));
+		builder = builder.withInputPort(XProcPortInfo.newInputPort("source", true, false, true),
+		                                new XProcPortMetadata("", "", ""));
+		builder = builder.withOutputPort(XProcPortInfo.newOutputPort(portResult, true, true),
+		                                 new XProcPortMetadata("", "", ""));
+		builder = builder.withOutputPort(XProcPortInfo.newOutputPort(opt1Name, true, false),
+		                                 new XProcPortMetadata("", "", ""));
+		builder = builder.withOption(XProcOptionInfo.newOption(new QName(opt2Name), false, ""),
+		                             new XProcOptionMetadata(null, null, null, null));
+		return builder.build();
 	}
 
 	public static AbstractJob buildJob() {
@@ -158,19 +150,16 @@ public class Mocks   {
                 return buildContext(client,null);
         }
 	public static AbstractJobContext buildContext(Client client,JobBatchId batchId){  
-		final XProcScript script = Mocks.buildScript();
+		final Script script = Mocks.buildScript();
 		//Input setup
-		final XProcInput input= new XProcInput.Builder().withInput("source", new Mocks.SimpleSourceProvider(file1))
-		                                                .withInput("source", new Mocks.SimpleSourceProvider(file2))
-		                                                .withOption(opt1Qname, result2.toURI().toASCIIString())
-		                                                .withOption(opt2Qname, value1)
-		                                                .withParameter(paramPort, new QName(qparam),paramVal)
-		                                                .build();
-		
+		final ScriptInput input= new ScriptInput.Builder().withInput("source", new Mocks.SimpleSourceProvider(file1))
+		                                                  .withInput("source", new Mocks.SimpleSourceProvider(file2))
+		                                                  .withOption(opt2Name, value1)
+		                                                  .build();
 		final JobId id = JobIdFactory.newId();
 		final URIMapper mapper= new URIMapper(in,out);
 		final JobResultSet rSet=new JobResultSet.Builder().addResult(portResult, result1.getName(), result1, null)
-		                                                  .addResult(opt1Qname, result2.getName(), result2, null)
+		                                                  .addResult(opt1Name, result2.getName(), result2, null)
 		                                                  .build();
                 //add to the db
                 if ( client ==null){
@@ -182,7 +171,7 @@ public class Mocks   {
 	}
 
 	static class MyHiddenContext extends AbstractJobContext{
-			public MyHiddenContext(JobResultSet set,XProcScript script,XProcInput input,URIMapper mapper, Client client,JobId id,JobBatchId batchId){
+			public MyHiddenContext(JobResultSet set, Script script, ScriptInput input, URIMapper mapper, Client client, JobId id, JobBatchId batchId){
 				super();
 				this.client = client;
 				this.id = id;
@@ -191,7 +180,7 @@ public class Mocks   {
 				this.niceName = "hidden";
 				this.script = script;
 				this.input = input;
-				this.resultMapper = mapper;
+				this.uriMapper = mapper;
 				this.results = set;
 				this.monitor = new JobMonitor() {
 						@Override

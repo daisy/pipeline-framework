@@ -11,7 +11,6 @@ import org.daisy.common.messaging.MessageBus;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcEngine;
-import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.AbstractJob;
@@ -23,14 +22,17 @@ import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.StatusNotifier;
-import org.daisy.pipeline.script.BoundXProcScript;
+import org.daisy.pipeline.script.BoundScript;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultJobBuilder implements JobManager.JobBuilder {
 
 	private final JobMonitorFactory monitorFactory;
 	private final XProcEngine xprocEngine;
 	private final Client client;
-	private final BoundXProcScript boundScript;
+	private final BoundScript boundScript;
 	private final boolean managed;
 	private boolean closeOnExit = false;
 	private boolean isMapping;
@@ -55,7 +57,7 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 	public DefaultJobBuilder(JobMonitorFactory monitorFactory,
 	                         XProcEngine xprocEngine,
 	                         Client client,
-	                         BoundXProcScript boundScript,
+	                         BoundScript boundScript,
 	                         boolean managed) {
 		this.monitorFactory = monitorFactory;
 		this.xprocEngine = xprocEngine;
@@ -121,14 +123,14 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 				logFile = JobURIUtils.getLogFile(id.toString()).toURI();
 				results = JobResultSet.EMPTY;
 				script = boundScript.getScript();
-				resultMapper = isMapping
+				uriMapper = isMapping
 					? JobURIUtils.newURIMapper(id.toString())
 					: JobURIUtils.newOutputURIMapper(id.toString());
-				XProcDecorator decorator = isMapping
-					? XProcDecorator.from(script, resultMapper, resources)
-					: XProcDecorator.from(script, resultMapper);
-				input = decorator.decorate(boundScript.getInput());
-				output = decorator.decorate(new XProcOutput.Builder().build());
+				if (isMapping && resources != null) {
+					logger.debug("Storing the resource collection");
+					IOHelper.dump(resources, uriMapper);
+				}
+				input = boundScript.getInput();
 				messageBus = new MessageBus(id.toString(), messagesThreshold);
 				statusListeners = new LinkedList<>();
 				StatusNotifier statusNotifier = new StatusNotifier() {
@@ -147,4 +149,7 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 			throw new RuntimeException("Error while creating job context", e);
 		}
 	}
+
+	private static final Logger logger = LoggerFactory.getLogger(DefaultJobBuilder.class);
+
 }
