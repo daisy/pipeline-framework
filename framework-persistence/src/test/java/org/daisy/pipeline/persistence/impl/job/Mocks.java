@@ -63,7 +63,7 @@ public class Mocks   {
 		}
 	}
 
-	public static class DummyScriptService implements ScriptRegistry{
+	public static class DummyScriptService extends ScriptRegistry {
 
 		protected XProcScript script;
 
@@ -78,9 +78,10 @@ public class Mocks   {
 
 		@Override
 		public XProcScriptService getScript(String name) {
-			return new XProcScriptService(){
-				public XProcScript load(){
-					return DummyScriptService.this.script;
+			return new XProcScriptService() {
+				@Override
+				public XProcScript load() {
+					return script;
 				}
 			};
 		}

@@ -1,15 +1,10 @@
-/*
- *
- */
 package org.daisy.pipeline.script;
 
 import java.net.URL;
 import java.util.Map;
 
 import org.daisy.common.file.URLs;
-
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
+import org.daisy.pipeline.script.impl.StaxXProcScriptParser;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -41,7 +36,9 @@ public class XProcScriptService {
 	private String version;
 
 	/** The script. */
-	private Supplier<XProcScript> script;
+	private XProcScript script;
+
+	private StaxXProcScriptParser parser;
 
 	/**
 	 * Instantiates a new x proc script service.
@@ -126,30 +123,18 @@ public class XProcScriptService {
 	 * @return the x proc script
 	 */
 	public XProcScript load() {
-		return script.get();
+		if (parser == null)
+			throw new IllegalStateException("Object was not property initialized");
+		if (script == null)
+			script = parser.parse(this);
+		return script;
 	}
 
 	/**
-	 * Sets the parser.
-	 *
-	 * @param parser the new parser
+	 * {@link StaxXProcScriptParser} set by {@link ScriptRegistry}
 	 */
-	public void setParser(final XProcScriptParser parser) {
-		script = Suppliers.memoize(new Supplier<XProcScript>() {
-			@Override
-			public XProcScript get() {
-				return parser.parse(XProcScriptService.this);
-			}
-		});
-	}
-
-	/**
-	 * Checks for parser.
-	 *
-	 * @return true, if successful
-	 */
-	public boolean hasParser() {
-		return script != null;
+	void setParser(StaxXProcScriptParser parser) {
+		this.parser = parser;
 	}
 
 	/* (non-Javadoc)

@@ -3,8 +3,8 @@ import javax.xml.namespace.QName;
 
 import org.daisy.pipeline.datatypes.DatatypeService;
 import org.daisy.pipeline.junit.AbstractTest;
+import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
-import org.daisy.pipeline.script.XProcScriptParser;
 import org.daisy.pipeline.script.XProcScriptService;
 
 import org.junit.Test;
@@ -36,15 +36,12 @@ public class FrameworkCoreTest extends AbstractTest {
 	}
 	
 	@Inject
-	public XProcScriptParser scriptParser;
-	
-	@Inject
-	public XProcScriptService script;
+	public ScriptRegistry registry;
 	
 	@Test
 	public void testScript() {
+		XProcScriptService script = registry.getScript("unit-test-script");
 		assertEquals("unit-test-script", script.getId());
-		script.setParser(scriptParser);
 		XProcOptionMetadata meta = script.load().getOptionMetadata(new QName("option1"));
 		assertEquals("dtbook:mydatatype", meta.getType());
 	}

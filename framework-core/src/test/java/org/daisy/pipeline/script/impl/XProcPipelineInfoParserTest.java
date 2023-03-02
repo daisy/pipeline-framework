@@ -1,4 +1,4 @@
-package org.daisy.pipeline.script.impl.parser;
+package org.daisy.pipeline.script.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -13,7 +13,7 @@ import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcPortInfo.Kind;
-import org.daisy.pipeline.script.impl.parser.StaxXProcPipelineInfoParser;
+
 import org.junit.Before;
 import org.junit.Test;
 

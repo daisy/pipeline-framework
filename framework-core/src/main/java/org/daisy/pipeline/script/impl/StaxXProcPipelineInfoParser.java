@@ -1,4 +1,4 @@
-package org.daisy.pipeline.script.impl.parser;
+package org.daisy.pipeline.script.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,9 +17,9 @@ import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPipelineInfo.Builder;
 import org.daisy.common.xproc.XProcPortInfo;
-import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Attributes;
-import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Elements;
-import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Values;
+import org.daisy.pipeline.script.impl.XProcScriptConstants.Attributes;
+import org.daisy.pipeline.script.impl.XProcScriptConstants.Elements;
+import org.daisy.pipeline.script.impl.XProcScriptConstants.Values;
 
 /**
  * Parser the xproc pipeline info, not only for scripts but for regular steps.

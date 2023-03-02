@@ -14,5 +14,3 @@ public interface DatatypeService {
         public ValidationResult validate(String content);
 
 }
-
-

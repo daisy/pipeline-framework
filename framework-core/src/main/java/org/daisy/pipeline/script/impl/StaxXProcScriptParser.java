@@ -1,4 +1,4 @@
-package org.daisy.pipeline.script.impl.parser;
+package org.daisy.pipeline.script.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,11 +20,11 @@ import org.daisy.common.stax.StaxEventHelper.EventPredicates;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
-import org.daisy.pipeline.script.XProcScriptParser;
 import org.daisy.pipeline.script.XProcScriptService;
-import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Attributes;
-import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Elements;
-import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Values;
+import org.daisy.pipeline.script.impl.XProcScriptConstants.Attributes;
+import org.daisy.pipeline.script.impl.XProcScriptConstants.Elements;
+import org.daisy.pipeline.script.impl.XProcScriptConstants.Values;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,29 +34,18 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
-// TODO: Auto-generated Javadoc
 /**
- * StaxXProcScriptParser parses the xpl file extracting the metadata and buiding
- * the XProcScript object
+ * Parses the XProc file extracting the metadata and buiding the {@link XProcScript} object.
  */
 @Component(
-	name = "converter-parser",
-	service = { XProcScriptParser.class }
+	name = "script-parser",
+	service = { StaxXProcScriptParser.class }
 )
-public class StaxXProcScriptParser implements XProcScriptParser {
+public class StaxXProcScriptParser {
 
-	/** The Constant logger. */
-	private static final Logger logger = LoggerFactory
-			.getLogger(StaxXProcScriptParser.class);
-	/** The xmlinputfactory. */
+	private static final Logger logger = LoggerFactory.getLogger(StaxXProcScriptParser.class);
 	private XMLInputFactory mFactory;
 
-	/**
-	 * Sets the factory.
-	 * 
-	 * @param factory
-	 *            the new factory
-	 */
 	@Reference(
 		name = "xml-input-factory",
 		unbind = "-",
@@ -64,24 +53,18 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		cardinality = ReferenceCardinality.MANDATORY,
 		policy = ReferencePolicy.STATIC
 	)
-	public void setFactory(XMLInputFactory factory) {
+	protected void setFactory(XMLInputFactory factory) {
 		mFactory = factory;
 	}
 
-	/**
-	 * Activate (OSGI)
-	 */
 	@Activate
-	public void activate() {
+	protected void activate() {
 		logger.trace("Activating XProc script parser");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.daisy.pipeline.script.XProcScriptParser#parse(java.net.URI)
+	/**
+	 * Parses the XProc file.
 	 */
-	@Override
 	public XProcScript parse(final XProcScriptService descriptor) {
 		return new StatefulParser().parse(descriptor);
 	}

@@ -1,4 +1,4 @@
-package org.daisy.pipeline.script.impl.parser;
+package org.daisy.pipeline.script.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -17,7 +17,7 @@ import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
-import org.daisy.pipeline.script.impl.parser.StaxXProcScriptParser;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
