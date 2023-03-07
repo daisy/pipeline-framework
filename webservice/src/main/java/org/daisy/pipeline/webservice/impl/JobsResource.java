@@ -589,29 +589,37 @@ public class JobsResource extends AuthenticatedResource {
                                         //eventhough the option is a sequence it may happen that 
                                         //there are no item elements, just one value
                                         NodeList items = optionElm.getElementsByTagNameNS(Validator.NS_DAISY,"item");
-                                        if (metadata.isSequence() && items.getLength()>0) {
+                                        String val = "";
+                                        if (items.getLength() > 0) {
+                                                // accept <item> children even if it is not a sequence option
+                                                // but at most one
+                                                if (!metadata.isSequence() && items.getLength() > 1) {
+                                                        throw new IllegalArgumentException(
+                                                                String.format("Option %s of script %s does not accept a sequence of values",
+                                                                              name.toString(),
+                                                                              script.getName()));
+                                                }
                                                 // concat items
-                                                String val = "";
                                                 for (int j = 0; j<items.getLength(); j++) {
                                                         Element e = (Element)items.item(j);
+                                                        String v = e.getAttribute("value");
                                                         if(isInput){
-                                                                checkInput(e.getAttribute("value"),zippedContext);
+                                                                checkInput(v, zippedContext);
                                                         }
                                                         if (j > 0)
                                                                 val += metadata.getSeparator();
-                                                        val += e.getAttribute("value");
+                                                        val += v;
                                                 }
-                                                builder.withOption(optionName, val);
-                                        }
-                                        else {
-                                                String val = optionElm.getTextContent();
+                                        } else {
+                                                // accept text node even if it is a sequence option
+                                                String v = optionElm.getTextContent();
                                                 if(isInput){
-                                                        checkInput(val,zippedContext);
+                                                        checkInput(v, zippedContext);
                                                 }
-                                                builder.withOption(optionName, val);
-                                                break;
+                                                val += v;
                                         }
-
+                                        builder.withOption(optionName, val);
+                                        break;
                                 }
                         }
                 }
