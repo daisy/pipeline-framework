@@ -252,6 +252,10 @@ public class JobXmlWriter {
                         portResultElm.setAttribute("from", "port");
                         portResultElm.setAttribute("name", port);
                         portResultElm.setAttribute("nicename", job.getScript().getPortMetadata(port).getNiceName());
+                        String desc = job.getScript().getPortMetadata(port).getDescription();
+                        if (desc != null && !"".equals(desc)) {
+                                portResultElm.setAttribute("desc", desc);
+                        }
                         resultsElm.appendChild(portResultElm);
                         for (JobResult result : this.job.getResults().getResults(port)) {
                                 Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
@@ -281,7 +285,11 @@ public class JobXmlWriter {
                         optionResultElm.setAttribute("name", option.toString());
                         //in case the script was deleted
                         if (meta!=null){
-                                optionResultElm.setAttribute("nicename", job.getScript().getOptionMetadata(option).getNiceName());
+                                optionResultElm.setAttribute("nicename", meta.getNiceName());
+                                String desc = meta.getDescription();
+                                if (desc != null && !"".equals(desc)) {
+                                        optionResultElm.setAttribute("desc", desc);
+                                }
                         }
                         resultsElm.appendChild(optionResultElm);
                         for(JobResult result : this.job.getResults().getResults(option)) {
