@@ -1,6 +1,7 @@
 package org.daisy.pipeline.webservice.xml;
 
 import java.math.BigDecimal;
+import java.net.URI;
 import java.util.HashSet;
 import java.util.List;
 
@@ -195,13 +196,18 @@ public class JobXmlWriter {
                         }
                 }
                 
-                if (job.getStatus() == Job.Status.SUCCESS || job.getStatus() == Job.Status.FAIL) {
-                        Element logElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "log");
-                        String logHref = baseUrl + Routes.LOG_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
-                        logElm.setAttribute("href", logHref);
-                        element.appendChild(logElm);
-                        if(this.fullResult)
-                                addResults(element);
+                status = job.getStatus();
+                if (status == Job.Status.SUCCESS || status == Job.Status.FAIL || status == Job.Status.ERROR) {
+                        URI logfileUri = job.getLogFile();
+                        if (logfileUri != null) {
+                                Element logElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "log");
+                                String logHref = baseUrl + Routes.LOG_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+                                logElm.setAttribute("href", logHref);
+                                element.appendChild(logElm);
+                        }
+                }
+                if (this.fullResult && (status == Job.Status.SUCCESS || status == Job.Status.FAIL)) {
+                        addResults(element);
                 }
         }
 
