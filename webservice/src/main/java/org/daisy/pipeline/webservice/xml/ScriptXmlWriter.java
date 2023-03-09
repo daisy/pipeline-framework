@@ -153,10 +153,6 @@ public class ScriptXmlWriter {
 			optionElm.setAttribute("ordered", Boolean.toString(meta.isOrdered()));
 			optionElm.setAttribute("sequence", Boolean.toString(meta.isSequence()));
                         setDefault(option,optionElm);
-			
-			if (meta.getOutput() != Output.NA) {
-				optionElm.setAttribute("outputType", meta.getOutput().toString().toLowerCase());
-			}
 			parent.appendChild(optionElm);
 		}
 	}
