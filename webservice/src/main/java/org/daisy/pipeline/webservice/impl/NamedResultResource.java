@@ -115,7 +115,7 @@ public abstract class NamedResultResource extends AuthenticatedResource {
                 });
                 if(results.size()==0){
                         setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                        return this.getErrorRepresentation(String.format("Option idx %s not found for option name %s",idx,name));
+                        return this.getErrorRepresentation("Result not found");
                 }
 
                 try{
@@ -154,7 +154,7 @@ public abstract class NamedResultResource extends AuthenticatedResource {
                                 return result.strip();
                         }
                 });
-                logger.debug(String.format("Getting port result for %s ",this.name));
+                logger.debug(String.format("Getting result for %s", this.name));
                 if (results.size() == 0) {
                         setStatus(Status.SERVER_ERROR_INTERNAL);
                         return this.getErrorRepresentation("No results available");

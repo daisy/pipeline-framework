@@ -5,8 +5,6 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.xml.namespace.QName;
-
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.Message.Level;
@@ -15,7 +13,6 @@ import org.daisy.common.priority.Priority;
 import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobResult;
-import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.webservice.Routes;
 
@@ -255,6 +252,10 @@ public class JobXmlWriter {
                         Element portResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
                         portResultElm.setAttribute("href", String.format("%s/port/%s",resultHref,port));
                         portResultElm.setAttribute("mime-type", "application/zip");
+                        /**
+                         * Note that this attribute does not really have a meaning anymore now that
+                         * all results come from ports, but it is kept for backward compatibility.
+                         */
                         portResultElm.setAttribute("from", "port");
                         portResultElm.setAttribute("name", port);
                         portResultElm.setAttribute("nicename", job.getScript().getPortMetadata(port).getNiceName());
@@ -275,41 +276,6 @@ public class JobXmlWriter {
                                 resultElm.setAttribute("size",
                                                 String.format("%s", result.getSize()));
                                 portResultElm.appendChild(resultElm); 
-                        }
-                }
-
-
-                for (QName option : this.job.getResults().getOptions()) {
-                        XProcOptionMetadata meta = job.getScript().getOptionMetadata(option);
-                        if ( this.onlyPrimaries&&  (meta==null || !meta.isPrimary())){
-                                continue;
-                        }
-                        Element optionResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
-                        optionResultElm.setAttribute("href", String.format("%s/option/%s",resultHref,option));
-                        optionResultElm.setAttribute("mime-type", "application/zip");
-                        optionResultElm.setAttribute("from", "option");
-                        optionResultElm.setAttribute("name", option.toString());
-                        //in case the script was deleted
-                        if (meta!=null){
-                                optionResultElm.setAttribute("nicename", meta.getNiceName());
-                                String desc = meta.getDescription();
-                                if (desc != null && !"".equals(desc)) {
-                                        optionResultElm.setAttribute("desc", desc);
-                                }
-                        }
-                        resultsElm.appendChild(optionResultElm);
-                        for(JobResult result : this.job.getResults().getResults(option)) {
-                                Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
-                                resultElm.setAttribute("href", String.format("%s/option/%s/idx/%s",resultHref,option,result.getIdx()));
-                                if(result.getMediaType()!= null && !result.getMediaType().isEmpty()){
-                                        resultElm.setAttribute("mime-type", result.getMediaType());
-                                }
-                                if ( this.localPaths){
-                                        resultElm.setAttribute("file",result.getPath().toString());
-                                }
-                                resultElm.setAttribute("size",
-                                                String.format("%s", result.getSize()));
-                                optionResultElm.appendChild(resultElm);
                         }
                 }
         }

@@ -99,11 +99,15 @@ public class XProcDecorator {
 	}
 
 	/**
-	*Output port 'result' use cases:
-	*1. relative uri ./myoutput/file.xml is allowed and resolved to ../data/../outputs/myoutput/file.xml (file-1.xml if more)
-	* in case there is no extension (myoutput/file) the outputs will be named as myoutput/file-1
-	*2. ~/myscript/ this will be resolved to ../data/../outputs/myscript/result.xml  (result-1.xml if more)
-	*3. No output provided will resolve to ../data/../outputs/result/result.xml → if more documents ../data/../outputs/result/result-1.xml
+	 * Output port 'result' use cases:
+	 *
+	 * 1. Relative URI ./myoutput/file.xml is allowed and resolved to
+	 *    ../data/../outputs/myoutput/file.xml (file-1.xml if more). In case there is no extension
+	 *    (myoutput/file) the outputs will be named as myoutput/file-1
+	 * 2. ./myscript/ will be resolved to ../data/../outputs/myscript/result.xml (result-1.xml if
+	 *    more).
+	 * 3. No output provided will resolve to ../data/../outputs/result/result.xml (if more documents
+	 *    ../data/../outputs/result/result-1.xml)
 	 */
 	public XProcOutput decorate(XProcOutput output) {
 		logger.debug(String.format("Translating outputs for script :%s",script));
@@ -118,7 +122,14 @@ public class XProcDecorator {
 			if (XProcPortMetadata.MEDIA_TYPE_STATUS_XML.equals(mediaType)) {
 				builder.withOutput(port, new StatusResultProvider(port));
 			} else {
-				builder.withOutput(port, new DynamicResultProvider(output.getResultProvider(port), port, mediaType, mapper));
+				/* Note that in practice output will always be empty because the {@link
+				 * BoundXProcScript} API doesn't allow specifying outputs anymore.
+				 */
+				builder.withOutput(port,
+				                   new DynamicResultProvider(output == null ? null : output.getResultProvider(port),
+				                                             port,
+				                                             mediaType,
+				                                             mapper));
 			}
 		}
 		return builder.build();

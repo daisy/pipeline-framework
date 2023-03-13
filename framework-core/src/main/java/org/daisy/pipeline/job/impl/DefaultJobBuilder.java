@@ -11,6 +11,7 @@ import org.daisy.common.messaging.MessageBus;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcEngine;
+import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.AbstractJob;
@@ -127,7 +128,7 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 					? XProcDecorator.from(script, resultMapper, resources)
 					: XProcDecorator.from(script, resultMapper);
 				input = decorator.decorate(boundScript.getInput());
-				output = decorator.decorate(boundScript.getOutput());
+				output = decorator.decorate(new XProcOutput.Builder().build());
 				messageBus = new MessageBus(id.toString(), messagesThreshold);
 				statusListeners = new LinkedList<>();
 				StatusNotifier statusNotifier = new StatusNotifier() {

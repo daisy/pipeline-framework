@@ -43,6 +43,9 @@ public final class DynamicResultProvider implements Supplier<Result>{
 	public Result get() {
 		Result res = null;
 		int count = providedResults.size();
+		/* Note that in practice backingProvider will always be null because the {@link
+		 * BoundXProcScript} API doesn't allow specifying outputs anymore.
+		 */
 		if (backingProvider != null) {
 			res = backingProvider.get();
 			if (!(res instanceof StreamResult)) {

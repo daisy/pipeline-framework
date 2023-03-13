@@ -21,11 +21,9 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
 import org.daisy.common.priority.Priority;
-import org.daisy.common.transform.LazySaxResultProvider;
 import org.daisy.common.transform.LazySaxSourceProvider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
-import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobIdFactory;
@@ -388,14 +386,19 @@ public class JobsResource extends AuthenticatedResource {
                 }
                 XProcScript script = unfilteredScript.load();
                 XProcInput.Builder inBuilder = new XProcInput.Builder();
-                XProcOutput.Builder outBuilder = new XProcOutput.Builder();
 
                 addInputsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"input"), script.getXProcPipelineInfo().getInputPorts(), inBuilder,zip!=null);
-
                 addOptionsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"option"), script, inBuilder,zip!=null);
-                addOutputsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"output"), script.getXProcPipelineInfo().getOutputPorts(), outBuilder);
-
-                BoundXProcScript bound= BoundXProcScript.from(script,inBuilder.build(),outBuilder.build());
+                if (doc.getElementsByTagNameNS(Validator.NS_DAISY,"output").getLength() > 0) {
+                        // show deprecation warning in server logs
+                        logger.warn("Deprecated <output/> element used. Job results should be retrieved through the /jobs/ID/result API.");
+                        // show deprecation warning in response header
+                        addWarningHeader(
+                                199,
+                                "\"Deprecated API\": "
+                                + "<output/> is deprecated, job results should be retrieved through the /jobs/ID/result API");
+                }
+                BoundXProcScript bound = BoundXProcScript.from(script, inBuilder.build());
 
                 JobManager jobMan = webservice().getJobManager(this.getClient());
                 JobResources resourceCollection=null;
@@ -496,37 +499,6 @@ public class JobsResource extends AuthenticatedResource {
                                                         };
                                                         builder.withInput(name, prov);
                                                 }
-                                        }
-                                }
-                        }
-                }
-
-        }
-
-        /**
-         * Adds the outputs to job.
-         *
-         * @param nodes the nodes
-         * @param inputPorts the input ports
-         * @param builder the builder
-         */
-        private void addOutputsToJob(NodeList nodes, Iterable<XProcPortInfo> ports, XProcOutput.Builder builder) {
-                if(!webservice().getConfiguration().isLocalFS()){
-                        return;
-                }
-
-                for(XProcPortInfo output : ports){
-                        String outputName = output.getName();
-                        for (int i = 0; i < nodes.getLength(); i++) {
-                                Element outputElm = (Element) nodes.item(i);
-                                String name = outputElm.getAttribute("name");
-                                if (name.equals(outputName)) {
-                                        NodeList fileNodes = outputElm.getElementsByTagNameNS(Validator.NS_DAISY,"item");
-
-                                        for (int j = 0; j < fileNodes.getLength(); j++) {
-                                                String res = ((Element)fileNodes.item(j)).getAttribute("value");
-                                                LazySaxResultProvider prov= new LazySaxResultProvider(res);
-                                                builder.withOutput(name, prov);
                                         }
                                 }
                         }

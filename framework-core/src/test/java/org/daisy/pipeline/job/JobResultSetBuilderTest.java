@@ -19,7 +19,6 @@ import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.job.impl.Mock;
 import org.daisy.pipeline.job.impl.XProcDecorator;
-import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScript;
 import org.junit.After;
 import org.junit.Assert;
@@ -40,7 +39,6 @@ public class JobResultSetBuilderTest {
         File file2;
         String dir="option/";
         String oldIoBase="";
-        BoundXProcScript bound;
 
         @Before
         public void setUp() throws IOException{
@@ -64,7 +62,6 @@ public class JobResultSetBuilderTest {
                 input=trans.decorate(input);
                 writeResult(file2);
                 Mock.populateDir((String)input.getOptions().get(optDir));
-                bound=BoundXProcScript.from(script,input,output);
         }
 
         private static File writeResult(Result result) throws IOException {
