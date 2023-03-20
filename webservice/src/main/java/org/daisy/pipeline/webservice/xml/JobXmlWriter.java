@@ -270,7 +270,7 @@ public class JobXmlWriter {
                                         resultElm.setAttribute("mime-type", result.getMediaType());
                                 }
                                 if ( this.localPaths){
-                                        resultElm.setAttribute("file",result.getPath().toString());
+                                        resultElm.setAttribute("file", result.getPath().toURI().toString());
                                 }
                                 resultElm.setAttribute("size",
                                                 String.format("%s", result.getSize()));

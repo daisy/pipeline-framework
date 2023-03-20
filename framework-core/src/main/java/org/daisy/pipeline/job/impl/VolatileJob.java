@@ -1,6 +1,6 @@
 package org.daisy.pipeline.job.impl;
 
-import java.net.URI;
+import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -68,19 +68,19 @@ public class VolatileJob extends AbstractJob {
 	protected JobResultSet.Builder newResultSetBuilder() {
 		return new JobResultSet.Builder() {
 			@Override
-			public JobResultSet.Builder addResult(String port, String idx, URI path, String mediaType) {
+			public JobResultSet.Builder addResult(String port, String idx, File path, String mediaType) {
 				outputPorts.put(port, newResult(idx, path, mediaType));
 				return this;
 			}
 			@Override
-			public JobResultSet.Builder addResult(QName option, String idx, URI path, String mediaType) {
+			public JobResultSet.Builder addResult(QName option, String idx, File path, String mediaType) {
 				options.put(option, newResult(idx, path, mediaType));
 				return this;
 			}
 		};
 	}
 
-	private JobResult newResult(String idx, URI path, String mediaType) {
+	private JobResult newResult(String idx, File path, String mediaType) {
 		resultCount.incrementAndGet();
 		return new JobResult(idx, path, mediaType) {
 				@Override

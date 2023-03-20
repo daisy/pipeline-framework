@@ -1,7 +1,7 @@
 package org.daisy.pipeline.job;
 
+import java.io.File;
 import java.net.URI;
-import java.util.List;
 import java.util.function.Consumer;
 
 import javax.xml.transform.Result;
@@ -268,8 +268,13 @@ public abstract class AbstractJob implements Job {
                                         // XProcResult.writeTo(XProcOutput). If the output was a file, the system ID is
                                         // the file path. If the output was a stream, the system ID may be null.
                                         String sysId = result.getSystemId();
-                                        URI path = sysId == null ? null : URI.create(sysId);
-                                        builder = builder.addResult(info.getName(), path == null ? null : mapper.unmapOutput(path).toString(), path, mediaType);
+                                        if (sysId != null) {
+                                                URI path = URI.create(sysId);
+                                                builder = builder.addResult(info.getName(),
+                                                                            mapper.unmapOutput(path).toString(),
+                                                                            new File(path),
+                                                                            mediaType);
+                                        }
                                 }
                         }
                 }
@@ -289,7 +294,10 @@ public abstract class AbstractJob implements Job {
                                                 throw new RuntimeException("Expected string value for option " + option.getName() + " but got: " + val.getClass());
                                         }
                                 }
-                                builder = builder.addResult(option.getName(), path == null ? null : mapper.unmapOutput(path).toString(), path, mediaType);
+                                builder = builder.addResult(option.getName(),
+                                                            mapper.unmapOutput(path).toString(),
+                                                            new File(path),
+                                                            mediaType);
                         } else if (XProcDecorator.TranslatableOption.ANY_DIR_URI.getName().equals(script.getOptionMetadata(option.getName()).getType())) {
                                 String dir; {
                                         Object val = inputs.getOptions().get(option.getName());
@@ -300,9 +308,12 @@ public abstract class AbstractJob implements Job {
                                         }
                                 }
                                 // scan the directory to get all files inside
-                                List<URI> ls = IOHelper.treeFileList(URI.create(dir));
-                                for (URI path : ls) {
-                                        builder = builder.addResult(option.getName(), path == null ? null : mapper.unmapOutput(path).toString(), path, mediaType);
+                                for (File f : IOHelper.treeFileList(new File(URI.create(dir)))) {
+                                        URI path = f.toURI();
+                                        builder = builder.addResult(option.getName(),
+                                                                    mapper.unmapOutput(path).toString(),
+                                                                    f,
+                                                                    mediaType);
                                 }
                         }
                 }

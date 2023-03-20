@@ -1,5 +1,7 @@
 package org.daisy.pipeline.persistence.impl.job;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
@@ -40,14 +42,26 @@ public class Mocks   {
 	public static final String file2="file:/tmp/f2.xml";
 	public static final QName opt1Qname=new QName("www.daisy.org","opt1"); 
 	public static final QName opt2Qname=new QName("www.daisy.org","opt2"); 
-	public static final String value1="value1";
-	public static final String value2="value2";
+	public static final String value1 = "value1";
+	public static final File result1;
+	public static final File result2;
 	public static final String paramPort="params";	
 	public static final String qparam="param1"; 
 	public static final String paramVal="pval";
 	public static final URI in=URI.create("file:/tmp/in/");
 	public static final URI out=URI.create("file:/tmp/out/");
 	public static final String portResult="res"; 
+
+	static {
+		try {
+			result1 = File.createTempFile("res", null);
+			result2 = File.createTempFile("res", null);
+			result1.deleteOnExit();
+			result2.deleteOnExit();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	public static class DummyScriptService implements ScriptRegistry{
 
@@ -145,12 +159,17 @@ public class Mocks   {
 	public static AbstractJobContext buildContext(Client client,JobBatchId batchId){  
 		final XProcScript script = Mocks.buildScript();
 		//Input setup
-		final XProcInput input= new XProcInput.Builder().withInput("source",new Mocks.SimpleSourceProvider(file1)).withInput("source", new Mocks.SimpleSourceProvider(file2)).withOption(opt1Qname,value1).withOption(opt2Qname,value2).withParameter(paramPort,new QName(qparam),paramVal).build();
+		final XProcInput input= new XProcInput.Builder().withInput("source", new Mocks.SimpleSourceProvider(file1))
+		                                                .withInput("source", new Mocks.SimpleSourceProvider(file2))
+		                                                .withOption(opt1Qname, result2.toURI().toASCIIString())
+		                                                .withOption(opt2Qname, value1)
+		                                                .withParameter(paramPort, new QName(qparam),paramVal)
+		                                                .build();
 		
 		final JobId id = JobIdFactory.newId();
 		final URIMapper mapper= new URIMapper(in,out);
-		final JobResultSet rSet=new JobResultSet.Builder().addResult(portResult, value1, in, null)
-		                                                  .addResult(opt1Qname, value2, out, null)
+		final JobResultSet rSet=new JobResultSet.Builder().addResult(portResult, result1.getName(), result1, null)
+		                                                  .addResult(opt1Qname, result2.getName(), result2, null)
 		                                                  .build();
                 //add to the db
                 if ( client ==null){

@@ -1,8 +1,11 @@
 package org.daisy.pipeline.webservice.impl;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.MessageDigest;
 import java.util.Collection;
 
 import org.daisy.pipeline.job.Job;
@@ -14,7 +17,7 @@ import org.restlet.data.Digest;
 import org.restlet.data.Disposition;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
-import org.restlet.representation.FileRepresentation;
+import org.restlet.representation.InputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.slf4j.Logger;
@@ -117,15 +120,24 @@ public abstract class NamedResultResource extends AuthenticatedResource {
 
                 try{
                         JobResult res=Lists.newArrayList(results).get(0);
-                        File file = new File(res.getPath());
-                        Representation rep = new FileRepresentation(file,
+                        InputStream is = res.asStream();
+                        is = new BufferedInputStream(is, 8192);
+                        Integer size = ResultResource.getSize(is, 32768);
+                        Representation rep = new InputRepresentation(
+                                        is,
                                         MediaType.APPLICATION_ALL);//TODO get media type from the file
-                        rep.setDigest(new Digest(Files.hash(file,Hashing.md5()).asBytes()));//TODO update to guava 1.5
-                        //rep.setDigest(new Digest(Files.getDigest(file,MessageDigest.getInstance("MD5"))));
+                        if (size != null) { // if > 32 Mb
+                                byte[] bytes = new byte[size];
+                                is.mark(size);
+                                is.read(bytes);
+                                rep.setDigest(new Digest(MessageDigest.getInstance("MD5").digest(bytes)));
+                                is.reset();
+                        }
                         Disposition disposition = new Disposition();
                         disposition.setFilename(res.getIdx().toString());
-                        disposition.setSize(file.length());
                         disposition.setType(Disposition.TYPE_ATTACHMENT);
+                        if (size != null) // if > 32 Mb
+                                disposition.setSize(size);
                         rep.setDisposition(disposition);
                         return rep;
                 }catch(Exception e){

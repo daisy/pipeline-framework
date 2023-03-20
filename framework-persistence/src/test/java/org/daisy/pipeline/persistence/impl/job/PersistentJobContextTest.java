@@ -85,8 +85,8 @@ public class PersistentJobContextTest  {
 		XProcInput inputs=jCtxt.getInputs();
 		Assert.assertTrue(inputs.getOptions().containsKey(Mocks.opt1Qname));
 		Assert.assertTrue(inputs.getOptions().containsKey(Mocks.opt2Qname));
-		Assert.assertEquals(inputs.getOptions().get(Mocks.opt1Qname),Mocks.value1);
-		Assert.assertEquals(inputs.getOptions().get(Mocks.opt2Qname),Mocks.value2);
+		Assert.assertEquals(inputs.getOptions().get(Mocks.opt1Qname), Mocks.result2.toURI().toASCIIString());
+		Assert.assertEquals(inputs.getOptions().get(Mocks.opt2Qname), Mocks.value1);
 	}
 
 	@Test

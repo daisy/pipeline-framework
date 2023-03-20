@@ -1,6 +1,7 @@
 package org.daisy.pipeline.job;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -29,12 +30,12 @@ public final class JobResultSet {
                 protected final Multimap<String,JobResult> outputPorts = LinkedListMultimap.create();
                 protected final Multimap<QName,JobResult> options = LinkedListMultimap.create();
 
-                public Builder addResult(String port, String idx, URI path, String mediaType) {
+                public Builder addResult(String port, String idx, File path, String mediaType) {
                         outputPorts.put(port, new JobResult(idx, path, mediaType));
                         return this;
                 }
 
-                public Builder addResult(QName option, String idx, URI path, String mediaType) {
+                public Builder addResult(QName option, String idx, File path, String mediaType) {
                         options.put(option, new JobResult(idx, path, mediaType));
                         return this;
                 }
@@ -86,7 +87,7 @@ public final class JobResultSet {
                                                 JobResult result = resultsIt.next();
                                                 ZipEntry entry = new ZipEntry(URI.create(result.getIdx()).getPath());
                                                 zipos.putNextEntry(entry);
-                                                InputStream is = result.getPath().toURL().openStream();
+                                                InputStream is = result.asStream();
                                                 IOHelper.dump(is, zipos);
                                                 is.close();
                                                 if (!resultsIt.hasNext())
@@ -108,6 +109,14 @@ public final class JobResultSet {
                                 }
                         }
                 };
+        }
+
+        public InputStream asZip() throws IOException {
+                return asZip(getResults());
+        }
+
+        public InputStream asZip(String port) throws IOException {
+                return asZip(getResults(port));
         }
 
         public Collection<String> getPorts(){
