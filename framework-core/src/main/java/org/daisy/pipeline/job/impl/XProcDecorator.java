@@ -198,7 +198,7 @@ public class XProcDecorator {
 		for (ScriptOption option : script.getOptions()) {
 			Iterable<String> val = input.getOption(option.getName()); // may be empty collections but never null
 			if (val.iterator().hasNext()) {
-				String type = option.getType();
+				String type = option.getType().getId();
 				// check if type is "anyDirURI"
 				if (XProcOptionMetadata.ANY_DIR_URI.equals(type)) {
 					val = Iterables.transform(
@@ -247,7 +247,7 @@ public class XProcDecorator {
 		String uri = option.getDefault();
 		// otherwise generate URI
 		if (!notEmpty(uri)) {
-			if (XProcOptionMetadata.ANY_DIR_URI.equals(option.getType())) {
+			if (XProcOptionMetadata.ANY_DIR_URI.equals(option.getType().getId())) {
 				uri = option.getName() + "/";
 			} else {
 				uri = option.getName() + ".xml";

@@ -1,6 +1,5 @@
 import javax.inject.Inject;
 
-import org.daisy.pipeline.datatypes.DatatypeService;
 import org.daisy.pipeline.junit.AbstractTest;
 import org.daisy.pipeline.script.ScriptOption;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -42,14 +41,6 @@ public class FrameworkCoreTest extends AbstractTest {
 		ScriptService<?> script = registry.getScript("unit-test-script");
 		assertEquals("unit-test-script", script.getId());
 		ScriptOption meta = script.load().getOption("option1");
-		assertEquals("dtbook:mydatatype", meta.getType());
-	}
-
-	@Inject
-	public DatatypeService datatype;
-	
-	@Test
-	public void testDatatype() {
-		assertEquals("dtbook:mydatatype", datatype.getId());
+		assertEquals("dtbook:mydatatype", meta.getType().getId());
 	}
 }

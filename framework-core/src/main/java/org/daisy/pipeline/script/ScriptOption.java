@@ -1,5 +1,7 @@
 package org.daisy.pipeline.script;
 
+import org.daisy.pipeline.datatypes.DatatypeService;
+
 /**
  * Script option description.
  */
@@ -33,7 +35,7 @@ public interface ScriptOption {
 	/**
 	 * The type.
 	 */
-	public String getType();
+	public DatatypeService getType();
 
 	/**
 	 * The media type.

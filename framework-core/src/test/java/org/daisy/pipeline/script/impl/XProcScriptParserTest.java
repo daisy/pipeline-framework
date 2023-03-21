@@ -12,12 +12,16 @@ import javax.xml.stream.XMLInputFactory;
 
 import org.daisy.pipeline.script.ScriptOption;
 import org.daisy.pipeline.script.ScriptPort;
+import org.daisy.pipeline.datatypes.DatatypeRegistry;
+import org.daisy.pipeline.datatypes.DatatypeService;
+import org.daisy.pipeline.datatypes.ValidationResult;
 import org.daisy.pipeline.script.Script;
 import org.daisy.pipeline.script.XProcScriptService;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.w3c.dom.Document;
 
 import com.google.common.collect.Iterables;
 
@@ -62,6 +66,18 @@ public class XProcScriptParserTest {
 		 URL url=this.getClass().getClassLoader().getResource("script.xpl");
 		 StaxXProcScriptParser parser = new StaxXProcScriptParser();
 		 parser.setFactory(XMLInputFactory.newInstance());
+		 DatatypeRegistry datatypes = new DatatypeRegistry();
+		 datatypes.register(new DatatypeService() {
+			public String getId() {
+				return "dtbook:mydatatype";
+			}
+			public Document asDocument() throws Exception {
+				throw new UnsupportedOperationException("Not implemented");
+			}
+			public ValidationResult validate(String content) {
+				return ValidationResult.valid();
+			}});
+		 parser.setDatatypeRegistry(datatypes);
 		 scp = parser.parse(new MockScriptService(url)); //Try to fix this using a service
 	 
 	 
@@ -169,7 +185,7 @@ public class XProcScriptParserTest {
 	 @Test
 	 public void testOption() {
 		 ScriptOption opt = scp.getOption("option1");
-		 assertEquals("dtbook:mydatatype", opt.getType());
+		 assertEquals("dtbook:mydatatype", opt.getType().getId());
 		 //assertEquals(Direction.OUTPUT, opt.getDirection());
 		 assertEquals("Option 1", opt.getNiceName());
 	 }

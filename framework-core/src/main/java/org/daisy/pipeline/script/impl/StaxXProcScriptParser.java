@@ -18,6 +18,7 @@ import org.daisy.common.stax.EventProcessor;
 import org.daisy.common.stax.StaxEventHelper;
 import org.daisy.common.stax.StaxEventHelper.EventPredicates;
 import org.daisy.common.xproc.XProcPipelineInfo;
+import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.script.Script;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
@@ -46,7 +47,8 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 public class StaxXProcScriptParser {
 
 	private static final Logger logger = LoggerFactory.getLogger(StaxXProcScriptParser.class);
-	private XMLInputFactory mFactory;
+	private XMLInputFactory xmlInputFactory;
+	private DatatypeRegistry datatypeRegistry;
 
 	@Reference(
 		name = "xml-input-factory",
@@ -56,7 +58,18 @@ public class StaxXProcScriptParser {
 		policy = ReferencePolicy.STATIC
 	)
 	protected void setFactory(XMLInputFactory factory) {
-		mFactory = factory;
+		xmlInputFactory = factory;
+	}
+
+	@Reference(
+		name = "datatype-registry",
+		unbind = "-",
+		service = DatatypeRegistry.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
+	protected void setDatatypeRegistry(DatatypeRegistry registry) {
+		datatypeRegistry = registry;
 	}
 
 	@Activate
@@ -86,20 +99,20 @@ public class StaxXProcScriptParser {
 		 * Parses the XProc file extracting the metadata attached to options, ports and the step.
 		 */
 		public XProcScript parse(final XProcScriptService descriptor) {
-			if (mFactory == null) {
+			if (xmlInputFactory == null) {
 				throw new IllegalStateException();
 			}
 			InputStream is = null;
 			XMLEventReader reader = null;
 			logger.debug("Parsing with descriptor:" + descriptor);
 			StaxXProcPipelineInfoParser infoParser = new StaxXProcPipelineInfoParser();
-			infoParser.setFactory(mFactory);
+			infoParser.setFactory(xmlInputFactory);
 			try {
 				XProcPipelineInfo info = infoParser.parse(descriptor.getURL());
-				scriptBuilder = new XProcScript.Builder(descriptor, info.getURI());
+				scriptBuilder = new XProcScript.Builder(descriptor, info.getURI(), datatypeRegistry);
 				URL descUrl = descriptor.getURL();
 				is = descUrl.openConnection().getInputStream();
-				reader = mFactory.createXMLEventReader(is);
+				reader = xmlInputFactory.createXMLEventReader(is);
 
 				parseStep(reader);
 				for (XProcOptionMetadataBuilder b : optionBuilders) {

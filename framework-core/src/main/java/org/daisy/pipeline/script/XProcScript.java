@@ -11,6 +11,8 @@ import javax.xml.namespace.QName;
 
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
+import org.daisy.pipeline.datatypes.DatatypeRegistry;
+import org.daisy.pipeline.datatypes.DatatypeService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,15 +71,18 @@ public final class XProcScript extends Script {
 		private final List<XProcScriptOption> tempOptions = new ArrayList<>();
 		private final Map<String,XProcScriptOption> resultOptions = new HashMap<>();
 		private ScriptPort statusPort;
+		private final DatatypeRegistry datatypes;
 
-		public Builder(XProcScriptService descriptor, URI uri) {
+		public Builder(XProcScriptService descriptor, URI uri, DatatypeRegistry datatypes) {
 			super(descriptor);
 			this.uri = uri;
+			this.datatypes = datatypes;
 		}
 
-		public Builder(String id, String version, URI uri) {
+		public Builder(String id, String version, URI uri, DatatypeRegistry datatypes) {
 			super(id, version);
 			this.uri = uri;
+			this.datatypes = datatypes;
 		}
 
 		public Builder withOption(XProcOptionInfo info, XProcOptionMetadata metadata) {
@@ -85,7 +90,7 @@ public final class XProcScript extends Script {
 			case TEMP:
 				if (XProcOptionMetadata.ANY_DIR_URI.equals(metadata.getType())) {
 					// need (unique) name to derive default value from
-					tempOptions.add(new XProcScriptOption(uniqueOptionName(info.getName()), info, metadata));
+					tempOptions.add(new XProcScriptOption(uniqueOptionName(info.getName()), info, metadata, datatypes));
 					return this;
 				}
 				break;
@@ -126,7 +131,7 @@ public final class XProcScript extends Script {
 					withOutputPort(port.getName(), port);
 					// need (unique) name to derive default file/dir from
 					resultOptions.put(port.getName(),
-					                  new XProcScriptOption(uniqueOptionName(info.getName()), info, metadata));
+					                  new XProcScriptOption(uniqueOptionName(info.getName()), info, metadata, datatypes));
 					return this;
 				}
 				break;
@@ -164,11 +169,11 @@ public final class XProcScript extends Script {
 							}
 						};
 					withInputPort(port.getName(), port);
-					inputOptions.put(port.getName(), new XProcScriptOption(null, info, metadata));
+					inputOptions.put(port.getName(), new XProcScriptOption(null, info, metadata, datatypes));
 					return this;
 				}
 			}
-			XProcScriptOption option = new XProcScriptOption(uniqueOptionName(info.getName()), info, metadata);
+			XProcScriptOption option = new XProcScriptOption(uniqueOptionName(info.getName()), info, metadata, datatypes);
 			super.withOption(option.getName(), option);
 			return this;
 		}
@@ -280,10 +285,12 @@ public final class XProcScript extends Script {
 		private final XProcOptionInfo info;
 		private final XProcOptionMetadata metadata;
 		private final String defaultValue;
+		private final DatatypeService datatype;
 
 		public XProcScriptOption(String name,
 		                         XProcOptionInfo info,
-		                         XProcOptionMetadata metadata) {
+		                         XProcOptionMetadata metadata,
+		                         DatatypeRegistry datatypes) {
 			this.name = name;
 			this.info = info;
 			this.metadata = metadata;
@@ -304,6 +311,25 @@ public final class XProcScript extends Script {
 						defaultValue = "";
 					}
 				}
+			}
+			String type = metadata.getType();
+			if (type == null || "".equals(type) || "xs:string".equals(type) || "string".equals(type))
+				datatype = DatatypeService.XS_STRING;
+			else if ("xs:integer".equals(type) || "integer".equals(type))
+				datatype = DatatypeService.XS_INTEGER;
+			else if ("xs:boolean".equals(type) || "boolean".equals(type))
+				datatype = DatatypeService.XS_BOOLEAN;
+			else if ("xs:anyURI".equals(type) || "anyURI".equals(type))
+				datatype = DatatypeService.XS_ANY_URI;
+			else if ("anyFileURI".equals(type))
+				datatype = DatatypeService.ANY_FILE_URI;
+			else if ("anyDirURI".equals(type))
+				datatype = DatatypeService.ANY_DIR_URI;
+			else {
+				datatype = datatypes.getDatatype(type).orNull();
+				if (datatype == null)
+					throw new IllegalArgumentException(
+						"Invalid px:type '" + type + "': does not match a known data type");
 			}
 		}
 
@@ -337,8 +363,8 @@ public final class XProcScript extends Script {
 		}
 
 		@Override
-		public String getType() {
-			return metadata.getType();
+		public DatatypeService getType() {
+			return datatype;
 		}
 
 		@Override

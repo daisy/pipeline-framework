@@ -273,7 +273,7 @@ public abstract class AbstractJob implements Job {
                                 if (inputs.getOptions().get(option.getXProcOptionName()) == null)
                                         // option was not set
                                         continue;
-                                if (XProcOptionMetadata.ANY_FILE_URI.equals(option.getType())) {
+                                if (XProcOptionMetadata.ANY_FILE_URI.equals(option.getType().getId())) {
                                         URI path; {
                                                 Object val = inputs.getOptions().get(option.getXProcOptionName());
                                                 try {
@@ -291,7 +291,7 @@ public abstract class AbstractJob implements Job {
                                                                             f,
                                                                             mediaType);
                                         }
-                                } else if (XProcOptionMetadata.ANY_DIR_URI.equals(option.getType())) {
+                                } else if (XProcOptionMetadata.ANY_DIR_URI.equals(option.getType().getId())) {
                                         String dir; {
                                                 Object val = inputs.getOptions().get(option.getXProcOptionName());
                                                 try {

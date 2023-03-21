@@ -505,7 +505,8 @@ public class JobsResource extends AuthenticatedResource {
                                                               script.getName()));
                                 }
                                 if (name.equals(option.getName())) {
-                                        boolean isInput = "anyDirURI".equals(option.getType()) || "anyFileURI".equals(option.getType());
+                                        boolean isInput = "anyDirURI".equals(option.getType().getId())
+                                                       || "anyFileURI".equals(option.getType().getId());
                                         //eventhough the option is a sequence it may happen that 
                                         //there are no item elements, just one value
                                         NodeList items = optionElm.getElementsByTagNameNS(Validator.NS_DAISY,"item");
