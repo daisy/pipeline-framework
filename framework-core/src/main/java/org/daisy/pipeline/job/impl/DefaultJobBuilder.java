@@ -35,7 +35,6 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 	private final BoundScript boundScript;
 	private final boolean managed;
 	private boolean closeOnExit = false;
-	private boolean isMapping;
 	private JobBatchId batchId;
 	private JobResources resources;
 	private String niceName = "";
@@ -71,12 +70,6 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 		if (managed)
 			throw new UnsupportedOperationException();
 		this.closeOnExit = closeOnExit;
-		return this;
-	}
-
-	@Override
-	public DefaultJobBuilder isMapping(boolean isMapping) {
-		this.isMapping = isMapping;
 		return this;
 	}
 
@@ -123,10 +116,10 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 				logFile = JobURIUtils.getLogFile(id.toString()).toURI();
 				results = JobResultSet.EMPTY;
 				script = boundScript.getScript();
-				uriMapper = isMapping
+				uriMapper = resources != null
 					? JobURIUtils.newURIMapper(id.toString())
 					: JobURIUtils.newOutputURIMapper(id.toString());
-				if (isMapping && resources != null) {
+				if (resources != null) {
 					logger.debug("Storing the resource collection");
 					IOHelper.dump(resources, uriMapper);
 				}

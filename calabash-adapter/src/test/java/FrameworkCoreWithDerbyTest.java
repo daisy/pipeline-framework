@@ -115,7 +115,6 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 		ScriptService<?> script = scriptRegistry.getScript(scriptId);
 		Assert.assertNotNull("The " + scriptId + " script should exist", script);
 		return jobManager.newJob(BoundScript.from(script.load(), new ScriptInput.Builder().build()))
-		                 .isMapping(true)
 		                 .withNiceName("nice")
 		                 .build()
 		                 .get();

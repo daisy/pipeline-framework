@@ -500,7 +500,6 @@ public class FrameworkCoreTest extends AbstractTest {
 		ScriptService<?> script = scriptRegistry.getScript(scriptId);
 		Assert.assertNotNull("The " + scriptId + " script should exist", script);
 		Job job = jobFactory.newJob(BoundScript.from(script.load(), new ScriptInput.Builder().build()))
-		                    .isMapping(true)
 		                    .withNiceName("nice")
 		                    .build()
 		                    .get();

@@ -58,7 +58,6 @@ public class NewDatabaseTest extends TestBase {
 			jobManager = factory.createFor(client.get());
 		}
 		Optional<Job> job = jobManager.newJob(boundScript)
-		                              .isMapping(false)
 		                              .withNiceName("my-job")
 		                              .build();
 		Assert.assertTrue(job.isPresent());

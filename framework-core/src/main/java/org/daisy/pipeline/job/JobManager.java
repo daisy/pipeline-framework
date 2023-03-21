@@ -50,8 +50,6 @@ public interface JobManager extends JobFactory {
 
 	public interface JobBuilder extends JobFactory.JobBuilder {
 		@Override
-		public JobBuilder isMapping(boolean mapping);
-		@Override
 		public JobBuilder withResources(JobResources resources);
 		@Override
 		public JobBuilder withNiceName(String niceName);

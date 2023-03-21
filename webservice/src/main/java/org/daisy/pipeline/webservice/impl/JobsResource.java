@@ -399,9 +399,7 @@ public class JobsResource extends AuthenticatedResource {
                 if (zip != null){
                         resourceCollection = new ZippedJobResources(zip);
                 }
-                boolean mapping=!webservice().getConfiguration().isLocalFS();
-                //logger.debug("MAPPING "+mapping);
-                return jobMan.newJob(bound).isMapping(mapping)
+                return jobMan.newJob(bound)
                         .withNiceName(niceName).withBatchId(JobIdFactory.newBatchIdFromString(batchId))
                         .withPriority(priority).withResources(resourceCollection).build();
         }

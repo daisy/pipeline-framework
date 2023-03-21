@@ -16,7 +16,6 @@ public interface JobFactory {
 	public JobBuilder newJob(BoundScript boundScript);
 
 	public interface JobBuilder {
-		public JobBuilder isMapping(boolean mapping);
 		public JobBuilder withResources(JobResources resources);
 		public JobBuilder withNiceName(String niceName);
 		/**
