@@ -26,7 +26,6 @@ import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.ZippedJobResources;
 import org.daisy.pipeline.script.BoundScript;
 import org.daisy.pipeline.script.Script;
-import org.daisy.pipeline.script.ScriptInput;
 import org.daisy.pipeline.script.ScriptOption;
 import org.daisy.pipeline.script.ScriptPort;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -383,10 +382,10 @@ public class JobsResource extends AuthenticatedResource {
                 }
                 Script script = scriptService.load();
                 JobResources resourceCollection = zip != null ? new ZippedJobResources(zip) : null;
-                ScriptInput.Builder inBuilder = new ScriptInput.Builder(resourceCollection);
+                BoundScript.Builder bound = new BoundScript.Builder(script, resourceCollection);
 
-                addInputsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"input"), script, inBuilder, zip != null);
-                addOptionsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"option"), script, inBuilder,zip!=null);
+                addInputsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"input"), script, bound, zip != null);
+                addOptionsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"option"), script, bound, zip != null);
                 if (doc.getElementsByTagNameNS(Validator.NS_DAISY,"output").getLength() > 0) {
                         // show deprecation warning in server logs
                         logger.warn("Deprecated <output/> element used. Job results should be retrieved through the /jobs/ID/result API.");
@@ -396,10 +395,9 @@ public class JobsResource extends AuthenticatedResource {
                                 "\"Deprecated API\": "
                                 + "<output/> is deprecated, job results should be retrieved through the /jobs/ID/result API");
                 }
-                BoundScript bound = BoundScript.from(script, inBuilder.build());
 
                 JobManager jobMan = webservice().getJobManager(this.getClient());
-                return jobMan.newJob(bound)
+                return jobMan.newJob(bound.build())
                         .withNiceName(niceName).withBatchId(JobIdFactory.newBatchIdFromString(batchId))
                         .withPriority(priority).build();
         }
@@ -441,7 +439,7 @@ public class JobsResource extends AuthenticatedResource {
          * @param builder the builder
          * @throws LocalInputException
          */
-        private void addInputsToJob(NodeList nodes, Script script, ScriptInput.Builder builder, boolean zippedContext)
+        private void addInputsToJob(NodeList nodes, Script script, BoundScript.Builder builder, boolean zippedContext)
                         throws LocalInputException, FileNotFoundException {
 
                 for (ScriptPort input : script.getInputPorts()) {
@@ -488,20 +486,14 @@ public class JobsResource extends AuthenticatedResource {
          * Adds the options to job.
          * @throws LocalInputException
          */
-        private void addOptionsToJob(NodeList nodes, Script script, ScriptInput.Builder builder, boolean zippedContext)
-                        throws LocalInputException {
+        private void addOptionsToJob(NodeList nodes, Script script, BoundScript.Builder builder, boolean zippedContext)
+                        throws LocalInputException, FileNotFoundException {
 
                 Iterable<ScriptOption> options = script.getOptions();
                 for (ScriptOption option : options) {
                         for (int i = 0; i< nodes.getLength(); i++) {
                                 Element optionElm = (Element) nodes.item(i);
                                 String name = optionElm.getAttribute("name");
-                                if (script.getOption(name) == null) {
-                                        throw new IllegalArgumentException(
-                                                String.format("Option %s is not recognized by script %s",
-                                                              name.toString(),
-                                                              script.getName()));
-                                }
                                 if (name.equals(option.getName())) {
                                         boolean isInput = "anyDirURI".equals(option.getType().getId())
                                                        || "anyFileURI".equals(option.getType().getId());
@@ -510,13 +502,7 @@ public class JobsResource extends AuthenticatedResource {
                                         NodeList items = optionElm.getElementsByTagNameNS(Validator.NS_DAISY,"item");
                                         if (items.getLength() > 0) {
                                                 // accept <item> children even if it is not a sequence option
-                                                // but at most one
-                                                if (!option.isSequence() && items.getLength() > 1) {
-                                                        throw new IllegalArgumentException(
-                                                                String.format("Option %s of script %s does not accept a sequence of values",
-                                                                              name.toString(),
-                                                                              script.getName()));
-                                                }
+                                                // but at most one (this is verified in BoundScript.Builder)
                                                 for (int j = 0; j<items.getLength(); j++) {
                                                         Element e = (Element)items.item(j);
                                                         String v = e.getAttribute("value");

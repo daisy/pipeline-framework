@@ -31,8 +31,8 @@ public class ScriptInput {
 
 	public static class Builder {
 
-		private final Map<String,SourceSequence> inputs = Maps.newHashMap();
-		private final Map<String,List<String>> options = Maps.newHashMap();
+		final Map<String,SourceSequence> inputs = Maps.newHashMap();
+		final Map<String,List<String>> options = Maps.newHashMap();
 		private final JobResources resources;
 		private final Set<URI> resourcePaths;
 
@@ -99,6 +99,17 @@ public class ScriptInput {
 		public Builder withInput(String port, URI source) throws FileNotFoundException {
 			checkInputURI(source);
 			return withInput(port, new LazySaxSourceProvider(source.toASCIIString()));
+		}
+
+		/**
+		 * Put a single document on the specified input port. All documents that are put on a port
+		 * form a sequence.
+		 *
+		 * @throws FileNotFoundException if <code>source</code> does not exist.
+		 */
+		public Builder withInput(String port, File source) throws FileNotFoundException {
+			checkFile(source);
+			return withInput(port, new LazySaxSourceProvider(source.toURI().toASCIIString()));
 		}
 
 		/**

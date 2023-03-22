@@ -41,7 +41,6 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobFactory;
 import org.daisy.pipeline.junit.AbstractTest;
 import org.daisy.pipeline.script.BoundScript;
-import org.daisy.pipeline.script.ScriptInput;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.ScriptService;
 
@@ -499,7 +498,7 @@ public class FrameworkCoreTest extends AbstractTest {
 	Job newJob(String scriptId) {
 		ScriptService<?> script = scriptRegistry.getScript(scriptId);
 		Assert.assertNotNull("The " + scriptId + " script should exist", script);
-		Job job = jobFactory.newJob(BoundScript.from(script.load(), new ScriptInput.Builder().build()))
+		Job job = jobFactory.newJob(new BoundScript.Builder(script.load()).build())
 		                    .withNiceName("nice")
 		                    .build()
 		                    .get();

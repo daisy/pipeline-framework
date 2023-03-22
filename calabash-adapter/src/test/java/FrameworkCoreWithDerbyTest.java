@@ -23,7 +23,6 @@ import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.junit.AbstractTest;
 import org.daisy.pipeline.junit.OSGiLessConfiguration;
 import org.daisy.pipeline.script.BoundScript;
-import org.daisy.pipeline.script.ScriptInput;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.ScriptService;
 
@@ -114,7 +113,7 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 		JobManager jobManager = jobManagerFactory.create();
 		ScriptService<?> script = scriptRegistry.getScript(scriptId);
 		Assert.assertNotNull("The " + scriptId + " script should exist", script);
-		return jobManager.newJob(BoundScript.from(script.load(), new ScriptInput.Builder().build()))
+		return jobManager.newJob(new BoundScript.Builder(script.load()).build())
 		                 .withNiceName("nice")
 		                 .build()
 		                 .get();

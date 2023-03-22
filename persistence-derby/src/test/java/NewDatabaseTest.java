@@ -11,7 +11,6 @@ import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.script.BoundScript;
-import org.daisy.pipeline.script.ScriptInput;
 import org.daisy.pipeline.script.XProcScriptService;
 
 import org.junit.Assert;
@@ -48,9 +47,7 @@ public class NewDatabaseTest extends TestBase {
 		Optional<Client> client = clientStorage.addClient("my-client", "my-secret", Client.Role.CLIENTAPP, "me@daisy.org");
 		Assert.assertTrue(client.isPresent());
 		Assert.assertEquals("my-script", script.getId());
-		BoundScript boundScript = BoundScript.from(
-			script.load(),
-			new ScriptInput.Builder().build());
+		BoundScript boundScript = new BoundScript.Builder(script.load()).build();
 		JobManager jobManager; {
 			JobManagerFactory factory = new JobManagerFactory() {{
 				setJobStorage(jobStorage);
