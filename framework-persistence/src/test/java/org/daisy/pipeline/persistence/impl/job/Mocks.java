@@ -1,7 +1,10 @@
 package org.daisy.pipeline.persistence.impl.job;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 
 import javax.xml.namespace.QName;
@@ -19,10 +22,12 @@ import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobMonitor;
+import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.StatusNotifier;
 import org.daisy.pipeline.job.URIMapper;
+import org.daisy.pipeline.job.impl.IOHelper;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
 import org.daisy.pipeline.script.Script;
 import org.daisy.pipeline.script.ScriptInput;
@@ -33,20 +38,22 @@ import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
 
+import com.google.common.base.Supplier;
+import com.google.common.collect.Lists;
+
 public class Mocks   {
 
 	public static final String scriptUri= "http://daisy.com";
 	public static final String scriptId= "foo-to-bar";
 	public static final String testLogFile="http://daisy.com/log.txt";
-	public static final String file1="file:/tmp/f1.xml";
-	public static final String file2="file:/tmp/f2.xml";
+	public static final String file1 = "f1.xml";
+	public static final String file2 = "f2.xml";
 	public static final String opt1Name = "opt1";
 	public static final String opt2Name = "opt2";
 	public static final String value1 = "value1";
 	public static final File result1;
 	public static final File result2;
-	public static final URI in=URI.create("file:/tmp/in/");
-	public static final URI out=URI.create("file:/tmp/out/");
+	public static final URI out = URI.create("file:/tmp/out/");
 	public static final String portResult="res"; 
 
 	static {
@@ -130,34 +137,77 @@ public class Mocks   {
 		return buildJob(Priority.MEDIUM);
 	}
 
+	public static AbstractJob buildJob(File contextDir) {
+		return new AbstractJob(buildContext(contextDir), Priority.MEDIUM, null, true) {};
+	}
+
 	public static AbstractJob buildJob(Priority priority) {
 		return new AbstractJob(buildContext(), priority, null, true) {};
+	}
+
+	public static AbstractJob buildJob(Priority priority, File contextDir) {
+		return new AbstractJob(buildContext(contextDir), priority, null, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client) {
 		return new AbstractJob(buildContext(client), Priority.MEDIUM, null, true) {};
 	}
 
+	public static AbstractJob buildJob(Client client, File contextDir) {
+		return new AbstractJob(buildContext(client, null, contextDir), Priority.MEDIUM, null, true) {};
+	}
+
 	public static AbstractJob buildJob(Client client, JobBatchId batchId) {
 		return new AbstractJob(buildContext(client, batchId), Priority.MEDIUM, null, true) {};
 	}
 
-	public static AbstractJobContext buildContext(){  
-                return buildContext(null,null);
+	public static AbstractJob buildJob(Client client, JobBatchId batchId, File contextDir) {
+		return new AbstractJob(buildContext(client, batchId, contextDir), Priority.MEDIUM, null, true) {};
 	}
 
-	public static AbstractJobContext buildContext(Client client){  
-                return buildContext(client,null);
-        }
-	public static AbstractJobContext buildContext(Client client,JobBatchId batchId){  
+	public static AbstractJobContext buildContext() {
+		return buildContext(null, null);
+	}
+
+	public static AbstractJobContext buildContext(File contextDir) {
+		return buildContext(null, null, contextDir);
+	}
+
+	public static AbstractJobContext buildContext(Client client) {
+		return buildContext(client, null);
+	}
+
+	public static AbstractJobContext buildContext(Client client, JobBatchId batchId) {
+		return buildContext(client, batchId, null);
+	}
+
+	public static AbstractJobContext buildContext(Client client, JobBatchId batchId, File contextDir) {
 		final Script script = Mocks.buildScript();
-		//Input setup
-		final ScriptInput input= new ScriptInput.Builder().withInput("source", new Mocks.SimpleSourceProvider(file1))
-		                                                  .withInput("source", new Mocks.SimpleSourceProvider(file2))
-		                                                  .withOption(opt2Name, value1)
-		                                                  .build();
+		JobResources resources = new JobResources() {
+				public Iterable<String> getNames() {
+					return Lists.newArrayList(file1, file2);
+				}
+				public Supplier<InputStream> getResource(String name) {
+					return () -> new ByteArrayInputStream("foo".getBytes());
+				}
+			};
+		final ScriptInput input;
+		try {
+			input = new ScriptInput.Builder(resources).withInput("source", new Mocks.SimpleSourceProvider(file1))
+		                                              .withInput("source", new Mocks.SimpleSourceProvider(file2))
+		                                              .withOption(opt2Name, value1)
+		                                              .build();
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 		final JobId id = JobIdFactory.newId();
-		final URIMapper mapper= new URIMapper(in,out);
+		final URIMapper mapper= new URIMapper(contextDir != null ? contextDir.toURI() : URI.create(""), out);
+		if (contextDir != null)
+			try {
+				IOHelper.dump(resources, mapper);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		final JobResultSet rSet=new JobResultSet.Builder().addResult(portResult, result1.getName(), result1, null)
 		                                                  .addResult(opt1Name, result2.getName(), result2, null)
 		                                                  .build();

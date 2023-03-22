@@ -36,7 +36,6 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 	private final boolean managed;
 	private boolean closeOnExit = false;
 	private JobBatchId batchId;
-	private JobResources resources;
 	private String niceName = "";
 	private Priority priority = Priority.MEDIUM;
 
@@ -70,12 +69,6 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 		if (managed)
 			throw new UnsupportedOperationException();
 		this.closeOnExit = closeOnExit;
-		return this;
-	}
-
-	@Override
-	public DefaultJobBuilder withResources(JobResources resources) {
-		this.resources = resources;
 		return this;
 	}
 
@@ -116,14 +109,15 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 				logFile = JobURIUtils.getLogFile(id.toString()).toURI();
 				results = JobResultSet.EMPTY;
 				script = boundScript.getScript();
+				input = boundScript.getInput();
+				JobResources resources = input.getResources();
 				uriMapper = resources != null
 					? JobURIUtils.newURIMapper(id.toString())
 					: JobURIUtils.newOutputURIMapper(id.toString());
 				if (resources != null) {
-					logger.debug("Storing the resource collection");
+					logger.debug("Storing the resource collection"); // because not persisted
 					IOHelper.dump(resources, uriMapper);
 				}
-				input = boundScript.getInput();
 				messageBus = new MessageBus(id.toString(), messagesThreshold);
 				statusListeners = new LinkedList<>();
 				StatusNotifier statusNotifier = new StatusNotifier() {

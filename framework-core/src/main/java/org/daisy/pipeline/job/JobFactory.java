@@ -16,7 +16,6 @@ public interface JobFactory {
 	public JobBuilder newJob(BoundScript boundScript);
 
 	public interface JobBuilder {
-		public JobBuilder withResources(JobResources resources);
 		public JobBuilder withNiceName(String niceName);
 		/**
 		 * Request to automatically close the job when the object is dismissed or the virtual

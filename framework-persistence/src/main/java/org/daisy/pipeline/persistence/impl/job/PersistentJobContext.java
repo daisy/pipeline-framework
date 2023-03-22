@@ -1,5 +1,7 @@
 package org.daisy.pipeline.persistence.impl.job;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -128,12 +130,27 @@ public final class PersistentJobContext extends AbstractJobContext {
         private void postLoad(){
                 logger.debug("Post loading jobcontext");
                 //we have all the model but we have to hidrate the actual objects
-                ScriptInput.Builder builder = new ScriptInput.Builder();
-                ContextHydrator.hydrateInputPorts(builder,inputPorts);
+                this.uriMapper = this.pMapper.getMapper();
+                File contextDir = null; {
+                        URI u = uriMapper.getInputBase();
+                        if (u != null && !"".equals(u.toString())) {
+                                try {
+                                        contextDir = new File(u);
+                                } catch (IllegalArgumentException e) {
+                                        throw new IllegalStateException("Not a directory: " + u, e);
+                                }
+                        }
+                }
+                ScriptInput.Builder builder = contextDir != null ? new ScriptInput.Builder(contextDir)
+                                                                 : new ScriptInput.Builder();
+                try {
+                        ContextHydrator.hydrateInputPorts(builder,inputPorts);
+                } catch (FileNotFoundException e) {
+                        throw new IllegalStateException("Input files missing", e);
+                }
                 ContextHydrator.hydrateOptions(builder,options);
                 this.input = builder.build();
 
-                this.uriMapper = this.pMapper.getMapper();
                 this.client = this.pClient;
 
                 JobResultSet.Builder rBuilder=new JobResultSet.Builder();

@@ -2,6 +2,7 @@ package org.daisy.pipeline.job.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.List;
@@ -13,6 +14,7 @@ import javax.xml.transform.Source;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
+import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.script.ScriptInput;
 import org.daisy.pipeline.script.XProcOptionMetadata;
@@ -31,6 +33,13 @@ public class XProcDecoratorTest   {
 	URIMapper mapper;
 	String testFile="dir/myfile.xml";
 	String testFile2="dir/myfile2.xml";
+	JobResources resources = new JobResources() {
+			public Iterable<String> getNames() {
+				return Lists.newArrayList(testFile, testFile2);
+			}
+			public Supplier<InputStream> getResource(String name) {
+				throw new UnsupportedOperationException();
+			}};
 	String testDir="dir";
 	@Before
 	public void setUp() throws IOException {
@@ -56,8 +65,10 @@ public class XProcDecoratorTest   {
 		Source src2= Mock.getSource(testFile2);
 		//adding a value to the input option
 		String optName=Mock.ScriptGenerator.getInputName(0);
-		ScriptInput input = new ScriptInput.Builder().
-				withInput(optName, src).withInput(optName, src2).build();
+		ScriptInput input = new ScriptInput.Builder(resources)
+			.withInput(optName, src)
+			.withInput(optName, src2)
+			.build();
 
 		XProcInput.Builder builder = new XProcInput.Builder();
 		XProcDecorator trans=XProcDecorator.from(mscript,mapper);
@@ -107,7 +118,7 @@ public class XProcDecoratorTest   {
 		XProcScript mscript = new Mock.ScriptGenerator.Builder().withOptionInputs(1).build().generate();
 		//adding a value to the input option
 		QName optName=Mock.ScriptGenerator.getOptionInputName(0);
-		ScriptInput input = new ScriptInput.Builder().withInput(optName.getLocalPart(), Mock.getSource(testFile)).build();
+		ScriptInput input = new ScriptInput.Builder(resources).withInput(optName.getLocalPart(), Mock.getSource(testFile)).build();
 		XProcInput.Builder builder = new XProcInput.Builder();
 		XProcDecorator trans=XProcDecorator.from(mscript,mapper);
 		trans.decorateInputOptions(mscript, input, builder);
@@ -124,7 +135,7 @@ public class XProcDecoratorTest   {
 		XProcScript mscript = new Mock.ScriptGenerator.Builder().withOptionInputs(1).build().generate();
 		//adding a value to the input option
 		QName optName=Mock.ScriptGenerator.getOptionInputName(0);
-		ScriptInput input = new ScriptInput.Builder()
+		ScriptInput input = new ScriptInput.Builder(resources)
 			.withInput(optName.getLocalPart(), Mock.getSource(testFile))
 			.withInput(optName.getLocalPart(), Mock.getSource(testFile2))
 			.build();
@@ -262,8 +273,8 @@ public class XProcDecoratorTest   {
 		QName optOutFile = Mock.ScriptGenerator.getOptionOutputFileName(0);
 		QName optOutDir  = Mock.ScriptGenerator.getOptionOutputDirName(0);
 
-		ScriptInput input = new ScriptInput.Builder()
-			.withInput(optIn.getLocalPart(), Mock.getSource("dir/input.xml"))
+		ScriptInput input = new ScriptInput.Builder(resources)
+			.withInput(optIn.getLocalPart(), Mock.getSource(testFile))
 			.withOption(optReg.getLocalPart(), "value")
 			.withOption(optOutFile.getLocalPart(), "dir/output.xml") // no effect
 			.withOption(optOutDir.getLocalPart(), "outs")            // no effect
@@ -272,7 +283,7 @@ public class XProcDecoratorTest   {
 		XProcDecorator trans=XProcDecorator.from(script,mapper);
 		XProcInput iTrans=trans.decorate(input);
 
-		Assert.assertEquals(iTrans.getOptions().get(optIn),mapper.getInputBase()+"dir/input.xml");
+		Assert.assertEquals(iTrans.getOptions().get(optIn), mapper.getInputBase() + testFile);
 		Assert.assertEquals(iTrans.getOptions().get(optOutFile), mapper.getOutputBase() + "option-output-file-0.xml");
 		Assert.assertEquals(iTrans.getOptions().get(optOutDir), mapper.getOutputBase() + "option-output-dir-0/");
 		Assert.assertEquals(iTrans.getOptions().get(optReg),"value");

@@ -50,8 +50,6 @@ public interface JobManager extends JobFactory {
 
 	public interface JobBuilder extends JobFactory.JobBuilder {
 		@Override
-		public JobBuilder withResources(JobResources resources);
-		@Override
 		public JobBuilder withNiceName(String niceName);
 		public JobBuilder withPriority(Priority priority);
 		public JobBuilder withBatchId(JobBatchId id);

@@ -1,5 +1,6 @@
 package org.daisy.pipeline.persistence.impl.job;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.xml.transform.Source;
@@ -17,7 +18,7 @@ import com.google.common.collect.Lists;
 
 class ContextHydrator {
 	//
-	static void hydrateInputPorts(ScriptInput.Builder builder, List<PersistentInputPort> inputPorts) {
+	static void hydrateInputPorts(ScriptInput.Builder builder, List<PersistentInputPort> inputPorts) throws FileNotFoundException {
 		for ( PersistentInputPort input:inputPorts){
 			for (PersistentSource src:input.getSources()){
 				builder.withInput(input.getName(),src);

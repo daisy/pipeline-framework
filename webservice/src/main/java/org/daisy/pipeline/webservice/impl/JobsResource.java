@@ -1,6 +1,7 @@
 package org.daisy.pipeline.webservice.impl;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
@@ -178,6 +179,8 @@ public class JobsResource extends AuthenticatedResource {
                         job = createJob(doc, zipfile );
                 } catch (LocalInputException e) {
                         return badRequest(e);
+                } catch (FileNotFoundException e) {
+                        return badRequest(e);
                 } catch (IllegalArgumentException e) {
                         return badRequest(e);
                 }
@@ -335,7 +338,7 @@ public class JobsResource extends AuthenticatedResource {
          * @throws LocalInputException
          */
         private Optional<Job> createJob(Document doc, ZipFile zip)
-                        throws LocalInputException {
+                        throws LocalInputException, FileNotFoundException {
 
                 Element scriptElm = (Element) doc.getElementsByTagNameNS(Validator.NS_DAISY, "script").item(0);
                 Priority priority=Priority.MEDIUM;
@@ -379,7 +382,8 @@ public class JobsResource extends AuthenticatedResource {
                         return Optional.absent();
                 }
                 Script script = scriptService.load();
-                ScriptInput.Builder inBuilder = new ScriptInput.Builder();
+                JobResources resourceCollection = zip != null ? new ZippedJobResources(zip) : null;
+                ScriptInput.Builder inBuilder = new ScriptInput.Builder(resourceCollection);
 
                 addInputsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"input"), script, inBuilder, zip != null);
                 addOptionsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"option"), script, inBuilder,zip!=null);
@@ -395,13 +399,9 @@ public class JobsResource extends AuthenticatedResource {
                 BoundScript bound = BoundScript.from(script, inBuilder.build());
 
                 JobManager jobMan = webservice().getJobManager(this.getClient());
-                JobResources resourceCollection=null;
-                if (zip != null){
-                        resourceCollection = new ZippedJobResources(zip);
-                }
                 return jobMan.newJob(bound)
                         .withNiceName(niceName).withBatchId(JobIdFactory.newBatchIdFromString(batchId))
-                        .withPriority(priority).withResources(resourceCollection).build();
+                        .withPriority(priority).build();
         }
 
         /**
@@ -442,7 +442,7 @@ public class JobsResource extends AuthenticatedResource {
          * @throws LocalInputException
          */
         private void addInputsToJob(NodeList nodes, Script script, ScriptInput.Builder builder, boolean zippedContext)
-                        throws LocalInputException {
+                        throws LocalInputException, FileNotFoundException {
 
                 for (ScriptPort input : script.getInputPorts()) {
                         String inputName = input.getName();
