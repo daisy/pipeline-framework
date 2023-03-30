@@ -12,6 +12,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.daisy.pipeline.job.impl.IOHelper;
+import org.daisy.pipeline.script.Script;
+import org.daisy.pipeline.script.ScriptPort;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Lists;
@@ -20,14 +22,43 @@ import com.google.common.collect.Multimaps;
 
 public final class JobResultSet {
 
-        public final static JobResultSet EMPTY = new Builder().build();
+        public final static JobResultSet EMPTY = new Builder(null).build();
 
-        public static class Builder{
+        public static class Builder {
 
-                protected final Multimap<String,JobResult> outputPorts = LinkedListMultimap.create();
+                private final Script script;
 
-                public Builder addResult(String port, String idx, File path, String mediaType) {
-                        outputPorts.put(port, new JobResult(idx, path, mediaType));
+                public Builder() {
+                        this(null);
+                }
+
+                public Builder(Script script) {
+                        this.script = script;
+                }
+
+                private final Multimap<String,JobResult> outputPorts = LinkedListMultimap.create();
+
+                protected void addResult(String port, JobResult result) throws IllegalArgumentException {
+                        if (script != null) {
+                                ScriptPort p = script.getOutputPort(port);
+                                if (p == null)
+                                        throw new IllegalArgumentException(
+                                                String.format("Output '%s' is not recognized by script '%s'", port, script.getId()));
+                                if (!p.isSequence() && outputPorts.containsKey(port))
+                                        throw new IllegalArgumentException(
+                                                String.format("Output '%s' of script '%s' can not produce a sequence of documents",
+                                                              port, script.getId()));
+                        }
+                        outputPorts.put(port, result);
+                }
+
+                /**
+                 * @throws IllegalArgumentException if the script does not have the specified output
+                 *         port, or the port can not produce a sequence of documents and multiple
+                 *         documents are supplied.
+                 */
+                public Builder addResult(String port, String idx, File path, String mediaType) throws IllegalArgumentException {
+                        addResult(port, new JobResult(idx, path, mediaType));
                         return this;
                 }
 

@@ -109,7 +109,7 @@ public final class XProcScript extends Script {
 							}
 							@Override
 							public boolean isSequence() {
-								return metadata.isSequence();
+								return XProcOptionMetadata.ANY_DIR_URI.equals(type);
 							}
 							@Override
 							public boolean isRequired() {

@@ -188,7 +188,7 @@ public abstract class AbstractJob implements Job {
                         XProcResult result = pipeline.run(input, () -> ctxt.messageBus, null);
                         XProcOutput output = decorator.decorate(new XProcOutput.Builder().build());
                         result.writeTo(output); // writes to files and/or streams specified in output
-                        ctxt.results = buildResultSet((XProcScript)script, input, output, ctxt.uriMapper, newResultSetBuilder());
+                        ctxt.results = buildResultSet((XProcScript)script, input, output, ctxt.uriMapper, newResultSetBuilder(script));
                         onResultsChanged();
                         if (checkStatusPort((XProcScript)script, output))
                                 changeStatus(Status.SUCCESS);
@@ -250,14 +250,14 @@ public abstract class AbstractJob implements Job {
                         this.getId().equals(((Job) object).getId());
         }
 
-        protected JobResultSet.Builder newResultSetBuilder() {
-                return new JobResultSet.Builder();
+        protected JobResultSet.Builder newResultSetBuilder(Script script) {
+                return new JobResultSet.Builder(script);
         }
 
         // package private for unit tests
         static JobResultSet buildResultSet(XProcScript script, XProcInput inputs, XProcOutput outputs, URIMapper mapper)
                         throws IOException {
-                return buildResultSet(script, inputs, outputs, mapper, new JobResultSet.Builder());
+                return buildResultSet(script, inputs, outputs, mapper, new JobResultSet.Builder(script));
         }
 
         private static JobResultSet buildResultSet(XProcScript script, XProcInput inputs, XProcOutput outputs,

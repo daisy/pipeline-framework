@@ -208,9 +208,10 @@ public class Mocks   {
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
-		final JobResultSet rSet=new JobResultSet.Builder().addResult(portResult, result1.getName(), result1, null)
-		                                                  .addResult(opt1Name, result2.getName(), result2, null)
-		                                                  .build();
+		final JobResultSet rSet = new JobResultSet.Builder(script)
+		                                          .addResult(portResult, result1.getName(), result1, null)
+		                                          .addResult(opt1Name, result2.getName(), result2, null)
+		                                          .build();
                 //add to the db
                 if ( client ==null){
                         client=new PersistentClient("Client_"+Math.random(),"b",Role.ADMIN,"a@a",Priority.LOW);

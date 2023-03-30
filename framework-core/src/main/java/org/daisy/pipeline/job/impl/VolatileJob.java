@@ -11,6 +11,7 @@ import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
+import org.daisy.pipeline.script.Script;
 
 /**
  * Job that automatically deletes all associated files when the object is dismissed.
@@ -63,11 +64,11 @@ public class VolatileJob extends AbstractJob {
 	}
 
 	@Override
-	protected JobResultSet.Builder newResultSetBuilder() {
-		return new JobResultSet.Builder() {
+	protected JobResultSet.Builder newResultSetBuilder(Script script) {
+		return new JobResultSet.Builder(script) {
 			@Override
 			public JobResultSet.Builder addResult(String port, String idx, File path, String mediaType) {
-				outputPorts.put(port, newResult(idx, path, mediaType));
+				addResult(port, newResult(idx, path, mediaType));
 				return this;
 			}
 		};
