@@ -57,5 +57,11 @@ public interface JobManager extends JobFactory {
 		public JobBuilder withNiceName(String niceName);
 		public JobBuilder withPriority(Priority priority);
 		public JobBuilder withBatchId(JobBatchId id);
+		/**
+		 * @throws UnsupportedOperationException Jobs managed by a {@link JobManager} are never
+		 *                                       automatically closed.
+		 */
+		@Override
+		public JobBuilder closeOnExit() throws UnsupportedOperationException;
 	}
 }

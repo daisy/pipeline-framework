@@ -19,6 +19,11 @@ public interface JobFactory {
 		public JobBuilder isMapping(boolean mapping);
 		public JobBuilder withResources(JobResources resources);
 		public JobBuilder withNiceName(String niceName);
+		/**
+		 * Request to automatically close the job when the object is dismissed or the virtual
+		 * machine terminates.
+		 */
+		public JobBuilder closeOnExit();
 		public Optional<Job> build();
 	}
 }

@@ -31,6 +31,7 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 	private final Client client;
 	private final BoundXProcScript boundScript;
 	private final boolean managed;
+	private boolean closeOnExit = false;
 	private boolean isMapping;
 	private JobBatchId batchId;
 	private JobResources resources;
@@ -60,6 +61,14 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 		this.client = client;
 		this.boundScript = boundScript;
 		this.managed = managed;
+	}
+
+	@Override
+	public DefaultJobBuilder closeOnExit() throws UnsupportedOperationException {
+		if (managed)
+			throw new UnsupportedOperationException();
+		this.closeOnExit = closeOnExit;
+		return this;
 	}
 
 	@Override
@@ -131,8 +140,8 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 				monitor = monitorFactory.newJobMonitor(id, messageBus, statusNotifier);
 			}};
 			return Optional.of(
-				managed ? new AbstractJob(ctxt, priority, xprocEngine, true) {}
-				        : new VolatileJob(ctxt, priority, xprocEngine, false));
+				(managed || !closeOnExit) ? new AbstractJob(ctxt, priority, xprocEngine, managed) {}
+				                          : new VolatileJob(ctxt, priority, xprocEngine, false));
 		} catch (IOException e) {
 			throw new RuntimeException("Error while creating job context", e);
 		}
