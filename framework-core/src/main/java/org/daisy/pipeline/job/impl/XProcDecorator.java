@@ -166,7 +166,9 @@ public class XProcDecorator {
 					if (is != null && (is.getByteStream() != null || is.getCharacterStream() != null)) {
 						// document is not stored on disk so we can't pass a file path to the XProc option
 						// store it to a temporary location
-						File f = File.createTempFile("input", null);
+						String sysId = is.getSystemId();
+						// give the file a name that resembles the original name
+						File f = File.createTempFile("input", sysId != null ? new File(sysId).getName() : null);
 						f.deleteOnExit();
 						InputStream stream = is.getByteStream();
 						if (stream == null)  {

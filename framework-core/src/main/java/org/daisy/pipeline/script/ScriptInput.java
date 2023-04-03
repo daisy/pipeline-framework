@@ -2,8 +2,11 @@ package org.daisy.pipeline.script;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -116,6 +119,28 @@ public class ScriptInput {
 		 * Put a single document on the specified input port. All documents that are put on a port
 		 * form a sequence.
 		 *
+		 * @throws FileNotFoundException if the URL can not be resolved to a document.
+		 */
+		public Builder withInput(String port, URL source) throws FileNotFoundException {
+			InputSource is = new InputSource(checkInputURI(source));
+			is.setSystemId(source.toString());
+			getSequence(port).add(new SAXSource(is));
+			return this;
+		}
+
+		/**
+		 * Put a single document on the specified input port. All documents that are put on a port
+		 * form a sequence.
+		 */
+		public Builder withInput(String port, InputStream source) {
+			getSequence(port).add(new SAXSource(new InputSource(source)));
+			return this;
+		}
+
+		/**
+		 * Put a single document on the specified input port. All documents that are put on a port
+		 * form a sequence.
+		 *
 		 * The {@link Supplier} serves as a proxy and must always return the same object.
 		 */
 		private Builder withInput(String port, Supplier<Source> source) {
@@ -152,6 +177,14 @@ public class ScriptInput {
 			} catch (URISyntaxException e) {
 				throw new FileNotFoundException(
 					"Input not found: not a valid URI: " + uri);
+			}
+		}
+
+		private InputStream checkInputURI(URL uri) throws FileNotFoundException {
+			try {
+				return uri.openStream();
+			} catch (IOException e) {
+				throw new FileNotFoundException("Input not found: " + uri);
 			}
 		}
 

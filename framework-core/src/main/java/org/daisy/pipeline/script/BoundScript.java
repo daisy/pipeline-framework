@@ -2,7 +2,9 @@ package org.daisy.pipeline.script;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
@@ -52,6 +54,33 @@ public class BoundScript {
 		 * @throws FileNotFoundException if <code>source</code> does not exist.
 		 */
 		public Builder withInput(String port, File source) throws IllegalArgumentException, FileNotFoundException {
+			checkInputPort(port);
+			input.withInput(port, source);
+			return this;
+		}
+
+		/**
+		 * Put a single document on the specified input port. All documents that are put on a port
+		 * form a sequence.
+		 *
+		 * @throws IllegalArgumentException if the script does not have the specified port, or the
+		 *         port does not accept a sequence of documents and multiple documents are supplied.
+		 * @throws FileNotFoundException if the URL can not be resolved to a document.
+		 */
+		public Builder withInput(String port, URL source) throws FileNotFoundException {
+			checkInputPort(port);
+			input.withInput(port, source);
+			return this;
+		}
+
+		/**
+		 * Put a single document on the specified input port. All documents that are put on a port
+		 * form a sequence.
+		 *
+		 * @throws IllegalArgumentException if the script does not have the specified port, or the
+		 *         port does not accept a sequence of documents and multiple documents are supplied.
+		 */
+		public Builder withInput(String port, InputStream source) {
 			checkInputPort(port);
 			input.withInput(port, source);
 			return this;
