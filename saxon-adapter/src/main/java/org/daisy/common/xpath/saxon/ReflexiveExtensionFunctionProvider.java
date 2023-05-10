@@ -95,6 +95,13 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 		}
 		for (Method method : definition.getDeclaredMethods()) {
 			if (Modifier.isPublic(method.getModifiers())) {
+				if ("toString".equals(method.getName())
+				    && method.getParameterCount() == 0
+				    && !Modifier.isStatic(method.getModifiers())) {
+					// skip because the method can already be called through the string() function:
+					// ObjectValue.getStringValueCS() calls Object.toString()
+					continue;
+				}
 				List<Executable> list = methods.get(method.getName());
 				if (list == null) {
 					list = new ArrayList<>();
