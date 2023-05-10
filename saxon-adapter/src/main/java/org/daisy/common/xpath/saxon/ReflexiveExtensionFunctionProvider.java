@@ -637,9 +637,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 				return (T)objectFromItem(item, Boolean.class);
 			else if (item instanceof AnyURIValue)
 				return (T)objectFromItem(item, URI.class);
-			else
-				throw new IllegalArgumentException();
-		else if (item instanceof ObjectValue) {
+		if (item instanceof ObjectValue) {
 			Object o = ((ObjectValue<?>)item).getObject();
 			if (type.isInstance(o))
 				return (T)o;
