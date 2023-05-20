@@ -292,6 +292,8 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "foobar\n" +
+			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)\n" +
+			                 "Caused by: foobar\n" +
 			                 "	at JavaStep.run(JavaStep.java:57)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)");
 			Assert.assertFalse(log.hasNext());
