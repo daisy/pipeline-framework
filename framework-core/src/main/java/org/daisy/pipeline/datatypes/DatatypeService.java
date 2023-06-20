@@ -30,7 +30,7 @@ public interface DatatypeService {
 
 	public static final DatatypeService XS_STRING = new DatatypeService() {
 			public String getId() {
-				return "xs:string";
+				return "string";
 			}
 			public Document asDocument() throws Exception {
 				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse("<data type=\"string\"/>");
@@ -42,7 +42,7 @@ public interface DatatypeService {
 
 	public static final DatatypeService XS_INTEGER = new DatatypeService() {
 			public String getId() {
-				return "xs:integer";
+				return "integer";
 			}
 			public Document asDocument() throws Exception {
 				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse("<data type=\"integer\"/>");
@@ -59,7 +59,7 @@ public interface DatatypeService {
 
 	public static final DatatypeService XS_BOOLEAN = new DatatypeService() {
 			public String getId() {
-				return "xs:boolean";
+				return "boolean";
 			}
 			public Document asDocument() throws Exception {
 				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse("<data type=\"boolean\"/>");
@@ -73,7 +73,7 @@ public interface DatatypeService {
 
 	public static final DatatypeService XS_ANY_URI = new DatatypeService() {
 			public String getId() {
-				return "xs:anyURI";
+				return "anyURI";
 			}
 			public Document asDocument() throws Exception {
 				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse("<data type=\"anyURI\"/>");
