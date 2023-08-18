@@ -13,10 +13,13 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.function.Supplier;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 import com.google.common.collect.Iterators;
 
@@ -39,8 +42,8 @@ public abstract class Module {
 	private String name;
 	private String version;
 	private String title;
-	private final Map<URI,Component> components = new HashMap<>();
-	private final Map<String,Entity> entities = new HashMap<>();
+	protected final Map<URI,Supplier<Component>> components = new HashMap<>();
+	private final Map<String,Supplier<Entity>> entities = new HashMap<>();
 	private ResourceLoader loader;
 
 	private static final Logger mLogger = LoggerFactory.getLogger(Module.class);
@@ -170,6 +173,14 @@ public abstract class Module {
 	}
 
 	/**
+	 * Called by {@link ModuleRegistry} to resolve dependencies of components. If a dependency of a
+	 * component can not be resolved, this does not result in an exception, but the component will
+	 * not be created (and consequently will not be available through the {@link #getComponent()} or
+	 * {@link #getEntity} method).
+	 */
+	public abstract void resolveDependencies();
+
+	/**
 	 * Parse catalog.xml file
 	 */
 	public static void parseCatalog(Module module, XmlCatalogParser parser) {
@@ -233,7 +244,7 @@ public abstract class Module {
 	}
 
 	protected boolean addComponent(Component component) {
-		components.put(component.getURI(), component);
+		components.put(component.getURI(), () -> component);
 		return true;
 	}
 
@@ -243,7 +254,7 @@ public abstract class Module {
 	}
 
 	protected boolean addEntity(Entity entity) {
-		entities.put(entity.getPublicId(), entity);
+		entities.put(entity.getPublicId(), () -> entity);
 		return true;
 	}
 
@@ -283,31 +294,71 @@ public abstract class Module {
 	}
 
 	/**
-	 * Gets the components.
+	 * Whether this module provides a component with the given URI. This assumes that the component
+	 * can be resolved.
+	 *
+	 * If the component could not be resolved (e.g. due to a missing dependency), this will result
+	 * in a {@link ResolutionException} when the {@link #getComponent} method is called.
 	 */
-	public Iterable<Component> getComponents() {
-		return components.values();
+	public boolean hasComponent(URI uri) {
+		return components.containsKey(uri);
 	}
 
 	/**
-	 * Gets the component identified by the given uri.
+	 * Gets all the component URIs.
 	 */
-	public Component getComponent(URI uri) {
-		return components.get(uri);
+	public Set<URI> getComponents() {
+		return components.keySet();
 	}
 
 	/**
-	 * Gets the list of entities.
+	 * Gets the component identified by the given URI.
+	 *
+	 * @throws NoSuchElementException if this module provides a component with the given URI.
+	 * @throws ResolutionException if the component could not be resolved, e.g. due to a missing dependency.
 	 */
-	public Iterable<Entity> getEntities() {
-		return entities.values();
+	public Component getComponent(URI uri) throws NoSuchElementException, ResolutionException {
+		Supplier<Component> s = components.get(uri);
+		if (s == null)
+			throw new NoSuchElementException();
+		Component c = s.get();
+		if (c == null)
+			throw new ResolutionException();
+		return c;
 	}
 
 	/**
-	 * Gets the entity identified by the given public id.
+	 * Gets the list of entity IDs.
 	 */
-	public Entity getEntity(String publicId) {
-		return entities.get(publicId);
+	public Set<String> getEntities() {
+		return entities.keySet();
+	}
+
+	/**
+	 * Whether this module provides a entity with the given ID. This assumes that the entity can be
+	 * resolved.
+	 *
+	 * If the entity could not be resolved (e.g. due to a missing dependency), this will result in a
+	 * {@link ResolutionException} when the {@link #getEntity} method is called.
+	 */
+	public boolean hasEntity(String publicId) {
+		return entities.containsKey(publicId);
+	}
+
+	/**
+	 * Gets the entity identified by the given ID.
+	 *
+	 * @throws NoSuchElementException if this module provides an entity with the given ID.
+	 * @throws ResolutionException if the entity could not be resolved, e.g. due to a missing dependency.
+	 */
+	public Entity getEntity(String publicId) throws NoSuchElementException, ResolutionException {
+		Supplier<Entity> s = entities.get(publicId);
+		if (s == null)
+			throw new NoSuchElementException();
+		Entity e = s.get();
+		if (e == null)
+			throw new ResolutionException();
+		return e;
 	}
 
 	@Override

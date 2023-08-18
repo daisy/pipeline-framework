@@ -9,7 +9,6 @@ import java.util.Iterator;
 
 import javax.xml.stream.XMLInputFactory;
 
-import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ResourceLoader;
 import org.daisy.pipeline.xmlcatalog.impl.StaxXmlCatalogParser;
@@ -43,12 +42,15 @@ public class ModuleTest {
 				throw new UnsupportedOperationException("not implemented");
 			}
 		};
-		Module module = new Module("name", "version", "title", resourceLoader) {};
+		Module module = new Module("name", "version", "title", resourceLoader) {
+			@Override
+			public void resolveDependencies() {}
+		};
 		Module.parseCatalog(module, catalog);
-		Iterator<Component> components = module.getComponents().iterator();
+		Iterator<URI> components = module.getComponents().iterator();
 		assertTrue(components.hasNext());
-		Component c = components.next();
-		assertEquals("http://example-module/hello.xml", c.getURI().toString());
+		URI c = components.next();
+		assertEquals("http://example-module/hello.xml", c.toString());
 		assertFalse(components.hasNext());
 	}
 }
