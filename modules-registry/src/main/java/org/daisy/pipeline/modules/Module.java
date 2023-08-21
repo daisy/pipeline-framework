@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import javax.xml.stream.XMLInputFactory;
+
 import com.google.common.collect.Iterators;
 
 import org.daisy.common.file.URLs;
@@ -44,6 +46,7 @@ public abstract class Module {
 	private String title;
 	protected final Map<URI,Supplier<Component>> components = new HashMap<>();
 	private final Map<String,Supplier<Entity>> entities = new HashMap<>();
+	private final Map<String,XSLTPackage> xsltPackages = new HashMap<>();
 	private ResourceLoader loader;
 
 	private static final Logger mLogger = LoggerFactory.getLogger(Module.class);
@@ -258,6 +261,19 @@ public abstract class Module {
 		return true;
 	}
 
+	protected boolean addXSLTPackage(String path, XMLInputFactory parser) throws NoSuchFileException, IllegalArgumentException {
+		return addXSLTPackage(new XSLTPackage(this, path, parser));
+	}
+
+	protected boolean addXSLTPackage(String name, String version, String path) throws NoSuchFileException {
+		return addXSLTPackage(new XSLTPackage(this, name, version, path));
+	}
+
+	protected boolean addXSLTPackage(XSLTPackage pack) {
+		xsltPackages.put(pack.getName(), pack);
+		return true;
+	}
+
 	/**
 	 * Gets the name.
 	 */
@@ -359,6 +375,20 @@ public abstract class Module {
 		if (e == null)
 			throw new ResolutionException();
 		return e;
+	}
+
+	/**
+	 * Gets the list of XSLT packages.
+	 */
+	public Iterable<XSLTPackage> getXSLTPackages() {
+		return xsltPackages.values();
+	}
+
+	/**
+	 * Gets the XSLT package identified by the given name.
+	 */
+	public XSLTPackage getXSLTPackage(String name) {
+		return xsltPackages.get(name);
 	}
 
 	@Override
