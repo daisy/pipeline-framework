@@ -84,10 +84,10 @@ public class DynamicXProcConfigurationFactory implements XProcConfigurationFacto
 	 */
 	@Reference(
 		name = "XProcStepProvider",
-		unbind = "removeStep",
+		unbind = "-",
 		service = XProcStepProvider.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addStep(XProcStepProvider stepProvider, Map<?, ?> properties) {
 		QName type = QName.fromClarkName((String) properties.get("type"));
@@ -109,10 +109,10 @@ public class DynamicXProcConfigurationFactory implements XProcConfigurationFacto
 	 */
 	@Reference(
 		name = "ConfigurationFileProvider",
-		unbind = "removeConfigurationFile",
+		unbind = "-",
 		service = ConfigurationFileProvider.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addConfigurationFile(ConfigurationFileProvider provider) {
 		logger.debug("Adding " + provider);
