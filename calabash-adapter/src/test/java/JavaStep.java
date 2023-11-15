@@ -14,6 +14,7 @@ import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.common.transform.TransformerException;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -65,7 +66,7 @@ public class JavaStep extends Identity implements XProcStep {
 		property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}java-step" }
 	)
 	public static class Provider implements XProcStepProvider {
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor) {
 			return new JavaStep(runtime, step);
 		}
 	}

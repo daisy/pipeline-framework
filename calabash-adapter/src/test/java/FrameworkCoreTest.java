@@ -294,7 +294,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			                 "foobar\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)\n" +
 			                 "Caused by: foobar\n" +
-			                 "	at JavaStep.run(JavaStep.java:57)\n" +
+			                 "	at JavaStep.run(JavaStep.java:58)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)");
 			Assert.assertFalse(log.hasNext());
 		} finally {

@@ -19,6 +19,7 @@ import org.daisy.common.xproc.calabash.ConfigurationFileProvider;
 import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.calabash.XProcStepRegistry;
+import org.daisy.common.xproc.XProcMonitor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,11 +63,11 @@ public class DynamicXProcConfigurationFactory implements XProcConfigurationFacto
 	 * ()
 	 */
 	@Override
-	public XProcConfiguration newConfiguration() {
+	public XProcConfiguration newConfiguration(XProcMonitor monitor) {
 		System.setProperty("com.xmlcalabash.config.user", ""); // skip loading configuration from ~/.calabash
 		Processor processor = new Processor(false);
 		saxonConfigurator.configure(processor);
-		XProcConfiguration config = new DynamicXProcConfiguration(processor, this);
+		XProcConfiguration config = new DynamicXProcConfiguration(processor, this, monitor);
 		for (ConfigurationFileProvider f : configurationFiles) {
 			logger.debug("Reading {}", f);
 			loadConfigurationFile(config, f.get());
@@ -148,10 +149,9 @@ public class DynamicXProcConfigurationFactory implements XProcConfigurationFacto
 	 * com.xmlcalabash.runtime.XAtomicStep)
 	 */
 	@Override
-	public XProcStep newStep(QName type, XProcRuntime runtime, XAtomicStep step) {
+	public XProcStep newStep(QName type, XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor) {
 		XProcStepProvider stepProvider = stepProviders.get(type);
-		return (stepProvider != null) ? stepProvider.newStep(runtime, step)
-				: null;
+		return (stepProvider != null) ? stepProvider.newStep(runtime, step, monitor) : null;
 	}
 
 	private void loadConfigurationFile(XProcConfiguration conf, InputStream config) {
@@ -162,8 +162,7 @@ public class DynamicXProcConfigurationFactory implements XProcConfigurationFacto
 			doc = builder.build(source);
 		} catch (SaxonApiException e) {
 			logger.error("Error loading configuration file", e);
-			throw new RuntimeException("error loading configuration file",
-					e);
+			throw new RuntimeException("error loading configuration file", e);
 		}
 		conf.parse(doc);
 	}

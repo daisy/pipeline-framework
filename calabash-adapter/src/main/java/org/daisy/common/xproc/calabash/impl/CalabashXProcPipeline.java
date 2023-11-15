@@ -79,70 +79,35 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		org.daisy.common.properties.Properties.getProperty(
 			"org.daisy.pipeline.calabash.autonamesteps", "false"));
 
-	/**
-	 * The pipeline supplier returns a ready-to-go pipeline instance based on
-	 * the XProcPipeline object
-	 */
-	private final Supplier<PipelineInstance> pipelineSupplier = new Supplier<PipelineInstance>() {
-		/**
-		 * configures the clone of the pipeline instance setting all the objects
-		 * present in the XProcPipeline object
-		 */
-		@Override
-		public PipelineInstance get() {
-			XProcConfiguration config = configFactory.newConfiguration();
-			XProcRuntime runtime = new XProcRuntime(config);
-			runtime.setMessageListener(new slf4jXProcMessageListener());
-			if (uriResolver != null) {
-				runtime.setURIResolver(uriResolver);
-			}
-			if (entityResolver != null) {
-				runtime.setEntityResolver(entityResolver);
-			}
-
-			XProcMessageListenerAggregator listeners = new XProcMessageListenerAggregator();
-			listeners.add(new slf4jXProcMessageListener());
-			// TODO: get rid of asAccessor as from now on it will be available
-			// from the job monitor
-			// listeners.addAsAccessor(new MessageListenerWrapper(
-			// messageListenerFactory.createMessageListener()));
-			runtime.setMessageListener(listeners);
-			XPipeline xpipeline = null;
-
-			try {
-				xpipeline = runtime.load(new com.xmlcalabash.util.Input(uri.toString()));
-                                
-			} catch (SaxonApiException e) {
-				throw new RuntimeException(e.getMessage(), e);
-			}
-			return new PipelineInstance(xpipeline, config,runtime);
-		}
-	};
-
 	/** Suplies the current Pipeline info for this pipeline object */
-	private final Supplier<XProcPipelineInfo> info = Suppliers
-			.memoize(new Supplier<XProcPipelineInfo>() {
-
+	private final Supplier<XProcPipelineInfo> info = Suppliers.memoize(
+		new Supplier<XProcPipelineInfo>() {
 				@Override
 				public XProcPipelineInfo get() {
 					XProcPipelineInfo.Builder builder = new XProcPipelineInfo.Builder();
 					builder.withURI(uri);
-                                        PipelineInstance instance=pipelineSupplier.get();
-					DeclareStep declaration = instance.xpipe.getDeclareStep();
+					PipelineInstance pipeline = PipelineInstance.newInstance(uri,
+					                                                         configFactory.newConfiguration(null),
+					                                                         uriResolver,
+					                                                         entityResolver);
+					DeclareStep declaration = pipeline.xpipe.getDeclareStep();
 					// input and parameter ports
 					for (Input input : declaration.inputs()) {
 						if (!input.getParameterInput()) {
-							builder.withPort(XProcPortInfo.newInputPort(
+							builder.withPort(
+								XProcPortInfo.newInputPort(
 									input.getPort(), input.getSequence(),
 									input.getBinding().isEmpty(), input.getPrimary()));
 						} else {
-							builder.withPort(XProcPortInfo.newParameterPort(
+							builder.withPort(
+								XProcPortInfo.newParameterPort(
 									input.getPort(), input.getPrimary()));
 						}
 					}
 					// output ports
 					for (Output output : declaration.outputs()) {
-						builder.withPort(XProcPortInfo.newOutputPort(
+						builder.withPort(
+							XProcPortInfo.newOutputPort(
 								output.getPort(), output.getSequence(),
 								output.getPrimary()));
 					}
@@ -152,13 +117,11 @@ public class CalabashXProcPipeline implements XProcPipeline {
 						if (sequenceType == null) sequenceType = SequenceType.XS_STRING;
 						builder.withOption(new CalabashXProcOptionInfo(option, sequenceType));
 					}
-                                        instance.runtime.close();
-
+					pipeline.runtime.close();
 					return builder.build();
 				}
-			});
-
-
+		}
+	);
 
 	/**
 	 * Instantiates a new calabash x proc pipeline.
@@ -196,7 +159,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 
 	@Override
 	public XProcResult run(XProcInput data) throws XProcErrorException {
-		return run(data, null,null);
+		return run(data, null, null);
 	}
 
 	/*
@@ -208,122 +171,118 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	 */
 	@Override
 	public XProcResult run(XProcInput data, XProcMonitor monitor, Properties props) throws XProcErrorException {
-		if (monitor != null) {
-			MessageListenerImpl messageListener = new MessageListenerImpl(monitor.getMessageAppender(), AUTO_NAME_STEPS);
-			try {
-				return run(data, messageListener);
-			} finally {
-				messageListener.clean();
-			}
-		} else {
-			return run(data, null);
-		}
-	}
-
-	private XProcResult run(XProcInput data, XProcMessageListener messageListener) throws XProcErrorException {
-		PipelineInstance pipeline = pipelineSupplier.get();
-		if (messageListener != null)
-			((XProcMessageListenerAggregator)pipeline.xpipe.getStep().getXProc().getMessageListener())
-				.add(messageListener);
-		// bind inputs
-		for (String name : pipeline.xpipe.getInputs()) {
-			boolean cleared = false;
-			for (Supplier<Source> sourceProvider : data.getInputs(name)) {
-				Source source = sourceProvider.get();
-				// TODO hack to set the entity resolver
-				if (source instanceof SAXSource) {
-					XMLReader reader = ((SAXSource) source).getXMLReader();
-					if (reader == null) {
-						try {
-							reader = XMLReaderFactory.createXMLReader();
-							((SAXSource) source).setXMLReader(reader);
-							reader.setEntityResolver(entityResolver);
-						} catch (SAXException se) {
-							// nop?
-						}
-					}
-				}
-				// remove possible default connection
-				if (!cleared) pipeline.xpipe.clearInputs(name);
-				pipeline.xpipe.writeTo(name,
-						asXdmNode(pipeline.config.getProcessor(), source));
-			}
-		}
-		// bind options
-		for (QName optname : data.getOptions().keySet()) {
-			XProcOptionInfo optionInfo = info.get().getOption(optname);
-			if (optionInfo != null) {
-				RuntimeValue value; {
-					if (pipeline.runtime.getAllowGeneralExpressions()) {
-						XdmValue xdmValue = ((CalabashXProcOptionInfo)optionInfo).sequenceType.cast(
-							SaxonHelper.xdmValueFromObject(data.getOptions().get(optname)),
-							// note that we're passing null as the "namespaceResolver" argument which could
-							// lead to a NullPointerException if we're trying to cast a xs:string to a xs:QName
-							null);
-						// because value might be accessed as string or untyped atomic, e.g. by p:in-scope-names
-						String stringValue = StreamSupport.stream(xdmValue.spliterator(), false)
-						                                  .map(item -> {
-						                                          try {
-						                                              return item.getStringValue(); }
-						                                          catch (UnsupportedOperationException e) {
-						                                              // don't know how to create string value from this item
-						                                              return ""; }})
-						                                  .collect(Collectors.joining(""));
-						value = new RuntimeValue(stringValue, xdmValue, null, null);
-					} else {
-						Object val = data.getOptions().get(optname);
-						try {
-							value = new RuntimeValue((String)val);
-						} catch (ClassCastException e) {
-							throw new RuntimeException("Expected string value for option " + optname + " but got: " + val.getClass());
-						}
-					}
-				}
-				pipeline.xpipe.passOption(new net.sf.saxon.s9api.QName(optname), value);
-			} // else ignore the option
-		}
-
-		// bind parameters
-		for (String port : info.get().getParameterPorts()) {
-			for (QName name : data.getParameters(port).keySet()) {
-				RuntimeValue value = new RuntimeValue(data.getParameters(port)
-						.get(name), null, null);
-				pipeline.xpipe.setParameter(port, new net.sf.saxon.s9api.QName(
-						name), value);
-			}
-		}
-
-		// run
+		MessageListenerImpl messageListener = monitor != null
+			? new MessageListenerImpl(monitor.getMessageAppender(), AUTO_NAME_STEPS)
+			: null;
 		try {
-			pipeline.xpipe.run();
-			// make sure all lazy code is executed by accessing all output ports
-			for (String port : pipeline.xpipe.getOutputs()) {
-				pipeline.xpipe.readFrom(port).moreDocuments();
+			PipelineInstance pipeline = PipelineInstance.newInstance(uri,
+			                                                         configFactory.newConfiguration(monitor),
+			                                                         uriResolver,
+			                                                         entityResolver);
+			if (messageListener != null)
+				((XProcMessageListenerAggregator)pipeline.xpipe.getStep().getXProc().getMessageListener())
+					.add(messageListener);
+			// bind inputs
+			for (String name : pipeline.xpipe.getInputs()) {
+				boolean cleared = false;
+				for (Supplier<Source> sourceProvider : data.getInputs(name)) {
+					Source source = sourceProvider.get();
+					// TODO hack to set the entity resolver
+					if (source instanceof SAXSource) {
+						XMLReader reader = ((SAXSource) source).getXMLReader();
+						if (reader == null) {
+							try {
+								reader = XMLReaderFactory.createXMLReader();
+								((SAXSource) source).setXMLReader(reader);
+								reader.setEntityResolver(entityResolver);
+							} catch (SAXException se) {
+								// nop?
+							}
+						}
+					}
+					// remove possible default connection
+					if (!cleared) pipeline.xpipe.clearInputs(name);
+					pipeline.xpipe.writeTo(name,
+							asXdmNode(pipeline.config.getProcessor(), source));
+				}
 			}
-		} catch (XProcException e) {
+			// bind options
+			for (QName optname : data.getOptions().keySet()) {
+				XProcOptionInfo optionInfo = info.get().getOption(optname);
+				if (optionInfo != null) {
+					RuntimeValue value; {
+						if (pipeline.runtime.getAllowGeneralExpressions()) {
+							XdmValue xdmValue = ((CalabashXProcOptionInfo)optionInfo).sequenceType.cast(
+								SaxonHelper.xdmValueFromObject(data.getOptions().get(optname)),
+								// note that we're passing null as the "namespaceResolver" argument which could
+								// lead to a NullPointerException if we're trying to cast a xs:string to a xs:QName
+								null);
+							// because value might be accessed as string or untyped atomic, e.g. by p:in-scope-names
+							String stringValue = StreamSupport.stream(xdmValue.spliterator(), false)
+							                                  .map(item -> {
+							                                          try {
+							                                              return item.getStringValue(); }
+							                                          catch (UnsupportedOperationException e) {
+							                                              // don't know how to create string value from this item
+							                                              return ""; }})
+							                                  .collect(Collectors.joining(""));
+							value = new RuntimeValue(stringValue, xdmValue, null, null);
+						} else {
+							Object val = data.getOptions().get(optname);
+							try {
+								value = new RuntimeValue((String)val);
+							} catch (ClassCastException e) {
+								throw new RuntimeException("Expected string value for option " + optname + " but got: " + val.getClass());
+							}
+						}
+					}
+					pipeline.xpipe.passOption(new net.sf.saxon.s9api.QName(optname), value);
+				} // else ignore the option
+			}
 
-			// if multiple errors have been reported, log all except the last one (the last one
-			// should normally contain the same info as the caught XProcException)
-			List<XdmNode> errors = pipeline.xpipe.errors();
-			for (int i = 0; i < errors.size() - 1; i++)
-				try {
-					XProcError err = XProcError.parse(
-						new SaxonInputValue(errors.get(i).getUnderlyingNode()).asXMLStreamReader());
-					logger.error(err.toString()); }
-				catch (Throwable e1) {}
+			// bind parameters
+			for (String port : info.get().getParameterPorts()) {
+				for (QName name : data.getParameters(port).keySet()) {
+					RuntimeValue value = new RuntimeValue(data.getParameters(port)
+							.get(name), null, null);
+					pipeline.xpipe.setParameter(port, new net.sf.saxon.s9api.QName(
+							name), value);
+				}
+			}
 
-			XProcError err = CalabashXProcError.from(e);
-			throw new XProcErrorException(err, e);
-		} catch (Exception e) {
-                        throw new RuntimeException(e);
+			// run
+			try {
+				pipeline.xpipe.run();
+				// make sure all lazy code is executed by accessing all output ports
+				for (String port : pipeline.xpipe.getOutputs()) {
+					pipeline.xpipe.readFrom(port).moreDocuments();
+				}
+			} catch (XProcException e) {
 
-		} catch (OutOfMemoryError e) {//this one needs it's own catch!
-                        throw new RuntimeException(e);
-		}finally{
-                        pipeline.runtime.close();
-                }
-		return CalabashXProcResult.newInstance( pipeline.xpipe ,
-				pipeline.config);
+				// if multiple errors have been reported, log all except the last one (the last one
+				// should normally contain the same info as the caught XProcException)
+				List<XdmNode> errors = pipeline.xpipe.errors();
+				for (int i = 0; i < errors.size() - 1; i++)
+					try {
+						XProcError err = XProcError.parse(
+							new SaxonInputValue(errors.get(i).getUnderlyingNode()).asXMLStreamReader());
+						logger.error(err.toString()); }
+					catch (Throwable e1) {}
+			
+				XProcError err = CalabashXProcError.from(e);
+				throw new XProcErrorException(err, e);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			} catch (OutOfMemoryError e) {//this one needs it's own catch!
+				throw new RuntimeException(e);
+			} finally {
+				pipeline.runtime.close();
+			}
+			return CalabashXProcResult.newInstance(pipeline.xpipe, pipeline.config);
+		} finally {
+			if (messageListener != null)
+				messageListener.clean();
+		}
 	}
 
 	/**
@@ -363,34 +322,43 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	}
 
 	/**
-	 * The Class PipelineInstance is just a holder for various objects to
-	 * connect with the suppliers .
+	 * Holder for various objects to connect with the suppliers.
 	 */
 	private static final class PipelineInstance {
 
-		/** The xpipe. */
 		private final XPipeline xpipe;
-
-		/** The config. */
 		private final XProcConfiguration config;
-
-		/** The config. */
 		private final XProcRuntime runtime;
 
-		/**
-		 * Instantiates a new pipeline instance.
-		 *
-		 * @param xpipe
-		 *            the xpipe
-		 * @param config
-		 *            the config
-		 */
-		private PipelineInstance(XPipeline xpipe, XProcConfiguration config,XProcRuntime runtime) {
+		private PipelineInstance(XPipeline xpipe, XProcConfiguration config, XProcRuntime runtime) {
 			this.xpipe = xpipe;
 			this.config = config;
-			this.runtime= runtime;
+			this.runtime = runtime;
+		}
 
+		private static PipelineInstance newInstance(URI uri,
+		                                            XProcConfiguration config,
+		                                            URIResolver uriResolver,
+		                                            EntityResolver entityResolver) {
+			XProcRuntime runtime = new XProcRuntime(config);
+			runtime.setMessageListener(new slf4jXProcMessageListener());
+			if (uriResolver != null) {
+				runtime.setURIResolver(uriResolver);
+			}
+			if (entityResolver != null) {
+				runtime.setEntityResolver(entityResolver);
+			}
+			XProcMessageListenerAggregator listeners = new XProcMessageListenerAggregator();
+			listeners.add(new slf4jXProcMessageListener());
+			runtime.setMessageListener(listeners);
+			XPipeline xpipe = null; {
+				try {
+					xpipe = runtime.load(new com.xmlcalabash.util.Input(uri.toString()));
+				} catch (SaxonApiException e) {
+					throw new RuntimeException(e.getMessage(), e);
+				}
+			}
+			return new PipelineInstance(xpipe, config, runtime);
 		}
 	}
-
 }
