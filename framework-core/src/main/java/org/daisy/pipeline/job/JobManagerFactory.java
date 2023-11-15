@@ -1,5 +1,7 @@
 package org.daisy.pipeline.job;
 
+import org.daisy.common.properties.Properties;
+import org.daisy.common.properties.Properties.Property;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.impl.DefaultJobBuilder;
@@ -15,6 +17,9 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component(
     name = "job-manager-factory",
     service = {
@@ -23,6 +28,10 @@ import org.osgi.service.component.annotations.ReferencePolicy;
     }
 )
 public class JobManagerFactory implements JobFactory {
+
+        private static final Logger logger = LoggerFactory.getLogger(JobManagerFactory.class);
+
+        private final static Property procsProperty = Properties.getProperty("org.daisy.pipeline.procs", false, "2");
 
         @Override
         public JobFactory.JobBuilder newJob(BoundScript boundScript) {
@@ -88,7 +97,15 @@ public class JobManagerFactory implements JobFactory {
                 if (storage == null)
                         storage = new VolatileJobStorage();
                 monitorFactory = new JobMonitorFactory(storage);
-                this.executionService = new DefaultJobExecutionService();
+                int procs = 2; {
+                        String prop = procsProperty.getValue();
+                        try {
+                                procs = Integer.parseInt(prop);
+                        } catch (NumberFormatException e) {
+                                logger.info(String.format("Failed to parse property '%s': %s", procsProperty.getName(), prop));
+                        }
+                }
+                this.executionService = new DefaultJobExecutionService(procs);
         }
 
         @Reference(
