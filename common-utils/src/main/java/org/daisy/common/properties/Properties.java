@@ -20,7 +20,7 @@ public final class Properties {
 
 	// System.getProperties() returns an object that can change afterwards, so make a copy to get
 	// the initial system properties
-	private final static Map<String,String> systemProperties = new HashMap<>((Map<String,String>)(Map)System.getProperties());
+	private final static Map<String,String> systemProperties = new HashMap<>(propertiesAsMap(System.getProperties()));
 	private final static Map<String,String> systemEnv = System.getenv();
 	private final static String PROPERTIES_FILE_PROPERTY = "org.daisy.pipeline.properties";
 	private final static String propertiesFile = systemProperties.get(PROPERTIES_FILE_PROPERTY);
@@ -54,6 +54,21 @@ public final class Properties {
 				String p = "org.daisy.pipeline." + envKey.substring(10).replace('_','.').toLowerCase();
 				keys.add(p); }
 		return keys;
+	}
+
+	/**
+	 * Returns the momentary set of properties as a {@link Map} object.
+	 */
+	public static Map<String,String> getSnapshot() {
+		synchronized (settableProperties) {
+			java.util.Properties snapshot = new java.util.Properties();
+			for (String prop : propertyNames()) {
+				String val = getProperty(prop);
+				if (val != null) // could be null for a settable property that has not been set
+					snapshot.setProperty(prop, val);
+			}
+			return propertiesAsMap(snapshot);
+		}
 	}
 
 	/**
@@ -188,7 +203,7 @@ public final class Properties {
 
 	public static class Property {
 
-		private final String key;
+		protected final String key;
 		private final String value;
 
 		private Property(String key, String value) {
@@ -210,6 +225,10 @@ public final class Properties {
 		 */
 		public String getValue() {
 			return value;
+		}
+
+		public String getValue(Map<String,String> snapshot) {
+			return getValue();
 		}
 	}
 
@@ -240,6 +259,20 @@ public final class Properties {
 		@Override
 		public synchronized String getValue() {
 			return value != null ? value : defaultValue;
+		}
+
+		/**
+		 * Get the value that was in effect at the moment the snapshot was made, or the default
+		 * value if the value was {@code null}.
+		 */
+		@Override
+		public String getValue(Map<String,String> snapshot) {
+			if (snapshot == null)
+				throw new IllegalArgumentException();
+			String v = snapshot.get(key);
+			if (v != null)
+				return v; // already expanded
+			return defaultValue;
 		}
 	}
 
