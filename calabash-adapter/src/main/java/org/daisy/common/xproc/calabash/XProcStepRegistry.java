@@ -1,5 +1,7 @@
 package org.daisy.common.xproc.calabash;
 
+import java.util.Map;
+
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.runtime.XAtomicStep;
@@ -24,5 +26,5 @@ public interface XProcStepRegistry {
 	/**
 	 * returns the step implementation for the atomic step using the the step provider type given by the first argument.
 	 */
-	XProcStep newStep(QName type, XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor);
+	XProcStep newStep(QName type, XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties);
 }

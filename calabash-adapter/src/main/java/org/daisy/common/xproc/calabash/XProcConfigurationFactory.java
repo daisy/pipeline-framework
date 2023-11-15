@@ -1,5 +1,7 @@
 package org.daisy.common.xproc.calabash;
 
+import java.util.Map;
+
 import com.xmlcalabash.core.XProcConfiguration;
 
 import org.daisy.common.xproc.XProcMonitor;
@@ -12,6 +14,6 @@ public interface XProcConfigurationFactory {
 	/**
 	 * Gets a new configuration object
 	 */
-	XProcConfiguration newConfiguration(XProcMonitor monitor);
+	XProcConfiguration newConfiguration(XProcMonitor monitor, Map<String,String> properties);
 
 }

@@ -1,3 +1,5 @@
+import java.util.Map;
+
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.library.Identity;
@@ -43,7 +45,7 @@ public class SleepStep extends Identity implements XProcStep {
 		property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}sleep" }
 	)
 	public static class Provider implements XProcStepProvider {
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 			return new SleepStep(runtime, step);
 		}
 	}

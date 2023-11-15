@@ -2,7 +2,7 @@ package org.daisy.common.xproc.calabash.impl;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -11,6 +11,21 @@ import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
+
+import com.xmlcalabash.core.XProcConfiguration;
+import com.xmlcalabash.core.XProcException;
+import com.xmlcalabash.core.XProcMessageListener;
+import com.xmlcalabash.core.XProcRuntime;
+import com.xmlcalabash.model.DeclareStep;
+import com.xmlcalabash.model.Input;
+import com.xmlcalabash.model.Option;
+import com.xmlcalabash.model.Output;
+import com.xmlcalabash.model.RuntimeValue;
+import com.xmlcalabash.model.SequenceType;
+import com.xmlcalabash.runtime.XPipeline;
+
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -18,6 +33,7 @@ import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmValue;
 
+import org.daisy.common.properties.Properties;
 import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.xproc.XProcError;
@@ -36,21 +52,6 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
-
-import com.xmlcalabash.core.XProcConfiguration;
-import com.xmlcalabash.core.XProcException;
-import com.xmlcalabash.core.XProcMessageListener;
-import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.model.DeclareStep;
-import com.xmlcalabash.model.Input;
-import com.xmlcalabash.model.Option;
-import com.xmlcalabash.model.Output;
-import com.xmlcalabash.model.RuntimeValue;
-import com.xmlcalabash.model.SequenceType;
-import com.xmlcalabash.runtime.XPipeline;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,8 +77,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	private final EntityResolver entityResolver;
 
 	private final boolean AUTO_NAME_STEPS = Boolean.parseBoolean(
-		org.daisy.common.properties.Properties.getProperty(
-			"org.daisy.pipeline.calabash.autonamesteps", "false"));
+		Properties.getProperty("org.daisy.pipeline.calabash.autonamesteps", "false"));
 
 	/** Suplies the current Pipeline info for this pipeline object */
 	private final Supplier<XProcPipelineInfo> info = Suppliers.memoize(
@@ -87,7 +87,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 					XProcPipelineInfo.Builder builder = new XProcPipelineInfo.Builder();
 					builder.withURI(uri);
 					PipelineInstance pipeline = PipelineInstance.newInstance(uri,
-					                                                         configFactory.newConfiguration(null),
+					                                                         configFactory.newConfiguration(null, null),
 					                                                         uriResolver,
 					                                                         entityResolver);
 					DeclareStep declaration = pipeline.xpipe.getDeclareStep();
@@ -170,13 +170,13 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	 * )
 	 */
 	@Override
-	public XProcResult run(XProcInput data, XProcMonitor monitor, Properties props) throws XProcErrorException {
+	public XProcResult run(XProcInput data, XProcMonitor monitor, Map<String,String> properties) throws XProcErrorException {
 		MessageListenerImpl messageListener = monitor != null
 			? new MessageListenerImpl(monitor.getMessageAppender(), AUTO_NAME_STEPS)
 			: null;
 		try {
 			PipelineInstance pipeline = PipelineInstance.newInstance(uri,
-			                                                         configFactory.newConfiguration(monitor),
+			                                                         configFactory.newConfiguration(monitor, properties),
 			                                                         uriResolver,
 			                                                         entityResolver);
 			if (messageListener != null)

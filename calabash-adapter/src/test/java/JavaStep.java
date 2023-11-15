@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+import java.util.Map;
 
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -66,7 +67,7 @@ public class JavaStep extends Identity implements XProcStep {
 		property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}java-step" }
 	)
 	public static class Provider implements XProcStepProvider {
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 			return new JavaStep(runtime, step);
 		}
 	}
