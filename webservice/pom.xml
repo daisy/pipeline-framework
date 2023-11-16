@@ -121,11 +121,6 @@
       <artifactId>clientlib-java-jaxb</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>webservice-jaxb</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
