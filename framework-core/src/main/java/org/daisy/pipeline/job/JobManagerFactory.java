@@ -31,8 +31,14 @@ public class JobManagerFactory implements JobFactory {
 
         private static final Logger logger = LoggerFactory.getLogger(JobManagerFactory.class);
 
-        private final static Property procsProperty = Properties.getProperty("org.daisy.pipeline.procs", false, "2");
-        private final static Property logLevelProperty = Properties.getProperty("org.daisy.pipeline.log.level", true, "INFO");
+        private final static Property procsProperty = Properties.getProperty("org.daisy.pipeline.procs",
+                                                                             false,
+                                                                             "Maximum allowed number of jobs running simultaneously",
+                                                                             "2");
+        private final static Property logLevelProperty = Properties.getProperty("org.daisy.pipeline.log.level",
+                                                                                true,
+                                                                                "Disable job messages below this level",
+                                                                                "INFO");
 
         @Override
         public JobFactory.JobBuilder newJob(BoundScript boundScript) {

@@ -2,7 +2,7 @@ package org.daisy.pipeline.webservice.xml;
 
 import java.util.List;
 
-import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.SettableProperty;
 import org.daisy.pipeline.webservice.Routes;
 
 import org.slf4j.Logger;
@@ -16,9 +16,9 @@ public class PropertiesXmlWriter {
 	private static Logger logger = LoggerFactory.getLogger(PropertiesXmlWriter.class.getName());
 
 	private final String baseUrl;
-	private final List<? extends Property> properties;
+	private final List<SettableProperty> properties;
 
-	public PropertiesXmlWriter(List<? extends Property> properties, String baseUrl) {
+	public PropertiesXmlWriter(List<SettableProperty> properties, String baseUrl) {
 		this.properties = properties;
 		this.baseUrl = baseUrl;
 	}
@@ -27,7 +27,7 @@ public class PropertiesXmlWriter {
 		Document doc = XmlUtils.createDom("properties");
 		Element propsElm = doc.getDocumentElement();
 		propsElm.setAttribute("href", baseUrl + Routes.PROPERTIES_ROUTE);
-		for (Property p : properties) {
+		for (SettableProperty p : properties) {
 			PropertyXmlWriter writer = new PropertyXmlWriter(p, baseUrl);
 			writer.addAsElementChild(propsElm);
 		}

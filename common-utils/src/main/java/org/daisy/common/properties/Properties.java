@@ -140,18 +140,18 @@ public final class Properties {
 	 * @param settable Allow a property to be modified and get a {@link SettableProperty} object for
 	 *                 reading future values.
 	 */
-	public static Property getProperty(String key, boolean settable) {
-		return getProperty(key, settable, null);
+	public static Property getProperty(String key, boolean settable, String description) {
+		return getProperty(key, settable, description, null);
 	}
 
-	public static Property getProperty(String key, boolean settable, String defaultValue) {
+	public static Property getProperty(String key, boolean settable, String description, String defaultValue) {
 		if (settable)
 			synchronized (settableProperties) {
 				if (settableProperties.containsKey(key)) {
 					// defaultValue ignored (only the defaultValue that was defined first is remembered)
 					return settableProperties.get(key);
 				}
-				SettableProperty prop = new SettableProperty(key, defaultValue, getProperty(key));
+				SettableProperty prop = new SettableProperty(key, description, defaultValue, getProperty(key));
 				settableProperties.put(key, prop);
 				return prop;
 			}
@@ -234,11 +234,13 @@ public final class Properties {
 
 	public static class SettableProperty extends Property {
 
+		private final String description;
 		private final String defaultValue;
 		private String value;
 
-		private SettableProperty(String key, String defaultValue, String value) {
+		private SettableProperty(String key, String description, String defaultValue, String value) {
 			super(key, defaultValue);
+			this.description = description;
 			this.value = value;
 			this.defaultValue = defaultValue;
 		}
@@ -273,6 +275,10 @@ public final class Properties {
 			if (v != null)
 				return v; // already expanded
 			return defaultValue;
+		}
+
+		public String getDescription() {
+			return description;
 		}
 	}
 

@@ -5,4 +5,5 @@ property = element property {
     attribute href { xsd:anyURI }?
     & attribute name { text }
     & attribute value { text }?
+    & attribute desc { text }?
 }

@@ -1,6 +1,6 @@
 package org.daisy.pipeline.webservice.xml;
 
-import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.SettableProperty;
 import org.daisy.pipeline.webservice.Routes;
 
 import org.slf4j.Logger;
@@ -14,9 +14,9 @@ public class PropertyXmlWriter {
 	private static Logger logger = LoggerFactory.getLogger(PropertyXmlWriter.class);
 
 	private final String baseUrl;
-	private final Property property;
+	private final SettableProperty property;
 
-	public PropertyXmlWriter(Property property, String baseUrl) {
+	public PropertyXmlWriter(SettableProperty property, String baseUrl) {
 		this.property = property;
 		this.baseUrl = baseUrl;
 	}
@@ -45,5 +45,8 @@ public class PropertyXmlWriter {
 		String val = property.getValue();
 		if (val != null)
 			element.setAttribute("value", val);
+		String description = property.getDescription();
+		if (description != null)
+			element.setAttribute("desc", description);
 	}
 }
