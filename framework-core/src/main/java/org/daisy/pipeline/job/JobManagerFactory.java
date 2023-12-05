@@ -34,10 +34,12 @@ public class JobManagerFactory implements JobFactory {
         private final static Property procsProperty = Properties.getProperty("org.daisy.pipeline.procs",
                                                                              false,
                                                                              "Maximum allowed number of jobs running simultaneously",
+                                                                             false,
                                                                              "2");
         private final static Property logLevelProperty = Properties.getProperty("org.daisy.pipeline.log.level",
                                                                                 true,
                                                                                 "Disable job messages below this level",
+                                                                                false,
                                                                                 "INFO");
 
         @Override

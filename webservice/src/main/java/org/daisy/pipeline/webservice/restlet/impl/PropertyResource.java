@@ -11,6 +11,7 @@ import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.SettableProperty;
 import org.daisy.pipeline.webservice.restlet.AdminResource;
 import org.daisy.pipeline.webservice.xml.PropertyXmlWriter;
+import org.daisy.pipeline.webservice.xml.XmlUtils;
 import org.daisy.pipeline.webservice.xml.XmlValidator;
 
 import org.restlet.data.MediaType;
@@ -64,10 +65,13 @@ public class PropertyResource extends AdminResource {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return this.getErrorRepresentation("Property not found");
 		}
-		PropertyXmlWriter writer = new PropertyXmlWriter(property.get(), getRequest().getRootRef().toString());
+		PropertyXmlWriter writer = new PropertyXmlWriter(property.get(), getRequest().getRootRef().toString(), false);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
 		setStatus(Status.SUCCESS_OK);
-		logResponse(dom);
+		if (logger.isDebugEnabled())
+			logger.debug(
+				XmlUtils.nodeToString(
+					new PropertyXmlWriter(property.get(), getRequest().getRootRef().toString(), true).getXmlDocument()));
 		return dom;
 	}
 
@@ -107,10 +111,13 @@ public class PropertyResource extends AdminResource {
 			return this.getErrorRepresentation("Invalid property XML provided: 'property' element missing 'value' attribute");
 		}
 		property.get().setValue(val.getValue());
-		PropertyXmlWriter writer = new PropertyXmlWriter(property.get(), getRequest().getRootRef().toString());
+		PropertyXmlWriter writer = new PropertyXmlWriter(property.get(), getRequest().getRootRef().toString(), false);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
 		setStatus(Status.SUCCESS_OK);
-		logResponse(dom);
+		if (logger.isDebugEnabled())
+			logger.debug(
+				XmlUtils.nodeToString(
+					new PropertyXmlWriter(property.get(), getRequest().getRootRef().toString(), true).getXmlDocument()));
 		return dom;
 	}
 }
