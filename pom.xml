@@ -27,7 +27,6 @@
   <modules>
     <module>bom</module>
     <module>parent</module>
-    <module>utils/webservice-jaxb</module>
     <module>utils/clientlib-java-jaxb</module>
     <module>utils/xproc-engine-daisy-pipeline</module>
     <module>utils/xproc-engine-daisy-pipeline-logging</module>
