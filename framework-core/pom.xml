@@ -8,7 +8,7 @@
     <relativePath>../parent</relativePath>
   </parent>
   <artifactId>framework-core</artifactId>
-  <version>7.1.1-SNAPSHOT</version>
+  <version>7.2.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Framework Core</name>
   <dependencies>
