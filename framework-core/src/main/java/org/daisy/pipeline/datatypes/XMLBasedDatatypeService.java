@@ -58,7 +58,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-public abstract class XMLBasedDatatypeService implements DatatypeService {
+public abstract class XMLBasedDatatypeService extends DatatypeService {
 
 	private static final Logger logger = LoggerFactory.getLogger(XMLBasedDatatypeService.class);
 
@@ -72,6 +72,14 @@ public abstract class XMLBasedDatatypeService implements DatatypeService {
 	private List<String> enumerationValues = null;
 	private Pattern pattern = null;
 	private Document document = null;
+
+	public XMLBasedDatatypeService() {
+		super();
+	}
+
+	public XMLBasedDatatypeService(String id) {
+		super(id);
+	}
 
 	protected abstract Node readDocument() throws Exception;
 

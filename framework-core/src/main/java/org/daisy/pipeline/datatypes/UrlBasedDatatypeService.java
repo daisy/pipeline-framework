@@ -17,8 +17,11 @@ public class UrlBasedDatatypeService extends XMLBasedDatatypeService {
         public static final String DATATYPE_URL= "data-type.url";
         public static final String DATATYPE_ID = "data-type.id";
 
-        private String id;
         private URL url;
+
+        public UrlBasedDatatypeService() {
+                super();
+        }
 
         public void activate(Map<?, ?> properties, Class<?> context) {
                 if (properties.get(DATATYPE_ID) == null
@@ -35,12 +38,9 @@ public class UrlBasedDatatypeService extends XMLBasedDatatypeService {
                 url = URLs.getResourceFromJAR(path, context);
                 if (url == null)
                         throw new IllegalArgumentException("Resource at location " + path + " could not be found");
-                id = properties.get(DATATYPE_ID).toString();
+                String id = properties.get(DATATYPE_ID).toString();
+                this.id = () -> id;
                 logger.debug("Activating" + this.toString());
-        }
-
-        public String getId() {
-                return this.id;
         }
 
         @Override
@@ -50,6 +50,6 @@ public class UrlBasedDatatypeService extends XMLBasedDatatypeService {
 
         @Override
         public String toString() {
-                return String.format("[DatatypeService #id=%s #url=%s ]",this.id,this.url.toString());
+                return String.format("[DatatypeService #id=%s #url=%s ]", getId(), url.toString());
         }
 }
