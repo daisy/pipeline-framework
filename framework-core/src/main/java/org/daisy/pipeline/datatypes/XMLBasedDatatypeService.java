@@ -36,6 +36,7 @@ import com.thaiopensource.validate.ValidationDriver;
 import com.thaiopensource.validate.rng.CompactSchemaReader;
 
 import net.sf.saxon.dom.DocumentOverNodeInfo;
+import net.sf.saxon.dom.NodeOverNodeInfo;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.XdmDestination;
@@ -72,7 +73,7 @@ public abstract class XMLBasedDatatypeService implements DatatypeService {
 	private Pattern pattern = null;
 	private Document document = null;
 
-	protected abstract Document readDocument() throws Exception;
+	protected abstract Node readDocument() throws Exception;
 
 	public static Document readDocument(URL url) throws ParserConfigurationException, SAXException, IOException {
 		return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(url.openStream());
@@ -87,12 +88,12 @@ public abstract class XMLBasedDatatypeService implements DatatypeService {
 	@Override
 	public Document asDocument() throws Exception {
 		if (document == null) {
-			document = readDocument();
+			Node doc = readDocument();
 
 			// normalize space inside documentation elements
 			StreamSource xslt = new StreamSource(XMLBasedDatatypeService.class.getResourceAsStream(TYPE_DECL_XSLT_PATH));
-			if (document instanceof DocumentOverNodeInfo) {
-				NodeInfo node = ((DocumentOverNodeInfo)document).getUnderlyingNodeInfo();
+			if (doc instanceof NodeOverNodeInfo) {
+				NodeInfo node = ((NodeOverNodeInfo)doc).getUnderlyingNodeInfo();
 				Processor proc = (Processor)node.getConfiguration().getProcessor();
 				XsltTransformer transformer = proc.newXsltCompiler().compile(xslt).load();
 				XdmDestination result = new XdmDestination();
@@ -102,7 +103,7 @@ public abstract class XMLBasedDatatypeService implements DatatypeService {
 				document = (Document)DocumentOverNodeInfo.wrap(result.getXdmNode().getUnderlyingNode());
 			} else {
 				DOMResult result = new DOMResult();
-				TransformerFactory.newInstance().newTransformer(xslt).transform(new DOMSource(document), result);
+				TransformerFactory.newInstance().newTransformer(xslt).transform(new DOMSource(doc), result);
 				document = (Document)result.getNode();
 			}
 		}

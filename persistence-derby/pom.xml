@@ -20,6 +20,10 @@
   <dependencies>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-persistence</artifactId>
     </dependency>
     <dependency>
