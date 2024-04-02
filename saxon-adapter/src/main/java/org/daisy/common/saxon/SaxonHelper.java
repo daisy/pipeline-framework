@@ -33,6 +33,7 @@ import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.AnyURIValue;
 import net.sf.saxon.value.BigDecimalValue;
 import net.sf.saxon.value.BooleanValue;
+import net.sf.saxon.value.DoubleValue;
 import net.sf.saxon.value.EmptySequence;
 import net.sf.saxon.value.FloatValue;
 import net.sf.saxon.value.IntegerValue;
@@ -67,6 +68,8 @@ public final class SaxonHelper {
 			return IntegerValue.makeIntegerValue(BigInteger.valueOf((Long)object));
 		else if (object instanceof Float)
 			return FloatValue.makeFloatValue((Float)object);
+		else if (object instanceof Double)
+			return DoubleValue.makeDoubleValue((Double)object);
 		else if (object instanceof BigDecimal)
 			return new BigDecimalValue((BigDecimal)object);
 		else if (object instanceof Boolean)
