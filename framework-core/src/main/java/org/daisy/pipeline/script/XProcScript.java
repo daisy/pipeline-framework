@@ -12,6 +12,10 @@ import java.util.regex.Pattern;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
+
 import org.daisy.common.properties.Properties;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
@@ -20,9 +24,6 @@ import org.daisy.pipeline.datatypes.DatatypeService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * XProc based implementation of {@link Script}
@@ -36,6 +37,8 @@ public final class XProcScript extends Script {
 	private final List<XProcScriptOption> tempOptions;
 	private final Map<String,XProcScriptOption> resultOptions;
 	private final Optional<ScriptPort> statusPort;
+	final boolean someOptionsUseProperty; // whether one or more options have a default value that depends
+	                                      // on a (possibly settable) property
 
 	/**
 	 * The URI of the XProc pipeline.
@@ -275,6 +278,10 @@ public final class XProcScript extends Script {
 		this.tempOptions = ImmutableList.copyOf(tempOptions);
 		this.resultOptions = ImmutableMap.copyOf(resultOptions);
 		this.statusPort = Optional.ofNullable(statusPort);
+		this.someOptionsUseProperty = Iterables.any(options.values(), o -> ((XProcScriptOption)o).usesProperty)
+			|| Iterables.any(inputOptions.values(), o -> o.usesProperty)
+			|| Iterables.any(tempOptions, o -> o.usesProperty)
+			|| Iterables.any(resultOptions.values(), o -> o.usesProperty);
 	}
 
 	@Override
@@ -289,6 +296,7 @@ public final class XProcScript extends Script {
 		private final XProcOptionInfo info;
 		private final XProcOptionMetadata metadata;
 		private final String defaultValue;
+		final boolean usesProperty; // whether the default value depends on a (possibly settable) propeprty
 		private final DatatypeService datatype;
 
 		private static final Pattern SYSTEM_PROPERTY = Pattern.compile("^(?<prefix>[a-zA-Z_][\\w.-]*):system-property\\((?<arg>[^)]+)\\)$");
@@ -305,8 +313,10 @@ public final class XProcScript extends Script {
 			this.metadata = metadata;
 			if (info.isRequired()) {
 				defaultValue = null;
+				usesProperty = false;
 			} else {
 				String select = info.getSelect();
+				boolean usesProperty = false;
 				if (select != null)
 					select = select.trim();
 				if (select == null || "".equals(select)) {
@@ -343,6 +353,7 @@ public final class XProcScript extends Script {
 											ns = nsContext.getNamespaceURI(prf);
 											String prop = m.group("localPart");
 											if (NS_PIPELINE_DATA.equals(ns)) {
+												usesProperty = true;
 												defaultValue = Properties.getSnapshot().get(prop);
 												if (defaultValue == null) // if property not settable
 													defaultValue = Properties.getProperty(prop);
@@ -376,6 +387,7 @@ public final class XProcScript extends Script {
 						this.defaultValue = defaultValue;
 					}
 				}
+				this.usesProperty = usesProperty;
 			}
 			String type = metadata.getType();
 			if (type == null || "".equals(type) || "xs:string".equals(type) || "string".equals(type))
