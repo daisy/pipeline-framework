@@ -51,6 +51,10 @@
       <artifactId>org.restlet.ext.xml</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>servlet-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>

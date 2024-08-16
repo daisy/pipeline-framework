@@ -314,14 +314,14 @@
         <artifactId>org.restlet.ext.xml</artifactId>
         <version>${restlet.version}</version>
       </dependency>
-
-
-      <!-- Jetty -->
       <dependency>
         <groupId>org.daisy.libs</groupId>
         <artifactId>servlet-api</artifactId>
         <version>${javax.servlet-api.version}</version>
       </dependency>
+
+
+      <!-- Jetty -->
       <dependency>
         <groupId>org.restlet.osgi</groupId>
         <artifactId>org.restlet.ext.jetty</artifactId>
