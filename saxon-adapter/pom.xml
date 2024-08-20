@@ -101,6 +101,7 @@
             </Import-Package>
             <_dsannotations>
               org.daisy.common.saxon.SaxonConfigurator,
+              org.daisy.common.saxon.impl.DocumentBuilderImpl,
               org.daisy.common.saxon.impl.ProcessorImpl,
               org.daisy.common.saxon.impl.TransformerFactoryImpl,
               org.daisy.common.xpath.saxon.impl.XPathFactoryImpl,
@@ -126,6 +127,7 @@
             <configuration>
               <includes>
                 org.daisy.common.saxon.SaxonConfigurator,
+                org.daisy.common.saxon.impl.DocumentBuilderImpl,
                 org.daisy.common.saxon.impl.ProcessorImpl,
                 org.daisy.common.saxon.impl.TransformerFactoryImpl,
                 org.daisy.common.xpath.saxon.impl.XPathFactoryImpl,
