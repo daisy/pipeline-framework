@@ -116,7 +116,7 @@ public class DefaultJobManager implements JobManager {
                         public Optional<Job> build() {
                                 // store it
                                 Optional<AbstractJob> job = storage.add(
-                                        (AbstractJob)super.build().get() // DefaultJobBuilder.build() creates VolatileJob
+                                        (AbstractJob)super.build().get()
                                 );
                                 if (job.isPresent()) {
                                         // broadcast status

@@ -131,9 +131,12 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 								statusListeners.remove(listener); }}};
 				monitor = monitorFactory.newJobMonitor(id, messageBus, statusNotifier);
 			}};
-			return Optional.of(
-				(managed || !closeOnExit) ? new AbstractJob(ctxt, priority, xprocEngine, managed) {}
-				                          : new VolatileJob(ctxt, priority, xprocEngine, false));
+			AbstractJob job = (managed || !closeOnExit)
+				? new AbstractJob(ctxt, priority, xprocEngine, managed) {}
+				: new VolatileJob(ctxt, priority, xprocEngine, false);
+			if (!managed)
+				job.changeStatus(Job.Status.IDLE);
+			return Optional.of(job);
 		} catch (IOException e) {
 			throw new RuntimeException("Error while creating job context", e);
 		}

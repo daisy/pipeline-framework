@@ -64,8 +64,6 @@ public abstract class AbstractJob implements Job {
                 this.priority = priority != null ? priority : Priority.MEDIUM;
                 this.xprocEngine = xprocEngine;
                 this.managed = managed;
-                if (!managed)
-                        changeStatus(Status.IDLE);
         }
 
         @Override
