@@ -1,8 +1,7 @@
 package org.daisy.pipeline.modules;
 
 /**
- * Java dependency of an XSLT resource. The Java resource (class) is assumed to live in the same
- * module as the XSLT resource.
+ * Java dependency of an XSLT resource.
  */
 public class JavaDependency implements Dependency {
 
