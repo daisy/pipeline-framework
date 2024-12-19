@@ -1,5 +1,6 @@
 package org.daisy.pipeline.job.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.function.Consumer;
@@ -22,7 +23,6 @@ import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobMonitorFactory;
-import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.StatusNotifier;
 import org.daisy.pipeline.script.BoundScript;
@@ -109,14 +109,13 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 				results = JobResultSet.EMPTY;
 				script = boundScript.getScript();
 				input = boundScript.getInput();
-				JobResources resources = input.getResources();
-				uriMapper = resources != null
-					? JobURIUtils.newURIMapper(id.toString())
-					: JobURIUtils.newOutputURIMapper(id.toString());
-				if (resources != null) {
-					logger.debug("Storing the resource collection"); // because not persisted
-					IOHelper.dump(resources, uriMapper);
-				}
+				resultDir = IOHelper.makeDirs(JobURIUtils.getJobOutputDir(id.toString()));
+				logger.debug("Storing inputs"); // because we want to be able to download the
+					                            // context files of persisted jobs, even though
+					                            // JobResources are not persisted and only the
+					                            // systemId of ScriptInput are persisted
+				File contextDir = IOHelper.makeDirs(JobURIUtils.getJobContextDir(id.toString()));
+				input = input.storeToDisk(contextDir);
 				properties = Properties.getSnapshot();
 				Level messagesThreshold; {
 					try {

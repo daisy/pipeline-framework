@@ -194,12 +194,12 @@ public abstract class AbstractJob implements Job {
                         throw new IllegalStateException();
                 try {
                         pipeline = xprocEngine.load(((XProcScript)script).getURI());
-                        XProcDecorator decorator = XProcDecorator.from((XProcScript)script, ctxt.uriMapper, inputParsers);
+                        XProcDecorator decorator = XProcDecorator.from((XProcScript)script, ctxt.resultDir, inputParsers);
                         XProcInput input = decorator.decorate(ctxt.input);
                         XProcResult result = pipeline.run(input, () -> ctxt.messageBus, ctxt.properties);
                         XProcOutput output = decorator.decorate(new XProcOutput.Builder().build());
                         result.writeTo(output); // writes to files and/or streams specified in output
-                        ctxt.results = buildResultSet((XProcScript)script, input, output, ctxt.uriMapper, newResultSetBuilder(script));
+                        ctxt.results = buildResultSet((XProcScript)script, input, output, ctxt.resultDir, newResultSetBuilder(script));
                         onResultsChanged();
                         if (checkStatusPort((XProcScript)script, output))
                                 changeStatus(Status.SUCCESS);
@@ -266,13 +266,13 @@ public abstract class AbstractJob implements Job {
         }
 
         // package private for unit tests
-        static JobResultSet buildResultSet(XProcScript script, XProcInput inputs, XProcOutput outputs, URIMapper mapper)
+        static JobResultSet buildResultSet(XProcScript script, XProcInput inputs, XProcOutput outputs, File resultDir)
                         throws IOException {
-                return buildResultSet(script, inputs, outputs, mapper, new JobResultSet.Builder(script));
+                return buildResultSet(script, inputs, outputs, resultDir, new JobResultSet.Builder(script));
         }
 
         private static JobResultSet buildResultSet(XProcScript script, XProcInput inputs, XProcOutput outputs,
-                                                   URIMapper mapper, JobResultSet.Builder builder) throws IOException {
+                                                   File resultDir, JobResultSet.Builder builder) throws IOException {
 
                 // iterate over output ports
                 for (ScriptPort port : script.getOutputPorts()) {
@@ -298,7 +298,7 @@ public abstract class AbstractJob implements Job {
                                         File f = new File(path);
                                         if (f.exists()) {
                                                 builder = builder.addResult(port.getName(),
-                                                                            mapper.unmapOutput(path).toString(),
+                                                                            resultDir.toURI().relativize(path).toString(),
                                                                             f,
                                                                             mediaType);
                                         }
@@ -317,7 +317,7 @@ public abstract class AbstractJob implements Job {
                                         for (File f : IOHelper.treeFileList(new File(URI.create(dir)))) {
                                                 URI path = f.toURI();
                                                 builder = builder.addResult(port.getName(),
-                                                                            mapper.unmapOutput(path).toString(),
+                                                                            resultDir.toURI().relativize(path).toString(),
                                                                             f,
                                                                             mediaType);
                                         }
@@ -339,7 +339,7 @@ public abstract class AbstractJob implements Job {
                                                         "Result is expected to be a DynamicResult but got: " + result);
                                         URI path = URI.create(sysId);
                                         builder = builder.addResult(port.getName(),
-                                                                    mapper.unmapOutput(path).toString(),
+                                                                    resultDir.toURI().relativize(path).toString(),
                                                                     new File(path),
                                                                     mediaType);
                                 }

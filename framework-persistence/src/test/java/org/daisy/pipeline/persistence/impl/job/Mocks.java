@@ -26,7 +26,6 @@ import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.StatusNotifier;
-import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.job.impl.IOHelper;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
 import org.daisy.pipeline.script.Script;
@@ -53,7 +52,7 @@ public class Mocks   {
 	public static final String value1 = "value1";
 	public static final File result1;
 	public static final File result2;
-	public static final URI out = URI.create("file:/tmp/out/");
+	public static final File out = new File("/tmp/out/");
 	public static final String portResult="res"; 
 
 	static {
@@ -191,7 +190,7 @@ public class Mocks   {
 					return () -> new ByteArrayInputStream("foo".getBytes());
 				}
 			};
-		final ScriptInput input;
+		ScriptInput input;
 		try {
 			input = new ScriptInput.Builder(resources).withInput("source", new Mocks.SimpleSourceProvider(file1))
 		                                              .withInput("source", new Mocks.SimpleSourceProvider(file2))
@@ -201,10 +200,9 @@ public class Mocks   {
 			throw new RuntimeException(e);
 		}
 		final JobId id = JobIdFactory.newId();
-		final URIMapper mapper= new URIMapper(contextDir != null ? contextDir.toURI() : URI.create(""), out);
 		if (contextDir != null)
 			try {
-				IOHelper.dump(resources, mapper);
+				input = input.storeToDisk(contextDir);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -218,11 +216,11 @@ public class Mocks   {
                         DatabaseProvider.getDatabase().addObject(client);
                 }
 		//inception!
-		return new MyHiddenContext(rSet,script,input,mapper,client,id,batchId);
+		return new MyHiddenContext(rSet,script,input,out,client,id,batchId);
 	}
 
 	static class MyHiddenContext extends AbstractJobContext{
-			public MyHiddenContext(JobResultSet set, Script script, ScriptInput input, URIMapper mapper, Client client, JobId id, JobBatchId batchId){
+			public MyHiddenContext(JobResultSet set, Script script, ScriptInput input, File resultDir, Client client, JobId id, JobBatchId batchId){
 				super();
 				this.client = client;
 				this.id = id;
@@ -231,7 +229,7 @@ public class Mocks   {
 				this.niceName = "hidden";
 				this.script = script;
 				this.input = input;
-				this.uriMapper = mapper;
+				this.resultDir = resultDir;
 				this.results = set;
 				this.monitor = new JobMonitor() {
 						@Override
