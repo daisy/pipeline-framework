@@ -61,7 +61,9 @@ import org.osgi.service.component.annotations.ReferencePolicy;
  */
 @org.osgi.service.component.annotations.Component(
     name = "org.daisy.pipeline.webservice",
-    immediate = true
+    immediate = true,
+    service = { PipelineWebService.class } // this is to ensure object created by SPIHelper.createWebService()
+                                           // is an instance of PipelineWebService
 )
 public class PipelineWebService extends Application {
 
