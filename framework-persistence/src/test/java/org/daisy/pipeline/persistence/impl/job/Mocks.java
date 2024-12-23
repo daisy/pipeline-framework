@@ -120,7 +120,8 @@ public class Mocks   {
 	}
 
 	public static XProcScript buildScript(){
-		XProcScript.Builder builder = new XProcScript.Builder(Mocks.scriptId, "", URI.create(Mocks.scriptUri), null);
+		XProcScript.Builder builder = new XProcScript.Builder(Mocks.scriptId, "", URI.create(Mocks.scriptUri),
+		                                                      null, null, null);
 		builder = builder.withInputPort(XProcPortInfo.newInputPort("source", true, false, true),
 		                                new XProcPortMetadata("", "", ""));
 		builder = builder.withOutputPort(XProcPortInfo.newOutputPort(portResult, true, true),
@@ -137,31 +138,31 @@ public class Mocks   {
 	}
 
 	public static AbstractJob buildJob(File contextDir) {
-		return new AbstractJob(buildContext(contextDir), Priority.MEDIUM, null, null, true) {};
+		return new AbstractJob(buildContext(contextDir), Priority.MEDIUM, true) {};
 	}
 
 	public static AbstractJob buildJob(Priority priority) {
-		return new AbstractJob(buildContext(), priority, null, null, true) {};
+		return new AbstractJob(buildContext(), priority, true) {};
 	}
 
 	public static AbstractJob buildJob(Priority priority, File contextDir) {
-		return new AbstractJob(buildContext(contextDir), priority, null, null, true) {};
+		return new AbstractJob(buildContext(contextDir), priority, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client) {
-		return new AbstractJob(buildContext(client), Priority.MEDIUM, null, null, true) {};
+		return new AbstractJob(buildContext(client), Priority.MEDIUM, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client, File contextDir) {
-		return new AbstractJob(buildContext(client, null, contextDir), Priority.MEDIUM, null, null, true) {};
+		return new AbstractJob(buildContext(client, null, contextDir), Priority.MEDIUM, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client, JobBatchId batchId) {
-		return new AbstractJob(buildContext(client, batchId), Priority.MEDIUM, null, null, true) {};
+		return new AbstractJob(buildContext(client, batchId), Priority.MEDIUM, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client, JobBatchId batchId, File contextDir) {
-		return new AbstractJob(buildContext(client, batchId, contextDir), Priority.MEDIUM, null, null, true) {};
+		return new AbstractJob(buildContext(client, batchId, contextDir), Priority.MEDIUM, true) {};
 	}
 
 	public static AbstractJobContext buildContext() {

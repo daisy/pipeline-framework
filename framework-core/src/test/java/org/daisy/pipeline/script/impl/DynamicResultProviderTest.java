@@ -1,15 +1,15 @@
-package org.daisy.pipeline.job.impl;
+package org.daisy.pipeline.script.impl;
 
 import java.io.File;
 import java.net.URI;
 
-import org.daisy.pipeline.job.impl.DynamicResultProvider;
+import javax.xml.transform.Result;
+
+import  org.daisy.pipeline.job.impl.Mock;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.xml.transform.Result;
 
 public class DynamicResultProviderTest {
 

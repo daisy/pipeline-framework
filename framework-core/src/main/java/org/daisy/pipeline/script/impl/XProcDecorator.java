@@ -1,4 +1,4 @@
-package org.daisy.pipeline.job.impl;
+package org.daisy.pipeline.script.impl;
 
 import java.io.File;
 import java.io.IOException;

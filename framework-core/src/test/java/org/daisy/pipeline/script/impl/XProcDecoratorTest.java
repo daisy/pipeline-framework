@@ -1,4 +1,4 @@
-package org.daisy.pipeline.job.impl;
+package org.daisy.pipeline.script.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -17,6 +17,8 @@ import org.apache.commons.io.FileUtils;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
+import org.daisy.pipeline.job.impl.IOHelper;
+import org.daisy.pipeline.job.impl.Mock;
 import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.script.ScriptInput;
 import org.daisy.pipeline.script.XProcOptionMetadata;

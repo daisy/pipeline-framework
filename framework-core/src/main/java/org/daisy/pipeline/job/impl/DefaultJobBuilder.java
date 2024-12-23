@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.function.Consumer;
-import java.util.List;
 
 import com.google.common.base.Optional;
 
@@ -13,8 +12,6 @@ import org.daisy.common.messaging.MessageBus;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
 import org.daisy.common.priority.Priority;
-import org.daisy.common.xml.DocumentBuilder;
-import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.AbstractJob;
@@ -33,8 +30,6 @@ import org.slf4j.LoggerFactory;
 public class DefaultJobBuilder implements JobManager.JobBuilder {
 
 	private final JobMonitorFactory monitorFactory;
-	private final XProcEngine xprocEngine;
-	private final List<DocumentBuilder> inputParsers;
 	private final Client client;
 	private final BoundScript boundScript;
 	private final boolean managed;
@@ -48,15 +43,11 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 	 * @param managed Whether the Job will be managed by a JobManager.
 	 */
 	public DefaultJobBuilder(JobMonitorFactory monitorFactory,
-	                         XProcEngine xprocEngine,
-	                         List<DocumentBuilder> inputParsers,
 	                         Client client,
 	                         BoundScript boundScript,
 	                         boolean managed,
 	                         Property logLevelProperty) {
 		this.monitorFactory = monitorFactory;
-		this.xprocEngine = xprocEngine;
-		this.inputParsers = inputParsers;
 		this.client = client;
 		this.boundScript = boundScript;
 		this.managed = managed;
@@ -135,7 +126,7 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 								statusListeners.remove(listener); }}};
 				monitor = monitorFactory.newJobMonitor(id, messageBus, statusNotifier);
 			}};
-			AbstractJob job = new AbstractJob(ctxt, priority, xprocEngine, inputParsers, managed) {};
+			AbstractJob job = new AbstractJob(ctxt, priority, managed) {};
 			if (!managed && closeOnExit)
 				job = new VolatileJob(job);
 			if (!managed)

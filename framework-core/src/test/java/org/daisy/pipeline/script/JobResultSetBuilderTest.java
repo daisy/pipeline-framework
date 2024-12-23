@@ -1,4 +1,4 @@
-package org.daisy.pipeline.job;
+package org.daisy.pipeline.script;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -12,23 +12,21 @@ import javax.xml.transform.Result;
 
 import org.apache.commons.io.FileUtils;
 
+import com.google.common.base.Supplier;
+import com.google.common.collect.Lists;
+
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.impl.IOHelper;
 import org.daisy.pipeline.job.impl.Mock;
-import org.daisy.pipeline.job.impl.XProcDecorator;
-import org.daisy.pipeline.script.ScriptInput;
-import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.impl.XProcDecorator;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.google.common.base.Supplier;
-import com.google.common.collect.Lists;
 
 public class JobResultSetBuilderTest {
 
@@ -91,7 +89,7 @@ public class JobResultSetBuilderTest {
                 File f = null;
                 try {
                         f = writeResult(res.get());
-                        JobResultSet rSet = AbstractJob.buildResultSet(script, input, output, resultDir);
+                        JobResultSet rSet = script.buildResultSet(input, output, resultDir);
                         List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(outName));
                         Assert.assertEquals(new File(resultDir, "output-0/output-0.xml"), jobs.get(0).getPath());
                         Assert.assertEquals("output-0/output-0.xml", jobs.get(0).getIdx().toString());
@@ -104,7 +102,7 @@ public class JobResultSetBuilderTest {
         public void outputPortNullCheck() throws Exception{
                 String outName = Mock.ScriptGenerator.getOutputName(0);
                 XProcOutput output = new XProcOutput.Builder().build();
-                JobResultSet rSet = AbstractJob.buildResultSet(script, input, output, resultDir);
+                JobResultSet rSet = script.buildResultSet(input, output, resultDir);
                 List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(outName));
                 Assert.assertEquals(jobs.size(),0);
         }
@@ -118,7 +116,7 @@ public class JobResultSetBuilderTest {
                 try {
                         f1 = writeResult(res.get());
                         f2 = writeResult(res.get());
-                        JobResultSet rSet = AbstractJob.buildResultSet(script, input, output, resultDir);
+                        JobResultSet rSet = script.buildResultSet(input, output, resultDir);
                         List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(outName));
                         Assert.assertEquals(jobs.size(),2);
                         Assert.assertEquals(new File(resultDir, "sequence/sequence.xml"), jobs.get(0).getPath());
@@ -135,13 +133,13 @@ public class JobResultSetBuilderTest {
                 String outName = Mock.ScriptGenerator.getOutputName(0);
                 // undecorated output
                 XProcOutput output = new XProcOutput.Builder().withOutput(outName, Mock.getResultProvider("foo.xml")).build();
-                AbstractJob.buildResultSet(script, input, output, resultDir);
+                script.buildResultSet(input, output, resultDir);
         }
 
         @Test
         public void optionsOutputFile() throws Exception{
                 QName optName=Mock.ScriptGenerator.getOptionOutputFileName(0);
-                JobResultSet rSet = AbstractJob.buildResultSet(script, input, output, resultDir);
+                JobResultSet rSet = script.buildResultSet(input, output, resultDir);
                 List<JobResult> jobs = Lists.newLinkedList(rSet.getResults(optName.getLocalPart()));
                 Assert.assertEquals(1, jobs.size());
                 Assert.assertEquals(new File(resultDir, "option-output-file-0.xml"), jobs.get(0).getPath());
@@ -151,7 +149,7 @@ public class JobResultSetBuilderTest {
         @Test
         public void optionsOutputDirSize() throws Exception{
                 QName optName=Mock.ScriptGenerator.getOptionOutputDirName(0);
-                JobResultSet rSet = AbstractJob.buildResultSet(script, input, output, resultDir);
+                JobResultSet rSet = script.buildResultSet(input, output, resultDir);
                 List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName.getLocalPart()));
                 Assert.assertEquals(3,jobs.size());
         }
@@ -159,7 +157,7 @@ public class JobResultSetBuilderTest {
         @Test
         public void optionsOutputURIs() throws Exception{
                 QName optName=Mock.ScriptGenerator.getOptionOutputDirName(0);
-                JobResultSet rSet = AbstractJob.buildResultSet(script, input, output, resultDir);
+                JobResultSet rSet = script.buildResultSet(input, output, resultDir);
                 List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName.getLocalPart()));
                 Assert.assertEquals(3, jobs.size());
                 HashSet<File> uris= new HashSet<>();
@@ -174,7 +172,7 @@ public class JobResultSetBuilderTest {
         @Test
         public void optionsOutputIdx() throws Exception{
                 QName optName=Mock.ScriptGenerator.getOptionOutputDirName(0);
-                JobResultSet rSet = AbstractJob.buildResultSet(script, input, output, resultDir);
+                JobResultSet rSet = script.buildResultSet(input, output, resultDir);
                 List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName.getLocalPart()));
                 Assert.assertEquals(3, jobs.size());
                 HashSet<String> uris= new HashSet<String>();
@@ -193,7 +191,7 @@ public class JobResultSetBuilderTest {
                 File f = null;
                 try {
                         f = writeResult(res.get());
-                        JobResultSet rSet = AbstractJob.buildResultSet(script, input, output, resultDir);
+                        JobResultSet rSet = script.buildResultSet(input, output, resultDir);
                          Assert.assertEquals(5,rSet.getResults().size());
                 } finally {
                         if (f != null) f.delete();
