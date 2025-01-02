@@ -636,7 +636,7 @@ public final class XProcScript extends Script {
 					throw new IllegalArgumentException("can not convert value to integer: " + value, e);
 				}
 			else if (datatype == DatatypeService.XS_BOOLEAN)
-				return "true".equals(value.toLowerCase()) || "1".equals(value);
+				return datatype.validate(value).isValid();
 			else
 				throw new RuntimeException("coding error");
 		}
