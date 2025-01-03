@@ -148,7 +148,7 @@ public class PipelineWebService extends Application {
                         webserviceStorage = new VolatileWebserviceStorage();
                 if (!checkAuthenticationSanity()){
                         try {
-                                this.halt();
+                                close();
                         } catch (Exception e) {
                                 logger.error("Error shutting down:"+e.getMessage());
                         }
@@ -179,7 +179,7 @@ public class PipelineWebService extends Application {
                 } catch (Exception e) {
                         logger.error("Shutting down the framework because of:"+e.getMessage());
                         try{
-                                this.halt();
+                                close();
                         }catch (Exception innerException) {
                                 logger.error("Error shutting down:"+e.getMessage());
                         }
@@ -274,10 +274,11 @@ public class PipelineWebService extends Application {
         @Deactivate
         public void close() {
                 try {
-                        pushNotifier.close();
-                        if (this.component!=null)
-                                this.component.stop();
-                        this.stop();
+                        if (pushNotifier != null)
+                                pushNotifier.close();
+                        if (component != null)
+                                component.stop();
+                        stop();
                         logger.info("Webservice stopped.");
                 } catch (Exception e) {
                         logger.error("Error stopping the web service:" + e.getMessage());
