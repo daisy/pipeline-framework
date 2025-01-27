@@ -1,4 +1,4 @@
-include ../../assembly/make/enable-java-shell.mk
+include make/enable-java-shell.mk
 
 PIPELINE1_VERSION := 20250106
 
