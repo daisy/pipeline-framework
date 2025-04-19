@@ -125,6 +125,11 @@
         <version>${guava.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.13.0</version>
+      </dependency>
+      <dependency>
         <groupId>org.daisy.libs</groupId>
         <artifactId>jing</artifactId>
         <version>${jing.version}</version>
@@ -321,6 +326,11 @@
       <dependency>
         <groupId>org.restlet.osgi</groupId>
         <artifactId>org.restlet.ext.xml</artifactId>
+        <version>${restlet.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.restlet.osgi</groupId>
+        <artifactId>org.restlet.ext.json</artifactId>
         <version>${restlet.version}</version>
       </dependency>
       <dependency>
