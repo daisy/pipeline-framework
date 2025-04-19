@@ -204,6 +204,14 @@ public class PipelineWebService extends Application {
                                 logger.error("Error shutting down:"+e.getMessage());
                         }
                 }
+
+                // Disable the ability to tunnel method and client preferences via query
+                // parameters. We do this so that the "media" query parameter can be used for other
+                // purposes, notably to specify the media in a /stylesheet-parameters request.
+                // See:
+                // - https://javadocs.restlet.talend.com/2.4/jse/api/org/restlet/service/TunnelService.html
+                // - https://github.com/restlet/restlet-framework-java/issues/804
+                getTunnelService().setQueryTunnel(false);
         }
 
         private void cleanUp() {
