@@ -110,6 +110,8 @@
                     <exclude name="pipeline-${pipeline1.version}/licenses/**" />
                     <exclude name="pipeline-${pipeline1.version}/rmi/**" />
                     <exclude name="pipeline-${pipeline1.version}/transformers/**" />
+                    <exclude name="pipeline-${pipeline1.version}/lib/slf4j-api-1.5.6.jar"/>
+                    <exclude name="pipeline-${pipeline1.version}/lib/slf4j-log4j12-1.5.6.jar"/>
                   </patternset>
                   <cutdirsmapper dirs="1" />
                 </unzip>
