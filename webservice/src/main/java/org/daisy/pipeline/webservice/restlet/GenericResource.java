@@ -86,9 +86,12 @@ public abstract class GenericResource extends ServerResource {
 		return dom;
 	}
 
+	// Only use this method when there is no stack trace information. Use the
+	// getErrorRepresentation(Throwable) method if possible, so that the stack trace is included in
+	// the logs. ErrorWriter does not include the stack trace in the XML representation anyway.
 	protected Representation getErrorRepresentation(String error) {
 		logger.debug("Error in fulfilling request: " + error);
-		ErrorWriter.ErrorWriterBuilder builder=new ErrorWriter.ErrorWriterBuilder()
+		ErrorWriter.ErrorWriterBuilder builder = new ErrorWriter.ErrorWriterBuilder()
 		                                                        .withError(new Throwable(error))
 		                                                        .withUri(this.getStatus().getUri());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, builder.build().getXmlDocument());
