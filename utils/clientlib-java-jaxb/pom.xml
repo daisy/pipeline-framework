@@ -13,7 +13,7 @@
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: JAXB based Java client library</name>
   <properties>
-    <jersey.version>2.9</jersey.version>
+    <jersey.version>2.46</jersey.version>
   </properties>
   <dependencies>
     <dependency>
