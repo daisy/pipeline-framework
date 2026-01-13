@@ -264,14 +264,12 @@ public class Pipeline1Script extends Script {
 					switch (param.getDatatype().getType()) {
 					case FILE:
 						resultBuilder = resultBuilder.addResult(port.getName(),
-						                                        resultDir.toURI().relativize(resultPath.toURI()).toString(),
 						                                        resultPath,
 						                                        port.getMediaType());
 						break;
 					case DIRECTORY:
 						for (File f : treeFileList(resultPath)) {
 							resultBuilder = resultBuilder.addResult(port.getName(),
-							                                        resultDir.toURI().relativize(f.toURI()).toString(),
 							                                        f,
 							                                        port.getMediaType());
 						}

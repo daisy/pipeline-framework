@@ -1,6 +1,7 @@
 package org.daisy.pipeline.persistence.impl.job;
 
 import java.io.FileNotFoundException;
+import java.net.URI;
 import java.util.List;
 
 import javax.xml.transform.Source;
@@ -34,7 +35,7 @@ class ContextHydrator {
 
 	static void hydrateResultPorts(JobResultSet.Builder builder,List<PersistentPortResult> portResults){
 		for(PersistentPortResult pRes: portResults){
-			builder.addResult(pRes.getPortName(), pRes.getIdx(), pRes.getPath(), pRes.getMediaType());
+			builder.addResult(pRes.getPortName(), URI.create(pRes.getIdx()), pRes.getPath(), pRes.getMediaType());
 		}
 	}
 	

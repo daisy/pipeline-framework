@@ -40,7 +40,7 @@ import com.google.common.io.Files;
 public abstract class NamedResultResource extends AuthenticatedResource {
         /** The job. */
         private Optional<Job> job=Optional.absent();
-        private String idx;
+        private String path;
         private String name;
         private static Logger logger = LoggerFactory
                         .getLogger(NamedResultResource.class.getName());
@@ -68,7 +68,7 @@ public abstract class NamedResultResource extends AuthenticatedResource {
                         name = NamedResultResource.decode((String) getRequestAttributes().get("name"));
                 }
                 if ( getRequestAttributes().get("idx")!=null){
-                        idx = NamedResultResource.decode((String)getRequestAttributes().get("idx"));
+                        path = NamedResultResource.decode((String)getRequestAttributes().get("idx"));
                 }
         }
 
@@ -99,7 +99,7 @@ public abstract class NamedResultResource extends AuthenticatedResource {
                         setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
                         return this.getErrorRepresentation("No name provided");
                 }
-                if (idx!=null&&!idx.isEmpty()){
+                if (path != null && !path.isEmpty()){
                         return this.singleResult();
 
                 }else{
@@ -109,11 +109,11 @@ public abstract class NamedResultResource extends AuthenticatedResource {
 
         private Representation singleResult(){
                 Collection<JobResult> results=this.gatherResults(this.job.get(),this.name);
-                logger.debug(String.format("Getting single result for %s idx: %s",this.name,this.idx));
+                logger.debug(String.format("Getting single result for %s path: %s", this.name, this.path));
                 results=Collections2.filter(results, new Predicate<JobResult>(){
                         @Override
                         public boolean apply(JobResult res) {
-                                return res.getIdx().toString().equals(NamedResultResource.this.idx);
+                                return res.getPath().toString().equals(NamedResultResource.this.path);
                         }
                 });
                 if(results.size()==0){
@@ -123,7 +123,7 @@ public abstract class NamedResultResource extends AuthenticatedResource {
 
                 try{
                         JobResult res=Lists.newArrayList(results).get(0);
-                        InputStream is = res.asStream();
+                        InputStream is = res.read();
                         is = new BufferedInputStream(is, 8192);
                         Integer size = ResultResource.getSize(is, 32768);
                         Representation rep = new InputRepresentation(
@@ -137,7 +137,7 @@ public abstract class NamedResultResource extends AuthenticatedResource {
                                 is.reset();
                         }
                         Disposition disposition = new Disposition();
-                        disposition.setFilename(res.getIdx().toString());
+                        disposition.setFilename(res.getPath().toString());
                         disposition.setType(Disposition.TYPE_ATTACHMENT);
                         if (size != null) // if > 32 Mb
                                 disposition.setSize(size);

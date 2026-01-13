@@ -306,12 +306,12 @@ public class JobXmlWriter {
                         resultsElm.appendChild(portResultElm);
                         for (JobResult result : this.job.getResults().getResults(portName)) {
                                 Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
-                                resultElm.setAttribute("href", String.format("%s/port/%s/idx/%s",resultHref, portName, result.getIdx()));
-                                if(result.getMediaType()!= null && !result.getMediaType().isEmpty()){
-                                        resultElm.setAttribute("mime-type", result.getMediaType());
+                                resultElm.setAttribute("href", String.format("%s/port/%s/idx/%s",resultHref, portName, result.getPath()));
+                                if(result.getMediaType().isPresent() && !result.getMediaType().get().isEmpty()){
+                                        resultElm.setAttribute("mime-type", result.getMediaType().get());
                                 }
                                 if ( this.localPaths){
-                                        resultElm.setAttribute("file", result.getPath().toURI().toString());
+                                        resultElm.setAttribute("file", result.getFile().toURI().toString());
                                 }
                                 resultElm.setAttribute("size",
                                                 String.format("%s", result.getSize()));

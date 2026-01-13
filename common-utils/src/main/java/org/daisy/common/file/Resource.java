@@ -31,6 +31,10 @@ public class Resource {
 		this.mediaType = mediaType;
 	}
 
+	protected Resource(File from, URI path, Optional<String> mediaType) {
+		this(new FileDataOnDisk(from), path, mediaType);
+	}
+
 	/**
 	 * The path as a URI.
 	 *
@@ -150,6 +154,8 @@ public class Resource {
 		 * @param file is read lazily, but we already check whether it exists
 		 */
 		private FileDataOnDisk(File file) {
+			if (file == null)
+				throw new IllegalArgumentException("file must not be null");
 			if (!(file.isFile() && file.exists()))
 				throw new IllegalArgumentException(new FileNotFoundException("file does not exist: " + file));
 			this.file = file;

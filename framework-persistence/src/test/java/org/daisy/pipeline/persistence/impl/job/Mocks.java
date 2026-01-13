@@ -208,8 +208,8 @@ public class Mocks   {
 				throw new RuntimeException(e);
 			}
 		final JobResultSet rSet = new JobResultSet.Builder(script)
-		                                          .addResult(portResult, result1.getName(), result1, null)
-		                                          .addResult(opt1Name, result2.getName(), result2, null)
+		                                          .addResult(portResult, result1, null)
+		                                          .addResult(opt1Name, result2, null)
 		                                          .build();
                 //add to the db
                 if ( client ==null){
