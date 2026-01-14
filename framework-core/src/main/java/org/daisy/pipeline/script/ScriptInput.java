@@ -44,7 +44,6 @@ public class ScriptInput {
 		final Map<String,SourceSequence> inputs = Maps.newHashMap();
 		final Map<String,List<String>> options = Maps.newHashMap();
 		private final JobResources resources;
-		private final Set<URI> resourcePaths;
 
 		/**
 		 * Don't handle relative inputs.
@@ -58,16 +57,6 @@ public class ScriptInput {
 		 */
 		public Builder(JobResources resources) {
 			this.resources = resources;
-			if (resources != null) {
-				resourcePaths = new HashSet<>();
-				for (String path : resources.getNames())
-					try {
-						resourcePaths.add(new URI(null, null, path.replace("\\", "/"), null, null).normalize());
-					} catch (URISyntaxException e) {
-						throw new RuntimeException("Resource path could not be converted to URI: " + path, e);
-					}
-			} else
-				resourcePaths = null;
 		}
 
 		/**
@@ -78,7 +67,7 @@ public class ScriptInput {
 		}
 
 		/**
-		 * Put a single document on the specified input port. All documents that are put on a port
+		 * Put a single XML document on the specified input port. All documents that are put on a port
 		 * form a sequence.
 		 *
 		 * @throws IllegalArgumentException if no {@link InputStream} or {@link Reader} can be
@@ -101,10 +90,10 @@ public class ScriptInput {
 		}
 
 		/**
-		 * Put a single document on the specified input port. All documents that are put on a port
+		 * Put a single file on the specified input port. All files that are put on a port
 		 * form a sequence.
 		 *
-		 * @throws FileNotFoundException if the URI can not be resolved to a document.
+		 * @throws FileNotFoundException if the URI can not be resolved to a file.
 		 */
 		public Builder withInput(String port, URI source) throws FileNotFoundException {
 			checkInputURI(source);
@@ -112,7 +101,7 @@ public class ScriptInput {
 		}
 
 		/**
-		 * Put a single document on the specified input port. All documents that are put on a port
+		 * Put a single file on the specified input port. All files that are put on a port
 		 * form a sequence.
 		 *
 		 * @throws FileNotFoundException if <code>source</code> does not exist.
@@ -123,10 +112,10 @@ public class ScriptInput {
 		}
 
 		/**
-		 * Put a single document on the specified input port. All documents that are put on a port
+		 * Put a single file on the specified input port. All files that are put on a port
 		 * form a sequence.
 		 *
-		 * @throws FileNotFoundException if the URL can not be resolved to a document.
+		 * @throws FileNotFoundException if the URL can not be resolved to a file.
 		 */
 		public Builder withInput(String port, URL source) throws FileNotFoundException {
 			InputSource is = new InputSource(checkInputURI(source));
@@ -136,7 +125,7 @@ public class ScriptInput {
 		}
 
 		/**
-		 * Put a single document on the specified input port. All documents that are put on a port
+		 * Put a single file on the specified input port. All files that are put on a port
 		 * form a sequence.
 		 */
 		public Builder withInput(String port, InputStream source) {
@@ -145,7 +134,7 @@ public class ScriptInput {
 		}
 
 		/**
-		 * Put a single document on the specified input port. All documents that are put on a port
+		 * Put a single file on the specified input port. All files that are put on a port
 		 * form a sequence.
 		 *
 		 * The {@link Supplier} serves as a proxy and must always return the same object.
@@ -217,7 +206,7 @@ public class ScriptInput {
 				if (resources == null)
 					throw new FileNotFoundException(
 						"Input not found: a relative path was specified but no context provided: " + uri);
-				if (!resourcePaths.contains(uri.normalize()))
+				if (!resources.getNames().contains(uri.normalize()))
 					throw new FileNotFoundException(
 						"Input not found within provided context: " + uri);
 			}
@@ -254,7 +243,7 @@ public class ScriptInput {
 	}
 
 	/**
-	 * Get all documents on an input port.
+	 * Get all files on an input port.
 	 *
 	 * The returned {@link Source} should only be consumed once.
 	 */

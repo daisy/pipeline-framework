@@ -186,6 +186,7 @@ public class URLsTest extends AbstractTest {
 				Iterator<String> i = sort(URLs.listResourcesFromJAR("/org/daisy/common/file", context));
 				Assert.assertEquals("org/daisy/common/file/Resource$1.class", i.next());
 				Assert.assertEquals("org/daisy/common/file/Resource$FileData.class", i.next());
+				Assert.assertEquals("org/daisy/common/file/Resource$FileDataInMemory$1.class", i.next());
 				Assert.assertEquals("org/daisy/common/file/Resource$FileDataInMemory.class", i.next());
 				Assert.assertEquals("org/daisy/common/file/Resource$FileDataOnDisk.class", i.next());
 				Assert.assertEquals("org/daisy/common/file/Resource.class", i.next());

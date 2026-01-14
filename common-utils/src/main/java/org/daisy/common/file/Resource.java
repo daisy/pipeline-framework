@@ -8,8 +8,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.util.Optional;
+import java.util.function.Supplier;
+
+import com.google.common.io.ByteStreams;
 
 /**
  * A readable resource (file) with a certain path and media type. Does not need to be stored on disk.
@@ -19,6 +23,8 @@ import java.util.Optional;
  * This class is immutable.
  */
 public class Resource {
+
+	public final static String MEDIA_TYPE_UNKNOWN = null;
 
 	private final URI path;
 	private final Optional<String> mediaType;
@@ -80,6 +86,17 @@ public class Resource {
 		return new Resource(from, path, Optional.ofNullable(mediaType));
 	}
 
+	public static Resource load(InputStream data, URI path, String mediaType) {
+		return new Resource(new FileDataInMemory(data), path, Optional.ofNullable(mediaType));
+	}
+
+	/**
+	 * @param data {@code data.get()} is called only once.
+	 */
+	public static Resource load(Supplier<InputStream> data, URI path, String mediaType) {
+		return new Resource(new FileDataInMemory(data), path, Optional.ofNullable(mediaType));
+	}
+
 	public static Resource load(byte[] data, URI path, String mediaType) {
 		return new Resource(new FileDataInMemory(data), path, Optional.ofNullable(mediaType));
 	}
@@ -104,6 +121,10 @@ public class Resource {
 	}
 
 	public Resource copy(URI path) {
+		if (path == null)
+			throw new IllegalArgumentException();
+		if (path.equals(this.path))
+			return this;
 		return new Resource(data, path, mediaType);
 	}
 
@@ -175,17 +196,57 @@ public class Resource {
 
 	private static class FileDataInMemory extends FileData {
 
-		private final byte[] data;
+		private final Supplier<InputStream> dataSupplier;
+
+		private FileDataInMemory(byte[] data) {
+			dataSupplier = () -> new ByteArrayInputStream(data);
+		}
 
 		/**
 		 * @param data is read lazily
 		 */
-		private FileDataInMemory(byte[] data) {
-			this.data = data;
+		private FileDataInMemory(InputStream data) {
+			dataSupplier = duplicateInputStream(data);
 		}
 
-		public InputStream read() {
-			return new ByteArrayInputStream(data);
+		/**
+		 * @param data is read lazily
+		 */
+		private FileDataInMemory(Supplier<InputStream> data) {
+			dataSupplier = duplicateInputStream(data);
+		}
+
+		public InputStream read() throws IOException {
+			try {
+				return dataSupplier.get();
+			} catch (UncheckedIOException e) {
+				throw e.getCause();
+			}
+		}
+
+		// note that this is a method in Java 9
+		private static byte[] readAllBytes(InputStream data) throws IOException {
+			return ByteStreams.toByteArray(data);
+		}
+
+		private static Supplier<InputStream> duplicateInputStream(InputStream stream) {
+			return duplicateInputStream(() -> stream);
+		}
+
+		private static Supplier<InputStream> duplicateInputStream(Supplier<InputStream> stream) {
+			return new Supplier<InputStream>() {
+				private Supplier<InputStream> supplier = null;
+				public InputStream get() {
+					try {
+						if (supplier == null) {
+							byte[] data = readAllBytes(stream.get());
+							supplier = () -> new ByteArrayInputStream(data); }
+						return supplier.get();
+					} catch (IOException e) {
+						throw new UncheckedIOException(e);
+					}
+				}
+			};
 		}
 	}
 }
