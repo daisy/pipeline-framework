@@ -13,14 +13,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.Location;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.Source;
 
 import com.google.common.base.Joiner;
 
@@ -71,8 +68,6 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
-
-import org.xml.sax.InputSource;
 
 public class Pipeline1Script extends Script {
 
@@ -211,16 +206,10 @@ public class Pipeline1Script extends Script {
 			for (ScriptPort port : getInputPorts()) {
 				ScriptParameter param = ((Pipeline1ScriptPort)port).param;
 				List<File> files = new ArrayList<>();
-				for (Source src : input.getInput(port.getName())) {
-					InputSource is = SAXSource.sourceToInputSource(src);
-					// make sure documents on input ports have a non-empty base URI
-					if (src.getSystemId() == null
-					    || "".equals(src.getSystemId())
-					    || (is != null && (is.getByteStream() != null || is.getCharacterStream() != null)))
-						throw new IllegalStateException(); // should not happen because ScripInput.storeToDisk() was called
-					// get file where input was stored
-					URI baseURI = resolveRelativePath(URI.create(src.getSystemId()), input);
-					files.add(new File(baseURI));
+				for (URI uri : input.getInput(port.getName())) {
+					// make sure documents on input ports are stored on disk and have an absolute base URI
+					uri = resolveRelativePath(uri, input);
+					files.add(new File(uri));
 				}
 				job.setParameterValue(param.getName(),
 				                      Joiner.on(FilesDatatype.SEPARATOR_STRING).join(files));

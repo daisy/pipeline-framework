@@ -13,7 +13,12 @@ import java.net.URI;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.Source;
+
 import com.google.common.io.ByteStreams;
+
+import org.xml.sax.InputSource;
 
 /**
  * A readable resource (file) with a certain path and media type. Does not need to be stored on disk.
@@ -118,6 +123,20 @@ public class Resource {
 			return ((FileDataOnDisk)data).file;
 		else
 			throw new UnsupportedOperationException("not stored on disk");
+	}
+
+	/**
+	 * If this resource is stored on disk, return the absolute file path as a {@link Source}.
+	 * Otherwise, return the data stream as a {@link Source} with a non-empty system ID.
+	 */
+	public Source readAsSource() throws IOException {
+		if (data instanceof FileDataOnDisk)
+			return new SAXSource(new InputSource(((FileDataOnDisk)data).file.toURI().toASCIIString()));
+		else {
+			Source s = new SAXSource(new InputSource(read()));
+			s.setSystemId(path.toASCIIString());
+			return s;
+		}
 	}
 
 	public Resource copy(URI path) {
