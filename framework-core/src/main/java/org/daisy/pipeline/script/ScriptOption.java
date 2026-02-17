@@ -57,6 +57,7 @@ public interface ScriptOption {
 	/**
 	 * Whether the option is a primary output.
 	 */
+	@Deprecated
 	public boolean isPrimary();
 
 	/**
