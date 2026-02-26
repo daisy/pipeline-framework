@@ -166,6 +166,10 @@ public final class XProcScript extends Script {
 								return false;
 							}
 							@Override
+							public boolean isReusable() {
+								return metadata.isReusable();
+							}
+							@Override
 							public String getNiceName() {
 								return metadata.getNiceName();
 							}
@@ -204,6 +208,10 @@ public final class XProcScript extends Script {
 							@Override
 							public boolean isRequired() {
 								return info.isRequired();
+							}
+							@Override
+							public boolean isReusable() {
+								return metadata.isReusable();
 							}
 							@Override
 							public String getNiceName() {
@@ -660,6 +668,11 @@ public final class XProcScript extends Script {
 			return metadata.getRole();
 		}
 
+		@Override
+		public boolean isReusable() {
+			return metadata.isReusable();
+		}
+
 		/**
 		 * Convert a sequence of string values in order to pass it to
 		 * {@link org.daisy.common.xproc.XProcInput.Builder#withOption()}.
@@ -736,6 +749,11 @@ public final class XProcScript extends Script {
 		@Override
 		public boolean isRequired() {
 			return info.isRequired();
+		}
+
+		@Override
+		public boolean isReusable() {
+			return metadata.isReusable();
 		}
 
 		@Override
