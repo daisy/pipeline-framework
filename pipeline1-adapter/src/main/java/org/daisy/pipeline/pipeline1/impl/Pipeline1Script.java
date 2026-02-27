@@ -348,7 +348,10 @@ public class Pipeline1Script extends Script {
 					if (((FileBasedDatatype)type).isInput()) {
 						switch (type.getType()) {
 						case DIRECTORY:
-							withOption(name, new Pipeline1ScriptOption(name, param, script, provider.datatypeRegistry));
+							withOption(
+								name,
+								new Pipeline1ScriptOption(
+									name, param, script, provider.datatypeRegistry, false));
 							break;
 						default:
 							if (numberOfRequiredInputPorts == 1)
@@ -366,7 +369,13 @@ public class Pipeline1Script extends Script {
 					}
 					break;
 				default:
-					withOption(name, new Pipeline1ScriptOption(name, param, script, provider.datatypeRegistry));
+					withOption(
+						name,
+						new Pipeline1ScriptOption(
+							name, param, script, provider.datatypeRegistry,
+							// FIXME: this is a quick hack to make the "identifier" option
+							// of pef-merger not reusable
+							!"identifier".equals(name)));
 				}
 			}
 			if (id.startsWith("daisy-")) {
@@ -478,6 +487,11 @@ public class Pipeline1Script extends Script {
 		}
 
 		@Override
+		public boolean isReusable() {
+			return false;
+		}
+
+		@Override
 		public String getNiceName() {
 			return param.getNicename();
 		}
@@ -498,13 +512,16 @@ public class Pipeline1Script extends Script {
 		private final String name;
 		private final ScriptParameter param;
 		private final DatatypeService type;
+		private final boolean reusable;
 
 		private Pipeline1ScriptOption(String name,
 		                              ScriptParameter param,
 		                              org.daisy.pipeline.core.script.Script script,
-		                              DatatypeRegistry datatypes) {
+		                              DatatypeRegistry datatypes,
+		                              boolean reusable) {
 			this.name = name;
 			this.param = param;
+			this.reusable = reusable;
 			Datatype type = param.getDatatype();
 			switch (type.getType()) {
 			case BOOLEAN:
@@ -601,6 +618,11 @@ public class Pipeline1Script extends Script {
 		@Override
 		public boolean isOrdered() {
 			return false;
+		}
+
+		@Override
+		public boolean isReusable() {
+			return reusable;
 		}
 
 		@Override
