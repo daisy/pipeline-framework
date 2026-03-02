@@ -107,8 +107,14 @@ public class JobResource extends AuthenticatedResource {
                         writer.withQueuePosition(pos);
                 }
 
-                Document doc = writer.withScriptDetails().getXmlDocument();
-                
+                Document doc; {
+                        try {
+                                doc = writer.withScriptDetails().getXmlDocument();
+                        } catch (UnsupportedOperationException e) {
+                                setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+                                return this.getErrorRepresentation("Job was closed");
+                        }
+                }
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
                 logResponse(dom);
                 return dom;

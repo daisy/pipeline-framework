@@ -1,10 +1,12 @@
 package org.daisy.pipeline.webservice.impl;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -79,8 +81,17 @@ public class JobsWebSocketEndpoint {
 				callbackType = CallbackType.PROGRESS;}
 		Callback callback = new WebSocketCallback(
 			job.get(), callbackType, 1, firstMessage, session, routes);
+		try {
+			callbackHandler.addCallback(callback);
+		} catch (UnsupportedOperationException e) {
+			try {
+				session.close(new CloseReason(CloseCodes.GOING_AWAY, "Job was closed"));
+			} catch (IOException ioe) {
+				logger.error(ioe.getMessage());
+			}
+			return;
+		}
 		callbacks.put(session.getId(), callback);
-		callbackHandler.addCallback(callback);
 	}
 
 	@OnMessage
