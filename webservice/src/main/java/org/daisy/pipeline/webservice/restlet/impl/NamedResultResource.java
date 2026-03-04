@@ -9,8 +9,6 @@ import java.security.MessageDigest;
 import java.util.Collection;
 
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
@@ -31,8 +29,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.google.common.hash.Hashing;
-import com.google.common.io.Files;
 
 /**
  * The Class ResultResource.
@@ -59,8 +55,7 @@ public abstract class NamedResultResource extends AuthenticatedResource {
                 JobManager jobMan = getJobManager(this.getClient());
                 String idParam = (String) getRequestAttributes().get("id");
                 try {
-                        JobId id = JobIdFactory.newIdFromString(idParam);
-                        job = jobMan.getJob(id);
+                        job = jobMan.findJob(idParam);
                 } catch (Exception e) {
                         logger.warn("Job Id malformed - Job not found: " + idParam);
                 }

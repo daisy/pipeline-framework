@@ -19,7 +19,6 @@ import com.google.common.base.Optional;
 
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.webservice.Callback;
@@ -60,7 +59,7 @@ public class JobsWebSocketEndpoint {
 		Client client = ((ClientPrincipal)session.getUserPrincipal()).getClient();
 		//            = (Client)session.getUserProperties().get(Client.class.getName());
 		JobManager jobManager = jobManagerFactory.createFor(client);
-		Optional<Job> job = jobManager.getJob(JobIdFactory.newIdFromString(jobId));
+		Optional<Job> job = jobManager.findJob(jobId);
 		if (!job.isPresent())
 			// this wouldn't happen if the code in modifyHandshake() would work
 			throw new RuntimeException("No job with ID " + jobId);
