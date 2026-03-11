@@ -316,8 +316,9 @@ public class Pipeline1Script extends Script {
 			super(descriptor);
 			this.provider = provider;
 			this.script = script;
-			shortName = script.getNicename() + " (experimental Pipeline 1 backend)";
-			description = script.getDescription();
+			shortName = script.getNicename();
+			description = script.getDescription() + "\n\n"
+				+ "This script is powered by \"Pipeline 1\", the legacy version of Pipeline.";
 			int numberOfRequiredInputPorts = 0; {
 				for (Map.Entry<String,ScriptParameter> e : script.getParameters().entrySet()) {
 					ScriptParameter param = e.getValue();
