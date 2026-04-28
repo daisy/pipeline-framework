@@ -184,6 +184,8 @@ public class URLsTest extends AbstractTest {
 				Assert.assertTrue( e.getMessage().startsWith("not a directory:")); }
 			{
 				Iterator<String> i = sort(URLs.listResourcesFromJAR("/org/daisy/common/file", context));
+				Assert.assertEquals("org/daisy/common/file/Files$1.class", i.next());
+				Assert.assertEquals("org/daisy/common/file/Files.class", i.next());
 				Assert.assertEquals("org/daisy/common/file/Resource$1.class", i.next());
 				Assert.assertEquals("org/daisy/common/file/Resource$FileData.class", i.next());
 				Assert.assertEquals("org/daisy/common/file/Resource$FileDataInMemory$1.class", i.next());
