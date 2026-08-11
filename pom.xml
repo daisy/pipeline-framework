@@ -40,7 +40,6 @@
     <module>persistence-derby</module>
     <module>webservice</module>
     <module>xproc-api</module>
-    <module>pipeline1-adapter</module>
   </modules>
   
   <build>
