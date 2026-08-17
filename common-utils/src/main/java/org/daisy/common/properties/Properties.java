@@ -1,6 +1,5 @@
 package org.daisy.common.properties;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -9,9 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class Properties {
 
@@ -25,12 +21,6 @@ public final class Properties {
 	private final static String PROPERTIES_FILE_PROPERTY = "org.daisy.pipeline.properties";
 	private final static String propertiesFile = systemProperties.get(PROPERTIES_FILE_PROPERTY);
 	private static Map<String,String> propertiesFromFile = null;
-
-	private static Logger logger;
-	private static Logger logger() {
-		if (logger == null) logger = LoggerFactory.getLogger(Properties.class);
-		return logger;
-	}
 
 	/**
 	 * Returns a set of all the keys in this property list.
