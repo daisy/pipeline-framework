@@ -475,17 +475,14 @@ public final class XProcScript extends Script {
 										String prop = m.group("localPart");
 										if (NS_PIPELINE_DATA.equals(ns)) {
 											usesProperty = true;
-											defaultValue = Properties.getSnapshot().get(prop);
-											if (defaultValue == null) {// if property not settable
-												defaultValue = Properties.getProperty(prop);
-												if (defaultValue != null)
-													try {
-														defaultValue = "" + convertValue(defaultValue);
-													} catch (IllegalArgumentException e) {
-														logger.debug(select + " can not be evaluated to a " + datatype.getId() + ": " + defaultValue);
-														defaultValue = fallbackDefaultValue;
-													}
-											}
+											defaultValue = Properties.getGlobalProperty(prop);
+											if (defaultValue != null)
+												try {
+													defaultValue = "" + convertValue(defaultValue);
+												} catch (IllegalArgumentException e) {
+													logger.debug(select + " can not be evaluated to a " + datatype.getId() + ": " + defaultValue);
+													defaultValue = fallbackDefaultValue;
+												}
 											if (defaultValue == null) {
 												logger.debug("Property does not have a value: " + prop);
 												defaultValue = fallbackDefaultValue;
