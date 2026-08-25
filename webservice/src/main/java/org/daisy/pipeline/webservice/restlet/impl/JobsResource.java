@@ -17,6 +17,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 
 import org.daisy.common.priority.Priority;
+import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobResources;
@@ -234,7 +235,8 @@ public class JobsResource extends AuthenticatedResource {
                         logger.error("Script not found");
                         return Optional.absent();
                 }
-                Script script = scriptService.load();
+                Script script = scriptService.load(
+                    Properties.getProperties(getClient().getId()).getSnapshot());
                 JobResources resourceCollection = zip != null ? new ZippedJobResources(zip) : null;
                 BoundScript.Builder bound = new BoundScript.Builder(script, resourceCollection);
                 addInputsToJob(req.getInputs(), script, bound, zip != null);
