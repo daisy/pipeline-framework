@@ -13,7 +13,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeoutException;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -48,15 +47,18 @@ public class ScriptRegistry {
 	public ScriptRegistry() {
 	}
 
+	/* This function is called update(), but it computes the list only
+	 * once. To make the list dynamic, uncomment the `!prev.isDone()'.
+	 */
 	private synchronized Future<Boolean> update() {
 		return updated.updateAndGet(
 			prev -> {
-				if (prev != null && !prev.isDone())
+				if (prev != null /*&& !prev.isDone()*/)
 					return prev;
 				if (prev == null)
 					// this code is called only once
 					for (ScriptService<?> script : SPIHelper.getScripts())
-						registerScriptIfNew(script);
+						registerScript(script);
 				List<ScriptServiceProvider> nextScriptProviders
 					= Lists.newArrayList(SPIHelper.getScriptProviders());
 				if (nextScriptProviders.size() == 0)
@@ -78,7 +80,7 @@ public class ScriptRegistry {
 										if (updated.isCancelled())
 											return;
 										else
-											registerScriptIfNew(script);
+											registerScript(script);
 									if (remaining.decrementAndGet() == 0)
 										updated.complete(true);
 									return;
@@ -118,7 +120,7 @@ public class ScriptRegistry {
 	 * Get the script looking it up by its ID
 	 */
 	// note that this method may be called from ScriptServiceProvider.getScripts(), from one of
-	// the threads created in init()
+	// the threads created in update()
 	public ScriptService<?> getScript(String name) {
 		ScriptService<?> script = scripts.get(name);
 		if (script != null)
@@ -136,7 +138,7 @@ public class ScriptRegistry {
 				break;
 			}
 		} while (!(updated.isDone() || updated.isCancelled()));
-		// try one last time just in case registerScriptIfNew() was called from another thread at a
+		// try one last time just in case registerScript() was called from another thread at a
 		// bad time
 		script = scripts.get(name);
 		if (script == null)
@@ -144,10 +146,7 @@ public class ScriptRegistry {
 		return script;
 	}
 
-	/*
-	 * Script list can grow dynamically, but no scripts are ever removed or replaced
-	 */
-	private void registerScriptIfNew(ScriptService<?> script) {
+	private void registerScript(ScriptService<?> script) {
 		scripts.computeIfAbsent(
 			script.getId(),
 			id -> {
