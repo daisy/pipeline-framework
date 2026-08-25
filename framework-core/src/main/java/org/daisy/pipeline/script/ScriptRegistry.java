@@ -41,26 +41,39 @@ public class ScriptRegistry {
 
 	private static final Logger logger = LoggerFactory.getLogger(ScriptRegistry.class);
 
+	private final boolean dynamic;
+	private Iterable<ScriptService<?>> staticScripts = null;
 	private final ConcurrentMap<String,ScriptService<?>> scripts = new ConcurrentHashMap<>();
 	private final AtomicReference<Future<Boolean>> updated = new AtomicReference<>();
 
 	public ScriptRegistry() {
+		this(false);
 	}
 
-	/* This function is called update(), but it computes the list only
-	 * once. To make the list dynamic, uncomment the `!prev.isDone()'.
+	/**
+	 * @param dynamic Whether the list of scripts is dynamic (recomputed every time) or not.
 	 */
+	protected ScriptRegistry(boolean dynamic) {
+		this.dynamic = dynamic;
+	}
+
 	private synchronized Future<Boolean> update() {
 		return updated.updateAndGet(
 			prev -> {
-				if (prev != null /*&& !prev.isDone()*/)
+				if (prev != null && (!dynamic || !prev.isDone()))
 					return prev;
-				if (prev == null)
-					// this code is called only once
-					for (ScriptService<?> script : SPIHelper.getScripts())
+				if (dynamic)
+					scripts.clear();
+				if (prev == null || dynamic) {
+					synchronized (this) {
+						// even if the list of scripts is dynamic, there is a static part that is never recomputed
+						if (staticScripts == null)
+							staticScripts = ImmutableList.copyOf(SPIHelper.getScripts());
+					}
+					for (ScriptService<?> script : staticScripts)
 						registerScript(script);
-				List<ScriptServiceProvider> nextScriptProviders
-					= Lists.newArrayList(SPIHelper.getScriptProviders());
+				}
+				List<ScriptServiceProvider> nextScriptProviders = Lists.newArrayList(getScriptProviders());
 				if (nextScriptProviders.size() == 0)
 					return CompletableFuture.completedFuture(true);
 				else {
@@ -151,11 +164,18 @@ public class ScriptRegistry {
 			script.getId(),
 			id -> {
 				logger.debug("Registering script {}", id);
-				if (script instanceof XProcScriptService)
+				if (script instanceof XProcScriptService) {
+					if (parser == null)
+						throw new IllegalStateException("no StaxXProcScriptParser set");
 					((XProcScriptService) script).setParser(parser);
+				}
 				return script;
 			}
 		);
+	}
+
+	protected Iterable<ScriptServiceProvider> getScriptProviders() {
+		return SPIHelper.getScriptProviders();
 	}
 
 	/**
